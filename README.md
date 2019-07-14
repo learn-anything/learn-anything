@@ -47,10 +47,6 @@ _A special thanks to [@iinfin](https://github.com/iinfin) for designing the foll
 
 </details>
 
-## Curated Lists
-
-We also manage curation of [awesome](https://github.com/sindresorhus/awesome#readme) lists. Feel free to [explore and improve them](https://github.com/learn-anything/curated-lists#readme).
-
 ## Support
 
 This project is built by the community, for the community and our goal is to create the best platform possible for exploring new topics and finding valuable resources. There are no advertisements or sponsored content in the website, we rely on donations which can be done through our [Patreon page](https://www.patreon.com/learnanything).
