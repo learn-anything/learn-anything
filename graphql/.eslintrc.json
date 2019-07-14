@@ -1,0 +1,22 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "plugins": [
+    "prettier",
+    "flowtype"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:prettier/recommended",
+    "plugin:flowtype/recommended"
+   ],
+   "rules": {
+      "no-console": ["error", { "allow": ["warn", "error"] }],
+      "prettier/prettier": ["error", { "singleQuote": true, "semi": true }],
+      "flowtype/space-after-type-colon": ["error", "always", { "allowLineBreak": true }]
+   }
+}
+
