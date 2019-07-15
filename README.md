@@ -16,9 +16,9 @@
 
 You can start helping by joining our [Discord](https://discord.gg/KKYdWjt) group and sharing your thoughts with the community.
 
-We have [documentation](https://github.com/learn-anything/docs) page available.
+We also have [documentation](https://docs.learn-anything.org) available.
 
-Our designs are on [Figma](https://www.figma.com/file/N2ioUbr7aiapNijNH8DH3Xh3/1.0?node-id=0%3A1).
+Our designs are on [Figma](https://www.figma.com/file/N2ioUbr7aiapNijNH8DH3Xh3/1.0).
 
 <details>
 <summary>Mockups</summary><br>
