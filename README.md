@@ -51,8 +51,6 @@ _A special thanks to [@iinfin](https://github.com/iinfin) for designing the foll
 
 This project is built by the community, for the community and our goal is to create the best platform possible for exploring new topics and finding valuable resources. There are no advertisements or sponsored content in the website, we rely on donations which can be done through our [Patreon page](https://www.patreon.com/learnanything).
 
-Thank you, to all the people who contributed to this project and vision.
-
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
