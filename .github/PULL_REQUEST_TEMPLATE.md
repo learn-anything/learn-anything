@@ -1,15 +1,15 @@
 <!--
-  Have any questions? Check out the contributing docs.
+  Thanks for submitting a pull request. Have any questions? Check out the contributing docs.
 -->
 
-<!-- Write brief description of the changes introduced by this PR -->
-## Description
+<!-- A short summary, referencing related issues (if there is one):
+Fixes #0000, References #0000, etc. -->
 
+#### Summary
 
-<!--
-  Link to the issue that is fixed by this PR (if there is one)
-  e.g. Fixes #1234, Addresses #1234, Related to #1234, etc.
--->
-## Related Issues
+<!-- What are the changes made in this pull request? -->
 
+#### Changes
 
+- 
+- 

@@ -1,9 +1,10 @@
 ---
 name: Question 🤔
-about: Usage question or discussion
+about: Usage question or discussion is best done on Discord
 ---
 
-<!-- Please search existing issues to avoid creating duplicates. -->
+<!-- Please read the docs and ask the question on Discord (https://discord.gg/KKYdWjt) first.
+     The issue tracker is focused on code related issues. -->
 
 <!-- Provide as much useful information as you can -->
 #### Summary
