@@ -4,7 +4,7 @@ about: Usage question or discussion is best done on Discord
 ---
 
 <!-- Please read the docs and ask the question on Discord (https://discord.gg/KKYdWjt) first.
-     The issue tracker is focused on code related issues. -->
+     The issue tracker is more focused on code related issues. -->
 
 <!-- Provide as much useful information as you can -->
 #### Summary
