@@ -6,12 +6,10 @@ about: Suggest a new idea for the project
 
 <!-- Please search existing issues to avoid creating duplicates. -->
 
-<!-- Brief explanation of the feature. Provide an example if possible. -->
-#### Summary
+<!-- Describe the feature you'd like. -->
+## Summary
 
 
-<!-- Why are we doing this? What use cases does it support? What is the expected outcome? -->
-#### Motivation
+## Can you add this yourself and submit a PR?
+<!-- Yes/no? -->
 
-
-<!-- Can you do this yourself and submit a Pull Request? -->

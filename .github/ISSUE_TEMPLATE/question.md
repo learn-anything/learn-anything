@@ -1,13 +1,7 @@
 ---
 name: Question 🤔
-about: Usage question or discussion is best done on Discord
+about: Usage question and discussions is best done on Discord
 ---
 
-<!-- Please read the docs and ask the question on Discord (https://discord.gg/KKYdWjt) first.
+<!-- Please read the docs and ask questions on Discord (https://discord.gg/KKYdWjt).
      The issue tracker is more focused on code related issues. -->
-
-<!-- Provide as much useful information as you can -->
-#### Summary
-
-
-<!-- Can you do this yourself and submit a Pull Request? -->
