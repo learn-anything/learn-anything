@@ -24,6 +24,8 @@ We also have [documentation](https://docs.learn-anything.org) available.
 	</a>
 </div>
 
+If anyone wants to contribute on the designs, make sure to say something in the #design channel on our Discord!
+
 <details>
 <summary>Mockups</summary><br>
 
