@@ -18,7 +18,11 @@ You can start helping by joining our [Discord](https://discord.gg/KKYdWjt) group
 
 We also have [documentation](https://docs.learn-anything.org) available.
 
-Our designs are on [Figma](https://www.figma.com/file/N2ioUbr7aiapNijNH8DH3Xh3/1.0).
+<div>
+	<a href="https://www.figma.com/file/N2ioUbr7aiapNijNH8DH3Xh3/1.0" target="_blank">
+	<img src="https://raw.githubusercontent.com/learn-anything/docs/master/media/cta-view-figma.jpg" alt="figma link" width="295px" />
+	</a>
+</div>
 
 <details>
 <summary>Mockups</summary><br>
