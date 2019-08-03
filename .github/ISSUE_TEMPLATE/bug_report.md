@@ -3,14 +3,20 @@ name: Bug report 🐞
 about: Something isn't working as expected?
 ---
 
-<!-- Please search existing issues to avoid creating duplicates. -->
+<!-- Thanks for submitting a bug report. Please search existing issues to avoid creating duplicates. -->
 
-<!-- Clear steps describing how to reproduce the issue. Link to demo project if possible. -->
+## Summary
+<!-- Summarize the problem in a few sentences: -->
+
+
+
 ## Steps to Reproduce:
+<!-- How can we reproduce the problem? -->
 
 1. 
 2. 
 
-## Can you fix this yourself and submit a PR?
-<!-- Yes/no? -->
+## How do you propose to implement this?
+<!-- Can you fix this and submit a PR? Please think about how this could be fixed. -->
+
 

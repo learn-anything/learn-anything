@@ -4,12 +4,19 @@ about: Suggest a new idea for the project
 
 ---
 
-<!-- Please search existing issues to avoid creating duplicates. -->
+<!-- Thanks for submitting a feature request. Please search existing issues to avoid creating duplicates. -->
 
-<!-- Describe the feature you'd like. -->
 ## Summary
+<!-- Summarize the feature in a few sentences: -->
 
 
-## Can you add this yourself and submit a PR?
-<!-- Yes/no? -->
+
+## Why do we need this?
+<!-- Please explain the motivation, how it will be used, etc. -->
+
+
+
+## How do you propose to implement this?
+<!-- Can you add this and submit a PR? Please think about how this could be added. -->
+
 
