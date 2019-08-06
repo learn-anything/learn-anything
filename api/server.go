@@ -33,7 +33,7 @@ func main() {
 		if err = c.Validate(u); err != nil {
 			return
 		}
-		return c.JSON(http.StatusOK, u)
+		return c.JSON(http.StatusCreated, u)
 	})
 	e.HideBanner = true
 	e.Logger.Fatal(e.Start(":1323"))
