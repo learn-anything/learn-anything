@@ -4,47 +4,37 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo"
+	"gopkg.in/go-playground/validator.v9"
 )
 
-// User
-type User struct {
-	Name  string `json:"name" form:"name" query:"name"`
-	Email string `json:"email" form:"email" query:"email"`
+type (
+	User struct {
+		Name  string `json:"name" form:"name" query:"name" validate:"required"`
+		Email string `json:"email" form:"email" query:"email" validate:"required,email"`
+	}
+
+	CustomValidator struct {
+		validator *validator.Validate
+	}
+)
+
+func (cv *CustomValidator) Validate(i interface{}) error {
+	return cv.validator.Struct(i)
 }
 
 func main() {
 	e := echo.New()
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
-
-	e.GET("/users/:id", getUser)
-	e.POST("/save", save)
-	e.POST("/users", func(c echo.Context) error {
+	e.Validator = &CustomValidator{validator: validator.New()}
+	e.POST("/user", func(c echo.Context) (err error) {
 		u := new(User)
-		if err := c.Bind(u); err != nil {
-			return err
+		if err = c.Bind(u); err != nil {
+			return
 		}
-		return c.JSON(http.StatusCreated, u)
-		// or
-		// return c.XML(http.StatusCreated, u)
+		if err = c.Validate(u); err != nil {
+			return
+		}
+		return c.JSON(http.StatusOK, u)
 	})
-
 	e.HideBanner = true
 	e.Logger.Fatal(e.Start(":1323"))
-}
-
-// e.GET("/users/:id", getUser)
-func getUser(c echo.Context) error {
-	// User ID from path `users/:id`
-	id := c.Param("id")
-	return c.String(http.StatusOK, id)
-}
-
-//e.POST("/save", save)
-func save(c echo.Context) error {
-	// Get name and email
-	name := c.FormValue("name")
-	email := c.FormValue("email")
-	return c.String(http.StatusOK, "name:"+name+", email:"+email)
 }
