@@ -28,7 +28,7 @@ func main() {
 	e := echo.New()
 	e.Validator = &CustomValidator{validator: validator.New()}
 	e.GET("/users", getUsers)
-	e.POST("/user", func(c echo.Context) (err error) {
+	e.POST("/user/add", func(c echo.Context) (err error) {
 		u := new(User)
 		if err = c.Bind(u); err != nil {
 			return
@@ -38,6 +38,22 @@ func main() {
 		}
 		users = append(users, u)
 		return c.JSON(http.StatusCreated, u)
+	})
+	e.POST("/user/remove", func(c echo.Context) (err error) {
+		u := new(User)
+		if err = c.Bind(u); err != nil {
+			return
+		}
+		if err = c.Validate(u); err != nil {
+			return
+		}
+		for i := range users {
+			if users[i].Name == u.Name && users[i].Email == u.Email {
+				users = append(users[:i], users[i+1:]...)
+				break
+			}
+		}
+		return c.String(http.StatusOK, "Successfully removed!")
 	})
 	e.HideBanner = true
 	e.Logger.Fatal(e.Start(":1323"))
