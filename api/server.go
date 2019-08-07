@@ -53,7 +53,7 @@ func main() {
 				break
 			}
 		}
-		return c.String(http.StatusOK, "Successfully removed!")
+		return c.String(http.StatusOK, u.Name+" was successfully removed!")
 	})
 	e.HideBanner = true
 	e.Logger.Fatal(e.Start(":1323"))
