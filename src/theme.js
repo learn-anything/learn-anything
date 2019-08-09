@@ -74,9 +74,9 @@ export default {
     },
     styles: {
         a: {
-            color: '#5C6166',
+            color: 'text',
             '&:hover': {
-                color: 'secondary',
+                color: '#5C6166',
             },
         },
     }

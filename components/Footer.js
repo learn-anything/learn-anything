@@ -7,7 +7,7 @@ export default function Footer() {
             <div
                 sx={{
                     position: 'absolute',
-                    top: '95%',
+                    top: '94%',
                 }}
             >
                 <Styled.a href="https://twitter.com/learnanything_">
