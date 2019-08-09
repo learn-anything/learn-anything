@@ -9,6 +9,7 @@ const heading = {
 }
 
 export default {
+    initialColorMode: 'dark',
     colors: {
         text: '#F5F5F5',
         background: '#000',
@@ -30,7 +31,7 @@ export default {
             },
             light: {
                 text: '#000',
-                background: '#fff',
+                background: '#fff', // change to '#F5F5F5'
                 primary: '#33e',
                 secondary: '#119',
                 muted: '#f6f6f6',
@@ -50,9 +51,10 @@ export default {
         },
     },
     fonts: {
-        body: 'system-ui, sans-serif',
-        heading: 'inherit',
-        monospace: 'Menlo, monospace',
+        sansSerif:
+          '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+        monospace:
+          'SFMono-Regular, Consolas, "Liberation Mono", Menlo, Courier, monospace',
     },
     fontSizes: [12, 14, 16, 20, 24, 32, 48, 64, 72],
     fontWeights: {
@@ -66,9 +68,8 @@ export default {
     textStyles: {
         heading,
         display: {
-        variant: 'textStyles.heading',
-        fontSize: [5, 6, 7],
-        mt: 3,
+            fontSize: [5, 6, 7],
+            mt: 3,
         },
     },
     styles: {
