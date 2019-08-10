@@ -8,15 +8,17 @@
 
 #### Organize world's knowledge, explore relations and curate learning paths
 
-- **Learn**: Study plans created and improved by users
-- **Explore**: An interactive map with all topics and their relatioships
+- **Learn**: Study guides created and improved by users
+- **Explore**: An interactive map with all topics and their relationships
 - **Build**: Share and find ideas to build
+
+For more info, please read [our Roadmap](https://docs.learn-anything.org/roadmap).
 
 ## Contributing
 
 You can start helping by joining our [Discord](https://discord.gg/KKYdWjt) group and sharing your thoughts with the community.
 
-We also have [documentation](https://docs.learn-anything.org) available.
+We have [documentation](https://docs.learn-anything.org) available you can read. If you want to contribute to the code, please read [CONTRIBUTING.md](CONTRIBUTING.md).
 
 <div>
 	<a href="https://www.figma.com/file/N2ioUbr7aiapNijNH8DH3Xh3/1.0" target="_blank">
