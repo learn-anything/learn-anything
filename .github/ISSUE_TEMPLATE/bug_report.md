@@ -3,10 +3,10 @@ name: Bug report 🐞
 about: Something isn't working as expected?
 ---
 
-<!-- Thanks for submitting a bug report. Please search existing issues to avoid creating duplicates. -->
+<!-- Please search existing issues to avoid creating duplicates. -->
 
-## Summary
-<!-- Summarize the problem in a few sentences: -->
+## Bug Summary 🐞
+<!-- A clear and concise description of what the bug is. -->
 
 
 
@@ -16,7 +16,10 @@ about: Something isn't working as expected?
 1. 
 2. 
 
+<!-- If you have code sample, error messages, stack traces, please provide it here as well -->
+
+
 ## How do you propose to implement this?
-<!-- Can you fix this and submit a PR? Please think about how this could be fixed. -->
+<!-- Please think about how this could be fixed. Can you add this and submit a PR? -->
 
 
