@@ -1,15 +1,24 @@
 /** @jsx jsx */
-import { jsx, Styled } from 'theme-ui'
+import { jsx } from 'theme-ui'
 import { parse } from 'serialize-query-params'
 import { StringParam, useQueryParam } from 'use-query-params'
 import SearchInput from '../components/SearchInput'
+import {ChangeEvent, FunctionComponent} from "react";
 
-function IndexPage({ location }) {
+type IndexPageProps = {
+    location: string
+}
+
+const IndexPage: FunctionComponent<IndexPageProps> = ({ location }) => {
     const [query, setQuery] = useQueryParam(
         'query',
         StringParam,
         parse(location),
     )
+
+    const handleOnChange = (event: ChangeEvent) => {
+        setQuery(event.target.nodeValue)
+    }
 
     return (
         <div
@@ -43,7 +52,7 @@ function IndexPage({ location }) {
                 <SearchInput
                     placeholder={`Search for a topic (Press "/" to focus)`}
                     value={query}
-                    onChange={event => setQuery(event.target.value)}
+                    onChange={handleOnChange}
                 />
             </div>
         </div>

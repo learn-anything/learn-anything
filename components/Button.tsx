@@ -1,7 +1,12 @@
 /** @jsx jsx */
-import { jsx } from 'theme-ui'
-	
-export default props => (
+import {jsx} from 'theme-ui'
+import {FunctionComponent} from "react";
+
+type ButtonProps = {
+    onClick: () => void
+}
+
+const Button: FunctionComponent<ButtonProps> = props => (
     <button
         {...props}
         sx={{
@@ -23,3 +28,5 @@ export default props => (
         }}
     />
 )
+
+export default Button
