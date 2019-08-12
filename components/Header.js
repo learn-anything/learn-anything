@@ -43,11 +43,26 @@ export default function Header() {
                         float: 'right'
                     }}
                 >
-                    <Styled.a href="/sign-in">
-                        Sign in
-                    </Styled.a>
-                    <Styled.a href="/sign-up" sx={{ ml: 2 }}>
-                        Sign up
+                    <Styled.a
+                        href="/guide/new"
+                        sx={{
+                            appearance: 'none',
+                            fontFamily: 'inherit',
+                            fontSize: 1,
+                            fontWeight: 'bold',
+                            m: 0,
+                            px: 2,
+                            py: 2,
+                            color: 'text',
+                            bg: 'muted',
+                            border: 0,
+                            borderRadius: 2,
+                            ':focus': {
+                                outline: '2px solid',
+                            },
+                        }}
+                    >
+                        New Guide
                     </Styled.a>
                     <Button
                         sx={{ ml: 2 }}
