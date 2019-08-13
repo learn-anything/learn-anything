@@ -16,8 +16,8 @@ const IndexPage: FunctionComponent<IndexPageProps> = ({ location }) => {
         parse(location),
     )
 
-    const handleOnChange = (event: ChangeEvent) => {
-        setQuery(event.target.nodeValue)
+    const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setQuery(event.target.value)
     }
 
     return (

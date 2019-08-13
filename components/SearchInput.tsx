@@ -7,7 +7,7 @@ import { Search } from 'react-feather'
 type SearchInputProps = {
     placeholder?: string
     value?: string
-    onChange: (event: ChangeEvent) => void
+    onChange: (event: ChangeEvent<HTMLInputElement>) => void
 }
 
 const SearchInput: FunctionComponent<SearchInputProps> = ({ placeholder, value, onChange, ...props }) => {
