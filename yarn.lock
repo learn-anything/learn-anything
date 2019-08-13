@@ -1372,15 +1372,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*":
-  version "16.8.24"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.8.24.tgz#8d1ea1fcbfa214220da3d3c04e506f1077b0deac"
-  integrity sha512-VpFHUoD37YNY2+lr/+c7qL/tZsIU/bKuskUF3tmGUArbxIcQdb5j3zvo4cuuzu2A6UaVmVn7sJ4PgWYNFEBGzg==
-  dependencies:
-    "@types/prop-types" "*"
-    csstype "^2.2.0"
-
-"@types/react@^16.9.1":
+"@types/react@*", "@types/react@^16.9.1":
   version "16.9.1"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.1.tgz#862c83b4c9d5cd116e42fd9a4f3694843cd2c051"
   integrity sha512-jGM2x8F7m7/r+81N/BOaUKVwbC5Cdw6ExlWEUpr77XPwVeNvAppnPEnMMLMfxRDYL8FPEX8MHjwtD2NQMJ0yyQ==
@@ -1405,9 +1397,9 @@
     csstype "^2.6.4"
 
 "@types/styled-system__css@*":
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/@types/styled-system__css/-/styled-system__css-5.0.3.tgz#45dd1881d9debef787826d913023a1da875530af"
-  integrity sha512-Vz9OGQn4qDju9bWeK3RzdQ+nNAJbag7P8XhAKxsuoXW2XLF0TdeuDk0FFIzpbmQNo5ffvuRtFNGZlacbkXyyGw==
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/@types/styled-system__css/-/styled-system__css-5.0.4.tgz#df83b015cf377ab39ecf33ea31339c05eeb9230a"
+  integrity sha512-SHHoNh9cCRTG9hcmCD2ua0NeYUrLmLXoMJ7g0U/e0FjrzcwNQtM5wjjEJVCVZymU632xA1PdPEykrtoSHTIecA==
   dependencies:
     csstype "^2.6.6"
 
@@ -1416,10 +1408,10 @@
   resolved "https://registry.yarnpkg.com/@types/tapable/-/tapable-1.0.4.tgz#b4ffc7dc97b498c969b360a41eee247f82616370"
   integrity sha512-78AdXtlhpCHT0K3EytMpn4JNxaf5tbqbLcbIRoQIHzpTIyjpxLQKRoxU55ujBXAtg3Nl2h/XWvfDa9dsMOd0pQ==
 
-"@types/theme-ui@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@types/theme-ui/-/theme-ui-0.2.0.tgz#6ac815ce8974b5650d04e104affc16fc73b54ed7"
-  integrity sha512-ir3sCWszCnlwj1hRk7oREYGeLvASa6XffMsKg9AVCxxiu0Hngg9jUYQF5PPAsi56v9KGdSm1NFTj+Plx2ZfFHg==
+"@types/theme-ui@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@types/theme-ui/-/theme-ui-0.2.1.tgz#d34bb135f5bc3493733866cbe4a396b0dffaa526"
+  integrity sha512-PEsbt5tM96aQCi05GyEUwMaf2U3XVUVzYC+AmM2Cu/XcTAzaqXOUg0gq8GD3fB2Odj/tOKphN5LA9WCPMgZvQA==
   dependencies:
     "@types/react" "*"
     "@types/styled-system" "*"
