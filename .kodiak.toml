@@ -25,7 +25,7 @@ block_on_reviews_requested = true # default: false
 
 # if there are running status checks on a PR when it's up for merge, don't
 # wait for those to finish before updating the branch
-optimistic_updates = true # default: true
+optimistic_updates = false # default: true
 
 # use this for status checks that run indefinitely, like deploy jobs or the
 # WIP GitHub App
