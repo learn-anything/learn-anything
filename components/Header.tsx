@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx, useColorMode, Styled } from 'theme-ui'
 import Button from './Button'
+import { FunctionComponent } from "react";
 
 const modes = [
     'dark',
@@ -9,7 +10,7 @@ const modes = [
     'swiss',
 ]
 
-export default function Header() {
+const Header: FunctionComponent = () => {
     const [mode, setMode] = useColorMode()
 
     const handleThemeChange = () => {
@@ -82,3 +83,5 @@ export default function Header() {
         </header>
     )
 }
+
+export default Header

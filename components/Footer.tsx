@@ -1,7 +1,8 @@
 /** @jsx jsx */
 import { jsx, Styled } from 'theme-ui'
+import { FunctionComponent } from "react";
 
-export default function Footer() {
+const Footer: FunctionComponent = () => {
     return (
         <footer>
             <div
@@ -52,3 +53,5 @@ export default function Footer() {
         </footer>
     )
 }
+
+export default Footer
