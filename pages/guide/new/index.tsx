@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, Styled } from 'theme-ui'
-import {FunctionComponent} from "react";
+import { FunctionComponent } from "react";
 // import { Editor } from '@blocks/editor'
 
 const NewGuidePage: FunctionComponent = () => {

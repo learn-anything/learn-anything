@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import {jsx, useColorMode, Styled} from 'theme-ui'
+import { jsx, useColorMode, Styled } from 'theme-ui'
 import Button from './Button'
 
 const modes = [
@@ -72,7 +72,7 @@ export default function Header() {
                         New Guide
                     </Styled.a>
                     <Button
-                        sx={{ml: 2}}
+                        sx={{ ml: 2 }}
                         onClick={handleThemeChange}
                     >
                         {mode}

@@ -1,6 +1,6 @@
 import React from 'react'
-import Document, {Html, Head, Main, NextScript, DocumentContext} from 'next/document'
-import {InitializeColorMode} from 'theme-ui'
+import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document'
+import { InitializeColorMode } from 'theme-ui'
 
 class LearnAnythingDocument extends Document {
     static async getInitialProps(ctx: DocumentContext) {
@@ -11,7 +11,7 @@ class LearnAnythingDocument extends Document {
         return (
             <Html>
                 <Head/>
-                <InitializeColorMode />
+                <InitializeColorMode/>
                 <body>
                 <Main/>
                 <NextScript/>

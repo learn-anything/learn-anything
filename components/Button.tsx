@@ -1,6 +1,6 @@
 /** @jsx jsx */
-import {jsx} from 'theme-ui'
-import {FunctionComponent} from "react";
+import { jsx } from 'theme-ui'
+import { FunctionComponent } from "react";
 
 type ButtonProps = {
     onClick: () => void

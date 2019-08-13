@@ -1,6 +1,6 @@
 import React from 'react'
-import App, {Container, AppContext} from 'next/app'
-import {ThemeProvider, Styled, ColorMode} from 'theme-ui'
+import App, { Container, AppContext } from 'next/app'
+import { ThemeProvider, Styled, ColorMode } from 'theme-ui'
 
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -14,16 +14,16 @@ class LearnAnythingApp extends App {
             pageProps = await context.Component.getInitialProps(context.ctx)
         }
 
-        return {pageProps}
+        return { pageProps }
     }
 
     render() {
-        const {Component, pageProps} = this.props
+        const { Component, pageProps } = this.props
 
         return (
             <Container>
                 <ThemeProvider theme={theme}>
-                    <ColorMode />
+                    <ColorMode/>
                     <Header/>
                     <Styled.root>
                         <Component {...pageProps} />

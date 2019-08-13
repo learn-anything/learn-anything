@@ -1,8 +1,8 @@
 /** @jsx jsx */
-import {jsx} from 'theme-ui'
-import {rgba} from 'polished'
-import React, {ChangeEvent, FunctionComponent} from 'react'
-import {Search} from 'react-feather'
+import { jsx } from 'theme-ui'
+import { rgba } from 'polished'
+import React, { ChangeEvent, FunctionComponent } from 'react'
+import { Search } from 'react-feather'
 
 type SearchInputProps = {
     placeholder?: string
@@ -10,7 +10,7 @@ type SearchInputProps = {
     onChange: (event: ChangeEvent) => void
 }
 
-const SearchInput: FunctionComponent<SearchInputProps> = ({placeholder, value, onChange, ...props}) => {
+const SearchInput: FunctionComponent<SearchInputProps> = ({ placeholder, value, onChange, ...props }) => {
     const inputElement = React.useRef<HTMLInputElement>(null)
 
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -29,7 +29,7 @@ const SearchInput: FunctionComponent<SearchInputProps> = ({placeholder, value, o
     }, [])
 
     return (
-        <div sx={{position: 'relative'}} {...props}>
+        <div sx={{ position: 'relative' }} {...props}>
             <div
                 sx={{
                     position: 'absolute',

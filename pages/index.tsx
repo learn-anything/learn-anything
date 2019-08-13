@@ -3,7 +3,7 @@ import { jsx } from 'theme-ui'
 import { parse } from 'serialize-query-params'
 import { StringParam, useQueryParam } from 'use-query-params'
 import SearchInput from '../components/SearchInput'
-import {ChangeEvent, FunctionComponent} from "react";
+import { ChangeEvent, FunctionComponent } from "react";
 
 type IndexPageProps = {
     location: string
