@@ -1,13 +1,3 @@
-const heading = {
-    fontFamily: 'heading',
-    fontWeight: 'heading',
-    lineHeight: 'heading',
-    a: {
-        color: 'inherit',
-        textDecoration: 'none'
-    }
-}
-
 export default {
     initialColorMode: 'dark',
     colors: {
@@ -48,28 +38,6 @@ export default {
                 muted: 'hsl(10, 20%, 94%)',
                 gray: 'hsl(10, 20%, 50%)',
             },
-        },
-    },
-    fonts: {
-        sansSerif:
-            '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
-        monospace:
-            'SFMono-Regular, Consolas, "Liberation Mono", Menlo, Courier, monospace',
-    },
-    fontSizes: [12, 14, 16, 20, 24, 32, 48, 64, 72],
-    fontWeights: {
-        body: '400',
-        heading: '700',
-    },
-    lineHeights: {
-        body: 1.5,
-        heading: 1.25,
-    },
-    textStyles: {
-        heading,
-        display: {
-            fontSize: [5, 6, 7],
-            mt: 3,
         },
     },
     styles: {
