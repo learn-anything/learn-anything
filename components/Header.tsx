@@ -5,9 +5,8 @@ import { FunctionComponent } from "react";
 
 const modes = [
     'dark',
-    'deep',
+    'dusk',
     'light',
-    'swiss',
 ]
 
 const Header: FunctionComponent = () => {
