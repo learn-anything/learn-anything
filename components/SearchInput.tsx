@@ -33,7 +33,7 @@ const SearchInput: FunctionComponent<SearchInputProps> = ({ placeholder, value, 
             <div
                 sx={{
                     position: 'absolute',
-                    top: 0,
+                    top: 15,
                     bottom: 0,
                     left: '0.75rem',
                     display: 'flex',
@@ -53,7 +53,7 @@ const SearchInput: FunctionComponent<SearchInputProps> = ({ placeholder, value, 
                     margin: 0,
                     padding: '0.75rem',
                     paddingLeft: '3.25rem',
-                    fontSize: 'inherit',
+                    fontSize: 1,
                     fontFamily: 'inherit',
                     color: 'inherit',
                     background: `${rgba('#C4C4C4', 0.22)}`,
@@ -66,7 +66,7 @@ const SearchInput: FunctionComponent<SearchInputProps> = ({ placeholder, value, 
                     '::-webkit-search-decoration': {
                         display: 'none',
                     },
-                    '&:focus': {
+                    ':focus': {
                         boxShadow: `0 0 0 3px ${rgba('#0066ff', 0.5)}`,
                     },
                 }}

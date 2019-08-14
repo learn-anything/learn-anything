@@ -57,7 +57,6 @@ const Header: FunctionComponent = () => {
                             appearance: 'none',
                             fontFamily: 'inherit',
                             fontSize: 1,
-                            fontWeight: 'bold',
                             m: 0,
                             px: 2,
                             py: 2,
