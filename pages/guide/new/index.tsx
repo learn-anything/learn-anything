@@ -14,6 +14,9 @@ const NewGuidePage: FunctionComponent = () => {
         >
             <title>New Guide</title>
             <Styled.h2 sx={{ textDecoration: "underline" }}>Create a new study guide</Styled.h2>
+            <select>
+                <option value="">Choose one</option>
+            </select>
             {/* <Editor
                 initialValue=""
                 onChange={{}}
