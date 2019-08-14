@@ -52,9 +52,9 @@ export default {
     },
     fonts: {
         sansSerif:
-          '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+            '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
         monospace:
-          'SFMono-Regular, Consolas, "Liberation Mono", Menlo, Courier, monospace',
+            'SFMono-Regular, Consolas, "Liberation Mono", Menlo, Courier, monospace',
     },
     fontSizes: [12, 14, 16, 20, 24, 32, 48, 64, 72],
     fontWeights: {
