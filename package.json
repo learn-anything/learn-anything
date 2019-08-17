@@ -4,7 +4,9 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "prettier --check \"{src,pages,components}/**/*.ts\" \"{src,pages,components}/**/*.tsx\"",
+    "lint:fix": "prettier --write \"{src,pages,components}/**/*.ts\" \"{src,pages,components}/**/*.tsx\""
   },
   "dependencies": {
     "@blocks/editor": "^0.0.28",
@@ -29,6 +31,7 @@
     "@types/styled-components": "4.1.16",
     "@types/theme-ui": "^0.2.1",
     "babel-plugin-styled-components": "^1.10.0",
+    "prettier": "1.18.2",
     "typescript": "^3.5.3"
   },
   "license": "ISC"
