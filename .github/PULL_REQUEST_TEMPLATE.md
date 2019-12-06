@@ -1,17 +1,18 @@
-<!-- Thanks for submitting a pull request. Have any questions? Check out contributing docs. -->
+<!-- Thanks for submitting this PR. Have any questions? Check out contributing docs. -->
 
-## Summary
-<!-- Short summary, referencing related issues: Closes #00, References #00, etc. -->
+### Summary
+<!-- Reference related issues: Fix #00, Ref #00 -->
 
 
 
-## Changes
-<!-- What are the changes made in this pull request? -->
+### Changes
+<!-- Changes made in this PR. -->
 
 - 
 - 
 
-## Notes for reviewers
+
+### Notes
 <!-- 
 Optionally mention anything you think is notable related to this PR.
 Can @mention reviewers with requests, questions.

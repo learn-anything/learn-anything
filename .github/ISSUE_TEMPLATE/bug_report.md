@@ -1,25 +1,21 @@
 ---
-name: Bug report 🐞
+name: Bug 🐞
 about: Something isn't working as expected?
 ---
 
 <!-- Please search existing issues to avoid creating duplicates. -->
 
-## Bug Summary 🐞
-<!-- A clear and concise description of what the bug is. -->
+### Bug 🐞
+<!-- Clear and concise description of the bug. -->
 
 
 
-## Steps to Reproduce:
-<!-- How can we reproduce the problem? -->
+### Steps to Reproduce:
 
 1. 
 2. 
 
-<!-- If you have code sample, error messages, stack traces, please provide it here as well -->
 
 
-## How do you propose to implement this?
-<!-- Please think about how this could be fixed. Can you add this and submit a PR? -->
-
-
+<!-- If you have code sample, error messages, stack traces, please provide it. -->
+<!-- Optionally think about how this could be fixed. Can you fix it and submit a PR? -->
