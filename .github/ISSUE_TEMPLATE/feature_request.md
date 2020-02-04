@@ -7,7 +7,7 @@ about: Suggest new idea for the project
 <!-- Please search existing issues to avoid creating duplicates. -->
 
 ### Feature ✨
-<!-- Clear and concise description of the feature proposal. -->
+<!-- Provide as much useful information as you can. -->
 
 
 
