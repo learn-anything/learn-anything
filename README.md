@@ -10,6 +10,8 @@
 
 The [end goal](https://docs.learn-anything.xyz/roadmap) is to create a machine learning system that can craft personalized study plans for learning any topic and an open knowledge graph anyone can explore and extend.
 
+As new version is being worked on. The code for old release (one currently deployed at [learn-anything.xyz](https://learn-anything.xyz)) can be found [here](https://github.com/learn-anything/2017-release).
+
 ## Contributing
 
 See [contribution guidelines](CONTRIBUTING.md#readme).
