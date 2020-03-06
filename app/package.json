@@ -1,0 +1,18 @@
+{
+  "name": "la-frontend",
+  "version": "2.0.0",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "dev": "next",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@mdx-js/loader": "^1.5.7",
+    "@mdx-js/mdx": "^1.5.7",
+    "@next/mdx": "^9.2.1",
+    "next": "^9.2.1",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
+  }
+}
