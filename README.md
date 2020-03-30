@@ -24,7 +24,7 @@ See [contribution guidelines](CONTRIBUTING.md#readme).
   <tr>
     <td align="center"><a href="https://nikitavoloboev.xyz"><img src="https://avatars0.githubusercontent.com/u/6391776?v=4" width="100px;" alt="Nikita Voloboev"/><br /><sub><b>Nikita Voloboev</b></sub></a></td>
     <td align="center"><a href="https://nglgzz.com/"><img src="https://avatars1.githubusercontent.com/u/13448636?v=4" width="100px;" alt="Angelo Gazzola"/><br /><sub><b>Angelo Gazzola</b></sub></a></td>
-    <td align="center"><a href="https://github.com/johnletey"><img src="https://avatars0.githubusercontent.com/u/30328854?v=4" width="100px;" alt="John Letey"/><br /><sub><b>John Letey</b></sub></a></td>
+    <td align="center"><a href="https://github.com/jletey"><img src="https://avatars0.githubusercontent.com/u/62398724?v=4" width="100px;" alt="John Letey"/><br /><sub><b>John Letey</b></sub></a></td>
   </tr>
 </table>
 
