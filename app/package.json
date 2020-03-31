@@ -3,27 +3,35 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
+    "dev": "next dev",
     "build": "next build",
-    "dev": "next",
-    "start": "next start"
+    "start": "next start",
+    "fmt": "prettier --write \"**/*.+(ts|tsx|md|mdx)\""
   },
   "dependencies": {
-    "@chakra-ui/core": "^0.7.0",
-    "@emotion/core": "^10.0.28",
+    "@chakra-ui/core": "^0.5.2",
+    "@emotion/core": "^10.0.27",
     "@emotion/styled": "^10.0.27",
-    "@mdx-js/loader": "^1.5.7",
-    "@mdx-js/mdx": "^1.5.7",
-    "@next/mdx": "^9.2.1",
     "emotion-theming": "^10.0.27",
     "next": "^9.3.3",
-    "next-seo": "^4.4.0",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0"
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
   },
   "devDependencies": {
-    "@types/node": "^13.7.7",
-    "@types/react": "^16.9.23",
+    "@types/node": "^13.9.8",
+    "@types/react": "^16.9.29",
     "@types/react-dom": "^16.9.5",
+    "husky": ">=4",
+    "lint-staged": ">=10",
+    "prettier": "2.0.2",
     "typescript": "^3.8.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.+(ts|tsx|md|mdx)": "prettier --write"
   }
 }
