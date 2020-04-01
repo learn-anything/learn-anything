@@ -9,7 +9,7 @@
     "fmt": "prettier --write \"**/*.+(ts|tsx|md|mdx)\""
   },
   "dependencies": {
-    "@chakra-ui/core": "^0.5.2",
+    "@chakra-ui/core": "^0.7.0",
     "@emotion/core": "^10.0.27",
     "@emotion/styled": "^10.0.27",
     "emotion-theming": "^10.0.27",

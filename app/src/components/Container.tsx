@@ -1,6 +1,14 @@
 import React from "react";
 import NextLink from "next/link";
-import { useColorMode, Flex, IconButton, Text, Tag } from "@chakra-ui/core";
+import {
+  useColorMode,
+  Flex,
+  Icon,
+  IconButton,
+  Text,
+  Tag,
+  Stack,
+} from "@chakra-ui/core";
 import styled from "@emotion/styled";
 
 const StickyNav = styled(Flex)`
@@ -51,11 +59,27 @@ const Container = ({ children }) => {
             </Tag>
           </Text>
         </NextLink>
-        <IconButton
-          aria-label="Toggle dark mode"
-          icon={colorMode === "dark" ? "sun" : "moon"}
-          onClick={toggleColorMode}
-        />
+        <Stack isInline>
+          <NextLink href="/new" passHref>
+            <IconButton
+              aria-label="Create new study guide"
+              icon={() => <Icon name="plus" />}
+              variant="ghost"
+            />
+          </NextLink>
+          {/* TODO: only display icon when the user is not logged in */}
+          {/* if the user is logged in display their avatar instead */}
+          <IconButton
+            aria-label="Log in/Sign up"
+            icon={() => <Icon name="person" />}
+            variant="ghost"
+          />
+          <IconButton
+            aria-label="Toggle dark mode"
+            icon={colorMode === "dark" ? "sun" : "moon"}
+            onClick={toggleColorMode}
+          />
+        </Stack>
       </StickyNav>
       <Flex
         as="main"
