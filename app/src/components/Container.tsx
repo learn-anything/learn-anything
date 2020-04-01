@@ -1,8 +1,7 @@
 import React from "react";
 import NextLink from "next/link";
-import { useColorMode, Flex, IconButton, Text } from "@chakra-ui/core";
+import { useColorMode, Flex, IconButton, Text, Tag } from "@chakra-ui/core";
 import styled from "@emotion/styled";
-import { Global, css } from "@emotion/core";
 
 const StickyNav = styled(Flex)`
   position: sticky;
@@ -30,16 +29,6 @@ const Container = ({ children }) => {
 
   return (
     <>
-      <Global
-        styles={css`
-          #__next {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            background: ${colorMode === "light" ? "white" : "#171923"};
-          }
-        `}
-      />
       <StickyNav
         flexDirection="row"
         justifyContent="space-between"
@@ -55,7 +44,12 @@ const Container = ({ children }) => {
         mx="auto"
       >
         <NextLink href="/" passHref>
-          <Text>Learn Anything</Text>
+          <Text fontWeight="bold">
+            Learn Anything
+            <Tag ml="2" size="md" variant="solid" variantColor="orange">
+              WIP
+            </Tag>
+          </Text>
         </NextLink>
         <IconButton
           aria-label="Toggle dark mode"
