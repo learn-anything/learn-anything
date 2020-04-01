@@ -8,6 +8,10 @@ import {
   Text,
   Tag,
   Stack,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/core";
 import styled from "@emotion/styled";
 
@@ -52,30 +56,46 @@ const Container = ({ children }) => {
         mx="auto"
       >
         <Stack isInline>
-          <NextLink href="/" passHref>
-            <Text fontWeight="bold">
+          <Text fontWeight="bold">
+            <NextLink href="/" passHref>
               Learn Anything
-              <Tag ml="2" size="md" variant="solid" variantColor="orange">
-                WIP
-              </Tag>
-            </Text>
-          </NextLink>
+            </NextLink>
+            <Tag ml="2" size="md" variant="solid" variantColor="orange">
+              WIP
+            </Tag>
+          </Text>
         </Stack>
         <Stack isInline>
           <NextLink href="/new" passHref>
             <IconButton
-              aria-label="Create new study guide"
+              aria-label="Create a new guide"
               icon={() => <Icon name="plus" />}
               variant="ghost"
             />
           </NextLink>
           {/* TODO: only display icon when the user is not logged in */}
           {/* if the user is logged in display their avatar instead */}
-          <IconButton
-            aria-label="Log in/Sign up"
-            icon={() => <Icon name="person" />}
-            variant="ghost"
-          />
+          {/* TODO: display different dropdown options when signed in */}
+          {/* e.g user profile, settings, sign out */}
+          <Stack>
+            <Menu>
+              <MenuButton>
+                <IconButton
+                  aria-label="Log in/Sign up"
+                  icon={() => <Icon name="person" />}
+                  variant="ghost"
+                />
+              </MenuButton>
+              <MenuList placement="left-start">
+                <NextLink href="/login" passHref>
+                  <MenuItem>Sign in</MenuItem>
+                </NextLink>
+                <NextLink href="/join" passHref>
+                  <MenuItem>Sign up</MenuItem>
+                </NextLink>
+              </MenuList>
+            </Menu>
+          </Stack>
           <IconButton
             aria-label="Toggle dark mode"
             icon={colorMode === "dark" ? "sun" : "moon"}
