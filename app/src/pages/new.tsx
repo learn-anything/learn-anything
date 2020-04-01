@@ -2,7 +2,7 @@ import React from "react";
 import { Stack, Flex, Heading } from "@chakra-ui/core";
 import Container from "../components/Container";
 
-const IndexPage = () => {
+const NewGuidePage = () => {
   return (
     <Container>
       <Stack
@@ -26,4 +26,4 @@ const IndexPage = () => {
   );
 };
 
-export default IndexPage;
+export default NewGuidePage;
