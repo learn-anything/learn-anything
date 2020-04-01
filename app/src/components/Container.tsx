@@ -51,14 +51,16 @@ const Container = ({ children }) => {
         mb={8}
         mx="auto"
       >
-        <NextLink href="/" passHref>
-          <Text fontWeight="bold">
-            Learn Anything
-            <Tag ml="2" size="md" variant="solid" variantColor="orange">
-              WIP
-            </Tag>
-          </Text>
-        </NextLink>
+        <Stack isInline>
+          <NextLink href="/" passHref>
+            <Text fontWeight="bold">
+              Learn Anything
+              <Tag ml="2" size="md" variant="solid" variantColor="orange">
+                WIP
+              </Tag>
+            </Text>
+          </NextLink>
+        </Stack>
         <Stack isInline>
           <NextLink href="/new" passHref>
             <IconButton
