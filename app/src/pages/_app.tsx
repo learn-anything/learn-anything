@@ -52,7 +52,8 @@ class App extends NextApp {
     return (
       <ThemeProvider theme={theme}>
         <CSSReset />
-        <ColorModeProvider>
+        {/* TODO: remove once https://github.com/chakra-ui/chakra-ui/issues/305 is resolved */}
+        <ColorModeProvider value="dark">
           <GlobalStyle>
             <DefaultSeo {...SEO} />
             <Component />

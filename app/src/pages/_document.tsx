@@ -28,6 +28,11 @@ class MyDocument extends Document {
           <Main />
           <NextScript />
         </body>
+        <script
+          src="/static/noflash.ts"
+          crossOrigin="anonymous"
+          type="application/typescript"
+        />
       </html>
     );
   }
