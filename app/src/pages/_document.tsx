@@ -6,31 +6,23 @@ class MyDocument extends Document {
     return (
       <html lang="en">
         <Head>
-          {/* TODO: favicon is hard to see in browser dark mode */}
           <link
-            href="/static/favicons/apple-touch-icon.png"
-            rel="apple-touch-icon"
-            sizes="180x180"
-          />
-          <link
-            href="/static/favicons/favicon-32x32.png"
             rel="icon"
-            sizes="32x32"
+            media="(prefers-color-scheme:dark)"
+            href="/static/favicons/favicon-dark.png"
             type="image/png"
           />
           <link
-            href="/static/favicons/favicon-16x16.png"
             rel="icon"
-            sizes="16x16"
+            media="(prefers-color-scheme:light)"
+            href="/static/favicons/favicon-light.png"
             type="image/png"
           />
-          <link href="/static/favicons/site.webmanifest" rel="manifest" />
-          <link
-            color="#000000"
-            href="/static/favicons/safari-pinned-tab.svg"
-            rel="mask-icon"
+          <script
+            src="https://unpkg.com/favicon-switcher@1.2.2/dist/index.js"
+            crossOrigin="anonymous"
+            type="application/javascript"
           />
-          <meta content="#ffffff" name="theme-color" />
         </Head>
         <body>
           <Main />
