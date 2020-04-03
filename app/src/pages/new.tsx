@@ -62,10 +62,9 @@ const NewGuidePage = () => {
               Add
             </Button>
           </Stack>
-          {/* TODO: wrap tags, do not overflow page */}
-          <Stack isInline mt={4}>
+          <Stack isInline flexWrap="wrap" mt={4}>
             {state.tags.map((tag) => (
-              <Tag variant="outline" size="lg">
+              <Tag variant="outline" size="lg" mb={2}>
                 <TagLabel>{tag}</TagLabel>
                 <TagIcon id={`tag-${tag}`} icon="x" onClick={removeTag} />
               </Tag>
