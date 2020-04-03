@@ -3,11 +3,11 @@ import {
   Stack,
   Flex,
   Heading,
-  InputGroup,
   Input,
-  InputRightElement,
   Button,
   Tag,
+  TagLabel,
+  TagIcon,
 } from "@chakra-ui/core";
 import Container from "../components/Container";
 
@@ -17,7 +17,7 @@ const NewGuidePage = () => {
     tags: [],
   });
 
-  const updateTags = async () => {
+  const addTag = async () => {
     const input = inputEl.current.value;
     if (!(input == "")) {
       if (!state.tags.find((tag) => tag === input)) {
@@ -25,6 +25,13 @@ const NewGuidePage = () => {
       }
       inputEl.current.value = "";
     }
+  };
+  const removeTag = async (e) => {
+    setState({
+      tags: state.tags.filter(
+        (tag) => tag !== e.currentTarget.id.split("tag-")[1]
+      ),
+    });
   };
 
   return (
@@ -51,14 +58,16 @@ const NewGuidePage = () => {
               ref={inputEl}
               type="text"
             />
-            <Button fontWeight="bold" size="md" onClick={updateTags}>
+            <Button fontWeight="bold" size="md" onClick={addTag}>
               Add
             </Button>
           </Stack>
+          {/* TODO: wrap tags, do not overflow page */}
           <Stack isInline mt={4}>
             {state.tags.map((tag) => (
               <Tag variant="outline" size="lg">
-                {tag}
+                <TagLabel>{tag}</TagLabel>
+                <TagIcon id={`tag-${tag}`} icon="x" onClick={removeTag} />
               </Tag>
             ))}
           </Stack>
