@@ -14,22 +14,22 @@ import Container from "../components/Container";
 const NewGuidePage = () => {
   const inputEl = useRef(null);
   const [state, setState] = useState({
-    tags: [],
+    topics: [],
   });
 
-  const addTag = async () => {
+  const addTopic = async () => {
     const input = inputEl.current.value;
     if (!(input == "")) {
-      if (!state.tags.find((tag) => tag === input)) {
-        setState({ tags: [...state.tags, input] });
+      if (!state.topics.find((topic) => topic === input)) {
+        setState({ topics: [...state.topics, input] });
       }
       inputEl.current.value = "";
     }
   };
-  const removeTag = async (e) => {
+  const removeTopic = async (e) => {
     setState({
-      tags: state.tags.filter(
-        (tag) => tag !== e.currentTarget.id.split("tag-")[1]
+      topics: state.topics.filter(
+        (topic) => topic !== e.currentTarget.id.split("topic-")[1]
       ),
     });
   };
@@ -58,15 +58,15 @@ const NewGuidePage = () => {
               ref={inputEl}
               type="text"
             />
-            <Button fontWeight="bold" size="md" onClick={addTag}>
+            <Button fontWeight="bold" size="md" onClick={addTopic}>
               Add
             </Button>
           </Stack>
           <Stack isInline flexWrap="wrap" mt={4}>
-            {state.tags.map((tag) => (
+            {state.topics.map((topic) => (
               <Tag variant="outline" size="lg" mb={2}>
-                <TagLabel>{tag}</TagLabel>
-                <TagIcon id={`tag-${tag}`} icon="x" onClick={removeTag} />
+                <TagLabel>{topic}</TagLabel>
+                <TagIcon id={`topic-${topic}`} icon="x" onClick={removeTopic} />
               </Tag>
             ))}
           </Stack>
