@@ -5,6 +5,8 @@ import {
   Heading,
   Input,
   Button,
+  Text,
+  Divider,
   Tag,
   TagLabel,
   TagIcon,
@@ -12,26 +14,61 @@ import {
 import Container from "../components/Container";
 
 const NewGuidePage = () => {
-  const inputEl = useRef(null);
+  const titleInputEl = useRef(null);
+  const topicInputEl = useRef(null);
   const [state, setState] = useState({
+    title: null,
+    slug: null,
     topics: [],
   });
 
+  const slugify = (str) => {
+    const slug = str
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)+/g, "");
+    // TODO: display their actual username
+    return `/user/$name/guides/${slug}`.replace(/\/\/+/g, "/");
+  };
+
   const addTopic = async () => {
-    const input = inputEl.current.value;
+    const input = topicInputEl.current.value;
     if (!(input == "")) {
       if (!state.topics.find((topic) => topic === input)) {
-        setState({ topics: [...state.topics, input] });
+        setState({ ...state, topics: [...state.topics, input] });
       }
-      inputEl.current.value = "";
+      topicInputEl.current.value = "";
     }
   };
   const removeTopic = async (e) => {
     setState({
+      ...state,
       topics: state.topics.filter(
         (topic) => topic !== e.currentTarget.id.split("topic-")[1]
       ),
     });
+  };
+  const updateTitle = async () => {
+    const input = titleInputEl.current.value;
+    if (input == "") {
+      setState({
+        ...state,
+        title: null,
+        slug: null,
+      });
+    } else {
+      setState({
+        ...state,
+        title: input,
+        slug: slugify(input),
+      });
+    }
+  };
+  const isValidGuide = async () => {
+    if (!state.title) {
+      return false;
+    }
+    return true;
   };
 
   return (
@@ -53,9 +90,25 @@ const NewGuidePage = () => {
           <Heading letterSpacing="tight">Create a new guide</Heading>
           <Stack isInline mt={4} w="100%">
             <Input
+              aria-label="Title for guide"
+              placeholder="Enter a title"
+              ref={titleInputEl}
+              onChange={updateTitle}
+              type="text"
+            />
+          </Stack>
+          {state.slug && (
+            <Stack isInline>
+              <Text>Your guide will be located at: </Text>
+              <Text as="b">{state.slug}</Text>
+            </Stack>
+          )}
+          <Divider />
+          <Stack isInline mt={4} w="100%">
+            <Input
               aria-label="Topics for guide"
               placeholder="Enter a topic"
-              ref={inputEl}
+              ref={topicInputEl}
               type="text"
             />
             <Button fontWeight="bold" size="md" onClick={addTopic}>
@@ -70,6 +123,17 @@ const NewGuidePage = () => {
               </Tag>
             ))}
           </Stack>
+          <Button
+            as="a"
+            p={[1, 4]}
+            w="250px"
+            fontWeight="bold"
+            m="3rem auto 0"
+            isDisabled
+            variantColor="red"
+          >
+            Create guide
+          </Button>
         </Flex>
       </Stack>
     </Container>

@@ -60,7 +60,7 @@ const Container = ({ children }) => {
             <NextLink href="/" passHref>
               Learn Anything
             </NextLink>
-            <Tag ml="2" size="md" variant="solid" variantColor="orange">
+            <Tag ml="2" size="md" variant="outline" variantColor="red">
               WIP
             </Tag>
           </Text>
