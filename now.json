@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "alias": ["learn-anything"],
+  "scope": "learn-anything",
+  "github": {
+    "silent": true
+  }
+}
