@@ -32,12 +32,26 @@ const GlobalStyle = ({ children }) => {
   );
 };
 
+const title = "Learn Anything";
+const description = ""; // TODO
 const SEO = {
-  title: "Learn Anything",
-  description: "", // TODO
+  title,
+  description,
   canonical: "https://learn-anything.xyz",
   openGraph: {
-    // TODO
+    type: "website",
+    locale: "en_GB",
+    url: "https://learn-anything.xyz",
+    title,
+    description,
+    images: [
+      {
+        url: "/static/images/og.jpg",
+        alt: title,
+        width: 1200,
+        height: 630,
+      },
+    ],
   },
   twitter: {
     handle: "@learnanything_",
