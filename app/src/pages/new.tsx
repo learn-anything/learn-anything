@@ -3,7 +3,10 @@ import {
   Stack,
   Flex,
   Heading,
+  InputGroup,
   Input,
+  InputRightElement,
+  Icon,
   Button,
   Text,
   Divider,
@@ -16,6 +19,8 @@ import Container from "../components/Container";
 const NewGuidePage = () => {
   const titleInputEl = useRef(null);
   const topicInputEl = useRef(null);
+  // TODO: actually validate the title
+  const [validName, setValidName] = useState(true);
   const [state, setState] = useState({
     title: null,
     slug: null,
@@ -88,7 +93,7 @@ const NewGuidePage = () => {
           w="100%"
         >
           <Heading letterSpacing="tight">Create a new guide</Heading>
-          <Stack isInline mt={4} w="100%">
+          <InputGroup mt={4} w="100%">
             <Input
               aria-label="Title for guide"
               placeholder="Enter a title"
@@ -96,7 +101,17 @@ const NewGuidePage = () => {
               onChange={updateTitle}
               type="text"
             />
-          </Stack>
+            {state.title && (
+              <InputRightElement
+                children={
+                  <Icon
+                    name={validName ? "check" : "alert"}
+                    color={validName ? "green.500" : "red.500"}
+                  />
+                }
+              />
+            )}
+          </InputGroup>
           {state.slug && (
             <Stack isInline>
               <Text>Your guide will be located at: </Text>
@@ -119,7 +134,12 @@ const NewGuidePage = () => {
             {state.topics.map((topic) => (
               <Tag variant="outline" size="lg" mb={2}>
                 <TagLabel>{topic}</TagLabel>
-                <TagIcon id={`topic-${topic}`} icon="x" onClick={removeTopic} />
+                <TagIcon
+                  id={`topic-${topic}`}
+                  icon="x"
+                  onClick={removeTopic}
+                  cursor="pointer"
+                />
               </Tag>
             ))}
           </Stack>

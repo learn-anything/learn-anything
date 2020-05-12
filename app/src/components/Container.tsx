@@ -14,6 +14,7 @@ import {
   MenuItem,
 } from "@chakra-ui/core";
 import styled from "@emotion/styled";
+import SponsorButton from "./SponsorButton";
 
 const StickyNav = styled(Flex)`
   position: sticky;
@@ -66,6 +67,7 @@ const Container = ({ children }) => {
           </Text>
         </Stack>
         <Stack isInline>
+          <SponsorButton />
           <NextLink href="/new" passHref>
             <IconButton
               aria-label="Create a new guide"
