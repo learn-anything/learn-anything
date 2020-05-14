@@ -1,7 +1,7 @@
 ---
 name: Feature ✨
 about: Suggest new idea for the project
-
+labels: enhancement
 ---
 
 ### Feature ✨

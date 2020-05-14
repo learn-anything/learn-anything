@@ -1,6 +1,7 @@
 ---
 name: Question 🤔
 about: Usage question or discussion is best done on Discord
+labels: question
 ---
 
 ### Question 🤔
