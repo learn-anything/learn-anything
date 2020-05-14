@@ -1,7 +1,7 @@
 ---
 name: Question 🤔
-about: Usage questions and discussions are best done on Discord
+about: Usage question or discussion is best done on Discord
 ---
 
-<!-- Please read the docs and ask questions on Discord (https://discord.gg/KKYdWjt).
-     The issue tracker is focused on code related issues. -->
+### Question 🤔
+<!-- Please read the docs (https://docs.learn-anything.xyz) & ask questions on Discord (https://discord.gg/KKYdWjt). The issue tracker is focused on code related issues. -->
