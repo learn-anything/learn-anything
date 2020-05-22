@@ -6,17 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "fmt": "prettier --write \"**/*.+(ts|tsx|md|mdx)\""
+    "fmt": "prettier --write \"**/*.+(ts|tsx|md|mdx|css)\""
   },
   "dependencies": {
-    "@chakra-ui/core": "^0.7.0",
-    "@emotion/core": "^10.0.27",
-    "@emotion/styled": "^10.0.27",
-    "emotion-theming": "^10.0.27",
     "next": "^9.3.3",
     "next-seo": "^4.4.0",
     "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "react-dom": "^16.12.0",
+    "swr": "^0.2.0"
   },
   "devDependencies": {
     "@types/node": "^13.9.8",
@@ -33,6 +30,6 @@
     }
   },
   "lint-staged": {
-    "*.+(ts|tsx|md|mdx)": "prettier --write"
+    "*.+(ts|tsx|md|mdx|css)": "prettier --write"
   }
 }
