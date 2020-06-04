@@ -1,8 +1,8 @@
-# api
+# api
 
-## Instructions
+## Instructions
 
-### Run Hasura GraphQL engine & Postgres
+### Run Hasura GraphQL engine & Postgres
 
 Start the local Docker container:
 
@@ -20,7 +20,7 @@ Now you have a local Hasura client running on your computer. Head to `http://loc
 
 <img width="1313" alt="Screenshot 2020-06-04 at 10 52 47" src="https://user-images.githubusercontent.com/62398724/83742693-a3452180-a651-11ea-81e1-e77f56b9c343.png">
 
-### Move data to Hasura DB
+### Move the data to Hasura DB
 
 Install the CLI tool:
 
