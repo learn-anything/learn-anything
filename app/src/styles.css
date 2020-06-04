@@ -1,0 +1,60 @@
+@import url("https://rsms.me/inter/inter.css");
+html {
+  font-family: "Inter", sans-serif;
+}
+@supports (font-variation-settings: normal) {
+  html {
+    font-family: "Inter var", sans-serif;
+  }
+}
+
+:root {
+  /* Spacing */
+  --main-content: 45rem;
+
+  /* Dark Mode Colors */
+  --bg: #131415;
+  --fg: #fafbfc;
+  --selection: rgba(255, 255, 255, 0.99);
+
+  /* Static Colours */
+  --red: #a76c6e;
+}
+
+.light {
+  --bg: #fff;
+  --fg: #000;
+  --selection: rgba(0, 0, 0, 0.99);
+}
+
+::selection {
+  text-shadow: none;
+  background: var(--selection);
+  color: var(--bg);
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--fg);
+
+  max-width: var(--main-content);
+  margin: 0 auto;
+}
+
+a {
+  outline: none;
+  text-decoration: none;
+  color: var(--fg);
+
+  background-image: linear-gradient(to right, var(--red), var(--red));
+  background-size: 100% 1px;
+  background-position: left bottom;
+  background-repeat: no-repeat;
+  text-shadow: 0.1em 0 var(--bg), -0.1em 0 var(--bg), 0.05em 0 var(--bg),
+    -0.05em 0 var(--bg);
+}
+
+a:hover {
+  color: var(--red);
+}
