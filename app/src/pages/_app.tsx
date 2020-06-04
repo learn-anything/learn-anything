@@ -15,8 +15,8 @@ const App = ({ Component, pageProps }: AppProps) => {
         } else {
           setLightMode()
         }
-      }
-    }
+      },
+    },
   })
 
   return <Component {...pageProps} />
@@ -26,13 +26,18 @@ App.getInitialProps = async (ctx: NextUrqlAppContext) => {
   const appProps = await NextApp.getInitialProps(ctx)
 
   return {
-    ...appProps
+    ...appProps,
   }
 }
 
 export default withUrqlClient(() => ({
-  url: "http://localhost:8080/v1/graphql",
-  fetch
+  url: "https://learn-anything-db.herokuapp.com/v1/graphql",
+  fetchOptions: {
+    headers: {
+      "x-hasura-admin-secret": process.env.hasuraSecret,
+    },
+  },
+  fetch,
 }))(
   // @ts-ignore
   App

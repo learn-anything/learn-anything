@@ -1,26 +1,18 @@
-import React from "react"
 import gql from "graphql-tag"
+import React from "react"
 import { useQuery } from "urql"
 
-const queryTopics = gql`
+const query = gql`
   query {
-    topics {
-      key
+    link {
+      name
     }
   }
 `
 
-interface TopicData {
-  topics: Topic[]
-}
-
-interface Topic {
-  key: string
-}
-
 const IndexPage = () => {
-  const [result] = useQuery<TopicData>({
-    query: queryTopics
+  const [result] = useQuery({
+    query: query,
   })
 
   if (result.fetching || !result.data) {
@@ -35,8 +27,8 @@ const IndexPage = () => {
     <div>
       <h1>Learn Anything</h1>
       <ul>
-        {result.data.topics.map(topic => (
-          <li>{topic.key}</li>
+        {result.data.link.map((link) => (
+          <li>{link.name}</li>
         ))}
       </ul>
     </div>
