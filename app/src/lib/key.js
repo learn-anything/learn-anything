@@ -1,32 +1,32 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react'
 
-const isCtrl = (e) => e.metaKey || e.ctrlKey;
+const isCtrl = e => e.metaKey || e.ctrlKey
 
 // https://keycode.info
 export const useKeyBindings = (
   initialKeyBindings = {},
-  eventListener = "keydown"
+  eventListener = 'keydown',
 ) => {
-  const [keyBindings] = useState(initialKeyBindings);
+  const [keyBindings] = useState(initialKeyBindings)
 
   useEffect(() => {
     document.addEventListener(
       eventListener,
-      (event) => {
-        const { code } = event;
-        const keyBinding = keyBindings[code];
-        if (keyBinding === undefined) return;
-        const condition = keyBinding.ctrl ? isCtrl(event) : true;
-        if (!condition) return;
-        event.preventDefault();
-        keyBinding.fn(event);
+      event => {
+        const { code } = event
+        const keyBinding = keyBindings[code]
+        if (keyBinding === undefined) return
+        const condition = keyBinding.ctrl ? isCtrl(event) : true
+        if (!condition) return
+        event.preventDefault()
+        keyBinding.fn(event)
       },
-      false
-    );
+      false,
+    )
 
     return () =>
-      Object.keys(keyBindings).forEach((keyBinding) =>
-        document.removeEventListener(eventListener, keyBindings[keyBinding])
-      );
-  }, []);
-};
+      Object.keys(keyBindings).forEach(keyBinding =>
+        document.removeEventListener(eventListener, keyBindings[keyBinding]),
+      )
+  }, [])
+}

@@ -1,5 +1,5 @@
-import NextDocument, { Html, Head, Main, NextScript } from "next/document";
-import { themeStorageKey } from "../lib/theme";
+import NextDocument, { Html, Head, Main, NextScript } from 'next/document'
+import { themeStorageKey } from '../lib/theme'
 
 class Document extends NextDocument {
   render() {
@@ -23,8 +23,8 @@ class Document extends NextDocument {
           <NextScript />
         </body>
       </Html>
-    );
+    )
   }
 }
 
-export default Document;
+export default Document
