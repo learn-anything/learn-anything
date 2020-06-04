@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react"
 
 const isCtrl = e => e.metaKey || e.ctrlKey
 
 // https://keycode.info
 export const useKeyBindings = (
   initialKeyBindings = {},
-  eventListener = 'keydown',
+  eventListener = "keydown"
 ) => {
   const [keyBindings] = useState(initialKeyBindings)
 
@@ -21,12 +21,12 @@ export const useKeyBindings = (
         event.preventDefault()
         keyBinding.fn(event)
       },
-      false,
+      false
     )
 
     return () =>
       Object.keys(keyBindings).forEach(keyBinding =>
-        document.removeEventListener(eventListener, keyBindings[keyBinding]),
+        document.removeEventListener(eventListener, keyBindings[keyBinding])
       )
   }, [])
 }

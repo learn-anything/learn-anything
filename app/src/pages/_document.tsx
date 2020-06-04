@@ -1,5 +1,5 @@
-import NextDocument, { Html, Head, Main, NextScript } from 'next/document'
-import { themeStorageKey } from '../lib/theme'
+import NextDocument, { Html, Head, Main, NextScript } from "next/document"
+import { themeStorageKey } from "../lib/theme"
 
 class Document extends NextDocument {
   render() {
@@ -16,7 +16,7 @@ class Document extends NextDocument {
                   if (!mode) return
                   if (mode == "light") document.documentElement.classList.add(mode)
                 } catch (e) {}
-              })()`,
+              })()`
             }}
           />
           <Main />

@@ -1,6 +1,6 @@
-import React from 'react'
-import gql from 'graphql-tag'
-import { useQuery } from 'urql'
+import React from "react"
+import gql from "graphql-tag"
+import { useQuery } from "urql"
 
 const queryTopics = gql`
   query {
@@ -20,7 +20,7 @@ interface Topic {
 
 const IndexPage = () => {
   const [result] = useQuery<TopicData>({
-    query: queryTopics,
+    query: queryTopics
   })
 
   if (result.fetching || !result.data) {
