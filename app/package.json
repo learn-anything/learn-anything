@@ -9,9 +9,15 @@
     "start": "next start"
   },
   "dependencies": {
+    "graphql": "^15.0.0",
+    "graphql-tag": "^2.10.3",
+    "isomorphic-unfetch": "^3.0.0",
     "next": "^9.4.4",
+    "next-urql": "^0.3.8",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "react-is": "^16.13.1",
+    "urql": "^1.9.7"
   },
   "devDependencies": {
     "@types/node": "^14.0.10",
