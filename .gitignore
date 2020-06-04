@@ -1,4 +1,7 @@
-# frontend
+# general
+.DS_Store
+
+# app
 node_modules
 .next
-.DS_Store
+

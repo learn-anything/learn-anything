@@ -1,8 +1,15 @@
-# LA Frontend
+# app
 
-[learn-anything.now.sh](https://learn-anything.now.sh/)
+## Instructions
+
+Install the dependencies:
 
 ```sh
-yarn
-yarn dev
+$ yarn
+```
+
+Run the website in development mode:
+
+```sh
+$ yarn dev
 ```
