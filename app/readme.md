@@ -1,6 +1,6 @@
-# app
+# app
 
-## Instructions
+## Instructions
 
 Install the dependencies:
 
