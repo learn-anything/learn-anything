@@ -18,7 +18,7 @@ To run the project:
 1. Clone the repo (`git clone https://github.com/learn-anything/learn-anything`)
 2. Run `cd app` (change to the app directory)
 3. Run `yarn` (download all dependencies)
-4. Run `yart dev` (start local development)
+4. Run `yarn dev` (start local development)
 5. Edit the code & run it! ✨
 
 ## Opening PRs
