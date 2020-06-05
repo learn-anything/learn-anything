@@ -16,9 +16,10 @@ Learn Anything is a website built using [NextJS](https://nextjs.org), [Go](https
 To run the project:
 
 1. Clone the repo (`git clone https://github.com/learn-anything/learn-anything`)
-2. Run `yarn` (download all dependencies)
-3. Run `yart start` (start local development)
-4. Edit the code & run it! ✨
+2. Run `cd app` (change to app directory)
+3. Run `yarn` (download all dependencies)
+4. Run `yart dev` (start local development)
+5. Edit the code & run it! ✨
 
 ## Opening PRs
 
