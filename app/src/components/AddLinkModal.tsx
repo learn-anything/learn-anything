@@ -17,7 +17,6 @@ import { useKeyBindings } from "../lib/key"
 
 import { useMutation } from "urql"
 import { createLinkMutation } from "../lib/mutations"
-import { Plus } from "./icons"
 
 const AddLinkModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -25,7 +24,7 @@ const AddLinkModal = () => {
 
   const [addLinkResult, addLink] = useMutation(createLinkMutation)
 
-  const onCreateSite = (values) => {
+  const onCreateLink = (values) => {
     addLink({ object: values })
     onClose()
   }
@@ -38,12 +37,22 @@ const AddLinkModal = () => {
 
   return (
     <>
-      <span onClick={onOpen} style={{ cursor: "pointer" }}>
-        <Plus size={28} />
-      </span>
+      <Button
+        backgroundColor="gray.900"
+        color="white"
+        fontWeight="medium"
+        _hover={{ bg: "gray.700" }}
+        _active={{
+          bg: "gray.800",
+          transform: "scale(0.95)",
+        }}
+        onClick={onOpen}
+      >
+        + Add Link
+      </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent as="form" onSubmit={handleSubmit(onCreateSite)}>
+        <ModalContent as="form" onSubmit={handleSubmit(onCreateLink)}>
           <ModalHeader fontWeight="bold">Add Link</ModalHeader>
           <ModalBody pb={6}>
             <FormControl isRequired>
