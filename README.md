@@ -12,7 +12,11 @@ The [end goal](https://docs.learn-anything.xyz/roadmap) is to create a machine l
 
 As new version is being worked on. The code for old release (one currently deployed at [learn-anything.xyz](https://learn-anything.xyz)) can be found [here](https://github.com/learn-anything/2017-release).
 
-This repo includes open source code. There are also [docs](https://docs.learn-anything.xyz) and [curated lists](https://github.com/learn-anything/curated-lists#readme) available.
+New version is being worked on in private as we figure out how to make development work with open source contributions.
+
+There are [docs](https://docs.learn-anything.xyz) available that describe the goals of the project as well as an open wiki of notes.
+
+We also manage curation of [some lists](https://github.com/learn-anything/curated-lists#readme).
 
 ## Contributing
 
