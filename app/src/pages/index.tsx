@@ -1,27 +1,32 @@
-import gql from "graphql-tag"
-import { useQuery } from "urql"
-import Header from "../components/header"
-import Link from "../components/link"
+import { useAuth } from "../lib/auth"
+import { Flex, Icon, Tag, Button, Stack } from "@chakra-ui/core"
 
-const query = gql`
-  query {
-    links {
-      id
-    }
-  }
-`
-
-const BookmarksPage = () => {
-  const [result] = useQuery({ query })
+const Home = () => {
+  const auth = useAuth()
 
   return (
-    <div>
-      <Header />
-      {result?.data?.links.map((link) => (
-        <Link id={link.id} key={link.id} />
-      ))}
-    </div>
+    <Flex
+      as="main"
+      direction="column"
+      align="center"
+      justify="center"
+      h="100vh"
+    >
+      <Icon name="logo" size="64px" />
+      {auth.user ? (
+        <Tag mt={4}>WIP</Tag>
+      ) : (
+        <Stack mt={4} isInline>
+          <Button size="sm" onClick={(e) => auth.signinWithGitHub()}>
+            GitHub
+          </Button>
+          <Button isDisabled size="sm" onClick={(e) => auth.signinWithGoogle()}>
+            Google
+          </Button>
+        </Stack>
+      )}
+    </Flex>
   )
 }
 
-export default BookmarksPage
+export default Home

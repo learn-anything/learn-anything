@@ -1,9 +1,10 @@
 import fetch from "isomorphic-unfetch"
 import { NextUrqlAppContext, withUrqlClient } from "next-urql"
 import NextApp, { AppProps } from "next/app"
-import React from "react"
 import { DefaultSeo } from "next-seo"
 import { ThemeProvider, CSSReset } from "@chakra-ui/core"
+import customTheme from "../theme"
+import { AuthProvider } from "../lib/auth"
 
 const title = "Learn Anything"
 const description =
@@ -36,10 +37,12 @@ const SEO = {
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
-    <ThemeProvider>
-      <CSSReset />
-      <DefaultSeo {...SEO} />
-      <Component {...pageProps} />
+    <ThemeProvider theme={customTheme}>
+      <AuthProvider>
+        <CSSReset />
+        <DefaultSeo {...SEO} />
+        <Component {...pageProps} />
+      </AuthProvider>
     </ThemeProvider>
   )
 }
@@ -56,7 +59,7 @@ export default withUrqlClient(() => ({
   url: "https://learn-anything-db.herokuapp.com/v1/graphql",
   fetchOptions: {
     headers: {
-      "x-hasura-admin-secret": process.env.hasuraSecret,
+      "x-hasura-admin-secret": process.env.NEXT_PUBLIC_HASURA_SECRET,
     },
   },
   fetch,

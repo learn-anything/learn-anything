@@ -12,8 +12,8 @@
     "@chakra-ui/core": "^0.8.0",
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
-    "dotenv": "^8.2.0",
     "emotion-theming": "^10.0.27",
+    "firebase": "^7.15.0",
     "graphql": "^15.0.0",
     "graphql-tag": "^2.10.3",
     "isomorphic-unfetch": "^3.0.0",
@@ -24,7 +24,6 @@
     "react-dom": "^16.13.1",
     "react-hook-form": "^5.7.2",
     "react-is": "^16.13.1",
-    "swr": "^0.2.2",
     "urql": "^1.9.7"
   },
   "devDependencies": {
