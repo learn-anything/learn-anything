@@ -1,0 +1,7 @@
+# general
+.DS_Store
+
+# app
+.next
+node_modules
+.env*
