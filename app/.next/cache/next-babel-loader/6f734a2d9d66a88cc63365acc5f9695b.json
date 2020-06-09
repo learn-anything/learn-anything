@@ -1,0 +1,31 @@
+{
+  "ast": null,
+  "code": "var _jsxFileName = \"/Users/nikivi/src/orgs/learn-anything/learn-anything/app/pages/_app.tsx\";\nvar __jsx = React.createElement;\n\nfunction ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }\n\nfunction _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }\n\nfunction _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }\n\nfunction _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }\n\nimport fetch from \"isomorphic-unfetch\";\nimport { withUrqlClient } from \"next-urql\";\nimport NextApp from \"next/app\";\nimport React from \"react\";\n\nconst App = ({\n  Component,\n  pageProps\n}) => {\n  return __jsx(Component, _extends({}, pageProps, {\n    __self: this,\n    __source: {\n      fileName: _jsxFileName,\n      lineNumber: 7,\n      columnNumber: 10\n    }\n  }));\n};\n\nApp.getInitialProps = async ctx => {\n  const appProps = await NextApp.getInitialProps(ctx);\n  console.log(\"hi\");\n  return _objectSpread({}, appProps);\n};\n\nexport default withUrqlClient(() => ({\n  url: \"https://learn-anything-db.herokuapp.com/v1/graphql\",\n  fetch\n}))( // @ts-ignore\nApp);",
+  "map": {
+    "version": 3,
+    "sources": [
+      "/Users/nikivi/src/orgs/learn-anything/learn-anything/app/pages/_app.tsx"
+    ],
+    "names": [
+      "fetch",
+      "withUrqlClient",
+      "NextApp",
+      "React",
+      "App",
+      "Component",
+      "pageProps",
+      "getInitialProps",
+      "ctx",
+      "appProps",
+      "console",
+      "log",
+      "url"
+    ],
+    "mappings": ";;;;;;;;;;;AAAA,OAAOA,KAAP,MAAkB,oBAAlB;AACA,SAA6BC,cAA7B,QAAmD,WAAnD;AACA,OAAOC,OAAP,MAAkC,UAAlC;AACA,OAAOC,KAAP,MAAkB,OAAlB;;AAEA,MAAMC,GAAG,GAAG,CAAC;AAAEC,EAAAA,SAAF;AAAaC,EAAAA;AAAb,CAAD,KAAwC;AAClD,SAAO,MAAC,SAAD,eAAeA,SAAf;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,KAAP;AACD,CAFD;;AAIAF,GAAG,CAACG,eAAJ,GAAsB,MAAOC,GAAP,IAAmC;AACvD,QAAMC,QAAQ,GAAG,MAAMP,OAAO,CAACK,eAAR,CAAwBC,GAAxB,CAAvB;AACAE,EAAAA,OAAO,CAACC,GAAR,CAAY,IAAZ;AAEA,2BACKF,QADL;AAGD,CAPD;;AASA,eAAeR,cAAc,CAAC,OAAO;AACnCW,EAAAA,GAAG,EAAE,oDAD8B;AAEnCZ,EAAAA;AAFmC,CAAP,CAAD,CAAd,EAIb;AACAI,GALa,CAAf",
+    "sourcesContent": [
+      "import fetch from \"isomorphic-unfetch\";\nimport { NextUrqlAppContext, withUrqlClient } from \"next-urql\";\nimport NextApp, { AppProps } from \"next/app\";\nimport React from \"react\";\n\nconst App = ({ Component, pageProps }: AppProps) => {\n  return <Component {...pageProps} />;\n};\n\nApp.getInitialProps = async (ctx: NextUrqlAppContext) => {\n  const appProps = await NextApp.getInitialProps(ctx);\n  console.log(\"hi\");\n\n  return {\n    ...appProps,\n  };\n};\n\nexport default withUrqlClient(() => ({\n  url: \"https://learn-anything-db.herokuapp.com/v1/graphql\",\n  fetch,\n}))(\n  // @ts-ignore\n  App\n);\n"
+    ]
+  },
+  "metadata": {},
+  "sourceType": "module"
+}

@@ -1,0 +1,32 @@
+{
+  "ast": null,
+  "code": "\"use strict\";\n\nexports.__esModule = true;\nexports.getRouteRegex = getRouteRegex; // this isn't importing the escape-string-regex module\n// to reduce bytes\n\nfunction escapeRegex(str) {\n  return str.replace(/[|\\\\{}()[\\]^$+*?.-]/g, '\\\\$&');\n}\n\nfunction getRouteRegex(normalizedRoute) {\n  // Escape all characters that could be considered RegEx\n  var escapedRoute = escapeRegex(normalizedRoute.replace(/\\/$/, '') || '/');\n  var groups = {};\n  var groupIndex = 1;\n  var parameterizedRoute = escapedRoute.replace(/\\/\\\\\\[([^/]+?)\\\\\\](?=\\/|$)/g, function (_, $1) {\n    var isOptional = /^\\\\\\[.*\\\\\\]$/.test($1);\n\n    if (isOptional) {\n      $1 = $1.slice(2, -2);\n    }\n\n    var isCatchAll = /^(\\\\\\.){3}/.test($1);\n\n    if (isCatchAll) {\n      $1 = $1.slice(6);\n    }\n\n    groups[$1 // Un-escape key\n    .replace(/\\\\([|\\\\{}()[\\]^$+*?.-])/g, '$1') // eslint-disable-next-line no-sequences\n    ] = {\n      pos: groupIndex++,\n      repeat: isCatchAll\n    };\n    return isCatchAll ? isOptional ? '(?:/(.+?))?' : '/(.+?)' : '/([^/]+?)';\n  });\n  var namedParameterizedRoute; // dead code eliminate for browser since it's only needed\n  // while generating routes-manifest\n\n  if (false) {\n    namedParameterizedRoute = escapedRoute.replace(/\\/\\\\\\[([^/]+?)\\\\\\](?=\\/|$)/g, function (_, $1) {\n      var isCatchAll = /^(\\\\\\.){3}/.test($1);\n      var key = $1 // Un-escape key\n      .replace(/\\\\([|\\\\{}()[\\]^$+*?.-])/g, '$1').replace(/^\\.{3}/, '');\n      return isCatchAll ? \"/(?<\".concat(escapeRegex(key), \">.+?)\") : \"/(?<\".concat(escapeRegex(key), \">[^/]+?)\");\n    });\n  }\n\n  return {\n    re: new RegExp('^' + parameterizedRoute + '(?:/)?$', 'i'),\n    groups: groups,\n    namedRegex: namedParameterizedRoute ? \"^\".concat(namedParameterizedRoute, \"(?:/)?$\") : undefined\n  };\n}",
+  "map": {
+    "version": 3,
+    "sources": ["../../../../../next-server/lib/router/utils/route-regex.ts"],
+    "names": [
+      "str",
+      "escapedRoute",
+      "escapeRegex",
+      "normalizedRoute",
+      "groups",
+      "groupIndex",
+      "parameterizedRoute",
+      "isOptional",
+      "$1",
+      "isCatchAll",
+      "pos",
+      "repeat",
+      "namedParameterizedRoute",
+      "key",
+      "re",
+      "namedRegex"
+    ],
+    "mappings": ";;;uCAAA;AACA;;AACA,SAAA,WAAA,CAAA,GAAA,EAAkC;AAChC,SAAOA,GAAG,CAAHA,OAAAA,CAAAA,sBAAAA,EAAP,MAAOA,CAAP;AAGK;;AAAA,SAAA,aAAA,CAAA,eAAA,EAML;AACA;AACA,MAAMC,YAAY,GAAGC,WAAW,CAACC,eAAe,CAAfA,OAAAA,CAAAA,KAAAA,EAAAA,EAAAA,KAAjC,GAAgC,CAAhC;AAEA,MAAMC,MAAiE,GAAvE,EAAA;AACA,MAAIC,UAAU,GAAd,CAAA;AAEA,MAAMC,kBAAkB,GAAG,YAAY,CAAZ,OAAA,CAAA,6BAAA,EAEzB,UAAA,CAAA,EAAA,EAAA,EAAW;AACT,QAAMC,UAAU,GAAG,eAAA,IAAA,CAAnB,EAAmB,CAAnB;;AACA,QAAA,UAAA,EAAgB;AACdC,MAAAA,EAAE,GAAGA,EAAE,CAAFA,KAAAA,CAAAA,CAAAA,EAAY,CAAjBA,CAAKA,CAALA;AAEF;;AAAA,QAAMC,UAAU,GAAG,aAAA,IAAA,CAAnB,EAAmB,CAAnB;;AACA,QAAA,UAAA,EAAgB;AACdD,MAAAA,EAAE,GAAGA,EAAE,CAAFA,KAAAA,CAALA,CAAKA,CAALA;AAEF;;AAAA,IAAA,MAAM,CACJ,EACE;AAAA,KADF,OAAA,CAAA,0BAAA,EAAA,IAAA,CADI,CAIJ;AAJI,KAAN,GAKI;AAAEE,MAAAA,GAAG,EAAEL,UAAP,EAAA;AAAqBM,MAAAA,MAAM,EAL/B;AAKI,KALJ;AAMA,WAAOF,UAAU,GAAIF,UAAU,GAAA,aAAA,GAAd,QAAA,GAAjB,WAAA;AAjBJ,GAA2B,CAA3B;AAqBA,MAAA,uBAAA,CA5BA,CA8BA;AACA;;AACA,aAAmC;AACjCK,IAAAA,uBAAuB,GAAGX,YAAY,CAAZA,OAAAA,CAAAA,6BAAAA,EAExB,UAAA,CAAA,EAAA,EAAA,EAAW;AACT,UAAMQ,UAAU,GAAG,aAAA,IAAA,CAAnB,EAAmB,CAAnB;AACA,UAAMI,GAAG,GAAG,EACV;AAAA,OADU,OAAA,CAAA,0BAAA,EAAA,IAAA,EAAA,OAAA,CAAA,QAAA,EAAZ,EAAY,CAAZ;AAKA,aAAOJ,UAAU,iBACNP,WAAW,CADL,GACK,CADL,2BAENA,WAAW,CAFtB,GAEsB,CAFL,aAAjB;AATJU,KAA0BX,CAA1BW;AAgBF;;AAAA,SAAO;AACLE,IAAAA,EAAE,EAAE,IAAA,MAAA,CAAW,MAAA,kBAAA,GAAX,SAAA,EADC,GACD,CADC;AAELV,IAAAA,MAFK,EAELA,MAFK;AAGLW,IAAAA,UAAU,EAAEH,uBAAuB,cAAA,uBAAA,eAHrC;AAAO,GAAP;AAOD",
+    "sourcesContent": [
+      "// this isn't importing the escape-string-regex module\n// to reduce bytes\nfunction escapeRegex(str: string) {\n  return str.replace(/[|\\\\{}()[\\]^$+*?.-]/g, '\\\\$&')\n}\n\nexport function getRouteRegex(\n  normalizedRoute: string\n): {\n  re: RegExp\n  namedRegex?: string\n  groups: { [groupName: string]: { pos: number; repeat: boolean } }\n} {\n  // Escape all characters that could be considered RegEx\n  const escapedRoute = escapeRegex(normalizedRoute.replace(/\\/$/, '') || '/')\n\n  const groups: { [groupName: string]: { pos: number; repeat: boolean } } = {}\n  let groupIndex = 1\n\n  const parameterizedRoute = escapedRoute.replace(\n    /\\/\\\\\\[([^/]+?)\\\\\\](?=\\/|$)/g,\n    (_, $1) => {\n      const isOptional = /^\\\\\\[.*\\\\\\]$/.test($1)\n      if (isOptional) {\n        $1 = $1.slice(2, -2)\n      }\n      const isCatchAll = /^(\\\\\\.){3}/.test($1)\n      if (isCatchAll) {\n        $1 = $1.slice(6)\n      }\n      groups[\n        $1\n          // Un-escape key\n          .replace(/\\\\([|\\\\{}()[\\]^$+*?.-])/g, '$1')\n        // eslint-disable-next-line no-sequences\n      ] = { pos: groupIndex++, repeat: isCatchAll }\n      return isCatchAll ? (isOptional ? '(?:/(.+?))?' : '/(.+?)') : '/([^/]+?)'\n    }\n  )\n\n  let namedParameterizedRoute: string | undefined\n\n  // dead code eliminate for browser since it's only needed\n  // while generating routes-manifest\n  if (typeof window === 'undefined') {\n    namedParameterizedRoute = escapedRoute.replace(\n      /\\/\\\\\\[([^/]+?)\\\\\\](?=\\/|$)/g,\n      (_, $1) => {\n        const isCatchAll = /^(\\\\\\.){3}/.test($1)\n        const key = $1\n          // Un-escape key\n          .replace(/\\\\([|\\\\{}()[\\]^$+*?.-])/g, '$1')\n          .replace(/^\\.{3}/, '')\n\n        return isCatchAll\n          ? `/(?<${escapeRegex(key)}>.+?)`\n          : `/(?<${escapeRegex(key)}>[^/]+?)`\n      }\n    )\n  }\n\n  return {\n    re: new RegExp('^' + parameterizedRoute + '(?:/)?$', 'i'),\n    groups,\n    namedRegex: namedParameterizedRoute\n      ? `^${namedParameterizedRoute}(?:/)?$`\n      : undefined,\n  }\n}\n"
+    ]
+  },
+  "metadata": {},
+  "sourceType": "script"
+}

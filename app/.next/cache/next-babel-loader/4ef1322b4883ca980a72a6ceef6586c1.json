@@ -1,0 +1,15 @@
+{
+  "ast": null,
+  "code": "\"use strict\";\n\nexports.__esModule = true;\nexports.HeadManagerContext = void 0;\n\nvar _react = _interopRequireDefault(require(\"react\"));\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : {\n    \"default\": obj\n  };\n}\n\nvar HeadManagerContext = _react[\"default\"].createContext(null);\n\nexports.HeadManagerContext = HeadManagerContext;\n\nif (true) {\n  HeadManagerContext.displayName = 'HeadManagerContext';\n}",
+  "map": {
+    "version": 3,
+    "sources": ["../../../next-server/lib/head-manager-context.ts"],
+    "names": ["HeadManagerContext", "React"],
+    "mappings": ";;;;;AAAA,IAAA,MAAA,GAAA,sBAAA,CAAA,OAAA,CAAA,OAAA,CAAA,CAAA;;;;;;AAEO;;AAAA,IAAMA,kBAAsC,GAAGC,MAAAA,WAAAA,CAAAA,aAAAA,CAA/C,IAA+CA,CAA/C;;;;AAEP,UAA2C;AACzCD,EAAAA,kBAAkB,CAAlBA,WAAAA,GAAAA,oBAAAA;AACD",
+    "sourcesContent": [
+      "import React from 'react'\n\nexport const HeadManagerContext: React.Context<any> = React.createContext(null)\n\nif (process.env.NODE_ENV !== 'production') {\n  HeadManagerContext.displayName = 'HeadManagerContext'\n}\n"
+    ]
+  },
+  "metadata": {},
+  "sourceType": "script"
+}

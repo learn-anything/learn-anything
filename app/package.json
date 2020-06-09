@@ -1,0 +1,36 @@
+{
+  "name": "app",
+  "version": "2.0.0",
+  "author": "John Letey",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@chakra-ui/core": "^0.8.0",
+    "@emotion/core": "^10.0.28",
+    "@emotion/styled": "^10.0.27",
+    "dotenv": "^8.2.0",
+    "emotion-theming": "^10.0.27",
+    "graphql": "^15.0.0",
+    "graphql-tag": "^2.10.3",
+    "isomorphic-unfetch": "^3.0.0",
+    "next": "^9.4.4",
+    "next-seo": "^4.5.0",
+    "next-urql": "^0.3.8",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-hook-form": "^5.7.2",
+    "react-is": "^16.13.1",
+    "swr": "^0.2.2",
+    "urql": "^1.9.7"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.10",
+    "@types/react": "^16.9.35",
+    "@types/react-dom": "^16.9.8",
+    "typescript": "^3.9.3"
+  }
+}
