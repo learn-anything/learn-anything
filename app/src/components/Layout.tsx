@@ -1,5 +1,5 @@
+import { Avatar, Box, Button, Flex, Icon } from "@chakra-ui/core"
 import { useAuth } from "../lib/auth"
-import { Box, Flex, Icon, Button, Avatar } from "@chakra-ui/core"
 
 const Layout = ({ children }) => {
   const { user, signout } = useAuth()

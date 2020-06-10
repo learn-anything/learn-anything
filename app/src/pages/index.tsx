@@ -1,7 +1,7 @@
-import { useAuth } from "../lib/auth"
-import Layout from "../components/Layout"
+import { Button, Flex, Heading, Icon, Stack } from "@chakra-ui/core"
 import AddLinkModal from "../components/AddLinkModal"
-import { Flex, Heading, Icon, Stack, Button } from "@chakra-ui/core"
+import Layout from "../components/Layout"
+import { useAuth } from "../lib/auth"
 
 const Home = () => {
   const auth = useAuth()

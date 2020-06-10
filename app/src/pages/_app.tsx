@@ -1,10 +1,10 @@
+import { CSSReset, ThemeProvider } from "@chakra-ui/core"
 import fetch from "isomorphic-unfetch"
+import { DefaultSeo } from "next-seo"
 import { NextUrqlAppContext, withUrqlClient } from "next-urql"
 import NextApp, { AppProps } from "next/app"
-import { DefaultSeo } from "next-seo"
-import { ThemeProvider, CSSReset } from "@chakra-ui/core"
-import customTheme from "../theme"
 import { AuthProvider } from "../lib/auth"
+import customTheme from "../theme"
 
 const title = "Learn Anything"
 const description =

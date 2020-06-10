@@ -1,4 +1,4 @@
-# Contributing to Learn Anything
+# Contributing
 
 ## Using
 
