@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect } from 'react'
 
 const isCtrl = (e) => e.metaKey || e.ctrlKey
 
 // https://keycode.info
 export const useKeyBindings = (
   initialKeyBindings = {},
-  eventListener = "keydown"
+  eventListener = 'keydown'
 ) => {
   const [keyBindings] = useState(initialKeyBindings)
 
@@ -18,7 +18,7 @@ export const useKeyBindings = (
         if (keyBinding === undefined) return
         const condition = keyBinding.ctrl ? isCtrl(event) : true
         if (!condition) return
-        if (event.target.type != "text") {
+        if (event.target.type != 'text') {
           event.preventDefault()
           keyBinding.fn(event)
         }
