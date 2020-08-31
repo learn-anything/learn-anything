@@ -1,8 +1,3 @@
 # Contributing
 
-## Using
-
-- [NextJS](https://nextjs.org) for rendering things
-- [PostgresDB](https://www.postgresql.org) to store all the data
-- [Hasura](https://hasura.io) for GraphQL API on top of Postgres DB
-- [Go](https://golang.org) for all things backend (Hasura actions, ..)
+The project uses [NextJS](https://nextjs.org), [Postgres](https://www.postgresql.org), [Prisma](https://www.prisma.io/) & [Go](https://golang.org).
