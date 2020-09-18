@@ -18,4 +18,8 @@ Working version:
 4. CLI to add/remove links
 5. Add a tag and/or note to a link
 
-The rest: knowledge graph of topics etc will be done as OSS.
+## Notes
+
+Edit [doc/notes.md](doc/notes.md) as a general documentation file for the project. Feel free to free form discuss code, data model, anything.
+
+Will be using [Linear](https://linear.app/learn-anything/team/LA/active) for active tasks. Once MVP with contribution is done and deployed. Will move fully to GitHub.
