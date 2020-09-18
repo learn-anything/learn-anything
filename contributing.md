@@ -6,6 +6,6 @@ The project uses:
 - [Postgres](https://www.postgresql.org)/[Prisma](https://www.prisma.io/) to store and access data
 - [Go](https://golang.org) for CLI
 
-## Mobile app (separte repo will be made)
+## Mobile app (separate repo will be made)
 
 - SwiftUI & [Composable Architecture](https://github.com/pointfreeco/swift-composable-architecture) for iOS app
