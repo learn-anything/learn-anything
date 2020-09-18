@@ -23,3 +23,5 @@ Working version:
 Edit [doc/notes.md](doc/notes.md) as a general documentation file for the project. Feel free to free form discuss code, data model, anything.
 
 Will be using [Linear](https://linear.app/learn-anything/team/LA/active) for active tasks. Once MVP with contribution is done and deployed. Will move fully to GitHub.
+
+Discussion is done on [Discord](https://discord.gg/KKYdWjt).
