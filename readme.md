@@ -1,4 +1,4 @@
-# Learn Anything [![Discord](https://img.shields.io/badge/-Discord-0a0a0a.svg?style=flat&colorA=0a0a0a)](https://discord.gg/KKYdWjt)
+# Learn Anything
 
 > Organize world's knowledge, explore relations and curate learning paths
 
@@ -24,4 +24,4 @@ Edit [doc/notes.md](doc/notes.md) as a general documentation file for the projec
 
 Will be using [Linear](https://linear.app/learn-anything/team/LA/active) for active tasks. Once MVP with contribution is done and deployed. Will move fully to GitHub.
 
-Discussion is done on [Discord](https://discord.gg/KKYdWjt).
+As it's just me and John working on this now, maybe Angelo if he sees it (👋), let's talk on Telegram. Later, Discord.
