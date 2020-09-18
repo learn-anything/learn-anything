@@ -1,2 +1,5 @@
-.next
-node_modules
+.gitkeep
+.env*
+*.ico
+*.lock
+db/migrations

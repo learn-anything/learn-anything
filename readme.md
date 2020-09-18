@@ -6,8 +6,16 @@
 
 See [contribution guidelines](contributing.md).
 
-## Release goals
+## Release
 
-The goal is to get a working version of storing, retrieving bookmarks. With ability to attach links to a bookmark + write a note.
+Will release it back on GitHub when basic version is working. And contribution guidelines are good.
 
-As well as a basic knowledge graph of topics users can track to learn. The topics are special tags in the system. (i.e. `react` tag is also LA topic).
+Working version:
+
+1. Store, retrieve links
+2. Present links on website
+3. Users
+4. CLI to add/remove links
+5. Add a tag and/or note to a link
+
+The rest: knowledge graph of topics etc will be done as OSS.
