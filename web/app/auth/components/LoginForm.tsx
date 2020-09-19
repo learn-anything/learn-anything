@@ -19,7 +19,11 @@ export const LoginForm = (props: LoginFormProps) => {
         initialValues={{ email: undefined, password: undefined }}
         onSubmit={async (values) => {
           try {
-            await login({ email: values.email, password: values.password })
+            await login({
+              email: values.email,
+              password: values.password,
+              username: values.username,
+            })
             props.onSuccess && props.onSuccess()
           } catch (error) {
             if (error.name === "AuthenticationError") {
@@ -35,6 +39,7 @@ export const LoginForm = (props: LoginFormProps) => {
       >
         <LabeledTextField name="email" label="Email" placeholder="Email" />
         <LabeledTextField name="password" label="Password" placeholder="Password" type="password" />
+        <LabeledTextField name="username" label="Username" placeholder="Username" />
       </Form>
     </div>
   )

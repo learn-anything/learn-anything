@@ -24,11 +24,6 @@ const UserInfo = () => {
         >
           Logout
         </button>
-        <div>
-          User id: <code>{currentUser.id}</code>
-          <br />
-          User role: <code>{currentUser.role}</code>
-        </div>
       </>
     )
   } else {
@@ -56,41 +51,44 @@ const AddLink = () => {
   return (
     <div>
       {currentUser && (
-        <form>
-          <h1 className="font-bold">Add Link</h1>
-          <div>
-            <span className="mr-2">Title</span>
-            <input
-              className="bg-gray-200"
-              type="text"
-              value={title}
-              onChange={(e) => {
-                setTitle(e.target.value)
+        <div>
+          <h1>Hi, {currentUser.username}</h1>
+          <form>
+            <h1 className="font-bold">Add Link</h1>
+            <div>
+              <span className="mr-2">Title</span>
+              <input
+                className="bg-gray-200"
+                type="text"
+                value={title}
+                onChange={(e) => {
+                  setTitle(e.target.value)
+                }}
+              />
+            </div>
+            <div>
+              <span className="mr-2">URL</span>
+              <input
+                className="bg-gray-200"
+                type="text"
+                value={url}
+                onChange={(e) => {
+                  setUrl(e.target.value)
+                }}
+              />
+            </div>
+            <button
+              className="bg-gray-200 mt-2"
+              type="submit"
+              onClick={async (e) => {
+                e.preventDefault()
+                await addLink({ url, title })
               }}
-            />
-          </div>
-          <div>
-            <span className="mr-2">URL</span>
-            <input
-              className="bg-gray-200"
-              type="text"
-              value={url}
-              onChange={(e) => {
-                setUrl(e.target.value)
-              }}
-            />
-          </div>
-          <button
-            className="bg-gray-200 mt-2"
-            type="submit"
-            onClick={async (e) => {
-              e.preventDefault()
-              await addLink({ url, title })
-            }}
-          >
-            Add
-          </button>
-        </form>
+            >
+              Add
+            </button>
+          </form>
+        </div>
       )}
     </div>
   )

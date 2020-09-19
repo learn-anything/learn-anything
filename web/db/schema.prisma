@@ -16,7 +16,7 @@ model User {
   id             Int       @default(autoincrement()) @id
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
-  name           String?
+  username       String    @unique
   email          String    @unique
   hashedPassword String?
   role           String    @default("user")
