@@ -5,11 +5,12 @@ export default async function addLink(
   { url, title }: { url: string; title: string },
   ctx: { session?: SessionContext } = {}
 ) {
-  await db.link.create({
+  const link = await db.link.create({
     data: {
       title,
       url,
       user: { connect: { id: ctx.session!.userId } },
     },
   })
+  return link
 }

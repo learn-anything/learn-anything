@@ -3,7 +3,7 @@ import logout from "app/auth/mutations/logout"
 import { useCurrentUser } from "app/hooks/useCurrentUser"
 import Layout from "app/layouts/Layout"
 import { BlitzPage, Link } from "blitz"
-import React, { Suspense } from "react"
+import React, { Suspense, useEffect } from "react"
 
 /*
  * This file is just for a pleasant getting started page for your new app.
@@ -48,11 +48,23 @@ const AddLink = () => {
   const currentUser = useCurrentUser()
   const [url, setUrl] = React.useState("")
   const [title, setTitle] = React.useState("")
+  const [link, setLink] = React.useState({})
+  const [changed, setChanged] = React.useState(false)
+
+  useEffect(() => {
+    setChanged(true)
+    setTimeout(() => {
+      setChanged(false)
+    }, 1000)
+  }, [link])
+
   return (
     <div>
       {currentUser && (
         <div>
-          <h1>Hi, {currentUser.username}</h1>
+          <h1>
+            Hi, <a href={`/u/${currentUser.username}`}>{currentUser.username}</a>
+          </h1>
           <form>
             <h1 className="font-bold">Add Link</h1>
             <div>
@@ -82,11 +94,12 @@ const AddLink = () => {
               type="submit"
               onClick={async (e) => {
                 e.preventDefault()
-                await addLink({ url, title })
+                setLink(await addLink({ url, title }))
               }}
             >
               Add
             </button>
+            {changed && <span className="text-green-500 ml-3">Link added</span>}
           </form>
         </div>
       )}
