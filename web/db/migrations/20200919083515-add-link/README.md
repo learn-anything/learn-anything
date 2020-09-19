@@ -89,5 +89,3 @@ migration 20200918162609-initial-migration..20200919083515-add-link
 +  userId Int
 +}
 ```
-
-

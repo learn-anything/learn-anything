@@ -83,5 +83,3 @@ migration ..20200918162609-initial-migration
 +  privateData        String?
 +}
 ```
-
-
