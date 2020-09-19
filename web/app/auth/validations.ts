@@ -10,4 +10,5 @@ export const LoginInput = z.object({
   email: z.string().email(),
   password: z.string(),
 })
+
 export type LoginInputType = z.infer<typeof LoginInput>

@@ -1,3 +1,4 @@
+import addLink from "app/auth/mutations/addLink"
 import logout from "app/auth/mutations/logout"
 import { useCurrentUser } from "app/hooks/useCurrentUser"
 import Layout from "app/layouts/Layout"
@@ -82,10 +83,9 @@ const AddLink = () => {
           <button
             className="bg-gray-200 mt-2"
             type="submit"
-            onClick={(e) => {
+            onClick={async (e) => {
               e.preventDefault()
-              console.log(url)
-              console.log(title)
+              await addLink({ url, title })
             }}
           >
             Add
