@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
-  provider = ["sqlite", "postgres"]
+  provider = ["postgres"]
   url      = env("DATABASE_URL")
 }
 
@@ -21,6 +21,7 @@ model User {
   hashedPassword String?
   role           String    @default("user")
   sessions       Session[]
+  links          Link[]
 }
 
 model Session {
@@ -35,4 +36,12 @@ model Session {
   antiCSRFToken      String?
   publicData         String?
   privateData        String?
+}
+
+model Link {
+  id     Int    @default(autoincrement()) @id
+  title  String
+  url    String
+  user   User   @relation(fields: [userId], references: [id])
+  userId Int
 }

@@ -1,8 +1,8 @@
-import { Link, BlitzPage } from "blitz"
-import Layout from "app/layouts/Layout"
 import logout from "app/auth/mutations/logout"
 import { useCurrentUser } from "app/hooks/useCurrentUser"
-import { Suspense } from "react"
+import Layout from "app/layouts/Layout"
+import { BlitzPage, Link } from "blitz"
+import React from "react"
 
 /*
  * This file is just for a pleasant getting started page for your new app.
@@ -11,6 +11,7 @@ import { Suspense } from "react"
 
 const UserInfo = () => {
   const currentUser = useCurrentUser()
+  console.log(currentUser)
 
   if (currentUser) {
     return (
@@ -48,79 +49,52 @@ const UserInfo = () => {
   }
 }
 
+const SignUp = () => {
+  return (
+    <>
+      <Link href="/signup">
+        <a className="button small">
+          <strong>Sign Up</strong>
+        </a>
+      </Link>
+      <Link href="/login">
+        <a className="button small">
+          <strong>Login</strong>
+        </a>
+      </Link>
+    </>
+  )
+}
+
+const AddLink = () => {
+  return (
+    <div>
+      <span>Add Link</span>
+      <span>Title</span>
+      <input type="text" />
+      <span>URL</span>
+      <input type="text" />
+    </div>
+  )
+}
+
 const Home: BlitzPage = () => {
+  const currentUser = useCurrentUser()
   return (
     <div className="container">
       <main>
-        <div className="logo">
-          <img src="/logo.png" alt="blitz.js" />
-        </div>
-        <p>
-          <strong>Congrats!</strong> Your app is ready, including user sign-up and log-in.
-        </p>
-        <div className="buttons" style={{ marginTop: "1rem", marginBottom: "5rem" }}>
+        <span>Hi {currentUser && currentUser.name}</span>
+        {currentUser ? <AddLink /> : <SignUp />}
+        {/* <div className="buttons" style={{ marginTop: "1rem", marginBottom: "5rem" }}>
           <Suspense fallback="Loading...">
             <UserInfo />
           </Suspense>
-        </div>
-        <p>
-          <strong>
-            To add a new model to your app, <br />
-            run the following in your terminal:
-          </strong>
-        </p>
-        <pre>
-          <code>blitz generate all project name:string</code>
-        </pre>
-        <pre>
-          <code>blitz db migrate</code>
-        </pre>
-
-        <p>
-          Then go to{" "}
-          <Link href="/projects">
-            <a>/projects</a>
-          </Link>
-        </p>
-        <div className="buttons" style={{ marginTop: "5rem" }}>
-          <a
-            className="button"
-            href="https://github.com/blitz-js/blitz/blob/master/USER_GUIDE.md?utm_source=blitz-new&utm_medium=app-template&utm_campaign=blitz-new"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-          <a
-            className="button-outline"
-            href="https://github.com/blitz-js/blitz"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Github Repo
-          </a>
-          <a
-            className="button-outline"
-            href="https://slack.blitzjs.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Slack Community
-          </a>
-        </div>
+        </div> */}
       </main>
 
-      <footer>
-        <a
-          href="https://blitzjs.com?utm_source=blitz-new&utm_medium=app-template&utm_campaign=blitz-new"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by Blitz.js
-        </a>
-      </footer>
+      <footer></footer>
 
-      <style jsx global>{`
+      {/* <style jsx global>{`
         @import url("https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;700&display=swap");
 
         html,
@@ -250,7 +224,7 @@ const Home: BlitzPage = () => {
             flex-direction: column;
           }
         }
-      `}</style>
+      `}</style> */}
     </div>
   )
 }

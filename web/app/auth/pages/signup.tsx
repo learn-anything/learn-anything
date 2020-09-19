@@ -1,10 +1,10 @@
-import React from "react"
-import { useRouter, BlitzPage } from "blitz"
-import Layout from "app/layouts/Layout"
-import { Form, FORM_ERROR } from "app/components/Form"
-import { LabeledTextField } from "app/components/LabeledTextField"
 import signup from "app/auth/mutations/signup"
 import { SignupInput, SignupInputType } from "app/auth/validations"
+import { Form, FORM_ERROR } from "app/components/Form"
+import { LabeledTextField } from "app/components/LabeledTextField"
+import Layout from "app/layouts/Layout"
+import { BlitzPage, useRouter } from "blitz"
+import React from "react"
 
 const SignupPage: BlitzPage = () => {
   const router = useRouter()
