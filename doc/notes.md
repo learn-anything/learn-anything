@@ -1,5 +1,9 @@
 # Data model
 
+# Questions
+
+- why does hot reload break when creating new file
+
 # 1. Store, retrieve links
 
 - be able to save, retrieve links from web
