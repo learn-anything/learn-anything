@@ -9,7 +9,7 @@ export const Link = ({ link }) => {
       <Text as="a" href={link.url} className="text-gray-600" fontSize="sm">
         {link.url}
       </Text>
-      <Button onClick={() => removeLink({ id: link.id })}>
+      <Button onClick={() => removeLink(link.id)}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
           <path
             fill-rule="evenodd"
