@@ -1,4 +1,4 @@
-import { Box, Text, Button } from "@chakra-ui/core"
+import { Box, Button, Text } from "@chakra-ui/core"
 import removeLink from "app/auth/mutations/removeLink"
 
 // flag to show full, only host url
