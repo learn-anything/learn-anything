@@ -7,7 +7,7 @@ const User = ({ user, links }) => {
   return (
     <div>
       <h1>Hey, {user.username}!</h1>
-      <ul>{links && links.map((link) => <Link link={link} />)}</ul>
+      <div className="flex flex-col">{links && links.map((link) => <Link link={link} />)}</div>
     </div>
   )
 }

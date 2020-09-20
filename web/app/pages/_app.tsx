@@ -5,6 +5,8 @@ import LoginForm from "app/auth/components/LoginForm"
 
 import "app/styles/index.css"
 
+import { CSSReset, ThemeProvider } from "@chakra-ui/core";
+
 export default function App({ Component, pageProps }: AppProps) {
   const getLayout = Component.getLayout || ((page) => page)
 
@@ -17,9 +19,12 @@ export default function App({ Component, pageProps }: AppProps) {
         queryCache.resetErrorBoundaries()
       }}
     >
-      {getLayout(<Component {...pageProps} />)}
+      {getLayout(<ThemeProvider>
+        <CSSReset />
+        <Component {...pageProps} />
+      </ThemeProvider>)}
     </ErrorBoundary>
-  )
+  );
 }
 
 function RootErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
