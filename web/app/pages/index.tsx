@@ -3,7 +3,7 @@ import logout from "app/auth/mutations/logout"
 import { useCurrentUser } from "app/hooks/useCurrentUser"
 import Layout from "app/layouts/Layout"
 import { BlitzPage, Link } from "blitz"
-import React, { Suspense, useEffect } from "react"
+import React, { Suspense, useEffect, useRef } from "react"
 
 /*
  * This file is just for a pleasant getting started page for your new app.
@@ -31,7 +31,7 @@ const UserInfo = () => {
       <>
         <Link href="/signup">
           <a className="button small">
-            <strong>Sign Up</strong>
+            <strong className="mr-2">Sign Up</strong>
           </a>
         </Link>
         <Link href="/login">
@@ -50,8 +50,13 @@ const AddLink = () => {
   const [title, setTitle] = React.useState("")
   const [link, setLink] = React.useState({})
   const [changed, setChanged] = React.useState(false)
+  const didMount = useRef(false)
 
   useEffect(() => {
+    if (!didMount.current) {
+      didMount.current = true
+      return
+    }
     setChanged(true)
     setTimeout(() => {
       setChanged(false)

@@ -1,8 +1,8 @@
-import React from "react"
-import { LabeledTextField } from "app/components/LabeledTextField"
-import { Form, FORM_ERROR } from "app/components/Form"
 import login from "app/auth/mutations/login"
 import { LoginInput, LoginInputType } from "app/auth/validations"
+import { Form, FORM_ERROR } from "app/components/Form"
+import { LabeledTextField } from "app/components/LabeledTextField"
+import React from "react"
 
 type LoginFormProps = {
   onSuccess?: () => void
@@ -22,7 +22,6 @@ export const LoginForm = (props: LoginFormProps) => {
             await login({
               email: values.email,
               password: values.password,
-              username: values.username,
             })
             props.onSuccess && props.onSuccess()
           } catch (error) {
@@ -39,7 +38,6 @@ export const LoginForm = (props: LoginFormProps) => {
       >
         <LabeledTextField name="email" label="Email" placeholder="Email" />
         <LabeledTextField name="password" label="Password" placeholder="Password" type="password" />
-        <LabeledTextField name="username" label="Username" placeholder="Username" />
       </Form>
     </div>
   )

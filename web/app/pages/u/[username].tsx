@@ -1,24 +1,20 @@
-import getUsers from "app/auth/queries/users"
-import getUser from "app/auth/queries/user"
 import getLinks from "app/auth/queries/links"
+import getUser from "app/auth/queries/user"
+import getUsers from "app/auth/queries/users"
+import { Link } from "app/components/Link"
 
 const User = ({ user, links }) => {
   return (
     <div>
       <h1>Hey, {user.username}!</h1>
-      <ul>
-        {links &&
-          links.map((link) => (
-            <li>
-              <a href={link.url} className="bg-blue-100">
-                {link.title}
-              </a>
-            </li>
-          ))}
-      </ul>
+      <ul>{links && links.map((link) => <Link link={link} />)}</ul>
     </div>
   )
 }
+
+;<li>{/* <a href={link.url} className="bg-blue-100">
+  {link.title}
+</a> */}</li>
 
 export async function getStaticPaths() {
   const users = await getUsers()

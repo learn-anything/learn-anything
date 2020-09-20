@@ -1,5 +1,5 @@
-import { SessionContext } from "blitz"
 import { authenticateUser } from "app/auth/auth-utils"
+import { SessionContext } from "blitz"
 import { LoginInput, LoginInputType } from "../validations"
 
 export default async function login(input: LoginInputType, ctx: { session?: SessionContext } = {}) {
