@@ -24,7 +24,7 @@ We share [all of our plans & docs in public](https://www.notion.so/Public-b3b8e0
 
 Check [contributing.md](contributing.md) for instructions how to run the project and how to contribute.
 
-Check [0.1 Release (link manager with tags, user profiles) issue](#3) for things that should be worked on before the initial release.
+Check [0.1 Release (link manager with tags, user profiles) issue](/issues/#3) for things that should be worked on before the initial release.
 
 ## Notes
 
