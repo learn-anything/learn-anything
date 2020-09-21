@@ -31,7 +31,8 @@ The repo consists of these main folders.
 To run the website:
 
 1. Clone project: `git clone https://github.com/learn-anything/learn-anything`
-2. Add `.env.local` file in [web](web) directory. With content:
+2. Have Postgres running locally. Can [install Postgres](https://www.postgresql.org) and run a local server. If you are on mac, [Postico](https://eggerapps.at/postico2/) is a nice GUI client for Postgres.
+3. Add `.env.local` file in [web](web) directory. With content:
 
 ```
 DATABASE_URL=postgresql://nikitavoloboev@localhost:5432/learn-anything
@@ -39,7 +40,7 @@ DATABASE_URL=postgresql://nikitavoloboev@localhost:5432/learn-anything
 
 In future we will have a Dockerfile for both running the database/backend on server and locally.
 
-3. Once Postgres is running locally, can run `yarn` and `yarn start`. And go to http://localhost:3000 ✨
+4. Once Postgres is running locally, can run `yarn` and `yarn start`. And go to http://localhost:3000 ✨
 
 ### CLI
 
