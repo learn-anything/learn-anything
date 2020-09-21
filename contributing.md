@@ -22,9 +22,9 @@ Learn Anything currently uses:
 
 The repo consists of these main folders.
 
-- `api/cmd` holds the CLI tool.
-- `docs` holds documentation. Other docs related to LA (not directly code related) can be found [here](https://www.notion.so/learnany/Public-b3b8e046a6bc44549367b84423360b93).
-- `web` holds all the website code. Both all the NextJS pages, Prisma queries.
+- [api/cmd](api/cmd) holds the CLI tool.
+- [docs](docs) holds documentation. Other docs related to LA (not directly code related) can be found [here](https://www.notion.so/learnany/Public-b3b8e046a6bc44549367b84423360b93).
+- [web](web) holds all the website code. Both all the NextJS pages, Prisma queries.
 
 [HyperLink Academy](https://gitlab.com/jaredpereira/hyperlink-academy) and [lorawan-stack](https://github.com/TheThingsNetwork/lorawan-stack) are great code inspirations.
 
