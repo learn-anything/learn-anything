@@ -26,10 +26,6 @@ Check [contributing.md](contributing.md) for instructions how to run the project
 
 Check [0.1 Release (link manager with tags, user profiles) issue](../../issues/3) for things that should be worked on before the initial release.
 
-## Notes
-
-Edit [docs/notes.md](docs/notes.md) as a general documentation file for the project. Feel free to free form discuss code, data model, anything.
-
 ## Old code
 
 The code for last release of Learn Anything currently deployed at [learn-anything.xyz](https://learn-anything.xyz) can be found [here](https://github.com/learn-anything/2017-release).

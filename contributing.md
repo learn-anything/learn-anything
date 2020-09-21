@@ -49,3 +49,7 @@ Not yet done but it will be a Go CLI tool based off [gh](https://github.com/cli/
 ## iOS/Android apps
 
 There will be native apps built. iOS app will use [SwiftUI](https://developer.apple.com/xcode/swiftui/) & [Composable Architecture](https://github.com/pointfreeco/swift-composable-architecture).
+
+## Docs
+
+All docs can be improved. Feel free to edit [docs/notes.md](docs/notes.md) file as it's used as a general note file. Feel free to free form discuss code, data model, anything.
