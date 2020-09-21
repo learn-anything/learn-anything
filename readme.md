@@ -24,16 +24,7 @@ We share [all of our plans & docs in public](https://www.notion.so/Public-b3b8e0
 
 Check [contributing.md](contributing.md) for instructions how to run the project and how to contribute.
 
-## Release Goals
-
-Will release a basic version of website live once we have:
-
-1. Store, retrieve links (done)
-2. Present links on website (done)
-3. Users
-4. CLI to add/remove links
-5. Add a tag and/or note to a link
-6. Style nicely
+Check [0.1 Release (link manager with tags, user profiles) issue](#3) for things that should be worked on before the initial release.
 
 ## Notes
 
