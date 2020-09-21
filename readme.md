@@ -34,7 +34,7 @@ Edit [docs/notes.md](docs/notes.md) as a general documentation file for the proj
 
 The code for last release of Learn Anything currently deployed at [learn-anything.xyz](https://learn-anything.xyz) can be found [here](https://github.com/learn-anything/2017-release).
 
-As new version will be built, it will be moved to a subdomain.
+As new version will be built, old version will be moved to a subdomain.
 
 ## Team
 
@@ -46,4 +46,6 @@ As new version will be built, it will be moved to a subdomain.
   </tr>
 </table>
 
-[![Discord](https://img.shields.io/badge/-Discord-0a0a0a.svg?style=flat&colorA=0a0a0a)](https://discord.gg/KKYdWjt) [![Twitter](http://bit.ly/latwitt)](https://twitter.com/learnanything_)
+Let's build this together. 🦊
+
+[![MIT](http://bit.ly/mitbadge)](license) [![Discord](https://img.shields.io/badge/-Discord-0a0a0a.svg?style=flat&colorA=0a0a0a)](https://discord.gg/KKYdWjt) [![Twitter](http://bit.ly/latwitt)](https://twitter.com/learnanything_)
