@@ -24,7 +24,7 @@ We share [all of our plans & docs in public](https://www.notion.so/Public-b3b8e0
 
 Check [contributing.md](contributing.md) for instructions how to run the project and how to contribute.
 
-Check [0.1 Release (link manager with tags, user profiles) issue](/issues/#3) for things that should be worked on before the initial release.
+Check [0.1 Release (link manager with tags, user profiles) issue](../../issues/3) for things that should be worked on before the initial release.
 
 ## Notes
 
@@ -46,6 +46,10 @@ As new version will be built, old version will be moved to a subdomain.
   </tr>
 </table>
 
-Let's build this together. 🦊
+## Develop & learn together 🦊
+
+We try to run the project as openly as possible and all communication is done either in GitHub issues/prs or on [Discord](https://discord.gg/KKYdWjt).
+
+If you are stuck on anything and either can't run the project or have trouble implementing something, reach out on Discord #dev channel. We also do pair programming sessions on Discord in one of the voice channels.
 
 [![MIT](http://bit.ly/mitbadge)](license) [![Discord](https://img.shields.io/badge/-Discord-0a0a0a.svg?style=flat&colorA=0a0a0a)](https://discord.gg/KKYdWjt) [![Twitter](http://bit.ly/latwitt)](https://twitter.com/learnanything_)
