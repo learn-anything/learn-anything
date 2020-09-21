@@ -42,6 +42,8 @@ In future we will have a Dockerfile for both running the database/backend on ser
 
 4. Once Postgres is running locally, can run `yarn` and `yarn start`. And go to http://localhost:3000 ✨
 
+Check [web](web) for more details.
+
 ### CLI
 
 Not yet done but it will be a Go CLI tool based off [gh](https://github.com/cli/cli). The goal is to be able to save, retrieve links/ideas from CLI.
