@@ -31,7 +31,7 @@ The repo consists of these main folders.
 To run the website:
 
 1. Clone project: `git clone https://github.com/learn-anything/learn-anything`
-2. Have Postgres running locally. Can [install Postgres](https://www.postgresql.org) and run a local server. If you are on mac, [Postico](https://eggerapps.at/postico2/) is a nice GUI client for Postgres.
+2. Have Postgres running locally. Can [install Postgres](https://www.postgresql.org) and run a local server. If you are on mac, [Postico](https://eggerapps.at/postico2/) is a nice GUI client for Postgres. For setting up a postgresql locally, prisma has a [nice guide](https://www.prisma.io/docs/guides/database-workflows/setting-up-a-database/postgresql)
 3. Add `.env.local` file in [web](web) directory. With content:
 
 ```
@@ -55,3 +55,16 @@ There will be native apps built. iOS app will use [SwiftUI](https://developer.ap
 ## Docs
 
 All docs can be improved. Feel free to edit [docs/notes.md](docs/notes.md) file as it's used as a general note file. Feel free to free form discuss code, data model, anything.
+
+## Troubleshooting
+
+If you run into issues that should be documented here, please submit a PR! ❤️
+
+@prisma/client did not initialize yet error when running `yarn start`
+
+Workaround
+
+1. Run `yarn blitz db migrate`
+2. Then run `yarn start`
+
+[Active issue](https://github.com/blitz-js/blitz/issues/1004) on blitz.js
