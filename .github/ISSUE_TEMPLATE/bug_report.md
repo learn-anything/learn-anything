@@ -3,8 +3,8 @@ name: Bug 🐞
 about: Something not working as expected?
 labels: bug
 ---
-<!-- Search existing issues to avoid duplicates. Provide detailed report. -->
-<!-- If you have code sample, error messages, stack traces, please provide it. -->
+<!-- Search existing issues to avoid duplicates. Check readme/contributing docs. -->
+<!-- If you have relevant code sample, error messages, etc. Please provide it. -->
 
 ### Bug 🐞
 
