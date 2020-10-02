@@ -47,6 +47,8 @@ export function Form<FormValues extends Record<string, unknown>>({
           <button type="submit" disabled={submitting}>
             {submitText}
           </button>
+          
+          <p>Better if added a description here, Cheers!</p>
 
           <style global jsx>{`
             .form > * + * {
