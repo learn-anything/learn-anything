@@ -1,6 +1,5 @@
 {
   "name": "web",
-  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "solid-start dev",
@@ -35,6 +34,6 @@
 
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=16"
   }
 }
