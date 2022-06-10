@@ -1,7 +1,5 @@
 # Contributing
 
-Thank you for wanting to contribute!
-
 Any type of contribution is welcome, not just code. You can help with:
 
 - **Bugs / Features:** Share bug reports or make feature requests. Check [existing issues](../../issues) to avoid duplicates.
