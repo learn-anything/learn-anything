@@ -613,7 +613,7 @@ packages:
   /@solid-primitives/rootless/1.1.0_solid-js@1.4.2:
     resolution: {integrity: sha512-9KiTDWxEQ8d5NTElCqKVASxukUWMYMVOVGE6ZAq1MUUQPT94lQ2BdnHVUOplN5zu+rQ15AWleM8fZRwty6Ge9A==}
     peerDependencies:
-      solid-js: ^1.3.1
+      solid-js: ^1.3.1 || ^1.4.0
     dependencies:
       '@solid-primitives/utils': 1.5.2_solid-js@1.4.2
       solid-js: 1.4.2
@@ -623,7 +623,7 @@ packages:
     resolution: {integrity: sha512-qYKYEgGl/nSCF+wq7H6zFFi8s2e/woFZJkZbCbyUrtbEIvCze4xSZRr64Xi067GlBE+T/N4LZX/htJmLfwkAeg==}
     deprecated: throttle primitive moved to @solid-primitives/scheduled
     peerDependencies:
-      solid-js: ^1.3.1
+      solid-js: ^1.3.1 || ^1.4.0
     dependencies:
       solid-js: 1.4.2
     dev: false
@@ -631,7 +631,7 @@ packages:
   /@solid-primitives/utils/1.5.2_solid-js@1.4.2:
     resolution: {integrity: sha512-dZUHjzasuqS2lDO+PQCY1+jFmtWHlaP3tUvkX1Jr06LI/Ipa2P/ZNVSvuIoqQ0Bg+Ny27LvtrXxflZNeGtptvA==}
     peerDependencies:
-      solid-js: ^1.3.1
+      solid-js: ^1.3.1 || ^1.4.0
     dependencies:
       solid-js: 1.4.2
     dev: false
@@ -639,7 +639,7 @@ packages:
   /@solid-primitives/utils/2.0.1_solid-js@1.4.2:
     resolution: {integrity: sha512-9EbVhDKpxyAJCctMgRvfm6MMaS3Lj1ryKJHX+sxZ+VYNSB9H5SpkTwlkbhe/yh+S8iVQ811FkM7A4LCVcPLU5g==}
     peerDependencies:
-      solid-js: ^1.4.1
+      solid-js: ^1.4.1 || ^1.4.0
     dependencies:
       solid-js: 1.4.2
     dev: false
@@ -3106,7 +3106,7 @@ packages:
   /solid-app-router/0.0.36_solid-js@1.4.2:
     resolution: {integrity: sha512-x6ssnVcwTWO8JKv6qeYDCL94ie0wCmBd4yhX03xCmfMawRzQGp5nQq08rXlT8OXDawUjGyewxM4SHtg3R45Mhw==}
     peerDependencies:
-      solid-js: ^0.24.0
+      solid-js: ^0.24.0 || ^1.4.0
     dependencies:
       solid-js: 1.4.2
     dev: false
@@ -3114,7 +3114,7 @@ packages:
   /solid-app-router/0.3.3_solid-js@1.4.2:
     resolution: {integrity: sha512-JEn0gi6q8Pq9M2Ml3CLeNzenxuBrOrQg4aQyeIZTNjOAeEil/9YiaAJk+US78sIdVcqflTneN5KZgJMIGJ0rFQ==}
     peerDependencies:
-      solid-js: ^1.3.5
+      solid-js: ^1.3.5 || ^1.4.0
     dependencies:
       solid-js: 1.4.2
 
@@ -3133,7 +3133,7 @@ packages:
   /solid-meta/0.27.4_solid-js@1.4.2:
     resolution: {integrity: sha512-hKrx690LbUMpQL6pDLIJHvvM9Vq5u25WDEWduKKBnYIqHSOFZlYC/z9mnxOb/DPQdW/xwhgyObZnoV53CHJujA==}
     peerDependencies:
-      solid-js: '>=^1.4.0'
+      solid-js: '>=^1.4.0 || ^1.4.0'
     dependencies:
       solid-js: 1.4.2
     dev: false
@@ -3141,7 +3141,7 @@ packages:
   /solid-refresh/0.4.0_solid-js@1.4.2:
     resolution: {integrity: sha512-5XCUz845n/sHPzKK2i2G2EeV61tAmzv6SqzqhXcPaYhrgzVy7nKTQaBpKK8InKrriq9Z2JFF/mguIU00t/73xw==}
     peerDependencies:
-      solid-js: ^1.3.0
+      solid-js: ^1.3.0 || ^1.4.0
     dependencies:
       '@babel/generator': 7.18.0
       '@babel/helper-module-imports': 7.16.7

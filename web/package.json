@@ -34,13 +34,6 @@
 
   },
   "engines": {
-    "node": ">=16"
-  },
-   "pnpm": {
-    "peerDependencyRules": {
-      "allowedVersions": {
-        "react": "17"
-      }
-    }
+    "node": ">=14.17.0"
   }
 }
