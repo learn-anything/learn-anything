@@ -35,5 +35,12 @@
   },
   "engines": {
     "node": ">=16"
+  },
+   "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "react": "17"
+      }
+    }
   }
 }
