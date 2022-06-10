@@ -1,9 +1,14 @@
 {
   "name": "learn-anything",
   "scripts": {
-    "dev": "pnpm run dev --filter web"
+    "dev": "pnpm run --filter web dev"
   },
   "prettier": {
     "semi": false
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "solid-js": "^1.4.0"
+    }
   }
 }
