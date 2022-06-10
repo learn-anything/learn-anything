@@ -1,0 +1,40 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "solid-start dev",
+    "build": "solid-start build",
+    "start": "solid-start start"
+  },
+  "dependencies": {
+    "solid-devtools": "^0.0.1",
+    "tiny-sqlite3": "^1.0.1",
+    "autoprefixer": "^10.4.2",
+    "postcss": "^8.4.6",
+    "solid-app-router": "^0.3.1",
+    "solid-js": "^1.4.0",
+    "solid-meta": "^0.27.3",
+    "solid-start": "next",
+    "solid-start-node": "next",
+    "tailwindcss": "^3.0.18",
+    "typescript": "^4.6.2",
+    "vite": "^2.7.13"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.2",
+    "postcss": "^8.4.6",
+    "solid-app-router": "^0.3.1",
+    "solid-js": "^1.4.0",
+    "solid-meta": "^0.27.3",
+    "solid-start": "next",
+    "solid-start-node": "next",
+    "tailwindcss": "^3.0.18",
+    "typescript": "^4.6.2",
+    "vite": "^2.7.13"
+
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

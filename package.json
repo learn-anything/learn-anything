@@ -1,0 +1,9 @@
+{
+  "name": "learn-anything",
+  "scripts": {
+    "dev": "pnpm run dev --filter web"
+  },
+  "prettier": {
+    "semi": false
+  }
+}
