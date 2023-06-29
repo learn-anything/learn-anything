@@ -1,8 +1,16 @@
 # Learn Anything
 
-> App to share what you know or want to learn next. Together with ideas you want to build.
-
 Explanation of vision and future [here](https://wiki.nikiv.dev/ideas/learn-anything).
+
+Join [Discord](https://discord.com/invite/bxtD8x6aNF) if interested.
+
+<!-- ## Setup
+
+## Run -->
+
+<!-- ## File structure
+
+Important bits defined below.
 
 ## Develop
 
@@ -11,17 +19,17 @@ Explanation of vision and future [here](https://wiki.nikiv.dev/ideas/learn-anyth
 ```
 pnpm i
 pnpm dev
-```
+``` -->
 
-The tool to be built is a mix of [Obsidian](https://obsidian.md/) or [Reflect](https://reflect.app/) (notes, wiki graph) and [Raindrop](https://raindrop.io/) (social link manager). And many more exciting ideas.
+<!-- The tool to be built is a mix of [Obsidian](https://obsidian.md/) or [Reflect](https://reflect.app/) (notes, wiki graph) and [Raindrop](https://raindrop.io/) (social link manager). And many more exciting ideas.
 
 Need to get basics of notes + links covered.
 
 Excited? Join our [Discord](https://discord.gg/bxtD8x6aNF). Ask for help or share ideas about the project. This is a completely open source project / community with goals to in future create personalized study plans on any topic in the universe. As well as to be the best collaboration space for idea building.
 
-Maybe with a mix of [Replit](https://replit.com). All open source. Your code. Your data. Your private or public knowledge/ideas.
+Maybe with a mix of [Replit](https://replit.com). All open source. Your code. Your data. Your private or public knowledge/ideas. -->
 
-## Structure
+<!-- ## Structure
 
 Built on top of [Solid Start](https://github.com/solidjs/solid-start).
 
@@ -50,4 +58,4 @@ This current new vision of LA has been attempted to be written multiple times.
 
 This is new one. As minimal as possible. Understandable and documented code.
 
-See [Kuskus app](https://kuskus.app/) for now. LA will be worked on after KusKus app works well.
+See [Kuskus app](https://kuskus.app/) for now. LA will be worked on after KusKus app works well. -->
