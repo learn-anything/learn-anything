@@ -4,7 +4,7 @@
     "dev": "solid-start dev",
     "build": "solid-start build",
     "start": "solid-start start",
-    "db:sync": "cd grafbase/db && tsx sync.ts",
+    "db:sync": "cd grafbase/db/sync && tsx sync.ts",
     "db:watch": "cd grafbase/db && edgedb watch"
   },
   "type": "module",

@@ -4,9 +4,11 @@ Explanation of vision and future [here](https://wiki.nikiv.dev/ideas/learn-anyth
 
 Join [Discord](https://discord.com/invite/bxtD8x6aNF) if interested.
 
-<!-- ## Setup
+## Setup
 
-## Run -->
+> too many moving parts now, will be added after first release
+
+<!-- ## Run -->
 
 <!-- ## File structure
 

@@ -1,15 +1,13 @@
-import { client } from "./client"
-import { createTopic, getTopics } from "./topic"
-import { createUser, getUsers } from "./user"
+import { client } from "../client"
+import { createUser, getUsers } from "../user"
+import { forceWikiSync } from "./wiki"
 
 async function main() {
   // resetDb()
-  getUsers()
-  createTopic(
-    { name: "Physics", content: "Physics is fun" },
-    "4ac43a0c-169f-11ee-93a2-9bad7dd0cab0"
-  )
-  getTopics()
+  // seed()
+  // getUsers()
+  // getTopics()
+  forceWikiSync()
 }
 
 main().catch((err) => {
