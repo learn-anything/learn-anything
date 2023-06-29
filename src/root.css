@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+a {
+  /* border-bottom: dotted 1.5px #4cd06f; */
+  color: #23833d;
+  font-weight: 550;
+}
+
+html {
+  background-color: #ffffff;
+  color: black;
+}
+.Topbar {
+  background-color: white;
+}
+@media (prefers-color-scheme: dark) {
+   html {
+    background: #1e1e20;
+   color: white;
+  }
+  .Topbar {
+    background-color: #1e1e20;
+  }
+}

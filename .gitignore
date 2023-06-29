@@ -1,0 +1,4 @@
+dist
+.solid
+.env
+node_modules
