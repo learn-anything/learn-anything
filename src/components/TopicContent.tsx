@@ -1,9 +1,11 @@
 import SolidMarkdown from "solid-markdown"
 import MiniSidebar from "./MiniSidebar"
 import TopBar from "./TopBar"
+import { Setter } from "solid-js"
 
 interface Props {
   content: string
+  setShowSidebar: Setter<boolean>
 }
 
 export default function TopicContent(props: Props) {
@@ -42,10 +44,42 @@ export default function TopicContent(props: Props) {
 
        .Topbar {
          background-color: #1e1e20;
+
        }
+
        .Divider {
         background: linear-gradient( rgb(30,30,32),  rgba(30,30,32, 0))
        }
+     }
+     #Topbar {
+      display:none;
+
+     }
+     #TopicPage {
+      height: 100%;
+     }
+     #MiniSidebar {
+      display: none;
+     }
+     #Topic{
+      padding: 100px 30px 100px 30px;
+     }
+     @media (min-width: 800px) {
+      #Topbar {
+        display: block;
+      }
+      #MiniSidebar {
+        display:block;
+      }
+      #TopicPage {
+        height: 90%;
+      }
+      #Topic {
+        padding-left: 12rem;
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+        padding-right: 20rem;
+      }
      }
       `}
       </style>
@@ -56,6 +90,7 @@ export default function TopicContent(props: Props) {
             height: "65px",
           }}
           class=" flex"
+          id="Topbar"
         >
           <div
             class="Topbar fixed top-0 right-0 z-10"
@@ -65,11 +100,26 @@ export default function TopicContent(props: Props) {
           >
             <TopBar></TopBar>
           </div>
-
           <div class="Divider p-6 absolute top-16 z-20 left-0 w-full"></div>
         </div>
-        <div style={{ height: "90%" }} class=" flex items-start justify-end">
-          <div style={{ width: "100% " }} class="  h-full overflow-auto">
+        <div id="TopicPage" class=" flex items-start justify-end">
+          <div
+            style={{ width: "100% " }}
+            class=" flex flex-col  h-full overflow-auto"
+          >
+            <div
+              id="PhoneTopbar"
+              class="w-full flex items-center justify-center p-4"
+            >
+              <div></div>
+              <div
+                onClick={() => {
+                  props.setShowSidebar(true)
+                }}
+              >
+                Icon
+              </div>
+            </div>
             <div
               id="Topic"
               style={{
@@ -82,7 +132,11 @@ export default function TopicContent(props: Props) {
               <SolidMarkdown children={props.content} />
             </div>
           </div>
-          <div class="fixed top-16 right-0" style={{ width: "15%" }}>
+          <div
+            id="MiniSidebar"
+            class="fixed top-16 right-0"
+            style={{ width: "15%" }}
+          >
             <MiniSidebar />
           </div>
         </div>

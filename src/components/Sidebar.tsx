@@ -1,18 +1,8 @@
 import { For, createResource } from "solid-js"
 import { json, useParams } from "solid-start"
 
-export default function Sidebar() {
+export default function Sidebar(props: any) {
   const params = useParams()
-
-  const [sidebar] = createResource(
-    () => params.topic,
-    async () => {
-      const res = await fetch(`http://127.0.0.1:3000/users/1/topics`)
-      const jsonResponse = await res.json()
-      console.log(jsonResponse, "topics")
-      return jsonResponse
-    }
-  )
 
   return (
     <>
@@ -51,7 +41,7 @@ export default function Sidebar() {
             class="opacity-60 relative font-semibold overflow-auto px-4 py-5 w-full"
           >
             <div class="px-2">
-              <For each={sidebar()} fallback={<div>Loading...</div>}>
+              <For each={props.sidebar} fallback={<div>Loading...</div>}>
                 {(topic) => {
                   return <div>{topic.name}</div>
                 }}

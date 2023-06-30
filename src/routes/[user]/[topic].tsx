@@ -1,4 +1,4 @@
-import { Show, createResource } from "solid-js"
+import { Show, createResource, createSignal } from "solid-js"
 import { useParams } from "solid-start"
 import Sidebar from "~/components/Sidebar"
 import TopicContent from "~/components/TopicContent"
@@ -21,19 +21,39 @@ export default function Topic() {
     }
   )
 
+  const [sidebar] = createResource(
+    () => params.topic,
+    async () => {
+      const res = await fetch(`http://127.0.0.1:3000/users/1/topics`)
+      const jsonResponse = await res.json()
+      console.log(jsonResponse, "topics")
+      return jsonResponse
+    }
+  )
+
+  const [showSidebar, setShowSidebar] = createSignal(false)
+
   return (
     <>
       <style>
         {`
-        #Sidebar {
+        #FixedSidebar {
           background-color: #f6f6f7
         }
       @media (prefers-color-scheme: dark) {
-        #Sidebar {
+        #FixedSidebar {
           background-color: #161618ab
         }
 
       }
+      #Sidebar {
+        display: none;
+      }
+      @media (min-width: 800px) {
+       #Sidebar {
+        display: block;
+       }
+       }
       `}
       </style>
       <main
@@ -53,22 +73,24 @@ export default function Topic() {
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
           rel="stylesheet"
         />
-        <div class="h-screen" style={{ "min-width": "15%" }}></div>
-        <div
-          style={{
-            width: "20%",
+        <div class="h-screen" id="Sidebar" style={{ "min-width": "15%" }}></div>
+        <Show when={showSidebar() && sidebar()}>
+          <div
+            style={{
+              width: "20%",
 
-            "min-width": "250px",
-          }}
-          class=" h-full z-50 fixed top-0 left-0"
-          id="Sidebar"
-        >
-          <Sidebar />
-        </div>
+              "min-width": "250px",
+            }}
+            class=" h-full z-50 fixed top-0 left-0"
+            id="FixedSidebar"
+          >
+            <Sidebar sidebar={sidebar()} />
+          </div>
+        </Show>
 
         <div style={{ width: "100%" }} class=" h-full">
           <Show when={content()}>
-            <TopicContent content={content()} />
+            <TopicContent setShowSidebar={setShowSidebar} content={content()} />
           </Show>
         </div>
       </main>
