@@ -2,7 +2,7 @@ module default {
   type User {
     required name: str;
     required email: str;
-    required profileImage: str; # aws s3 or cloudflare images url
+    profileImage: str; # aws s3 or cloudflare images url
     multi topics: Topic;
   }
   type Topic {

@@ -18,7 +18,7 @@ export async function forceWikiSync() {
     fileIgnoreList
   )
   if (files.length > 0) {
-    mdFileIntoTopic(files[0], "4ac43a0c-169f-11ee-93a2-9bad7dd0cab0")
+    mdFileIntoTopic(files[0], "ec0e646c-1769-11ee-ac06-8313e6f11a99")
   }
 }
 

@@ -1,5 +1,5 @@
 import { client } from "../client"
-import { addUser } from "../user"
+import { addUser, getUsers } from "../user"
 import { forceWikiSync } from "./wiki"
 
 async function main() {
