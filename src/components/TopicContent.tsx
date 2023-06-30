@@ -1,7 +1,7 @@
 import SolidMarkdown from "solid-markdown"
 import MiniSidebar from "./MiniSidebar"
 import TopBar from "./TopBar"
-import { Setter } from "solid-js"
+import { Setter, Show } from "solid-js"
 
 interface Props {
   content: string
@@ -62,11 +62,17 @@ export default function TopicContent(props: Props) {
       display: none;
      }
      #Topic{
-      padding: 100px 30px 100px 30px;
+      padding: 70px 30px 70px 30px;
+     }
+     #PhoneTopbar {
+      display: block;
      }
      @media (min-width: 800px) {
       #Topbar {
         display: block;
+      }
+      #PhoneTopbar {
+        display: none;
       }
       #MiniSidebar {
         display:block;
@@ -109,17 +115,25 @@ export default function TopicContent(props: Props) {
           >
             <div
               id="PhoneTopbar"
-              class="w-full flex items-center justify-center p-4"
+              class="w-full flex items-center justify-center"
             >
-              <div></div>
+              <div class="w-full p-3  flex items-center border-b border-[rgba(60,60,67,0.12)] font-semibold justify-between text-sm">
+                Title
+                <div class="flex text-xs gap-4 font-normal">
+                  <div>Search</div>
+                  <div>Settings</div>
+                </div>
+              </div>
               <div
                 onClick={() => {
                   props.setShowSidebar(true)
                 }}
+                class="text-xs p-2 px-3  border-b border-[rgba(60,60,67,0.12)]"
               >
-                Icon
+                Menu
               </div>
             </div>
+
             <div
               id="Topic"
               style={{

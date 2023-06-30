@@ -49,9 +49,15 @@ export default function Topic() {
       #Sidebar {
         display: none;
       }
+      #FixedSidebar {
+        width: 45%;
+      }
       @media (min-width: 800px) {
        #Sidebar {
         display: block;
+       }
+       #FixedSidebar {
+        width: 20%;
        }
        }
       `}
@@ -74,11 +80,9 @@ export default function Topic() {
           rel="stylesheet"
         />
         <div class="h-screen" id="Sidebar" style={{ "min-width": "15%" }}></div>
-        <Show when={showSidebar() && sidebar()}>
+        <Show when={showSidebar()}>
           <div
             style={{
-              width: "20%",
-
               "min-width": "250px",
             }}
             class=" h-full z-50 fixed top-0 left-0"
@@ -86,6 +90,12 @@ export default function Topic() {
           >
             <Sidebar sidebar={sidebar()} />
           </div>
+          <div
+            class="fixed top-0 right-0 h-full w-full bg-black bg-opacity-60 z-40"
+            onClick={() => {
+              setShowSidebar(false)
+            }}
+          ></div>
         </Show>
 
         <div style={{ width: "100%" }} class=" h-full">
