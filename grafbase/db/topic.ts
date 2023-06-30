@@ -5,7 +5,7 @@ export interface Topic {
   content: string
 }
 
-export async function createTopic(topic: Topic, userId: string) {
+export async function addTopic(topic: Topic, userId: string) {
   const res = await client.query(`
   UPDATE User FILTER .id = <uuid>'${userId}' SET {
     topics += (

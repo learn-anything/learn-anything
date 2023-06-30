@@ -1,5 +1,5 @@
 import { client } from "../client"
-import { createUser, getUsers } from "../user"
+import { addUser } from "../user"
 import { forceWikiSync } from "./wiki"
 
 async function main() {
@@ -16,7 +16,7 @@ main().catch((err) => {
 })
 
 async function seed() {
-  createUser({ name: "Nikita", email: "nikita@learn-anything.xyz" })
+  addUser({ name: "Nikita", email: "nikita@learn-anything.xyz" })
 }
 
 async function clearTable(table: "User" | "Topic" | "Note" | "Link") {

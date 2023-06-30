@@ -2,6 +2,7 @@ import * as fs from "fs"
 import { readFile } from "fs/promises"
 import * as path from "path"
 import { basename, dirname } from "path"
+import { addTopic } from "../topic"
 
 export async function syncWiki() {}
 
@@ -17,7 +18,7 @@ export async function forceWikiSync() {
     fileIgnoreList
   )
   if (files.length > 0) {
-    processFile(files[0])
+    mdFileIntoTopic(files[0], "4ac43a0c-169f-11ee-93a2-9bad7dd0cab0")
   }
 }
 
@@ -46,7 +47,6 @@ async function markdownFilePaths(
 }
 
 // if its index.md, take name of parent folder
-
 // async function processFileAsTopic(filePath: string) {
 //   const entries = await readdir(directoryPath, { withFileTypes: true })
 
@@ -60,7 +60,7 @@ async function markdownFilePaths(
 //   }
 // }
 
-async function processFile(filePath: string) {
+async function mdFileIntoTopic(filePath: string, userId: string) {
   const data = (await readFile(filePath)).toString()
   console.log(data)
 
@@ -82,6 +82,6 @@ async function processFile(filePath: string) {
 
   if (title) {
     const parentDirName = basename(dirname(filePath))
-    // await createTopic()
+    await addTopic({ name: title, content: data }, userId)
   }
 }

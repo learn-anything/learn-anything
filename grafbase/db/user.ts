@@ -5,7 +5,7 @@ export interface User {
   email: string
 }
 
-export async function createUser(user: User) {
+export async function addUser(user: User) {
   const res = await client.query(`
   insert User {
     name := '${user.name}',
