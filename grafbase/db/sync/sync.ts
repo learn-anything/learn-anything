@@ -3,11 +3,11 @@ import { addUser, getUsers } from "../user"
 import { forceWikiSync } from "./wiki"
 
 async function main() {
-  // resetDb()
+  resetDb()
   // seed()
   // getUsers()
   // getTopics()
-  forceWikiSync()
+  // forceWikiSync()
 }
 
 main().catch((err) => {
@@ -31,5 +31,5 @@ async function resetDb() {
   await clearTable("Topic")
   await clearTable("Note")
   await clearTable("Link")
-  await seed()
+  // await seed()
 }
