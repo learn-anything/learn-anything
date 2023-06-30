@@ -81,7 +81,10 @@ async function mdFileIntoTopic(filePath: string, userId: string) {
   }
 
   if (title) {
-    const parentDirName = basename(dirname(filePath))
+    // const parentDirName = basename(dirname(filePath))
+    // console.log(title, "title")
+    // console.log(data, "content")
+    // console.log(userId, "user id")
     await addTopic({ name: title, content: data }, userId)
   }
 }
