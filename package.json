@@ -4,6 +4,7 @@
     "dev": "solid-start dev",
     "build": "solid-start build",
     "start": "solid-start start",
+    "api": "npx grafbase@latest dev",
     "db:sync": "cd grafbase/db/sync && tsx sync.ts",
     "db:watch": "cd grafbase/db && edgedb watch"
   },
@@ -14,7 +15,7 @@
     "postcss": "^8.4.24",
     "solid-start-node": "^0.2.26",
     "tailwindcss": "^3.3.2",
-    "typescript": "^5.1.5",
+    "typescript": "^5.1.6",
     "vite": "^4.3.9"
   },
   "dependencies": {

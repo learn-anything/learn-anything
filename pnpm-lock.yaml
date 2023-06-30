@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -59,7 +59,7 @@ devDependencies:
     specifier: ^3.3.2
     version: 3.3.2
   typescript:
-    specifier: ^5.1.5
+    specifier: ^5.1.6
     version: 5.1.6
   vite:
     specifier: ^4.3.9

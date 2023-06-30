@@ -1,4 +1,4 @@
-import * as edgedb from "edgedb"
+// import * as edgedb from "edgedb"
 
 // TODO: use auth token to get user
 // get topics for a given user
