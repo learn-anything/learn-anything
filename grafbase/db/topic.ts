@@ -17,6 +17,7 @@ export async function addTopic(topic: Topic, userId: string) {
       name: e.str(topic.name),
       content: e.str(topic.content),
     })
+    .unlessConflict()
     .run(client)
   console.log(res)
   return res
@@ -38,6 +39,16 @@ export async function getTopics() {
       name: true,
       content: true,
       id: true,
+    }))
+    .run(client)
+  console.log(res)
+  return res
+}
+
+export async function getTopicCount(userId: string) {
+  const res = await e
+    .select(e.User, (user) => ({
+      topicCount: e.count(user.topics),
     }))
     .run(client)
   console.log(res)

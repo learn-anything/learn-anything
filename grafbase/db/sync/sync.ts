@@ -2,16 +2,17 @@ import { client } from "../client"
 import { addUser, getUserIdByName, getUsers } from "../user"
 import { forceWikiSync } from "./wiki"
 import e from "../dbschema/edgeql-js"
-import { getTopics } from "../topic"
+import { getTopicCount, getTopics } from "../topic"
 
 async function main() {
   // resetDb()
   // getUsers()
   // getTopics()
-  // const userId = await getUserIdByName("Nikita")
-  // if (userId.length > 0) {
-  //   forceWikiSync(userId[0].id)
-  // }
+  const userId = await getUserIdByName("Nikita")
+  if (userId.length > 0) {
+    forceWikiSync(userId[0].id)
+    getTopicCount(userId[0].id)
+  }
 }
 
 main().catch((err) => {
