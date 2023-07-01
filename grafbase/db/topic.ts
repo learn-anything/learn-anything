@@ -46,6 +46,19 @@ export async function getTopics() {
   return res
 }
 
+export async function getTopic(topicName: string, userId: string) {
+  const res = await e
+    .select(e.Topic, (topic) => ({
+      name: true,
+      content: true,
+      filter: e.op(topic.name, "=", topicName),
+      // filter: e.op(topic.user.id, "=", userId),
+    }))
+    .run(client)
+  console.log(res)
+  return res
+}
+
 export async function getTopicCount(userId: string) {
   const res = await e
     .select(e.User, (user) => ({
