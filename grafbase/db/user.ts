@@ -7,55 +7,45 @@ export interface User {
 }
 
 export async function addUser(user: User) {
-  const res = await e.insert(e.User, {
-    name: user.name,
-    email: user.email,
-  })
+  const res = await e
+    .insert(e.User, {
+      name: user.name,
+      email: user.email,
+    })
+    .run(client)
   console.log(res)
   return res
 }
 
 export async function deleteUser(id: string) {
-  const res = await client.query(`
-  delete User
-  filter .id = <uuid>'${id}'`)
+  const res = await e
+    .delete(e.User, (user) => ({
+      filter: e.op(user.id, "=", id),
+    }))
+    .run(client)
   console.log(res)
   return res
 }
 
 export async function getUsers() {
-  const res = await client.query(`
-  select User {
-    name,
-    email,
-    id
-  }`)
+  const res = await e
+    .select(e.User, () => ({
+      name: true,
+      email: true,
+      id: true,
+    }))
+    .run(client)
   console.log(res)
   return res
 }
 
 export async function getUserIdByName(name: string) {
-  const res = await client.querySingle<User>(
-    `
-    select User {
-      name
-    } filter .name = <str>$name;
-    `,
-    {
-      name,
-    }
-  )
-  // const res = await client.query(
-  //   `
-  // SELECT User {
-  //   id
-  // }
-  // FILTER .name = <str>$name;
-  // `,
-  //   {
-  //     name,
-  //   }
-  // )
+  const res = await e
+    .select(e.User, (user) => ({
+      id: true,
+      filter: e.op(user.name, "=", name),
+    }))
+    .run(client)
   console.log(res)
   return res
 }

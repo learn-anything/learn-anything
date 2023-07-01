@@ -1,4 +1,5 @@
 import { client } from "./client"
+import e from "./dbschema/edgeql-js"
 
 export interface Topic {
   name: string
@@ -6,39 +7,39 @@ export interface Topic {
 }
 
 export async function addTopic(topic: Topic, userId: string) {
-  const res = await client.query(
-    `
-    insert Topic {
-      user := (select User filter .id = <uuid>$userId),
-      name := <str>$topicName,
-      content := <str>$topicContent
-    }
-  `,
-    {
-      userId: userId,
-      topicName: topic.name,
-      topicContent: topic.content,
-    }
-  )
+  const res = await e
+    .insert(e.Topic, {
+      user: e
+        .select(e.User, (user) => ({
+          filter: e.op(user.id, "=", e.uuid(userId)),
+        }))
+        .assert_single(),
+      name: e.str(topic.name),
+      content: e.str(topic.content),
+    })
+    .run(client)
   console.log(res)
   return res
 }
 
 export async function deleteTopic(id: string) {
-  const res = await client.query(`
-  delete Topic
-  filter .id = <uuid>'${id}'`)
+  const res = await e
+    .delete(e.Topic, (topic) => ({
+      filter: e.op(topic.id, "=", id),
+    }))
+    .run(client)
   console.log(res)
   return res
 }
 
 export async function getTopics() {
-  const res = await client.query(`
-  select Topic {
-    name,
-    content,
-    id
-  }`)
+  const res = await e
+    .select(e.Topic, () => ({
+      name: true,
+      content: true,
+      id: true,
+    }))
+    .run(client)
   console.log(res)
   return res
 }
