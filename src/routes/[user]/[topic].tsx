@@ -10,9 +10,10 @@ export default function Topic() {
   const [content] = createResource(
     () => params.topic,
     async () => {
-      const res = await fetch(`http://127.0.0.1:3000/users/1/${params.topic}`)
-      console.log(res)
+      // const res = await fetch(`http://127.0.0.1:3000/users/1/${params.topic}`)
+      const res = await fetch(`http://127.0.0.1:3000/topics`)
       const jsonResponse = await res.json()
+      console.log(jsonResponse)
       const content = jsonResponse.content
       if (content) {
         return content
@@ -21,15 +22,15 @@ export default function Topic() {
     }
   )
 
-  const [sidebar] = createResource(
-    () => params.topic,
-    async () => {
-      const res = await fetch(`http://127.0.0.1:3000/users/1/topics`)
-      const jsonResponse = await res.json()
-      console.log(jsonResponse, "topics")
-      return jsonResponse
-    }
-  )
+  // const [sidebar] = createResource(
+  //   () => params.topic,
+  //   async () => {
+  //     const res = await fetch(`http://127.0.0.1:3000/users/1/topics`)
+  //     const jsonResponse = await res.json()
+  //     console.log(jsonResponse, "topics")
+  //     return jsonResponse
+  //   }
+  // )
 
   const [showSidebar, setShowSidebar] = createSignal(false)
 
@@ -94,7 +95,7 @@ export default function Topic() {
             class=" h-full z-50 "
             id="FixedSidebar"
           >
-            <Sidebar sidebar={sidebar()} />
+            {/* <Sidebar sidebar={sidebar()} /> */}
           </div>
           <div
             id="PhoneBlur"
