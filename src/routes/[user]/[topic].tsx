@@ -10,8 +10,7 @@ export default function Topic() {
   const [content] = createResource(
     () => params.topic,
     async () => {
-      // const res = await fetch(`http://127.0.0.1:3000/users/1/${params.topic}`)
-      const res = await fetch(`http://127.0.0.1:3000/topics`)
+      const res = await fetch(`http://127.0.0.1:3000/topic`)
       const jsonResponse = await res.json()
       console.log(jsonResponse)
       const content = jsonResponse.content
@@ -22,15 +21,14 @@ export default function Topic() {
     }
   )
 
-  // const [sidebar] = createResource(
-  //   () => params.topic,
-  //   async () => {
-  //     const res = await fetch(`http://127.0.0.1:3000/users/1/topics`)
-  //     const jsonResponse = await res.json()
-  //     console.log(jsonResponse, "topics")
-  //     return jsonResponse
-  //   }
-  // )
+  const [sidebarTopics] = createResource(
+    () => params.topic,
+    async () => {
+      const res = await fetch(`http://127.0.0.1:3000/sidebar`)
+      const sidebarTopics = await res.json()
+      return sidebarTopics
+    }
+  )
 
   const [showSidebar, setShowSidebar] = createSignal(false)
 
