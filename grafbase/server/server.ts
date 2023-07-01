@@ -2,9 +2,12 @@ import { Hono } from "hono"
 import { cors } from "hono/cors"
 import { type z } from "zod"
 import { serve } from "@hono/node-server"
-import { getUserIdByName } from "grafbase/db/user"
+import { addUser, getUserIdByName } from "grafbase/db/user"
 import { getTopic } from "grafbase/db/topic"
 import * as edgedb from "edgedb"
+import dotenv from "dotenv"
+
+dotenv.config()
 
 export const app = new Hono()
 export const client = edgedb.createClient()
@@ -21,9 +24,8 @@ app.onError((err, ctx) => {
 app.use("*", cors())
 
 app.get("/topic", async (ctx) => {
-  // const userId = await getUserIdByName("Nikita")
-  // const res = await getTopic("Physics", userId)
-  // console.log(res)
+  await addUser({ name: "Nikita", email: "nikita@nikiv.dev" })
+
   return ctx.json({
     name: "Physics",
     content: `# Physics

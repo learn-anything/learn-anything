@@ -26,6 +26,7 @@
     "@solidjs/meta": "^0.28.5",
     "@solidjs/router": "^0.8.2",
     "@teamhanko/hanko-elements": "0.5.5-beta",
+    "dotenv": "^16.3.1",
     "edgedb": "^1.3.2",
     "graphql-request": "^6.1.0",
     "hono": "^3.2.7",

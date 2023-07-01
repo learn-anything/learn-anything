@@ -26,6 +26,7 @@ export default function Topic() {
     async () => {
       const res = await fetch(`http://127.0.0.1:3000/sidebar`)
       const sidebarTopics = await res.json()
+      console.log(sidebarTopics)
       return sidebarTopics
     }
   )
