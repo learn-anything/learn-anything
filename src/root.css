@@ -11,6 +11,7 @@ a {
 html {
   background-color: #ffffff;
   color: black;
+  overscroll-behavior: none;
 }
 .Topbar {
   background-color: white;

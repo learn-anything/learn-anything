@@ -52,12 +52,18 @@ export default function Topic() {
       #FixedSidebar {
         width: 45%;
       }
+      #PhoneBlur {
+        display: block;
+      }
       @media (min-width: 800px) {
        #Sidebar {
         display: block;
        }
        #FixedSidebar {
         width: 20%;
+       }
+       #PhoneBlur {
+        display: none;
        }
        }
       `}
@@ -79,18 +85,19 @@ export default function Topic() {
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
           rel="stylesheet"
         />
-        <div class="h-screen" id="Sidebar" style={{ "min-width": "15%" }}></div>
-        <Show when={showSidebar()}>
+
+        <Show when={true}>
           <div
             style={{
               "min-width": "250px",
             }}
-            class=" h-full z-50 fixed top-0 left-0"
+            class=" h-full z-50 "
             id="FixedSidebar"
           >
             <Sidebar sidebar={sidebar()} />
           </div>
           <div
+            id="PhoneBlur"
             class="fixed top-0 right-0 h-full w-full bg-black bg-opacity-60 z-40"
             onClick={() => {
               setShowSidebar(false)

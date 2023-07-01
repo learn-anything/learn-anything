@@ -26,6 +26,8 @@ export default function TopicContent(props: Props) {
       }
       p {
         font-weight: 500;
+        margin-top: 16px;
+        margin-bottom: 16px;
       }
       h2 {
         font-size: 28px;
@@ -65,7 +67,7 @@ export default function TopicContent(props: Props) {
       padding: 70px 30px 70px 30px;
      }
      #PhoneTopbar {
-      display: block;
+      display: inline;
      }
      @media (min-width: 800px) {
       #Topbar {
@@ -81,10 +83,10 @@ export default function TopicContent(props: Props) {
         height: 90%;
       }
       #Topic {
-        padding-left: 12rem;
+        padding-left: 4rem;
         padding-top: 4rem;
         padding-bottom: 4rem;
-        padding-right: 20rem;
+        padding-right: 16rem;
       }
      }
       `}
@@ -109,15 +111,12 @@ export default function TopicContent(props: Props) {
           <div class="Divider p-6 absolute top-16 z-20 left-0 w-full"></div>
         </div>
         <div id="TopicPage" class=" flex items-start justify-end">
-          <div
-            style={{ width: "100% " }}
-            class=" flex flex-col  h-full overflow-auto"
-          >
-            <div
-              id="PhoneTopbar"
-              class="w-full flex items-center justify-center"
-            >
-              <div class="w-full p-3  flex items-center border-b border-[rgba(60,60,67,0.12)] font-semibold justify-between text-sm">
+          <div style={{ width: "100% " }} class=" flex flex-col  h-full">
+            <div id="PhoneTopbar" class="w-full ">
+              <div
+                style={{ height: "63px" }}
+                class="w-full p-3  flex items-center border-b border-[rgba(60,60,67,0.12)] font-semibold justify-between text-sm"
+              >
                 Title
                 <div class="flex text-xs gap-4 font-normal">
                   <div>Search</div>
@@ -125,10 +124,11 @@ export default function TopicContent(props: Props) {
                 </div>
               </div>
               <div
+                style={{ height: "49px" }}
                 onClick={() => {
                   props.setShowSidebar(true)
                 }}
-                class="text-xs p-2 px-3  border-b border-[rgba(60,60,67,0.12)]"
+                class="text-xs p-2 sticky w-full top-0 px-3 flex items-center  border-b border-[rgba(60,60,67,0.12)]"
               >
                 Menu
               </div>
@@ -141,7 +141,7 @@ export default function TopicContent(props: Props) {
                 "line-height": "30px",
                 "font-size": "16px",
               }}
-              class="h-full w-full py-16 pl-48 opacity-80 pr-80 font-light overflow-scroll"
+              class="h-full w-full py-16 pl-16 opacity-80 pr-80 font-light overflow-scroll"
             >
               <SolidMarkdown children={props.content} />
             </div>
