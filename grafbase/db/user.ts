@@ -47,5 +47,5 @@ export async function getUserIdByName(name: string) {
     }))
     .run(client)
   console.log(res)
-  return res
+  return res[0].id
 }

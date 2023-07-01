@@ -5,13 +5,13 @@ import e from "../dbschema/edgeql-js"
 import { getTopicCount, getTopics } from "../topic"
 
 async function main() {
-  // resetDb()
-  // getUsers()
-  // getTopics()
+  await resetDb()
+  // await getUsers()
+  // await getTopics()
   const userId = await getUserIdByName("Nikita")
   if (userId.length > 0) {
-    forceWikiSync(userId[0].id)
-    getTopicCount(userId[0].id)
+    await forceWikiSync(userId)
+    await getTopicCount(userId)
   }
 }
 

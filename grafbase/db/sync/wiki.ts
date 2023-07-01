@@ -15,10 +15,9 @@ export async function forceWikiSync(userId: string) {
     fileIgnoreList
   )
   if (files.length > 0) {
-    files.map(async (file) => {
-      console.log(file, "file")
+    for (const file of files) {
       await mdFileIntoTopic(file, userId)
-    })
+    }
   }
 }
 
@@ -48,7 +47,7 @@ async function markdownFilePaths(
 
 async function mdFileIntoTopic(filePath: string, userId: string) {
   const data = (await readFile(filePath)).toString()
-  console.log(data)
+  console.log(filePath, "file path")
 
   // Extract the title from the frontmatter
   const frontmatterMatch = data.match(
