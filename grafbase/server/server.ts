@@ -24,8 +24,6 @@ app.onError((err, ctx) => {
 app.use("*", cors())
 
 app.get("/topic", async (ctx) => {
-  await addUser({ name: "Nikita", email: "nikita@nikiv.dev" })
-
   return ctx.json({
     name: "Physics",
     content: `# Physics
