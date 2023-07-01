@@ -7,6 +7,7 @@ export interface Topic {
 }
 
 export async function addTopic(topic: Topic, userId: string) {
+  console.log(topic.name, "topic name")
   const res = await e
     .insert(e.Topic, {
       user: e

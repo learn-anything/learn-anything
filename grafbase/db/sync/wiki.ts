@@ -15,9 +15,9 @@ export async function forceWikiSync(userId: string) {
     fileIgnoreList
   )
   if (files.length > 0) {
-    files.map((file) => {
+    files.map(async (file) => {
       console.log(file, "file")
-      mdFileIntoTopic(file, userId)
+      await mdFileIntoTopic(file, userId)
     })
   }
 }
