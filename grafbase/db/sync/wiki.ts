@@ -8,10 +8,6 @@ export async function syncWiki() {}
 
 // overwrite topics on server with local files
 export async function forceWikiSync() {
-  // createTopic(
-  //   { name: "Physics", content: "Physics is fun" },
-  //   "4ac43a0c-169f-11ee-93a2-9bad7dd0cab0"
-  // )
   let fileIgnoreList = ["readme.md"]
   const files = await markdownFilePaths(
     "/Users/nikiv/src/docs/wiki/docs",
@@ -45,20 +41,6 @@ async function markdownFilePaths(
   }
   return filesToProcess
 }
-
-// if its index.md, take name of parent folder
-// async function processFileAsTopic(filePath: string) {
-//   const entries = await readdir(directoryPath, { withFileTypes: true })
-
-//   for (const entry of entries) {
-//     const entryPath = join(directoryPath, entry.name)
-//     if (entry.isDirectory()) {
-//       await seedWikiFromFolder(entryPath)
-//     } else if (entry.isFile() && extname(entry.name) === ".md") {
-//       await processFile(entryPath)
-//     }
-//   }
-// }
 
 async function mdFileIntoTopic(filePath: string, userId: string) {
   const data = (await readFile(filePath)).toString()
