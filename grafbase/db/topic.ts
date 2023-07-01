@@ -51,8 +51,11 @@ export async function getTopic(topicName: string, userId: string) {
     .select(e.Topic, (topic) => ({
       name: true,
       content: true,
-      filter: e.op(topic.name, "=", topicName),
-      // filter: e.op(topic.user.id, "=", userId),
+      filter: e.op(
+        e.op(topic.name, "=", topicName),
+        "and",
+        e.op(topic.user.id, "=", userId)
+      ),
     }))
     .run(client)
   console.log(res)
