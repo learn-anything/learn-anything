@@ -54,7 +54,7 @@ export async function getTopic(topicName: string, userId: string) {
       filter: e.op(
         e.op(topic.name, "=", topicName),
         "and",
-        e.op(topic.user.id, "=", userId)
+        e.op(topic.user.id, "=", e.cast(e.uuid, userId))
       ),
     }))
     .run(client)
