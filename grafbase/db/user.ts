@@ -1,4 +1,5 @@
 import { client } from "./client"
+import { User } from "./dbschema/interfaces"
 
 export interface User {
   name: string
@@ -12,6 +13,7 @@ export async function addUser(user: User) {
     email := '${user.email}'
   }`)
   console.log(res)
+  return res
 }
 
 export async function deleteUser(id: string) {
@@ -19,6 +21,7 @@ export async function deleteUser(id: string) {
   delete User
   filter .id = <uuid>'${id}'`)
   console.log(res)
+  return res
 }
 
 export async function getUsers() {
@@ -29,4 +32,31 @@ export async function getUsers() {
     id
   }`)
   console.log(res)
+  return res
+}
+
+export async function getUserIdByName(name: string) {
+  const res = await client.querySingle<User>(
+    `
+    select User {
+      name
+    } filter .name = <str>$name;
+    `,
+    {
+      name,
+    }
+  )
+  // const res = await client.query(
+  //   `
+  // SELECT User {
+  //   id
+  // }
+  // FILTER .name = <str>$name;
+  // `,
+  //   {
+  //     name,
+  //   }
+  // )
+  console.log(res)
+  return res
 }

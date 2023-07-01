@@ -10,6 +10,7 @@
   },
   "type": "module",
   "devDependencies": {
+    "@edgedb/generate": "^0.3.0",
     "@grafbase/sdk": "~0.1.0",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.24",

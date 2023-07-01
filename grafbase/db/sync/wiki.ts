@@ -3,18 +3,21 @@ import { readFile } from "fs/promises"
 import * as path from "path"
 import { basename, dirname } from "path"
 import { addTopic } from "../topic"
+import { getUserIdByName } from "../user"
 
 export async function syncWiki() {}
 
 // overwrite topics on server with local files
-export async function forceWikiSync() {
+export async function forceWikiSync(userId: string) {
+  console.log(userId)
+  return
   let fileIgnoreList = ["readme.md"]
   const files = await markdownFilePaths(
     "/Users/nikiv/src/docs/wiki/docs",
     fileIgnoreList
   )
   if (files.length > 0) {
-    mdFileIntoTopic(files[1], "ec0e646c-1769-11ee-ac06-8313e6f11a99")
+    mdFileIntoTopic(files[0], "07b40dc2-17a4-11ee-bbc6-b7d2f41f2fe1")
   }
 }
 

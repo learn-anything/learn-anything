@@ -8,7 +8,11 @@ export interface Topic {
 export async function addTopic(topic: Topic, userId: string) {
   const res = await client.query(
     `
-
+    insert Topic {
+      user := (select User filter .id = <uuid>$userId),
+      name := <str>$topicName,
+      content := <str>$topicContent
+    }
   `,
     {
       userId: userId,
@@ -16,24 +20,6 @@ export async function addTopic(topic: Topic, userId: string) {
       topicContent: topic.content,
     }
   )
-  // const res = await client.query(
-  //   `
-  //   UPDATE User FILTER .id = <uuid>$userId SET {
-  //     topics += (
-  //       INSERT Topic {
-  //         name := <str>$topicName,
-  //         content := <str>$topicContent
-  //       }
-  //     )
-  //   }
-  // `,
-  //   {
-  //     userId: userId,
-  //     topicName: topic.name,
-  //     topicContent: topic.content,
-  //   }
-  // )
-
   console.log(res)
   return res
 }
@@ -43,6 +29,7 @@ export async function deleteTopic(id: string) {
   delete Topic
   filter .id = <uuid>'${id}'`)
   console.log(res)
+  return res
 }
 
 export async function getTopics() {
@@ -53,4 +40,5 @@ export async function getTopics() {
     id
   }`)
   console.log(res)
+  return res
 }
