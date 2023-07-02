@@ -11,7 +11,9 @@ export async function forceWikiSync(userId: string) {
   const wikiPath = "/Users/nikiv/src/docs/wiki/docs"
   const files = await markdownFilePaths(wikiPath, fileIgnoreList)
   if (files.length > 0) {
-    await mdFileIntoTopic(files[0], userId, wikiPath)
+    let testFile = "/Users/nikiv/Desktop/file.md"
+    // await mdFileIntoTopic(files[0], userId, wikiPath)
+    await mdFileIntoTopic(testFile, userId, wikiPath)
     // for (const file of files) {
     //   await mdFileIntoTopic(file, userId)
     // }
@@ -206,18 +208,41 @@ async function mdFileIntoTopic(
 
   console.log(parentTopic, "parent topic")
 
-  console.log(fileContent)
+  // console.log(fileContent)
 
   const contentWithoutFrontMatter = fileContent.replace(/---[\s\S]*?---/, "")
   // console.log(contentWithoutFrontMatter)
 
-  const linksSection = contentWithoutFrontMatter.split("## Links\n")[1]
-  console.log(linksSection)
+  let contentSection
+  let linksSection
+  let notesSection
+
+  // Find sections
+  const sections = contentWithoutFrontMatter.split("\n## ")
+  console.log(sections, "sections")
+  sections.forEach((section) => {
+    if (section.startsWith("Links\n")) {
+      linksSection = section.replace("Links\n", "")
+    } else if (section.startsWith("Notes\n")) {
+      notesSection = section.replace("Notes\n", "")
+    } else {
+      contentSection = section // If not Notes or Links, it's content
+    }
+  })
+
+  console.log(contentSection, "content section")
+  console.log(notesSection, "notes section")
+  console.log(linksSection, "links section")
 
   // only run if ## Links is present
-  links = await extractLinks(linksSection)
+  if (linksSection) {
+    links = await extractLinks(linksSection)
+  }
 
   // only run if ## Notes is present
+  if (notesSection) {
+    // ... extract notes here
+  }
 
   // run prettier on file to get formatting good
   return
