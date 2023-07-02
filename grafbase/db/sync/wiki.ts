@@ -81,7 +81,7 @@ function extractDescriptionFromLink(line: string) {
   // Remove all the markdown links
   let lineWithoutLinks = line.replace(linkPattern, "").trim()
 
-  // If there is no ')-', return the entire lineWithoutLinks as the description
+  // If there is no ' -', return the entire lineWithoutLinks as the description
   if (!lineWithoutLinks.includes(" -")) {
     return lineWithoutLinks
   }
@@ -93,11 +93,6 @@ function extractDescriptionFromLink(line: string) {
   // If description starts with '-  -', remove it
   if (description.startsWith("-  -")) {
     description = description.substring(4).trim() // Changed from replace to substring
-  }
-
-  // If description ends with '.', remove it
-  if (description && description.endsWith(".")) {
-    return description.slice(0, -1).trim()
   }
 
   return description.trim()
@@ -123,9 +118,11 @@ function extractLinks(markdownContent: string) {
       const [fullMatch, title, url] = match
 
       // Check if the link is a related link (appears after a ".")
-      if (line.indexOf(fullMatch) > line.lastIndexOf(". ")) {
+      if (
+        line.lastIndexOf(fullMatch) > line.indexOf(". ") &&
+        line.indexOf(". ") !== -1
+      ) {
         related.push({ title, url })
-        links.push({ title, url, related })
       } else {
         links.push({ title, url })
       }
@@ -135,6 +132,16 @@ function extractLinks(markdownContent: string) {
     if (links.length > 0) {
       const lastLink = links[links.length - 1]
       lastLink.description = extractDescriptionFromLink(line)
+
+      // Remove related links from the description
+      for (const relatedLink of related) {
+        lastLink.description = lastLink.description
+          .replace(`([${relatedLink.title}](${relatedLink.url}))`, "")
+          .trim()
+      }
+
+      // Assign related links
+      lastLink.related = related
     }
   })
 
