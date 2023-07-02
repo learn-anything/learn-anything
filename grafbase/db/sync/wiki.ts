@@ -152,6 +152,49 @@ function extractLinks(markdownContent: string) {
   return links
 }
 
+interface Note {
+  content: string
+  url?: string
+}
+
+function extractNotes(markdownContent: string) {
+  const lines = markdownContent.split("\n")
+
+  const notes: Note[] = []
+
+  lines.forEach((line) => {
+    // Match markdown link pattern
+    const linkPattern = /\[([^\]]+)\]\(([^)]+)\)/g
+    let match
+
+    // If the line has a link, parse it and push to notes
+    if ((match = linkPattern.exec(line)) !== null) {
+      const [fullMatch, content, url] = match
+      const contentTrimmed = content.trim().startsWith("-")
+        ? content.trim().substring(1).trim()
+        : content.trim()
+
+      // Only push if the content is not empty
+      if (contentTrimmed !== "") {
+        notes.push({ content: contentTrimmed, url })
+      }
+    }
+    // If the line does not have a link, treat it as a note with no URL
+    else {
+      const lineTrimmed = line.trim().startsWith("-")
+        ? line.trim().substring(1).trim()
+        : line.trim()
+
+      // Only push if the line is not empty
+      if (lineTrimmed !== "") {
+        notes.push({ content: lineTrimmed })
+      }
+    }
+  })
+
+  return notes
+}
+
 async function mdFileIntoTopic(
   filePath: string,
   userId: string,
@@ -213,20 +256,23 @@ async function mdFileIntoTopic(
   const contentWithoutFrontMatter = fileContent.replace(/---[\s\S]*?---/, "")
   // console.log(contentWithoutFrontMatter)
 
-  let contentSection
+  let contentSection = ""
   let linksSection
   let notesSection
+  let noteOrLinkFound = false
 
   // Find sections
   const sections = contentWithoutFrontMatter.split("\n## ")
-  console.log(sections, "sections")
   sections.forEach((section) => {
     if (section.startsWith("Links\n")) {
       linksSection = section.replace("Links\n", "")
+      noteOrLinkFound = true
     } else if (section.startsWith("Notes\n")) {
       notesSection = section.replace("Notes\n", "")
-    } else {
-      contentSection = section // If not Notes or Links, it's content
+      noteOrLinkFound = true
+    } else if (!noteOrLinkFound) {
+      // If not Notes or Links and no Notes or Links found before, append it to contentSection
+      contentSection += (contentSection ? "\n## " : "") + section
     }
   })
 
@@ -241,7 +287,8 @@ async function mdFileIntoTopic(
 
   // only run if ## Notes is present
   if (notesSection) {
-    // ... extract notes here
+    notes = await extractNotes(notesSection)
+    console.log(notes)
   }
 
   // run prettier on file to get formatting good
