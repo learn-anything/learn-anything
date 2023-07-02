@@ -6,8 +6,9 @@ import { getTopic, getTopicCount, getTopics } from "../topic"
 
 async function main() {
   // await resetDb()
-  const userId = await getUserIdByName("Nikita")
-  await forceWikiSync(userId)
+  // const userId = await getUserIdByName("Nikita")
+  // await forceWikiSync(userId)
+  await forceWikiSync("test")
   // await getUsers()
   // await getTopics()
   // await getTopic("Physics", userId)

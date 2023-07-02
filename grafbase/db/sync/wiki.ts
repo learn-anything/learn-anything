@@ -44,13 +44,39 @@ async function markdownFilePaths(
   return filesToProcess
 }
 
+function isParentFolder(firstPath: string, secondPath: string) {
+  const absoluteFirstPath = path.resolve(firstPath)
+  const absoluteSecondParentPath = path.resolve(path.dirname(secondPath))
+  return absoluteSecondParentPath.startsWith(absoluteFirstPath)
+}
+
+function getFolderNameOfFileFromPath(filePath: string) {
+  let dirPath = path.dirname(filePath)
+  let folderName = path.basename(dirPath)
+  return folderName
+}
+
+function getFolderPathOfFileFromPath(filePath: string) {
+  let dirPath = dirname(filePath)
+  return dirPath
+}
+
 async function mdFileIntoTopic(
   filePath: string,
   userId: string,
   rootPath: string
 ) {
-  const data = (await readFile(filePath)).toString()
+  let parentTopic
+  console.log(rootPath, "root path")
   console.log(filePath, "file path")
+  console.log(getFolderNameOfFileFromPath(filePath))
+  console.log(getFolderPathOfFileFromPath(filePath))
+  // console.log(isParentFolder(rootPath, filePath))
+  return
+  const data = (await readFile(filePath)).toString()
+  let directory = path.dirname(filePath)
+  let directoryName = path.basename(directory)
+  console.log(directoryName, "directory name")
   console.log(rootPath)
 
   // Extract the title from the frontmatter
@@ -75,6 +101,6 @@ async function mdFileIntoTopic(
     // console.log(title, "title")
     // console.log(data, "content")
     // console.log(userId, "user id")
-    await addTopic({ name: title, content: data }, userId)
+    // await addTopic({ name: title, content: data }, userId)
   }
 }
