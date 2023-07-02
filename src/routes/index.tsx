@@ -63,8 +63,17 @@ export default function Home() {
     `}
       </style>
       <div class="w-screen bg-neutral-950 text-white h-screen flex items-center justify-center">
-        <div class="flex flex-col gap-5 items-center justify-center">
-          <div class="text-5xl font-bold">I want to learn</div>
+        <div class="flex flex-col gap-1 items-center justify-center">
+          <div
+            class=" tracking-wide font-bold bg-clip-text text-transparent"
+            style={{
+              "background-image":
+                "linear-gradient(145deg, #fff 65%, rgba(255,255,255,.43))",
+              "font-size": "clamp(3rem, 10vw, 5rem)",
+            }}
+          >
+            I want to learn
+          </div>
           <div class="w-full relative flex flex-col gap-3">
             <input
               type="text"
@@ -72,8 +81,8 @@ export default function Home() {
               onInput={(e) => {
                 setFilteredWord(e.target.value)
               }}
-              class=" rounded font-semibold py-2 px-4 outline-none text-black"
-              style={{ width: "450px" }}
+              class=" rounded text-lg font-semibold py-2 px-4 outline-none text-black"
+              style={{ width: "100%" }}
             />
             <Show when={filteredWord() !== "" && filteredTopic().length !== 0}>
               <div class="bg-white absolute top-12 left-0 text-black font-semibold text-opacity-40 flex flex-col rounded w-full">

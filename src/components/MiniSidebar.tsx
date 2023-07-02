@@ -16,7 +16,7 @@ export default function MiniSidebar() {
     `}
       </style>
       <div class="h-full pt-10">
-        <div class="border-l-2 flex flex-col  py-1  text-sm font-semibold border-gray-500 h-1/4 border-opacity-20">
+        <div class="border-l-2 flex flex-col h-fit py-2  text-sm font-semibold border-gray-500 border-opacity-20">
           <div class="opacity-60 flex flex-col gap-2">
             <div id="Inactive" class="px-3 cursor-pointer">
               thing

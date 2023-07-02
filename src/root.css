@@ -4,8 +4,12 @@
 
 a {
   /* border-bottom: dotted 1.5px #4cd06f; */
-  color: #23833d;
+  color: #10B981;
   font-weight: 550;
+
+}
+a:hover {
+  text-decoration: underline;
 }
 
 html {

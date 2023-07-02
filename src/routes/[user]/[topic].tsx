@@ -60,7 +60,7 @@ export default function Topic() {
         display: block;
        }
        #FixedSidebar {
-        width: 20%;
+        width: 200px;
        }
        #PhoneBlur {
         display: none;
@@ -91,7 +91,7 @@ export default function Topic() {
             style={{
               "min-width": "250px",
             }}
-            class=" h-full z-50 "
+            class="fixed top-0 left-0 h-full z-50 "
             id="FixedSidebar"
           >
             {/* <Sidebar sidebar={sidebar()} /> */}
