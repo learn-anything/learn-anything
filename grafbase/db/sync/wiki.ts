@@ -64,23 +64,68 @@ function getFileNameWithoutExtension(filePath: string) {
   return path.parse(filePath).name
 }
 
+function extractLinks(markdownContent: string) {
+  // Find the part of the content under "## Links"
+  const linksSection = markdownContent.split("## Links\n")[1]
+
+  // Separate each line
+  const lines = linksSection.split("\n")
+
+  const links = []
+
+  lines.forEach((line) => {
+    // Match markdown link pattern
+    const linkPattern = /\[([^\]]+)\]\(([^)]+)\)/g
+    let match
+    const related = []
+
+    // Add all links on the line to the links array or related array
+    while ((match = linkPattern.exec(line)) !== null) {
+      const [fullMatch, title, url] = match
+
+      // Check if the link is a related link (appears after a ".")
+      if (line.indexOf(fullMatch) > line.lastIndexOf(". ")) {
+        related.push({ title, url })
+      } else {
+        links.push({ title, url })
+      }
+    }
+
+    // Add description to the last link added
+    if (links.length > 0) {
+      const lastLink = links[links.length - 1]
+      lastLink.description = line
+        .replace(linkPattern, "") // Remove links from the line
+        .trim() // Remove leading and trailing whitespace
+        .replace(/^- /, "") // Remove potential leading "- "
+
+      // Add related links if they exist
+      if (related.length > 0) {
+        lastLink.related = related
+      }
+    }
+  })
+
+  return links
+}
+
 async function mdFileIntoTopic(
   filePath: string,
   userId: string,
   rootPath: string
 ) {
-  const topicName = getFileNameWithoutExtension(filePath) // file name is topic name
+  console.log(filePath, "file path")
+  console.log(rootPath, "root path")
+
+  const topicName = getFileNameWithoutExtension(filePath) // file name is topic name (in-this-form)
   console.log(topicName, "topic name")
+  let prettyName // pretty name for the topic (user defined)
   let parentTopic
   let content
   let notes = []
   let links = []
-  console.log(rootPath, "root path")
-  console.log(filePath, "file path")
 
   const fileContent = (await readFile(filePath)).toString()
-  let directory = path.dirname(filePath)
-  let directoryName = path.basename(directory)
 
   // Extract title from frontmatter
   const frontmatterMatch = fileContent.match(
@@ -96,35 +141,39 @@ async function mdFileIntoTopic(
     }
     title = titleMatch ? titleMatch[1] : ""
   }
-  console.log(title, "title")
+  prettyName = title // either # Heading or title: Frontmatter
+
+  // Find the topic's parent if it exists
 
   const topicFolderPath = getFolderPathOfFileFromPath(filePath)
   console.log(topicFolderPath, "topic folder path")
   const parentFolderName = path.basename(topicFolderPath)
   console.log(parentFolderName, "parent folder name")
+
   // if file name is same as folder name
   // means parent topic can be one level up
   if (parentFolderName === topicName) {
-    console.log("HIT THIS")
     const parentFolderPath = getFolderPathOfFileFromPath(topicFolderPath)
-    if (parentFolderPath === rootPath) {
-      console.log("no parent topic")
-      parentTopic = null
+    // this is true only if the parent folder is not root folder
+    if (!(parentFolderPath === rootPath)) {
+      console.log("not root folder, there is parent available")
     }
-    console.log(parentFolderPath, "parent folder path")
-    const parentFolderName = path.basename(parentFolderPath)
-    console.log(parentFolderName, "parent folder name")
+    console.log("no parent!")
+  } else {
     parentTopic = parentFolderName
-    console.log(parentTopic, "parent topic")
   }
 
+  console.log(parentTopic, "parent topic")
+
+  console.log(fileContent)
+
+  const contentWithoutFrontMatter = fileContent.replace(/---[\s\S]*?---/, "")
+  console.log(contentWithoutFrontMatter)
+
+  links = await extractLinks(contentWithoutFrontMatter)
+  console.log(links)
+  console.log(links.length)
+
+  // run prettier on file to get formatting good
   return
-  if (title) {
-    const parentDirName = basename(dirname(filePath))
-    console.log(parentDirName)
-    // console.log(title, "title")
-    // console.log(data, "content")
-    // console.log(userId, "user id")
-    // await addTopic({ name: title, content: data }, userId)
-  }
 }

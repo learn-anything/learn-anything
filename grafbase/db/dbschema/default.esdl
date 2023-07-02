@@ -5,11 +5,16 @@ module default {
     profileImage: str; # aws s3 or cloudflare images url
     multi link topics := .<user[is Topic]; # all topics that have this user as author
   }
+  type GlobalTopic {
+    required name: str; # name of topic in form of `topic-name`
+    verified: bool; # if true, topic is valid global topic
+  }
   type Topic {
     required link user: User; # owner of this topic
     required public: bool; # if true, anyone can see the topic
     required name: str; # name of topic in form of `topic-name`
     required content: str; # markdown
+    prettyName: str; # name of topic in form of `Topic Name`
     directParent: Topic; # parent topic
     multi notes: Note;
     multi links: Link;
