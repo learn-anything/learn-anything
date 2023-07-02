@@ -1,13 +1,33 @@
 import { client } from "./client"
 import e from "./dbschema/edgeql-js"
 
-export interface Topic {
+export interface Link {
+  title: string
+  url: string
+  description?: string
+  related?: RelatedLink[]
+}
+
+export interface RelatedLink {
+  title: string
+  url: string
+}
+
+export interface Note {
+  content: string
+  url?: string
+}
+
+interface Topic {
   name: string
   content: string
+  parentTopic?: string
+  notes?: Note[]
+  links?: Link[]
 }
 
 export async function addTopic(topic: Topic, userId: string) {
-  console.log(topic.name, "topic name")
+  console.log(topic, "topic")
   const res = await e
     .insert(e.Topic, {
       user: e

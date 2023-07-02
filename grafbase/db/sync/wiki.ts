@@ -2,6 +2,8 @@ import * as fs from "fs"
 import { readFile } from "fs/promises"
 import * as path from "path"
 import { dirname } from "path"
+import { Link, Note, RelatedLink, addTopic } from "../topic"
+import { Note } from "../dbschema/edgeql-js/modules/default"
 
 export async function syncWiki() {}
 
@@ -12,8 +14,8 @@ export async function forceWikiSync(userId: string) {
   const files = await markdownFilePaths(wikiPath, fileIgnoreList)
   if (files.length > 0) {
     let testFile = "/Users/nikiv/Desktop/file.md"
-    // await mdFileIntoTopic(files[0], userId, wikiPath)
-    await mdFileIntoTopic(testFile, userId, wikiPath)
+    await mdFileIntoTopic(files[0], userId, wikiPath)
+    // await mdFileIntoTopic(testFile, userId, wikiPath)
     // for (const file of files) {
     //   await mdFileIntoTopic(file, userId)
     // }
@@ -62,18 +64,6 @@ function getFolderPathOfFileFromPath(filePath: string) {
 
 function getFileNameWithoutExtension(filePath: string) {
   return path.parse(filePath).name
-}
-
-interface Link {
-  title: string
-  url: string
-  description?: string
-  related?: RelatedLink[]
-}
-
-interface RelatedLink {
-  title: string
-  url: string
 }
 
 function extractDescriptionFromLink(line: string) {
@@ -152,11 +142,6 @@ function extractLinks(markdownContent: string) {
   return links
 }
 
-interface Note {
-  content: string
-  url?: string
-}
-
 function extractNotes(markdownContent: string) {
   const lines = markdownContent.split("\n")
 
@@ -207,7 +192,7 @@ async function mdFileIntoTopic(
   console.log(topicName, "topic name")
   let prettyName // pretty name for the topic (user defined)
   let parentTopic
-  let content
+  let content = ""
   let notes = []
   let links = []
 
@@ -248,15 +233,10 @@ async function mdFileIntoTopic(
   } else {
     parentTopic = parentFolderName
   }
-
   console.log(parentTopic, "parent topic")
 
-  // console.log(fileContent)
-
   const contentWithoutFrontMatter = fileContent.replace(/---[\s\S]*?---/, "")
-  // console.log(contentWithoutFrontMatter)
 
-  let contentSection = ""
   let linksSection
   let notesSection
   let noteOrLinkFound = false
@@ -272,25 +252,38 @@ async function mdFileIntoTopic(
       noteOrLinkFound = true
     } else if (!noteOrLinkFound) {
       // If not Notes or Links and no Notes or Links found before, append it to contentSection
-      contentSection += (contentSection ? "\n## " : "") + section
+      content += (content ? "\n## " : "") + section
     }
   })
 
-  console.log(contentSection, "content section")
-  console.log(notesSection, "notes section")
-  console.log(linksSection, "links section")
+  console.log(content, "content")
 
   // only run if ## Links is present
   if (linksSection) {
+    // TODO: why is links any[] and not Link[]?
     links = await extractLinks(linksSection)
+    console.log(links, "links")
   }
 
   // only run if ## Notes is present
   if (notesSection) {
+    // TODO: why is notes any[] and not Note[]?
     notes = await extractNotes(notesSection)
-    console.log(notes)
+    console.log(notes, "notes")
   }
 
-  // run prettier on file to get formatting good
+  await addTopic(
+    {
+      name: topicName,
+      content: content,
+      parentTopic: parentTopic,
+      // @ts-ignore
+      notes,
+      // @ts-ignore
+      links,
+    },
+    userId
+  )
+
   return
 }
