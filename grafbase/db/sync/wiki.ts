@@ -81,9 +81,9 @@ function extractDescriptionFromLink(line: string) {
   // Remove all the markdown links
   let lineWithoutLinks = line.replace(linkPattern, "").trim()
 
-  // If there is no ' -', return the entire lineWithoutLinks as the description
+  // If there is no ' -', return an empty string
   if (!lineWithoutLinks.includes(" -")) {
-    return lineWithoutLinks
+    return ""
   }
 
   // Split by the first ' -' and return the second part as the description
@@ -99,11 +99,7 @@ function extractDescriptionFromLink(line: string) {
 }
 
 function extractLinks(markdownContent: string) {
-  // Find the part of the content under "## Links"
-  const linksSection = markdownContent.split("## Links\n")[1]
-
-  // Separate each line
-  const lines = linksSection.split("\n")
+  const lines = markdownContent.split("\n")
 
   const links: Link[] = []
 
@@ -112,19 +108,18 @@ function extractLinks(markdownContent: string) {
     const linkPattern = /\[([^\]]+)\]\(([^)]+)\)/g
     let match
     let related: RelatedLink[] = []
+    let firstLink = true
 
     // Add all links on the line to the links array or related array
     while ((match = linkPattern.exec(line)) !== null) {
       const [fullMatch, title, url] = match
 
-      // Check if the link is a related link (appears after a ".")
-      if (
-        line.lastIndexOf(fullMatch) > line.indexOf(". ") &&
-        line.indexOf(". ") !== -1
-      ) {
+      // Check if the link is a related link (not the first link on the line)
+      if (!firstLink) {
         related.push({ title, url })
       } else {
         links.push({ title, url })
+        firstLink = false
       }
     }
 
@@ -140,8 +135,8 @@ function extractLinks(markdownContent: string) {
           .trim()
       }
 
-      // If description is '-', set it to empty string
-      if (description === "-") {
+      // If description is '-' or empty, set it to empty string
+      if (description === "-" || description === " -  ()") {
         description = ""
       }
 
@@ -214,16 +209,15 @@ async function mdFileIntoTopic(
   console.log(fileContent)
 
   const contentWithoutFrontMatter = fileContent.replace(/---[\s\S]*?---/, "")
-  console.log(contentWithoutFrontMatter)
+  // console.log(contentWithoutFrontMatter)
+
+  const linksSection = contentWithoutFrontMatter.split("## Links\n")[1]
+  console.log(linksSection)
 
   // only run if ## Links is present
-
-  links = await extractLinks(contentWithoutFrontMatter)
-  console.log(links)
-  // console.log(links.length)
+  links = await extractLinks(linksSection)
 
   // only run if ## Notes is present
-  // extractNotes(contentWithoutFrontMatterAndLinks)
 
   // run prettier on file to get formatting good
   return
