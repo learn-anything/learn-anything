@@ -131,14 +131,21 @@ function extractLinks(markdownContent: string) {
     // Add description to the last link added
     if (links.length > 0) {
       const lastLink = links[links.length - 1]
-      lastLink.description = extractDescriptionFromLink(line)
+      let description = extractDescriptionFromLink(line)
 
       // Remove related links from the description
       for (const relatedLink of related) {
-        lastLink.description = lastLink.description
+        description = description
           .replace(`([${relatedLink.title}](${relatedLink.url}))`, "")
           .trim()
       }
+
+      // If description is '-', set it to empty string
+      if (description === "-") {
+        description = ""
+      }
+
+      lastLink.description = description
 
       // Assign related links
       lastLink.related = related
