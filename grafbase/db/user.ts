@@ -46,6 +46,5 @@ export async function getUserIdByName(name: string) {
       filter: e.op(user.name, "=", name),
     }))
     .run(client)
-  console.log(res)
   return res[0].id
 }

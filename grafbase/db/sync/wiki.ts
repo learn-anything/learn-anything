@@ -10,14 +10,13 @@ export async function syncWiki() {}
 // overwrite topics on server with local files
 export async function forceWikiSync(userId: string) {
   let fileIgnoreList = ["readme.md"]
-  const files = await markdownFilePaths(
-    "/Users/nikiv/src/docs/wiki/docs",
-    fileIgnoreList
-  )
+  const wikiPath = "/Users/nikiv/src/docs/wiki/docs"
+  const files = await markdownFilePaths(wikiPath, fileIgnoreList)
   if (files.length > 0) {
-    for (const file of files) {
-      await mdFileIntoTopic(file, userId)
-    }
+    await mdFileIntoTopic(files[0], userId, wikiPath)
+    // for (const file of files) {
+    //   await mdFileIntoTopic(file, userId)
+    // }
   }
 }
 
@@ -45,7 +44,11 @@ async function markdownFilePaths(
   return filesToProcess
 }
 
-async function mdFileIntoTopic(filePath: string, userId: string) {
+async function mdFileIntoTopic(
+  filePath: string,
+  userId: string,
+  rootPath: string
+) {
   const data = (await readFile(filePath)).toString()
   console.log(filePath, "file path")
 
@@ -66,10 +69,11 @@ async function mdFileIntoTopic(filePath: string, userId: string) {
   }
 
   if (title) {
-    // const parentDirName = basename(dirname(filePath))
+    const parentDirName = basename(dirname(filePath))
+    console.log(parentDirName)
     // console.log(title, "title")
     // console.log(data, "content")
     // console.log(userId, "user id")
-    await addTopic({ name: title, content: data }, userId)
+    // await addTopic({ name: title, content: data }, userId)
   }
 }

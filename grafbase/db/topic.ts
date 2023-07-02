@@ -71,3 +71,13 @@ export async function getTopicCount(userId: string) {
   console.log(res)
   return res
 }
+
+export async function getSidebar(userId: string) {
+  const res = await e
+    .select(e.User, (user) => ({
+      topicCount: e.count(user.topics),
+    }))
+    .run(client)
+  console.log(res)
+  return res
+}

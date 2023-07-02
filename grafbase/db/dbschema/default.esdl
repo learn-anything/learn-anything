@@ -9,6 +9,7 @@ module default {
     required link user: User; # owner of this topic
     required name: str;
     required content: str; # markdown
+    directParent link: Topic; # parent topic
     multi notes: Note;
     multi links: Link;
     constraint exclusive on ((.name, .user)); # users can't have two topics with same name
