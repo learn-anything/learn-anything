@@ -1,9 +1,7 @@
 import * as fs from "fs"
 import { readFile } from "fs/promises"
 import * as path from "path"
-import { basename, dirname } from "path"
-import { addTopic } from "../topic"
-import { getUserIdByName } from "../user"
+import { dirname } from "path"
 
 export async function syncWiki() {}
 
@@ -64,6 +62,47 @@ function getFileNameWithoutExtension(filePath: string) {
   return path.parse(filePath).name
 }
 
+interface Link {
+  title: string
+  url: string
+  description?: string
+  related?: RelatedLink[]
+}
+
+interface RelatedLink {
+  title: string
+  url: string
+}
+
+function extractDescriptionFromLink(line: string) {
+  // Match markdown link pattern
+  const linkPattern = /\[([^\]]+)\]\(([^)]+)\)/g
+
+  // Remove all the markdown links
+  let lineWithoutLinks = line.replace(linkPattern, "").trim()
+
+  // If there is no ')-', return the entire lineWithoutLinks as the description
+  if (!lineWithoutLinks.includes(" -")) {
+    return lineWithoutLinks
+  }
+
+  // Split by the first ' -' and return the second part as the description
+  const splitLine = line.split(" -", 2)
+  let description = splitLine.length > 1 ? splitLine[1] : ""
+
+  // If description starts with '-  -', remove it
+  if (description.startsWith("-  -")) {
+    description = description.substring(4).trim() // Changed from replace to substring
+  }
+
+  // If description ends with '.', remove it
+  if (description && description.endsWith(".")) {
+    return description.slice(0, -1).trim()
+  }
+
+  return description.trim()
+}
+
 function extractLinks(markdownContent: string) {
   // Find the part of the content under "## Links"
   const linksSection = markdownContent.split("## Links\n")[1]
@@ -71,13 +110,13 @@ function extractLinks(markdownContent: string) {
   // Separate each line
   const lines = linksSection.split("\n")
 
-  const links = []
+  const links: Link[] = []
 
   lines.forEach((line) => {
     // Match markdown link pattern
     const linkPattern = /\[([^\]]+)\]\(([^)]+)\)/g
     let match
-    const related = []
+    let related: RelatedLink[] = []
 
     // Add all links on the line to the links array or related array
     while ((match = linkPattern.exec(line)) !== null) {
@@ -86,6 +125,7 @@ function extractLinks(markdownContent: string) {
       // Check if the link is a related link (appears after a ".")
       if (line.indexOf(fullMatch) > line.lastIndexOf(". ")) {
         related.push({ title, url })
+        links.push({ title, url, related })
       } else {
         links.push({ title, url })
       }
@@ -94,15 +134,7 @@ function extractLinks(markdownContent: string) {
     // Add description to the last link added
     if (links.length > 0) {
       const lastLink = links[links.length - 1]
-      lastLink.description = line
-        .replace(linkPattern, "") // Remove links from the line
-        .trim() // Remove leading and trailing whitespace
-        .replace(/^- /, "") // Remove potential leading "- "
-
-      // Add related links if they exist
-      if (related.length > 0) {
-        lastLink.related = related
-      }
+      lastLink.description = extractDescriptionFromLink(line)
     }
   })
 
@@ -170,9 +202,14 @@ async function mdFileIntoTopic(
   const contentWithoutFrontMatter = fileContent.replace(/---[\s\S]*?---/, "")
   console.log(contentWithoutFrontMatter)
 
+  // only run if ## Links is present
+
   links = await extractLinks(contentWithoutFrontMatter)
   console.log(links)
-  console.log(links.length)
+  // console.log(links.length)
+
+  // only run if ## Notes is present
+  // extractNotes(contentWithoutFrontMatterAndLinks)
 
   // run prettier on file to get formatting good
   return
