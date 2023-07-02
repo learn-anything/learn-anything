@@ -6,7 +6,8 @@
     "start": "solid-start start",
     "api": "npx grafbase@latest dev",
     "db:sync": "cd grafbase/db/sync && tsx sync.ts",
-    "db:watch": "cd grafbase/db && edgedb watch"
+    "db:watch": "cd grafbase/db && edgedb watch",
+    "db:ts-generate": "cd grafbase/db && npx @edgedb/generate edgeql-js --target ts"
   },
   "type": "module",
   "devDependencies": {

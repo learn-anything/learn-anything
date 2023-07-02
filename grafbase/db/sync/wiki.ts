@@ -51,6 +51,7 @@ async function mdFileIntoTopic(
 ) {
   const data = (await readFile(filePath)).toString()
   console.log(filePath, "file path")
+  console.log(rootPath)
 
   // Extract the title from the frontmatter
   const frontmatterMatch = data.match(
@@ -74,6 +75,6 @@ async function mdFileIntoTopic(
     // console.log(title, "title")
     // console.log(data, "content")
     // console.log(userId, "user id")
-    // await addTopic({ name: title, content: data }, userId)
+    await addTopic({ name: title, content: data }, userId)
   }
 }

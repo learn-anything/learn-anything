@@ -19,7 +19,8 @@ export async function addTopic(topic: Topic, userId: string) {
       content: e.str(topic.content),
     })
     .unlessConflict()
-    .run(client)
+    .toEdgeQL()
+  // .run(client)
   console.log(res)
   return res
 }
