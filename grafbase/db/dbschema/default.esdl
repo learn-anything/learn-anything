@@ -21,11 +21,13 @@ module default {
     constraint exclusive on ((.name, .user)); # users can't have two topics with same name
   }
   type Note {
+    required link topic: Topic; # topic this note belongs to
     required public: bool; # if true, anyone can see the note
     required content: str;
     url: str;
   }
   type Link {
+    required link topic: Topic; # topic this note belongs to
     required public: bool; # if true, anyone can see the note
     required title: str;
     required url: str;
