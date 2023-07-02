@@ -7,7 +7,8 @@ module default {
   }
   type Topic {
     required link user: User; # owner of this topic
-    required name: str;
+    required public: bool; # if true, anyone can see the topic
+    required name: str; # name of topic in form of `topic-name`
     required content: str; # markdown
     directParent: Topic; # parent topic
     multi notes: Note;
@@ -15,10 +16,12 @@ module default {
     constraint exclusive on ((.name, .user)); # users can't have two topics with same name
   }
   type Note {
+    required public: bool; # if true, anyone can see the note
     required content: str;
     url: str;
   }
   type Link {
+    required public: bool; # if true, anyone can see the note
     required title: str;
     required url: str;
   }

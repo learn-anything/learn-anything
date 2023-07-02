@@ -57,8 +57,11 @@ function getFolderNameOfFileFromPath(filePath: string) {
 }
 
 function getFolderPathOfFileFromPath(filePath: string) {
-  let dirPath = dirname(filePath)
-  return dirPath
+  return dirname(filePath)
+}
+
+function getFileNameWithoutExtension(filePath: string) {
+  return path.parse(filePath).name
 }
 
 async function mdFileIntoTopic(
@@ -66,35 +69,56 @@ async function mdFileIntoTopic(
   userId: string,
   rootPath: string
 ) {
+  const topicName = getFileNameWithoutExtension(filePath) // file name is topic name
+  console.log(topicName, "topic name")
   let parentTopic
+  let content
+  let notes = []
+  let links = []
   console.log(rootPath, "root path")
   console.log(filePath, "file path")
-  console.log(getFolderNameOfFileFromPath(filePath))
-  console.log(getFolderPathOfFileFromPath(filePath))
-  // console.log(isParentFolder(rootPath, filePath))
-  return
-  const data = (await readFile(filePath)).toString()
+
+  const fileContent = (await readFile(filePath)).toString()
   let directory = path.dirname(filePath)
   let directoryName = path.basename(directory)
-  console.log(directoryName, "directory name")
-  console.log(rootPath)
 
-  // Extract the title from the frontmatter
-  const frontmatterMatch = data.match(
+  // Extract title from frontmatter
+  const frontmatterMatch = fileContent.match(
     /^---\n(?:.*\n)*title: (.*)\n(?:.*\n)*---/m
   )
-
-  // If a title is not found in the frontmatter, extract it from the first heading
+  // If title is not found in frontmatter, extract it from first heading
   let title = frontmatterMatch ? frontmatterMatch[1] : ""
   if (!title) {
-    let titleMatch = data.match(/^# \[(.*)\]\(.*\)$/m)
+    let titleMatch = fileContent.match(/^# \[(.*)\]\(.*\)$/m)
     if (!titleMatch) {
-      // If the title is not a markdown link, fallback to previous regex
-      titleMatch = data.match(/^# (.*)$/m)
+      // If title is not a markdown link, fallback to previous regex
+      titleMatch = fileContent.match(/^# (.*)$/m)
     }
     title = titleMatch ? titleMatch[1] : ""
   }
+  console.log(title, "title")
 
+  const topicFolderPath = getFolderPathOfFileFromPath(filePath)
+  console.log(topicFolderPath, "topic folder path")
+  const parentFolderName = path.basename(topicFolderPath)
+  console.log(parentFolderName, "parent folder name")
+  // if file name is same as folder name
+  // means parent topic can be one level up
+  if (parentFolderName === topicName) {
+    console.log("HIT THIS")
+    const parentFolderPath = getFolderPathOfFileFromPath(topicFolderPath)
+    if (parentFolderPath === rootPath) {
+      console.log("no parent topic")
+      parentTopic = null
+    }
+    console.log(parentFolderPath, "parent folder path")
+    const parentFolderName = path.basename(parentFolderPath)
+    console.log(parentFolderName, "parent folder name")
+    parentTopic = parentFolderName
+    console.log(parentTopic, "parent topic")
+  }
+
+  return
   if (title) {
     const parentDirName = basename(dirname(filePath))
     console.log(parentDirName)
