@@ -5,6 +5,7 @@ export interface Link {
   title: string
   url: string
   description: string | null
+  public: boolean
   related: RelatedLink[]
 }
 
@@ -15,6 +16,7 @@ export interface RelatedLink {
 
 export interface Note {
   content: string
+  public: boolean
   url: string | null
 }
 
@@ -22,6 +24,7 @@ interface Topic {
   name: string
   content: string
   parentTopic: string | null
+  public: boolean
   notes: Note[]
   links: Link[]
 }
@@ -33,34 +36,46 @@ export async function addTopic(topic: Topic, userId: string) {
       topic: e.tuple({
         name: e.str,
         content: e.str,
+        public: e.bool,
       }),
       notes: e.json,
       links: e.json,
     },
-    (params) =>
-      e
-        .insert(e.Topic, {
-          user: e
-            .select(e.User, (user) => ({
-              filter: e.op(user.id, "=", params.userId),
-            }))
-            .assert_single(),
-          name: topic.name,
-          content: topic.content,
-          notes: e.for(e.json_array_unpack(params.notes), (note) =>
-            e.insert(e.Note, {
-              content: e.cast(e.str, e.json_get(note, "content")),
-              url: e.cast(e.str, e.json_get(note, "url")),
-            })
-          ),
-          links: e.for(e.json_array_unpack(params.links), (link) =>
-            e.insert(e.Link, {
-              title: e.cast(e.str, e.json_get(link, "title")),
-              url: e.cast(e.str, e.json_get(link, "url")),
-            })
-          ),
+    (params) => {
+      const newTopic = e.insert(e.Topic, {
+        user: e
+          .select(e.User, (user) => ({
+            filter: e.op(user.id, "=", params.userId),
+          }))
+          .assert_single(),
+        name: params.topic.name,
+        content: params.topic.content,
+        public: params.topic.public,
+      })
+
+      return e.with([newTopic], e.for(e.json_array_unpack(params.notes), (note) =>
+        e.insert(e.Note, {
+          content: e.cast(e.str, e.json_get(note, "content")),
+          url: e.cast(e.str, e.json_get(note, "url")),
+          public: e.cast(e.bool, e.json_get(note, "public")),
+          topic: e.assert_exists(e.select(newTopic, () => ({ id: true }))),
         })
-        .unlessConflict()
+      ))
+
+      // const links = e.with([newTopic], e.for(e.json_array_unpack(params.links), (link) =>
+      //   e.insert(e.Link, {
+      //     title: e.cast(e.str, e.json_get(link, "title")),
+      //     url: e.cast(e.str, e.json_get(link, "url")),
+      //     public: e.cast(e.bool, e.json_get(link, "public")),
+      //     topic: e.assert_exists(e.select(e.Topic, () => ({ filter_single: { id: newTopic.id } }))),
+      //   })
+      // ))
+
+      // return e.with(
+      //   [newTopic],
+      //   e.select(newTopic, () => ({ id: true }))
+      // )
+    }
   )
   console.log("addTopic", query.toEdgeQL())
 
@@ -69,6 +84,7 @@ export async function addTopic(topic: Topic, userId: string) {
     topic: {
       name: topic.name,
       content: topic.content,
+      public: topic.public,
     },
     links: topic.links,
     notes: topic.notes,

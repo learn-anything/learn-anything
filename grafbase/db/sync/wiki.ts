@@ -2,6 +2,7 @@ import * as fs from "fs"
 import { readFile } from "fs/promises"
 import * as path from "path"
 import { dirname } from "path"
+import { URL } from "node:url";
 import { Link, Note, RelatedLink, addTopic } from "../topic"
 
 export async function syncWiki() {}
@@ -9,10 +10,9 @@ export async function syncWiki() {}
 // overwrite topics on server with local files
 export async function forceWikiSync(userId: string) {
   let fileIgnoreList = ["readme.md"]
-  const wikiPath = "/Users/nikiv/src/docs/wiki/docs"
+  const wikiPath = new URL("../../../src/docs", import.meta.url).pathname;
   const files = await markdownFilePaths(wikiPath, fileIgnoreList)
   if (files.length > 0) {
-    let testFile = "/Users/nikiv/Desktop/file.md"
     await mdFileIntoTopic(files[0], userId, wikiPath)
     // await mdFileIntoTopic(testFile, userId, wikiPath)
     // for (const file of files) {
@@ -275,11 +275,10 @@ async function mdFileIntoTopic(
     {
       name: topicName,
       content: content,
-      parentTopic: parentTopic,
-      // @ts-ignore
-      notes,
-      // @ts-ignore
-      links,
+      parentTopic: parentTopic ?? null,
+      public: false,
+      notes: notes.map((note) => ({ ...note, public: false })),
+      links: links.map((link) => ({ ...link, public: false })),
     },
     userId
   )
