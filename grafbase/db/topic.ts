@@ -53,28 +53,32 @@ export async function addTopic(topic: Topic, userId: string) {
         public: params.topic.public,
       })
 
-      return e.with([newTopic], e.for(e.json_array_unpack(params.notes), (note) =>
-        e.insert(e.Note, {
-          content: e.cast(e.str, e.json_get(note, "content")),
-          url: e.cast(e.str, e.json_get(note, "url")),
-          public: e.cast(e.bool, e.json_get(note, "public")),
-          topic: e.assert_exists(e.select(newTopic, () => ({ id: true }))),
-        })
-      ))
-
-      // const links = e.with([newTopic], e.for(e.json_array_unpack(params.links), (link) =>
-      //   e.insert(e.Link, {
-      //     title: e.cast(e.str, e.json_get(link, "title")),
-      //     url: e.cast(e.str, e.json_get(link, "url")),
-      //     public: e.cast(e.bool, e.json_get(link, "public")),
-      //     topic: e.assert_exists(e.select(e.Topic, () => ({ filter_single: { id: newTopic.id } }))),
-      //   })
-      // ))
-
-      // return e.with(
-      //   [newTopic],
-      //   e.select(newTopic, () => ({ id: true }))
-      // )
+      return e.with(
+        [newTopic],
+        e.for(e.json_array_unpack(params.notes), (note) =>
+          e.op(
+            e.insert(e.Note, {
+              content: e.cast(e.str, e.json_get(note, "content")),
+              url: e.cast(e.str, e.json_get(note, "url")),
+              public: e.cast(e.bool, e.json_get(note, "public")),
+              topic: e.assert_exists(e.select(newTopic, () => ({ id: true }))),
+            }),
+            "union",
+            e.for(e.json_array_unpack(params.links), (link) =>
+              e.insert(e.Link, {
+                title: e.cast(e.str, e.json_get(link, "title")),
+                url: e.cast(e.str, e.json_get(link, "url")),
+                public: e.cast(e.bool, e.json_get(link, "public")),
+                topic: e.assert_exists(
+                  e.select(newTopic, () => ({
+                    filter_single: { id: newTopic.id },
+                  }))
+                ),
+              })
+            )
+          )
+        )
+      )
     }
   )
   console.log("addTopic", query.toEdgeQL())
