@@ -1,19 +1,36 @@
-CREATE MIGRATION m17tlajhbdcmrk26aqealxrjqulez466r5oluhhh3sqwa2vlw55rrq
+CREATE MIGRATION m13rpuanc5m7plhxje37igizmscbhlh43sttf6ite373x45yrxavyq
     ONTO initial
 {
+  CREATE TYPE default::GlobalTopic {
+      CREATE REQUIRED PROPERTY name: std::str;
+      CREATE PROPERTY verified: std::bool;
+  };
   CREATE TYPE default::Link {
+      CREATE REQUIRED PROPERTY public: std::bool;
       CREATE REQUIRED PROPERTY title: std::str;
       CREATE REQUIRED PROPERTY url: std::str;
   };
-  CREATE TYPE default::Note {
+  CREATE TYPE default::Topic {
+      CREATE REQUIRED PROPERTY name: std::str;
+      CREATE LINK directParent: default::Topic;
       CREATE REQUIRED PROPERTY content: std::str;
+      CREATE PROPERTY prettyName: std::str;
+      CREATE REQUIRED PROPERTY public: std::bool;
+  };
+  ALTER TYPE default::Link {
+      CREATE REQUIRED LINK topic: default::Topic;
+  };
+  ALTER TYPE default::Topic {
+      CREATE MULTI LINK links := (.<topic[IS default::Link]);
+  };
+  CREATE TYPE default::Note {
+      CREATE REQUIRED LINK topic: default::Topic;
+      CREATE REQUIRED PROPERTY content: std::str;
+      CREATE REQUIRED PROPERTY public: std::bool;
       CREATE PROPERTY url: std::str;
   };
-  CREATE TYPE default::Topic {
-      CREATE MULTI LINK links: default::Link;
-      CREATE MULTI LINK notes: default::Note;
-      CREATE REQUIRED PROPERTY name: std::str;
-      CREATE REQUIRED PROPERTY content: std::str;
+  ALTER TYPE default::Topic {
+      CREATE MULTI LINK notes := (.<topic[IS default::Note]);
   };
   CREATE TYPE default::User {
       CREATE REQUIRED PROPERTY email: std::str;

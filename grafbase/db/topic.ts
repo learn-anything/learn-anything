@@ -56,7 +56,7 @@ export async function addTopic(topic: Topic, userId: string) {
           links: e.for(e.json_array_unpack(params.links), (link) =>
             e.insert(e.Link, {
               title: e.cast(e.str, e.json_get(link, "title")),
-              url: e.cast(e.str, e.json_get(link, "url"))
+              url: e.cast(e.str, e.json_get(link, "url")),
             })
           ),
         })

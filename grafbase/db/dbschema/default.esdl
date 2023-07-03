@@ -16,18 +16,18 @@ module default {
     required content: str; # markdown
     prettyName: str; # name of topic in form of `Topic Name`
     directParent: Topic; # parent topic
-    multi notes: Note;
-    multi links: Link;
+    multi link notes := .<topic[is Note];
+    multi link links := .<topic[is Link];
     constraint exclusive on ((.name, .user)); # users can't have two topics with same name
   }
   type Note {
-    required link topic: Topic; # topic this note belongs to
+    required topic: Topic; # topic this note belongs to
     required public: bool; # if true, anyone can see the note
     required content: str;
     url: str;
   }
   type Link {
-    required link topic: Topic; # topic this note belongs to
+    required topic: Topic; # topic this note belongs to
     required public: bool; # if true, anyone can see the note
     required title: str;
     required url: str;
