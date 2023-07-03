@@ -3,7 +3,6 @@ import { readFile } from "fs/promises"
 import * as path from "path"
 import { dirname } from "path"
 import { Link, Note, RelatedLink, addTopic } from "../topic"
-import { Note } from "../dbschema/edgeql-js/modules/default"
 
 export async function syncWiki() {}
 
@@ -193,8 +192,8 @@ async function mdFileIntoTopic(
   let prettyName // pretty name for the topic (user defined)
   let parentTopic
   let content = ""
-  let notes = []
-  let links = []
+  let notes: Note[] = []
+  let links: Link[] = []
 
   const fileContent = (await readFile(filePath)).toString()
 

@@ -36,6 +36,13 @@ export async function addTopic(topic: Topic, userId: string) {
         .assert_single(),
       name: e.str(topic.name),
       content: e.str(topic.content),
+      notes:
+        topic.notes === undefined
+          ? e.cast(e.Note, e.set)
+          : e.for(e.json_array_unpack(e.cast(e.json, topic.notes)), (note) => ({
+              content: note.content,
+              url: e.str(e.json_get(note, "url")),
+            })),
     })
     .unlessConflict()
     .toEdgeQL()
