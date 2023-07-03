@@ -27,7 +27,7 @@ interface Topic {
 }
 
 export async function addTopic(topic: Topic, userId: string) {
-  const res = await e
+  const query = e
     .insert(e.Topic, {
       user: e
         .select(e.User, (user) => ({
@@ -36,19 +36,19 @@ export async function addTopic(topic: Topic, userId: string) {
         .assert_single(),
       name: e.str(topic.name),
       content: e.str(topic.content),
-      notes:
-        topic.notes === undefined
-          ? e.cast(e.Note, e.set)
-          : e.for(e.json_array_unpack(e.cast(e.json, topic.notes)), (note) => ({
-              content: note.content,
-              url: e.str(e.json_get(note, "url")),
-            })),
+      notes: e.for(
+        e.json_array_unpack(e.cast(e.json, topic.notes ?? null)),
+        (note) =>
+          e.insert(e.Note, {
+            content: e.cast(e.str, e.json_get(note, "content")),
+            url: e.cast(e.str, e.json_get(note, "url")),
+          })
+      ),
     })
     .unlessConflict()
-    .toEdgeQL()
-  // .run(client)
-  console.log(res)
-  return res
+  console.log("addTopic", query.toEdgeQL())
+
+  return query.run(client)
 }
 
 export async function deleteTopic(id: string) {
