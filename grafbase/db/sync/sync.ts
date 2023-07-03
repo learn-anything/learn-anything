@@ -5,7 +5,7 @@ import e from "../dbschema/edgeql-js"
 import { getTopic, getTopicCount, getTopics } from "../topic"
 
 async function main() {
-  // await resetDb()
+  await resetDb()
   // seed()
   const userId = await getUserIdByName("Nikita")
   await forceWikiSync(userId)
@@ -21,7 +21,7 @@ main().catch((err) => {
 })
 
 async function seed() {
-  addUser({ name: "Nikita", email: "nikita@learn-anything.xyz" })
+  return addUser({ name: "Nikita", email: "nikita@learn-anything.xyz" })
 }
 
 async function clearTable(table: any) {
