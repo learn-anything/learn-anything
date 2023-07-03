@@ -4,8 +4,8 @@ import e from "./dbschema/edgeql-js"
 export interface Link {
   title: string
   url: string
-  description?: string
-  related?: RelatedLink[]
+  description: string | null
+  related: RelatedLink[]
 }
 
 export interface RelatedLink {
@@ -15,40 +15,64 @@ export interface RelatedLink {
 
 export interface Note {
   content: string
-  url?: string
+  url: string | null
 }
 
 interface Topic {
   name: string
   content: string
-  parentTopic?: string
-  notes?: Note[]
-  links?: Link[]
+  parentTopic: string | null
+  notes: Note[]
+  links: Link[]
 }
 
 export async function addTopic(topic: Topic, userId: string) {
-  const query = e
-    .insert(e.Topic, {
-      user: e
-        .select(e.User, (user) => ({
-          filter: e.op(user.id, "=", e.uuid(userId)),
-        }))
-        .assert_single(),
-      name: e.str(topic.name),
-      content: e.str(topic.content),
-      notes: e.for(
-        e.json_array_unpack(e.cast(e.json, topic.notes ?? null)),
-        (note) =>
-          e.insert(e.Note, {
-            content: e.cast(e.str, e.json_get(note, "content")),
-            url: e.cast(e.str, e.json_get(note, "url")),
-          })
-      ),
-    })
-    .unlessConflict()
+  const query = e.params(
+    {
+      userId: e.uuid,
+      topic: e.tuple({
+        name: e.str,
+        content: e.str,
+      }),
+      notes: e.json,
+      links: e.json,
+    },
+    (params) =>
+      e
+        .insert(e.Topic, {
+          user: e
+            .select(e.User, (user) => ({
+              filter: e.op(user.id, "=", params.userId),
+            }))
+            .assert_single(),
+          name: topic.name,
+          content: topic.content,
+          notes: e.for(e.json_array_unpack(params.notes), (note) =>
+            e.insert(e.Note, {
+              content: e.cast(e.str, e.json_get(note, "content")),
+              url: e.cast(e.str, e.json_get(note, "url")),
+            })
+          ),
+          links: e.for(e.json_array_unpack(params.links), (link) =>
+            e.insert(e.Link, {
+              title: e.cast(e.str, e.json_get(link, "title")),
+              url: e.cast(e.str, e.json_get(link, "url"))
+            })
+          ),
+        })
+        .unlessConflict()
+  )
   console.log("addTopic", query.toEdgeQL())
 
-  return query.run(client)
+  return query.run(client, {
+    userId,
+    topic: {
+      name: topic.name,
+      content: topic.content,
+    },
+    links: topic.links,
+    notes: topic.notes,
+  })
 }
 
 export async function deleteTopic(id: string) {
