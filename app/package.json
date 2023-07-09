@@ -1,0 +1,52 @@
+{
+  "name": "app",
+  "version": "0.0.1",
+  "main": "packages/main/dist/index.cjs",
+  "scripts": {
+    "build": "npm run build:main && npm run build:preload && npm run build:renderer",
+    "build:main": "cd ./packages/main && vite build",
+    "build:preload": "cd ./packages/preload && vite build",
+    "build:renderer": "cd ./packages/renderer && vite build",
+    "compile": "cross-env MODE=production npm run build && electron-builder build --config .electron-builder.config.js --dir --config.asar=false",
+    "test": "npm run test:main && npm run test:preload && npm run test:renderer && npm run test:e2e",
+    "test:e2e": "npm run build && vitest run",
+    "test:main": "vitest run -r packages/main --passWithNoTests",
+    "test:preload": "vitest run -r packages/preload --passWithNoTests",
+    "test:renderer": "vitest run -r packages/renderer --passWithNoTests",
+    "watch": "tsx scripts/watch.mjs",
+    "lint": "eslint . --ext js,mjs,cjs,ts,mts,cts,vue",
+    "typecheck:main": "tsc --noEmit -p packages/main/tsconfig.json",
+    "typecheck:preload": "tsc --noEmit -p packages/preload/tsconfig.json",
+    "typecheck:renderer": "vue-tsc --noEmit -p packages/renderer/tsconfig.json",
+    "typecheck": "npm run typecheck:main && npm run typecheck:preload && npm run typecheck:renderer",
+    "postinstall": "cross-env ELECTRON_RUN_AS_NODE=1 electron scripts/update-electron-vendors.mjs",
+    "format": "npx prettier --write \"**/*.{js,mjs,cjs,ts,mts,cts,vue,json}\""
+  },
+  "devDependencies": {
+    "@types/node": "20.4.1",
+    "@typescript-eslint/eslint-plugin": "5.61.0",
+    "@vitejs/plugin-vue": "4.2.3",
+    "@vue/test-utils": "2.4.0",
+    "cross-env": "7.0.3",
+    "electron": "25.2.0",
+    "electron-builder": "24.4.0",
+    "eslint": "8.44.0",
+    "eslint-plugin-vue": "9.15.1",
+    "happy-dom": "10.0.3",
+    "nano-staged": "0.8.0",
+    "playwright": "1.35.1",
+    "simple-git-hooks": "2.8.1",
+    "typescript": "5.1.6",
+    "unplugin-auto-expose": "0.0.5",
+    "vite": "4.4.2",
+    "vitest": "0.33.0",
+    "vue": "3.3.4",
+    "vue-tsc": "1.8.4"
+  },
+  "dependencies": {
+    "electron-nano-store": "^0.6.0",
+    "electron-updater": "6.1.1",
+    "solid-codemirror": "^2.3.0",
+    "tinybase": "^4.0.0"
+  }
+}

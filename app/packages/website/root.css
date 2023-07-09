@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+a {
+  /* border-bottom: dotted 1.5px #4cd06f; */
+  color: #10b981;
+  font-weight: 550;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+html {
+  background-color: #ffffff;
+  color: black;
+  overscroll-behavior: none;
+}
+.Topbar {
+  background-color: white;
+}
+@media (prefers-color-scheme: dark) {
+  html {
+    background: #1e1e20;
+    color: white;
+  }
+  .Topbar {
+    background-color: #1e1e20;
+  }
+}

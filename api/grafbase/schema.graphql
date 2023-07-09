@@ -1,0 +1,12 @@
+schema
+  @auth(
+    providers: [{ type: jwks, jwksEndpoint: "{{ env.HANKO_API_ENDPOINT }}" }]
+    rules: [{ allow: owner }]
+  ) {
+  query: Query
+}
+
+extend type Query {
+  getTopic(topicName: String, userId: String): String!
+    @resolver(name: "topics/getTopic")
+}
