@@ -5,7 +5,11 @@ import { createSignal, onMount } from "solid-js"
 import { createCodeMirror } from "solid-codemirror"
 import { EditorView, lineNumbers } from "@codemirror/view"
 
-export default function TopicEditor() {
+interface Props {
+  topic: string
+}
+
+export default function TopicEditor(props: Props) {
   const [topicContent, setTopicContent] = createSignal()
 
   const [showLineNumber, setShowLineNumber] = createSignal(true)

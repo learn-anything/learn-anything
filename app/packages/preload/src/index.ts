@@ -34,3 +34,7 @@ export async function getWikiFolderPath() {
   const store = await defineStore("user")
   return store.get("wikiFolderPath")
 }
+
+export async function getTopic(topic: string) {
+  const store = await defineStore("user")
+}
