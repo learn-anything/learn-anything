@@ -3,9 +3,9 @@ export default function Sidebar() {
     <>
       <div
         class="dark:bg-neutral-800 bg-zinc-200 flex h-full"
-        style={{ width: "25%" }}
+        style={{ width: "22%", "min-width": "200px" }}
       >
-        <div class="flex flex-col justify-between items-center font-semibold p-4 py-4 border-r-2 border-opacity-10 border-slate-100">
+        <div class="flex flex-col justify-between items-center font-semibold p-3 py-4 border-r-2 border-opacity-10 border-slate-100">
           <div>stuff</div>
           <div class="flex flex-col items-center gap-3">
             <div>Set</div>
