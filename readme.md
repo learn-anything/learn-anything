@@ -52,7 +52,7 @@ Follow instructions, name EdgeDB instance `learn-anything`.
 
 Run `edgedb ui`. This will open EdgeDB graphical interface where you can run queries or explore the schema.
 
-Run below command to apply the schema defined in [default.esdl](grafbase/db/dbschema/default.esdl) on your local DB:
+Run below command to apply the schema defined in [default.esdl](db/dbschema/default.esdl) on your local DB:
 
 ```
 pnpm db:watch

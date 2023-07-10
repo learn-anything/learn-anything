@@ -3,6 +3,7 @@ import { createSignal, onMount } from "solid-js"
 // TODO: don't know why it complains about types
 // @ts-ignore
 import { createCodeMirror, createEditorControlledValue } from "solid-codemirror"
+import Sidebar from "./components/Sidebar"
 
 export default function App() {
   // const [fileSignal, setFileSignal] = createSignal()
@@ -35,9 +36,18 @@ export default function App() {
 
   return (
     <>
-      <div style={{ width: "100vw", height: "100vh" }}>
-        <h1 class="text-red-600">Editor</h1>
-        <div style={{ width: "50%" }} ref={ref} />
+      <div
+        style={{ width: "100vw", height: "100vh" }}
+        class="flex items-center justify-center"
+      >
+        <Sidebar />
+        <div
+          class="bg-neutral-900 flex flex-col gap-4 p-10 h-full overflow-scroll"
+          style={{ width: "75%" }}
+        >
+          <h1 class="font-bold text-3xl">Editor</h1>
+          <div style={{}} ref={ref} />
+        </div>
       </div>
     </>
   )
