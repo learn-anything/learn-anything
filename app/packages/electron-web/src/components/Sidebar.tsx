@@ -1,7 +1,10 @@
 export default function Sidebar() {
   return (
     <>
-      <div class="bg-neutral-800 flex h-full" style={{ width: "25%" }}>
+      <div
+        class="dark:bg-neutral-800 bg-zinc-200 flex h-full"
+        style={{ width: "25%" }}
+      >
         <div class="flex flex-col justify-between items-center font-semibold p-4 py-4 border-r-2 border-opacity-10 border-slate-100">
           <div>stuff</div>
           <div class="flex flex-col items-center gap-3">

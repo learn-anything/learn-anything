@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+#root {
+  margin: 0 auto;
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

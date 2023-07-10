@@ -4,35 +4,53 @@ import { createSignal, onMount } from "solid-js"
 // @ts-ignore
 import { createCodeMirror, createEditorControlledValue } from "solid-codemirror"
 import Sidebar from "./components/Sidebar"
+import { EditorView, lineNumbers } from "@codemirror/view"
 
 export default function App() {
+  const [content, setContent] = createSignal()
+  const [showLineNumber, setShowLineNumber] = createSignal(true)
+
+  const { ref, editorView, createExtension } = createCodeMirror({
+    onValueChange: setContent,
+  })
+
+  const theme = EditorView.theme({
+    "&": {
+      background: "red",
+    },
+  })
+
+  // Add a static custom theme
+  createExtension(theme)
+
+  // Toggle extension
+  createExtension(() => (showLineNumber() ? lineNumbers() : []))
+
+  // Remove line numbers after 2.5s
+  setTimeout(() => {
+    setShowLineNumber(false)
+  }, 2500)
+
+  // console.log(createExtension)
+
+  // const lineWrap = EditorView.lineWrapping
+
+  // createExtension(lineWrap)
+
+  // createEditorControlledValue(editorView, content)
+
   // const [fileSignal, setFileSignal] = createSignal()
   // const [editorSignal, setEditorSignal] = createSignal()
 
-  const [code, setCode] = createSignal()
-
-  const { ref, editorView } = createCodeMirror({ onValueChange: setCode })
-  createEditorControlledValue(editorView, code)
-
-  // TODO: save this file into tinybase
+  // TODO: load this file from tinybase sqlite
+  // save all all files into sqlite tinybase, expose it via store
   onMount(async () => {
     // await saveWikiFolderPath("/Users/nikiv/src/docs/wiki/docs/")
     // const res = await getWikiFolderPath()
     const fileContet = await getFileContent("macOS/apps/karabiner/karabiner.md")
     console.log(fileContet, "content")
-    setCode(fileContet)
-    // console.log(fileContet, "content")
-    // console.log(res, "res")
+    setContent(fileContet)
   })
-
-  // Update code after 2.5s
-  // setTimeout(() => {
-  //   setCode("console.log('updated!')")
-  // }, 2500)
-
-  // #root {
-  //   margin: 0 auto;
-  // }
 
   return (
     <>
@@ -42,7 +60,7 @@ export default function App() {
       >
         <Sidebar />
         <div
-          class="bg-neutral-900 flex flex-col gap-4 p-10 h-full overflow-scroll"
+          class="dark:bg-neutral-900 bg-white flex flex-col gap-4 p-10 h-full overflow-scroll"
           style={{ width: "75%" }}
         >
           <h1 class="font-bold text-3xl">Editor</h1>
