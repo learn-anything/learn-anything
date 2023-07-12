@@ -44,9 +44,9 @@ export default function App() {
         <div
           style={{ width: "100vw", height: "100vh" }}
           class="flex items-center"
-          onClick={() => {
-            setShowToolBar(true)
-          }}
+          // onClick={() => {
+          //   setShowToolBar(true)
+          // }}
         >
           <Sidebar setShowSet={setShowSet} />
           <TopicEditor topic="karabiner" />
