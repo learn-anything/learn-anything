@@ -1,4 +1,7 @@
-export default function Sidebar() {
+import { createUserState } from "../GlobalContext/user"
+
+export default function Sidebar(props: any) {
+  const user = createUserState()
   return (
     <>
       <div
@@ -12,6 +15,9 @@ export default function Sidebar() {
             <div
               onClick={() => {
                 // setShowEditorSettings(true)
+                props.setShowSet(true)
+                user.setShowEditorSettings(true)
+                console.log(user.user.showEditorSettings)
               }}
             >
               Set
