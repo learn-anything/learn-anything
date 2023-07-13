@@ -22,7 +22,13 @@ export default function Sidebar(props: any) {
             >
               Set
             </div>
-            <div>Help</div>
+            <div
+              onClick={() => {
+                props.setShowToolBar(true)
+              }}
+            >
+              Help
+            </div>
           </div>
         </div>
         <div

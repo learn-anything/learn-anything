@@ -48,7 +48,7 @@ export default function App() {
           //   setShowToolBar(true)
           // }}
         >
-          <Sidebar setShowSet={setShowSet} />
+          <Sidebar setShowToolBar={setShowToolBar} setShowSet={setShowSet} />
           <TopicEditor topic="karabiner" />
           <Show when={showSet()}>
             <div class="absolute z-10 flex items-center justify-center top-0 left-0 w-screen h-screen">

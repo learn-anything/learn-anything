@@ -27,26 +27,26 @@ export default function ToolBar(props: any) {
   //   setFocusedTopic(focusedTopic() - 1)
   // })
 
-  createEffect(() => {
-    if (filteredWord()) {
-      untrack(() => {
-        setFilteredTopic(TopicArray())
+  // createEffect(() => {
+  //   if (filteredWord()) {
+  //     untrack(() => {
+  //       setFilteredTopic(TopicArray())
 
-        setFilteredTopic(
-          filteredTopic().filter((word: any) =>
-            filteredWord()
-              .split("")
-              .every((v) => {
-                return word.split("").includes(v)
-              })
-          )
-        )
+  //       setFilteredTopic(
+  //         filteredTopic().filter((word: any) =>
+  //           filteredWord()
+  //             .split("")
+  //             .every((v) => {
+  //               return word.split("").includes(v)
+  //             })
+  //         )
+  //       )
 
-        console.log(filteredTopic())
-      })
-      setFocusedTodoTitle(filteredTopic()[focusedTopic()])
-    }
-  })
+  //       console.log(filteredTopic())
+  //     })
+  //     setFocusedTodoTitle(filteredTopic()[focusedTopic()])
+  //   }
+  // })
 
   return (
     <>
@@ -85,22 +85,23 @@ export default function ToolBar(props: any) {
             console.log("run")
           }}
           id="ToolBarBackDrop"
-          class="absolute backdrop-blur top-0 right-0 bg-neutral-900 bg-opacity-50 h-full w-full"
+          class="absolute top-0 right-0 bg-neutral-900 bg-opacity-50 h-full w-full"
         ></div>
         <div id="ToolBar" class=" flex h-1/3 justify-center items-center">
           <div class="w-1/2  relative flex flex-col gap-3">
             <input
               type="text"
               placeholder="Search"
-              onInput={(e) => {
-                setFilteredWord(e.target.value)
-              }}
+              // onInput={(e) => {
+              //   setFilteredWord(e.target.value)
+              // }}
               class=" rounded-md text-xl font-semibold py-4 px-6 outline-none text-black dark:text-white"
               style={{ width: "100%" }}
             />
-            <Show when={filteredWord() !== "" && filteredTopic().length !== 0}>
+            {/* <Show when={filteredWord() !== "" && filteredTopic().length !== 0}> */}
+            <Show when={false}>
               <div class="bg-neutral-700 absolute top-16 left-0 text-white font-semibold text-opacity-40 flex flex-col rounded-md w-full">
-                <For each={filteredTopic()}>
+                {/* <For each={filteredTopic()}>
                   {(topic) => (
                     <div
                       id={
@@ -114,7 +115,7 @@ export default function ToolBar(props: any) {
                       <div>{topic}</div>
                     </div>
                   )}
-                </For>
+                </For> */}
               </div>
             </Show>
           </div>
