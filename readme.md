@@ -40,6 +40,10 @@ pnpm i
 
 Everything is driven using `pnpm ..` commands.
 
+The current focus is on making [Electron app](#run-electron-app) work. Other steps will give you issues in setup.
+
+Ask for help on [Discord](https://discord.com/invite/bxtD8x6aNF).
+
 ## Setup DB
 
 Assumes you installed [EdgeDB](https://www.edgedb.com/) (run `curl ..` command).
@@ -69,8 +73,6 @@ pnpm db:ts-generate
 `pnpm i db:seed-clone`
 
 This will `git clone` [seed repo](https://github.com/learn-anything/seed).
-
-> from this part, things are unstable
 
 The goal is to seed EdgeDB with [this content](https://github.com/learn-anything/seed/tree/main/wiki/nikita). Can be seen online [here](https://wiki.nikiv.dev).
 
