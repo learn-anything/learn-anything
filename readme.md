@@ -68,7 +68,7 @@ pnpm app:tinybase
 
 Will `tsx` run [app/packages/tinybase/main.ts](app/packages/tinybase/main.ts).
 
-Goal of that file currently is to load all the .md files from `seed/nikita` folder into TinyBase store backed by SQLite.
+Goal of that file currently is to load all the .md files from `seed/wiki/nikita` folder into TinyBase store backed by SQLite.
 
 If changes are made to SQLite content, it will update the files in the file system using TinyBase reactive hooks.
 
@@ -125,7 +125,7 @@ SEED_FOLDER_NAME=nikita
 USERNAME=nikita
 ```
 
-You can swap the names to your own. The `SEED_FOLDER_NAME` is the folder that is found in `seed/wiki` (from clone above).
+You can swap the names to your own. The `SEED_FOLDER_NAME` is the folder that is found in `seed/wiki`.
 
 Read [api/db/sync/sync.ts](api/db/sync/sync.ts) and [api/db/sync/wiki.ts](api/db/sync/wiki.ts) for details how sync works.
 
