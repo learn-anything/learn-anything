@@ -34,15 +34,47 @@ Ask questions on [Discord](https://discord.com/invite/bxtD8x6aNF) if interested 
 
 This project is a monorepo setup using [pnpm workspaces](https://pnpm.io/workspaces).
 
+Everything is driven using `pnpm ..` commands. First run:
+
 ```
 pnpm i
+pnpm dev-setup
 ```
 
-Everything is driven using `pnpm ..` commands.
+`pnpm dev-setup` will `git clone` [seed repo](https://github.com/learn-anything/seed). It's needed for dev setup below to work well.
 
-The current focus is on making [Electron app](#run-electron-app) work. Other steps will give you issues in setup.
+## Run Electron app
 
-Ask for help on [Discord](https://discord.com/invite/bxtD8x6aNF).
+<!-- TODO: make electron app instantly start reading files from the seed folder -->
+<!-- using default wiki folder env -->
+
+```
+pnpm app:dev
+```
+
+This will start an Electron development app. Started from [this app starter](https://github.com/cawa-93/vite-electron-builder).
+
+Solid code that renders the app is located at [app/packages/electron-web](app/packages/electron-web).
+
+[app/packages/preload/src/index.ts](app/packages/preload/src/index.ts) exposes functions to front end from [node.js main process](https://github.com/cawa-93/vite-electron-builder#project-structure).
+
+## Run TinyBase setup
+
+Currently trying to make [TinyBase](https://tinybase.org/) setup with [SQLite adapter](https://tinybase.org/api/persister-sqlite3/).
+
+```
+pnpm app:tinybase
+```
+
+Will `tsx` run [app/packages/tinybase/main.ts](app/packages/tinybase/main.ts).
+
+Goal of that file currently is to load all the .md files from `seed/nikita` folder into TinyBase store backed by SQLite.
+
+If changes are made to SQLite content, it will update the files in the file system using TinyBase reactive hooks.
+
+Once that works in just Node, it should be connected to Electron.
+
+TinyBase is the main app state of the app. Front end state is reflection of TinyBase state. If TinyBase state changes, GraphQL requests to mutate real backend state are sent where needed. Same goes for any other side effects that needs to happen such as updating of files connected.
 
 ## Setup DB
 
@@ -69,10 +101,6 @@ pnpm db:ts-generate
 ```
 
 ## Seed DB with content
-
-`pnpm i seed-clone`
-
-This will `git clone` [seed repo](https://github.com/learn-anything/seed).
 
 The goal is to seed EdgeDB with [this content](https://github.com/learn-anything/seed/tree/main/wiki/nikita). Can be seen online [here](https://wiki.nikiv.dev).
 
@@ -127,34 +155,6 @@ pnpm api:grafbase
 ```
 
 Will start Grafbase locally and give you GraphQL access.
-
-## Run Electron app
-
-```
-pnpm app:dev
-```
-
-This will start an Electron development app. Built using [this app starter](https://github.com/cawa-93/vite-electron-builder).
-
-Solid code that renders the app is located at [app/packages/electron-web](app/packages/electron-web).
-
-## Run TinyBase setup
-
-Currently trying to make [TinyBase](https://tinybase.org/) setup with [SQLite adapter](https://tinybase.org/api/persister-sqlite3/).
-
-```
-pnpm app:tinybase
-```
-
-Will `tsx` run [app/packages/tinybase/main.ts](app/packages/tinybase/main.ts).
-
-Goal of that file currently is to load all the .md files from the `seed` folder into TinyBase store backed by SQLite.
-
-If changes are made to SQLite content, it will update the files in the file system using TinyBase reactive hooks.
-
-Once that works in just Node, it should be connected to Electron.
-
-TinyBase is the main app state of the app. Front end state is reflection of TinyBase state. If TinyBase state changes, GraphQL requests to mutate real backend state are sent where needed. Same goes for any other side effects that needs to happen such as updating of files.
 
 ## Run web
 
