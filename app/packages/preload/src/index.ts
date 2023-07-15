@@ -40,9 +40,9 @@ export async function getTopic(topic: string) {
   const store = await defineStore("user")
 }
 
-// export async function createStore() {
-//   const store = createStore()
-// }
+export async function createStore() {
+  const store = createStore()
+}
 
 // export async function saveFile(filePath: string, topic: string) {
 //   const store = createStore()

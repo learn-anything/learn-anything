@@ -70,7 +70,7 @@ pnpm db:ts-generate
 
 ## Seed DB with content
 
-`pnpm i db:seed-clone`
+`pnpm i seed-clone`
 
 This will `git clone` [seed repo](https://github.com/learn-anything/seed).
 
@@ -136,15 +136,32 @@ pnpm app:dev
 
 This will start an Electron development app. Built using [this app starter](https://github.com/cawa-93/vite-electron-builder).
 
-Thinking of trying to make Electron and Solid happy and [use only one codebase for all web code with solid](https://github.com/brillout/vite-plugin-ssr/discussions/1011), using [vite-plugin-ssr](https://vite-plugin-ssr.com/).
+Solid code that renders the app is located at [app/packages/electron-web](app/packages/electron-web).
 
-Electron expects `index.html` file as entry but [Solid Start](https://github.com/solidjs/solid-start) does not provide a `index.html` file.
+## Run TinyBase setup
+
+Currently trying to make [TinyBase](https://tinybase.org/) setup with [SQLite adapter](https://tinybase.org/api/persister-sqlite3/).
+
+```
+pnpm app:tinybase
+```
+
+Will `tsx` run [app/packages/tinybase/main.ts](app/packages/tinybase/main.ts).
+
+Goal of that file currently is to load all the .md files from the `seed` folder into TinyBase store backed by SQLite.
+
+If changes are made to SQLite content, it will update the files in the file system using TinyBase reactive hooks.
+
+Once that works in just Node, it should be connected to Electron.
+
+TinyBase is the main app state of the app. Front end state is reflection of TinyBase state. If TinyBase state changes, GraphQL requests to mutate real backend state are sent where needed. Same goes for any other side effects that needs to happen such as updating of files.
 
 ## Run web
 
-> Some issues here for now.
+<!-- TODO: automate creating of `.env` file with default content as part of `pnpm setup` command -->
+<!-- TODO: do same for API .env too -->
 
-<!-- Create `.env` with this content:
+Create `.env` file inside [app/packages/website](app/packages/website) with this content:
 
 ```
 VITE_HANKO_API=https://e879ccc9-285e-49d3-b37e-b569f0db4035.hanko.io
@@ -159,7 +176,7 @@ Run:
 pnpm web:dev
 ```
 
-Open http://localhost:3000 -->
+Open http://localhost:3000
 
 ## Contribute
 
@@ -192,3 +209,9 @@ Tech stack is [very similar to Inlang](https://github.com/inlang/inlang/blob/mai
 ## Future DX wins
 
 - Setup [devenv](https://devenv.sh/) to get one command dev env install. Currently we ask to install EdgeDB manually for example.
+
+### Maybe
+
+Can potentially [use only one codebase for both web code and electron app renderer code](https://github.com/brillout/vite-plugin-ssr/discussions/1011), using [vite-plugin-ssr](https://vite-plugin-ssr.com/).
+
+Electron expects `index.html` file as entry but [Solid Start](https://github.com/solidjs/solid-start) does not provide a `index.html` file. At least I don't know how to make that work so for now its split up. The app is quite different to the website in features so it's even for the best.
