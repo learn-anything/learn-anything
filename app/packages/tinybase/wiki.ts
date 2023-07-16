@@ -5,23 +5,26 @@ import { dirname } from "path"
 import { URL } from "node:url"
 import { exec } from "child_process"
 import clipboard from "clipboardy"
-import { Link, Note, RelatedLink } from "./tinybase"
+import { Link, Note, RelatedLink, saveFileToTinybase } from "./tinybase"
+import { Store } from "tinybase/cjs"
 
 // assumes `pnpm dev-setup` was ran
 // syncs content of folder with .md files inside `seed` folder to tinybase
 // all markdown files are synced with tinybase sqlite db
-export async function seedWikiSync(folderName: string) {
+export async function seedWikiSync(folderName: string, store: Store) {
   const wikiPath = new URL(`../../../seed/wiki/${folderName}`, import.meta.url)
     .pathname
   const filePaths = await markdownFilePaths(wikiPath)
   const filePathToTest = filePaths[1] // analytics.md
-  console.log(filePathToTest)
+  saveFileToTinybase(wikiPath, filePathToTest, store)
 }
 
-export async function addFileToTinybase(filePath: string, rootPath: string) {
+export async function saveFileToTinybase(
+  wikiPath: string,
+  filePath: string,
+  store: Store
+) {
   console.log(filePath, "file path")
-  console.log(rootPath, "root path")
-
   const topicName = getFileNameWithoutExtension(filePath) // file name is topic name (in-this-form)
   console.log(topicName, "topic name")
   let prettyName // pretty name for the topic (user defined)
@@ -60,7 +63,7 @@ export async function addFileToTinybase(filePath: string, rootPath: string) {
   if (parentFolderName === topicName) {
     const parentFolderPath = getFolderPathOfFileFromPath(topicFolderPath)
     // this is true only if the parent folder is not root folder
-    if (!(parentFolderPath === rootPath)) {
+    if (!(parentFolderPath === wikiPath)) {
       console.log("not root folder, there is parent available")
     }
     console.log("no parent!")

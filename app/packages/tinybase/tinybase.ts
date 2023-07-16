@@ -1,7 +1,5 @@
-import { createQueries, createStore } from "tinybase"
+import { Store, createQueries, createStore } from "tinybase"
 import { readFile } from "node:fs/promises"
-
-//
 
 export interface Link {
   title: string
@@ -45,8 +43,4 @@ export async function setupTinybaseStore() {
     },
   })
   return store
-}
-
-export async function saveFileContent(path: string) {
-  const fileContent = await readFile(path, { encoding: "utf8" })
 }
