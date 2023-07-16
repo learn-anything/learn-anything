@@ -109,28 +109,13 @@ export async function saveFileToTinybase(
     console.log(notes, "notes")
   }
 
-  // writeToFile(`/Users/nikiv/Desktop/wiki/${topicName}-content.md`, content)
-  // writeToFile(
-  //   `/Users/nikiv/Desktop/wiki/${topicName}-notes.md`,
-  //   notes.length + " " + JSON.stringify(notes)
-  // )
-  // writeToFile(
-  //   `/Users/nikiv/Desktop/wiki/${topicName}-links.md`,
-  //   links.length + " " + JSON.stringify(links)
-  // )
-  // await addTopic(
-  //   {
-  //     name: topicName,
-  //     content,
-  //     parentTopic: parentTopic ?? null,
-  //     public: true,
-  //     notes: notes.map((note) => ({ ...note, public: false })),
-  //     links: links.map((link) => ({ ...link, public: false })),
-  //     prettyName,
-  //   },
-  //   userId
-  // )
-
+  // TODO: add everything to tinybase
+  // store.setTable('topics', {
+  //   filePath: filePath,
+  //   fileContent: content,
+  //   topicName: topicName,
+  //   topicContent: content,
+  // })
   return
 }
 
