@@ -5,34 +5,130 @@ import { dirname } from "path"
 import { URL } from "node:url"
 import { exec } from "child_process"
 import clipboard from "clipboardy"
+import { Link, Note, RelatedLink } from "./tinybase"
 
-export interface Link {
-  title: string
-  url: string
-  description: string | null
-  public: boolean
-  related: RelatedLink[]
+// assumes `pnpm dev-setup` was ran
+// syncs content of folder with .md files inside `seed` folder to tinybase
+// all markdown files are synced with tinybase sqlite db
+export async function seedWikiSync(folderName: string) {
+  const wikiPath = new URL(`../../../seed/wiki/${folderName}`, import.meta.url)
+    .pathname
+  const filePaths = await markdownFilePaths(wikiPath)
+  const filePathToTest = filePaths[1] // analytics.md
+  console.log(filePathToTest)
 }
 
-export interface RelatedLink {
-  title: string
-  url: string
-}
+export async function addFileToTinybase(filePath: string, rootPath: string) {
+  console.log(filePath, "file path")
+  console.log(rootPath, "root path")
 
-export interface Note {
-  content: string
-  public: boolean
-  url: string | null
-}
+  const topicName = getFileNameWithoutExtension(filePath) // file name is topic name (in-this-form)
+  console.log(topicName, "topic name")
+  let prettyName // pretty name for the topic (user defined)
+  let parentTopic
+  let content = ""
+  let notes: Note[] = []
+  let links: Link[] = []
 
-export interface Topic {
-  name: string
-  content: string
-  parentTopic: string | null
-  public: boolean
-  notes: Note[]
-  links: Link[]
-  prettyName: string
+  const fileContent = (await readFile(filePath)).toString()
+
+  // Extract title from frontmatter
+  const frontmatterMatch = fileContent.match(
+    /^---\n(?:.*\n)*title: (.*)\n(?:.*\n)*---/m
+  )
+  // If title is not found in frontmatter, extract it from first heading
+  let title = frontmatterMatch ? frontmatterMatch[1] : ""
+  if (!title) {
+    let titleMatch = fileContent.match(/^# \[(.*)\]\(.*\)$/m)
+    if (!titleMatch) {
+      // If title is not a markdown link, fallback to previous regex
+      titleMatch = fileContent.match(/^# (.*)$/m)
+    }
+    title = titleMatch ? titleMatch[1] : ""
+  }
+  prettyName = title // either # Heading or title: Frontmatter
+
+  // Find the topic's parent if it exists
+
+  const topicFolderPath = getFolderPathOfFileFromPath(filePath)
+  console.log(topicFolderPath, "topic folder path")
+  const parentFolderName = path.basename(topicFolderPath)
+  console.log(parentFolderName, "parent folder name")
+
+  // if file name is same as folder name
+  // means parent topic can be one level up
+  if (parentFolderName === topicName) {
+    const parentFolderPath = getFolderPathOfFileFromPath(topicFolderPath)
+    // this is true only if the parent folder is not root folder
+    if (!(parentFolderPath === rootPath)) {
+      console.log("not root folder, there is parent available")
+    }
+    console.log("no parent!")
+  } else {
+    parentTopic = parentFolderName
+  }
+  console.log(parentTopic, "parent topic")
+
+  const contentWithoutFrontMatter = fileContent.replace(/---[\s\S]*?---/, "")
+
+  let linksSection
+  let notesSection
+  let noteOrLinkFound = false
+
+  // Find sections
+  const sections = contentWithoutFrontMatter.split("\n## ")
+  sections.forEach((section) => {
+    if (section.startsWith("Links\n")) {
+      linksSection = section.replace("Links\n", "")
+      noteOrLinkFound = true
+    } else if (section.startsWith("Notes\n")) {
+      notesSection = section.replace("Notes\n", "")
+      noteOrLinkFound = true
+    } else if (!noteOrLinkFound) {
+      // If not Notes or Links and no Notes or Links found before, append it to contentSection
+      content += (content ? "\n## " : "") + section
+    }
+  })
+
+  console.log(content, "content")
+
+  // only run if ## Links is present
+  if (linksSection) {
+    // TODO: why is links any[] and not Link[]?
+    links = await extractLinks(linksSection)
+    console.log(links, "links")
+  }
+
+  // only run if ## Notes is present
+  if (notesSection) {
+    // TODO: why is notes any[] and not Note[]?
+    notes = await extractNotes(notesSection)
+    console.log(notes, "notes")
+  }
+  writeToFile(`/Users/nikiv/Desktop/wiki/${topicName}-content.md`, content)
+  writeToFile(
+    `/Users/nikiv/Desktop/wiki/${topicName}-notes.md`,
+    notes.length + " " + JSON.stringify(notes)
+  )
+  writeToFile(
+    `/Users/nikiv/Desktop/wiki/${topicName}-links.md`,
+    links.length + " " + JSON.stringify(links)
+  )
+
+  // await addTopic(
+  //   {
+  //     name: topicName,
+  //     content,
+  //     parentTopic: parentTopic ?? null,
+  //     public: true,
+  //     notes: notes.map((note) => ({ ...note, public: false })),
+  //     links: links.map((link) => ({ ...link, public: false })),
+  //     prettyName,
+  //   },
+  //   userId
+  // )
+
+  return
 }
 
 async function getConnections(filePaths: string[]) {
@@ -266,117 +362,4 @@ export async function writeToFile(
   } catch (err) {
     console.error(`Error writing to file: ${err}`)
   }
-}
-
-export async function mdFileIntoTopic(filePath: string, rootPath: string) {
-  console.log(filePath, "file path")
-  console.log(rootPath, "root path")
-
-  const topicName = getFileNameWithoutExtension(filePath) // file name is topic name (in-this-form)
-  console.log(topicName, "topic name")
-  let prettyName // pretty name for the topic (user defined)
-  let parentTopic
-  let content = ""
-  let notes: Note[] = []
-  let links: Link[] = []
-
-  const fileContent = (await readFile(filePath)).toString()
-
-  // Extract title from frontmatter
-  const frontmatterMatch = fileContent.match(
-    /^---\n(?:.*\n)*title: (.*)\n(?:.*\n)*---/m
-  )
-  // If title is not found in frontmatter, extract it from first heading
-  let title = frontmatterMatch ? frontmatterMatch[1] : ""
-  if (!title) {
-    let titleMatch = fileContent.match(/^# \[(.*)\]\(.*\)$/m)
-    if (!titleMatch) {
-      // If title is not a markdown link, fallback to previous regex
-      titleMatch = fileContent.match(/^# (.*)$/m)
-    }
-    title = titleMatch ? titleMatch[1] : ""
-  }
-  prettyName = title // either # Heading or title: Frontmatter
-
-  // Find the topic's parent if it exists
-
-  const topicFolderPath = getFolderPathOfFileFromPath(filePath)
-  console.log(topicFolderPath, "topic folder path")
-  const parentFolderName = path.basename(topicFolderPath)
-  console.log(parentFolderName, "parent folder name")
-
-  // if file name is same as folder name
-  // means parent topic can be one level up
-  if (parentFolderName === topicName) {
-    const parentFolderPath = getFolderPathOfFileFromPath(topicFolderPath)
-    // this is true only if the parent folder is not root folder
-    if (!(parentFolderPath === rootPath)) {
-      console.log("not root folder, there is parent available")
-    }
-    console.log("no parent!")
-  } else {
-    parentTopic = parentFolderName
-  }
-  console.log(parentTopic, "parent topic")
-
-  const contentWithoutFrontMatter = fileContent.replace(/---[\s\S]*?---/, "")
-
-  let linksSection
-  let notesSection
-  let noteOrLinkFound = false
-
-  // Find sections
-  const sections = contentWithoutFrontMatter.split("\n## ")
-  sections.forEach((section) => {
-    if (section.startsWith("Links\n")) {
-      linksSection = section.replace("Links\n", "")
-      noteOrLinkFound = true
-    } else if (section.startsWith("Notes\n")) {
-      notesSection = section.replace("Notes\n", "")
-      noteOrLinkFound = true
-    } else if (!noteOrLinkFound) {
-      // If not Notes or Links and no Notes or Links found before, append it to contentSection
-      content += (content ? "\n## " : "") + section
-    }
-  })
-
-  console.log(content, "content")
-
-  // only run if ## Links is present
-  if (linksSection) {
-    // TODO: why is links any[] and not Link[]?
-    links = await extractLinks(linksSection)
-    console.log(links, "links")
-  }
-
-  // only run if ## Notes is present
-  if (notesSection) {
-    // TODO: why is notes any[] and not Note[]?
-    notes = await extractNotes(notesSection)
-    console.log(notes, "notes")
-  }
-  writeToFile(`/Users/nikiv/Desktop/wiki/${topicName}-content.md`, content)
-  writeToFile(
-    `/Users/nikiv/Desktop/wiki/${topicName}-notes.md`,
-    notes.length + " " + JSON.stringify(notes)
-  )
-  writeToFile(
-    `/Users/nikiv/Desktop/wiki/${topicName}-links.md`,
-    links.length + " " + JSON.stringify(links)
-  )
-
-  // await addTopic(
-  //   {
-  //     name: topicName,
-  //     content,
-  //     parentTopic: parentTopic ?? null,
-  //     public: true,
-  //     notes: notes.map((note) => ({ ...note, public: false })),
-  //     links: links.map((link) => ({ ...link, public: false })),
-  //     prettyName,
-  //   },
-  //   userId
-  // )
-
-  return
 }
