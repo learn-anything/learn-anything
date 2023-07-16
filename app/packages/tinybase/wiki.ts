@@ -1,12 +1,11 @@
+import { exec } from "child_process"
 import * as fs from "fs"
 import { readFile } from "fs/promises"
+import { URL } from "node:url"
 import * as path from "path"
 import { dirname } from "path"
-import { URL } from "node:url"
-import { exec } from "child_process"
-import clipboard from "clipboardy"
-import { Link, Note, RelatedLink } from "./tinybase"
 import { Store } from "tinybase/cjs"
+import { Link, Note, RelatedLink } from "./tinybase"
 
 // assumes `pnpm dev-setup` was ran
 // syncs content of folder with .md files inside `seed` folder to tinybase
@@ -119,105 +118,6 @@ export async function saveFileToTinybase(
   return
 }
 
-async function getConnections(filePaths: string[]) {
-  const connections = new Map()
-
-  for (const filePath of filePaths) {
-    const fileData = await readFile(filePath, "utf8")
-    const lines = fileData.split("\n")
-    let parsedData = ""
-
-    for (const line of lines) {
-      if (line.trim() === "## Notes" || line.trim() === "## Links") break
-      parsedData += line + "\n"
-    }
-
-    const regex = /\[.*?\]\((.*?\.md)\)/g
-    let match
-
-    const fileName = path.basename(filePath, ".md")
-
-    while ((match = regex.exec(parsedData)) !== null) {
-      const link = match[1].trim().split(" ")[0]
-      if (!link.startsWith("http://") && !link.startsWith("https://")) {
-        let linkName
-        if (path.basename(link) === "index.md") {
-          linkName = path.basename(path.dirname(link))
-        } else {
-          linkName = path.basename(link, ".md")
-        }
-
-        if (!connections.has(fileName)) {
-          connections.set(fileName, new Map())
-        }
-        const fileConnections = connections.get(fileName)
-        fileConnections.set(linkName, (fileConnections.get(linkName) || 0) + 1)
-
-        // Reverse connection
-        if (!connections.has(linkName)) {
-          connections.set(linkName, new Map())
-        }
-        const reverseConnections = connections.get(linkName)
-        reverseConnections.set(
-          fileName,
-          (reverseConnections.get(fileName) || 0) + 1
-        )
-      }
-    }
-  }
-
-  // Convert data to desired format
-  const result = []
-  for (const [file, links] of connections.entries()) {
-    const linksArray = []
-    for (const [linkFile, count] of links.entries()) {
-      linksArray.push({ file: linkFile, count })
-    }
-    result.push({ file, links: linksArray })
-  }
-
-  const connectionsArray = JSON.stringify(result, null, 2)
-  console.log(connectionsArray)
-  clipboard.writeSync(connectionsArray)
-  return result
-}
-
-export async function markdownFilePaths(
-  directoryPath: string,
-  ignoreList: string[] = []
-): Promise<string[]> {
-  let filesToProcess: string[] = []
-  const entries = fs.readdirSync(directoryPath, { withFileTypes: true })
-
-  for (let entry of entries) {
-    const fullPath = path.join(directoryPath, entry.name)
-
-    if (entry.isDirectory()) {
-      const subDirFiles = await markdownFilePaths(fullPath, ignoreList)
-      filesToProcess = [...filesToProcess, ...subDirFiles]
-    } else if (
-      entry.isFile() &&
-      path.extname(entry.name) === ".md" &&
-      !ignoreList.includes(entry.name.toLowerCase())
-    ) {
-      filesToProcess.push(fullPath)
-    }
-  }
-  return filesToProcess
-}
-
-function isParentFolder(firstPath: string, secondPath: string) {
-  const absoluteFirstPath = path.resolve(firstPath)
-  const absoluteSecondParentPath = path.resolve(path.dirname(secondPath))
-  return absoluteSecondParentPath.startsWith(absoluteFirstPath)
-}
-
-function getFolderNameOfFileFromPath(filePath: string) {
-  let dirPath = path.dirname(filePath)
-  let folderName = path.basename(dirPath)
-  return folderName
-}
-
 function getFolderPathOfFileFromPath(filePath: string) {
   return dirname(filePath)
 }
@@ -270,6 +170,7 @@ function extractLinks(markdownContent: string) {
       if (!firstLink) {
         related.push({ title, url })
       } else {
+        // @ts-ignore
         links.push({ title, url })
         firstLink = false
       }
@@ -321,6 +222,7 @@ function extractNotes(markdownContent: string) {
 
       // Only push if the content is not empty
       if (contentTrimmed !== "") {
+        // @ts-ignore
         notes.push({ content: contentTrimmed, url })
       }
     }
@@ -332,6 +234,7 @@ function extractNotes(markdownContent: string) {
 
       // Only push if the line is not empty
       if (lineTrimmed !== "") {
+        // @ts-ignore
         notes.push({ content: lineTrimmed })
       }
     }
@@ -350,4 +253,28 @@ export async function writeToFile(
   } catch (err) {
     console.error(`Error writing to file: ${err}`)
   }
+}
+
+async function markdownFilePaths(
+  directoryPath: string,
+  ignoreList: string[] = []
+): Promise<string[]> {
+  let filesToProcess: string[] = []
+  const entries = fs.readdirSync(directoryPath, { withFileTypes: true })
+
+  for (let entry of entries) {
+    const fullPath = path.join(directoryPath, entry.name)
+
+    if (entry.isDirectory()) {
+      const subDirFiles = await markdownFilePaths(fullPath, ignoreList)
+      filesToProcess = [...filesToProcess, ...subDirFiles]
+    } else if (
+      entry.isFile() &&
+      path.extname(entry.name) === ".md" &&
+      !ignoreList.includes(entry.name.toLowerCase())
+    ) {
+      filesToProcess.push(fullPath)
+    }
+  }
+  return filesToProcess
 }
