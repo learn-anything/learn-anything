@@ -5,7 +5,7 @@ import { dirname } from "path"
 import { URL } from "node:url"
 import { exec } from "child_process"
 import clipboard from "clipboardy"
-import { Link, Note, RelatedLink, saveFileToTinybase } from "./tinybase"
+import { Link, Note, RelatedLink } from "./tinybase"
 import { Store } from "tinybase/cjs"
 
 // assumes `pnpm dev-setup` was ran
@@ -108,16 +108,16 @@ export async function saveFileToTinybase(
     notes = await extractNotes(notesSection)
     console.log(notes, "notes")
   }
-  writeToFile(`/Users/nikiv/Desktop/wiki/${topicName}-content.md`, content)
-  writeToFile(
-    `/Users/nikiv/Desktop/wiki/${topicName}-notes.md`,
-    notes.length + " " + JSON.stringify(notes)
-  )
-  writeToFile(
-    `/Users/nikiv/Desktop/wiki/${topicName}-links.md`,
-    links.length + " " + JSON.stringify(links)
-  )
 
+  // writeToFile(`/Users/nikiv/Desktop/wiki/${topicName}-content.md`, content)
+  // writeToFile(
+  //   `/Users/nikiv/Desktop/wiki/${topicName}-notes.md`,
+  //   notes.length + " " + JSON.stringify(notes)
+  // )
+  // writeToFile(
+  //   `/Users/nikiv/Desktop/wiki/${topicName}-links.md`,
+  //   links.length + " " + JSON.stringify(links)
+  // )
   // await addTopic(
   //   {
   //     name: topicName,
