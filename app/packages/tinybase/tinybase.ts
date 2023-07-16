@@ -1,4 +1,4 @@
-import { createStore } from "tinybase"
+import { createQueries, createStore } from "tinybase"
 import { readFile } from "node:fs/promises"
 
 //
@@ -33,7 +33,10 @@ export interface Topic {
 }
 
 export async function setupTinybaseStore() {
-  console.log("run")
+  const store = createStore().setTable("topics", {})
+  const queries = createQueries(store)
+
+  console.log(store.getTable("species"))
 }
 
 const store = createStore().setValuesSchema({
@@ -41,8 +44,8 @@ const store = createStore().setValuesSchema({
   fileContent: { type: "string" },
   topicName: { type: "string" },
   topicContent: { type: "string" },
-  // notes: { type: "array" }, //
-  // links: { type: "array" },
+  // notes: { type: "" }, // TODO: can't do array of objects?
+  // links: { type: "" }, // TODO: can't do array of objects?
 })
 
 export async function saveFileContent(path: string) {
