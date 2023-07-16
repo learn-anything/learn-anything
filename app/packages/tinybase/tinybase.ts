@@ -30,7 +30,7 @@ export interface Topic {
   prettyName: string
 }
 
-export async function setupTinybaseStore() {
+export function setupTinybaseStore() {
   const store = createStore()
   store.setTablesSchema({
     topics: {
