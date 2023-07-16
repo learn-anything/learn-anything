@@ -33,10 +33,18 @@ export interface Topic {
 }
 
 export async function setupTinybaseStore() {
-  const store = createStore().setTable("topics", {})
-  const queries = createQueries(store)
-
-  console.log(store.getTable("species"))
+  const store = createStore()
+  store.setTablesSchema({
+    topics: {
+      filePath: { type: "string" },
+      fileContent: { type: "string" },
+      topicName: { type: "string" },
+      topicContent: { type: "string" },
+      // notes: { type: "" }, // TODO: can't do array of objects?
+      // links: { type: "" }, // TODO: can't do array of objects?
+    },
+  })
+  return store
 }
 
 const store = createStore().setValuesSchema({
