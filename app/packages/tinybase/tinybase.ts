@@ -47,25 +47,6 @@ export async function setupTinybaseStore() {
   return store
 }
 
-const store = createStore().setValuesSchema({
-  filePath: { type: "string" },
-  fileContent: { type: "string" },
-  topicName: { type: "string" },
-  topicContent: { type: "string" },
-  // notes: { type: "" }, // TODO: can't do array of objects?
-  // links: { type: "" }, // TODO: can't do array of objects?
-})
-
 export async function saveFileContent(path: string) {
   const fileContent = await readFile(path, { encoding: "utf8" })
-  store.setValues({
-    filePath: path,
-    topicName: "karabiner",
-    content: fileContent,
-  })
-  console.log(fileContent)
-}
-
-export async function getTopic() {
-  console.log(store.getValues())
 }
