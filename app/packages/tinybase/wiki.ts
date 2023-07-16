@@ -51,7 +51,6 @@ export async function saveFileToTinybase(
   prettyName = title // either # Heading or title: Frontmatter
 
   // Find the topic's parent if it exists
-
   const topicFolderPath = getFolderPathOfFileFromPath(filePath)
   console.log(topicFolderPath, "topic folder path")
   const parentFolderName = path.basename(topicFolderPath)
@@ -108,6 +107,12 @@ export async function saveFileToTinybase(
     console.log(notes, "notes")
   }
 
+  store.startTransaction()
+  store.setCell("topics", "filePath", filePath)
+  store.setCell("topics", "topicName", topicName)
+  store.setCell("topics", "topicContent", content)
+  store.finishTransaction()
+
   // TODO: add everything to tinybase
   // store.setTable('topics', {
   //   filePath: filePath,
@@ -115,6 +120,7 @@ export async function saveFileToTinybase(
   //   topicName: topicName,
   //   topicContent: content,
   // })
+
   return
 }
 
