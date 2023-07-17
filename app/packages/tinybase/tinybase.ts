@@ -54,10 +54,7 @@ export async function setupTinybaseStore() {
       public: { type: "boolean" },
     },
   })
-  // TODO: add sqlite persistence
   const db = new sqlite3.Database(":memory:")
-  // TODO: not sure where to get createSqlite3Persister from
-  // https://tinybase.org/api/persister-sqlite3/functions/creation/createsqlite3persister/
   const persister = createSqlite3Persister(store, db, "learn-anything")
   await persister.save()
   return store
