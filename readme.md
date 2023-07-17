@@ -58,23 +58,27 @@ Solid code that renders the app is located at [app/packages/electron-web](app/pa
 
 [app/packages/preload/src/index.ts](app/packages/preload/src/index.ts) exposes functions to front end from [node.js main process](https://github.com/cawa-93/vite-electron-builder#project-structure).
 
-## Run TinyBase setup
+## Issues with TinyBase
 
-Currently trying to make [TinyBase](https://tinybase.org/) setup with [SQLite adapter](https://tinybase.org/api/persister-sqlite3/).
+There is active issue trying to setup [TinyBase](https://tinybase.org/) with [SQLite adapter](https://tinybase.org/api/persister-sqlite3/) inside Electron node.js main process.
 
-```
-pnpm app:tinybase
-```
+Issue is that [Electron does not support ES modules](https://github.com/electron/electron/issues/21457) but tinybase only exports them it seems. You will see error if you run `pnpm app:dev`.
 
-Will `tsx` run [app/packages/tinybase/main.ts](app/packages/tinybase/main.ts).
-
-Goal of that file currently is to load all the .md files from `seed/wiki/nikita` folder into TinyBase store backed by SQLite.
+## Goals of TinyBase
 
 If changes are made to SQLite content, it will update the files in the file system using TinyBase reactive hooks.
 
-Once that works in just Node, it should be connected to Electron.
-
 TinyBase is the main app state of the app. Front end state is reflection of TinyBase state. If TinyBase state changes, GraphQL requests to mutate real backend state are sent where needed. Same goes for any other side effects that needs to happen such as updating of files connected.
+
+Connection to Solid.js stores will be added once above issue is fixed.
+
+<!-- ```
+pnpm app:tinybase
+``` -->
+
+<!-- Will `tsx` run [app/packages/tinybase/main.ts](app/packages/tinybase/main.ts). -->
+
+<!-- Goal of that file currently is to load all the .md files from `seed/wiki/nikita` folder into TinyBase store backed by SQLite. -->
 
 ## Setup DB
 
