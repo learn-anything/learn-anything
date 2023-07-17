@@ -54,8 +54,22 @@ export async function setupTinybaseStore() {
       public: { type: "boolean" },
     },
   })
-  const db = new sqlite3.Database(":memory:")
-  const persister = createSqlite3Persister(store, db, "learn-anything")
+  const db = new sqlite3.Database("learn-anything")
+  const persister = createSqlite3Persister(store, db, {
+    mode: "tabular",
+    tables: {
+      load: {
+        topics: "topics",
+        notes: "notes",
+        links: "links",
+      },
+      save: {
+        topics: "topics",
+        notes: "notes",
+        links: "links",
+      },
+    },
+  })
   await persister.save()
-  return store
+  return [store, persister]
 }

@@ -4,24 +4,29 @@ import { readFile } from "fs/promises"
 import { URL } from "node:url"
 import * as path from "path"
 import { dirname } from "path"
-import { Store } from "tinybase/cjs"
+import { Persister, Store } from "tinybase/cjs"
 import { Link, Note, RelatedLink } from "./tinybase"
 
 // assumes `pnpm dev-setup` was ran
 // syncs content of folder with .md files inside `seed` folder to tinybase
 // all markdown files are synced with tinybase sqlite db
-export async function seedWikiSync(folderName: string, store: Store) {
+export async function seedWikiSync(
+  folderName: string,
+  store: Store,
+  persister: Persister
+) {
   const wikiPath = new URL(`../../../seed/wiki/${folderName}`, import.meta.url)
     .pathname
   const filePaths = await markdownFilePaths(wikiPath)
   const filePathToTest = filePaths[1] // analytics.md
-  saveFileToTinybase(wikiPath, filePathToTest, store)
+  saveFileToTinybase(wikiPath, filePathToTest, store, persister)
 }
 
 export async function saveFileToTinybase(
   wikiPath: string,
   filePath: string,
-  store: Store
+  store: Store,
+  persister: Persister
 ) {
   console.log(filePath, "file path")
   const topicName = getFileNameWithoutExtension(filePath) // file name is topic name (in-this-form)
@@ -116,7 +121,8 @@ export async function saveFileToTinybase(
     topicContent: content,
   })
   store.finishTransaction()
-  console.log(store.getTables())
+  console.log(store.getTables(), "ran")
+  await persister.save()
   return
 }
 
