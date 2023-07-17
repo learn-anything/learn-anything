@@ -71,5 +71,5 @@ export async function setupTinybaseStore() {
     },
   })
   await persister.save()
-  return [store, persister]
+  return persister
 }

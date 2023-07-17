@@ -10,22 +10,17 @@ import { Link, Note, RelatedLink } from "./tinybase"
 // assumes `pnpm dev-setup` was ran
 // syncs content of folder with .md files inside `seed` folder to tinybase
 // all markdown files are synced with tinybase sqlite db
-export async function seedWikiSync(
-  folderName: string,
-  store: Store,
-  persister: Persister
-) {
+export async function seedWikiSync(folderName: string, persister: Persister) {
   const wikiPath = new URL(`../../../seed/wiki/${folderName}`, import.meta.url)
     .pathname
   const filePaths = await markdownFilePaths(wikiPath)
   const filePathToTest = filePaths[1] // analytics.md
-  saveFileToTinybase(wikiPath, filePathToTest, store, persister)
+  saveFileToTinybase(wikiPath, filePathToTest, persister)
 }
 
 export async function saveFileToTinybase(
   wikiPath: string,
   filePath: string,
-  store: Store,
   persister: Persister
 ) {
   console.log(filePath, "file path")
@@ -113,15 +108,15 @@ export async function saveFileToTinybase(
   }
 
   // TODO: add everything to tinybase
-  store.startTransaction()
-  store.setRow("topics", topicName, {
+  // store.startTransaction()
+  persister.getStore().setRow("topics", topicName, {
     filePath: filePath,
     fileContent: fileContent,
     topicName: topicName,
     topicContent: content,
   })
-  store.finishTransaction()
-  console.log(store.getTables(), "ran")
+  // store.finishTransaction()
+  console.log(persister.getStore().getTables(), "ran")
   await persister.save()
   return
 }

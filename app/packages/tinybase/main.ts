@@ -2,8 +2,8 @@ import { setupTinybaseStore } from "./tinybase"
 import { seedWikiSync } from "./wiki"
 
 async function main() {
-  const store = await setupTinybaseStore()
-  seedWikiSync("nikita", store)
+  const persister = await setupTinybaseStore()
+  seedWikiSync("nikita", persister)
 }
 
 main()
