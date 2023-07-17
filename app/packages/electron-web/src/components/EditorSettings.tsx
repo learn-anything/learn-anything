@@ -1,4 +1,11 @@
+import { createSignal } from "solid-js"
+import { useUser } from "../GlobalContext/user"
+
 export default function EditorSettings() {
+  const user = useUser()
+
+  const [wikiPathInput, setWikiPathInput] = createSignal("")
+
   return (
     <>
       <div class="w-full flex items-center justify-center h-full">
@@ -6,13 +13,21 @@ export default function EditorSettings() {
           <div>Editor</div>
         </div>
         <div class="w-full flex items-start h-full p-16 gap-2">
-          <div class="font-semibold rounded-md border dark:border-slate-800 border-opacity-40 bg-transparent px-4 p-2 hover:bg-neutral-950 transition-all cursor-pointer">
-            Sync
+          <div
+            onClick={() => {
+              user.setWikiPath(wikiPathInput())
+            }}
+            class="font-semibold rounded-md border dark:border-slate-800 border-opacity-40 bg-transparent px-4 p-2 hover:bg-neutral-950 transition-all cursor-pointer"
+          >
+            Save
           </div>
           <input
             type="text"
-            placeholder="idk"
+            placeholder="Enter path to wiki"
             class="rounded-md p-2 font-semibold dark:bg-transparent border border-slate-800 w-64 bg-opacity-50 outline-none"
+            onChange={(e) => {
+              setWikiPathInput(e.target.value)
+            }}
           />
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { Show, createSignal } from "solid-js"
+import { Show, createEffect, createSignal } from "solid-js"
 import { UserProvider, createUserState } from "./GlobalContext/user"
 import EditorSettings from "./components/EditorSettings"
 import Sidebar from "./components/Sidebar"
@@ -8,8 +8,11 @@ import ImagePage from "./components/ImagePage"
 
 export default function App() {
   const user = createUserState()
-  const [showSet, setShowSet] = createSignal()
   const [showToolBar, setShowToolBar] = createSignal(false)
+
+  createEffect(() => {
+    console.log(user, "user")
+  })
 
   return (
     <>
@@ -42,23 +45,17 @@ export default function App() {
       `}
       </style>
       <UserProvider value={user}>
-        <Show when={false} fallback={<ImagePage />}>
+        <Show when={true} fallback={<ImagePage />}>
           <div
             style={{ width: "100vw", height: "100vh" }}
             class="flex items-center"
-            // onClick={() => {
-            //   setShowToolBar(true)
-            // }}
           >
-            <Sidebar setShowToolBar={setShowToolBar} setShowSet={setShowSet} />
+            <Sidebar />
             <TopicEditor topic="karabiner" />
-            <Show when={showSet()}>
+            <Show when={!user.user.wikiPath}>
               <div class="absolute z-10 flex items-center justify-center top-0 left-0 w-screen h-screen">
                 <div
                   id="SettingsBackDrop"
-                  onClick={() => {
-                    setShowSet(false)
-                  }}
                   class="absolute top-0 left-0 w-full h-full bg-neutral-950 bg-opacity-50 bg-blur-lg "
                 />
                 <div

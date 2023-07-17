@@ -14,8 +14,11 @@ export async function seedWikiSync(folderName: string, persister: Persister) {
   const wikiPath = new URL(`../../../seed/wiki/${folderName}`, import.meta.url)
     .pathname
   const filePaths = await markdownFilePaths(wikiPath)
-  const filePathToTest = filePaths[1] // analytics.md
-  saveFileToTinybase(wikiPath, filePathToTest, persister)
+  filePaths.map((filePath) => {
+    saveFileToTinybase(wikiPath, filePath, persister)
+  })
+  // const filePathToTest = filePaths[1] // analytics.md
+  // saveFileToTinybase(wikiPath, filePathToTest, persister)
 }
 
 export async function saveFileToTinybase(
@@ -23,9 +26,9 @@ export async function saveFileToTinybase(
   filePath: string,
   persister: Persister
 ) {
-  console.log(filePath, "file path")
+  // console.log(filePath, "file path")
   const topicName = getFileNameWithoutExtension(filePath) // file name is topic name (in-this-form)
-  console.log(topicName, "topic name")
+  // console.log(topicName, "topic name")
   let prettyName // pretty name for the topic (user defined)
   let parentTopic
   let content = ""
@@ -52,23 +55,23 @@ export async function saveFileToTinybase(
 
   // Find the topic's parent if it exists
   const topicFolderPath = getFolderPathOfFileFromPath(filePath)
-  console.log(topicFolderPath, "topic folder path")
+  // console.log(topicFolderPath, "topic folder path")
   const parentFolderName = path.basename(topicFolderPath)
-  console.log(parentFolderName, "parent folder name")
+  // console.log(parentFolderName, "parent folder name")
 
   // if file name is same as folder name
   // means parent topic can be one level up
   if (parentFolderName === topicName) {
-    const parentFolderPath = getFolderPathOfFileFromPath(topicFolderPath)
+    // const parentFolderPath = getFolderPathOfFileFromPath(topicFolderPath)
     // this is true only if the parent folder is not root folder
-    if (!(parentFolderPath === wikiPath)) {
-      console.log("not root folder, there is parent available")
-    }
-    console.log("no parent!")
+    // if (!(parentFolderPath === wikiPath)) {
+    //   console.log("not root folder, there is parent available")
+    // }
+    // console.log("no parent!")
   } else {
     parentTopic = parentFolderName
   }
-  console.log(parentTopic, "parent topic")
+  // console.log(parentTopic, "parent topic")
 
   const contentWithoutFrontMatter = fileContent.replace(/---[\s\S]*?---/, "")
 
@@ -90,8 +93,6 @@ export async function saveFileToTinybase(
       content += (content ? "\n## " : "") + section
     }
   })
-
-  console.log(content, "content")
 
   persister.getStore().startTransaction()
   const topicId = persister.getStore().addRow("topics", {
@@ -120,8 +121,6 @@ export async function saveFileToTinybase(
   }
   persister.getStore().finishTransaction()
   await persister.save()
-
-  // console.log(persister.getStore().getTables(), "ran")
   return
 }
 

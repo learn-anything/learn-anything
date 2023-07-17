@@ -4,6 +4,7 @@ import { createStore } from "solid-js/store"
 export function createUserState() {
   const [user, setUser] = createStore({
     showEditorSettings: false,
+    wikiPath: "",
   })
 
   return {
@@ -12,6 +13,10 @@ export function createUserState() {
     // actions
     setShowEditorSettings: (state: boolean) => {
       return setUser({ showEditorSettings: state })
+    },
+    setWikiPath: (state: string) => {
+      console.log(state, "wiki path")
+      return setUser({ wikiPath: state })
     },
   } as const
 }
