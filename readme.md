@@ -64,6 +64,8 @@ There is active issue trying to setup [TinyBase](https://tinybase.org/) with [SQ
 
 Issue is that [Electron does not support ES modules](https://github.com/electron/electron/issues/21457) but tinybase only exports them it seems. You will see error if you run `pnpm app:dev`.
 
+The file that causes the issue is [app/packages/preload/src/index.ts](app/packages/preload/src/index.ts). Specifically import on L10.
+
 ## Goals of TinyBase
 
 If changes are made to SQLite content, it will update the files in the file system using TinyBase reactive hooks.
