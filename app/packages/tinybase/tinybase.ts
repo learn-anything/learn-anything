@@ -6,7 +6,7 @@ import {
 } from "tinybase"
 import { readFile } from "node:fs/promises"
 import { string } from "zod"
-import sqlite from "sqlite3"
+import sqlite3 from "sqlite3"
 
 export interface Link {
   title: string
