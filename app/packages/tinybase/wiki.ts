@@ -93,45 +93,35 @@ export async function saveFileToTinybase(
 
   console.log(content, "content")
 
-  // only run if ## Links is present
-  if (linksSection) {
-    // TODO: why is links any[] and not Link[]?
-    links = await extractLinks(linksSection)
-    console.log(links, "links")
-  }
-
-  // only run if ## Notes is present
-  if (notesSection) {
-    // TODO: why is notes any[] and not Note[]?
-    notes = await extractNotes(notesSection)
-    console.log(notes, "notes")
-  }
-
   persister.getStore().startTransaction()
   const topicId = persister.getStore().addRow("topics", {
     filePath: filePath,
     fileContent: fileContent,
     topicName: topicName,
     topicContent: content,
-  })
-  if (topicId) {
-    notes.map((note) => {
-      persister.getStore().addRow("notes", {
-        topicId: topicId,
-        content: note.content,
-      })
-    })
-    links.map((link) => {
-      persister.getStore().addRow("links", {
-        topicId: topicId,
-        content: link.title,
-        url: link.url,
-      })
-    })
+  })!
+
+  // only run if ## Links is present
+  if (linksSection) {
+    await addLinksFromMarkdownContent(
+      linksSection,
+      persister.getStore(),
+      topicId
+    )
+  }
+
+  // only run if ## Notes is present
+  if (notesSection) {
+    await addNotesFromMarkdownContent(
+      notesSection,
+      persister.getStore(),
+      topicId
+    )
   }
   persister.getStore().finishTransaction()
-  // console.log(persister.getStore().getTables(), "ran")
   await persister.save()
+
+  // console.log(persister.getStore().getTables(), "ran")
   return
 }
 
@@ -167,7 +157,11 @@ function extractDescriptionFromLink(line: string) {
   return description.trim()
 }
 
-function extractLinks(markdownContent: string) {
+function addLinksFromMarkdownContent(
+  markdownContent: string,
+  store: Store,
+  topicId: string
+) {
   const lines = markdownContent.split("\n")
 
   const links: Link[] = []
@@ -187,8 +181,11 @@ function extractLinks(markdownContent: string) {
       if (!firstLink) {
         related.push({ title, url })
       } else {
-        // @ts-ignore
-        links.push({ title, url })
+        store.addRow("links", {
+          topicId: topicId,
+          title: title,
+          url: url,
+        })
         firstLink = false
       }
     }
@@ -220,10 +217,14 @@ function extractLinks(markdownContent: string) {
   return links
 }
 
-function extractNotes(markdownContent: string) {
+function addNotesFromMarkdownContent(
+  markdownContent: string,
+  store: Store,
+  topicId: string
+) {
   const lines = markdownContent.split("\n")
 
-  const notes: Note[] = []
+  // const notes: Note[] = []
 
   lines.forEach((line) => {
     // Match markdown link pattern
@@ -239,8 +240,13 @@ function extractNotes(markdownContent: string) {
 
       // Only push if the content is not empty
       if (contentTrimmed !== "") {
+        store.addRow("notes", {
+          topicId: topicId,
+          content: contentTrimmed,
+          url: url,
+        })
         // @ts-ignore
-        notes.push({ content: contentTrimmed, url })
+        // notes.push({ content: contentTrimmed, url })
       }
     }
     // If the line does not have a link, treat it as a note with no URL
@@ -251,13 +257,15 @@ function extractNotes(markdownContent: string) {
 
       // Only push if the line is not empty
       if (lineTrimmed !== "") {
+        store.addRow("notes", {
+          topicId: topicId,
+          content: lineTrimmed,
+        })
         // @ts-ignore
-        notes.push({ content: lineTrimmed })
+        // notes.push({ content: lineTrimmed })
       }
     }
   })
-
-  return notes
 }
 
 export async function writeToFile(
