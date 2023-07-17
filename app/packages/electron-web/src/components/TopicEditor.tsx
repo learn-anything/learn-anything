@@ -23,8 +23,8 @@ export default function TopicEditor(props: Props) {
   onMount(async () => {
     // await saveWikiFolderPath("/Users/nikiv/src/docs/wiki/docs/")
     // const res = await getWikiFolderPath()
-    const fileContet = await getFileContent("macOS/apps/karabiner/karabiner.md")
-    console.log(fileContet, "content")
+    // const fileContet = await getFileContent("macOS/apps/karabiner/karabiner.md")
+    // console.log(fileContet, "content")
     // setContent(fileContet)
   })
 

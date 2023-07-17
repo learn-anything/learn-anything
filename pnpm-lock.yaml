@@ -111,6 +111,9 @@ importers:
       solid-codemirror:
         specifier: ^2.3.0
         version: 2.3.0(@codemirror/state@6.2.1)(@codemirror/view@6.14.1)(solid-js@1.7.7)
+      sqlite3:
+        specifier: ^5.1.6
+        version: 5.1.6
       tinybase:
         specifier: ^4.0.0
         version: 4.0.0(sqlite3@5.1.6)
@@ -148,9 +151,6 @@ importers:
       nano-staged:
         specifier: 0.8.0
         version: 0.8.0
-      playwright:
-        specifier: 1.36.0
-        version: 1.36.0
       simple-git-hooks:
         specifier: 2.8.1
         version: 2.8.1
@@ -165,7 +165,7 @@ importers:
         version: 4.4.3(@types/node@20.4.1)
       vitest:
         specifier: 0.33.0
-        version: 0.33.0(happy-dom@10.1.1)(playwright@1.36.0)
+        version: 0.33.0(happy-dom@10.1.1)
       vue:
         specifier: 3.3.4
         version: 3.3.4
@@ -7245,21 +7245,6 @@ packages:
       pathe: 1.1.1
     dev: true
 
-  /playwright-core@1.36.0:
-    resolution: {integrity: sha512-7RTr8P6YJPAqB+8j5ATGHqD6LvLLM39sYVNsslh78g8QeLcBs5750c6+msjrHUwwGt+kEbczBj1XB22WMwn+WA==}
-    engines: {node: '>=16'}
-    hasBin: true
-    dev: true
-
-  /playwright@1.36.0:
-    resolution: {integrity: sha512-ODVOTp5WoRMxDJY3liMmC+wVNicc0cQB17gASvQ+zLBggVK9a2x3gdT5mbl7av+zomvtdirWOqqfD+O6qIrFgw==}
-    engines: {node: '>=16'}
-    hasBin: true
-    requiresBuild: true
-    dependencies:
-      playwright-core: 1.36.0
-    dev: true
-
   /plist@3.1.0:
     resolution: {integrity: sha512-uysumyrvkUX0rX/dEVqt8gC3sTBzd4zoWfLeS29nb53imdaXVvLINYXTI2GNqzaMuvacNx4uJQ8+b3zXR0pkgQ==}
     engines: {node: '>=10.4.0'}
@@ -9113,7 +9098,7 @@ packages:
       vite: 4.4.2
     dev: true
 
-  /vitest@0.33.0(happy-dom@10.1.1)(playwright@1.36.0):
+  /vitest@0.33.0(happy-dom@10.1.1):
     resolution: {integrity: sha512-1CxaugJ50xskkQ0e969R/hW47za4YXDUfWJDxip1hwbnhUjYolpfUn2AMOulqG/Dtd9WYAtkHmM/m3yKVrEejQ==}
     engines: {node: '>=v14.18.0'}
     hasBin: true
@@ -9162,7 +9147,6 @@ packages:
       magic-string: 0.30.1
       pathe: 1.1.1
       picocolors: 1.0.0
-      playwright: 1.36.0
       std-env: 3.3.3
       strip-literal: 1.0.1
       tinybench: 2.5.0

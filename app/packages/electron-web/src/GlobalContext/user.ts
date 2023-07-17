@@ -4,7 +4,7 @@ import { createStore } from "solid-js/store"
 export function createUserState() {
   const [user, setUser] = createStore({
     showEditorSettings: false,
-    wikiPath: "",
+    wikiPath: "/Users/nikiv/src/app/learn-anything/seed/wiki/nikita",
   })
 
   return {

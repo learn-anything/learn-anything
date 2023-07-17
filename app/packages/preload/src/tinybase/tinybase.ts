@@ -2,7 +2,7 @@ import { Store, createQueries, createStore } from "tinybase"
 import { createSqlite3Persister } from "tinybase/persisters/persister-sqlite3"
 import { readFile } from "node:fs/promises"
 import { string } from "zod"
-import sqlite3 from "sqlite3"
+import { sqlite3 } from "sqlite3"
 
 export interface Link {
   title: string

@@ -8,6 +8,8 @@ import { readFile } from "node:fs/promises"
 // import { store } from "../../main/src/index"
 import { defineStore } from "electron-nano-store"
 import { contextBridge } from "electron"
+import { setupTinybaseStore } from "./tinybase/tinybase"
+import { seedWikiSync } from "./tinybase/wiki"
 
 contextBridge.exposeInMainWorld("defineStore", defineStore)
 
@@ -37,6 +39,11 @@ export async function getWikiFolderPath() {
 
 export async function getTopic(topic: string) {
   const store = await defineStore("user")
+}
+
+export async function testTinybase() {
+  const persister = await setupTinybaseStore()
+  // seedWikiSync("nikita", persister)
 }
 
 // export async function createStore() {

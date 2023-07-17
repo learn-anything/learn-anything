@@ -46,6 +46,7 @@
     "electron-nano-store": "^0.6.0",
     "electron-updater": "6.1.1",
     "solid-codemirror": "^2.3.0",
+    "sqlite3": "^5.1.6",
     "tinybase": "^4.0.0"
   }
 }
