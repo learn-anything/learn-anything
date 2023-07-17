@@ -8,4 +8,5 @@ seed
 run.ts
 app/.browserslistrc
 app/.electron-vendors.cache.json
+app/packages/tinybase/learn-anything
 .eslintcache
