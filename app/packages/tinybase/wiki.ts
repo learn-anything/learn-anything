@@ -107,16 +107,30 @@ export async function saveFileToTinybase(
     console.log(notes, "notes")
   }
 
-  // TODO: add everything to tinybase
-  // store.startTransaction()
-  persister.getStore().setRow("topics", topicName, {
+  persister.getStore().startTransaction()
+  const topicId = persister.getStore().addRow("topics", {
     filePath: filePath,
     fileContent: fileContent,
     topicName: topicName,
     topicContent: content,
   })
-  // store.finishTransaction()
-  console.log(persister.getStore().getTables(), "ran")
+  if (topicId) {
+    notes.map((note) => {
+      persister.getStore().addRow("notes", {
+        topicId: topicId,
+        content: note.content,
+      })
+    })
+    links.map((link) => {
+      persister.getStore().addRow("links", {
+        topicId: topicId,
+        content: link.title,
+        url: link.url,
+      })
+    })
+  }
+  persister.getStore().finishTransaction()
+  // console.log(persister.getStore().getTables(), "ran")
   await persister.save()
   return
 }

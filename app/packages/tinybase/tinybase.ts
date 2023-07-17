@@ -36,19 +36,20 @@ export interface Topic {
 export async function setupTinybaseStore() {
   const store = createStore().setTablesSchema({
     topics: {
+      id: { type: "string" },
       filePath: { type: "string" },
       fileContent: { type: "string" },
       topicName: { type: "string" },
       topicContent: { type: "string" },
-      // notes: { type: "" }, // array of ids of 'notes'
-      // links: { type: "" }, // array of ids of 'links'
     },
     notes: {
+      topicId: { type: "string" },
       content: { type: "string" },
       url: { type: "string" },
       public: { type: "boolean" },
     },
     links: {
+      topicId: { type: "string" },
       title: { type: "string" },
       url: { type: "string" },
       public: { type: "boolean" },
