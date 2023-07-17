@@ -7,9 +7,9 @@ export { versions } from "./versions"
 import { readFile } from "node:fs/promises"
 import { defineStore } from "electron-nano-store"
 import { contextBridge } from "electron"
-import { createStore } from "tinybase"
-import { createSqlite3Persister } from "tinybase/persisters/persister-sqlite3"
-import sqlite3 from "sqlite3"
+// import { createStore } from "tinybase"
+// import { createSqlite3Persister } from "tinybase/persisters/persister-sqlite3"
+// import sqlite3 from "sqlite3"
 
 contextBridge.exposeInMainWorld("defineStore", defineStore)
 
@@ -38,49 +38,58 @@ export async function getWikiFolderPath() {
 }
 
 export async function getTopic(topic: string) {
-  const store = await defineStore("user")
+  // const store = await defineStore("user")
+  return {
+    fileContent: `
+    # [SQLite](https://www.sqlite.org/index.html)
+
+    SQLite is great.
+    `,
+    topicName: "sqlite",
+  }
 }
 
 export async function testTinybase() {
-  const store = createStore().setTablesSchema({
-    topics: {
-      id: { type: "string" },
-      filePath: { type: "string" },
-      fileContent: { type: "string" },
-      topicName: { type: "string" },
-      topicContent: { type: "string" },
-    },
-    notes: {
-      topicId: { type: "string" },
-      content: { type: "string" },
-      url: { type: "string" },
-      public: { type: "boolean" },
-    },
-    links: {
-      topicId: { type: "string" },
-      title: { type: "string" },
-      url: { type: "string" },
-      public: { type: "boolean" },
-    },
-  })
-  const db = new sqlite3.Database("learn-anything")
-  const persister = createSqlite3Persister(store, db, {
-    mode: "tabular",
-    tables: {
-      load: {
-        topics: "topics",
-        notes: "notes",
-        links: "links",
-      },
-      save: {
-        topics: "topics",
-        notes: "notes",
-        links: "links",
-      },
-    },
-  })
-  await persister.save()
-  return persister
+  console.log("run")
+  // const store = createStore().setTablesSchema({
+  //   topics: {
+  //     id: { type: "string" },
+  //     filePath: { type: "string" },
+  //     fileContent: { type: "string" },
+  //     topicName: { type: "string" },
+  //     topicContent: { type: "string" },
+  //   },
+  //   notes: {
+  //     topicId: { type: "string" },
+  //     content: { type: "string" },
+  //     url: { type: "string" },
+  //     public: { type: "boolean" },
+  //   },
+  //   links: {
+  //     topicId: { type: "string" },
+  //     title: { type: "string" },
+  //     url: { type: "string" },
+  //     public: { type: "boolean" },
+  //   },
+  // })
+  // const db = new sqlite3.Database("learn-anything")
+  // const persister = createSqlite3Persister(store, db, {
+  //   mode: "tabular",
+  //   tables: {
+  //     load: {
+  //       topics: "topics",
+  //       notes: "notes",
+  //       links: "links",
+  //     },
+  //     save: {
+  //       topics: "topics",
+  //       notes: "notes",
+  //       links: "links",
+  //     },
+  //   },
+  // })
+  // await persister.save()
+  // return persister
 }
 
 // export async function createStore() {

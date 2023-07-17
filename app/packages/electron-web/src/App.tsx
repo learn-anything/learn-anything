@@ -1,18 +1,13 @@
-import { Show, createSignal, onMount } from "solid-js"
+import { Show, createSignal } from "solid-js"
 import { UserProvider, createUserState } from "./GlobalContext/user"
 import EditorSettings from "./components/EditorSettings"
 import Sidebar from "./components/Sidebar"
 import ToolBar from "./components/ToolBar"
-import TopicEditor from "./components/TopicEditor"
-import { testTinybase } from "#preload"
+import Editor from "./components/Editor"
 
 export default function App() {
   const user = createUserState()
   const [showToolBar, setShowToolBar] = createSignal(false)
-
-  onMount(() => {
-    testTinybase()
-  })
 
   return (
     <>
@@ -50,7 +45,7 @@ export default function App() {
           class="flex items-center"
         >
           <Sidebar />
-          <TopicEditor topic="karabiner" />
+          <Editor />
           <Show when={!user.user.wikiPath}>
             <div class="absolute z-10 flex items-center justify-center top-0 left-0 w-screen h-screen">
               <div

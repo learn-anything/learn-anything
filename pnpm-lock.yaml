@@ -62,9 +62,6 @@ importers:
       solid-start-cloudflare-pages:
         specifier: ^0.2.26
         version: 0.2.26(solid-start@0.2.26)(vite@4.3.9)
-      sqlite3:
-        specifier: ^5.1.6
-        version: 5.1.6
       undici:
         specifier: ^5.22.1
         version: 5.22.1

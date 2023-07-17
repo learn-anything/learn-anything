@@ -1,10 +1,17 @@
-import { createContext, useContext } from "solid-js"
+import { createContext, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
+import { getTopic } from "#preload"
 
 export function createUserState() {
   const [user, setUser] = createStore({
     showEditorSettings: false,
     wikiPath: "/Users/nikiv/src/app/learn-anything/seed/wiki/nikita",
+    topicContent: "",
+  })
+
+  onMount(async () => {
+    const res = await getTopic("sqlite")
+    setUser({ topicContent: res.fileContent })
   })
 
   return {
