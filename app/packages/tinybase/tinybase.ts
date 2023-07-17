@@ -1,9 +1,5 @@
-import {
-  Store,
-  createQueries,
-  createStore,
-  createSqlite3Persister,
-} from "tinybase"
+import { Store, createQueries, createStore } from "tinybase"
+import { createSqlite3Persister } from "tinybase/persisters/persister-sqlite3"
 import { readFile } from "node:fs/promises"
 import { string } from "zod"
 import sqlite3 from "sqlite3"
@@ -37,19 +33,32 @@ export interface Topic {
   prettyName: string
 }
 
-export function setupTinybaseStore() {
-  const store = createStore()
-  store.setTablesSchema({
+export async function setupTinybaseStore() {
+  const store = createStore().setTablesSchema({
     topics: {
       filePath: { type: "string" },
       fileContent: { type: "string" },
       topicName: { type: "string" },
       topicContent: { type: "string" },
-      // notes: { type: "" }, // TODO: can't do array of objects?
-      // links: { type: "" }, // TODO: can't do array of objects?
+      // notes: { type: "" }, // array of ids of 'notes'
+      // links: { type: "" }, // array of ids of 'links'
+    },
+    notes: {
+      content: { type: "string" },
+      url: { type: "string" },
+      public: { type: "boolean" },
+    },
+    links: {
+      title: { type: "string" },
+      url: { type: "string" },
+      public: { type: "boolean" },
     },
   })
+  // TODO: add sqlite persistence
   const db = new sqlite3.Database(":memory:")
-  const persister = createSqlite3Persister(store, db, "my_tinybase")
+  // TODO: not sure where to get createSqlite3Persister from
+  // https://tinybase.org/api/persister-sqlite3/functions/creation/createsqlite3persister/
+  const persister = createSqlite3Persister(store, db, "learn-anything")
+  await persister.save()
   return store
 }
