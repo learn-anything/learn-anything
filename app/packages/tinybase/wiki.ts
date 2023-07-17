@@ -107,20 +107,16 @@ export async function saveFileToTinybase(
     console.log(notes, "notes")
   }
 
-  store.startTransaction()
-  store.setCell("topics", "filePath", filePath)
-  store.setCell("topics", "topicName", topicName)
-  store.setCell("topics", "topicContent", content)
-  store.finishTransaction()
-
   // TODO: add everything to tinybase
-  // store.setTable('topics', {
-  //   filePath: filePath,
-  //   fileContent: content,
-  //   topicName: topicName,
-  //   topicContent: content,
-  // })
-
+  store.startTransaction()
+  store.setRow("topics", topicName, {
+    filePath: filePath,
+    fileContent: fileContent,
+    topicName: topicName,
+    topicContent: content,
+  })
+  store.finishTransaction()
+  console.log(store.getTables())
   return
 }
 
