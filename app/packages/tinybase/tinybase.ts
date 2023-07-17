@@ -1,5 +1,12 @@
-import { Store, createQueries, createStore } from "tinybase"
+import {
+  Store,
+  createQueries,
+  createStore,
+  createSqlite3Persister,
+} from "tinybase"
 import { readFile } from "node:fs/promises"
+import { string } from "zod"
+import sqlite from "sqlite3"
 
 export interface Link {
   title: string
@@ -42,5 +49,7 @@ export function setupTinybaseStore() {
       // links: { type: "" }, // TODO: can't do array of objects?
     },
   })
+  const db = new sqlite3.Database(":memory:")
+  const persister = createSqlite3Persister(store, db, "my_tinybase")
   return store
 }

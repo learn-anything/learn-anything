@@ -48,6 +48,7 @@
     "solid-markdown": "^1.2.2",
     "solid-start": "^0.2.26",
     "solid-start-cloudflare-pages": "^0.2.26",
+    "sqlite3": "^5.1.6",
     "undici": "^5.22.1",
     "zod": "^3.21.4"
   },

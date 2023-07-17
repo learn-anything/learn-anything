@@ -1,1 +1,1 @@
-export default function CanvasEditor(props: CanvasEditorProps) {}
+// export default function CanvasEditor(props: CanvasEditorProps) {}
