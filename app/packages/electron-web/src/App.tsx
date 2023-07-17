@@ -4,6 +4,7 @@ import EditorSettings from "./components/EditorSettings"
 import Sidebar from "./components/Sidebar"
 import TopicEditor from "./components/TopicEditor"
 import ToolBar from "./components/ToolBar"
+import ImagePage from "./components/ImagePage"
 
 export default function App() {
   const user = createUserState()
@@ -41,36 +42,38 @@ export default function App() {
       `}
       </style>
       <UserProvider value={user}>
-        <div
-          style={{ width: "100vw", height: "100vh" }}
-          class="flex items-center"
-          // onClick={() => {
-          //   setShowToolBar(true)
-          // }}
-        >
-          <Sidebar setShowToolBar={setShowToolBar} setShowSet={setShowSet} />
-          <TopicEditor topic="karabiner" />
-          <Show when={showSet()}>
-            <div class="absolute z-10 flex items-center justify-center top-0 left-0 w-screen h-screen">
-              <div
-                id="SettingsBackDrop"
-                onClick={() => {
-                  setShowSet(false)
-                }}
-                class="absolute top-0 left-0 w-full h-full bg-neutral-950 bg-opacity-50 bg-blur-lg "
-              />
-              <div
-                id="EditorSettings"
-                class="w-4/5 h-5/6 z-20 dark:bg-neutral-900 bg-gray-100 rounded-3xl border border-opacity-50 border-slate-200 dark:border-slate-800"
-              >
-                <EditorSettings />
+        <Show when={false} fallback={<ImagePage />}>
+          <div
+            style={{ width: "100vw", height: "100vh" }}
+            class="flex items-center"
+            // onClick={() => {
+            //   setShowToolBar(true)
+            // }}
+          >
+            <Sidebar setShowToolBar={setShowToolBar} setShowSet={setShowSet} />
+            <TopicEditor topic="karabiner" />
+            <Show when={showSet()}>
+              <div class="absolute z-10 flex items-center justify-center top-0 left-0 w-screen h-screen">
+                <div
+                  id="SettingsBackDrop"
+                  onClick={() => {
+                    setShowSet(false)
+                  }}
+                  class="absolute top-0 left-0 w-full h-full bg-neutral-950 bg-opacity-50 bg-blur-lg "
+                />
+                <div
+                  id="EditorSettings"
+                  class="w-4/5 h-5/6 z-20 dark:bg-neutral-900 bg-gray-100 rounded-3xl border border-opacity-50 border-slate-200 dark:border-slate-800"
+                >
+                  <EditorSettings />
+                </div>
               </div>
-            </div>
-          </Show>
-          <Show when={showToolBar()}>
-            <ToolBar setShowToolBar={setShowToolBar} />
-          </Show>
-        </div>
+            </Show>
+            <Show when={showToolBar()}>
+              <ToolBar setShowToolBar={setShowToolBar} />
+            </Show>
+          </div>
+        </Show>
       </UserProvider>
     </>
   )

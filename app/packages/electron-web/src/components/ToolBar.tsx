@@ -27,26 +27,26 @@ export default function ToolBar(props: any) {
   //   setFocusedTopic(focusedTopic() - 1)
   // })
 
-  // createEffect(() => {
-  //   if (filteredWord()) {
-  //     untrack(() => {
-  //       setFilteredTopic(TopicArray())
+  createEffect(() => {
+    if (filteredWord()) {
+      untrack(() => {
+        setFilteredTopic(TopicArray())
 
-  //       setFilteredTopic(
-  //         filteredTopic().filter((word: any) =>
-  //           filteredWord()
-  //             .split("")
-  //             .every((v) => {
-  //               return word.split("").includes(v)
-  //             })
-  //         )
-  //       )
+        setFilteredTopic(
+          filteredTopic().filter((word: any) =>
+            filteredWord()
+              .split("")
+              .every((v) => {
+                return word.split("").includes(v)
+              })
+          )
+        )
 
-  //       console.log(filteredTopic())
-  //     })
-  //     setFocusedTodoTitle(filteredTopic()[focusedTopic()])
-  //   }
-  // })
+        console.log(filteredTopic())
+      })
+      setFocusedTodoTitle(filteredTopic()[focusedTopic()])
+    }
+  })
 
   return (
     <>
@@ -101,7 +101,7 @@ export default function ToolBar(props: any) {
             {/* <Show when={filteredWord() !== "" && filteredTopic().length !== 0}> */}
             <Show when={false}>
               <div class="bg-neutral-700 absolute top-16 left-0 text-white font-semibold text-opacity-40 flex flex-col rounded-md w-full">
-                {/* <For each={filteredTopic()}>
+                <For each={filteredTopic()}>
                   {(topic) => (
                     <div
                       id={
@@ -115,7 +115,7 @@ export default function ToolBar(props: any) {
                       <div>{topic}</div>
                     </div>
                   )}
-                </For> */}
+                </For>
               </div>
             </Show>
           </div>
