@@ -279,7 +279,7 @@ export async function writeToFile(
   }
 }
 
-async function markdownFilePaths(
+export async function markdownFilePaths(
   directoryPath: string,
   ignoreList: string[] = []
 ): Promise<string[]> {

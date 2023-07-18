@@ -10,7 +10,7 @@ export default function Sidebar(props: any) {
         style={{ width: "25%", "min-width": "250px" }}
       >
         <div class="flex dark:bg-neutral-800 bg-zinc-200 flex-col justify-between items-center font-semibold p-4 py-4 border-r-2 border-opacity-10 border-slate-100">
-          <div class="hover:bg-neutral-700 p-1 px-2 rounded-md">stuff</div>
+          <div class="hover:bg-neutral-700 p-1 px-2 rounded-md">Wiki</div>
           <div class="flex flex-col items-center gap-3">
             <div
               onClick={() => {
@@ -20,7 +20,7 @@ export default function Sidebar(props: any) {
                 console.log(user.user.showEditorSettings)
               }}
             >
-              Set
+              Settings
             </div>
             <div
               onClick={() => {
