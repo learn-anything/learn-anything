@@ -15,6 +15,7 @@ export default function Sidebar(props: any) {
           <div class="hover:bg-neutral-700 p-1 px-2 rounded-md">Wiki</div>
           <div class="flex flex-col items-center gap-3">
             <div
+              class="cursor-pointer"
               onClick={async () => {
                 const topics = await getTopicsSidebar()
                 console.log(topics, "topics")
@@ -23,6 +24,7 @@ export default function Sidebar(props: any) {
               Get sidebar
             </div>
             <div
+              class="cursor-pointer"
               onClick={() => {
                 syncWiki("/Users/nikiv/src/app/learn-anything/seed/wiki/nikita")
               }}
@@ -30,6 +32,7 @@ export default function Sidebar(props: any) {
               Sync
             </div>
             <div
+              class="cursor-pointer"
               onClick={() => {
                 // setShowEditorSettings(true)
                 props.setShowSet(true)
@@ -40,6 +43,7 @@ export default function Sidebar(props: any) {
               Settings
             </div>
             <div
+              class="cursor-pointer"
               onClick={() => {
                 props.setShowToolBar(true)
               }}
