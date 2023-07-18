@@ -5,9 +5,6 @@
 export { sha256sum } from "./nodeCrypto"
 export { versions } from "./versions"
 import { contextBridge } from "electron"
-import { defineStore } from "electron-nano-store"
-
-contextBridge.exposeInMainWorld("defineStore", defineStore)
 
 // Everything exported from this file will be available in renderer as global function
 // All NodeJS APIs are available in the preload process.

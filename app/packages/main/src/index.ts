@@ -3,6 +3,8 @@ import "./security-restrictions"
 import { restoreOrCreateWindow } from "/@/mainWindow"
 import { platform } from "node:process"
 import { createStore } from "tinybase/cjs"
+import { createSqlite3Persister } from "tinybase/cjs/persisters/persister-sqlite3"
+import { Database } from "sqlite3"
 
 /**
  * Prevent electron from running multiple instances.
@@ -86,11 +88,58 @@ if (import.meta.env.PROD) {
     .catch((e) => console.error("Failed check and install updates:", e))
 }
 
-if (import.meta.env.DEV) {
-  app.whenReady().then(async () => {
-    const store = createStore()
-    ipcMain.on("store", (_event, value) => {
-      return store
+// Create TinyBase store
+app
+  .whenReady()
+  .then(async () => {
+    // TODO: check if store already exists
+    // maybe that's not necessary
+    // how would migrations work?
+
+    // create store
+    const store = createStore().setTablesSchema({
+      topics: {
+        id: { type: "string" },
+        filePath: { type: "string" },
+        fileContent: { type: "string" },
+        topicName: { type: "string" },
+        topicContent: { type: "string" },
+      },
+      notes: {
+        topicId: { type: "string" },
+        content: { type: "string" },
+        url: { type: "string" },
+        public: { type: "boolean" },
+      },
+      links: {
+        topicId: { type: "string" },
+        title: { type: "string" },
+        url: { type: "string" },
+        public: { type: "boolean" },
+      },
+    })
+    // persist it to local sqlite db
+    const db = new Database("learn-anything")
+    const persister = createSqlite3Persister(store, db, {
+      mode: "tabular",
+      tables: {
+        load: {
+          topics: "topics",
+          notes: "notes",
+          links: "links",
+        },
+        save: {
+          topics: "topics",
+          notes: "notes",
+          links: "links",
+        },
+      },
+    })
+    await persister.save()
+
+    // expose persister to preload/renderer process
+    ipcMain.on("get-persister", (_event, value) => {
+      return persister
     })
   })
-}
+  .catch((e) => console.error("Failed to create TinyBase store", e))
