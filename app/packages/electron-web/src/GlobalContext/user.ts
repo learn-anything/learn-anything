@@ -7,6 +7,7 @@ export function createUserState() {
     showEditorSettings: false,
     wikiPath: "/Users/nikiv/src/app/learn-anything/seed/wiki/nikita",
     topicContent: "",
+    topicName: "SQLite",
   })
 
   onMount(async () => {

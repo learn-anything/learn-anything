@@ -7,9 +7,9 @@ export { versions } from "./versions"
 import { readFile } from "node:fs/promises"
 import { defineStore } from "electron-nano-store"
 import { contextBridge } from "electron"
-import { createStore } from "tinybase"
-import { createSqlite3Persister } from "tinybase/persisters/persister-sqlite3"
-import sqlite3 from "sqlite3"
+import { createStore } from "tinybase/cjs"
+import { createSqlite3Persister } from "tinybase/cjs/persisters/persister-sqlite3"
+import { Database } from "sqlite3"
 
 contextBridge.exposeInMainWorld("defineStore", defineStore)
 
@@ -71,7 +71,7 @@ export async function createTinyBaseStore() {
       public: { type: "boolean" },
     },
   })
-  const db = new sqlite3.Database("learn-anything")
+  const db = new Database("learn-anything")
   const persister = createSqlite3Persister(store, db, {
     mode: "tabular",
     tables: {

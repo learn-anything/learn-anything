@@ -1,14 +1,12 @@
-import { createSignal, onMount } from "solid-js"
-// TODO: don't know why it complains about types
-// @ts-ignore
-import { createCodeMirror } from "solid-codemirror"
+import { createEffect, createSignal, onMount } from "solid-js"
+import { createCodeMirror, createEditorControlledValue } from "solid-codemirror"
 import { useUser } from "../GlobalContext/user"
 
 export default function Editor() {
   const [editorContent, setEditorContent] = createSignal("")
   const user = useUser()
 
-  onMount(() => {
+  createEffect(() => {
     setEditorContent(user.user.topicContent)
   })
 
@@ -16,19 +14,17 @@ export default function Editor() {
     onValueChange: setEditorContent,
   })
 
+  createEditorControlledValue(editorView, () => {
+    return editorContent()
+  })
+
   return (
     <div
       class="dark:bg-neutral-900 bg-white flex flex-col gap-4 p-10 h-full overflow-scroll"
       style={{ width: "78%" }}
     >
-      <h1 class="font-bold text-3xl">Editor</h1>
-      <button
-        onClick={() => {
-          console.log(user.user.topicContent, "topic content")
-        }}
-      >
-        press me
-      </button>
+      <h1 class="font-bold text-3xl">{user.user.topicName}</h1>
+      {/* <input type="text" value={editorContent()} /> */}
       <div ref={ref} />
     </div>
   )
