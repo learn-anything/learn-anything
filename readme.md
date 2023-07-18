@@ -56,17 +56,19 @@ This will start an Electron development app. Started from [this app starter](htt
 
 Solid code that renders the app is located at [app/packages/electron-web](app/packages/electron-web).
 
-[app/packages/preload/src/index.ts](app/packages/preload/src/index.ts) exposes functions to front end from [node.js main process](https://github.com/cawa-93/vite-electron-builder#project-structure).
+[app/packages/preload/src/index.ts](app/packages/preload/src/index.ts) exposes functions to front end from [node.js preload process](https://github.com/cawa-93/vite-electron-builder#project-structure).
 
-## Issues with TinyBase
+<!-- ## Issues with TinyBase
 
-There is active issue trying to setup [TinyBase](https://tinybase.org/) with [SQLite adapter](https://tinybase.org/api/persister-sqlite3/) inside Electron node.js main process.
+There is active issue trying to setup
 
 Issue is that [Electron does not support ES modules](https://github.com/electron/electron/issues/21457) but tinybase only exports them it seems. You will see error if you run `pnpm app:dev`.
 
-The file that causes the issue is [app/packages/preload/src/index.ts](app/packages/preload/src/index.ts). Specifically import on L10.
+The file that causes the issue is [app/packages/preload/src/index.ts](app/packages/preload/src/index.ts). Specifically import on L10. -->
 
 ## Goals of TinyBase
+
+[TinyBase](https://tinybase.org/) is setup with [SQLite adapter](https://tinybase.org/api/persister-sqlite3/) inside Electron node.js preload process.
 
 If changes are made to SQLite content, it will update the files in the file system using TinyBase reactive hooks.
 
