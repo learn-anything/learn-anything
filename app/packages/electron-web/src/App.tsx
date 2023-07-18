@@ -44,6 +44,18 @@ export default function App() {
           style={{ width: "100vw", height: "100vh" }}
           class="flex items-center"
         >
+          <Show when={true}>
+            <div class="absolute flex items-center justify-center top-0 right-0 z-40 w-screen h-screen bg-neutral-950">
+              <div class="rounded-lg p-5 flex items-center justify-center flex-col gap-5 border-slate-400 border-opacity-50 border">
+                <div>Sign in</div>
+                <input
+                  type="text"
+                  placeholder="Sign in"
+                  class="w-full p-1 px-4 border rounded-md bg-transparent border-slate-400 border-opacity-50"
+                />
+              </div>
+            </div>
+          </Show>
           <Sidebar />
           <Editor />
           <Show when={!user.user.wikiPath}>

@@ -21,7 +21,7 @@ export default function Sidebar(props: any) {
                 console.log(topics, "topics")
               }}
             >
-              Get sidebar
+              Sidebar
             </div>
             <div
               class="cursor-pointer"
@@ -51,6 +51,12 @@ export default function Sidebar(props: any) {
               }}
             >
               Help
+            </div>
+            <div
+              class="font-semibold hover:text-green-400 hover:opacity-90 transition-all"
+              onClick={() => {}}
+            >
+              Sign in
             </div>
           </div>
         </div>
