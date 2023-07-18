@@ -60,8 +60,8 @@ export default function Sidebar(props: any) {
               Intro
             </div>
             <div class="pl-6 opacity-70 flex flex-col gap-2 border-l border-opacity-30 border-slate-100">
-              <div class="hover:bg-neutral-700 rounded-md p-1 px-3">Hi</div>
-              <div class="hover:bg-neutral-700 rounded-md p-1 px-3">Bye</div>
+              {/* <div class="hover:bg-neutral-700 rounded-md p-1 px-3">Hi</div>
+              <div class="hover:bg-neutral-700 rounded-md p-1 px-3">Bye</div> */}
             </div>
           </div>
         </div>

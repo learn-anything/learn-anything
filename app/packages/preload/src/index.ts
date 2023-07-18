@@ -10,6 +10,15 @@ import { markdownFilePaths, saveFileToTinybase } from "./tinybase/wiki"
 // Everything exported from this file will be available in renderer as global function
 // All NodeJS APIs are available in the preload process.
 
+export async function syncWiki(wikiPath: string) {
+  const db = await getDb()
+  const filePaths = await markdownFilePaths(wikiPath)
+  filePaths.map((filePath) => {
+    saveFileToTinybase(wikiPath, filePath, db)
+  })
+  console.log(filePaths)
+}
+
 export async function getTopicsSidebar() {
   const db = await getDb()
   const store = db.getStore()
@@ -30,13 +39,4 @@ export async function getTopic(topic: string) {
     `,
     topicName: "sqlite",
   }
-}
-
-export async function syncWiki(wikiPath: string) {
-  const db = await getDb()
-  const filePaths = await markdownFilePaths(wikiPath)
-  filePaths.map((filePath) => {
-    saveFileToTinybase(wikiPath, filePath, db)
-  })
-  console.log(filePaths)
 }
