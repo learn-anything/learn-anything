@@ -74,7 +74,10 @@ export async function setupTinybaseStore() {
 }
 
 // tinybase db
-export async function db() {
+export async function getDb() {
+  // TODO: see if tinybase is init
+
+  // TODO: make it a singleton
   const db = await setupTinybaseStore()
   return db
 }
