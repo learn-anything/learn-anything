@@ -45,9 +45,6 @@ pnpm dev-setup
 
 ## Run Electron app
 
-<!-- TODO: make electron app instantly start reading files from the seed folder -->
-<!-- using default wiki folder env -->
-
 ```
 pnpm app:dev
 ```
@@ -58,15 +55,7 @@ Solid code that renders the app is located at [app/packages/electron-web](app/pa
 
 [app/packages/preload/src/index.ts](app/packages/preload/src/index.ts) exposes functions to front end from [node.js preload process](https://github.com/cawa-93/vite-electron-builder#project-structure).
 
-<!-- ## Issues with TinyBase
-
-There is active issue trying to setup
-
-Issue is that [Electron does not support ES modules](https://github.com/electron/electron/issues/21457) but tinybase only exports them it seems. You will see error if you run `pnpm app:dev`.
-
-The file that causes the issue is [app/packages/preload/src/index.ts](app/packages/preload/src/index.ts). Specifically import on L10. -->
-
-## Goals of TinyBase
+## TinyBase setup
 
 [TinyBase](https://tinybase.org/) is setup with [SQLite adapter](https://tinybase.org/api/persister-sqlite3/) inside Electron node.js preload process.
 
@@ -74,17 +63,21 @@ If changes are made to SQLite content, it will update the files in the file syst
 
 TinyBase is the main app state of the app. Front end state is reflection of TinyBase state. If TinyBase state changes, GraphQL requests to mutate real backend state are sent where needed. Same goes for any other side effects that needs to happen such as updating of files connected.
 
+Once you ran `pnpm app:dev`. In left corner of app you will see `Sync` button. Pressing it will seed TinyBase state with files from [this folder](https://github.com/learn-anything/seed/tree/main/wiki/nikita).
+
+## TinyBase current issues
+
+For some reason every time you try to read things from the store, it returns empty results.
+
 <!-- ```
 pnpm app:tinybase
 ``` -->
 
 <!-- Will `tsx` run [app/packages/tinybase/main.ts](app/packages/tinybase/main.ts). -->
 
-<!-- Goal of that file currently is to load all the .md files from `seed/wiki/nikita` folder into TinyBase store backed by SQLite. -->
-
 ## Setup DB
 
-> First need to make Electron + TinyBase + front end sync works smoothly.
+> First need to make Electron + TinyBase + front end sync work smoothly.
 
 Assumes you installed [EdgeDB](https://www.edgedb.com/) (run `curl ..` command).
 
@@ -139,7 +132,7 @@ Read [api/db/sync/sync.ts](api/db/sync/sync.ts) and [api/db/sync/wiki.ts](api/db
 
 ## Run server
 
-> First need to make Electron + TinyBase + front end sync works smoothly.
+> First need to make Electron + TinyBase + front end sync work smoothly.
 
 Before running server, create file at `api/server/.env` with this content:
 
@@ -168,7 +161,7 @@ Will start Grafbase locally and give you GraphQL access.
 
 ## Run web
 
-> First need to make Electron + TinyBase + front end sync works smoothly.
+> First need to make Electron + TinyBase + front end sync work smoothly.
 
 <!-- TODO: automate creating of `.env` file with default content as part of `pnpm setup` command -->
 <!-- TODO: do same for API .env too -->
