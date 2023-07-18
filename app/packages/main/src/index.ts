@@ -22,7 +22,7 @@ app.on("second-instance", restoreOrCreateWindow)
 app.disableHardwareAcceleration()
 
 /**
- * Shout down background process if all windows was closed
+ * Shut down background process if all windows are closed
  */
 app.on("window-all-closed", () => {
   if (platform !== "darwin") {
@@ -42,28 +42,6 @@ app
   .whenReady()
   .then(restoreOrCreateWindow)
   .catch((e) => console.error("Failed create window:", e))
-
-/**
- * Install Vue.js or any other extension in development mode only.
- * Note: You must install `electron-devtools-installer` manually
- */
-// if (import.meta.env.DEV) {
-//   app
-//     .whenReady()
-//     .then(() => import('electron-devtools-installer'))
-//     .then(module => {
-//       const {default: installExtension, VUEJS3_DEVTOOLS} =
-//         // @ts-expect-error Hotfix for https://github.com/cawa-93/vite-electron-builder/issues/915
-//         typeof module.default === 'function' ? module : (module.default as typeof module);
-//
-//       return installExtension(VUEJS3_DEVTOOLS, {
-//         loadExtensionOptions: {
-//           allowFileAccess: true,
-//         },
-//       });
-//     })
-//     .catch(e => console.error('Failed install extension:', e));
-// }
 
 /**
  * Check for app updates, install it in background and notify user that new version was installed.
