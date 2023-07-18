@@ -1,11 +1,8 @@
-import { app } from "electron"
+import { app, ipcMain } from "electron"
 import "./security-restrictions"
 import { restoreOrCreateWindow } from "/@/mainWindow"
 import { platform } from "node:process"
-// import { createStore } from "tinybase"
-
-// Create TinyBase Store
-// export const store = createStore()
+import { createStore } from "tinybase/cjs"
 
 /**
  * Prevent electron from running multiple instances.
@@ -87,4 +84,13 @@ if (import.meta.env.PROD) {
       require("electron-updater").autoUpdater.checkForUpdatesAndNotify()
     )
     .catch((e) => console.error("Failed check and install updates:", e))
+}
+
+if (import.meta.env.DEV) {
+  app.whenReady().then(async () => {
+    const store = createStore()
+    ipcMain.on("store", (_event, value) => {
+      return store
+    })
+  })
 }

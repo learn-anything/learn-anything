@@ -1,5 +1,5 @@
-import { createStore } from "tinybase"
-import { createSqlite3Persister } from "tinybase/persisters/persister-sqlite3"
+import { createStore } from "tinybase/cjs"
+import { createSqlite3Persister } from "tinybase/cjs/persisters/persister-sqlite3"
 import { Database } from "sqlite3"
 
 export interface Link {

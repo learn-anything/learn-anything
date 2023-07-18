@@ -1,19 +1,13 @@
-import { Show, createSignal, onMount } from "solid-js"
+import { Show, createSignal } from "solid-js"
 import { UserProvider, createUserState } from "./GlobalContext/user"
 import Editor from "./components/Editor"
 import EditorSettings from "./components/EditorSettings"
 import Sidebar from "./components/Sidebar"
 import ToolBar from "./components/ToolBar"
-import { createTinyBaseStore } from "#preload"
 
 export default function App() {
   const user = createUserState()
   const [showToolBar, setShowToolBar] = createSignal(false)
-
-  onMount(async () => {
-    const persistor = await createTinyBaseStore()
-    console.log(persistor, "persistor")
-  })
 
   return (
     <>
