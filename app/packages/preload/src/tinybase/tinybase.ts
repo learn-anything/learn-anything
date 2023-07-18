@@ -1,8 +1,6 @@
-const { createStore } = require("tinybase")
-const {
-  createSqlite3Persister,
-} = require("tinybase/persisters/persister-sqlite3")
-const sqlite3 = require("sqlite3")
+import { createStore } from "tinybase"
+import { createSqlite3Persister } from "tinybase/persisters/persister-sqlite3"
+import { Database } from "sqlite3"
 
 export interface Link {
   title: string
@@ -55,7 +53,7 @@ export async function setupTinybaseStore() {
       public: { type: "boolean" },
     },
   })
-  const db = new sqlite3.Database("learn-anything")
+  const db = new Database("learn-anything")
   const persister = createSqlite3Persister(store, db, {
     mode: "tabular",
     tables: {

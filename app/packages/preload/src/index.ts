@@ -38,7 +38,6 @@ export async function getWikiFolderPath() {
 }
 
 export async function getTopic(topic: string) {
-  // const store = await defineStore("user")
   return {
     fileContent: `
     # [SQLite](https://www.sqlite.org/index.html)
@@ -90,15 +89,3 @@ export async function createTinyBaseStore() {
   await persister.save()
   return persister
 }
-
-// export async function createStore() {
-//   const store = createStore()
-// }
-
-// export async function saveFile(filePath: string, topic: string) {
-//   const store = createStore()
-
-//   const file = readFile(filePath, { encoding: "utf8" })
-
-//   store.setValue(topic, file)
-// }
