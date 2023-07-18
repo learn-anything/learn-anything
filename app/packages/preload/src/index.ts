@@ -4,17 +4,24 @@
 
 export { sha256sum } from "./nodeCrypto"
 export { versions } from "./versions"
-import { contextBridge } from "electron"
+import { db } from "./tinybase/tinybase"
 
 // Everything exported from this file will be available in renderer as global function
 // All NodeJS APIs are available in the preload process.
 
-export async function getStore() {
-  // get store from main process
+export async function getTopics() {
+  console.log(db, "db")
+  return {
+    fileContent: `
+    # [SQLite](https://www.sqlite.org/index.html)
+
+    SQLite is great.
+    `,
+    topicName: "sqlite",
+  }
 }
 
-// TODO: use store defined in main process
-export async function getTopic(topic: string) {
+export async function getTopicContent(topic: string) {
   return {
     fileContent: `
     # [SQLite](https://www.sqlite.org/index.html)

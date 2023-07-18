@@ -72,3 +72,9 @@ export async function setupTinybaseStore() {
   await persister.save()
   return persister
 }
+
+// tinybase db
+export async function db() {
+  const db = await setupTinybaseStore()
+  return db
+}

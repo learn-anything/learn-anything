@@ -115,7 +115,7 @@ app
     })
     await persister.save()
 
-    // expose persister to preload/renderer process
+    // expose persister to preload process
     ipcMain.on("get-persister", (_event, value) => {
       return persister
     })
