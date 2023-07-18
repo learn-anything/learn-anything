@@ -9,6 +9,10 @@ import { contextBridge } from "electron"
 // Everything exported from this file will be available in renderer as global function
 // All NodeJS APIs are available in the preload process.
 
+export async function getStore() {
+  // get store from main process
+}
+
 // TODO: use store defined in main process
 export async function getTopic(topic: string) {
   return {
