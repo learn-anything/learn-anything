@@ -9,7 +9,7 @@ import { db } from "./tinybase/tinybase"
 // Everything exported from this file will be available in renderer as global function
 // All NodeJS APIs are available in the preload process.
 
-export async function getTopics() {
+export async function getTopicSidebar() {
   console.log(db, "db")
   return {
     fileContent: `
@@ -21,7 +21,7 @@ export async function getTopics() {
   }
 }
 
-export async function getTopicContent(topic: string) {
+export async function getTopic(topic: string) {
   return {
     fileContent: `
     # [SQLite](https://www.sqlite.org/index.html)
