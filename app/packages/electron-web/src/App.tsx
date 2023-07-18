@@ -10,8 +10,9 @@ export default function App() {
   const user = createUserState()
   const [showToolBar, setShowToolBar] = createSignal(false)
 
-  onMount(() => {
-    createTinyBaseStore()
+  onMount(async () => {
+    const persistor = await createTinyBaseStore()
+    console.log(persistor, "persistor")
   })
 
   return (

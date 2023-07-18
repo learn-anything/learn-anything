@@ -19,13 +19,32 @@ export default function Editor() {
   })
 
   return (
-    <div
-      class="dark:bg-neutral-900 bg-white flex flex-col gap-4 p-10 h-full overflow-scroll"
-      style={{ width: "78%" }}
-    >
-      <h1 class="font-bold text-3xl">{user.user.topicName}</h1>
-      {/* <input type="text" value={editorContent()} /> */}
-      <div ref={ref} />
-    </div>
+    <>
+      <style>
+        {`
+        .cm-editor {
+          height: 100%;
+        }
+        ::-webkit-scrollbar {
+          display: none;
+      }
+        .cm-line {
+          text-align: start !important;
+          padding: 0 !important;
+        }
+        .cm-focused {
+          outline: none !important;
+        }
+        `}
+      </style>
+      <div
+        class="dark:bg-neutral-900 bg-white flex flex-col gap-4 py-10 pr-10 pl-2 h-full overflow-scroll"
+        style={{ width: "78%" }}
+      >
+        <h1 class="font-bold pl-7 text-3xl">{user.user.topicName}</h1>
+        {/* <input type="text" value={editorContent()} /> */}
+        <div class="h-full" ref={ref} />
+      </div>
+    </>
   )
 }
