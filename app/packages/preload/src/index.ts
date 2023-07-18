@@ -6,7 +6,7 @@ export { sha256sum } from "./nodeCrypto"
 export { versions } from "./versions"
 import { getDb } from "./tinybase/tinybase"
 import { markdownFilePaths, saveFileToTinybase } from "./tinybase/wiki"
-import path from "path"
+import * as path from "path"
 
 // Everything exported from this file will be available in renderer as global function
 // All NodeJS APIs are available in the preload process.
@@ -35,13 +35,20 @@ export async function syncWikiFromSeed() {
   filePaths.map((filePath) => {
     saveFileToTinybase(wikiPath, filePath, db)
   })
+
+  return db
 }
 
 export async function getTopicsSidebar() {
-  const db = await getDb()
+  const db = await syncWikiFromSeed()
+
   const store = db.getStore()
   console.log(store.getTables(), "tables")
-  return store.getTable("topics")
+
+  // const db = await getDb()
+  // const store = db.getStore()
+  // console.log(store.getTables(), "tables")
+  // return store.getTable("topics")
 }
 
 export async function getTopic(topic: string) {

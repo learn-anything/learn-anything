@@ -74,8 +74,6 @@ If changes are made to SQLite content, it will update the files in the file syst
 
 TinyBase is the main app state of the app. Front end state is reflection of TinyBase state. If TinyBase state changes, GraphQL requests to mutate real backend state are sent where needed. Same goes for any other side effects that needs to happen such as updating of files connected.
 
-Connection to Solid.js stores will be added once above issue is fixed.
-
 <!-- ```
 pnpm app:tinybase
 ``` -->
@@ -85,6 +83,8 @@ pnpm app:tinybase
 <!-- Goal of that file currently is to load all the .md files from `seed/wiki/nikita` folder into TinyBase store backed by SQLite. -->
 
 ## Setup DB
+
+> First need to make Electron + TinyBase + front end sync works smoothly.
 
 Assumes you installed [EdgeDB](https://www.edgedb.com/) (run `curl ..` command).
 
@@ -110,13 +110,13 @@ pnpm db:ts-generate
 
 ## Seed DB with content
 
-The goal is to seed EdgeDB with [this content](https://github.com/learn-anything/seed/tree/main/wiki/nikita). Can be seen online [here](https://wiki.nikiv.dev).
+<!-- The goal is to seed EdgeDB with [this content](https://github.com/learn-anything/seed/tree/main/wiki/nikita). Can be seen online [here](https://wiki.nikiv.dev).
 
 However you can try seed it with a wiki / folder of markdown of yourself.
 
-Just add a folder in `seed/wiki` like `seed/wiki/my-wiki` and put some .md files inside.
+Just add a folder in `seed/wiki` like `seed/wiki/my-wiki` and put some .md files inside. -->
 
-## Run Sync DB code
+<!-- ## Run Sync DB code
 
 The goal of this command:
 
@@ -135,9 +135,11 @@ USERNAME=nikita
 
 You can swap the names to your own. The `SEED_FOLDER_NAME` is the folder that is found in `seed/wiki`.
 
-Read [api/db/sync/sync.ts](api/db/sync/sync.ts) and [api/db/sync/wiki.ts](api/db/sync/wiki.ts) for details how sync works.
+Read [api/db/sync/sync.ts](api/db/sync/sync.ts) and [api/db/sync/wiki.ts](api/db/sync/wiki.ts) for details how sync works. -->
 
 ## Run server
+
+> First need to make Electron + TinyBase + front end sync works smoothly.
 
 Before running server, create file at `api/server/.env` with this content:
 
@@ -165,6 +167,8 @@ pnpm api:grafbase
 Will start Grafbase locally and give you GraphQL access.
 
 ## Run web
+
+> First need to make Electron + TinyBase + front end sync works smoothly.
 
 <!-- TODO: automate creating of `.env` file with default content as part of `pnpm setup` command -->
 <!-- TODO: do same for API .env too -->
