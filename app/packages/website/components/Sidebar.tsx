@@ -1,4 +1,4 @@
-import { For, Show } from "solid-js"
+import { For, Show, createSignal, onMount } from "solid-js"
 import { A, useParams } from "solid-start"
 
 interface Props {
@@ -7,6 +7,7 @@ interface Props {
 
 export default function Sidebar(props: Props) {
   const params = useParams()
+
   return (
     <>
       <style>

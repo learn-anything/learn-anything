@@ -1,7 +1,16 @@
 import { createUserState } from "../GlobalContext/user"
+import { getTopicsSidebar, syncWiki } from "#preload"
+import { createSignal, onMount } from "solid-js"
 
 export default function Sidebar(props: any) {
   const user = createUserState()
+  const [topics, setTopics] = createSignal()
+
+  onMount(async () => {
+    const topics = await getTopicsSidebar()
+    console.log(topics, "topics")
+  })
+
   return (
     <>
       <div
@@ -12,6 +21,13 @@ export default function Sidebar(props: any) {
         <div class="flex dark:bg-neutral-800 bg-zinc-200 flex-col justify-between items-center font-semibold p-4 py-4 border-r-2 border-opacity-10 border-slate-100">
           <div class="hover:bg-neutral-700 p-1 px-2 rounded-md">Wiki</div>
           <div class="flex flex-col items-center gap-3">
+            <div
+              onClick={() => {
+                syncWiki("/Users/nikiv/src/app/learn-anything/seed/wiki/nikita")
+              }}
+            >
+              Sync
+            </div>
             <div
               onClick={() => {
                 // setShowEditorSettings(true)

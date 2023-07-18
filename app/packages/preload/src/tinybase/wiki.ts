@@ -10,16 +10,16 @@ import { Link, Note, RelatedLink } from "./tinybase"
 // assumes `pnpm dev-setup` was ran
 // syncs content of folder with .md files inside `seed` folder to tinybase
 // all markdown files are synced with tinybase sqlite db
-export async function seedWikiSync(folderName: string, persister: Persister) {
-  const wikiPath = new URL(`../../../seed/wiki/${folderName}`, import.meta.url)
-    .pathname
-  const filePaths = await markdownFilePaths(wikiPath)
-  filePaths.map((filePath) => {
-    saveFileToTinybase(wikiPath, filePath, persister)
-  })
-  // const filePathToTest = filePaths[1] // analytics.md
-  // saveFileToTinybase(wikiPath, filePathToTest, persister)
-}
+// export async function seedWikiSync(folderName: string, persister: Persister) {
+//   const wikiPath = new URL(`../../../seed/wiki/${folderName}`, import.meta.url)
+//     .pathname
+//   const filePaths = await markdownFilePaths(wikiPath)
+//   filePaths.map((filePath) => {
+//     saveFileToTinybase(wikiPath, filePath, persister)
+//   })
+//   // const filePathToTest = filePaths[1] // analytics.md
+//   // saveFileToTinybase(wikiPath, filePathToTest, persister)
+// }
 
 export async function saveFileToTinybase(
   wikiPath: string,
