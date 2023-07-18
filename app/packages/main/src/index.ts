@@ -1,10 +1,7 @@
-import { app, ipcMain } from "electron"
+import { app } from "electron"
+import { platform } from "node:process"
 import "./security-restrictions"
 import { restoreOrCreateWindow } from "/@/mainWindow"
-import { platform } from "node:process"
-import { createStore } from "tinybase/cjs"
-import { createSqlite3Persister } from "tinybase/cjs/persisters/persister-sqlite3"
-import { Database } from "sqlite3"
 
 /**
  * Prevent electron from running multiple instances.

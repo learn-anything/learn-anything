@@ -1,5 +1,5 @@
 import { createUserState } from "../GlobalContext/user"
-import { getTopicsSidebar, syncWiki } from "#preload"
+import { getTopicsSidebar, syncWiki, syncWikiFromSeed } from "#preload"
 
 export default function Sidebar(props: any) {
   const user = createUserState()
@@ -26,7 +26,9 @@ export default function Sidebar(props: any) {
             <div
               class="cursor-pointer"
               onClick={() => {
-                syncWiki("/Users/nikiv/src/app/learn-anything/seed/wiki/nikita")
+                if (import.meta.env.MODE === "development") {
+                  syncWikiFromSeed()
+                }
               }}
             >
               Sync
