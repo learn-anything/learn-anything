@@ -50,7 +50,7 @@ export default function App() {
           </Show>
           <Sidebar />
           <Editor />
-          <Show when={!user.user.wikiFolderPath}>
+          <Show when={!user.user.wikiFolderPath || user.user.showSettings}>
             <div class="absolute z-10 flex items-center justify-center top-0 left-0 w-screen h-screen">
               <div
                 id="SettingsBackDrop"

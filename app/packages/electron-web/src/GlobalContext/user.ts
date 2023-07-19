@@ -10,7 +10,7 @@ export function createUserState() {
     topicToEdit: "SQLite", // topic to show for editing
     topicContent: "", // markdown content of topic
     wikiFolderPath: "", // path to wiki folder connected to the wiki
-    showEditorSettings: false, // TODO: should be part of router
+    showSettings: false, // TODO: should be part of router
     showSignIn: false, // TODO: should be part of router
   })
 
@@ -29,8 +29,8 @@ export function createUserState() {
     // state
     user,
     // actions
-    setShowEditorSettings: (state: boolean) => {
-      return setUser({ showEditorSettings: state })
+    setShowSettings: (state: boolean) => {
+      return setUser({ showSettings: state })
     },
     // TODO: part of router
     setShowSignIn: (state: boolean) => {

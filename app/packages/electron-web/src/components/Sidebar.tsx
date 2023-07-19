@@ -1,6 +1,6 @@
 import { createUserState } from "../GlobalContext/user"
 
-export default function Sidebar(props: any) {
+export default function Sidebar() {
   const user = createUserState()
 
   return (
@@ -14,22 +14,12 @@ export default function Sidebar(props: any) {
           <div class="hover:bg-neutral-700 p-1 px-2 rounded-md">Wiki</div>
           <div class="flex flex-col items-center gap-3">
             <div
-              class="cursor-pointer"
+              class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
               onClick={() => {
-                props.setShowSet(true)
-                user.setShowEditorSettings(true)
-                console.log(user.user.showEditorSettings)
+                user.setShowSettings(true)
               }}
             >
               Settings
-            </div>
-            <div
-              class="cursor-pointer"
-              onClick={() => {
-                props.setShowToolBar(true)
-              }}
-            >
-              Help
             </div>
             <div
               class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"

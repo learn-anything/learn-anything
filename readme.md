@@ -73,7 +73,7 @@ Read [app/packages/preload/src/index.ts](app/packages/preload/src/index.ts) file
 
 ### Issues with TinyBase
 
-There is also `Load Sidebar` action that runs `getTopicsSidebar`. This action is currently returning empty object when it should be returning contents of `topics` table.
+There is `Load Sidebar` action that runs `getTopicsSidebar`. This action is currently returning empty object when it should be returning contents of `topics` table.
 
 <!-- ```
 pnpm app:tinybase
