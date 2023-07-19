@@ -215,6 +215,9 @@ importers:
       '@solidjs/router':
         specifier: ^0.8.2
         version: 0.8.2(solid-js@1.7.7)
+      '@teamhanko/hanko-elements':
+        specifier: 0.5.5-beta
+        version: 0.5.5-beta
       clipboardy:
         specifier: ^3.0.0
         version: 3.0.0

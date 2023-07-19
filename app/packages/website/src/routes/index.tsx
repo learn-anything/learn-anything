@@ -1,7 +1,9 @@
 import { createShortcut } from "@solid-primitives/keyboard"
 import { For, Show, createEffect, createSignal, untrack } from "solid-js"
+import { useNavigate } from "solid-start"
 
 export default function Home() {
+  const navigate = useNavigate()
   const [TopicArray, setTopicArray] = createSignal([
     "nlp",
     "chemistry",
@@ -32,7 +34,6 @@ export default function Home() {
     if (filteredWord()) {
       untrack(() => {
         setFilteredTopic(TopicArray())
-
         setFilteredTopic(
           filteredTopic().filter((word: any) =>
             filteredWord()
@@ -119,7 +120,12 @@ export default function Home() {
               </Show>
             </div>
           </div>
-          <div class="absolute top-5 right-5 hover:text-green-400 font-bold text-lg transition-all cursor-pointer">
+          <div
+            onClick={() => {
+              navigate("/auth")
+            }}
+            class="absolute top-5 right-5 hover:text-green-400 font-bold text-lg transition-all cursor-pointer"
+          >
             Sign In
           </div>
         </div>
