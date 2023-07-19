@@ -9,7 +9,7 @@ export default function DevToolsPanel() {
       </div>
       <div class="flex w-full h-full  items-center p-5 text-lg flex-col gap-2">
         <div
-          class="cursor-pointer"
+          class="cursor-pointer hover:text-green-400"
           onClick={() => {
             syncWikiFromSeed()
           }}
@@ -17,7 +17,7 @@ export default function DevToolsPanel() {
           Seed TinyBase
         </div>
         <div
-          class="cursor-pointer"
+          class="cursor-pointer hover:text-green-400"
           onClick={async () => {
             const topics = await getTopicsSidebar()
             console.log(topics, "topics")

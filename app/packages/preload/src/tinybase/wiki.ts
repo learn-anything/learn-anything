@@ -11,9 +11,9 @@ import { Link, Note, RelatedLink } from "./tinybase"
 
 // given path to file, save it to tinybase
 export async function saveFileToTinybase(
-  wikiPath: string,
+  wikiFolderPath: string,
   filePath: string,
-  persister: Persister
+  tinybase: Persister
 ) {
   console.log(filePath, "file path")
   const topicName = getFileNameWithoutExtension(filePath) // file name is topic name (in-this-form)
@@ -83,8 +83,8 @@ export async function saveFileToTinybase(
     }
   })
 
-  persister.getStore().startTransaction()
-  const topicId = persister.getStore().addRow("topics", {
+  tinybase.getStore().startTransaction()
+  const topicId = tinybase.getStore().addRow("topics", {
     filePath: filePath,
     fileContent: fileContent,
     topicName: topicName,
@@ -95,7 +95,7 @@ export async function saveFileToTinybase(
   if (linksSection) {
     await addLinksFromMarkdownContent(
       linksSection,
-      persister.getStore(),
+      tinybase.getStore(),
       topicId
     )
   }
@@ -104,12 +104,12 @@ export async function saveFileToTinybase(
   if (notesSection) {
     await addNotesFromMarkdownContent(
       notesSection,
-      persister.getStore(),
+      tinybase.getStore(),
       topicId
     )
   }
-  persister.getStore().finishTransaction()
-  await persister.save()
+  tinybase.getStore().finishTransaction()
+  await tinybase.save()
   return
 }
 
