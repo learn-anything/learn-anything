@@ -1,8 +1,11 @@
+import { makeEventListener } from "@solid-primitives/event-listener"
 import { onMount } from "solid-js"
 import { getHankoCookie } from "../lib/auth"
 import { register } from "@teamhanko/hanko-elements"
 import { createUserState } from "../GlobalContext/user"
 
+// uses https://hanko.io authentication
+// https://github.com/teamhanko/hanko/blob/main/frontend/elements/README.md
 export default function SignInPage() {
   const user = createUserState()
   onMount(async () => {
@@ -17,16 +20,31 @@ export default function SignInPage() {
       },
     })
     // if status 200, means user is logged in
+    // navigate to using the app
     if (res.status === 200) {
       user.setShowSignIn(false)
     }
 
     // register hanko component
-    // https://github.com/teamhanko/hanko/blob/main/frontend/elements/README.md#script
-    register({ shadow: true, injectStyles: true }).catch(async (error) => {
+    register(import.meta.env.VITE_HANKO_API, {
+      shadow: true,
+      injectStyles: true,
+    }).catch(async (error) => {
+      // TODO: log with Tinybird
       console.log(error, "error")
     })
   })
+
+  makeEventListener(
+    document,
+    "hankoAuthSuccess",
+    async (e) => {
+      console.log(e, "hanko auth success event")
+      // auth success, navigate to using app
+      user.setShowSignIn(true)
+    },
+    { passive: true }
+  )
 
   return (
     <>
@@ -36,13 +54,8 @@ export default function SignInPage() {
       </style>
       <div class="absolute flex items-center justify-center top-0 right-0 z-40 w-screen h-screen bg-neutral-950">
         <div class="rounded-lg p-5 flex items-center justify-center flex-col gap-5 border-slate-400 border-opacity-50 border">
+          {/* TODO: types.d.ts not helping solve type error, maybe wrong place for the file? */}
           <hanko-auth />
-          {/* <div>Sign in</div> */}
-          {/* <input
-            type="text"
-            placeholder="Sign in"
-            class="w-full p-1 px-4 border rounded-md bg-transparent border-slate-400 border-opacity-50"
-          /> */}
         </div>
       </div>
     </>

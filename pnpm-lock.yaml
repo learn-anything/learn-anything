@@ -169,6 +169,9 @@ importers:
 
   app/packages/electron-web:
     dependencies:
+      '@solid-primitives/event-listener':
+        specifier: ^2.2.13
+        version: 2.2.13(solid-js@1.7.7)
       '@teamhanko/hanko-elements':
         specifier: 0.5.5-beta
         version: 0.5.5-beta
