@@ -7,7 +7,7 @@ export default function DevToolsPanel() {
       <div class="flex items-center text-lg justify-center font-semibold w-full">
         DevTools
       </div>
-      <div class="flex w-full h-full  items-center p-5 text-lg flex-col">
+      <div class="flex w-full h-full  items-center p-5 text-lg flex-col gap-2">
         <div
           class="cursor-pointer"
           onClick={() => {
