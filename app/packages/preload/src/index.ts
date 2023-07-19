@@ -11,29 +11,25 @@ export { sha256sum } from "./nodeCrypto"
 export { versions } from "./versions"
 import { setupTinybaseStore } from "./tinybase/tinybase"
 import { markdownFilePaths, saveFileToTinybase } from "./tinybase/wiki"
-import * as path from "path"
+import * as path from "path" // TODO: is this ok import? tree shaken?
+import * as fs from "fs"
+import { promisify } from "util"
 
+// get in-memory javascript store persisted to sqlite
 const tinybase = setupTinybaseStore()
 
-export async function syncWiki(wikiPath: string) {
-  // const db = await getDb()
-
-  const filePaths = await markdownFilePaths(wikiPath)
-  filePaths.map((filePath) => {
-    saveFileToTinybase(wikiPath, filePath, tinybase)
-  })
-}
-
-// below code assumes `pnpm dev-setup` was ran
+// this function assumes `pnpm dev-setup` was ran
 // and there is `seed` folder present at root
-// it will load all the files from seed/wiki/nikita into tinybase
+// it will load all the .md files from seed/wiki/nikita into tinybase
 export async function syncWikiFromSeed() {
-  // const db = await getDb()
-
   // using the directory of this file, gets the path to the seed folder
   let fileDirectoryPath = __dirname
   const repoDir = fileDirectoryPath.replace("/app/packages/preload/dist", "")
   const wikiPath = path.join(repoDir, "seed/wiki/nikita")
+
+  // TODO: check this folder exists before running below
+  // if it does not return early with message and show error in UI
+  // or git clone into seed folder automatically
 
   // get all file paths of .md files inside the folder
   const filePaths = await markdownFilePaths(wikiPath)
@@ -43,36 +39,24 @@ export async function syncWikiFromSeed() {
   })
 }
 
+// load all the .md files from folder path into tinybase
+export async function syncWiki(wikiFolderPath: string) {
+  // get all file paths of .md files inside the folder
+  const filePaths = await markdownFilePaths(wikiFolderPath)
+  // save each file to tinybase
+  filePaths.map((filePath) => {
+    saveFileToTinybase(wikiFolderPath, filePath, tinybase)
+  })
+}
+
 export async function getTopicsSidebar() {
-  // TODO: I don't know how how to solve it so the db does not get wiped
-  // on every time a method from here gets called
-  // tinybase should be init only once, then I should be able to
-  // do this:
-  // const db = await getDb()
-
-  // and use it
-
-  // above await getDb(), does not work
-  // I thought to try this instead
-  // this should in theory, init tinybase
-  // then load tinybase with files from seed folder
-  // but for some reason it does not work, getTables() below returns {} but that can't be right
-  await syncWikiFromSeed()
-
-  const store = tinybase.getStore()
-  // TODO: returns {} for some reason instead of tables
-  console.log(store.getTables(), "tables")
-
-  // const db = await getDb()
-  // const store = db.getStore()
-  // console.log(store.getTables(), "tables")
-  // return store.getTable("topics")
+  // tinybase.
 }
 
 export async function getTopic(topic: string) {
   // TODO: use tinybase to get content of topic
 
-  // hardcoding values until tinybase is fixed
+  // hardcoding values for now
   return {
     fileContent: `
     # [SQLite](https://www.sqlite.org/index.html)
@@ -86,7 +70,7 @@ export async function getTopic(topic: string) {
 export async function getUserDetails() {
   // TODO: use tinybase to get all user content
 
-  // TODO: hardcoding values currently until tinybase is fixed
+  // TODO: hardcoding values for now
   return {
     topicToEdit: "SQLite",
     wikiFolderPath: "some/path", // TODO: not used currently

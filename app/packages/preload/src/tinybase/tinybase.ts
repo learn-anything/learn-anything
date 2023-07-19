@@ -31,7 +31,11 @@ export interface Topic {
   prettyName: string
 }
 
+// creates tinybase store
+// in-memory javascript store persisted to sqlite
+// https://tinybase.org
 export function setupTinybaseStore() {
+  // define the schema
   const store = createStore().setTablesSchema({
     topics: {
       id: { type: "string" },
@@ -54,6 +58,7 @@ export function setupTinybaseStore() {
     },
   })
   const db = new Database("learn-anything")
+  // sets what tables get saved in sqlite
   const persister = createSqlite3Persister(store, db, {
     mode: "tabular",
     tables: {
