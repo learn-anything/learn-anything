@@ -57,7 +57,7 @@ export async function getTopicsSidebar() {
   const db = await syncWikiFromSeed()
 
   const store = db.getStore()
-  // TODO: breaks for some reason
+  // TODO: returns {} for some reason instead of tables
   console.log(store.getTables(), "tables")
 
   // const db = await getDb()
@@ -67,10 +67,9 @@ export async function getTopicsSidebar() {
 }
 
 export async function getTopic(topic: string) {
-  // TODO: use tinybase data, broken now
-  // const db = await getDb()
-  // const store = db.getStore()
-  // console.log(db)
+  // TODO: use tinybase to get content of topic
+
+  // hardcoding values until tinybase is fixed
   return {
     fileContent: `
     # [SQLite](https://www.sqlite.org/index.html)
@@ -81,9 +80,12 @@ export async function getTopic(topic: string) {
   }
 }
 
-export async function getSettings() {
-  // TODO: use tinybase
+export async function getUserDetails() {
+  // TODO: use tinybase to get all user content
+
+  // TODO: hardcoding values currently until tinybase is fixed
   return {
-    wikiPath: "/Users/nikiv/src/app/learn-anything/seed/wiki/nikita",
+    topicToEdit: "SQLite",
+    wikiFolderPath: "some/path", // TODO: not used currently
   }
 }
