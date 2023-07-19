@@ -9,7 +9,6 @@ import Settings from "./components/Settings"
 export default function App() {
   const user = createUserState()
   const [showToolBar, setShowToolBar] = createSignal(false)
-  const [showSignIn, setShowSignIn] = createSignal(false)
 
   return (
     <>
@@ -46,7 +45,7 @@ export default function App() {
           style={{ width: "100vw", height: "100vh" }}
           class="flex items-center"
         >
-          <Show when={showSignIn()}>
+          <Show when={user.user.showSignIn}>
             <SignInPage />
           </Show>
           <Sidebar />

@@ -52,8 +52,10 @@ export default function Sidebar(props: any) {
               Help
             </div>
             <div
-              class="font-semibold hover:text-green-400 hover:opacity-90 transition-all"
-              onClick={() => {}}
+              class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
+              onClick={() => {
+                user.setShowSignIn(true)
+              }}
             >
               Sign in
             </div>

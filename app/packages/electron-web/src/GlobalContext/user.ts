@@ -8,6 +8,7 @@ export function createUserState() {
     wikiPath: "",
     topicContent: "",
     topicName: "SQLite",
+    showSignIn: true,
   })
 
   onMount(async () => {
@@ -22,6 +23,9 @@ export function createUserState() {
     // actions
     setShowEditorSettings: (state: boolean) => {
       return setUser({ showEditorSettings: state })
+    },
+    setShowSignIn: (state: boolean) => {
+      return setUser({ showSignIn: state })
     },
     setWikiPath: (state: string) => {
       console.log(state, "wiki path")

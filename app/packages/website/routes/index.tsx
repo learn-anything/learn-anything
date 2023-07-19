@@ -39,8 +39,8 @@ export default function Home() {
               .split("")
               .every((v) => {
                 return word.split("").includes(v)
-              }),
-          ),
+              })
+          )
         )
 
         console.log(filteredTopic())
