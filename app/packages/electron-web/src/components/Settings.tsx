@@ -15,7 +15,7 @@ export default function Settings() {
         <div class="w-full flex items-start h-full p-16 gap-2">
           <div
             onClick={() => {
-              user.setWikiPath(wikiPathInput())
+              user.setWikiFolderPath(wikiPathInput())
             }}
             class="font-semibold rounded-md border dark:border-slate-800 border-opacity-40 bg-transparent px-4 p-2 hover:bg-neutral-950 transition-all cursor-pointer"
           >

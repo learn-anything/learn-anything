@@ -1,5 +1,5 @@
 import { createUserState } from "../GlobalContext/user"
-import { getTopicsSidebar, syncWiki, syncWikiFromSeed } from "#preload"
+import { getTopicsSidebar, syncWikiFromSeed } from "#preload"
 
 export default function Sidebar(props: any) {
   const user = createUserState()

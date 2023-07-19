@@ -41,7 +41,7 @@ export default function Editor() {
         class="dark:bg-neutral-900 bg-white flex flex-col gap-4 py-10 pr-10 pl-2 h-full overflow-scroll"
         style={{ width: "78%" }}
       >
-        <h1 class="font-bold pl-7 text-3xl">{user.user.topicName}</h1>
+        <h1 class="font-bold pl-7 text-3xl">{user.user.topicToEdit}</h1>
         {/* <input type="text" value={editorContent()} /> */}
         <div class="h-full" ref={ref} />
       </div>
