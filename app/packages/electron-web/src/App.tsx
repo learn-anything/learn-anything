@@ -1,15 +1,14 @@
-import { Show, createSignal } from "solid-js"
+import { Show } from "solid-js"
 import { UserProvider, createUserState } from "./GlobalContext/user"
 import Editor from "./components/Editor"
 import Sidebar from "./components/Sidebar"
-import ToolBar from "./components/ToolBar"
 import SignInPage from "./components/SignInPage"
 import Settings from "./components/Settings"
-import { getTopicsSidebar, syncWikiFromSeed } from "#preload"
+import DevToolsPanel from "./components/DevToolsPanel"
+import CommandPalette from "./components/CommandPalette"
 
 export default function App() {
   const user = createUserState()
-  const [showToolBar, setShowToolBar] = createSignal(false)
 
   return (
     <>
@@ -65,35 +64,12 @@ export default function App() {
               </div>
             </div>
           </Show>
-          <Show when={showToolBar()}>
-            <ToolBar setShowToolBar={setShowToolBar} />
+          <Show when={user.user.showCommandPalette}>
+            <CommandPalette />
           </Show>
         </div>
         <Show when={import.meta.env.MODE === "development"}>
-          <div class="fixed flex flex-col items-center p-4 bottom-5 right-5 rounded-xl border-slate-400 border border-opacity-50 bg-transparent w-80 h-80">
-            <div class="flex items-center text-lg justify-center font-semibold w-full">
-              DevTools
-            </div>
-            <div class="flex w-full h-full  items-center p-5 text-lg flex-col">
-              <div
-                class="cursor-pointer"
-                onClick={() => {
-                  syncWikiFromSeed()
-                }}
-              >
-                Seed TinyBase
-              </div>
-              <div
-                class="cursor-pointer"
-                onClick={async () => {
-                  const topics = await getTopicsSidebar()
-                  console.log(topics, "topics")
-                }}
-              >
-                Load Sidebar
-              </div>
-            </div>
-          </div>
+          <DevToolsPanel />
         </Show>
       </UserProvider>
     </>

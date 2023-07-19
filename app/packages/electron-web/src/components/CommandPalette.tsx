@@ -1,16 +1,16 @@
-import { For, Show, createEffect, createSignal, untrack } from "solid-js"
+import { Show } from "solid-js"
 
-export default function ToolBar(props: any) {
-  const [TopicArray, setTopicArray] = createSignal([
-    "nlp",
-    "chemistry",
-    "physics",
-    "physics 2",
-  ])
-  const [filteredTopic, setFilteredTopic] = createSignal([])
-  const [filteredWord, setFilteredWord] = createSignal("")
-  const [focusedTopic, setFocusedTopic] = createSignal(0)
-  const [focusedTodoTitle, setFocusedTodoTitle] = createSignal("")
+// TODO: use https://github.com/Nozbe/microfuzz for fuzzy search
+export default function CommandPalette() {
+  // const [topics, setTopics] = createSignal([
+  //   "nlp",
+  //   "chemistry",
+  //   "physics",
+  // ])
+  // const [filteredTopics, setFilteredTopics] = createSignal([])
+  // const [filteredWords, setFilteredWords] = createSignal("")
+  // const [focusedTopic, setFocusedTopic] = createSignal(0)
+  // const [focusedTodoTitle, setFocusedTodoTitle] = createSignal("")
 
   // createShortcut(["ARROWDOWN"], () => {
   //   if (focusedTopic() === filteredTopic().length - 1) {
@@ -27,26 +27,26 @@ export default function ToolBar(props: any) {
   //   setFocusedTopic(focusedTopic() - 1)
   // })
 
-  createEffect(() => {
-    if (filteredWord()) {
-      untrack(() => {
-        setFilteredTopic(TopicArray())
+  // createEffect(() => {
+  //   if (filteredWords()) {
+  //     untrack(() => {
+  //       setFilteredTopic(TopicArray())
 
-        setFilteredTopic(
-          filteredTopic().filter((word: any) =>
-            filteredWord()
-              .split("")
-              .every((v) => {
-                return word.split("").includes(v)
-              })
-          )
-        )
+  //       setFilteredTopic(
+  //         filteredTopic().filter((word: any) =>
+  //           filteredWord()
+  //             .split("")
+  //             .every((v) => {
+  //               return word.split("").includes(v)
+  //             })
+  //         )
+  //       )
 
-        console.log(filteredTopic())
-      })
-      setFocusedTodoTitle(filteredTopic()[focusedTopic()])
-    }
-  })
+  //       console.log(filteredTopic())
+  //     })
+  //     setFocusedTodoTitle(filteredTopic()[focusedTopic()])
+  //   }
+  // })
 
   return (
     <>
@@ -81,8 +81,8 @@ export default function ToolBar(props: any) {
       <div class="absolute top-0 right-0 w-full h-full">
         <div
           onClick={() => {
-            props.setShowToolBar(false)
-            console.log("run")
+            // props.setShowToolBar(false)
+            // console.log("run")
           }}
           id="ToolBarBackDrop"
           class="absolute top-0 right-0 bg-neutral-900 bg-opacity-50 h-full w-full"
@@ -101,7 +101,7 @@ export default function ToolBar(props: any) {
             {/* <Show when={filteredWord() !== "" && filteredTopic().length !== 0}> */}
             <Show when={false}>
               <div class="bg-neutral-700 absolute top-16 left-0 text-white font-semibold text-opacity-40 flex flex-col rounded-md w-full">
-                <For each={filteredTopic()}>
+                {/* <For each={filteredTopic()}>
                   {(topic) => (
                     <div
                       id={
@@ -115,7 +115,7 @@ export default function ToolBar(props: any) {
                       <div>{topic}</div>
                     </div>
                   )}
-                </For>
+                </For> */}
               </div>
             </Show>
           </div>

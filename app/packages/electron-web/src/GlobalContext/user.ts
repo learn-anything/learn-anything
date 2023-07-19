@@ -6,6 +6,7 @@ import { getTopic, getUserDetails } from "#preload"
 // persisted to sqlite with tinybase
 export function createUserState() {
   const [user, setUser] = createStore({
+    showCommandPalette: false,
     topicToEdit: "SQLite", // topic to show for editing
     topicContent: "", // markdown content of topic
     wikiFolderPath: "", // path to wiki folder connected to the wiki
@@ -37,6 +38,9 @@ export function createUserState() {
     },
     setWikiFolderPath: (state: string) => {
       return setUser({ wikiFolderPath: state })
+    },
+    setShowCommandPalette: (state: boolean) => {
+      return setUser({ showCommandPalette: state })
     },
   } as const
 }
