@@ -1,22 +1,26 @@
+// Everything exported from this file will be available in renderer (electron-web)
+// Using this import: `import {} from "#preload"`
+// All NodeJS APIs are available in preload
+// https://github.com/cawa-93/vite-electron-builder#how-it-works
+
 /**
  * @module preload
  */
 
 export { sha256sum } from "./nodeCrypto"
 export { versions } from "./versions"
-import { getDb } from "./tinybase/tinybase"
+import { setupTinybaseStore } from "./tinybase/tinybase"
 import { markdownFilePaths, saveFileToTinybase } from "./tinybase/wiki"
 import * as path from "path"
 
-// Everything exported from this file will be available in renderer as global function
-// All NodeJS APIs are available in the preload process.
+const tinybase = setupTinybaseStore()
 
 export async function syncWiki(wikiPath: string) {
-  const db = await getDb()
+  // const db = await getDb()
 
   const filePaths = await markdownFilePaths(wikiPath)
   filePaths.map((filePath) => {
-    saveFileToTinybase(wikiPath, filePath, db)
+    saveFileToTinybase(wikiPath, filePath, tinybase)
   })
 }
 
@@ -24,7 +28,7 @@ export async function syncWiki(wikiPath: string) {
 // and there is `seed` folder present at root
 // it will load all the files from seed/wiki/nikita into tinybase
 export async function syncWikiFromSeed() {
-  const db = await getDb()
+  // const db = await getDb()
 
   // using the directory of this file, gets the path to the seed folder
   let fileDirectoryPath = __dirname
@@ -35,9 +39,8 @@ export async function syncWikiFromSeed() {
   const filePaths = await markdownFilePaths(wikiPath)
   // save each file to tinybase
   filePaths.map((filePath) => {
-    saveFileToTinybase(wikiPath, filePath, db)
+    saveFileToTinybase(wikiPath, filePath, tinybase)
   })
-  return db
 }
 
 export async function getTopicsSidebar() {
@@ -54,9 +57,9 @@ export async function getTopicsSidebar() {
   // this should in theory, init tinybase
   // then load tinybase with files from seed folder
   // but for some reason it does not work, getTables() below returns {} but that can't be right
-  const db = await syncWikiFromSeed()
+  await syncWikiFromSeed()
 
-  const store = db.getStore()
+  const store = tinybase.getStore()
   // TODO: returns {} for some reason instead of tables
   console.log(store.getTables(), "tables")
 
