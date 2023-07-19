@@ -8,7 +8,7 @@ export function createUserState() {
     wikiPath: "",
     topicContent: "",
     topicName: "SQLite",
-    showSignIn: true,
+    showSignIn: false,
   })
 
   onMount(async () => {
