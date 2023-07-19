@@ -52,9 +52,11 @@ export default function SignInPage() {
         {`
         `}
       </style>
-      <div class="absolute flex items-center justify-center top-0 right-0 z-40 w-screen h-screen bg-neutral-950">
+      <div class="absolute flex items-center justify-center top-0 right-0 z-40 w-screen h-screen bg-slate-100 dark:bg-neutral-950">
         <div class="rounded-lg p-5 flex items-center justify-center flex-col gap-5 border-slate-400 border-opacity-50 border">
           {/* TODO: types.d.ts not helping solve type error, maybe wrong place for the file? */}
+          {/* TODO: there is also CORS issue */}
+          {/* hanko-auth element does not render */}
           <hanko-auth />
         </div>
       </div>
