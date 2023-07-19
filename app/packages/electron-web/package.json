@@ -8,6 +8,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@teamhanko/hanko-elements": "0.5.5-beta",
+    "@teamhanko/hanko-frontend-sdk": "^0.8.0",
     "solid-codemirror": "^2.3.0",
     "solid-js": "^1.7.7"
   },

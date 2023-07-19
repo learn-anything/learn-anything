@@ -1,9 +1,10 @@
 import { Show, createSignal } from "solid-js"
 import { UserProvider, createUserState } from "./GlobalContext/user"
 import Editor from "./components/Editor"
-import EditorSettings from "./components/EditorSettings"
 import Sidebar from "./components/Sidebar"
 import ToolBar from "./components/ToolBar"
+import SignInPage from "./components/SignInPage"
+import Settings from "./components/Settings"
 
 export default function App() {
   const user = createUserState()
@@ -25,7 +26,7 @@ export default function App() {
             opacity: 1
           }
         }
-        #EditorSettings {
+        #Settings {
           animation: 0.1s ScaleSettings forwards linear
         }
         @keyframes ScaleSettings {
@@ -46,16 +47,7 @@ export default function App() {
           class="flex items-center"
         >
           <Show when={showSignIn()}>
-            <div class="absolute flex items-center justify-center top-0 right-0 z-40 w-screen h-screen bg-neutral-950">
-              <div class="rounded-lg p-5 flex items-center justify-center flex-col gap-5 border-slate-400 border-opacity-50 border">
-                <div>Sign in</div>
-                <input
-                  type="text"
-                  placeholder="Sign in"
-                  class="w-full p-1 px-4 border rounded-md bg-transparent border-slate-400 border-opacity-50"
-                />
-              </div>
-            </div>
+            <SignInPage />
           </Show>
           <Sidebar />
           <Editor />
@@ -66,10 +58,10 @@ export default function App() {
                 class="absolute top-0 left-0 w-full h-full bg-neutral-950 bg-opacity-50 bg-blur-lg "
               />
               <div
-                id="EditorSettings"
+                id="Settings"
                 class="w-4/5 h-5/6 z-20 dark:bg-neutral-900 bg-gray-100 rounded-3xl border border-opacity-50 border-slate-200 dark:border-slate-800"
               >
-                <EditorSettings />
+                <Settings />
               </div>
             </div>
           </Show>

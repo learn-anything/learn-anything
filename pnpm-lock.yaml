@@ -26,9 +26,6 @@ importers:
       '@solidjs/router':
         specifier: ^0.8.2
         version: 0.8.2(solid-js@1.7.7)
-      '@teamhanko/hanko-elements':
-        specifier: 0.5.5-beta
-        version: 0.5.5-beta
       clipboardy:
         specifier: ^3.0.0
         version: 3.0.0
@@ -172,6 +169,12 @@ importers:
 
   app/packages/electron-web:
     dependencies:
+      '@teamhanko/hanko-elements':
+        specifier: 0.5.5-beta
+        version: 0.5.5-beta
+      '@teamhanko/hanko-frontend-sdk':
+        specifier: ^0.8.0
+        version: 0.8.0
       solid-codemirror:
         specifier: ^2.3.0
         version: 2.3.0(@codemirror/state@6.2.1)(@codemirror/view@6.14.1)(solid-js@1.7.7)
@@ -2651,6 +2654,12 @@ packages:
 
   /@teamhanko/hanko-frontend-sdk@0.5.4-beta:
     resolution: {integrity: sha512-F0hNaRb9wgusL5O2UrTP+mg/T/aY5fCpwkfNWWBhjZ/sTzAZGcNRSd5ZhQA+Bh2302kIcALz2djvYXA93sI2Qw==}
+    dependencies:
+      '@types/js-cookie': 3.0.3
+    dev: false
+
+  /@teamhanko/hanko-frontend-sdk@0.8.0:
+    resolution: {integrity: sha512-DkupnuOT1bbXdt15K83lcOEXbmXJCTfHOPU3FUiGL0EzRUpQ17MNhSUjLkqnCVA6ToGpveY0VW6tSgNfWBLBzA==}
     dependencies:
       '@types/js-cookie': 3.0.3
     dev: false

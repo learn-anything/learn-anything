@@ -36,7 +36,6 @@ export default function Sidebar(props: any) {
             <div
               class="cursor-pointer"
               onClick={() => {
-                // setShowEditorSettings(true)
                 props.setShowSet(true)
                 user.setShowEditorSettings(true)
                 console.log(user.user.showEditorSettings)

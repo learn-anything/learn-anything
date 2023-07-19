@@ -1,7 +1,7 @@
 import { createSignal } from "solid-js"
 import { useUser } from "../GlobalContext/user"
 
-export default function EditorSettings() {
+export default function Settings() {
   const user = useUser()
 
   const [wikiPathInput, setWikiPathInput] = createSignal("")

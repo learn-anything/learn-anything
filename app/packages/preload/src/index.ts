@@ -52,9 +52,9 @@ export async function getTopicsSidebar() {
 }
 
 export async function getTopic(topic: string) {
-  const db = await getDb()
-  const store = db.getStore()
-  console.log(db)
+  // const db = await getDb()
+  // const store = db.getStore()
+  // console.log(db)
   // TODO: use tinybase data
   return {
     fileContent: `
@@ -63,5 +63,12 @@ export async function getTopic(topic: string) {
     SQLite is great.
     `,
     topicName: "sqlite",
+  }
+}
+
+export async function getSettings() {
+  // TODO: use tinybase
+  return {
+    wikiPath: "/Users/nikiv/src/app/learn-anything/seed/wiki/nikita",
   }
 }
