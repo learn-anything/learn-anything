@@ -20,22 +20,23 @@ export async function syncWiki(wikiPath: string) {
   })
 }
 
+// below code assumes `pnpm dev-setup` was ran
+// and there is `seed` folder present at root
+// it will load all the files from seed/wiki/nikita into tinybase
 export async function syncWikiFromSeed() {
   const db = await getDb()
 
-  // hacky but this lets new developers get started without manually entering path
-  // fileDirectoryPath will be be a path like: /Users/nikiv/src/app/learn-anything/app/packages/preload/dist
+  // using the directory of this file, gets the path to the seed folder
   let fileDirectoryPath = __dirname
-
-  // assumes `pnpm dev-setup` has been run so there is `seed` folder present at root
   const repoDir = fileDirectoryPath.replace("/app/packages/preload/dist", "")
   const wikiPath = path.join(repoDir, "seed/wiki/nikita")
 
+  // get all file paths of .md files inside the folder
   const filePaths = await markdownFilePaths(wikiPath)
+  // save each file to tinybase
   filePaths.map((filePath) => {
     saveFileToTinybase(wikiPath, filePath, db)
   })
-
   return db
 }
 
