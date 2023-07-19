@@ -40,9 +40,23 @@ export async function syncWikiFromSeed() {
 }
 
 export async function getTopicsSidebar() {
+  // TODO: I don't know how how to solve it so the db does not get wiped
+  // on every time a method from here gets called
+  // tinybase should be init only once, then I should be able to
+  // do this:
+  // const db = await getDb()
+
+  // and use it
+
+  // above await getDb(), does not work
+  // I thought to try this instead
+  // this should in theory, init tinybase
+  // then load tinybase with files from seed folder
+  // but for some reason it does not work, getTables() below returns {} but that can't be right
   const db = await syncWikiFromSeed()
 
   const store = db.getStore()
+  // TODO: breaks for some reason
   console.log(store.getTables(), "tables")
 
   // const db = await getDb()
@@ -52,10 +66,10 @@ export async function getTopicsSidebar() {
 }
 
 export async function getTopic(topic: string) {
+  // TODO: use tinybase data, broken now
   // const db = await getDb()
   // const store = db.getStore()
   // console.log(db)
-  // TODO: use tinybase data
   return {
     fileContent: `
     # [SQLite](https://www.sqlite.org/index.html)
