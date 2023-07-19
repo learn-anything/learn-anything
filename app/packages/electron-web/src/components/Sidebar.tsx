@@ -1,7 +1,7 @@
-import { createUserState } from "../GlobalContext/user"
+import { useUser } from "../GlobalContext/user"
 
 export default function Sidebar() {
-  const user = createUserState()
+  const user = useUser()
 
   return (
     <>
