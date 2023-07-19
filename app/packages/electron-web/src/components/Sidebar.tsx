@@ -1,5 +1,4 @@
 import { createUserState } from "../GlobalContext/user"
-import { getTopicsSidebar, syncWikiFromSeed } from "#preload"
 
 export default function Sidebar(props: any) {
   const user = createUserState()
@@ -14,25 +13,6 @@ export default function Sidebar(props: any) {
         <div class="flex dark:bg-neutral-800 bg-zinc-200 flex-col justify-between items-center font-semibold p-4 py-4 border-r-2 border-opacity-10 border-slate-100">
           <div class="hover:bg-neutral-700 p-1 px-2 rounded-md">Wiki</div>
           <div class="flex flex-col items-center gap-3">
-            <div
-              class="cursor-pointer"
-              onClick={async () => {
-                const topics = await getTopicsSidebar()
-                console.log(topics, "topics")
-              }}
-            >
-              Sidebar
-            </div>
-            <div
-              class="cursor-pointer"
-              onClick={() => {
-                if (import.meta.env.MODE === "development") {
-                  syncWikiFromSeed()
-                }
-              }}
-            >
-              Sync
-            </div>
             <div
               class="cursor-pointer"
               onClick={() => {

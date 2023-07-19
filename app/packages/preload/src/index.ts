@@ -23,17 +23,17 @@ export async function syncWikiFromSeed() {
   // using the directory of this file, gets the path to the seed folder
   let fileDirectoryPath = __dirname
   const repoDir = fileDirectoryPath.replace("/app/packages/preload/dist", "")
-  const wikiPath = path.join(repoDir, "seed/wiki/nikita")
+  const wikiFolderPath = path.join(repoDir, "seed/wiki/nikita")
 
   // TODO: check this folder exists before running below
   // if it does not return early with message and show error in UI
   // or git clone into seed folder automatically
 
   // get all file paths of .md files inside the folder
-  const filePaths = await markdownFilePaths(wikiPath)
+  const filePaths = await markdownFilePaths(wikiFolderPath)
   // save each file to tinybase
   filePaths.map((filePath) => {
-    saveFileToTinybase(wikiPath, filePath, tinybase)
+    saveFileToTinybase(wikiFolderPath, filePath, tinybase)
   })
 }
 
@@ -68,9 +68,9 @@ export async function getTopic(topic: string) {
 export async function getUserDetails() {
   // TODO: use tinybase to get all user content
 
-  // TODO: hardcoding values for now
+  // hardcoding values for now
   return {
     topicToEdit: "SQLite",
-    wikiFolderPath: "some/path", // TODO: not used currently
+    wikiFolderPath: "some/path",
   }
 }

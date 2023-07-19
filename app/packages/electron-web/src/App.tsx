@@ -5,6 +5,7 @@ import Sidebar from "./components/Sidebar"
 import ToolBar from "./components/ToolBar"
 import SignInPage from "./components/SignInPage"
 import Settings from "./components/Settings"
+import { getTopicsSidebar, syncWikiFromSeed } from "#preload"
 
 export default function App() {
   const user = createUserState()
@@ -68,6 +69,32 @@ export default function App() {
             <ToolBar setShowToolBar={setShowToolBar} />
           </Show>
         </div>
+        <Show when={import.meta.env.MODE === "development"}>
+          <div class="fixed flex flex-col items-center p-4 bottom-5 right-5 rounded-xl border-slate-400 border border-opacity-50 bg-transparent w-80 h-80">
+            <div class="flex items-center text-lg justify-center font-semibold w-full">
+              DevTools
+            </div>
+            <div class="flex w-full h-full  items-center p-5 text-lg flex-col">
+              <div
+                class="cursor-pointer"
+                onClick={() => {
+                  syncWikiFromSeed()
+                }}
+              >
+                Seed TinyBase
+              </div>
+              <div
+                class="cursor-pointer"
+                onClick={async () => {
+                  const topics = await getTopicsSidebar()
+                  console.log(topics, "topics")
+                }}
+              >
+                Load Sidebar
+              </div>
+            </div>
+          </div>
+        </Show>
       </UserProvider>
     </>
   )
