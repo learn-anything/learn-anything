@@ -12,8 +12,6 @@ export { versions } from "./versions"
 import { setupTinybaseStore } from "./tinybase/tinybase"
 import { markdownFilePaths, saveFileToTinybase } from "./tinybase/wiki"
 import * as path from "path" // TODO: is this ok import? tree shaken?
-import * as fs from "fs"
-import { promisify } from "util"
 
 // get in-memory javascript store persisted to sqlite
 const tinybase = setupTinybaseStore()
@@ -50,7 +48,7 @@ export async function syncWiki(wikiFolderPath: string) {
 }
 
 export async function getTopicsSidebar() {
-  // tinybase.
+  console.log(tinybase.getStore().getTable("topics"), "topics")
 }
 
 export async function getTopic(topic: string) {
