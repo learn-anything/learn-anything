@@ -1,32 +1,21 @@
 import { exec } from "child_process"
 import * as fs from "fs"
 import { readFile } from "fs/promises"
-import { URL } from "node:url"
 import * as path from "path"
 import { dirname } from "path"
 import { Persister, Store } from "tinybase/cjs"
 import { Link, Note, RelatedLink } from "./tinybase"
 
-// assumes `pnpm dev-setup` was ran
-// syncs content of folder with .md files inside `seed` folder to tinybase
-// all markdown files are synced with tinybase sqlite db
-// export async function seedWikiSync(folderName: string, persister: Persister) {
-//   const wikiPath = new URL(`../../../seed/wiki/${folderName}`, import.meta.url)
-//     .pathname
-//   const filePaths = await markdownFilePaths(wikiPath)
-//   filePaths.map((filePath) => {
-//     saveFileToTinybase(wikiPath, filePath, persister)
-//   })
-//   // const filePathToTest = filePaths[1] // analytics.md
-//   // saveFileToTinybase(wikiPath, filePathToTest, persister)
-// }
+// TODO: add proper test cases and different files
+// currently it fails to do right thing on many files
 
+// given path to file, save it to tinybase
 export async function saveFileToTinybase(
   wikiPath: string,
   filePath: string,
   persister: Persister
 ) {
-  // console.log(filePath, "file path")
+  console.log(filePath, "file path")
   const topicName = getFileNameWithoutExtension(filePath) // file name is topic name (in-this-form)
   // console.log(topicName, "topic name")
   let prettyName // pretty name for the topic (user defined)

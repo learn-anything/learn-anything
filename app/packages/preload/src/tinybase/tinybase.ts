@@ -76,6 +76,8 @@ export async function setupTinybaseStore() {
 // get instance of tinybase store
 // only runs init of tinybase once
 export async function getDb() {
+  // TODO: does not seem to work
+  // perhaps there is some other issue but it appears calling getDb wipes the db
   const db = await onceAsync(setupTinybaseStore)()
   return db
 }
