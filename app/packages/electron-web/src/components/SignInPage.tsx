@@ -57,6 +57,7 @@ export default function SignInPage() {
           {/* TODO: types.d.ts not helping solve type error, maybe wrong place for the file? */}
           {/* TODO: there is also CORS issue */}
           {/* hanko-auth element does not render */}
+          {/* @ts-ignore */}
           <hanko-auth />
         </div>
       </div>
