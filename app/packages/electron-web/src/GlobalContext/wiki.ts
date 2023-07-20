@@ -39,7 +39,7 @@ type Link = {
 export default function createWikiState() {
   const [wiki, setWiki] = createStore<Wiki>({
     wikiFolderPath: "test/path", // TODO: temp, load from tinybase
-    topics: [{ name: "wow" }],
+    topics: [],
     openTopic: {
       topicName: "",
       prettyName: "",
@@ -61,12 +61,11 @@ export default function createWikiState() {
   createEffect(() => {
     // when store changes, delta includes new store value
     const delta = getDelta()
-    /* execute some logic whenever the state changes */
     console.log(delta, "delta")
 
     // TODO: assume delta is an array of length 1
     // in what case can it be more than 1?
-    const value = delta[0]
+    const newStore = delta[0]
   })
 
   // TODO: maybe there is way to generate the actions to update one value
