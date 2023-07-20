@@ -20,9 +20,11 @@ export function createUserState() {
     const userDetails = await getUserDetails()
     const topic = await getTopic(userDetails.topicToEdit)
     const sidebarTopics = await getTopicsSidebar()
+
+    console.log(topic, "topic!!")
     setUser({
       topicToEdit: userDetails.topicToEdit,
-      topicContent: topic.fileContent,
+      // topicContent: topic.fileContent,
       wikiFolderPath: userDetails.wikiFolderPath,
       sidebarTopics,
     })
@@ -44,6 +46,9 @@ export function createUserState() {
     },
     setShowCommandPalette: (state: boolean) => {
       return setUser({ showCommandPalette: state })
+    },
+    setTopicToEdit: (state: string) => {
+      return setUser({ topicToEdit: state })
     },
   } as const
 }

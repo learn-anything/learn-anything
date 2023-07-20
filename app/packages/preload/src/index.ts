@@ -9,6 +9,7 @@
 
 export { sha256sum } from "./nodeCrypto"
 export { versions } from "./versions"
+import { createQueries } from "tinybase/cjs"
 import { setupTinybaseStore } from "./tinybase/tinybase"
 import { markdownFilePaths, saveFileToTinybase } from "./tinybase/wiki"
 import * as path from "path" // TODO: is this ok import? tree shaken?
@@ -39,7 +40,6 @@ export async function syncWikiFromSeed() {
   )
 
   console.log(tinybase.getStore().getTables(), "Tables are loaded")
-
   await tinybase.save() // and saved to sqlite
 }
 
@@ -61,25 +61,31 @@ export async function getTopicsSidebar() {
   const topics = tinybase.getStore().getTable("topics")
   let sidebarTopics: string[] = []
   Object.entries(topics).forEach(([key, value]) => {
-    console.log(key, "key")
-    console.log(value, "value")
+    // console.log(key, "key")
+    // console.log(value, "value")
     sidebarTopics.push(value.prettyName)
   })
   return sidebarTopics
 }
 
 export async function getTopic(topic: string) {
-  // TODO: use tinybase to get content of topic
+  const queries = createQueries(tinybase.getStore())
 
-  // hardcoding values for now
-  return {
-    fileContent: `
-    # [SQLite](https://www.sqlite.org/index.html)
+  queries.setQueryDefinition(
+    "getFileContent",
+    "topics",
+    ({ select, where }) => {
+      select("fileContent")
+      where("prettyName", topic)
+    }
+  )
 
-    SQLite is great.
-    `,
-    topicName: "sqlite",
-  }
+  const fileContent = queries.getResultTable("getFileContent")
+  console.log(fileContent, "file content")
+
+  // return {
+  //   fileContent: fileContent,
+  // }
 }
 
 export async function getUserDetails() {
