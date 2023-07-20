@@ -43,6 +43,7 @@ export function setupTinybaseStore() {
       fileContent: { type: "string" },
       topicName: { type: "string" },
       topicContent: { type: "string" },
+      prettyName: { type: "string" },
     },
     notes: {
       topicId: { type: "string" },
@@ -74,6 +75,7 @@ export function setupTinybaseStore() {
       },
     },
   })
+  // load things into tinybase js store from sqlite
   persister.load()
   return persister
 }

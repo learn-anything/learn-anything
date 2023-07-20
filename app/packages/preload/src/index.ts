@@ -53,8 +53,19 @@ export async function syncWiki(wikiFolderPath: string) {
   })
 }
 
+// get all topics from tinybase for wiki sidebar
 export async function getTopicsSidebar() {
-  console.log(tinybase.getStore().getTable("topics"), "topics")
+  // TODO: there is def a better way to do this
+  // need to get all values of a column for a table
+
+  const topics = tinybase.getStore().getTable("topics")
+  let sidebarTopics: string[] = []
+  Object.entries(topics).forEach(([key, value]) => {
+    console.log(key, "key")
+    console.log(value, "value")
+    sidebarTopics.push(value.prettyName)
+  })
+  return sidebarTopics
 }
 
 export async function getTopic(topic: string) {

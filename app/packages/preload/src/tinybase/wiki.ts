@@ -89,6 +89,7 @@ export async function saveFileToTinybase(
     fileContent: fileContent,
     topicName: topicName,
     topicContent: content,
+    prettyName: prettyName,
   })!
 
   // only run if ## Links is present
