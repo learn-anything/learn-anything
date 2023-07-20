@@ -2,33 +2,33 @@ import { createContext, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 import { getTopic, getUserDetails, getTopicsSidebar } from "#preload"
 
+export type User = {
+  showCommandPalette: boolean
+  topicToEdit: string
+  topicContent: string
+  wikiFolderPath: string
+  showSettings: boolean
+  showSignIn: boolean
+  sidebarTopics: string[]
+}
+
 // holds all the global state of user
 // persisted to sqlite with tinybase
 export function createUserState() {
-  const [user, setUser] = createStore({
+  const [user, setUser] = createStore<User>({
     showCommandPalette: false,
     topicToEdit: "SQLite", // topic to show for editing
     topicContent: "", // markdown content of topic
     wikiFolderPath: "", // path to wiki folder connected to the wiki
     showSettings: false, // TODO: should be part of router
     showSignIn: false, // TODO: should be part of router
-    sidebarTopics: [], // TODO: how to type it as string[]
+    sidebarTopics: [],
   })
 
-  // on first load of app, get all user state from tinybase
-  onMount(async () => {
-    const userDetails = await getUserDetails()
-    const topic = await getTopic(userDetails.topicToEdit)
-    const sidebarTopics = await getTopicsSidebar()
-
-    console.log(topic, "topic!!")
-    setUser({
-      topicToEdit: userDetails.topicToEdit,
-      // topicContent: topic.fileContent,
-      wikiFolderPath: userDetails.wikiFolderPath,
-      sidebarTopics,
-    })
-  })
+  // on first load, get all user details
+  // onMount(async () => {
+  //   setUser({})
+  // })
 
   return {
     // state

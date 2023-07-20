@@ -63,7 +63,7 @@ export async function getTopicsSidebar() {
   let sidebarTopics: string[] = []
   Object.entries(topics).forEach(([key, value]) => {
     // console.log(key, "key")
-    // console.log(value, "value")
+    console.log(value, "value")
     sidebarTopics.push(value.prettyName)
   })
   return sidebarTopics
@@ -105,4 +105,16 @@ export async function getUserDetails() {
 export async function clearTinybase() {
   store.delTables()
   tinybase.save()
+}
+
+export async function initUserStore() {
+  const userDetails = await getUserDetails()
+  const topic = await getTopic(userDetails.topicToEdit)
+  const sidebarTopics = await getTopicsSidebar()
+
+  return {
+    userDetails,
+    topic,
+    sidebarTopics,
+  }
 }
