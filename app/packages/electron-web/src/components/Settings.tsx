@@ -1,9 +1,8 @@
 import { createSignal } from "solid-js"
-import { useUser } from "../GlobalContext/user"
+import { useWiki } from "../GlobalContext/wiki"
 
 export default function Settings() {
-  const user = useUser()
-
+  const wiki = useWiki()
   const [wikiPathInput, setWikiPathInput] = createSignal("")
 
   return (
@@ -15,7 +14,7 @@ export default function Settings() {
         <div class="w-full flex items-start h-full p-16 gap-2">
           <div
             onClick={() => {
-              user.setWikiFolderPath(wikiPathInput())
+              wiki.setWikiFolderPath(wikiPathInput())
             }}
             class="font-semibold rounded-md border dark:border-slate-800 border-opacity-40 bg-transparent px-4 p-2 hover:bg-neutral-950 transition-all cursor-pointer"
           >

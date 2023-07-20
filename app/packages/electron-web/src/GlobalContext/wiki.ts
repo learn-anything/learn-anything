@@ -1,5 +1,6 @@
-import { createContext, onMount, useContext } from "solid-js"
+import { createContext, createEffect, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
+import { captureStoreUpdates } from "@solid-primitives/deep"
 
 type Wiki = {
   // sidebar: any // TODO: model how to do sidebar, derive it or store?
@@ -38,7 +39,7 @@ type Link = {
 export default function createWikiState() {
   const [wiki, setWiki] = createStore<Wiki>({
     wikiFolderPath: "test/path", // TODO: temp, load from tinybase
-    topics: [],
+    topics: [{ name: "wow" }],
     openTopic: {
       topicName: "",
       prettyName: "",
@@ -53,6 +54,19 @@ export default function createWikiState() {
   // on first load, get last opened topic
   onMount(async () => {
     // TODO:
+  })
+
+  const getDelta = captureStoreUpdates(wiki)
+
+  createEffect(() => {
+    // when store changes, delta includes new store value
+    const delta = getDelta()
+    /* execute some logic whenever the state changes */
+    console.log(delta, "delta")
+
+    // TODO: assume delta is an array of length 1
+    // in what case can it be more than 1?
+    const value = delta[0]
   })
 
   // TODO: maybe there is way to generate the actions to update one value
