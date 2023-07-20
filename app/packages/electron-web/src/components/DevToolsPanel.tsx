@@ -1,4 +1,4 @@
-import { getTopicsSidebar, syncWikiFromSeed } from "#preload"
+import { getTopicsSidebar, syncWikiFromSeed, clearTinybase } from "#preload"
 
 // lists useful functions you can run from electron preload file
 export default function DevToolsPanel() {
@@ -15,6 +15,14 @@ export default function DevToolsPanel() {
           }}
         >
           Seed TinyBase
+        </div>
+        <div
+          class="cursor-pointer hover:text-green-400 hover:opacity-90 transition-all"
+          onClick={() => {
+            clearTinybase()
+          }}
+        >
+          Clear TinyBase
         </div>
         <div
           class="cursor-pointer hover:text-green-400 hover:opacity-90 transition-all"

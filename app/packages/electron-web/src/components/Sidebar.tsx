@@ -48,6 +48,7 @@ export default function Sidebar() {
                 {(topic) => {
                   return (
                     <div
+                      class="cursor-pointer hover:text-green-400 hover:opacity-90 transition-all"
                       onClick={() => {
                         user.setTopicToEdit(topic)
                       }}

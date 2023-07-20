@@ -16,6 +16,7 @@ import * as path from "path" // TODO: is this ok import? tree shaken?
 
 // get in-memory javascript store persisted to sqlite
 const tinybase = setupTinybaseStore()
+const store = tinybase.getStore()
 
 // this function assumes `pnpm dev-setup` was ran
 // and there is `seed` folder present at root
@@ -80,8 +81,10 @@ export async function getTopic(topic: string) {
     }
   )
 
-  const fileContent = queries.getResultTable("getFileContent")
+  const fileContent = queries.getResultRow("getFileContent", "fileContent")
+  // const fileContent = queries.getResultTable("getFileContent")
   console.log(fileContent, "file content")
+  // console.log(Object.entries(fileContent)[1])
 
   // return {
   //   fileContent: fileContent,
@@ -96,4 +99,10 @@ export async function getUserDetails() {
     topicToEdit: "SQLite",
     wikiFolderPath: "some/path",
   }
+}
+
+// delete all tables from tinybase
+export async function clearTinybase() {
+  store.delTables()
+  tinybase.save()
 }

@@ -79,27 +79,3 @@ export function setupTinybaseStore() {
   persister.load()
   return persister
 }
-
-// get instance of tinybase store
-// only runs init of tinybase once
-// export async function getDb() {
-//   // TODO: does not seem to work
-//   // perhaps there is some other issue but it appears calling getDb wipes the db
-//   const db = await onceAsync(setupTinybaseStore)()
-//   return db
-// }
-
-// runs async function only once
-// function onceAsync<T>(fn: () => Promise<T>): () => Promise<T> {
-//   let called = false
-//   let result: T
-
-//   return async function (): Promise<T> {
-//     if (!called) {
-//       called = true
-//       result = await fn()
-//     }
-
-//     return result
-//   }
-// }
