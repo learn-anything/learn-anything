@@ -65,11 +65,14 @@ export default function createWikiState() {
 
     // TODO: assume delta is an array of length 1
     // in what case can it be more than 1?
-    const newStore = delta[0]
+    const newStore = delta[0].value
+    console.log(newStore, "new store")
+
+    // TODO: how to know what exactly changed in between deltas
   })
 
   // TODO: maybe there is way to generate the actions to update one value
-  // instead of having to write it eat
+  // instead of having to write it out manually
   return {
     // state
     wiki,
