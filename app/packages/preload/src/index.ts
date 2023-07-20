@@ -32,9 +32,15 @@ export async function syncWikiFromSeed() {
   // get all file paths of .md files inside the folder
   const filePaths = await markdownFilePaths(wikiFolderPath)
   // save each file to tinybase
-  filePaths.map((filePath) => {
-    saveFileToTinybase(wikiFolderPath, filePath, tinybase)
-  })
+  await Promise.all(
+    filePaths.map(async (filePath) => {
+      await saveFileToTinybase(wikiFolderPath, filePath, tinybase)
+    })
+  )
+
+  console.log(tinybase.getStore().getTables(), "Tables are loaded")
+
+  await tinybase.save() // and saved to sqlite
 }
 
 // load all the .md files from folder path into tinybase

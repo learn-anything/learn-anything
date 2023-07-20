@@ -109,7 +109,7 @@ export async function saveFileToTinybase(
     )
   }
   tinybase.getStore().finishTransaction()
-  await tinybase.save()
+
   return
 }
 
