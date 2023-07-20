@@ -74,6 +74,7 @@ export function setupTinybaseStore() {
       },
     },
   })
+  persister.load()
   return persister
 }
 

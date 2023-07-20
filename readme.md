@@ -65,7 +65,7 @@ TinyBase is the main app state of the app. Front end state is reflection of Tiny
 
 ### Useful DevTools panel
 
-In the app you get after running `pnpm app:dev`, you will see `DevTools` panel in bottom right corner. It contains a list of useful actions you can run to aid you.
+In the app you get after running `pnpm app:dev`, you will see DevTools panel in bottom right corner. It contains a list of useful actions you can run to aid you.
 
 One of the actions is `Seed TinyBase`. This will seed your local TinyBase store/sqlite with [one of the wikis](https://github.com/learn-anything/seed/tree/main/wiki/nikita) in seed folder.
 
