@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@solid-primitives/deep": "^0.2.1",
     "@solid-primitives/event-listener": "^2.2.13",
     "@teamhanko/hanko-elements": "0.5.5-beta",
     "@teamhanko/hanko-frontend-sdk": "^0.8.0",

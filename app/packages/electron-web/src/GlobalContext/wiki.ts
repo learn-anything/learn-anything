@@ -1,11 +1,22 @@
-import { onMount } from "solid-js"
+import { createContext, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 
 type Wiki = {
+  // sidebar: any // TODO: model how to do sidebar, derive it or store?
+  wikiFolderPath: string // path to wiki folder connected to the wiki
+  topics: Topic[]
+  openTopic: OpenTopic
+}
+
+type Topic = {
+  name: string
+}
+
+type OpenTopic = {
   filePath: string
   fileContent: string
   topicName: string
-  topicContent: string
+  topicContent: string // markdown content of topic
   prettyName: string
   notes: Note[]
   links: Link[]
@@ -23,15 +34,20 @@ type Link = {
   public: boolean
 }
 
+// global state of wiki
 export default function createWikiState() {
   const [wiki, setWiki] = createStore<Wiki>({
-    filePath: "",
-    fileContent: "",
-    topicName: "",
-    topicContent: "",
-    prettyName: "",
-    notes: [],
-    links: [],
+    wikiFolderPath: "test/path", // TODO: temp, load from tinybase
+    topics: [],
+    openTopic: {
+      topicName: "",
+      prettyName: "",
+      topicContent: "",
+      notes: [],
+      links: [],
+      filePath: "",
+      fileContent: "",
+    },
   })
 
   // on first load, get last opened topic
@@ -45,8 +61,18 @@ export default function createWikiState() {
     // state
     wiki,
     // actions
-    setFilePath: (state: string) => {
-      return setWiki({ filePath: state })
+    setWikiFolderPath: (state: string) => {
+      return setWiki({ wikiFolderPath: state })
     },
   }
+}
+
+const WikiCtx = createContext<ReturnType<typeof createWikiState>>()
+
+export const WikiProvider = WikiCtx.Provider
+
+export const useWiki = () => {
+  const ctx = useContext(WikiCtx)
+  if (!ctx) throw new Error("useWiki must be used within UserProvider")
+  return ctx
 }
