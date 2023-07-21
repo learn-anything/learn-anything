@@ -6,9 +6,7 @@ export default function DevToolsPanel() {
   // runs a devTest function from preload
   // useful for testing
   onMount(async () => {
-    setTimeout(async () => {
-      await devTest()
-    }, 300)
+    await devTest()
   })
 
   return (

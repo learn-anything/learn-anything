@@ -174,6 +174,6 @@ export async function updateWiki(wiki: Wiki) {
 // or if you edit code anywhere in preload
 // can use it to run/test some code from electron node.js side more easily
 export async function devTest() {
-  const topics = store.getTable("topics")
-  console.log(topics.length, "topics")
+  const topics = tinybase.getStore().getTable("topics")
+  console.log(topics, "topics")
 }
