@@ -16,7 +16,7 @@ import * as path from "path" // TODO: is this ok import? tree shaken?
 
 // get in-memory javascript store persisted to sqlite
 const tinybase = setupTinybaseStore()
-const store = tinybase.getStore()
+const store = tinybase.getStore() // TODO: for some reason using store.getTable() will return undefined..
 
 // TODO: remove from prod builds
 // this function assumes `pnpm dev-setup` was ran
@@ -62,19 +62,21 @@ export async function syncWiki(wikiFolderPath: string) {
   })
 }
 
-// get all topics from tinybase for wiki sidebar
+// return array of topics with indentation for sidebar
+// looks like: [ { prettyName: 'Analytics', indent: 0 }, { prettyName: 'Grafana', indent: 1 }]
 export async function getTopicsSidebar() {
-  // TODO: there is def a better way to do this
-  // need to get all values of a column for a table
+  // TODO: there should be a way to return values for a given column only
 
   const topics = tinybase.getStore().getTable("topics")
-  let sidebarTopics: string[] = []
+  let sidebarTopics: any[] = []
   Object.entries(topics).forEach(([key, value]) => {
     // console.log(key, "key")
-    console.log(value, "value")
+    // console.log(value, "value")
+
     // TODO: fix type, go through Cell to value?
-    sidebarTopics.push(value.prettyName)
+    sidebarTopics.push({ prettyName: value.prettyName, indent: 0 })
   })
+  console.log(sidebarTopics)
   return sidebarTopics
 }
 
@@ -174,6 +176,5 @@ export async function updateWiki(wiki: Wiki) {
 // or if you edit code anywhere in preload
 // can use it to run/test some code from electron node.js side more easily
 export async function devTest() {
-  const topics = tinybase.getStore().getTable("topics")
-  console.log(topics, "topics")
+  await getTopicsSidebar()
 }

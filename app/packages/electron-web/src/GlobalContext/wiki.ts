@@ -1,7 +1,7 @@
 import { createContext, createEffect, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 import { captureStoreUpdates } from "@solid-primitives/deep"
-import { updateWiki } from "#preload"
+import { updateWiki, getTopicsSidebar } from "#preload"
 import { unwrap } from "solid-js/store"
 
 // see app/packages/preload/src/tinybase/tinybase.ts
@@ -9,40 +9,6 @@ import { unwrap } from "solid-js/store"
 // this solid store is a subset of tinybase store
 // changes made to solid store are synced to tinybase store
 // which in turn writes to sqlite
-
-type Wiki = {
-  wikiFolderPath: string
-  openTopic: Topic
-  sidebarTopics: SidebarTopic[] // alphebetically sorted
-  // topics: Topic[] // TODO: should this be added to store or just kept in tinybase?
-}
-
-type SidebarTopic = {
-  prettyName: string // assumed unique, used to switch openTopic on click
-  indent: number // indent level
-}
-
-type Topic = {
-  topicName: string
-  filePath: string
-  fileContent: string
-  topicContent: string
-  prettyName: string
-  notes: Note[]
-  links: Link[]
-}
-
-type Note = {
-  content: string
-  url: string
-  public: boolean
-}
-
-type Link = {
-  title: string
-  url: string
-  public: boolean
-}
 
 // global state of wiki
 export default function createWikiState() {
@@ -60,9 +26,12 @@ export default function createWikiState() {
     sidebarTopics: [],
   })
 
-  // on first load, get last opened topic
+  // on first load, get last opened topic + sidebar
   onMount(async () => {
     // TODO:
+    const sidebarTopics = await getTopicsSidebar()
+    setWiki({ sidebarTopics: sidebarTopics })
+    console.log(sidebarTopics, "sidebar")
   })
 
   const getDelta = captureStoreUpdates(wiki)
