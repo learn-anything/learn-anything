@@ -67,6 +67,8 @@ export default function createWikiState() {
     },
     setOpenTopic: async (pretyName: string) => {
       const topic = await getTopic(pretyName)
+      console.log("adding this topic")
+      console.log(topic, "topic")
       return setWiki((prevWiki) => ({ ...prevWiki, openTopic: topic }))
     },
   }

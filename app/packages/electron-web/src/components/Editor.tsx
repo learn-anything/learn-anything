@@ -1,4 +1,4 @@
-import { createEffect, createSignal, onMount } from "solid-js"
+import { createEffect, createSignal, onCleanup, onMount } from "solid-js"
 import {
   Uri,
   languages,
@@ -9,20 +9,38 @@ import {
 import { useWiki } from "../GlobalContext/wiki"
 
 export default function Editor() {
-  const [editorContent, setEditorContent] = createSignal("SQLite is great.")
-  let editor: mEditor.IStandaloneCodeEditor
-
   const wiki = useWiki()
 
-  // const model = () => mEditor.getModel(Uri.parse(props.url));
+  let parent!: HTMLDivElement
+  let editor: mEditor.IStandaloneCodeEditor
 
-  createEffect(() => {
-    console.log(wiki, "wiki")
+  // Initialize Monaco
+  onMount(() => {
+    editor = mEditor.create(parent, {
+      model: null,
+      automaticLayout: true,
+      lineDecorationsWidth: 5,
+      lineNumbersMinChars: 3,
+      padding: { top: 15 },
+    })
+
+    editor.addCommand(KeyMod.CtrlCmd | KeyCode.KeyS, () => {
+      if (editor) {
+        // auto-format
+        editor.getAction("editor.action.formatDocument")?.run()
+        // auto-fix problems
+        // props.displayErrors && editor.getAction('eslint.executeAutofix')?.run();
+        editor.focus()
+      }
+    })
+
+    editor.onDidChangeModelContent(() => {
+      const code = editor.getValue()
+      // props.onDocChange?.(code)
+      // runLinter(code)
+    })
   })
+  onCleanup(() => editor?.dispose())
 
-  // const wiki = useWiki()
-  // createEffect(() => {
-  //   console.log(wiki, "wiki")
-  // })
-  return <div>editor</div>
+  return <div class="min-h-0 min-w-0 flex-1 p-0" ref={parent} />
 }
