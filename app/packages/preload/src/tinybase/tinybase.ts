@@ -80,5 +80,9 @@ export function setupTinybaseStore() {
   })
   // load things into tinybase js store from sqlite
   persister.load()
+  // TODO: ok not to await? I can't really await
+  // as this function runs in top level of preload/index.ts
+  // no top level await available there
+  persister.startAutoSave()
   return persister
 }
