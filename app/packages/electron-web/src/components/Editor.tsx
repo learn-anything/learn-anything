@@ -29,7 +29,8 @@ export default function Editor() {
         { token: "comment.css", foreground: "0000ff" }, // will inherit fontStyle from `comment` above
       ],
       colors: {
-        "editor.background": "#000000",
+        "editor.background": "#222222",
+        "editor.foreground": "#FFFFFF",
       },
     })
 
@@ -65,5 +66,5 @@ export default function Editor() {
     // props.onEditorReady?.(editor, { Uri, editor: mEditor });
   })
 
-  return <div class="h-[100px] min-h-0 min-w-0 flex-1" ref={parent} />
+  return <div class="h-full w-full min-h-0 min-w-0 flex-1" ref={parent} />
 }
