@@ -31,10 +31,6 @@ export async function syncWikiFromSeed() {
   // if it does not return early with message and show error in UI
   // or git clone into seed folder automatically
 
-  store.addRow("wiki", {
-    wikiFolderPath: wikiFolderPath,
-  })
-
   // get all file paths of .md files inside the folder
   const filePaths = await markdownFilePaths(wikiFolderPath)
   // save each file to tinybase
@@ -43,6 +39,15 @@ export async function syncWikiFromSeed() {
       await saveFileToTinybase(wikiFolderPath, filePath, tinybase)
     })
   )
+  // create sidebar, like one below:
+  // [ { prettyName: 'Analytics', indent: 0 }, { prettyName: 'Grafana', indent: 1 }]
+
+  // const sidebar =
+
+  store.addRow("wiki", {
+    wikiFolderPath: wikiFolderPath,
+  })
+
   console.log(tinybase.getStore().getTables(), "tables are loaded")
 }
 
@@ -66,6 +71,7 @@ export async function getTopicsSidebar() {
   Object.entries(topics).forEach(([key, value]) => {
     // console.log(key, "key")
     console.log(value, "value")
+    // TODO: fix type, go through Cell to value?
     sidebarTopics.push(value.prettyName)
   })
   return sidebarTopics
@@ -151,11 +157,20 @@ type Link = {
 // move the types to some shared package so types can be used
 // in both here and electron-web
 export async function updateWiki(wiki: Wiki) {
-  console.log(wiki, "wiki")
-
+  // console.log(wiki, "wiki")
   // assumes there is only one row in wiki table
   // and that the row exists
-  store.setRow("wiki", "0", {
-    wikiFolderPath: wiki.wikiFolderPath,
-  })
+  // store.setRow("wiki", "0", {
+  //   wikiFolderPath: wiki.wikiFolderPath,
+  // })
+  // store.setRow('topics', '')
+}
+
+// TODO: strip from prod builds
+// this function runs on every refresh of electron-web
+// or if you edit code anywhere in preload
+// can use it to run/test some code from electron node.js side more easily
+export async function devTest() {
+  const topics = store.getTable("topics")
+  console.log(topics.length, "topics")
 }

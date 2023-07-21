@@ -1,8 +1,10 @@
 import { For } from "solid-js"
 import { useUser } from "../GlobalContext/user"
+import { useWiki } from "../GlobalContext/wiki"
 
 export default function Sidebar() {
   const user = useUser()
+  const wiki = useWiki()
 
   return (
     <>
@@ -44,16 +46,17 @@ export default function Sidebar() {
               Topics
             </div>
             <div class="pl-6 opacity-70 flex flex-col gap-2 border-l border-opacity-30 border-slate-100">
-              <For each={user.user.sidebarTopics}>
+              <For each={wiki.wiki.sidebarTopics}>
                 {(topic) => {
+                  // TODO: use indent levels to make pretty sidebar
                   return (
                     <div
                       class="cursor-pointer hover:text-green-400 hover:opacity-90 transition-all"
                       onClick={() => {
-                        user.setTopicToEdit(topic)
+                        // user.setTopicToEdit(topic)
                       }}
                     >
-                      {topic}
+                      {topic.prettyName}
                     </div>
                   )
                 }}

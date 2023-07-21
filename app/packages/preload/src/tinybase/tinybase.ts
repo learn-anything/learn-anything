@@ -11,6 +11,7 @@ export function setupTinybaseStore() {
     wiki: {
       wikiFolderPath: { type: "string" }, // path to wiki folder connected to the wiki
       openTopic: { type: "string" }, // topicName of open topic
+      sidebarTopics: { type: "string" }, // JSON.stringify of SidebarTopic[]
     },
     topics: {
       topicName: { type: "string" }, // unique

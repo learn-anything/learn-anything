@@ -12,16 +12,17 @@ import { unwrap } from "solid-js/store"
 
 type Wiki = {
   wikiFolderPath: string
-  openTopic: OpenTopic
-  // sidebar: any // TODO: model how to do sidebar, derive it or store?
-  // topics: Topic[]
+  openTopic: Topic
+  sidebarTopics: SidebarTopic[] // alphebetically sorted
+  // topics: Topic[] // TODO: should this be added to store or just kept in tinybase?
 }
 
-// type Topic = {
-//   name: string
-// }
+type SidebarTopic = {
+  prettyName: string // assumed unique, used to switch openTopic on click
+  indent: number // indent level
+}
 
-type OpenTopic = {
+type Topic = {
   topicName: string
   filePath: string
   fileContent: string
@@ -56,6 +57,7 @@ export default function createWikiState() {
       filePath: "",
       fileContent: "",
     },
+    sidebarTopics: [],
   })
 
   // on first load, get last opened topic
@@ -68,18 +70,19 @@ export default function createWikiState() {
   createEffect(async () => {
     // when store changes, delta includes new store value
     const delta = getDelta()
-    console.log(delta, "delta")
+    // console.log(delta, "delta")
 
     // TODO: assume delta is an array of length 1
     // in what case can it be more than 1?
     const newStore = delta[0].value
-    console.log(newStore, "new store")
+    // console.log(newStore, "new store")
 
     // TODO: how to know what exactly changed in between deltas
 
     // for now load entire new store into tinybase
     // TODO: should I await this?
     // TODO: don't do `as ..` type
+    // TODO: don't run updateWiki on first load
     await updateWiki(unwrap(newStore as Wiki))
   })
 
