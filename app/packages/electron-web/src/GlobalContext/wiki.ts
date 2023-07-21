@@ -3,6 +3,7 @@ import { createStore } from "solid-js/store"
 import { captureStoreUpdates } from "@solid-primitives/deep"
 import { updateWiki, getTopicsSidebar } from "#preload"
 import { unwrap } from "solid-js/store"
+import { Wiki } from "../../../../types/wiki"
 
 // see app/packages/preload/src/tinybase/tinybase.ts
 // to understand schema of tinybase store

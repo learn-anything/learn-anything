@@ -1,3 +1,7 @@
+// TODO: VSCode does not automatically let you suggest imports from this file
+// for some reason, fix this as it's super useful to quickly import
+// also relative imports like '../../' should go too
+
 export type Wiki = {
   wikiFolderPath: string
   openTopic: Topic

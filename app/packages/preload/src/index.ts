@@ -13,6 +13,7 @@ import { createQueries } from "tinybase/cjs"
 import { setupTinybaseStore } from "./tinybase/tinybase"
 import { markdownFilePaths, saveFileToTinybase } from "./tinybase/wiki"
 import * as path from "path" // TODO: is this ok import? tree shaken?
+import { SidebarTopic } from "../../../types/wiki"
 
 // get in-memory javascript store persisted to sqlite
 const tinybase = setupTinybaseStore()
@@ -68,7 +69,7 @@ export async function getTopicsSidebar() {
   // TODO: there should be a way to return values for a given column only
 
   const topics = tinybase.getStore().getTable("topics")
-  let sidebarTopics: any[] = []
+  let sidebarTopics: SidebarTopic[] = []
   Object.entries(topics).forEach(([key, value]) => {
     // console.log(key, "key")
     // console.log(value, "value")
