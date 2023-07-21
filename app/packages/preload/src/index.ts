@@ -18,6 +18,7 @@ import * as path from "path" // TODO: is this ok import? tree shaken?
 const tinybase = setupTinybaseStore()
 const store = tinybase.getStore()
 
+// TODO: remove from prod builds
 // this function assumes `pnpm dev-setup` was ran
 // and there is `seed` folder present at root
 // it will load all the .md files from seed/wiki/nikita into tinybase
@@ -109,9 +110,11 @@ export async function getUserDetails() {
   }
 }
 
+// TODO: remove from prod builds
 // delete all tables from tinybase
 export async function clearTinybase() {
   store.delTables()
+  console.log("all tables deleted")
 }
 
 export async function initUserStore() {
@@ -166,7 +169,7 @@ export async function updateWiki(wiki: Wiki) {
   // store.setRow('topics', '')
 }
 
-// TODO: strip from prod builds
+// TODO: remove from prod builds
 // this function runs on every refresh of electron-web
 // or if you edit code anywhere in preload
 // can use it to run/test some code from electron node.js side more easily
