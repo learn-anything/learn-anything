@@ -88,12 +88,12 @@ export async function getTopic(prettyName: string) {
   const queries = createQueries(tinybase.getStore())
 
   queries.setQueryDefinition("getTopic", "topics", ({ select, where }) => {
-    select("fileContent")
+    select("*")
     where("prettyName", prettyName)
   })
 
-  const fileContent = queries.getResultRow("getTopic", "fileContent")
-  console.log(fileContent, "file content")
+  const topic = queries.getResultRow("getTopic", "how to get row id..")
+  console.log(topic, "topic")
 }
 
 export async function getUserDetails() {
@@ -140,7 +140,7 @@ export async function updateWiki(wiki: Wiki) {
 
 // TODO: remove from prod builds
 // this function runs on every refresh of electron-web
-// or if you edit code anywhere in preload
+// edit code anywhere in preload/main or do cmd+r in app
 // can use it to run/test some code from electron node.js side more easily
 export async function devTest() {
   // await getTopicsSidebar()
