@@ -13,7 +13,7 @@ import { createQueries } from "tinybase/cjs"
 import { setupTinybaseStore } from "./tinybase/tinybase"
 import { markdownFilePaths, saveFileToTinybase } from "./tinybase/wiki"
 import * as path from "path" // TODO: is this ok import? tree shaken?
-import { SidebarTopic } from "../../../types/wiki"
+import { SidebarTopic, Wiki } from "../../../types/wiki"
 
 // get in-memory javascript store persisted to sqlite
 const tinybase = setupTinybaseStore()
@@ -77,30 +77,23 @@ export async function getTopicsSidebar() {
     // TODO: fix type, go through Cell to value?
     sidebarTopics.push({ prettyName: value.prettyName, indent: 0 })
   })
-  console.log(sidebarTopics)
+  // console.log(sidebarTopics)
   return sidebarTopics
 }
 
-export async function getTopic(topic: string) {
+// TODO: potentially can load entire state of wiki/tinybase into solid store
+// to avoid having to do this
+// given prettyName of topic, return full topic details
+export async function getTopic(prettyName: string) {
   const queries = createQueries(tinybase.getStore())
 
-  queries.setQueryDefinition(
-    "getFileContent",
-    "topics",
-    ({ select, where }) => {
-      select("fileContent")
-      where("prettyName", topic)
-    }
-  )
+  queries.setQueryDefinition("getTopic", "topics", ({ select, where }) => {
+    select("fileContent")
+    where("prettyName", prettyName)
+  })
 
-  const fileContent = queries.getResultRow("getFileContent", "fileContent")
-  // const fileContent = queries.getResultTable("getFileContent")
+  const fileContent = queries.getResultRow("getTopic", "fileContent")
   console.log(fileContent, "file content")
-  // console.log(Object.entries(fileContent)[1])
-
-  // return {
-  //   fileContent: fileContent,
-  // }
 }
 
 export async function getUserDetails() {
@@ -132,33 +125,6 @@ export async function initUserStore() {
   }
 }
 
-type Wiki = {
-  wikiFolderPath: string
-  openTopic: OpenTopic
-}
-
-type OpenTopic = {
-  topicName: string
-  filePath: string
-  fileContent: string
-  topicContent: string
-  prettyName: string
-  notes: Note[]
-  links: Link[]
-}
-
-type Note = {
-  content: string
-  url: string
-  public: boolean
-}
-
-type Link = {
-  title: string
-  url: string
-  public: boolean
-}
-
 // TODO: import type Wiki currently defined in GlobalContext/wiki.ts
 // move the types to some shared package so types can be used
 // in both here and electron-web
@@ -177,5 +143,6 @@ export async function updateWiki(wiki: Wiki) {
 // or if you edit code anywhere in preload
 // can use it to run/test some code from electron node.js side more easily
 export async function devTest() {
-  await getTopicsSidebar()
+  // await getTopicsSidebar()
+  await getTopic("SQLite")
 }

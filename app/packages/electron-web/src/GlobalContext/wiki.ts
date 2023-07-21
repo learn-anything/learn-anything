@@ -32,7 +32,7 @@ export default function createWikiState() {
     // TODO:
     const sidebarTopics = await getTopicsSidebar()
     setWiki({ sidebarTopics: sidebarTopics })
-    console.log(sidebarTopics, "sidebar")
+    // console.log(sidebarTopics, "sidebar")
   })
 
   const getDelta = captureStoreUpdates(wiki)
@@ -64,6 +64,10 @@ export default function createWikiState() {
     // actions
     setWikiFolderPath: (state: string) => {
       return setWiki({ wikiFolderPath: state })
+    },
+    setOpenTopic: (pretyName: string) => {
+      console.log(pretyName)
+      // return setWiki({ wikiFolderPath: state })
     },
   }
 }
