@@ -42,6 +42,7 @@ export async function syncWikiFromSeed() {
     })
   )
   // create sidebar, like one below:
+
   // [ { prettyName: 'Analytics', indent: 0 }, { prettyName: 'Grafana', indent: 1 }]
 
   // const sidebar =
