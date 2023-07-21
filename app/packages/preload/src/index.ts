@@ -118,3 +118,11 @@ export async function initUserStore() {
     sidebarTopics,
   }
 }
+
+// TODO: import type Wiki currently defined in wiki.ts GlobalContext
+// move the types to some shared package so types can be used
+// in both here and electron-web
+export async function updateWiki(wiki: any) {
+  console.log(wiki, "wiki")
+  // store.
+}

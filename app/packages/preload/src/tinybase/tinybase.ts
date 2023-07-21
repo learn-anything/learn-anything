@@ -37,22 +37,25 @@ export interface Topic {
 export function setupTinybaseStore() {
   // define the schema
   const store = createStore().setTablesSchema({
+    wiki: {
+      wikiFolderPath: { type: "string" }, // path to wiki folder connected to the wiki
+      openTopic: { type: "string" }, // topicName of open topic
+    },
     topics: {
-      id: { type: "string" },
+      topicName: { type: "string" }, // unique
       filePath: { type: "string" },
       fileContent: { type: "string" },
-      topicName: { type: "string" },
-      topicContent: { type: "string" },
+      topicContent: { type: "string" }, // markdown content of topic
       prettyName: { type: "string" },
     },
     notes: {
-      topicId: { type: "string" },
+      topicId: { type: "string" }, // topic this note is attached to
       content: { type: "string" },
       url: { type: "string" },
       public: { type: "boolean" },
     },
     links: {
-      topicId: { type: "string" },
+      topicId: { type: "string" }, // topic this link is attached to
       title: { type: "string" },
       url: { type: "string" },
       public: { type: "boolean" },

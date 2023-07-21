@@ -9,7 +9,7 @@ export default function Settings() {
     <>
       <div class="w-full flex items-center justify-center h-full">
         <div class="h-full font-bold border-r dark:border-slate-800 border-opacity-30 p-8">
-          <div>Editor</div>
+          <div>Settings</div>
         </div>
         <div class="w-full flex items-start h-full p-16 gap-2">
           <div

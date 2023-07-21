@@ -1,23 +1,30 @@
 import { createContext, createEffect, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 import { captureStoreUpdates } from "@solid-primitives/deep"
+import { updateWiki } from "#preload"
+
+// see app/packages/preload/src/tinybase/tinybase.ts
+// to understand schema of tinybase store
+// this solid store is a subset of tinybase store
+// changes made to solid store are synced to tinybase store
+// which in turn writes to sqlite
 
 type Wiki = {
-  // sidebar: any // TODO: model how to do sidebar, derive it or store?
-  wikiFolderPath: string // path to wiki folder connected to the wiki
-  topics: Topic[]
+  wikiFolderPath: string
   openTopic: OpenTopic
+  // sidebar: any // TODO: model how to do sidebar, derive it or store?
+  // topics: Topic[]
 }
 
-type Topic = {
-  name: string
-}
+// type Topic = {
+//   name: string
+// }
 
 type OpenTopic = {
+  topicName: string
   filePath: string
   fileContent: string
-  topicName: string
-  topicContent: string // markdown content of topic
+  topicContent: string
   prettyName: string
   notes: Note[]
   links: Link[]
@@ -58,7 +65,7 @@ export default function createWikiState() {
 
   const getDelta = captureStoreUpdates(wiki)
 
-  createEffect(() => {
+  createEffect(async () => {
     // when store changes, delta includes new store value
     const delta = getDelta()
     console.log(delta, "delta")
@@ -69,6 +76,12 @@ export default function createWikiState() {
     console.log(newStore, "new store")
 
     // TODO: how to know what exactly changed in between deltas
+
+    // for now load entire new store into tinybase
+    // TODO: I can't pass a Proxy object
+    // I have to turn it into plain object?
+    // also should I await this?
+    // await updateWiki(newStore)
   })
 
   // TODO: maybe there is way to generate the actions to update one value
