@@ -85,15 +85,15 @@ export async function getTopicsSidebar() {
 // to avoid having to do this
 // given prettyName of topic, return full topic details
 export async function getTopic(prettyName: string) {
-  const queries = createQueries(tinybase.getStore())
+  const topics = tinybase.getStore().getTable("topics")
 
-  queries.setQueryDefinition("getTopic", "topics", ({ select, where }) => {
-    select("*")
-    where("prettyName", prettyName)
+  const topic = Object.entries(topics).find((topic) => {
+    return topic[1].prettyName === prettyName
   })
-
-  const topic = queries.getResultRow("getTopic", "how to get row id..")
-  console.log(topic, "topic")
+  if (topic) {
+    console.log(topic[1])
+    return topic[1]
+  }
 }
 
 export async function getUserDetails() {

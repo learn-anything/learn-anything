@@ -1,7 +1,7 @@
 import { createContext, createEffect, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 import { captureStoreUpdates } from "@solid-primitives/deep"
-import { updateWiki, getTopicsSidebar } from "#preload"
+import { updateWiki, getTopicsSidebar, getTopic } from "#preload"
 import { unwrap } from "solid-js/store"
 import { Wiki } from "../../../../types/wiki"
 
@@ -65,9 +65,10 @@ export default function createWikiState() {
     setWikiFolderPath: (state: string) => {
       return setWiki({ wikiFolderPath: state })
     },
-    setOpenTopic: (pretyName: string) => {
-      console.log(pretyName)
-      // return setWiki({ wikiFolderPath: state })
+    setOpenTopic: async (pretyName: string) => {
+      const topic = await getTopic(pretyName)
+      console.log(topic, "topic back")
+      return setWiki({ openTopic: topic })
     },
   }
 }
