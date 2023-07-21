@@ -31,6 +31,10 @@ export async function syncWikiFromSeed() {
   // if it does not return early with message and show error in UI
   // or git clone into seed folder automatically
 
+  store.addRow("wiki", {
+    wikiFolderPath: wikiFolderPath,
+  })
+
   // get all file paths of .md files inside the folder
   const filePaths = await markdownFilePaths(wikiFolderPath)
   // save each file to tinybase
@@ -39,9 +43,7 @@ export async function syncWikiFromSeed() {
       await saveFileToTinybase(wikiFolderPath, filePath, tinybase)
     })
   )
-
-  console.log(tinybase.getStore().getTables(), "Tables are loaded")
-  await tinybase.save() // and saved to sqlite
+  console.log(tinybase.getStore().getTables(), "tables are loaded")
 }
 
 // load all the .md files from folder path into tinybase
@@ -104,7 +106,6 @@ export async function getUserDetails() {
 // delete all tables from tinybase
 export async function clearTinybase() {
   store.delTables()
-  tinybase.save()
 }
 
 export async function initUserStore() {
@@ -119,10 +120,42 @@ export async function initUserStore() {
   }
 }
 
-// TODO: import type Wiki currently defined in wiki.ts GlobalContext
+type Wiki = {
+  wikiFolderPath: string
+  openTopic: OpenTopic
+}
+
+type OpenTopic = {
+  topicName: string
+  filePath: string
+  fileContent: string
+  topicContent: string
+  prettyName: string
+  notes: Note[]
+  links: Link[]
+}
+
+type Note = {
+  content: string
+  url: string
+  public: boolean
+}
+
+type Link = {
+  title: string
+  url: string
+  public: boolean
+}
+
+// TODO: import type Wiki currently defined in GlobalContext/wiki.ts
 // move the types to some shared package so types can be used
 // in both here and electron-web
-export async function updateWiki(wiki: any) {
+export async function updateWiki(wiki: Wiki) {
   console.log(wiki, "wiki")
-  // store.
+
+  // assumes there is only one row in wiki table
+  // and that the row exists
+  store.setRow("wiki", "0", {
+    wikiFolderPath: wiki.wikiFolderPath,
+  })
 }

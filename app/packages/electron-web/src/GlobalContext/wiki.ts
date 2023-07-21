@@ -2,6 +2,7 @@ import { createContext, createEffect, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 import { captureStoreUpdates } from "@solid-primitives/deep"
 import { updateWiki } from "#preload"
+import { unwrap } from "solid-js/store"
 
 // see app/packages/preload/src/tinybase/tinybase.ts
 // to understand schema of tinybase store
@@ -46,7 +47,6 @@ type Link = {
 export default function createWikiState() {
   const [wiki, setWiki] = createStore<Wiki>({
     wikiFolderPath: "test/path", // TODO: temp, load from tinybase
-    topics: [],
     openTopic: {
       topicName: "",
       prettyName: "",
@@ -78,10 +78,9 @@ export default function createWikiState() {
     // TODO: how to know what exactly changed in between deltas
 
     // for now load entire new store into tinybase
-    // TODO: I can't pass a Proxy object
-    // I have to turn it into plain object?
-    // also should I await this?
-    // await updateWiki(newStore)
+    // TODO: should I await this?
+    // TODO: don't do `as ..` type
+    await updateWiki(unwrap(newStore as Wiki))
   })
 
   // TODO: maybe there is way to generate the actions to update one value

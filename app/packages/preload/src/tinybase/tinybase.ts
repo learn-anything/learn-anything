@@ -2,35 +2,6 @@ import { createStore } from "tinybase/cjs"
 import { createSqlite3Persister } from "tinybase/cjs/persisters/persister-sqlite3"
 import { Database } from "sqlite3"
 
-export interface Link {
-  title: string
-  url: string
-  description: string | null
-  public: boolean
-  related: RelatedLink[]
-}
-
-export interface RelatedLink {
-  title: string
-  url: string
-}
-
-export interface Note {
-  content: string
-  public: boolean
-  url: string | null
-}
-
-export interface Topic {
-  name: string
-  content: string
-  parentTopic: string | null
-  public: boolean
-  notes: Note[]
-  links: Link[]
-  prettyName: string
-}
-
 // creates tinybase store
 // in-memory javascript store persisted to sqlite
 // https://tinybase.org
@@ -67,11 +38,13 @@ export function setupTinybaseStore() {
     mode: "tabular",
     tables: {
       load: {
+        wiki: "wiki",
         topics: "topics",
         notes: "notes",
         links: "links",
       },
       save: {
+        wiki: "wiki",
         topics: "topics",
         notes: "notes",
         links: "links",

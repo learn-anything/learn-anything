@@ -4,7 +4,37 @@ import { readFile } from "fs/promises"
 import * as path from "path"
 import { dirname } from "path"
 import { Persister, Store } from "tinybase/cjs"
-import { Link, Note, RelatedLink } from "./tinybase"
+
+// TODO: move below types into shared types/ folder
+
+type Link = {
+  title: string
+  url: string
+  description: string | null
+  public: boolean
+  related: RelatedLink[]
+}
+
+type RelatedLink = {
+  title: string
+  url: string
+}
+
+type Note = {
+  content: string
+  public: boolean
+  url: string | null
+}
+
+type Topic = {
+  name: string
+  content: string
+  parentTopic: string | null
+  public: boolean
+  notes: Note[]
+  links: Link[]
+  prettyName: string
+}
 
 // TODO: add proper test cases and different files
 // currently it fails to do right thing on many files
@@ -85,9 +115,9 @@ export async function saveFileToTinybase(
 
   tinybase.getStore().startTransaction()
   const topicId = tinybase.getStore().addRow("topics", {
+    topicName: topicName,
     filePath: filePath,
     fileContent: fileContent,
-    topicName: topicName,
     topicContent: content,
     prettyName: prettyName,
   })!
