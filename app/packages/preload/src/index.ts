@@ -72,11 +72,7 @@ export async function getTopicsSidebar() {
   const topics = tinybase.getStore().getTable("topics")
   let sidebarTopics: SidebarTopic[] = []
   Object.entries(topics).forEach(([key, value]) => {
-    // console.log(key, "key")
-    // console.log(value, "value")
-
-    // TODO: fix type, go through Cell to value?
-    sidebarTopics.push({ prettyName: value.prettyName, indent: 0 })
+    sidebarTopics.push({ prettyName: value.prettyName.toString(), indent: 0 })
   })
   console.log(sidebarTopics)
   return sidebarTopics
@@ -86,7 +82,9 @@ export async function getTopicsSidebar() {
 // to avoid having to do this
 // given prettyName of topic, return full topic details
 export async function getTopic(prettyName: string) {
-  const topics = tinybase.getStore().getTable("topics")
+  // const topics = tinybase.getStore().getTable("topics")
+  const topics = store.getTable("topics")
+  console.log(topics, "topics!!")
 
   const topic = Object.entries(topics).find((topic) => {
     return topic[1].prettyName === prettyName

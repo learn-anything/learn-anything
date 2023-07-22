@@ -1,11 +1,5 @@
-import { createEffect, createSignal, onCleanup, onMount } from "solid-js"
-import {
-  Uri,
-  languages,
-  editor as mEditor,
-  KeyMod,
-  KeyCode,
-} from "monaco-editor"
+import { KeyCode, KeyMod, editor as mEditor } from "monaco-editor"
+import { createEffect, onCleanup, onMount } from "solid-js"
 import { useWiki } from "../GlobalContext/wiki"
 
 export default function Editor() {
@@ -56,8 +50,10 @@ export default function Editor() {
   })
   onCleanup(() => editor?.dispose())
 
-  onMount(() => {
-    // props.onEditorReady?.(editor, { Uri, editor: mEditor });
+  createEffect(() => {
+    if (wiki.wiki.openTopic) {
+      editor.setValue(wiki.wiki.openTopic.fileContent)
+    }
   })
 
   return <div class="h-full w-full min-h-0 min-w-0 flex-1" ref={parent} />

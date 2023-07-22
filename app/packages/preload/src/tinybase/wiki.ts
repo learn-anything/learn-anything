@@ -3,7 +3,7 @@ import * as fs from "fs"
 import { readFile } from "fs/promises"
 import * as path from "path"
 import { dirname } from "path"
-import { Persister, Store } from "tinybase/cjs"
+import { Cell, Persister, Store } from "tinybase/cjs"
 import { Link, Note } from "../../../../types/wiki"
 
 type RelatedLink = {
