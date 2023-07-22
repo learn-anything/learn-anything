@@ -28,13 +28,12 @@ export default function DevToolsPanel() {
       </style>
       <div
         id={minimiseDevTools() ? "OpenedDevTools" : "ClosedDevTools"}
-        class="fixed flex flex-col items-center p-4 bottom-5 transition-all duration-500 right-5 rounded-xl border-slate-400 border border-opacity-50 bg-[#222222] overflow-hidden"
+        class="fixed flex flex-col items-center p-4 bottom-5 transition-all right-5 rounded-xl border-slate-400 border border-opacity-50 bg-[#222222] overflow-hidden"
       >
         <div
           class="absolute top-3 right-3 cursor-pointer"
           onClick={() => {
             setMinimiseDevTools(!minimiseDevTools())
-            console.log(minimiseDevTools(), "devtools")
           }}
         >
           <Icon name="Minimise" />

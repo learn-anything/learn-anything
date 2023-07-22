@@ -29,6 +29,8 @@ export async function syncWikiFromSeed() {
   const repoDir = fileDirectoryPath.replace("/app/packages/preload/dist", "")
   const wikiFolderPath = path.join(repoDir, "seed/wiki/nikita")
 
+  console.log(wikiFolderPath, "wiki folder path")
+
   // TODO: check this folder exists before running below
   // if it does not return early with message and show error in UI
   // or git clone into seed folder automatically
