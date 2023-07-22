@@ -1,5 +1,5 @@
 interface Props {
-  name: "Bug"
+  name: "Bug" | "Close" | "Minimise"
   width?: string
   height?: string
   color?: string
@@ -7,6 +7,64 @@ interface Props {
 
 export default function Icon(props: Props) {
   switch (props.name) {
+    case "Close":
+      return (
+        <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M17.25 6.75L6.75 17.25"
+          />
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M6.75 6.75L17.25 17.25"
+          />
+        </svg>
+      )
+    case "Minimise":
+      return (
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10.25 18.25V13.75H5.75"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M13.75 5.75V10.25H18.25"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M4.75 19.25L10.25 13.75"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M19.25 4.75L13.75 10.25"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      )
     case "Bug":
       return (
         <svg
