@@ -17,20 +17,14 @@ export default function Editor() {
   // Initialize Monaco
   onMount(() => {
     mEditor.defineTheme("dark", {
-      base: "vs", // can also be vs-dark or hc-black
+      base: "vs-dark", // can also be vs-dark or hc-black
       inherit: true, // can also be false to completely replace the builtin rules
-      rules: [
-        {
-          token: "comment",
-          foreground: "ffa500",
-          fontStyle: "italic underline",
-        },
-        { token: "comment.js", foreground: "008800", fontStyle: "bold" },
-        { token: "comment.css", foreground: "0000ff" }, // will inherit fontStyle from `comment` above
-      ],
+      rules: [],
       colors: {
         "editor.background": "#222222",
         "editor.foreground": "#FFFFFF",
+        "editorLineNumber.foreground": "#222222",
+        "editorLineNumber.activeForeground": "#222222",
       },
     })
 
