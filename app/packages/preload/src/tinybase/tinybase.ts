@@ -19,6 +19,7 @@ export function setupTinybaseStore() {
       fileContent: { type: "string" },
       topicContent: { type: "string" }, // markdown content of topic
       prettyName: { type: "string" },
+      parentTopic: { type: "string" }, // topicName of parent topic
     },
     notes: {
       topicId: { type: "string" }, // topic this note is attached to

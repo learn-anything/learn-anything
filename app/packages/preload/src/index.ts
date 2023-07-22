@@ -78,7 +78,7 @@ export async function getTopicsSidebar() {
     // TODO: fix type, go through Cell to value?
     sidebarTopics.push({ prettyName: value.prettyName, indent: 0 })
   })
-  // console.log(sidebarTopics)
+  console.log(sidebarTopics)
   return sidebarTopics
 }
 
@@ -92,7 +92,7 @@ export async function getTopic(prettyName: string) {
     return topic[1].prettyName === prettyName
   })
   if (topic) {
-    console.log(topic[1])
+    // console.log(topic[1])
     return topic[1]
   }
 }

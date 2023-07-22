@@ -4,36 +4,11 @@ import { readFile } from "fs/promises"
 import * as path from "path"
 import { dirname } from "path"
 import { Persister, Store } from "tinybase/cjs"
-
-// TODO: move below types into shared types/ folder
-
-type Link = {
-  title: string
-  url: string
-  description: string | null
-  public: boolean
-  related: RelatedLink[]
-}
+import { Link, Note } from "../../../../types/wiki"
 
 type RelatedLink = {
   title: string
   url: string
-}
-
-type Note = {
-  content: string
-  public: boolean
-  url: string | null
-}
-
-type Topic = {
-  name: string
-  content: string
-  parentTopic: string | null
-  public: boolean
-  notes: Note[]
-  links: Link[]
-  prettyName: string
 }
 
 // TODO: add proper test cases and different files
@@ -120,6 +95,7 @@ export async function saveFileToTinybase(
     fileContent: fileContent,
     topicContent: content,
     prettyName: prettyName,
+    parentTopic: parentTopic ? parentTopic : "",
   })!
 
   // only run if ## Links is present
