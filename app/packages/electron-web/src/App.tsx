@@ -46,7 +46,7 @@ export default function App() {
         <WikiProvider value={wiki}>
           <div
             style={{ width: "100vw", height: "100vh" }}
-            class="flex items-center"
+            class="flex items-center bg-[#222222]"
           >
             <Show when={user.user.showSignIn}>
               <SignInPage />

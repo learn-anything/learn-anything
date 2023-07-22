@@ -10,7 +10,7 @@ export default function DevToolsPanel() {
   })
 
   return (
-    <div class="fixed flex flex-col items-center p-4 bottom-5 right-5 rounded-xl border-slate-400 border border-opacity-50 bg-transparent w-80 h-80">
+    <div class="fixed flex flex-col items-center p-4 bottom-5 right-5 rounded-xl border-slate-400 border border-opacity-50 bg-[#222222] w-80 h-80">
       <div class="flex items-center text-lg justify-center font-semibold w-full">
         DevTools
       </div>
