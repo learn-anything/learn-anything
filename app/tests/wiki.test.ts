@@ -21,7 +21,7 @@ function parseMarkdownFile(filePath: string) {
 
 function getWikiFolderPath() {
   let fileDirectoryPath = __dirname
-  return fileDirectoryPath.replace("/app/test", "/seed/wiki/nikita")
+  return fileDirectoryPath.replace("/app/tests", "/seed/wiki/nikita")
 }
 
 test("parse markdown file", async () => {
