@@ -6,9 +6,11 @@ import SignInPage from "./components/SignInPage"
 import Settings from "./components/Settings"
 import DevToolsPanel from "./components/DevToolsPanel"
 import CommandPalette from "./components/CommandPalette"
+import createWikiState, { WikiProvider } from "./GlobalContext/wiki"
 
 export default function App() {
   const user = createUserState()
+  const wiki = createWikiState()
 
   return (
     <>
@@ -41,36 +43,38 @@ export default function App() {
       `}
       </style>
       <UserProvider value={user}>
-        <div
-          style={{ width: "100vw", height: "100vh" }}
-          class="flex items-center"
-        >
-          <Show when={user.user.showSignIn}>
-            <SignInPage />
-          </Show>
-          <Sidebar />
-          <Editor />
-          <Show when={!user.user.wikiFolderPath || user.user.showSettings}>
-            <div class="absolute z-10 flex items-center justify-center top-0 left-0 w-screen h-screen">
-              <div
-                id="SettingsBackDrop"
-                class="absolute top-0 left-0 w-full h-full bg-neutral-950 bg-opacity-50 bg-blur-lg "
-              />
-              <div
-                id="Settings"
-                class="w-4/5 h-5/6 z-20 dark:bg-neutral-900 bg-gray-100 rounded-3xl border border-opacity-50 border-slate-200 dark:border-slate-800"
-              >
-                <Settings />
+        <WikiProvider value={wiki}>
+          <div
+            style={{ width: "100vw", height: "100vh" }}
+            class="flex items-center bg-[#222222]"
+          >
+            <Show when={user.user.showSignIn}>
+              <SignInPage />
+            </Show>
+            <Sidebar />
+            <Editor />
+            <Show when={!wiki.wiki.wikiFolderPath || user.user.showSettings}>
+              <div class="absolute z-10 flex items-center justify-center top-0 left-0 w-screen h-screen">
+                <div
+                  id="SettingsBackDrop"
+                  class="absolute top-0 left-0 w-full h-full bg-neutral-950 bg-opacity-50 bg-blur-lg "
+                />
+                <div
+                  id="Settings"
+                  class="w-4/5 h-5/6 z-20 dark:bg-neutral-900 bg-gray-100 rounded-3xl border border-opacity-50 border-slate-200 dark:border-slate-800"
+                >
+                  <Settings />
+                </div>
               </div>
-            </div>
+            </Show>
+            <Show when={user.user.showCommandPalette}>
+              <CommandPalette />
+            </Show>
+          </div>
+          <Show when={import.meta.env.MODE === "development"}>
+            <DevToolsPanel />
           </Show>
-          <Show when={user.user.showCommandPalette}>
-            <CommandPalette />
-          </Show>
-        </div>
-        <Show when={import.meta.env.MODE === "development"}>
-          <DevToolsPanel />
-        </Show>
+        </WikiProvider>
       </UserProvider>
     </>
   )

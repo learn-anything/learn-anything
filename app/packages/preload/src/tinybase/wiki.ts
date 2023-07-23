@@ -3,8 +3,13 @@ import * as fs from "fs"
 import { readFile } from "fs/promises"
 import * as path from "path"
 import { dirname } from "path"
-import { Persister, Store } from "tinybase/cjs"
-import { Link, Note, RelatedLink } from "./tinybase"
+import { Cell, Persister, Store } from "tinybase/cjs"
+import { Link, Note } from "../../../../types/wiki"
+
+type RelatedLink = {
+  title: string
+  url: string
+}
 
 // TODO: add proper test cases and different files
 // currently it fails to do right thing on many files
@@ -85,10 +90,12 @@ export async function saveFileToTinybase(
 
   tinybase.getStore().startTransaction()
   const topicId = tinybase.getStore().addRow("topics", {
+    topicName: topicName,
     filePath: filePath,
     fileContent: fileContent,
-    topicName: topicName,
     topicContent: content,
+    prettyName: prettyName,
+    parentTopic: parentTopic ? parentTopic : "",
   })!
 
   // only run if ## Links is present

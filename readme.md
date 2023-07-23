@@ -71,9 +71,9 @@ One of the actions is `Seed TinyBase`. This will seed your local TinyBase store/
 
 Read [app/packages/preload/src/index.ts](app/packages/preload/src/index.ts) file for details. `syncWikiFromSeed` is the function.
 
-### Issues with TinyBase
+### Current issues
 
-There is `Load Sidebar` action that runs `getTopicsSidebar`. This action is currently returning empty object when it should be returning contents of `topics` table.
+Trying to make Solid stores sync up with TinyBase store.
 
 <!-- ```
 pnpm app:tinybase
