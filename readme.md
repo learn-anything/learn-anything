@@ -2,6 +2,14 @@
 
 Explanation of vision and future [here](https://wiki.nikiv.dev/ideas/learn-anything).
 
+Current focus is on making [Electron app](#run-electron-app) working. Essentially an app like [Obsidian](https://obsidian.md/).
+
+Reference [file structure](#file-structure) to make sense of how code is laid out in the repo.
+
+Read [setup](#setup) to get started with development.
+
+Sharing [current tasks in readme](#tasks) until MVP is released. Then proper issue structure + GitHub is setup.
+
 Ask questions on [Discord](https://discord.com/invite/bxtD8x6aNF) if interested in developing the project or you get issues with setup.
 
 ## File structure
@@ -197,28 +205,26 @@ If you are interested in helping out, please join [Discord](https://discord.com/
 
 The project is incredibly ambitious once it works.
 
-## Big goals
+## Tasks
 
-### Editor support
+> sorted by priority
 
-Electron app should be close to [Obsidian](https://obsidian.md/)/[Reflect](https://reflect.app/).
+- current mono repo structure is a mess. trying to make
+- electron app close to [Obsidian](https://obsidian.md/)/[Reflect](https://reflect.app/) in UX
+  - be able to edit markdown files, show sidebar of files/folders on the left
+  - sync up with file system
+- everything nicely persisted to tinybase with solid.js store syncing working well
 
-Be able to edit markdown files, show sidebar of files/folders on the left.
-
-Text editor uses [Solid CodeMirror](https://github.com/riccardoperra/solid-codemirror). Similar to [CodeImage project](https://github.com/riccardoperra/codeimage).
-
-### Local first
-
-[TinyBase](https://tinybase.org/) used in Electron app to persist everything.
-
-## Code inspirations
-
-[Inlang](https://github.com/inlang/inlang), [CodeImage](https://github.com/riccardoperra/codeimage), [Actual](https://github.com/actualbudget/actual).
-
-Tech stack is [very similar to Inlang](https://github.com/inlang/inlang/blob/main/rfcs/tech-stack/RFC.md).
-
-## Future DX wins
+## Better DX
 
 - Setup [devenv](https://devenv.sh/) to get one command dev env install. Currently we ask to install EdgeDB manually for example.
 - Can potentially [use only one codebase for both web code and electron app renderer code](https://github.com/brillout/vite-plugin-ssr/discussions/1011), using [vite-plugin-ssr](https://vite-plugin-ssr.com/).
   - Electron expects `index.html` file as entry but [Solid Start](https://github.com/solidjs/solid-start) does not provide a `index.html` file. At least I don't know how to make that work so for now its split up. The app is quite different to the website in features so it's even for the best.
+
+## Notes
+
+> to be moved to docs/ and deployed with vitepress later
+
+- Text editor once used [Solid CodeMirror](https://github.com/riccardoperra/solid-codemirror). Similar to [CodeImage project](https://github.com/riccardoperra/codeimage). But there were issues in making it work nicely. So now [Monaco Editor](https://github.com/microsoft/monaco-editor) is used.
+- [Inlang](https://github.com/inlang/inlang), [CodeImage](https://github.com/riccardoperra/codeimage), [Actual](https://github.com/actualbudget/actual) have great code to take inspiration from.
+  - [Inlang's tech stack](https://github.com/inlang/inlang/blob/main/rfcs/tech-stack/RFC.md) specifically is very great.
