@@ -8,13 +8,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@solid-primitives/deep": "^0.2.1",
     "@solid-primitives/event-listener": "^2.2.13",
     "@teamhanko/hanko-elements": "0.5.5-beta",
     "@teamhanko/hanko-frontend-sdk": "^0.8.0",
+    "monaco-editor": "^0.40.0",
     "solid-codemirror": "^2.3.0",
     "solid-js": "^1.7.7"
   },
   "devDependencies": {
+    "monaco-editor-textmate": "^4.0.0",
+    "monaco-textmate": "^3.0.1",
     "typescript": "^5.0.2",
     "vite": "^4.4.0",
     "vite-plugin-solid": "^2.7.0"

@@ -8,6 +8,10 @@ seed
 run.ts
 app/.browserslistrc
 app/.electron-vendors.cache.json
-app/packages/tinybase/learn-anything
-app/learn-anything
 .eslintcache
+
+# local sqlite dbs
+learn-anything
+app/learn-anything
+app/scripts/learn-anything
+app/test/learn-anything

@@ -1,46 +1,36 @@
-import { createContext, onMount, useContext } from "solid-js"
+import { createContext, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
-import { getTopic, getUserDetails } from "#preload"
 
-// holds all the global state of user
-// persisted to sqlite with tinybase
+type User = {
+  showCommandPalette: boolean
+  showSettings: boolean
+  showSignIn: boolean
+}
+
+// TODO: add router
+// currently using this store to do things router should do
+// like `showSignIn`
+
+// global state of user
 export function createUserState() {
-  const [user, setUser] = createStore({
+  const [user, setUser] = createStore<User>({
     showCommandPalette: false,
-    topicToEdit: "SQLite", // topic to show for editing
-    topicContent: "", // markdown content of topic
-    wikiFolderPath: "", // path to wiki folder connected to the wiki
-    showSettings: false, // TODO: should be part of router
-    showSignIn: false, // TODO: should be part of router
-  })
-
-  // on first load of app, get all user state from tinybase
-  onMount(async () => {
-    const userDetails = await getUserDetails()
-    const topic = await getTopic(userDetails.topicToEdit)
-    setUser({
-      topicToEdit: userDetails.topicToEdit,
-      topicContent: topic.fileContent,
-      wikiFolderPath: userDetails.wikiFolderPath,
-    })
+    showSettings: false,
+    showSignIn: false,
   })
 
   return {
     // state
     user,
     // actions
+    setShowCommandPalette: (state: boolean) => {
+      return setUser({ showCommandPalette: state })
+    },
     setShowSettings: (state: boolean) => {
       return setUser({ showSettings: state })
     },
-    // TODO: part of router
     setShowSignIn: (state: boolean) => {
       return setUser({ showSignIn: state })
-    },
-    setWikiFolderPath: (state: string) => {
-      return setUser({ wikiFolderPath: state })
-    },
-    setShowCommandPalette: (state: boolean) => {
-      return setUser({ showCommandPalette: state })
     },
   } as const
 }

@@ -8,7 +8,7 @@
     "jsxImportSource": "solid-js",
     "jsx": "preserve",
     "strict": true,
-    "types": ["solid-start/env"],
+    "types": ["solid-start/env", "bun-types"],
     "baseUrl": "./",
     "paths": {
       "~/*": ["./app/*", "./api/*"]
