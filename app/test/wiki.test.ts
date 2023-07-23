@@ -24,6 +24,10 @@ function getWikiFolderPath() {
 
 test("parse markdown file", () => {
   const wikiFolderPath = getWikiFolderPath()
+  tinybase.getStore().addRow("wiki", {
+    wikiFolderPath: wikiFolderPath,
+  })
+
   expect(wikiFolderPath).toBe(
     "/Users/nikiv/src/app/learn-anything/seed/wiki/nikita"
   )
