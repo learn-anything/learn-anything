@@ -209,7 +209,11 @@ The project is incredibly ambitious once it works.
 
 > sorted by priority
 
-- current mono repo structure is a mess. trying to make
+- current mono repo structure is a mess. trying to make it work nicely
+  - so you can share library/component code
+- setup proper testing
+  - need to make wiki imports robust so write lots of tests cases for different files one can try import
+  - specifically try import Nikita's wiki without issues
 - electron app close to [Obsidian](https://obsidian.md/)/[Reflect](https://reflect.app/) in UX
   - be able to edit markdown files, show sidebar of files/folders on the left
   - sync up with file system
