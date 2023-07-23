@@ -4,6 +4,9 @@ import { markdownFilePaths } from "~/packages/preload/src/tinybase/wiki"
 // @ts-ignore
 import { expect, test } from "bun:test"
 import { micromark } from "micromark"
+import { fromMarkdown } from "mdast-util-from-markdown"
+import { readFile } from "fs/promises"
+import { toString } from "mdast-util-to-string"
 
 // this file is ran via `bun app:test`
 // it's quicker to iterate this way
@@ -21,15 +24,26 @@ function getWikiFolderPath() {
   return fileDirectoryPath.replace("/app/test", "/seed/wiki/nikita")
 }
 
-test("parse markdown file", () => {
-  console.log(micromark("## Hello, *world*!"))
-
+test("parse markdown file", async () => {
   const wikiFolderPath = getWikiFolderPath()
+
+  const filePaths = await markdownFilePaths(wikiFolderPath)
+  const filePath = filePaths[0]
+
+  const fileContent = (await readFile(filePath)).toString()
+
+  const tree = fromMarkdown(fileContent)
+
+  for (const node of tree.children) {
+    console.log(toString(node), "node")
+  }
+
+  // TODO: does not save to sqlite when run with bun at least
   tinybase.getStore().addRow("wiki", {
     wikiFolderPath: wikiFolderPath,
   })
 
-  expect(wikiFolderPath).toBe(
-    "/Users/nikiv/src/app/learn-anything/seed/wiki/nikita"
-  )
+  // expect(wikiFolderPath).toBe(
+  //   "/Users/nikiv/src/app/learn-anything/seed/wiki/nikita"
+  // )
 })

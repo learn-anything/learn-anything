@@ -11,6 +11,7 @@ app/.electron-vendors.cache.json
 .eslintcache
 
 # local sqlite dbs
+learn-anything
 app/learn-anything
 app/scripts/learn-anything
 app/test/learn-anything
