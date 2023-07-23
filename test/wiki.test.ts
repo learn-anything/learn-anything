@@ -1,16 +1,13 @@
 import { describe, it } from "vitest"
 import { setupTinybaseStore } from "~/packages/preload/src/tinybase/tinybase"
 
-const tinybase = setupTinybaseStore()
-const store = tinybase.getStore()
-
 describe("parses", () => {
   it("test folder", (t) => {
     const testFolderPath = getTestFolderPath()
-    console.log(testFolderPath)
+    const tinybase = setupTinybaseStore()
 
     tinybase.getStore().addRow("wiki", {
-      wikiFolderPath: "some/path",
+      wikiFolderPath: testFolderPath,
     })
 
     // const fileContent = (await readFile(filePath)).toString()
