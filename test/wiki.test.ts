@@ -1,5 +1,5 @@
+import { describe, it } from "vitest"
 import { setupTinybaseStore } from "~/packages/preload/src/tinybase/tinybase"
-import { assert, describe, expect, it } from "vitest"
 
 const tinybase = setupTinybaseStore()
 const store = tinybase.getStore()

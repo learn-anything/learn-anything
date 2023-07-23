@@ -8,7 +8,7 @@ Reference [file structure](#file-structure) to make sense of how code is laid ou
 
 Read [setup](#setup) to get started with development.
 
-Sharing [current tasks in readme](#tasks) until MVP is released. Then proper issue structure on GitHub is setup.
+Sharing [current tasks in readme](#tasks) until MVP is released.
 
 Ask questions on [Discord](https://discord.com/invite/bxtD8x6aNF) if interested in developing the project or you get issues with setup.
 
