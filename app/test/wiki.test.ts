@@ -3,12 +3,11 @@ import { markdownFilePaths } from "~/packages/preload/src/tinybase/wiki"
 // TODO: no idea why this errors
 // @ts-ignore
 import { expect, test } from "bun:test"
+import { micromark } from "micromark"
 
-// this file is ran via `pnpm app:test`
-// ideally with a watcher so it reruns on file change
+// this file is ran via `bun app:test`
 // it's quicker to iterate this way
-// editor on left, terminal on right, save file, see output instantly
-// https://bun.sh is used by default as its faster
+// editor on left, terminal on right, save file, see test results instantly
 
 const tinybase = setupTinybaseStore()
 const store = tinybase.getStore()
@@ -23,6 +22,8 @@ function getWikiFolderPath() {
 }
 
 test("parse markdown file", () => {
+  console.log(micromark("## Hello, *world*!"))
+
   const wikiFolderPath = getWikiFolderPath()
   tinybase.getStore().addRow("wiki", {
     wikiFolderPath: wikiFolderPath,

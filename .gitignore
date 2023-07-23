@@ -13,3 +13,4 @@ app/.electron-vendors.cache.json
 # local sqlite dbs
 app/learn-anything
 app/scripts/learn-anything
+app/test/learn-anything
