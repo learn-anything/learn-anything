@@ -54,6 +54,7 @@
     "solid-start": "^0.2.26",
     "solid-start-cloudflare-pages": "^0.2.26",
     "undici": "^5.22.1",
+    "vitest": "0.33.0",
     "zod": "^3.21.4"
   },
   "prettier": {
