@@ -1,6 +1,6 @@
 # Learn Anything
 
-Explanation of vision and future [here](https://wiki.nikiv.dev/ideas/learn-anything).
+Explanation of project's goals is [here](https://wiki.nikiv.dev/ideas/learn-anything).
 
 Current focus is on making [Electron app](#run-electron-app) working. Essentially an app like [Obsidian](https://obsidian.md/).
 
