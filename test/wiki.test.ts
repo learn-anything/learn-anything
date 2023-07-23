@@ -9,6 +9,10 @@ describe("parses", () => {
     const testFolderPath = getTestFolderPath()
     console.log(testFolderPath)
 
+    tinybase.getStore().addRow("wiki", {
+      wikiFolderPath: "some/path",
+    })
+
     // const fileContent = (await readFile(filePath)).toString()
     // const tree = fromMarkdown(fileContent)
   })
