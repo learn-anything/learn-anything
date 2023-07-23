@@ -2,9 +2,12 @@ import { describe, it } from "vitest"
 import { setupTinybaseStore } from "~/packages/preload/src/tinybase/tinybase"
 
 describe("parses", () => {
-  it("test folder", (t) => {
+  it("test folder", async (t) => {
     const testFolderPath = getTestFolderPath()
     const tinybase = setupTinybaseStore()
+
+    await tinybase.load()
+    await tinybase.startAutoSave()
 
     tinybase.getStore().addRow("wiki", {
       wikiFolderPath: testFolderPath,
