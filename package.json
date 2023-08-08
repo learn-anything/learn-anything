@@ -1,0 +1,73 @@
+{
+  "name": "learn-anything",
+  "scripts": {
+    "seed-clone": "git clone https://github.com/learn-anything/seed",
+    "seed-update": "cd seed && git pull",
+    "dev-setup": "pnpm run seed-clone",
+    "test": "vitest",
+    "app:dev": "cd app && pnpm tauri:dev",
+    "web:dev": "cd website && solid-start dev",
+    "web:build": "cd website && solid-start build",
+    "web:start": "cd website && solid-start start",
+    "db:init": "cd api/db && edgedb project init",
+    "db:ui": "cd api/db && edgedb ui",
+    "db:sync": "cd api/db/sync && tsx sync.ts",
+    "db:watch": "cd api/db && edgedb watch",
+    "db:migrate": "cd api/db && edgedb migration create",
+    "db:ts-generate": "cd api/db && npx @edgedb/generate edgeql-js --target ts",
+    "api": "cd api/server && tsx server.ts",
+    "api:grafbase": "cd api && npx grafbase@latest dev",
+    "ts-run": "tsx run.ts"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@edgedb/generate": "^0.3.1",
+    "@grafbase/sdk": "~0.3.0",
+    "autoprefixer": "^10.4.14",
+    "mdast-util-from-markdown": "^2.0.0",
+    "mdast-util-to-markdown": "^2.1.0",
+    "mdast-util-to-string": "^4.0.0",
+    "postcss": "^8.4.27",
+    "solid-start-node": "^0.2.29",
+    "tailwindcss": "^3.3.3",
+    "tsx": "^3.12.7",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.7"
+  },
+  "dependencies": {
+    "@codemirror/view": "^6.15.3",
+    "@hono/node-server": "^1.1.1",
+    "@solid-primitives/event-listener": "^2.2.13",
+    "@solid-primitives/keyboard": "^1.2.3",
+    "@solidjs/meta": "^0.28.6",
+    "@solidjs/router": "^0.8.2",
+    "clipboardy": "^3.0.0",
+    "clsx": "^2.0.0",
+    "dotenv": "^16.3.1",
+    "edgedb": "^1.3.4",
+    "fava": "^0.2.0",
+    "graphql-request": "^6.1.0",
+    "hono": "^3.3.4",
+    "micromark": "^4.0.0",
+    "mri": "^1.2.0",
+    "prettier": "^3.0.0",
+    "solid-codemirror": "^2.3.0",
+    "solid-js": "^1.7.8",
+    "solid-markdown": "^1.2.2",
+    "solid-start": "^0.2.29",
+    "solid-start-cloudflare-pages": "^0.2.29",
+    "sqlite3": "^5.1.6",
+    "tinybase": "^4.0.1",
+    "undici": "^5.22.1",
+    "vite-tsconfig-paths": "^4.2.0",
+    "vitest": "0.33.0",
+    "watcher": "^2.2.2",
+    "zod": "^3.21.4"
+  },
+  "prettier": {
+    "semi": false
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
