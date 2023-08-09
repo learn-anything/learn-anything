@@ -233,6 +233,7 @@ If you are interested in helping out, join [Discord](https://discord.com/invite/
   - if you do global import from [test](test), it will actually do non relative imports
     - however imports from [app](app) to say [lib](lib) won't work, maybe due to tsconfig in app folder
 - Setup [devenv](https://devenv.sh/) to get one command dev env install. Currently we ask to install EdgeDB manually for example.
+- use user data to fine tune LLaMa model using [this setup](https://twitter.com/mattshumer_/status/1688958387973734400)
 <!-- - Can potentially [use only one codebase for both web code and electron app renderer code](https://github.com/brillout/vite-plugin-ssr/discussions/1011), using [vite-plugin-ssr](https://vite-plugin-ssr.com/).
   - Electron expects `index.html` file as entry but [Solid Start](https://github.com/solidjs/solid-start) does not provide a `index.html` file. At least I don't know how to make that work so for now its split up. The app is quite different to the website in features so it's even for the best. -->
 
