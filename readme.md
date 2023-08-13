@@ -16,6 +16,8 @@ Ask questions on [Discord](https://discord.com/invite/bxtD8x6aNF) if interested 
 
 ## File structure
 
+Full tech stack and how app + website + backend operates is described [here](docs/tech-stack.md).
+
 - [api](api) - server related actions
   - [edgedb](api/edgedb) - [EdgeDB](https://www.edgedb.com/) used as main server database
     - [dbschema](api/edgedb/dbschema)
@@ -236,14 +238,15 @@ If you are interested in helping out, join [Discord](https://discord.com/invite/
 - use user data to fine tune LLaMa model using [this setup](https://twitter.com/mattshumer_/status/1688958387973734400)
 <!-- - Can potentially [use only one codebase for both web code and electron app renderer code](https://github.com/brillout/vite-plugin-ssr/discussions/1011), using [vite-plugin-ssr](https://vite-plugin-ssr.com/).
   - Electron expects `index.html` file as entry but [Solid Start](https://github.com/solidjs/solid-start) does not provide a `index.html` file. At least I don't know how to make that work so for now its split up. The app is quite different to the website in features so it's even for the best. -->
+- upload [docs](docs) withs vitepress
+  - update aggressively so all development and future goals / tasks and how to get things done is clear
+  - [Inlang docs](https://inlang.com/documentation) is nice example
 
 ## Docs
 
-> TODO: move to docs/ and deploy with vitepress
+All docs can be seen in [docs](docs).
 
-- Text editor once used [Solid CodeMirror](https://github.com/riccardoperra/solid-codemirror). Similar to [CodeImage project](https://github.com/riccardoperra/codeimage). But there were issues in making it work nicely. So now [Monaco Editor](https://github.com/microsoft/monaco-editor) is used.
-- [Inlang](https://github.com/inlang/inlang), [CodeImage](https://github.com/riccardoperra/codeimage), [Actual](https://github.com/actualbudget/actual) have great code to take inspiration from.
-  - [Inlang's tech stack](https://github.com/inlang/inlang/blob/main/rfcs/tech-stack/RFC.md) specifically is very great.
+Will be uploaded to the web and rendered nicely soon.
 
 ### ♥️
 
