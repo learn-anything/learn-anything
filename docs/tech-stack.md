@@ -92,8 +92,9 @@
 - [70B LLaMA fine tuned model is deployed with Modal](https://modal.com/docs/guide/ex/vllm_inference)
   - goal of the model is similar to Google, user writes free form queries, and the model finds all the relevant LA notes/links/.. that are matching the query
   - potentially it will be 70B model + some custom search heuristics
+- [EdgeDB + pgvector](https://www.edgedb.com/blog/chit-chatting-with-edgedb-docs-via-chatgpt-and-pgvector) is used as vector database
 
 ## Payments
 
 - Payments can be done via [Stripe](https://stripe.com/en-gb-nl) or [Solana](https://solana.com/)
-- Any content can be paywalled, user sets the price.
+- Any content can be paywalled, user sets the price
