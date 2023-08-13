@@ -168,6 +168,11 @@
 
 - [Equals](https://equals.com) connected to EdgeDB via [SQL read only Postgres SQL support](https://www.edgedb.com/docs/reference/sql_support)
 
+## Internalization
+
+- [Inlang](https://github.com/inlang/inlang)
+  - for both solid parts and react native
+
 ## Browser extension
 
 - TODO:
