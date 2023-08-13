@@ -81,14 +81,19 @@
   - Stiched together with Grafbase to provide one GraphQL interface to everything
 - Go code is deployed as Docker container to [Google Cloud](https://cloud.google.com) with [proper logging, observability setup](https://twitter.com/nicoritschel/status/1690505240582422528?s=20)
 
-### Scraper
+## Scraper
 
 - Google like scraper is built in Go using [Colly](https://github.com/gocolly/colly)
   - it watches over many websites and ingests the data into the system
   - the data then gets processed and added to the database
 
-### Global language model inference
+## Global language model inference
 
 - [70B LLaMA fine tuned model is deployed with Modal](https://modal.com/docs/guide/ex/vllm_inference)
   - goal of the model is similar to Google, user writes free form queries, and the model finds all the relevant LA notes/links/.. that are matching the query
   - potentially it will be 70B model + some custom search heuristics
+
+## Payments
+
+- Payments can be done via [Stripe](https://stripe.com/en-gb-nl) or [Solana](https://solana.com/)
+- Any content can be paywalled, user sets the price.
