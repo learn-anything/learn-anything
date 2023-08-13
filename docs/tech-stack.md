@@ -86,3 +86,9 @@
 - Google like scraper is built in Go using [Colly](https://github.com/gocolly/colly)
   - it watches over many websites and ingests the data into the system
   - the data then gets processed and added to the database
+
+### Global language model inference
+
+- [70B LLaMA fine tuned model is deployed with Modal](https://modal.com/docs/guide/ex/vllm_inference)
+  - goal of the model is similar to Google, user writes free form queries, and the model finds all the relevant LA notes/links/.. that are matching the query
+  - potentially it will be 70B model + some custom search heuristics
