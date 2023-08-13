@@ -67,7 +67,7 @@
 
 - [EdgeDB](https://www.edgedb.com/) is used to store all data
 
-### Server API layer
+## Server API layer
 
 - [Grafbase](https://grafbase.com/) is used to provide a GraphQL access layer to all the API.
   - Grafbase is hosted with [Cloudflare Workers](https://workers.cloudflare.com/) and has low latency on each API call
@@ -75,7 +75,7 @@
 - Grafbase API is setup to do all CRUD operations on top of EdgeDB (creating, reading, updating, deleting data)
 - Grafbase is also setup to run any logic that needs to be ran on server too, such as creating Stripe checkout sessions, processing payments etc.
 
-#### In Go
+### In Go
 
 - A lot of server code will be written in Go exposed as GraphQL too.
   - Stiched together with Grafbase to provide one GraphQL interface to everything
