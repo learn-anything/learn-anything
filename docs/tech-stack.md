@@ -72,7 +72,7 @@
 ## Server API layer
 
 - [Grafbase](https://grafbase.com/) is used to provide a GraphQL access layer to all the API.
-  - Grafbase is hosted with [Cloudflare Workers](https://workers.cloudflare.com/) and has low latency on each API call
+  - Grafbase is hosted with [Cloudflare Workers](https://workers.cloudflare.com/) and has [low latency on each API call](https://www.artillery.io/blog/load-testing-for-production-readiness-grafbase-performance)
   - Grafbase allows you to write TS or Rust via WASM to run code at the edge
 - Grafbase API is setup to do all CRUD operations on top of EdgeDB (creating, reading, updating, deleting data)
 - Grafbase is also setup to run any logic that needs to be ran on server too, such as creating Stripe checkout sessions, processing payments etc.
@@ -156,10 +156,6 @@
 
 - [Cloudflare](https://cloudflare.com) for DNS, website analytics, web asset serving and more.
 
-## Browser extension
-
-- TODO:
-
 ## Communication
 
 - [Discord](https://discord.com/invite/bxtD8x6aNF) for everything
@@ -171,6 +167,18 @@
 ## Data reporting
 
 - [Equals](https://equals.com) connected to EdgeDB via [SQL read only Postgres SQL support](https://www.edgedb.com/docs/reference/sql_support)
+
+## Browser extension
+
+- TODO:
+
+## VSCode extension
+
+- TODO:
+
+## CLI
+
+- most likely in either go or rust
 
 ## Potentially useful
 
