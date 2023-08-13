@@ -73,7 +73,7 @@
 
 - [Grafbase](https://grafbase.com/) is used to provide a GraphQL access layer to all the API.
   - Grafbase is hosted with [Cloudflare Workers](https://workers.cloudflare.com/) and has low latency on each API call
-  - Grafbase allows you to write TS and Rust via WASM to run code at the edge
+  - Grafbase allows you to write TS or Rust via WASM to run code at the edge
 - Grafbase API is setup to do all CRUD operations on top of EdgeDB (creating, reading, updating, deleting data)
 - Grafbase is also setup to run any logic that needs to be ran on server too, such as creating Stripe checkout sessions, processing payments etc.
 
@@ -110,3 +110,37 @@
 
 - Payments can be done via [Stripe](https://stripe.com/) or [Solana](https://solana.com/)
 - Any content can be paywalled, user sets the price
+
+## Solid UI
+
+- [Tailwind](https://tailwindcss.com/)
+  - with [Shoelace](https://shoelace.style/) and [Zag.js](https://zagjs.com/)
+
+## Text editor
+
+- [Monaco Editor](https://github.com/microsoft/monaco-editor) for pure text editing
+  - with various plugins like [vim mode](https://github.com/brijeshb42/monaco-vim)
+- [TipTap](https://tiptap.dev/) for interactive text editing
+- Allow switching between Monaco and TipTap easily
+  - everything seralises to same structure
+  - interactive parts can be presented as JSX Solid components
+    - made using [mdxjs-rs](https://github.com/wooorm/mdxjs-rs)
+
+## Emails
+
+- [Resend](https://resend.com/) using [React Email](https://github.com/resendlabs/react-email)
+
+## Build system
+
+- [Turbo build](https://turbo.build/) with [pnpm workspaces](https://pnpm.io/workspaces)
+
+## Analytics / Observability
+
+- Most all logs are collected/sent to [Tinybird](https://www.tinybird.co/)
+
+## Potentially useful
+
+- [Inngest](https://www.inngest.com) for queues, background jobs
+  - what problems can it solve?
+- [vite-plugin-ssr](https://vite-plugin-ssr.com/)
+  - can be used to improve on solid start or potentially add [Houdini](https://houdinigraphql.com/) Solid support with it for GraphQL
