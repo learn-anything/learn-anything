@@ -66,6 +66,7 @@
 ### Server Database
 
 - [EdgeDB](https://www.edgedb.com/) is used to store all data
+- [Upstash](https://upstash.com/) or Grafbase Cache is used for all caching
 
 ## Server API layer
 
