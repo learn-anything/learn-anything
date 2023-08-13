@@ -81,6 +81,15 @@
   - Stiched together with Grafbase to provide one GraphQL interface to everything
 - Go code is deployed as Docker container to [Google Cloud](https://cloud.google.com) with [proper logging, observability setup](https://twitter.com/nicoritschel/status/1690505240582422528?s=20)
 
+## Mobile apps (iOS/Android)
+
+- Built with [Expo](https://expo.dev) & [Tamagui](https://tamagui.dev)
+  - using [Tamagui starter](https://tamagui.dev/takeout)
+- All useful global state is persisted to SQLite
+  - by [embedding rust in react native](https://ospfranco.notion.site/Rust-in-React-Native-43316cdc499f43b48e9bc014074d3f72), sharing most code from desktop rust code
+  - or with [TinyBase](https://tinybase.org)
+- [Valtio](https://github.com/pmndrs/valtio) is used as global react state, emulating Solid stores/signals DX as close as possible
+
 ## Scraper
 
 - Google like scraper is built in Go using [Colly](https://github.com/gocolly/colly)
