@@ -33,6 +33,7 @@
   - [LLaMA.rs](https://news.ycombinator.com/item?id=35171527) is used to embed the language model into the binary and provide inference
 - Potentially the language model is provided separately as a download. And then inference is served via HTTP server
   - This can allow sharing LLaMA model inference with other apps too. [TextSynth Server](https://bellard.org/ts_server/) can potentially be used.
+- [llm-chain](https://llm-chain.xyz/) is used to connect to the local LLaMA and make and chain prompts
 
 ### Local language model fine tuning
 
@@ -63,7 +64,7 @@
   - on each solid store update, GraphQL request gets sent to persist the changes to the server
   - there are [Server-Sent Events](https://grafbase.com/blog/building-realtime-apps-with-server-sent-events-and-graphql) setup to live update the stores with data from the server (if there is any)
 
-### Server Database
+## Server Database
 
 - [EdgeDB](https://www.edgedb.com/) is used to store all data
 - [Upstash](https://upstash.com/) or Grafbase Cache is used for all caching
@@ -76,7 +77,7 @@
 - Grafbase API is setup to do all CRUD operations on top of EdgeDB (creating, reading, updating, deleting data)
 - Grafbase is also setup to run any logic that needs to be ran on server too, such as creating Stripe checkout sessions, processing payments etc.
 
-### In Go
+## In Go
 
 - A lot of server code will be written in Go exposed as GraphQL too.
   - Stiched together with Grafbase to provide one GraphQL interface to everything
@@ -107,5 +108,5 @@
 
 ## Payments
 
-- Payments can be done via [Stripe](https://stripe.com/en-gb-nl) or [Solana](https://solana.com/)
+- Payments can be done via [Stripe](https://stripe.com/) or [Solana](https://solana.com/)
 - Any content can be paywalled, user sets the price
