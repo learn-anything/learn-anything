@@ -145,8 +145,8 @@
 
 ## LLM processing
 
-- [llm-chain](https://llm-chain.xyz/) locally in Grafbase WASM resolvers with rust
-  - can also use [LangChain](https://github.com/langchain-ai/langchain) in Python/TS in places depending on use case
+- [llm-chain](https://llm-chain.xyz/) locally or in Grafbase WASM resolvers with rust
+  - can also use [LangChain](https://github.com/langchain-ai/langchain) in Python/TS in some services depending on use case
 
 ## Design
 
