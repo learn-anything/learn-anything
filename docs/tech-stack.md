@@ -138,6 +138,40 @@
 
 - Most all logs are collected/sent to [Tinybird](https://www.tinybird.co/)
 
+## Images / media files
+
+- [AWS S3](https://aws.amazon.com/s3/) or [EdgeDB](https://www.edgedb.com) depending on file
+  - using [SST](https://sst.dev/) to connect with AWS
+
+## LLM processing
+
+- [llm-chain](https://llm-chain.xyz/) locally in Grafbase WASM resolvers with rust
+  - can also use [LangChain](https://github.com/langchain-ai/langchain) in Python/TS in places depending on use case
+
+## Design
+
+- [Figma](https://www.figma.com/) and [Midjourney](https://www.midjourney.com/) for graphic designs
+
+## Website deploy
+
+- [Cloudflare](https://cloudflare.com) for DNS, website analytics, web asset serving and more.
+
+## Browser extension
+
+- TODO:
+
+## Communication
+
+- [Discord](https://discord.com/invite/bxtD8x6aNF) for everything
+
+## Docs
+
+- [VitePress](https://vitepress.dev/) serving markdown files to [docs.learn-anything.xyz](https://docs.learn-anything.xyz)
+
+## Data reporting
+
+- [Equals](https://equals.com) connected to EdgeDB via [SQL read only Postgres SQL support](https://www.edgedb.com/docs/reference/sql_support)
+
 ## Potentially useful
 
 - [Inngest](https://www.inngest.com) for queues, background jobs
