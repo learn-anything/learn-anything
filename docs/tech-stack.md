@@ -79,7 +79,7 @@
 
 - A lot of server code will be written in Go exposed as GraphQL too.
   - Stiched together with Grafbase to provide one GraphQL interface to everything
-- Go code is deployed as Docker container to ([Google Cloud](https://cloud.google.com)) with [proper logging, observability setup](https://twitter.com/nicoritschel/status/1690505240582422528?s=20)
+- Go code is deployed as Docker container to [Google Cloud](https://cloud.google.com) with [proper logging, observability setup](https://twitter.com/nicoritschel/status/1690505240582422528?s=20)
 
 ### Scraper
 
