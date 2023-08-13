@@ -89,6 +89,7 @@
   - by [embedding rust in react native](https://ospfranco.notion.site/Rust-in-React-Native-43316cdc499f43b48e9bc014074d3f72), sharing most code from desktop rust code
   - or with [TinyBase](https://tinybase.org)
 - [Valtio](https://github.com/pmndrs/valtio) is used as global react state, emulating Solid stores/signals DX as close as possible
+- If any native module is required, it is written in Swift or Kotlin and [added using Expo](https://docs.expo.dev/workflow/customizing/)
 
 ## Scraper
 
