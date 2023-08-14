@@ -16,7 +16,7 @@ Ask questions on [Discord](https://discord.com/invite/bxtD8x6aNF) if interested 
 
 ## File structure
 
-Full tech stack and how app + website + backend operates is described [here](docs/tech-stack.md).
+Tech stack is described [here](docs/tech-stack.md).
 
 - [api](api) - server related actions
   - [edgedb](api/edgedb) - [EdgeDB](https://www.edgedb.com/) used as main server database

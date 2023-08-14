@@ -171,7 +171,7 @@
 ## Internalization
 
 - [Inlang](https://github.com/inlang/inlang)
-  - for both solid parts and react native
+  - for both solid and react native
 
 ## Browser extension
 
