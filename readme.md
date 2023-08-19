@@ -199,6 +199,10 @@ If you are interested in helping out, join [Discord](https://discord.com/invite/
 
 ## Tasks
 
+Issues are made in [this repo](https://github.com/nikitavoloboev/la-issues) for now. Until [this](https://github.com/calcom/synclinear.com/issues/127) is solved.
+
+Below will be moved to GitHub issues soon enough. Main focus is not getting the app + website deployed. Then proper GitHub issue workflow will be setup.
+
 - move markdown parser from ts to rust
   - use [markdown-rs](https://github.com/wooorm/markdown-rs)
   - currently doing this part in [rust repo](https://github.com/nikitavoloboev/rust)
