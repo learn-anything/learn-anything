@@ -10,7 +10,7 @@ Reference [file structure](#file-structure) to make sense of how code is laid ou
 
 Read [setup](#setup) to get started with development.
 
-Sharing [current tasks in readme](#tasks) until MVP is released.
+Current tasks to do are [here](#tasks).
 
 Ask questions on [Discord](https://discord.com/invite/bxtD8x6aNF) if interested in developing the project or you get issues with setup.
 
@@ -199,7 +199,7 @@ If you are interested in helping out, join [Discord](https://discord.com/invite/
 
 ## Tasks
 
-Issues are made in [this repo](https://github.com/nikitavoloboev/la-issues) for now. Until [this](https://github.com/calcom/synclinear.com/issues/127) is solved.
+Issues are made in [this repo](https://github.com/nikitavoloboev/la-issues/issues) for now. Until [this](https://github.com/calcom/synclinear.com/issues/127) is solved.
 
 Below will be moved to GitHub issues soon enough. Main focus is not getting the app + website deployed. Then proper GitHub issue workflow will be setup.
 
