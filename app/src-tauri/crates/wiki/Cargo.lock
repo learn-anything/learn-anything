@@ -9,20 +9,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a4668cab20f66d8d020e1fbc0ebe47217433c1b6c8f2040faf858554e394ace6"
 
 [[package]]
-name = "la_rust"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "log_macro",
- "markdown",
- "walkdir",
-]
-
-[[package]]
 name = "log_macro"
-version = "0.1.0"
+version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4bee1573f9b0880a660828d7ecd39e22b1721a6632e05f7e002822f2a6a4ae9d"
+checksum = "0956f0ca3fdbf6c6f77cc993d7fa743fe7c9c6389aebddd8b962a9b515e5c448"
 
 [[package]]
 name = "markdown"
@@ -56,6 +46,16 @@ checksum = "36df944cda56c7d8d8b7496af378e6b16de9284591917d307c9b4d313c44e698"
 dependencies = [
  "same-file",
  "winapi-util",
+]
+
+[[package]]
+name = "wiki"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "log_macro",
+ "markdown",
+ "walkdir",
 ]
 
 [[package]]

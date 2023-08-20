@@ -7,6 +7,6 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.75"
-log_macro = "0.1.0"
+log_macro = "0.1.4"
 markdown = "1.0.0-alpha.12"
 walkdir = "2.3.3"

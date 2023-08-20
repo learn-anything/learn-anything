@@ -79,7 +79,7 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
                             .children
                             .iter()
                             .filter_map(|child| {
-                                println!("child: {:?}", child);
+                                log!(child);
                                 if let Node::Text(text) = child {
                                     Some(text.value.clone())
                                 } else {
@@ -150,7 +150,7 @@ mod tests {
     #[test]
     fn test_md_file_with_heading_and_content_only() {
         let test_folder_path = get_test_folder_path();
-        println!("{}", test_folder_path.display());
+        log!(test_folder_path.display());
 
         // Attempt to convert to a str, will return None if the path is not valid UTF-8
         if let Some(path_str) = test_folder_path.to_str() {
