@@ -10,9 +10,9 @@ checksum = "a4668cab20f66d8d020e1fbc0ebe47217433c1b6c8f2040faf858554e394ace6"
 
 [[package]]
 name = "log_macro"
-version = "0.1.4"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0956f0ca3fdbf6c6f77cc993d7fa743fe7c9c6389aebddd8b962a9b515e5c448"
+checksum = "41eac5c506e890ca59231beb23bf29c8d6058e1a7638bd24e877ea64bf024301"
 
 [[package]]
 name = "markdown"

@@ -1,13 +1,17 @@
-# wiki
+# Rust wiki crate
 
 > Rust crate to do operations on LA wiki + markdown
 
-<!-- ## Install
+Will be used in src-tauri (desktop app) but also the CLI.
+
+## Run
+
+Assumes `pnpm dev-setup` was run at root and `seed` folder is present at root.
 
 ```
-cargo add log_macro
+cargo watch -q -- sh -c "tput reset && cargo test -q --lib"
 ```
 
-## Use
+## Tasks
 
-TODO: -->
+- Don't assume the `seed` folder for tests to run potentially.
