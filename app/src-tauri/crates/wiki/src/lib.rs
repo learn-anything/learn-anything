@@ -19,7 +19,6 @@ pub struct TopicStruct {
     content: String,
 }
 
-// Equivalent of TypeScript's 'Note' type
 #[derive(Debug, Clone)]
 pub struct Note {
     note: String,
@@ -28,7 +27,6 @@ pub struct Note {
     public: Option<bool>, // TODO: should be not optional, temp for testing
 }
 
-// Equivalent of TypeScript's 'Link' type
 #[derive(Debug, Clone)]
 pub struct Link {
     title: String,
@@ -40,8 +38,8 @@ pub struct Link {
 
 #[derive(Debug, Clone)]
 pub struct RelatedLink {
-    // Define fields for RelatedLink
-    // For now, it's empty, but you can add fields as per your requirements
+    title: String,
+    url: String,
 }
 
 // parse markdown file, extract topic
@@ -57,18 +55,6 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
     let mut pretty_topic_name = None;
     let mut content = String::new();
     let mut collecting_content = false;
-
-    // let topicName = path.basename(filePath, path.extname(filePath))
-    // let prettyTopicName
-    // let content = ""
-    // let notes: Note[] = []
-    // let links: Link[] = []
-
-    // let parsingNotes = false
-    // let parsingLinks = false
-    // let parsingFrontMatter = false
-    // let gotTitleFromFrontMatter = false
-    // let gotTitle = false
 
     while let Some(node) = nodes.pop_front() {
         match &node {
@@ -152,6 +138,7 @@ mod tests {
         if let Some(path_str) = test_folder_path.to_str() {
             let paths = get_md_files(path_str);
             if !paths.is_empty() {
+                // TODO: don't do paths[0] etc. do it by file-name so when new files are added, tests don't break
                 let content = get_content_of_file(&paths[0]);
                 log!(content);
                 let topic = parse_md_content_as_topic(&content).unwrap();
@@ -161,6 +148,42 @@ mod tests {
                     TopicStruct {
                         title: "Hardware".to_string(),
                         content: "[Digital Design and Computer Architecture course](https://safari.ethz.ch/digitaltechnik/spring2021/doku.php?id=start), [From Nand to Tetris](https://github.com/ghaiklor/nand-2-tetris) are great.".to_string()
+                    }
+                );
+            }
+        } else {
+            println!("Path is not valid UTF-8");
+        }
+    }
+
+    #[test]
+    fn test_md_file_with_heading_and_content_and_notes_and_links() {
+        let test_folder_path = get_test_folder_path();
+
+        // Attempt to convert to a str, will return None if the path is not valid UTF-8
+        if let Some(path_str) = test_folder_path.to_str() {
+            let paths = get_md_files(path_str);
+            if !paths.is_empty() {
+                // TODO: don't do paths[2] etc. do it by file-name so when new files are added, tests don't break
+                let content = get_content_of_file(&paths[2]);
+                log!(content);
+                let topic = parse_md_content_as_topic(&content).unwrap();
+                log!(topic.content);
+                assert_eq!(
+                    topic,
+                    TopicStruct {
+                        title: "SolidJS".to_string(),
+                        content: "# [SolidJS](https://www.solidjs.com/)
+
+                        Love Solid. Has [best parts](https://www.youtube.com/watch?v=qB5jK-KeXOs) of [React](react.md).
+
+                        [Fine grained reactivity](https://dev.to/ryansolid/a-hands-on-introduction-to-fine-grained-reactivity-3ndf) is nice.
+
+                        ## OSS apps
+
+                        - [CodeImage](https://github.com/riccardoperra/codeimage)
+                        - [Solid Hacker News](https://github.com/solidjs/solid-hackernews)
+                        ".to_string()
                     }
                 );
             }
