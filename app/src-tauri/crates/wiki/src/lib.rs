@@ -97,29 +97,26 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
             }
             Node::Paragraph(para) => {
                 if collecting_content {
-                    let para_content_vec: Vec<String> = para
-                        .children
-                        .iter()
-                        .map(|child| match child {
-                            Node::Text(text) => text.value.to_string(),
+                    let mut para_content = String::new();
+                    for child in &para.children {
+                        match child {
+                            Node::Text(text) => {
+                                para_content.push_str(&text.value);
+                            }
                             Node::Link(link) => {
                                 if let Node::Text(text) = &link.children[0] {
-                                    format!("[{}]({})", text.value.trim(), link.url)
-                                } else {
-                                    String::new()
+                                    let link_str = format!("[{}]({})", text.value.trim(), link.url);
+                                    para_content.push_str(&link_str);
                                 }
                             }
-                            _ => String::new(),
-                        })
-                        .collect();
-
-                    let para_content = para_content_vec.join(" ").trim().to_string();
+                            _ => {}
+                        }
+                    }
 
                     content.push_str(&para_content);
                     content.push(' ');
                 }
             }
-
             _ => {}
         }
 
