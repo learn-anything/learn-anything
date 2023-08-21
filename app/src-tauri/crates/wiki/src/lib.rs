@@ -4,6 +4,7 @@
 
 #[macro_use]
 extern crate log_macro;
+extern crate regex; // TODO: check maybe no need for this, it compiled without this line..
 
 use anyhow::Result;
 use markdown::{mdast::Node, to_mdast, ParseOptions};
@@ -42,6 +43,14 @@ pub struct RelatedLink {
     url: String,
 }
 
+// Helper function to extract title from front matter
+fn extract_title_from_front_matter(markdown: &str) -> Option<String> {
+    let re = regex::Regex::new(r"---\ntitle: (.*?)\n---").unwrap();
+    re.captures(markdown)
+        .and_then(|cap| cap.get(1))
+        .map(|m| m.as_str().to_string())
+}
+
 // parse markdown file, extract topic
 pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicStruct> {
     let options = ParseOptions::default();
@@ -51,10 +60,16 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
     let mut nodes = VecDeque::new();
     nodes.push_back(ast);
 
-    // let mut topic_name = None;
     let mut pretty_topic_name = None;
     let mut content = String::new();
     let mut collecting_content = false;
+
+    // Check for front matter title
+    let front_matter_title = extract_title_from_front_matter(markdown_string);
+    if let Some(title) = front_matter_title {
+        pretty_topic_name = Some(title);
+        collecting_content = true;
+    }
 
     while let Some(node) = nodes.pop_front() {
         match &node {
@@ -76,8 +91,8 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
                             .join(" "),
                     );
                     collecting_content = true;
-                } else {
-                    // Found another heading, we can stop collecting content
+                } else if heading.depth > 1 {
+                    // Found a Level-2 (or deeper) heading, we can stop collecting content
                     collecting_content = false;
                 }
             }
