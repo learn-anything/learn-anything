@@ -36,6 +36,7 @@ pub struct TopicStruct {
     links: Option<Vec<Link>>, // everything inside ## Links heading
 }
 
+// check `test_front_matter_heading_content_notes_links()` test for example of various notes
 #[derive(Debug, Clone, PartialEq)]
 pub struct Note {
     note: String,
@@ -44,6 +45,7 @@ pub struct Note {
     public: bool,
 }
 
+// by default parsed Note is public
 impl Default for Note {
     fn default() -> Self {
         Note {
@@ -55,15 +57,17 @@ impl Default for Note {
     }
 }
 
+// check `test_front_matter_heading_content_notes_links()` test for example of various links
 #[derive(Debug, Clone, PartialEq)]
 pub struct Link {
     title: String,
     url: String,
-    public: bool,
     description: Option<String>,
     related_links: Vec<RelatedLink>,
+    public: bool,
 }
 
+// by default parsed Link is public
 impl Default for Link {
     fn default() -> Self {
         Link {
@@ -76,19 +80,28 @@ impl Default for Link {
     }
 }
 
+// example:
+// - [Hope UI](https://github.com/fabien-ml/hope-ui) - SolidJS component library you've hoped for. ([Docs](https://hope-ui.com/docs/getting-started))
+// related link in above `Link` will be title: `Docs`, url: `https://hope-ui.com/docs/getting-started`
 #[derive(Debug, Clone, PartialEq)]
 pub struct RelatedLink {
     title: String,
     url: String,
 }
 
+// TODO: is this actually needed?
 pub struct ParsedMarkdown {
     topic: TopicStruct,
     notes: Vec<Note>,
     links: Vec<Link>,
 }
 
-// Helper function to extract title from front matter
+// example:
+// ---
+// title: Solid
+// ---
+// markdown..
+// will return `Solid` as title
 fn extract_title_from_front_matter(markdown: &str) -> Option<String> {
     let re = regex::Regex::new(r"---\ntitle: (.*?)\n---").unwrap();
     re.captures(markdown)
@@ -97,7 +110,9 @@ fn extract_title_from_front_matter(markdown: &str) -> Option<String> {
 }
 
 // Parse markdown file, extract topic
-// each topic has title, content, notes, links
+// each topic must have title, content
+// it can have notes, links
+// public: true/false is extracted from front matter (by default it's true)
 pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicStruct> {
     let options = ParseOptions::default();
     let ast = to_mdast(markdown_string, &options).map_err(anyhow::Error::msg)?;
@@ -106,19 +121,24 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
     let mut nodes = VecDeque::new();
     nodes.push_back(ast);
 
-    // example front matter:
-    // ---
-    // title: Solid
-    // ---
-    // title will be `Solid`
-    // if no front matter, title will be whats in first heading
+    // try get title from front matter
+    // TODO: should go into match and be done there?
     let mut title = extract_title_from_front_matter(markdown_string);
+
     let mut content = String::new();
     let mut notes = Vec::new();
-    let links = Vec::new();
+    let mut links = Vec::new();
 
+    // set to true once ## Notes is found
     let mut collecting_notes = false;
+    // set to true once ## Links is found
     let mut collecting_links = false;
+
+    // example note that can have a subnote:
+    // - Solid will never "re-render" your component/function.
+    //     - Means you don't ever have to optimise re-renders.
+    // it's used to make that case work
+    // TODO: can it be avoided?
     let mut current_note: Option<Note> = None;
 
     while let Some(node) = nodes.pop_front() {
@@ -230,6 +250,7 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
         content: content.trim().to_string(),
         notes: if notes.is_empty() { None } else { Some(notes) },
         links: if links.is_empty() { None } else { Some(links) },
+        public: None,
     })
 }
 
@@ -259,7 +280,8 @@ mod tests {
                 title: "Hardware".to_string(),
                 content: "[Digital Design and Computer Architecture course](https://safari.ethz.ch/digitaltechnik/spring2021/doku.php?id=start), [From Nand to Tetris](https://github.com/ghaiklor/nand-2-tetris) are great.".to_string(),
                 notes: None,
-                links: None
+                links: None,
+                public: None
             }
         );
     }
@@ -374,7 +396,8 @@ Love Solid. Has [best parts](https://www.youtube.com/watch?v=qB5jK-KeXOs) of [Re
                 title: "SolidJS".to_string(),
                 content: topic_content.to_string(),
                 notes: Some(notes),
-                links: Some(links)
+                links: Some(links),
+                public: None
             }
         );
     }
