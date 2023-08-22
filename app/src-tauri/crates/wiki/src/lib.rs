@@ -69,9 +69,8 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
     let mut title = extract_title_from_front_matter(markdown_string);
     let mut content = String::new();
     let mut notes = Vec::new();
-    let mut links = Vec::new();
+    let links = Vec::new();
 
-    let mut collecting_content = true;
     let mut collecting_notes = false;
     let mut collecting_links = false;
     let mut current_note: Option<Note> = None;
@@ -99,12 +98,12 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
                 if let Some(Node::Text(text)) = heading.children.first() {
                     match text.value.as_str() {
                         "Notes" => {
-                            collecting_content = false;
+                            // collecting_content = false;
                             collecting_notes = true;
                             collecting_links = false;
                         }
                         "Links" => {
-                            collecting_content = false;
+                            // collecting_content = false;
                             collecting_notes = false;
                             collecting_links = true;
                         }
@@ -159,7 +158,16 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
                     }
                 }
             }
-            Node::Paragraph(para) => {}
+            Node::Code(code) => {
+                content.push_str(&code.value);
+                content.push_str("\n\n"); // Add two newlines for Markdown
+            }
+            Node::Paragraph(para) => {
+                if let Some(Node::Text(text)) = para.children.first() {
+                    content.push_str(&text.value);
+                    content.push_str("\n\n"); // Add two newlines for Markdown paragraphs
+                }
+            }
             _ => {} // This will catch all other variants of the Node enum
         }
 
