@@ -66,20 +66,14 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
     let mut nodes = VecDeque::new();
     nodes.push_back(ast);
 
-    let mut pretty_topic_name = None;
+    let mut title = extract_title_from_front_matter(markdown_string);
     let mut content = String::new();
-
-    let mut collecting_content = true;
-
-    // Check for front matter title
-    pretty_topic_name = extract_title_from_front_matter(markdown_string);
-    log!(pretty_topic_name);
 
     while let Some(node) = nodes.pop_front() {
         match &node {
             Node::Heading(heading) => {
-                if pretty_topic_name.is_none() {
-                    pretty_topic_name = Some(
+                if title.is_none() {
+                    title = Some(
                         heading
                             .children
                             .iter()
@@ -96,26 +90,28 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
                 }
             }
             Node::Paragraph(para) => {
-                if collecting_content {
-                    let mut para_content = String::new();
-                    for child in &para.children {
-                        match child {
-                            Node::Text(text) => {
-                                para_content.push_str(&text.value);
-                            }
-                            Node::Link(link) => {
-                                if let Node::Text(text) = &link.children[0] {
-                                    let link_str = format!("[{}]({})", text.value.trim(), link.url);
-                                    para_content.push_str(&link_str);
-                                }
-                            }
-                            _ => {}
+                let mut para_content = String::new();
+                for child in &para.children {
+                    match child {
+                        Node::Text(text) => {
+                            para_content.push_str(&text.value);
                         }
+                        Node::Link(link) => {
+                            if let Node::Text(text) = &link.children[0] {
+                                let link_str = format!("[{}]({})", text.value.trim(), link.url);
+                                para_content.push_str(&link_str);
+                            }
+                        }
+                        _ => {}
                     }
-
-                    content.push_str(&para_content);
-                    content.push(' ');
                 }
+
+                content.push_str(&para_content);
+                content.push(' ');
+            }
+            Node::Code(code) => {
+                content.push_str(&code.value);
+                content.push(' ');
             }
             _ => {}
         }
@@ -127,8 +123,7 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
         }
     }
 
-    let title_str =
-        pretty_topic_name.ok_or_else(|| anyhow::Error::msg("Failed to extract title"))?;
+    let title_str = title.ok_or_else(|| anyhow::Error::msg("Failed to extract title"))?;
     Ok(TopicStruct {
         title: title_str,
         content: content.trim().to_string(),
