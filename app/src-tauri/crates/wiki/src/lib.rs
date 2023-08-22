@@ -233,10 +233,32 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
             }
             Node::Paragraph(para) => {
                 if collecting_content {
-                    if let Some(Node::Text(text)) = para.children.first() {
-                        content.push_str(&text.value);
-                        content.push_str("\n\n"); // Add two newlines for Markdown paragraphs
+                    let mut para_content = String::new();
+                    for child in &para.children {
+                        match child {
+                            Node::Text(text) => {
+                                para_content.push_str(&text.value);
+                            }
+                            Node::Link(link) => {
+                                let link_text = link
+                                    .children
+                                    .iter()
+                                    .filter_map(|child| {
+                                        if let Node::Text(text) = child {
+                                            Some(text.value.clone())
+                                        } else {
+                                            None
+                                        }
+                                    })
+                                    .collect::<Vec<String>>()
+                                    .join("");
+                                para_content.push_str(&format!("[{}]({})", link_text, link.url));
+                            }
+                            _ => {}
+                        }
                     }
+                    content.push_str(&para_content);
+                    content.push_str("\n\n"); // Add two newlines for Markdown paragraph
                 }
             }
             _ => {} // This will catch all other variants of the Node enum
