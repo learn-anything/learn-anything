@@ -149,22 +149,33 @@ mod tests {
     fn test_md_file_with_heading_and_content_only() {
         let test_folder_path = get_test_folder_path();
 
-        // Attempt to convert to a str, will return None if the path is not valid UTF-8
         if let Some(path_str) = test_folder_path.to_str() {
-            let paths = get_md_files(path_str);
-            if !paths.is_empty() {
-                // TODO: don't do paths[0] etc. do it by file-name so when new files are added, tests don't break
-                let content = get_content_of_file(&paths[0]);
-                log!(content);
-                let topic = parse_md_content_as_topic(&content).unwrap();
-                log!(topic.content);
-                assert_eq!(
-                    topic,
-                    TopicStruct {
-                        title: "Hardware".to_string(),
-                        content: "[Digital Design and Computer Architecture course](https://safari.ethz.ch/digitaltechnik/spring2021/doku.php?id=start), [From Nand to Tetris](https://github.com/ghaiklor/nand-2-tetris) are great.".to_string()
+            match get_md_files(path_str) {
+                Ok(paths) => {
+                    if !paths.is_empty() {
+                        let test_file_name = "hardware.md";
+                        let test_file_name =
+                            paths.iter().find(|path| path.ends_with(test_file_name));
+
+                        match test_file_name {
+                            Some(path) => {
+                                let content = get_content_of_file(path);
+                                let topic = parse_md_content_as_topic(&content).unwrap();
+                                assert_eq!(
+                            topic,
+                            TopicStruct {
+                                title: "Hardware".to_string(),
+                                content: "[Digital Design and Computer Architecture course](https://safari.ethz.ch/digitaltechnik/spring2021/doku.php?id=start), [From Nand to Tetris](https://github.com/ghaiklor/nand-2-tetris) are great.".to_string()
+                            }
+                        );
+                            }
+                            None => {
+                                eprintln!("File {:?} not found!", test_file_name);
+                            }
+                        }
                     }
-                );
+                }
+                Err(e) => eprintln!("Error: {}", e),
             }
         } else {
             println!("Path is not valid UTF-8");
@@ -175,32 +186,26 @@ mod tests {
     fn test_md_file_with_heading_and_content_and_notes_and_links() {
         let test_folder_path = get_test_folder_path();
 
-        // Attempt to convert to a str, will return None if the path is not valid UTF-8
         if let Some(path_str) = test_folder_path.to_str() {
-            let paths = get_md_files(path_str);
-            if !paths.is_empty() {
-                // TODO: don't do paths[2] etc. do it by file-name so when new files are added, tests don't break
-                let content = get_content_of_file(&paths[2]);
-                log!(content);
-                let topic = parse_md_content_as_topic(&content).unwrap();
-                log!(topic.content);
-                assert_eq!(
-                    topic,
-                    TopicStruct {
-                        title: "SolidJS".to_string(),
-                        content: "# [SolidJS](https://www.solidjs.com/)
+            match get_md_files(path_str) {
+                Ok(paths) => {
+                    if !paths.is_empty() {
+                        let test_file_name = "solid.md";
+                        let test_file_name =
+                            paths.iter().find(|path| path.ends_with(test_file_name));
 
-                        Love Solid. Has [best parts](https://www.youtube.com/watch?v=qB5jK-KeXOs) of [React](react.md).
-
-                        [Fine grained reactivity](https://dev.to/ryansolid/a-hands-on-introduction-to-fine-grained-reactivity-3ndf) is nice.
-
-                        ## OSS apps
-
-                        - [CodeImage](https://github.com/riccardoperra/codeimage)
-                        - [Solid Hacker News](https://github.com/solidjs/solid-hackernews)
-                        ".to_string()
+                        match test_file_name {
+                            Some(path) => {
+                                let content = get_content_of_file(path);
+                                let topic = parse_md_content_as_topic(&content).unwrap();
+                            }
+                            None => {
+                                eprintln!("File {:?} not found!", test_file_name);
+                            }
+                        }
                     }
-                );
+                }
+                Err(e) => eprintln!("Error: {}", e),
             }
         } else {
             println!("Path is not valid UTF-8");

@@ -17,7 +17,8 @@
     "db:ts-generate": "cd api/db && npx @edgedb/generate edgeql-js --target ts",
     "api": "cd api/server && tsx server.ts",
     "api:grafbase": "cd api && npx grafbase@latest dev",
-    "ts-run": "tsx run.ts"
+    "ts-run": "tsx run.ts",
+    "test-rust-wiki": "cd app/src-tauri/crates/wiki/ && cargo watch -q -- sh -c \"tput reset && cargo test -q --lib\""
   },
   "type": "module",
   "devDependencies": {

@@ -2,5 +2,22 @@
   "rust-analyzer.linkedProjects": [
     "./app/src-tauri/Cargo.toml",
     "./app/src-tauri/crates/wiki/Cargo.toml"
-  ]
+  ],
+  "workbench.colorCustomizations": {
+    "[GitHub Light]": {
+      "editorLineNumber.foreground": "#ffffff",
+      "editor.lineHighlightBackground": "#ffffff",
+      "editorInlayHint.typeBackground": "#f1f9fd"
+    },
+    "[GitHub Dark Default]": {
+      "editorLineNumber.foreground": "#0c1118",
+      "editor.lineHighlightBackground": "#0c1118",
+      "editorInlayHint.typeBackground": "#0d1116",
+      "titleBar.activeBackground": "#02040a",
+      "titleBar.activeForeground": "#7c8590"
+    },
+    "activityBar.background": "#342E08",
+    "titleBar.activeBackground": "#48400B",
+    "titleBar.activeForeground": "#FCFAED"
+  }
 }

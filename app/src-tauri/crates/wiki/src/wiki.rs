@@ -1,16 +1,30 @@
 use std::ffi::OsStr;
+use std::fs;
+use std::io;
+use std::path::Path;
 use walkdir::WalkDir;
 
 // get all the .md files from the given folder
-pub fn get_md_files(folder_path: &str) -> Vec<String> {
+pub fn get_md_files(folder_path: &str) -> Result<Vec<String>, io::Error> {
+    if !Path::new(folder_path).exists() {
+        return Err(io::Error::new(
+            io::ErrorKind::NotFound,
+            format!(
+                "Folder '{}' does not exist. Run `pnpm run dev-setup` at root of project.",
+                folder_path
+            ),
+        ));
+    }
+
     let mut paths = Vec::new();
     for entry in WalkDir::new(folder_path) {
-        let entry = entry.unwrap();
+        let entry = entry.map_err(|e| io::Error::new(io::ErrorKind::Other, e))?;
         if entry.path().extension() == Some(OsStr::new("md")) {
             paths.push(entry.path().to_string_lossy().to_string());
         }
     }
-    paths
+
+    Ok(paths)
 }
 
 pub fn get_content_of_file(file_path: &str) -> String {
