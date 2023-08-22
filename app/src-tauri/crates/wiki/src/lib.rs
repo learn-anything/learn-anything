@@ -16,9 +16,11 @@ mod wiki;
 pub struct TopicStruct {
     title: String,
     content: String,
+    notes: Option<Vec<Note>>,
+    links: Option<Vec<Link>>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Note {
     note: String,
     subnotes: Vec<String>,
@@ -26,7 +28,7 @@ pub struct Note {
     public: Option<bool>, // TODO: should be not optional, temp for testing
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Link {
     title: String,
     url: String,
@@ -35,10 +37,16 @@ pub struct Link {
     related_links: Vec<RelatedLink>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct RelatedLink {
     title: String,
     url: String,
+}
+
+pub struct ParsedMarkdown {
+    topic: TopicStruct,
+    notes: Vec<Note>,
+    links: Vec<Link>,
 }
 
 // Helper function to extract title from front matter
@@ -58,16 +66,16 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
     let mut nodes = VecDeque::new();
     nodes.push_back(ast);
 
-    let mut pretty_topic_name = None;
-    let mut content = String::new();
-    let mut collecting_content = false;
+    let mut pretty_topic_name = None; // is the topic name extracted from front matter or heading
+    let mut content = String::new(); // everything before ## Notes or ## Links
+
+    let mut collecting_content = true;
 
     // Check for front matter title
-    let front_matter_title = extract_title_from_front_matter(markdown_string);
-    if let Some(title) = front_matter_title {
-        pretty_topic_name = Some(title);
-        collecting_content = true;
-    }
+    pretty_topic_name = extract_title_from_front_matter(markdown_string);
+
+    let mut notes = Vec::new();
+    let mut links = Vec::new();
 
     while let Some(node) = nodes.pop_front() {
         match &node {
@@ -88,10 +96,6 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
                             .collect::<Vec<String>>()
                             .join(" "),
                     );
-                    collecting_content = true;
-                } else if heading.depth > 1 {
-                    // Found a Level-2 (or deeper) heading, we can stop collecting content
-                    collecting_content = false;
                 }
             }
             Node::Paragraph(para) => {
@@ -125,13 +129,6 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
             }
         }
     }
-
-    let title_str =
-        pretty_topic_name.ok_or_else(|| anyhow::Error::msg("Failed to extract title"))?;
-    Ok(TopicStruct {
-        title: title_str,
-        content: content.trim().to_string(),
-    })
 }
 
 #[cfg(test)]
@@ -143,57 +140,12 @@ mod tests {
 
     use super::*;
 
-    #[test]
-    fn test_no_front_matter_heading_content() {
-        let markdown_string = r#"# Hardware
-
-    [Digital Design and Computer Architecture course](https://safari.ethz.ch/digitaltechnik/spring2021/doku.php?id=start), [From Nand to Tetris](https://github.com/ghaiklor/nand-2-tetris) are great.
-    "#;
-
-        let topic = parse_md_content_as_topic(&markdown_string).unwrap();
-        log!(topic);
-
-        assert_eq!(
-            topic,
-            TopicStruct {
-                title: "Hardware".to_string(),
-                content: "[Digital Design and Computer Architecture course](https://safari.ethz.ch/digitaltechnik/spring2021/doku.php?id=start), [From Nand to Tetris](https://github.com/ghaiklor/nand-2-tetris) are great.".to_string()
-            }
-        );
-    }
-
     // #[test]
-    // fn test_front_matter_heading_content_notes_links() {
-    //     let markdown_string = r#"---
-    //     title: SolidJS
-    //     ---
+    // fn test_no_front_matter_heading_content() {
+    //     let markdown_string = r#"# Hardware
 
-    //     # [SolidJS](https://www.solidjs.com/)
-
-    //     Love Solid. Has [best parts](https://www.youtube.com/watch?v=qB5jK-KeXOs) of [React](react.md).
-
-    //     [Fine grained reactivity](https://dev.to/ryansolid/a-hands-on-introduction-to-fine-grained-reactivity-3ndf) is nice.
-
-    //     ## OSS apps
-
-    //     - [CodeImage](https://github.com/riccardoperra/codeimage)
-    //     - [Solid Hacker News](https://github.com/solidjs/solid-hackernews)
-
-    //     ## Notes
-
-    //     - [Solid will never "re-render" your component/function.](https://twitter.com/Axibord1/status/1606106151539687425)
-    //       - Means you don't ever have to optimise re-renders.
-    //       - And don't have to fight with React useEffect.
-    //     - [Solid Dev Tools](https://github.com/thetarnav/solid-devtools) are great.
-    //     - createResource makes a signal out of a promise.
-    //     - Builin components like [For](https://www.solidjs.com/docs/latest/api#for) and [Show](https://www.solidjs.com/docs/latest/api#show) are great.
-    //     - [Biggest difference between React and Solid is that things that can change are wrapped in signals in Solid, and in dependencies arrays in React.](https://twitter.com/fabiospampinato/status/1528537000504184834)
-
-    //     ## Links
-
-    //     - [Hope UI](https://github.com/fabien-ml/hope-ui) - SolidJS component library you've hoped for. ([Docs](https://hope-ui.com/docs/getting-started))
-    //     - [SolidJS Docs](https://docs.solidjs.com/)
-    //     "#;
+    // [Digital Design and Computer Architecture course](https://safari.ethz.ch/digitaltechnik/spring2021/doku.php?id=start), [From Nand to Tetris](https://github.com/ghaiklor/nand-2-tetris) are great.
+    // "#;
 
     //     let topic = parse_md_content_as_topic(&markdown_string).unwrap();
     //     log!(topic);
@@ -201,27 +153,72 @@ mod tests {
     //     assert_eq!(
     //         topic,
     //         TopicStruct {
-    //             title: "SolidJS".to_string(),
-    //             content: "# [SolidJS](https://www.solidjs.com/)\nLove Solid. Has [best parts](https://www.youtube.com/watch?v=qB5jK-KeXOs) of [React](react.md).\n[Fine grained reactivity](https://dev.to/ryansolid/a-hands-on-introduction-to-fine-grained-reactivity-3ndf) is nice.\n## OSS apps\n- [CodeImage](https://github.com/riccardoperra/codeimage)\n- [Solid Hacker News](https://github.com/solidjs/solid-hackernews)".to_string()
+    //             title: "Hardware".to_string(),
+    //             content: "[Digital Design and Computer Architecture course](https://safari.ethz.ch/digitaltechnik/spring2021/doku.php?id=start), [From Nand to Tetris](https://github.com/ghaiklor/nand-2-tetris) are great.".to_string()
     //         }
     //     );
-
-    //     let notes = vec![
-    //         Note {
-    //             note: "[Solid will never \"re-render\" your component/function.](https://twitter.com/Axibord1/status/1606106151539687425)".to_string(),
-    //             subnotes: vec![
-    //                 "Means you don't ever have to optimise re-renders.".to_string(),
-    //                 "And don't have to fight with React useEffect.".to_string()
-    //             ],
-    //             url: Some("https://twitter.com/Axibord1/status/1606106151539687425".to_string()),
-    //             public: None // Based on your code, this field is optional and not provided
-    //         },
-    //         Note {
-    //             note: "[Solid Dev Tools](https://github.com/thetarnav/solid-devtools) are great.".to_string(),
-    //             subnotes: vec![],
-    //             url: Some("https://github.com/thetarnav/solid-devtools".to_string()),
-    //             public: None
-    //         },
-    //     ];
     // }
+
+    #[test]
+    fn test_front_matter_heading_content_notes_links() {
+        let markdown_string = r#"---
+title: SolidJS
+---
+
+# [SolidJS](https://www.solidjs.com/)
+
+Love Solid. Has [best parts](https://www.youtube.com/watch?v=qB5jK-KeXOs) of [React](react.md).
+
+[Fine grained reactivity](https://dev.to/ryansolid/a-hands-on-introduction-to-fine-grained-reactivity-3ndf) is nice.
+
+## OSS apps
+
+- [CodeImage](https://github.com/riccardoperra/codeimage)
+- [Solid Hacker News](https://github.com/solidjs/solid-hackernews)
+
+## Notes
+
+- [Solid will never "re-render" your component/function.](https://twitter.com/Axibord1/status/1606106151539687425)
+    - Means you don't ever have to optimise re-renders.
+    - And don't have to fight with React useEffect.
+- [Solid Dev Tools](https://github.com/thetarnav/solid-devtools) are great.
+- createResource makes a signal out of a promise.
+- Builin components like [For](https://www.solidjs.com/docs/latest/api#for) and [Show](https://www.solidjs.com/docs/latest/api#show) are great.
+- [Biggest difference between React and Solid is that things that can change are wrapped in signals in Solid, and in dependencies arrays in React.](https://twitter.com/fabiospampinato/status/1528537000504184834)
+
+## Links
+
+- [Hope UI](https://github.com/fabien-ml/hope-ui) - SolidJS component library you've hoped for. ([Docs](https://hope-ui.com/docs/getting-started))
+- [SolidJS Docs](https://docs.solidjs.com/)
+"#;
+
+        let topic = parse_md_content_as_topic(&markdown_string).unwrap();
+        log!(topic);
+
+        let notes = vec![
+            Note {
+                note: "[Solid will never \"re-render\" your component/function.](https://twitter.com/Axibord1/status/1606106151539687425)".to_string(),
+                subnotes: vec![
+                    "Means you don't ever have to optimise re-renders.".to_string(),
+                    "And don't have to fight with React useEffect.".to_string()
+                ],
+                url: Some("https://twitter.com/Axibord1/status/1606106151539687425".to_string()),
+                public: None // Based on your code, this field is optional and not provided
+            },
+            Note {
+                note: "[Solid Dev Tools](https://github.com/thetarnav/solid-devtools) are great.".to_string(),
+                subnotes: vec![],
+                url: Some("https://github.com/thetarnav/solid-devtools".to_string()),
+                public: None
+            },
+        ];
+
+        assert_eq!(
+            topic,
+            TopicStruct {
+                title: "SolidJS".to_string(),
+                content: "# [SolidJS](https://www.solidjs.com/)\nLove Solid. Has [best parts](https://www.youtube.com/watch?v=qB5jK-KeXOs) of [React](react.md).\n[Fine grained reactivity](https://dev.to/ryansolid/a-hands-on-introduction-to-fine-grained-reactivity-3ndf) is nice.\n## OSS apps\n- [CodeImage](https://github.com/riccardoperra/codeimage)\n- [Solid Hacker News](https://github.com/solidjs/solid-hackernews)".to_string()
+            }
+        );
+    }
 }
