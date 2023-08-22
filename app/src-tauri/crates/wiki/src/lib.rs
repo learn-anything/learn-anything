@@ -162,68 +162,104 @@ mod tests {
         );
     }
 
-    //     #[test]
-    //     fn test_front_matter_heading_content_notes_links() {
-    //         let markdown_string = r#"---
-    // title: SolidJS
-    // ---
+    #[test]
+    fn test_front_matter_heading_content_notes_links() {
+        let markdown_string = r#"---
+    title: SolidJS
+    ---
 
-    // # [SolidJS](https://www.solidjs.com/)
+    # [SolidJS](https://www.solidjs.com/)
 
-    // Love Solid. Has [best parts](https://www.youtube.com/watch?v=qB5jK-KeXOs) of [React](react.md).
+    Love Solid. Has [best parts](https://www.youtube.com/watch?v=qB5jK-KeXOs) of [React](react.md).
 
-    // [Fine grained reactivity](https://dev.to/ryansolid/a-hands-on-introduction-to-fine-grained-reactivity-3ndf) is nice.
+    [Fine grained reactivity](https://dev.to/ryansolid/a-hands-on-introduction-to-fine-grained-reactivity-3ndf) is nice.
 
-    // ## OSS apps
+    ## OSS apps
 
-    // - [CodeImage](https://github.com/riccardoperra/codeimage)
-    // - [Solid Hacker News](https://github.com/solidjs/solid-hackernews)
+    - [CodeImage](https://github.com/riccardoperra/codeimage)
+    - [Solid Hacker News](https://github.com/solidjs/solid-hackernews)
 
-    // ## Notes
+    ## Notes
 
-    // - [Solid will never "re-render" your component/function.](https://twitter.com/Axibord1/status/1606106151539687425)
-    //     - Means you don't ever have to optimise re-renders.
-    //     - And don't have to fight with React useEffect.
-    // - [Solid Dev Tools](https://github.com/thetarnav/solid-devtools) are great.
-    // - createResource makes a signal out of a promise.
-    // - Builin components like [For](https://www.solidjs.com/docs/latest/api#for) and [Show](https://www.solidjs.com/docs/latest/api#show) are great.
-    // - [Biggest difference between React and Solid is that things that can change are wrapped in signals in Solid, and in dependencies arrays in React.](https://twitter.com/fabiospampinato/status/1528537000504184834)
+    - [Solid will never "re-render" your component/function.](https://twitter.com/Axibord1/status/1606106151539687425)
+        - Means you don't ever have to optimise re-renders.
+        - And don't have to fight with React useEffect.
+    - [Solid Dev Tools](https://github.com/thetarnav/solid-devtools) are great.
+    - createResource makes a signal out of a promise.
+    - Builin components like [For](https://www.solidjs.com/docs/latest/api#for) and [Show](https://www.solidjs.com/docs/latest/api#show) are great.
+    - [Biggest difference between React and Solid is that things that can change are wrapped in signals in Solid, and in dependencies arrays in React.](https://twitter.com/fabiospampinato/status/1528537000504184834)
 
-    // ## Links
+    ## Links
 
-    // - [Hope UI](https://github.com/fabien-ml/hope-ui) - SolidJS component library you've hoped for. ([Docs](https://hope-ui.com/docs/getting-started))
-    // - [SolidJS Docs](https://docs.solidjs.com/)
-    // "#;
+    - [Hope UI](https://github.com/fabien-ml/hope-ui) - SolidJS component library you've hoped for. ([Docs](https://hope-ui.com/docs/getting-started))
+    - [SolidJS Docs](https://docs.solidjs.com/)
+    "#;
 
-    //         let topic = parse_md_content_as_topic(&markdown_string).unwrap();
-    //         log!(topic);
+        let topic = parse_md_content_as_topic(&markdown_string).unwrap();
+        log!(topic);
 
-    //         let notes = vec![
-    //         Note {
-    //             note: "[Solid will never \"re-render\" your component/function.](https://twitter.com/Axibord1/status/1606106151539687425)".to_string(),
-    //             subnotes: vec![
-    //                 "Means you don't ever have to optimise re-renders.".to_string(),
-    //                 "And don't have to fight with React useEffect.".to_string()
-    //             ],
-    //             url: Some("https://twitter.com/Axibord1/status/1606106151539687425".to_string()),
-    //             public: None // Based on your code, this field is optional and not provided
-    //         },
-    //         Note {
-    //             note: "[Solid Dev Tools](https://github.com/thetarnav/solid-devtools) are great.".to_string(),
-    //             subnotes: vec![],
-    //             url: Some("https://github.com/thetarnav/solid-devtools".to_string()),
-    //             public: None
-    //         },
-    //     ];
+        let notes = vec![
+            Note {
+                note: "[Solid will never \"re-render\" your component/function.](https://twitter.com/Axibord1/status/1606106151539687425)".to_string(),
+                subnotes: vec![
+                    "Means you don't ever have to optimise re-renders.".to_string(),
+                    "And don't have to fight with React useEffect.".to_string()
+                ],
+                url: Some("https://twitter.com/Axibord1/status/1606106151539687425".to_string()),
+                public: None
+            },
+            Note {
+                note: "[Solid Dev Tools](https://github.com/thetarnav/solid-devtools) are great.".to_string(),
+                subnotes: vec![],
+                url: Some("https://github.com/thetarnav/solid-devtools".to_string()),
+                public: None
+            },
+            Note {
+                note: "createResource makes a signal out of a promise.".to_string(),
+                subnotes: vec![],
+                url: None,
+                public: None
+            },
+            Note {
+                // all notes are rendered as markdown
+                note: "Builin components like [For](https://www.solidjs.com/docs/latest/api#for) and [Show](https://www.solidjs.com/docs/latest/api#show) are great.".to_string(),
+                subnotes: vec![],
+                url: None,
+                public: None
+            },
+            Note {
+                note: "[Biggest difference between React and Solid is that things that can change are wrapped in signals in Solid, and in dependencies arrays in React.](https://twitter.com/fabiospampinato/status/1528537000504184834)".to_string(),
+                subnotes: vec![],
+                url: Some("https://twitter.com/fabiospampinato/status/1528537000504184834".to_string()),
+                public: None
+            },
+        ];
 
-    //         assert_eq!(
-    //         topic,
-    //         TopicStruct {
-    //             title: "SolidJS".to_string(),
-    //             content: "# [SolidJS](https://www.solidjs.com/)\nLove Solid. Has [best parts](https://www.youtube.com/watch?v=qB5jK-KeXOs) of [React](react.md).\n[Fine grained reactivity](https://dev.to/ryansolid/a-hands-on-introduction-to-fine-grained-reactivity-3ndf) is nice.\n## OSS apps\n- [CodeImage](https://github.com/riccardoperra/codeimage)\n- [Solid Hacker News](https://github.com/solidjs/solid-hackernews)".to_string(),
-    //             notes: None, // Add this line
-    //             links: None, // And this line
-    //         }
-    //     );
-    //     }
+        let links = vec![
+            Link {
+                title: "Hope UI".to_string(),
+                url: "https://github.com/fabien-ml/hope-ui".to_string(),
+                public: None,
+                description: Some("SolidJS component library you've hoped for.".to_string()),
+                related_links: vec![],
+            },
+            Link {
+                title: "SolidJS Docs".to_string(),
+                url: "https://docs.solidjs.com/".to_string(),
+                public: None,
+                description: None,
+                related_links: vec![],
+            },
+        ];
+
+        assert_eq!(
+            topic,
+            TopicStruct {
+                title: "SolidJS".to_string(),
+                content: "# [SolidJS](https://www.solidjs.com/)\nLove Solid. Has [best parts](https://www.youtube.com/watch?v=qB5jK-KeXOs) of [React](react.md).\n[Fine grained reactivity](https://dev.to/ryansolid/a-hands-on-introduction-to-fine-grained-reactivity-3ndf) is nice.\n## OSS apps\n- [CodeImage](https://github.com/riccardoperra/codeimage)\n- [Solid Hacker News](https://github.com/solidjs/solid-hackernews)".to_string(),
+                notes: None, // Add this line
+                links: None, // And this line
+            }
+        );
+    }
 }
