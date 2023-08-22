@@ -68,6 +68,13 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
 
     let mut title = extract_title_from_front_matter(markdown_string);
     let mut content = String::new();
+    let mut notes = Vec::new();
+    let mut links = Vec::new();
+
+    let mut collecting_content = true;
+    let mut collecting_notes = false;
+    let mut collecting_links = false;
+    let mut current_note: Option<Note> = None;
 
     while let Some(node) = nodes.pop_front() {
         match &node {
@@ -88,32 +95,59 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
                             .join(" "),
                     );
                 }
-            }
-            Node::Paragraph(para) => {
-                let mut para_content = String::new();
-                for child in &para.children {
-                    match child {
-                        Node::Text(text) => {
-                            para_content.push_str(&text.value);
+
+                if let Some(Node::Text(text)) = heading.children.first() {
+                    match text.value.as_str() {
+                        "Notes" => {
+                            collecting_content = false;
+                            collecting_notes = true;
+                            collecting_links = false;
                         }
-                        Node::Link(link) => {
-                            if let Node::Text(text) = &link.children[0] {
-                                let link_str = format!("[{}]({})", text.value.trim(), link.url);
-                                para_content.push_str(&link_str);
-                            }
+                        "Links" => {
+                            collecting_content = false;
+                            collecting_notes = false;
+                            collecting_links = true;
                         }
                         _ => {}
                     }
                 }
+            }
+            Node::List(list) => {
+                for item in &list.children {
+                    if collecting_notes {
+                        if let Some(Node::Paragraph(para)) = item.children()?.first() {
+                            if let Node::Text(text) = &para.children[0] {
+                                current_note = Some(Note {
+                                    note: text.value.clone(),
+                                    subnotes: Vec::new(),
+                                    url: None,
+                                    public: None,
+                                });
+                            }
+                        }
 
-                content.push_str(&para_content);
-                content.push(' ');
+                        if let Some(Node::List(sublist)) = item.children()?.get(1) {
+                            for subitem in &sublist.children {
+                                if let Some(Node::Paragraph(para)) = subitem.children()?.first() {
+                                    if let Node::Text(text) = &para.children[0] {
+                                        current_note
+                                            .as_mut()
+                                            .unwrap()
+                                            .subnotes
+                                            .push(text.value.clone());
+                                    }
+                                }
+                            }
+                        }
+
+                        if let Some(note) = current_note.take() {
+                            notes.push(note);
+                        }
+                    } else if collecting_links {
+                    }
+                }
             }
-            Node::Code(code) => {
-                content.push_str(&code.value);
-                content.push(' ');
-            }
-            _ => {}
+            Node::Paragraph(para) => {}
         }
 
         if let Some(children) = node.children() {
@@ -127,8 +161,8 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
     Ok(TopicStruct {
         title: title_str,
         content: content.trim().to_string(),
-        notes: None, // Placeholder, since the functionality to parse notes isn't present
-        links: None, // Placeholder, since the functionality to parse links isn't present
+        notes: if notes.is_empty() { None } else { Some(notes) },
+        links: if links.is_empty() { None } else { Some(links) },
     })
 }
 
@@ -257,8 +291,8 @@ mod tests {
             TopicStruct {
                 title: "SolidJS".to_string(),
                 content: "# [SolidJS](https://www.solidjs.com/)\nLove Solid. Has [best parts](https://www.youtube.com/watch?v=qB5jK-KeXOs) of [React](react.md).\n[Fine grained reactivity](https://dev.to/ryansolid/a-hands-on-introduction-to-fine-grained-reactivity-3ndf) is nice.\n## OSS apps\n- [CodeImage](https://github.com/riccardoperra/codeimage)\n- [Solid Hacker News](https://github.com/solidjs/solid-hackernews)".to_string(),
-                notes: None, // Add this line
-                links: None, // And this line
+                notes: Some(notes),
+                links: Some(links)
             }
         );
     }
