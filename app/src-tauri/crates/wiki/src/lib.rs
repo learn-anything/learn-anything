@@ -4,7 +4,6 @@
 
 #[macro_use]
 extern crate log_macro;
-extern crate regex; // TODO: check maybe no need for this, it compiled without this line..
 
 use anyhow::Result;
 use markdown::{mdast::Node, to_mdast, ParseOptions};
@@ -13,7 +12,6 @@ use std::{collections::VecDeque, net::SocketAddr};
 mod test;
 mod wiki;
 
-// TODO: &'a looks ugly, is there a better way?
 #[derive(Debug, PartialEq)]
 pub struct TopicStruct {
     title: String,
@@ -146,69 +144,84 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_md_file_with_heading_and_content_only() {
-        let test_folder_path = get_test_folder_path();
+    fn test_no_front_matter_heading_content() {
+        let markdown_string = r#"# Hardware
 
-        if let Some(path_str) = test_folder_path.to_str() {
-            match get_md_files(path_str) {
-                Ok(paths) => {
-                    if !paths.is_empty() {
-                        let test_file_name = "hardware.md";
-                        let test_file_name =
-                            paths.iter().find(|path| path.ends_with(test_file_name));
+    [Digital Design and Computer Architecture course](https://safari.ethz.ch/digitaltechnik/spring2021/doku.php?id=start), [From Nand to Tetris](https://github.com/ghaiklor/nand-2-tetris) are great.
+    "#;
 
-                        match test_file_name {
-                            Some(path) => {
-                                let content = get_content_of_file(path);
-                                let topic = parse_md_content_as_topic(&content).unwrap();
-                                assert_eq!(
-                            topic,
-                            TopicStruct {
-                                title: "Hardware".to_string(),
-                                content: "[Digital Design and Computer Architecture course](https://safari.ethz.ch/digitaltechnik/spring2021/doku.php?id=start), [From Nand to Tetris](https://github.com/ghaiklor/nand-2-tetris) are great.".to_string()
-                            }
-                        );
-                            }
-                            None => {
-                                eprintln!("File {:?} not found!", test_file_name);
-                            }
-                        }
-                    }
-                }
-                Err(e) => eprintln!("Error: {}", e),
+        let topic = parse_md_content_as_topic(&markdown_string).unwrap();
+        log!(topic);
+
+        assert_eq!(
+            topic,
+            TopicStruct {
+                title: "Hardware".to_string(),
+                content: "[Digital Design and Computer Architecture course](https://safari.ethz.ch/digitaltechnik/spring2021/doku.php?id=start), [From Nand to Tetris](https://github.com/ghaiklor/nand-2-tetris) are great.".to_string()
             }
-        } else {
-            println!("Path is not valid UTF-8");
-        }
+        );
     }
 
-    #[test]
-    fn test_md_file_with_heading_and_content_and_notes_and_links() {
-        let test_folder_path = get_test_folder_path();
+    // #[test]
+    // fn test_front_matter_heading_content_notes_links() {
+    //     let markdown_string = r#"---
+    //     title: SolidJS
+    //     ---
 
-        if let Some(path_str) = test_folder_path.to_str() {
-            match get_md_files(path_str) {
-                Ok(paths) => {
-                    if !paths.is_empty() {
-                        let test_file_name = "solid.md";
-                        let test_file_name =
-                            paths.iter().find(|path| path.ends_with(test_file_name));
+    //     # [SolidJS](https://www.solidjs.com/)
 
-                        match test_file_name {
-                            Some(path) => {
-                                let content = get_content_of_file(path);
-                                let topic = parse_md_content_as_topic(&content).unwrap();
-                            }
-                            None => {
-                                eprintln!("File {:?} not found!", test_file_name);
-                            }
-                        }
-                    }
-                }
-                Err(e) => eprintln!("Error: {}", e),
-            }
-        } else {
-            println!("Path is not valid UTF-8");
-        }
-    }
+    //     Love Solid. Has [best parts](https://www.youtube.com/watch?v=qB5jK-KeXOs) of [React](react.md).
+
+    //     [Fine grained reactivity](https://dev.to/ryansolid/a-hands-on-introduction-to-fine-grained-reactivity-3ndf) is nice.
+
+    //     ## OSS apps
+
+    //     - [CodeImage](https://github.com/riccardoperra/codeimage)
+    //     - [Solid Hacker News](https://github.com/solidjs/solid-hackernews)
+
+    //     ## Notes
+
+    //     - [Solid will never "re-render" your component/function.](https://twitter.com/Axibord1/status/1606106151539687425)
+    //       - Means you don't ever have to optimise re-renders.
+    //       - And don't have to fight with React useEffect.
+    //     - [Solid Dev Tools](https://github.com/thetarnav/solid-devtools) are great.
+    //     - createResource makes a signal out of a promise.
+    //     - Builin components like [For](https://www.solidjs.com/docs/latest/api#for) and [Show](https://www.solidjs.com/docs/latest/api#show) are great.
+    //     - [Biggest difference between React and Solid is that things that can change are wrapped in signals in Solid, and in dependencies arrays in React.](https://twitter.com/fabiospampinato/status/1528537000504184834)
+
+    //     ## Links
+
+    //     - [Hope UI](https://github.com/fabien-ml/hope-ui) - SolidJS component library you've hoped for. ([Docs](https://hope-ui.com/docs/getting-started))
+    //     - [SolidJS Docs](https://docs.solidjs.com/)
+    //     "#;
+
+    //     let topic = parse_md_content_as_topic(&markdown_string).unwrap();
+    //     log!(topic);
+
+    //     assert_eq!(
+    //         topic,
+    //         TopicStruct {
+    //             title: "SolidJS".to_string(),
+    //             content: "# [SolidJS](https://www.solidjs.com/)\nLove Solid. Has [best parts](https://www.youtube.com/watch?v=qB5jK-KeXOs) of [React](react.md).\n[Fine grained reactivity](https://dev.to/ryansolid/a-hands-on-introduction-to-fine-grained-reactivity-3ndf) is nice.\n## OSS apps\n- [CodeImage](https://github.com/riccardoperra/codeimage)\n- [Solid Hacker News](https://github.com/solidjs/solid-hackernews)".to_string()
+    //         }
+    //     );
+
+    //     let notes = vec![
+    //         Note {
+    //             note: "[Solid will never \"re-render\" your component/function.](https://twitter.com/Axibord1/status/1606106151539687425)".to_string(),
+    //             subnotes: vec![
+    //                 "Means you don't ever have to optimise re-renders.".to_string(),
+    //                 "And don't have to fight with React useEffect.".to_string()
+    //             ],
+    //             url: Some("https://twitter.com/Axibord1/status/1606106151539687425".to_string()),
+    //             public: None // Based on your code, this field is optional and not provided
+    //         },
+    //         Note {
+    //             note: "[Solid Dev Tools](https://github.com/thetarnav/solid-devtools) are great.".to_string(),
+    //             subnotes: vec![],
+    //             url: Some("https://github.com/thetarnav/solid-devtools".to_string()),
+    //             public: None
+    //         },
+    //     ];
+    // }
 }

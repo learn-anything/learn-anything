@@ -4,7 +4,7 @@ use std::io;
 use std::path::Path;
 use walkdir::WalkDir;
 
-// get all the .md files from the given folder
+// get all .md files from folder
 pub fn get_md_files(folder_path: &str) -> Result<Vec<String>, io::Error> {
     if !Path::new(folder_path).exists() {
         return Err(io::Error::new(
