@@ -115,7 +115,11 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
             Node::List(list) => {
                 for item in &list.children {
                     if collecting_notes {
-                        if let Some(Node::Paragraph(para)) = item.children()?.first() {
+                        if let Some(Node::Paragraph(para)) = item
+                            .children()
+                            .ok_or(anyhow::Error::msg("Failed to get children"))?
+                            .first()
+                        {
                             if let Node::Text(text) = &para.children[0] {
                                 current_note = Some(Note {
                                     note: text.value.clone(),
@@ -126,9 +130,17 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
                             }
                         }
 
-                        if let Some(Node::List(sublist)) = item.children()?.get(1) {
+                        if let Some(Node::List(sublist)) = item
+                            .children()
+                            .ok_or(anyhow::Error::msg("Failed to get children"))?
+                            .get(1)
+                        {
                             for subitem in &sublist.children {
-                                if let Some(Node::Paragraph(para)) = subitem.children()?.first() {
+                                if let Some(Node::Paragraph(para)) = subitem
+                                    .children()
+                                    .ok_or(anyhow::Error::msg("Failed to get children"))?
+                                    .first()
+                                {
                                     if let Node::Text(text) = &para.children[0] {
                                         current_note
                                             .as_mut()
@@ -148,6 +160,7 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
                 }
             }
             Node::Paragraph(para) => {}
+            _ => {} // This will catch all other variants of the Node enum
         }
 
         if let Some(children) = node.children() {
