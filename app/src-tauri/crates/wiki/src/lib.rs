@@ -286,11 +286,25 @@ mod tests {
             },
         ];
 
+        let topic_content = r#"
+# [SolidJS](https://www.solidjs.com/)
+
+Love Solid. Has [best parts](https://www.youtube.com/watch?v=qB5jK-KeXOs) of [React](react.md).
+
+[Fine grained reactivity](https://dev.to/ryansolid/a-hands-on-introduction-to-fine-grained-reactivity-3ndf) is nice.
+
+## OSS apps
+
+- [CodeImage](https://github.com/riccardoperra/codeimage)
+- [Solid Hacker News](https://github.com/solidjs/solid-hackernews)
+
+"#;
+
         assert_eq!(
             topic,
             TopicStruct {
                 title: "SolidJS".to_string(),
-                content: "# [SolidJS](https://www.solidjs.com/)\nLove Solid. Has [best parts](https://www.youtube.com/watch?v=qB5jK-KeXOs) of [React](react.md).\n[Fine grained reactivity](https://dev.to/ryansolid/a-hands-on-introduction-to-fine-grained-reactivity-3ndf) is nice.\n## OSS apps\n- [CodeImage](https://github.com/riccardoperra/codeimage)\n- [Solid Hacker News](https://github.com/solidjs/solid-hackernews)".to_string(),
+                content: topic_content.to_string(),
                 notes: Some(notes),
                 links: Some(links)
             }
