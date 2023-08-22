@@ -134,11 +134,12 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
     // set to true once ## Links is found
     let mut collecting_links = false;
 
-    // example note that can have a subnote:
+    // set to true before hitting ## Notes or ## Links
+    let mut collecting_content = true;
+
+    // TODO: GPT-4 generated, think its for this case of subnotes:
     // - Solid will never "re-render" your component/function.
     //     - Means you don't ever have to optimise re-renders.
-    // it's used to make that case work
-    // TODO: can it be avoided?
     let mut current_note: Option<Note> = None;
 
     while let Some(node) = nodes.pop_front() {
@@ -164,12 +165,12 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
                 if let Some(Node::Text(text)) = heading.children.first() {
                     match text.value.as_str() {
                         "Notes" => {
-                            // collecting_content = false;
+                            collecting_content = false;
                             collecting_notes = true;
                             collecting_links = false;
                         }
                         "Links" => {
-                            // collecting_content = false;
+                            collecting_content = false;
                             collecting_notes = false;
                             collecting_links = true;
                         }
@@ -225,13 +226,17 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
                 }
             }
             Node::Code(code) => {
-                content.push_str(&code.value);
-                content.push_str("\n\n"); // Add two newlines for Markdown
+                if collecting_content {
+                    content.push_str(&code.value);
+                    content.push_str("\n\n"); // Add two newlines for Markdown
+                }
             }
             Node::Paragraph(para) => {
-                if let Some(Node::Text(text)) = para.children.first() {
-                    content.push_str(&text.value);
-                    content.push_str("\n\n"); // Add two newlines for Markdown paragraphs
+                if collecting_content {
+                    if let Some(Node::Text(text)) = para.children.first() {
+                        content.push_str(&text.value);
+                        content.push_str("\n\n"); // Add two newlines for Markdown paragraphs
+                    }
                 }
             }
             _ => {} // This will catch all other variants of the Node enum
