@@ -1,3 +1,18 @@
+// purpose of this crate is to parse markdown content into a Topic structure
+// assumed structure of most files is:
+// optional front matter
+// # Heading
+// markdown
+// ## Optional heading
+// more markdown with optional headings
+// ## Notes (optional)
+// ## Links (optional)
+
+// everything before either ## Notes or ## Links is content
+// everything inside ## Notes heading is notes
+// everything inside ## Links heading is links
+// check test cases for various examples
+
 #![allow(unused_imports)]
 #![allow(dead_code)]
 #![allow(unused_variables)]
@@ -14,10 +29,11 @@ mod wiki;
 
 #[derive(Debug, PartialEq)]
 pub struct TopicStruct {
-    title: String,
-    content: String,
-    notes: Option<Vec<Note>>,
-    links: Option<Vec<Link>>,
+    public: Option<bool>, // extracted from front matter (i.e. public: true/false) if found
+    title: String, // extracted from front matter (i.e. title: Solid) or first heading (if no title: in front matter)
+    content: String, // everything before ## Notes or ## Links (excluding front matter)
+    notes: Option<Vec<Note>>, // everything inside ## Notes heading
+    links: Option<Vec<Link>>, // everything inside ## Links heading
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -25,16 +41,39 @@ pub struct Note {
     note: String,
     subnotes: Vec<String>,
     url: Option<String>,
-    public: Option<bool>, // TODO: should be not optional, temp for testing
+    public: bool,
+}
+
+impl Default for Note {
+    fn default() -> Self {
+        Note {
+            note: String::new(),
+            subnotes: Vec::new(),
+            url: None,
+            public: true,
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Link {
     title: String,
     url: String,
-    public: Option<bool>, // TODO: should be not optional, temp for testing
+    public: bool,
     description: Option<String>,
     related_links: Vec<RelatedLink>,
+}
+
+impl Default for Link {
+    fn default() -> Self {
+        Link {
+            title: String::new(),
+            url: String::new(),
+            public: true,
+            description: None,
+            related_links: Vec::new(),
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -57,7 +96,8 @@ fn extract_title_from_front_matter(markdown: &str) -> Option<String> {
         .map(|m| m.as_str().to_string())
 }
 
-// parse markdown file, extract topic
+// Parse markdown file, extract topic
+// each topic has title, content, notes, links
 pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicStruct> {
     let options = ParseOptions::default();
     let ast = to_mdast(markdown_string, &options).map_err(anyhow::Error::msg)?;
@@ -66,6 +106,12 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
     let mut nodes = VecDeque::new();
     nodes.push_back(ast);
 
+    // example front matter:
+    // ---
+    // title: Solid
+    // ---
+    // title will be `Solid`
+    // if no front matter, title will be whats in first heading
     let mut title = extract_title_from_front_matter(markdown_string);
     let mut content = String::new();
     let mut notes = Vec::new();
@@ -124,7 +170,7 @@ pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicSt
                                     note: text.value.clone(),
                                     subnotes: Vec::new(),
                                     url: None,
-                                    public: None,
+                                    public: true,
                                 });
                             }
                         }
@@ -263,32 +309,32 @@ Love Solid. Has [best parts](https://www.youtube.com/watch?v=qB5jK-KeXOs) of [Re
                     "And don't have to fight with React useEffect.".to_string()
                 ],
                 url: Some("https://twitter.com/Axibord1/status/1606106151539687425".to_string()),
-                public: None
+                public: true
             },
             Note {
                 note: "[Solid Dev Tools](https://github.com/thetarnav/solid-devtools) are great.".to_string(),
                 subnotes: vec![],
                 url: Some("https://github.com/thetarnav/solid-devtools".to_string()),
-                public: None
+                public: true
             },
             Note {
                 note: "createResource makes a signal out of a promise.".to_string(),
                 subnotes: vec![],
                 url: None,
-                public: None
+                public: true
             },
             Note {
                 // all notes are rendered as markdown
                 note: "Builin components like [For](https://www.solidjs.com/docs/latest/api#for) and [Show](https://www.solidjs.com/docs/latest/api#show) are great.".to_string(),
                 subnotes: vec![],
                 url: None,
-                public: None
+                public: true
             },
             Note {
                 note: "[Biggest difference between React and Solid is that things that can change are wrapped in signals in Solid, and in dependencies arrays in React.](https://twitter.com/fabiospampinato/status/1528537000504184834)".to_string(),
                 subnotes: vec![],
                 url: Some("https://twitter.com/fabiospampinato/status/1528537000504184834".to_string()),
-                public: None
+                public: true
             },
         ];
 
@@ -296,14 +342,14 @@ Love Solid. Has [best parts](https://www.youtube.com/watch?v=qB5jK-KeXOs) of [Re
             Link {
                 title: "Hope UI".to_string(),
                 url: "https://github.com/fabien-ml/hope-ui".to_string(),
-                public: None,
+                public: true,
                 description: Some("SolidJS component library you've hoped for.".to_string()),
                 related_links: vec![],
             },
             Link {
                 title: "SolidJS Docs".to_string(),
                 url: "https://docs.solidjs.com/".to_string(),
-                public: None,
+                public: true,
                 description: None,
                 related_links: vec![],
             },
