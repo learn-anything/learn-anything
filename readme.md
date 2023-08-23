@@ -199,52 +199,15 @@ If you are interested in helping out, join [Discord](https://discord.com/invite/
 
 ## Tasks
 
-Issues are made in [this repo](https://github.com/nikitavoloboev/la-issues/issues) for now. Until [this](https://github.com/calcom/synclinear.com/issues/127) is solved.
+All issues are made in [this repo](https://github.com/nikitavoloboev/la-issues/issues) for now. Until [this](https://github.com/calcom/synclinear.com/issues/127) is solved.
 
-Below will be moved to GitHub issues soon enough. Main focus is not getting the app + website deployed. Then proper GitHub issue workflow will be setup.
+Most urgent tasks to do are:
 
-- move markdown parser from ts to rust
-  - use [markdown-rs](https://github.com/wooorm/markdown-rs)
-  - currently doing this part in [rust repo](https://github.com/nikitavoloboev/rust)
-- make app work with Tauri
-  - this app used electron before but it had issues when trying to deploy it, code for it [here](https://github.com/learn-anything/electron-version)
-- add sqlite persistence
-  - what tinybase did in electron version, written in rust
-- add [turbo](https://turbo.build/)
-  - allow sharing code from `lib` folder at root everywhere else, with ability to deploy code seamlessly too
-- load nikita's wiki into sqlite with rust and run queries, check in app, all data is there correctly
-    <!-- - `pnpm ts-run` will run [run.ts](run.ts) file that has code to load things into tinybase from seed/wiki/nikita -->
-  <!-- - make [test/wiki.test.ts](test/wiki.test.ts) test pass (partly done, trying to load nikita's wiki and see what breaks)
-    - add tests for files that break into test suite with proper `expect` checks -->
-- tauri app close to [Obsidian](https://obsidian.md/)/[Reflect](https://reflect.app/) in UX
-  - be able to edit markdown files, show sidebar of files/folders on the left
-  <!-- - sync up with file system, using [watcher package](https://github.com/fabiospampinato/watcher) most likely -->
-- everything nicely persisted to sqlite with rust and solid.js store syncing working well
-  - test well
-- setup proper code sharing between monorepo packages
-  - there is `lib` and `lib/components` folders at root
-    - should be usable across all the mono repo (specifically `app` and `website`)
-  - the way packages are imported should be thought out well - which packages get installed at root? which go to specific package?
-  <!-- - would be nice if app/packages did not exist potentially
-  - just don't think app/packages is nice structure, maybe move everything into app/
-  - afraid to modify it as it came from template and moving things will break -->
-  <!-- - in dev tools panel when you click on `Seed TinyBase (default)`, it seeds with default files
-  - also add `Seed TinyBase (custom)`, then provide an option of folders to choose what to seed so users can provide custom folders to seed quickly -->
-  <!-- - is there need for app/packages/electron-web/package.json?
-  - or app/package.json is enough
-  - it's all the same bundle I would think -->
-- VSCode does not automatically suggest imports from [lib](lib) folder (super annoying)
-  - also imports use relative imports like `../../lib`. should be `~/lib/` instead
-  - use [turbo tsconfig setup for it](https://github.com/vercel/turbo/discussions/620)?
-  - if you do global import from [test](test), it will actually do non relative imports
-    - however imports from [app](app) to say [lib](lib) won't work, maybe due to tsconfig in app folder
-- Setup [devenv](https://devenv.sh/) to get one command dev env install. Currently we ask to install EdgeDB manually for example.
-- use user data to fine tune LLaMa model using [this setup](https://twitter.com/mattshumer_/status/1688958387973734400)
-<!-- - Can potentially [use only one codebase for both web code and electron app renderer code](https://github.com/brillout/vite-plugin-ssr/discussions/1011), using [vite-plugin-ssr](https://vite-plugin-ssr.com/).
-  - Electron expects `index.html` file as entry but [Solid Start](https://github.com/solidjs/solid-start) does not provide a `index.html` file. At least I don't know how to make that work so for now its split up. The app is quite different to the website in features so it's even for the best. -->
-- upload [docs](docs) withs vitepress
-  - update aggressively so all development and future goals / tasks and how to get things done is clear
-  - [Inlang docs](https://inlang.com/documentation) is nice example
+- [Move markdown parser from ts to rust](https://github.com/nikitavoloboev/la-issues/issues/2)
+- [Setup Tauri + SQLite + Wiki sync](https://github.com/nikitavoloboev/la-issues/issues/21)
+- [Publish all content correctly to EdgeDB](https://github.com/nikitavoloboev/la-issues/issues/31)
+- [Website release](https://github.com/nikitavoloboev/la-issues/issues/11)
+- [Desktop app release](https://github.com/nikitavoloboev/la-issues/issues/17)
 
 ## Docs
 

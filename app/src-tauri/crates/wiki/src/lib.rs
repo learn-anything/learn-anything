@@ -13,6 +13,11 @@
 // everything inside ## Links heading is links
 // check test cases for various examples
 
+// note: there is a working parser code in TS with mdast here:
+// https://github.com/learn-anything/electron-version/blob/main/lib/wiki/wiki.ts#L76
+// but it has rather bad code + is in TS
+// also has tests for it here: https://github.com/learn-anything/electron-version/blob/main/test/wiki.test.ts#L8
+
 #![allow(unused_imports)]
 #![allow(dead_code)]
 #![allow(unused_variables)]
