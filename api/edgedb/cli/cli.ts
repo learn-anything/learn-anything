@@ -5,7 +5,7 @@ import * as fs from "fs"
 import { fromMarkdown } from "mdast-util-from-markdown"
 import { toMarkdown } from "mdast-util-to-markdown"
 import { toString } from "mdast-util-to-string"
-import { addUser } from "../user"
+import { addUser, deleteUser } from "../user"
 import dotenv from "dotenv"
 
 dotenv.config()
@@ -20,6 +20,7 @@ dotenv.config()
 
 async function main() {
   addUser({ name: process.env.name!, email: process.env.email! })
+  // deleteUser("8c3f922a-1dbf-11ee-9485-9bfe38021547")
   // const paths = await markdownFilePaths(process.env.wikiFolderPath!)
   // const topic = await addMarkdownFileAsTopicToSqlite(paths[0])
   // console.log(topic, "topic")
@@ -31,35 +32,33 @@ async function main() {
 
 main()
 
-type User = {
-  wiki: Wiki
-  username: string
-}
-
-type Wiki = {
-  topics: Topic[]
-}
+// type Wiki = {
+//   topics: Topic[]
+// }
 
 type Topic = {
-  title: string // extracted from front matter (i.e. title: Solid) or first heading (if no title: in front matter)
-  laTopic: string // topic in LA (i.e. topic name can be 3D Printing but LA topic is 3d-printing)
+  name: string // extracted from front matter (i.e. title: Solid) or first heading (if no title: in front matter)
+  globalTopic: string // topic in LA (i.e. topic name can be 3D Printing but LA global topic is 3d-printing)
   public: boolean // extracted from front matter (i.e. public: true/false) if found
   content: string // everything before ## Notes or ## Links (excluding front matter)
   notes: Note[] // everything inside ## Notes heading
   links: Link[] // everything inside ## Links heading
-  markdownFileContent: string // full markdown file content for the topic
+  topicAsMarkdown: string // everything in the topic as markdown
 }
 
 type Note = {
-  note: string // note content as markdown
-  // example:
-  // - This is great note
-  //   - This is a subnote
-  //   - Another subnote
-  subnotes: string[]
-  // example:
-  // - [Learn Anything](https://learn-anything.xyz)
+  content: string // note content as markdown
+  // additional content of the note
+  // i.e.
+  // - note
+  //  - additional content in form of subnotes
+  //  - another subnote
+  additionalContent: string
   public: boolean // default is configurable by user, set to true initially
+  // url from where the note was taken from or has reference to
+  // i.e.
+  // - [Learn Anything](https://learn-anything.xyz)
+  // url is https://learn-anything.xyz
   url?: string
 }
 
@@ -131,8 +130,8 @@ async function parseMdFile(filePath: string) {
   const tree = fromMarkdown(markdownFileContent)
   // console.log(tree, "tree")
 
-  // CLI assumes that the file name is LA topic name
-  let laTopic = path.basename(filePath, path.extname(filePath))
+  // CLI assumes that the file name is LA global topic name
+  let globalTopic = path.basename(filePath, path.extname(filePath))
   let title
   let content = ""
   let notes: Note[] = []
@@ -384,8 +383,8 @@ async function parseMdFile(filePath: string) {
   // console.log(content, "content")
 
   return {
-    title,
-    laTopic,
+    name: title,
+    globalTopic,
     content,
     notes,
     links,
