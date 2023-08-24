@@ -5,29 +5,68 @@ import * as fs from "fs"
 import { fromMarkdown } from "mdast-util-from-markdown"
 import { toMarkdown } from "mdast-util-to-markdown"
 import { toString } from "mdast-util-to-string"
-import { addUser, deleteUser } from "../user"
+import { addUser } from "../user"
 import dotenv from "dotenv"
+import e from "../dbschema/edgeql-js"
+import { client } from "../client"
 
 dotenv.config()
 
-// current goal of the CLI is to simply seed LA EdgeDB database with topics
-// from a provided folder of markdown files
-// https://github.com/learn-anything/seed/tree/main/wiki/nikita is the folder used for seeding
-// TODO: adapt this CLI to be used as a way to bootstrap EdgeDB for local development
-
-// see app/src-tauri/crates/wiki/src/lib.rs
-// for markdown parsing that will be used in the desktop app
+// goal of the CLI is to seed LA EdgeDB database with topics
+// for the script to run, create `.env` file in this folder with content:
+// name=your-name
+// email=your-email@gmail.com
+// wikiFolderPath=path/to/your/wiki/or/seed/wiki
+// for example, if you ran `pnpm dev-setup`, in root of this project you have `seed` folder
+// from this repo https://github.com/learn-anything/seed
+// the path can be something like:
+// wikiFolderPath=/Users/nikiv/src/learn-anything.xyz/seed/wiki/nikita
 
 async function main() {
-  addUser({ name: process.env.name!, email: process.env.email! })
-  // deleteUser("8c3f922a-1dbf-11ee-9485-9bfe38021547")
-  // const paths = await markdownFilePaths(process.env.wikiFolderPath!)
-  // const topic = await addMarkdownFileAsTopicToSqlite(paths[0])
-  // console.log(topic, "topic")
+  const paths = await markdownFilePaths(process.env.wikiFolderPath!)
+  const topic = await addMarkdownFileAsTopicToSqlite(paths[0])
+  console.log(topic, "topic")
   // topic.links.map((link) => {
   //   console.log(link, "link")
   //   console.log(link.relatedLinks, "related links")
   // })
+}
+
+// creates a wiki linked to user
+// TODO: userId need?
+async function addWiki(userId: string) {
+  const res = await e
+    .insert(e.Wiki, {
+      // TODO: how to make work?
+      name: userId,
+    })
+    .run(client)
+  console.log(res)
+  return res
+}
+
+// TODO: is wikiId needed?
+async function addTopic(topic: Topic, wikiId: string) {
+  const res = await e
+    .insert(e.Topic, {
+      // TODO: how to make work?
+      wiki: wikiId,
+      name: topic.name,
+      public: topic.public,
+      content: topic.content,
+      // TODO: how to map notes in nice way?
+      // notes: topic.notes.map
+      // TODO: how to map links in nice way?
+      // links: topic.links.map
+      topicAsMarkdown: topic.topicAsMarkdown,
+    })
+    .run(client)
+  console.log(res)
+  return res
+}
+
+function createUser() {
+  addUser({ name: process.env.name!, email: process.env.email! })
 }
 
 main()
@@ -398,3 +437,7 @@ export async function addMarkdownFileAsTopicToSqlite(filePath: string) {
   // TODO: add sqlite insert code
   return topic
 }
+
+// TODO: adapt this CLI to be used as a way to bootstrap EdgeDB for local development for all kinds of cases
+// see app/src-tauri/crates/wiki/src/lib.rs
+// for markdown parsing that will be used in the desktop app

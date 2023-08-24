@@ -30,6 +30,7 @@ interface Topic {
   prettyName: string
 }
 
+// TODO: in topic: Topic, Topic should come from generated EdgeDB TS bindings I think
 export async function addTopic(topic: Topic, userId: string) {
   const query = e.params(
     {
@@ -75,14 +76,14 @@ export async function addTopic(topic: Topic, userId: string) {
                 topic: e.assert_exists(
                   e.select(newTopic, () => ({
                     filter_single: { id: newTopic.id },
-                  }))
+                  })),
                 ),
-              })
-            )
-          )
-        )
+              }),
+            ),
+          ),
+        ),
       )
-    }
+    },
   )
   return query.run(client, {
     userId,
@@ -134,7 +135,7 @@ export async function getTopic(topicName: string, userId: string) {
       filter: e.op(
         e.op(topic.name, "=", topicName),
         "and",
-        e.op(topic.user.id, "=", e.cast(e.uuid, userId))
+        e.op(topic.user.id, "=", e.cast(e.uuid, userId)),
       ),
     }))
     // .toEdgeQL()
@@ -185,7 +186,7 @@ export async function getLinkCountForTopic(topicName: string, userId: string) {
       filter: e.op(
         e.op(topic.name, "=", topicName),
         "and",
-        e.op(topic.user.id, "=", e.cast(e.uuid, userId))
+        e.op(topic.user.id, "=", e.cast(e.uuid, userId)),
       ),
     }))
     .toEdgeQL()
