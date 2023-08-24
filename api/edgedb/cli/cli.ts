@@ -5,6 +5,10 @@ import * as fs from "fs"
 import { fromMarkdown } from "mdast-util-from-markdown"
 import { toMarkdown } from "mdast-util-to-markdown"
 import { toString } from "mdast-util-to-string"
+import { addUser } from "../user"
+import dotenv from "dotenv"
+
+dotenv.config()
 
 // current goal of the CLI is to simply seed LA EdgeDB database with topics
 // from a provided folder of markdown files
@@ -15,14 +19,14 @@ import { toString } from "mdast-util-to-string"
 // for markdown parsing that will be used in the desktop app
 
 async function main() {
-  // TODO: don't hard code it, make it env variable
-  const paths = await markdownFilePaths("/Users/nikiv/src/sites/wiki/docs")
-  const topic = await addMarkdownFileAsTopicToSqlite(paths[0])
+  addUser({ name: process.env.name!, email: process.env.email! })
+  // const paths = await markdownFilePaths(process.env.wikiFolderPath!)
+  // const topic = await addMarkdownFileAsTopicToSqlite(paths[0])
   // console.log(topic, "topic")
-  topic.links.map((link) => {
-    console.log(link, "link")
-    console.log(link.relatedLinks, "related links")
-  })
+  // topic.links.map((link) => {
+  //   console.log(link, "link")
+  //   console.log(link.relatedLinks, "related links")
+  // })
 }
 
 main()
