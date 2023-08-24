@@ -8,24 +8,16 @@ import { toString } from "mdast-util-to-string"
 
 // current goal of the CLI is to simply seed LA EdgeDB database with topics
 // from a provided folder of markdown files
-// this CLI will also be used as a way to bootstrap EdgeDB for local development
+// https://github.com/learn-anything/seed/tree/main/wiki/nikita is the folder used for seeding
+// TODO: adapt this CLI to be used as a way to bootstrap EdgeDB for local development
 
 // see app/src-tauri/crates/wiki/src/lib.rs
 // for markdown parsing that will be used in the desktop app
 
 async function main() {
   const paths = await markdownFilePaths("/Users/nikiv/src/sites/wiki")
-  const topic = await addMarkdownFileAsTopic(paths[0])
-  console.log(topic, "topic")
-  // await Promise.all(
-  //   paths.map(async (filePath) => {
-  //     await addMarkdownFileAsTopic(filePath)
-  //   }),
-  // )
-  // console.log(paths, "paths")
-  // const query = db.query("select 'Hello world' as message;")
-  // query.get() // => { message: "Hello world" }
-  // console.log(query.get())
+  const topic = await addMarkdownFileAsTopicToSqlite(paths[0])
+  // console.log(topic, "topic")
 }
 
 main()
@@ -46,7 +38,7 @@ type Topic = {
   content: string // everything before ## Notes or ## Links (excluding front matter)
   notes: Note[] // everything inside ## Notes heading
   links: Link[] // everything inside ## Links heading
-  fileContent: string // full markdown file content for the topic
+  markdownFileContent: string // full markdown file content for the topic
 }
 
 type Note = {
@@ -126,9 +118,9 @@ async function markdownFilePaths(
 // everything inside ## Notes heading is notes
 // everything inside ## Links heading is links
 async function parseMdFile(filePath: string) {
-  const fileContent = (await readFile(filePath)).toString()
-  const tree = fromMarkdown(fileContent)
-  console.log(tree)
+  const markdownFileContent = (await readFile(filePath)).toString()
+  const tree = fromMarkdown(markdownFileContent)
+  // console.log(tree, "tree")
 
   // CLI assumes that the file name is LA topic name
   let laTopic = path.basename(filePath, path.extname(filePath))
@@ -159,57 +151,50 @@ async function parseMdFile(filePath: string) {
       continue
     }
     // if front matter doesn't exist, take the first heading as title
+    // example heading:
+
     if (
       !gotTitle &&
       !gotTitleFromFrontMatter &&
       node.type === "heading" &&
-      node.depth === 1
+      node.depth === 1 // we only consider # Heading. not ## Heading
     ) {
-      // example heading:
-      // # [Learn Anything](https://learn-anything.xyz)
-      if (node.type === "heading") {
-        console.log(node, "node")
-        title = node.children[0].children.value
-        content = content + toMarkdown(node)
-        // content =
-        //   content +
-        //   fileContent.slice(
-        //     node.position?.start.offset,
-        //     node.position?.end.offset,
-        //   )
+      // console.log(node, "node")
+      // title = node.children[0].children.value
+      // content = content + toMarkdown(node)
 
-        // content = content.slice()
-      } else {
-        // if # Heading
+      // if heading has a link like:
+      // # [Learn Anything](https://learn-anything.xyz)
+      // then title is Learn Anything
+      if (
+        node.children.length > 0 &&
+        node.children[0].type === "link" &&
+        node.children[0].children[0].type === "text"
+      ) {
+        title = node.children[0].children[0].value
+        content = content + toMarkdown(node)
+      }
+      // if its heading without a link like
+      // # Learn Anything
+      // then title is Learn Anything
+      else if (node.children.length > 0 && node.children[0].type === "text") {
         title = node.children[0].value
         content = content + toMarkdown(node)
-        // content =
-        //   content +
-        //   fileContent.slice(
-        //     node.position?.start.offset,
-        //     node.position?.end.offset,
-        //   )
       }
-
       gotTitle = true
       continue
     }
-    // console.log(node, "node")
 
-    // TODO: this is messy
-    // but the idea is that if ## Notes is found
-    // it will start parsing ## Notes
+    // parsingNotes is true when `## Notes` heading was reached, parse notes until either ## Links or end of file
     if (parsingNotes) {
-      // console.log(node, "node")
+      console.log(node, "node")
 
-      // if ## Links is found after ## Notes
-      // stop processing notes and start processing links
-      // TODO: super messy, very similar code appears below too
+      // if ## Links is found, stop processing notes and start processing links
       if (
         node.type === "heading" &&
         node.depth === 2 &&
-        // TODO: is there a nice type safe way to get value of nodes?
-        node.children[0]?.value === "Links"
+        node.children[0].type === "text" &&
+        node.children[0].value === "Links"
       ) {
         parsingNotes = false
         parsingLinks = true
@@ -220,37 +205,43 @@ async function parseMdFile(filePath: string) {
       if (node.type === "list") {
         node.children.forEach(async (note) => {
           let noteAsMarkdown = ""
+          // TODO: perhaps make it not `subnotes` but just `additionalNotes`?
+          // where `additionalNotes` is just markdown string
+          // example of subnotes:
+          // - note
+          //  - subnote is [markdown](https://en.wikipedia.org/wiki/Markdown)
+          //  - another subnote
           let subnotes: string[] = []
 
-          // noteUrl is
-          // if note is this
-          // [Link only](https://learn-anything.xyz)
-          // then noteUrl is https://learn-anything.xyz
-          // in all other cases noteAsMarkdown is markdown string of the note
-          // this is useful as then a note can be instantly clickable with a link
+          // example:
+          // - [Acceleration is independent of mass of object.](https://www.reddit.com/r/Physics/comments/iezeqe/gravity/)
+          // then noteUrl is https://www.reddit.com/r/Physics/comments/iezeqe/gravity/
           let noteUrl
 
-          const noteContent = note.children
-
-          // there are subnotes
-          if (noteContent.length > 1) {
-            noteAsMarkdown = toMarkdown(noteContent[0])
-            noteContent.forEach((note, i) => {
+          if (note.children.length > 1) {
+            // if there is a note that is not fully wrapped in a link, it's rendered as markdown
+            // example:
+            // - [Learn Anything](https://learn-anything.xyz) is great
+            // noteAsMarkdown is `[Learn Anything](https://learn-anything.xyz) is great`
+            noteAsMarkdown = toMarkdown(node.children[0])
+            node.children.forEach((note, i) => {
               if (i > 0) {
                 note.children.forEach((subnote) => {
-                  subnotes.push(
-                    toMarkdown(subnote.children[0].children[0]).replace(
-                      "\n",
-                      "",
-                    ),
-                  )
+                  if (subnote.type === "list") {
+                    subnotes.push(
+                      toMarkdown(subnote.children[0].children[0]).replace(
+                        "\n",
+                        "",
+                      ),
+                    )
+                  }
                 })
               }
             })
           }
           // no subnotes
           else {
-            noteAsMarkdown = toMarkdown(noteContent[0])
+            noteAsMarkdown = toMarkdown(node.children[0])
           }
 
           // detect that noteAsMarkdown is a link
@@ -258,6 +249,8 @@ async function parseMdFile(filePath: string) {
           // [Link](url)
           // text with [Link](url)
           // won't count
+          // TODO: very ugly, ideally it goes away if there is no `subnotes`
+          // but just `additionalNotes` as mentioned above
           const markdownLinkRegex = /^\[[^\]]+\]\([^)]+\)$/
           if (markdownLinkRegex.test(noteAsMarkdown.replace("\n", ""))) {
             noteUrl = noteAsMarkdown.split("(")[1].split(")")[0]
@@ -267,15 +260,15 @@ async function parseMdFile(filePath: string) {
             note: noteAsMarkdown.replace("\n", ""),
             subnotes,
             url: noteUrl,
+            public: true,
           })
         })
       }
       continue
     }
 
-    // parsing ## Links
+    // parsingLinks is true when `## Links` heading was reached, parse links until end of file
     if (parsingLinks) {
-      // process all the links as bullet points
       if (node.type === "list") {
         node.children.forEach((link) => {
           let linkTitle = ""
@@ -284,10 +277,7 @@ async function parseMdFile(filePath: string) {
           let relatedLinks: { title: string; url: string }[] = []
 
           const linkContent = link.children
-          // console.log(linkContent, "link content")
           linkContent.forEach((link) => {
-            // console.log(link, "link")
-
             link.children.forEach((linkDetail) => {
               // example url:
               // - [Hope UI](https://github.com/fabien-ml/hope-ui) - SolidJS component library you've hoped for. ([Docs](https://hope-ui.com/docs/getting-started))
@@ -345,32 +335,29 @@ async function parseMdFile(filePath: string) {
       continue
     }
 
-    // everything until ## Notes is found is content
+    // once ## Notes is found, start parsing notes
     if (
       node.type === "heading" &&
       node.depth === 2 &&
-      // TODO: how to make type safe?
-      node.children[0]?.value === "Notes"
+      node.children[0].type === "text" &&
+      node.children[0].value === "Notes"
     ) {
       parsingNotes = true
       continue
     }
 
-    // everything until ## Links is found is content (or potentially Notes)
-    // assumes that ## Links heading won't go before ## Notes
+    // once ## Links is found, start parsing links
     if (
       node.type === "heading" &&
       node.depth === 2 &&
-      node.children[0]?.value === "Links"
+      node.children[0].type === "text" &&
+      node.children[0].value === "Links"
     ) {
       parsingLinks = true
       continue
     }
 
-    // parse content
-    // TODO: it eats empty lines in between paragraphs
-    // also it currently skips any ## Heading inside `content`
-    // they should be included
+    // everything excluding `front matter`, `## Notes` and `## Links` is considered `content`
     content = content + toMarkdown(node)
   }
 
@@ -380,84 +367,21 @@ async function parseMdFile(filePath: string) {
   })
   content = content.replace("\n", "")
 
-  // console.log(topicName, "topic name")
-  // console.log(prettyTopicName, "pretty topic name")
   // console.log(content, "content")
-  // console.log(notes, "notes")
-  // console.log(links, "links")
 
   return {
-    topicName,
-    fileContent,
-    prettyTopicName,
+    title,
+    laTopic,
     content,
     notes,
     links,
+    public: true, // TODO: it should come from front matter `public: true/false`
+    markdownFileContent,
   }
 }
 
-export async function addMarkdownFileAsTopic(filePath: string) {
+export async function addMarkdownFileAsTopicToSqlite(filePath: string) {
   const topic = await parseMdFile(filePath)
-  console.log(topic, "topic")
-  // store.startTransaction()
-  // store.setRow("topics", topic.topicName, {
-  //   topicName: topic.topicName,
-  //   filePath: filePath,
-  //   fileContent: topic.fileContent,
-  //   topicContent: topic.content,
-  //   prettyName: topic.prettyTopicName,
-  // })!
-
-  // topic.notes.map((note) => {
-  //   // console.log("adding note", note)
-  //   const noteId = store.addRow("notes", {
-  //     topicId: topic.topicName,
-  //     note: note.note,
-  //     url: note.url ? note.url : "",
-  //   })!
-  //   // console.log(noteId, "note with id added")
-  //   if (note.subnotes.length > 0) {
-  //     note.subnotes.map((subnote) => {
-  //       store.addRow("subnotes", {
-  //         noteId: noteId,
-  //         subnote: subnote,
-  //       })
-  //     })
-  //   }
-  // })
-  // topic.links.map((link) => {
-  //   console.log("adding link", link)
-  //   const linkId = store.addRow("links", {
-  //     topicId: topic.topicName,
-  //     title: link.title,
-  //     url: link.url,
-  //     description: link.description ? link.description : "",
-  //   })!
-  //   console.log(linkId, "link with id added")
-  //   if (link.relatedLinks.length > 0) {
-  //     link.relatedLinks.map((relatedLink) => {
-  //       store.addRow("relatedLinks", {
-  //         linkId: linkId,
-  //         title: relatedLink.title,
-  //         url: relatedLink.url,
-  //       })
-  //     })
-  //   }
-  // })
-  // store.finishTransaction()
-}
-
-// overwrite topic content with new content from the file
-export async function updateTopicFromMarkdownFile(filePath: string) {
-  const topic = await parseMdFile(filePath)
-
-  // TODO: instead of addRow, do setRow
-  // TODO: need row id, how to get it nicely?
-  // const topicId = store.setRow("topics", {
-  //   topicName: topic.topicName,
-  //   filePath: filePath,
-  //   fileContent: topic.fileContent,
-  //   topicContent: topic.content,
-  //   prettyName: topic.prettyTopicName,
-  // })!
+  // TODO: add sqlite insert code
+  return topic
 }
