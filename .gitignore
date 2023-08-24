@@ -14,3 +14,4 @@ learn-anything
 app/learn-anything
 app/scripts/learn-anything
 app/test/learn-anything
+cli/la.sqlite
