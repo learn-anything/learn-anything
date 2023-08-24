@@ -15,9 +15,14 @@ import { toString } from "mdast-util-to-string"
 // for markdown parsing that will be used in the desktop app
 
 async function main() {
-  const paths = await markdownFilePaths("/Users/nikiv/src/sites/wiki")
+  // TODO: don't hard code it, make it env variable
+  const paths = await markdownFilePaths("/Users/nikiv/src/sites/wiki/docs")
   const topic = await addMarkdownFileAsTopicToSqlite(paths[0])
   // console.log(topic, "topic")
+  topic.links.map((link) => {
+    console.log(link, "link")
+    console.log(link.relatedLinks, "related links")
+  })
 }
 
 main()
@@ -187,7 +192,7 @@ async function parseMdFile(filePath: string) {
 
     // parsingNotes is true when `## Notes` heading was reached, parse notes until either ## Links or end of file
     if (parsingNotes) {
-      console.log(node, "node")
+      // console.log(node, "node")
 
       // if ## Links is found, stop processing notes and start processing links
       if (
@@ -270,64 +275,69 @@ async function parseMdFile(filePath: string) {
     // parsingLinks is true when `## Links` heading was reached, parse links until end of file
     if (parsingLinks) {
       if (node.type === "list") {
-        node.children.forEach((link) => {
+        node.children.forEach((linkNode) => {
           let linkTitle = ""
           let linkUrl = ""
           let linkDescription = ""
           let relatedLinks: { title: string; url: string }[] = []
 
-          const linkContent = link.children
-          linkContent.forEach((link) => {
-            link.children.forEach((linkDetail) => {
-              // example url:
-              // - [Hope UI](https://github.com/fabien-ml/hope-ui) - SolidJS component library you've hoped for. ([Docs](https://hope-ui.com/docs/getting-started))
-              // position.start.column needed because you need to make sure that
-              // it does not catch [Docs](..) as a link here
-              // 2nd url that appears as () is related link instead
-              // TODO: is there nicer way?
-              if (
-                linkDetail.type === "link" &&
-                linkDetail.position.start.column < 15
-              ) {
-                linkTitle = linkDetail.children[0].value
-                linkUrl = linkDetail.url
-              }
-              // capture description
-              // in above example, this will be
-              // SolidJS component library you've hoped for.
-              else if (linkDetail.type === "text") {
-                // description starts with Capital letter
-                // and ends with a .
-                // strip all else
-                // TODO: hacky way to not replace linkDescription with stray ( symbols
-                if (linkDetail.value.length > 5) {
-                  linkDescription = linkDetail.value.replace(
-                    /^[^a-zA-Z]+|[\s(]+$/g,
-                    "",
-                  )
+          linkNode.children.forEach((link) => {
+            // console.log(link, "link")
+            if (link.type === "paragraph") {
+              link.children.forEach((linkDetail) => {
+                // console.log(linkDetail, "link detail")
+                // example link with related links:
+                // - [Hope UI](https://github.com/fabien-ml/hope-ui) - SolidJS component library you've hoped for. ([Docs](https://hope-ui.com/docs/getting-started))
+                // linkTitle is Hope UI. linkUrl is https://github.com/fabien-ml/hope-ui. linkDescription is SolidJS component library you've hoped for.
+                // relatedLinks is [{title: Docs, url: https://hope-ui.com/docs/getting-started}]
+
+                // get link title and url
+                // it uses position.start.column because without it, it will capture linkDescription I think
+                // TODO: how to improve? it might not even work properly currently
+                if (
+                  linkDetail.type === "link" &&
+                  linkDetail.position &&
+                  linkDetail.position.start.column < 15 &&
+                  linkDetail.children[0].type === "text"
+                ) {
+                  linkTitle = linkDetail.children[0].value
+                  linkUrl = linkDetail.url
                 }
-              }
-              // capture related links
-              // in above example, this will be
-              // ([Docs](https://hope-ui.com/docs/getting-started))
-              // where Docs is title
-              // https://hope-ui.com/docs/getting-started is url
-              // there can be more than 1 related link
-              else if (
-                linkDetail.type === "link" &&
-                linkDetail.position.start.column > 15
-              ) {
-                relatedLinks.push({
-                  title: linkDetail.children[0].value,
-                  url: linkDetail.url,
-                })
-              }
-            })
+                // get description
+                // description starts with Capital letter and ends with a .
+                else if (linkDetail.type === "text") {
+                  if (linkDetail.value.length > 5) {
+                    linkDescription = linkDetail.value.replace(
+                      /^[^a-zA-Z]+|[\s(]+$/g,
+                      "",
+                    )
+                  }
+                }
+                // capture related links
+                // in above example, this will be
+                // ([Docs](https://hope-ui.com/docs/getting-started))
+                // where Docs is title
+                // https://hope-ui.com/docs/getting-started is url
+                // there can be more than 1 related link
+                else if (
+                  linkDetail.type === "link" &&
+                  linkDetail.position &&
+                  linkDetail.position.start.column > 15 &&
+                  linkDetail.children[0].type === "text"
+                ) {
+                  relatedLinks.push({
+                    title: linkDetail.children[0].value,
+                    url: linkDetail.url,
+                  })
+                }
+              })
+            }
             links.push({
               title: linkTitle,
               url: linkUrl,
               description: linkDescription,
               relatedLinks,
+              public: true,
             })
           })
         })
