@@ -170,7 +170,7 @@ module default {
     # title of section
     required title: str;
     # list of links in a section
-    links: array<Link>;
+    multi links: Link;
     # position of the section in the guide
     order: int16;
   }
