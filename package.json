@@ -6,7 +6,7 @@
     "dev-setup": "pnpm run seed-clone",
     "test": "vitest",
     "app:dev": "cd app && pnpm tauri:dev",
-    "web:dev": "cd website && solid-start dev",
+    "web:dev": "cd website && pnpm run dev",
     "web:build": "cd website && solid-start build",
     "web:start": "cd website && solid-start start",
     "db:init": "cd api/edgedb && edgedb project init",

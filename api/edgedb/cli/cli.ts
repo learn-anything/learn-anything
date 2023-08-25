@@ -39,6 +39,7 @@ async function main() {
 
   const paths = await markdownFilePaths(process.env.wikiFolderPath!)
   const topic = await await parseMdFile(paths[0])
+  // console.log(topic.links)
 
   await addTopic(topic, wikiId!)
 
