@@ -5,7 +5,7 @@ export async function getWikiIdByUserId(userId: string) {
   const res = await e
     .select(e.Wiki, (wiki) => ({
       id: true,
-      filter: e.op(user.id, "ilike", userId),
+      filter: e.op(wiki.user.id, "=", e.cast(e.uuid, userId)),
     }))
     .run(client)
   if (res.length === 0) {

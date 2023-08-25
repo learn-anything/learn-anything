@@ -1,37 +1,54 @@
+import { Link, Note, Topic } from "../cli/cli"
 import { client } from "../client"
 import e from "../dbschema/edgeql-js"
 
-export interface Link {
-  title: string
-  url: string
-  description: string | null
-  public: boolean
-  related: RelatedLink[]
+async function addTopic(topic: Topic, wikiId: string) {
+  const res = await e
+    .insert(e.Topic, {
+      wiki: wikiId,
+      name: topic.name,
+      public: topic.public,
+      content: topic.content,
+      // notes: topic.notes.map
+      // links: topic.links.map
+      topicAsMarkdown: topic.topicAsMarkdown,
+    })
+    .run(client)
+  console.log(res)
+  return res
 }
 
-export interface RelatedLink {
-  title: string
-  url: string
-}
+// export interface Link {
+//   title: string
+//   url: string
+//   description: string | null
+//   public: boolean
+//   related: RelatedLink[]
+// }
 
-export interface Note {
-  content: string
-  public: boolean
-  url: string | null
-}
+// export interface RelatedLink {
+//   title: string
+//   url: string
+// }
 
-interface Topic {
-  name: string
-  content: string
-  parentTopic: string | null
-  public: boolean
-  notes: Note[]
-  links: Link[]
-  prettyName: string
-}
+// export interface Note {
+//   content: string
+//   public: boolean
+//   url: string | null
+// }
+
+// // interface OldTopic {
+// //   name: string
+// //   content: string
+// //   parentTopic: string | null
+// //   public: boolean
+// //   notes: Note[]
+// //   links: Link[]
+// //   prettyName: string
+// // }
 
 // TODO: in topic: Topic, Topic should come from generated EdgeDB TS bindings I think
-export async function addTopic(topic: Topic, userId: string) {
+export async function addTopicOld(topic: Topic, userId: string) {
   const query = e.params(
     {
       userId: e.uuid,

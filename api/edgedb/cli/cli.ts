@@ -35,10 +35,10 @@ async function main() {
   if (!wikiId) {
     await addWiki(userId!)
   }
-  console.log(wikiId)
 
-  // const paths = await markdownFilePaths(process.env.wikiFolderPath!)
-  // const topic = await addMarkdownFileAsTopicToSqlite(paths[0])
+  const paths = await markdownFilePaths(process.env.wikiFolderPath!)
+  const topic = await await parseMdFile(paths[0])
+
   // const userId = await getUserIdByName(process.env.name!)
   // topic.links.map((link) => {
   //   console.log(link, "link")
@@ -62,7 +62,7 @@ async function addWiki(userId: string) {
 
 main()
 
-type Topic = {
+export type Topic = {
   name: string // extracted from front matter (i.e. title: Solid) or first heading (if no title: in front matter)
   globalTopic: string // topic in LA (i.e. topic name can be 3D Printing but LA global topic is 3d-printing)
   public: boolean // extracted from front matter (i.e. public: true/false) if found
@@ -72,7 +72,7 @@ type Topic = {
   topicAsMarkdown: string // everything in the topic as markdown
 }
 
-type Note = {
+export type Note = {
   content: string // note content as markdown
   // additional content of the note
   // i.e.
@@ -88,7 +88,7 @@ type Note = {
   url?: string
 }
 
-type Link = {
+export type Link = {
   title: string // link title
   url: string // link url
   public: boolean // default is configurable by user, set to true initially
@@ -102,7 +102,7 @@ type Link = {
   relatedLinks: RelatedLink[]
 }
 
-type RelatedLink = {
+export type RelatedLink = {
   title: string
   url: string
 }
