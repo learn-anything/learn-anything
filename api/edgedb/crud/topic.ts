@@ -16,25 +16,55 @@ async function addTopic(topic: Topic, wikiId: string) {
     },
     (params) => {
       const newTopic = e.insert(e.Topic, {
-        wiki: e.select(e.Wiki, (wiki) => ({
-          filter: e.op(wiki.id, "=", e.uuid(wikiId)),
-        })),
+        wiki: e.assert_exists(
+          e.assert_single(
+            e.select(e.Wiki, (wiki) => ({
+              filter: e.op(wiki.id, "=", e.uuid(wikiId)),
+            })),
+          ),
+        ),
+        content: topic.content,
+        public: topic.public,
+        name: topic.name,
       })
+      return e.with(
+        [newTopic],
+        e.for(e.json_array_unpack(params.notes), (note) =>
+          e.op(
+            e.insert(e.Note, {
+              content: e.cast(e.str, e.json_get(note, "content")),
+              url: e.cast(e.str, e.json_get(note, "url")),
+              public: e.cast(e.bool, e.json_get(note, "public")),
+              topic: e.assert_exists(e.select(newTopic, () => ({ id: true }))),
+            }),
+            "union",
+            e.for(e.json_array_unpack(params.links), (link) =>
+              e.insert(e.Link, {
+                title: e.cast(e.str, e.json_get(link, "title")),
+                url: e.cast(e.str, e.json_get(link, "url")),
+                public: e.cast(e.bool, e.json_get(link, "public")),
+                topic: e.assert_exists(
+                  e.select(newTopic, () => ({
+                    filter_single: { id: newTopic.id },
+                  })),
+                ),
+              }),
+            ),
+          ),
+        ),
+      )
     },
   )
-  // const res = await e
-  //   .insert(e.Topic, {
-  //     wiki: wikiId,
-  //     name: topic.name,
-  //     public: topic.public,
-  //     content: topic.content,
-  //     // notes: topic.notes.map
-  //     // links: topic.links.map
-  //     topicAsMarkdown: topic.topicAsMarkdown,
-  //   })
-  //   .run(client)
-  // console.log(res)
-  // return res
+  return query.run(client, {
+    wikiId,
+    topic: {
+      name: topic.name,
+      content: topic.content,
+      public: topic.public,
+    },
+    links: topic.links,
+    notes: topic.notes,
+  })
 }
 
 // export interface Link {
