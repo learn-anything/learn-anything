@@ -5,10 +5,11 @@ import * as fs from "fs"
 import { fromMarkdown } from "mdast-util-from-markdown"
 import { toMarkdown } from "mdast-util-to-markdown"
 import { toString } from "mdast-util-to-string"
-import { addUser } from "../user"
 import dotenv from "dotenv"
 import e from "../dbschema/edgeql-js"
 import { client } from "../client"
+import { addUser, getUserIdByName } from "../crud/user"
+import { getWikiIdByUserId } from "../crud/wiki"
 
 dotenv.config()
 
@@ -23,16 +24,22 @@ dotenv.config()
 // wikiFolderPath=/Users/nikiv/src/learn-anything.xyz/seed/wiki/nikita
 
 async function main() {
-  const userId = await getUserIdByName(process.env.name!)
+  let userId = await getUserIdByName(process.env.name!)
   if (!userId) {
-    await createUser()
+    userId = await addUser({
+      name: process.env.name!,
+      email: process.env.email!,
+    })
   }
-  console.log(userId, "user id")
-  // createUser()
+  let wikiId = await getWikiIdByUserId(userId)
+  if (!wikiId) {
+    await addWiki(userId!)
+  }
+  console.log(wikiId)
+
   // const paths = await markdownFilePaths(process.env.wikiFolderPath!)
   // const topic = await addMarkdownFileAsTopicToSqlite(paths[0])
   // const userId = await getUserIdByName(process.env.name!)
-  // console.log(userId)
   // topic.links.map((link) => {
   //   console.log(link, "link")
   //   console.log(link.relatedLinks, "related links")
@@ -53,49 +60,7 @@ async function addWiki(userId: string) {
   return res
 }
 
-async function getUserIdByName(name: string) {
-  const res = await e
-    .select(e.User, (user) => ({
-      id: true,
-      filter: e.op(user.name, "ilike", name),
-    }))
-    .run(client)
-  if (res.length === 0) {
-    return undefined
-  } else {
-    return res[0].id
-  }
-}
-
-// TODO: is wikiId needed?
-// async function addTopic(topic: Topic, wikiId: string) {
-//   const res = await e
-//     .insert(e.Topic, {
-//       // TODO: how to make work?
-//       wiki: wikiId,
-//       name: topic.name,
-//       public: topic.public,
-//       content: topic.content,
-//       // TODO: how to map notes in nice way?
-//       // notes: topic.notes.map
-//       // TODO: how to map links in nice way?
-//       // links: topic.links.map
-//       topicAsMarkdown: topic.topicAsMarkdown,
-//     })
-//     .run(client)
-//   console.log(res)
-//   return res
-// }
-
-async function createUser() {
-  await addUser({ name: process.env.name!, email: process.env.email! })
-}
-
 main()
-
-// type Wiki = {
-//   topics: Topic[]
-// }
 
 type Topic = {
   name: string // extracted from front matter (i.e. title: Solid) or first heading (if no title: in front matter)
@@ -186,7 +151,7 @@ async function markdownFilePaths(
 // everything before either ## Notes or ## Links is content
 // everything inside ## Notes heading is notes
 // everything inside ## Links heading is links
-async function parseMdFile(filePath: string) {
+async function parseMdFile(filePath: string): Promise<Topic> {
   const markdownFileContent = (await readFile(filePath)).toString()
   const tree = fromMarkdown(markdownFileContent)
   // console.log(tree, "tree")
@@ -444,22 +409,12 @@ async function parseMdFile(filePath: string) {
   // console.log(content, "content")
 
   return {
-    name: title,
+    name: title!,
     globalTopic,
     content,
     notes,
     links,
     public: true, // TODO: it should come from front matter `public: true/false`
-    markdownFileContent,
+    topicAsMarkdown: markdownFileContent,
   }
 }
-
-export async function addMarkdownFileAsTopicToSqlite(filePath: string) {
-  const topic = await parseMdFile(filePath)
-  // TODO: add sqlite insert code
-  return topic
-}
-
-// TODO: adapt this CLI to be used as a way to bootstrap EdgeDB for local development for all kinds of cases
-// see app/src-tauri/crates/wiki/src/lib.rs
-// for markdown parsing that will be used in the desktop app

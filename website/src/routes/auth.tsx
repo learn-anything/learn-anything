@@ -43,7 +43,7 @@ export default function SignInPage() {
       // auth success, navigate to using app
       // navigate("/")
     },
-    { passive: true }
+    { passive: true },
   )
 
   return (

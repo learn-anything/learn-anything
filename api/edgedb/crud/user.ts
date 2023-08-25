@@ -1,5 +1,5 @@
-import { client } from "./client"
-import e from "./dbschema/edgeql-js"
+import { client } from "../client"
+import e from "../dbschema/edgeql-js"
 
 export interface User {
   name: string
@@ -13,8 +13,8 @@ export async function addUser(user: User) {
       email: user.email,
     })
     .run(client)
-  console.log(res)
-  return res
+  console.log(res, "user added")
+  return res?.id
 }
 
 export async function deleteUser(id: string) {
@@ -46,5 +46,9 @@ export async function getUserIdByName(name: string) {
       filter: e.op(user.name, "ilike", name),
     }))
     .run(client)
-  return res[0].id
+  if (res.length === 0) {
+    return undefined
+  } else {
+    return res[0].id
+  }
 }
