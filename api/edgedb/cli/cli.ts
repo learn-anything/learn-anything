@@ -10,6 +10,7 @@ import e from "../dbschema/edgeql-js"
 import { client } from "../client"
 import { addUser, getUserIdByName } from "../crud/user"
 import { getWikiIdByUserId } from "../crud/wiki"
+import { addTopic } from "../crud/topic"
 
 dotenv.config()
 
@@ -38,6 +39,8 @@ async function main() {
 
   const paths = await markdownFilePaths(process.env.wikiFolderPath!)
   const topic = await await parseMdFile(paths[0])
+
+  await addTopic(topic, wikiId!)
 
   // const userId = await getUserIdByName(process.env.name!)
   // topic.links.map((link) => {

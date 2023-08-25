@@ -2,7 +2,7 @@ import { Link, Note, Topic } from "../cli/cli"
 import { client } from "../client"
 import e from "../dbschema/edgeql-js"
 
-async function addTopic(topic: Topic, wikiId: string) {
+export async function addTopic(topic: Topic, wikiId: string) {
   const query = e.params(
     {
       wikiId: e.uuid,
