@@ -23,9 +23,16 @@ dotenv.config()
 // wikiFolderPath=/Users/nikiv/src/learn-anything.xyz/seed/wiki/nikita
 
 async function main() {
-  const paths = await markdownFilePaths(process.env.wikiFolderPath!)
-  const topic = await addMarkdownFileAsTopicToSqlite(paths[0])
-  console.log(topic, "topic")
+  const userId = await getUserIdByName(process.env.name!)
+  if (!userId) {
+    await createUser()
+  }
+  console.log(userId, "user id")
+  // createUser()
+  // const paths = await markdownFilePaths(process.env.wikiFolderPath!)
+  // const topic = await addMarkdownFileAsTopicToSqlite(paths[0])
+  // const userId = await getUserIdByName(process.env.name!)
+  // console.log(userId)
   // topic.links.map((link) => {
   //   console.log(link, "link")
   //   console.log(link.relatedLinks, "related links")
@@ -37,36 +44,51 @@ async function main() {
 async function addWiki(userId: string) {
   const res = await e
     .insert(e.Wiki, {
-      // TODO: how to make work?
-      name: userId,
+      user: e.select(e.User, () => ({
+        filter_single: { id: userId },
+      })),
     })
     .run(client)
   console.log(res)
   return res
+}
+
+async function getUserIdByName(name: string) {
+  const res = await e
+    .select(e.User, (user) => ({
+      id: true,
+      filter: e.op(user.name, "ilike", name),
+    }))
+    .run(client)
+  if (res.length === 0) {
+    return undefined
+  } else {
+    return res[0].id
+  }
 }
 
 // TODO: is wikiId needed?
-async function addTopic(topic: Topic, wikiId: string) {
-  const res = await e
-    .insert(e.Topic, {
-      // TODO: how to make work?
-      wiki: wikiId,
-      name: topic.name,
-      public: topic.public,
-      content: topic.content,
-      // TODO: how to map notes in nice way?
-      // notes: topic.notes.map
-      // TODO: how to map links in nice way?
-      // links: topic.links.map
-      topicAsMarkdown: topic.topicAsMarkdown,
-    })
-    .run(client)
-  console.log(res)
-  return res
-}
+// async function addTopic(topic: Topic, wikiId: string) {
+//   const res = await e
+//     .insert(e.Topic, {
+//       // TODO: how to make work?
+//       wiki: wikiId,
+//       name: topic.name,
+//       public: topic.public,
+//       content: topic.content,
+//       // TODO: how to map notes in nice way?
+//       // notes: topic.notes.map
+//       // TODO: how to map links in nice way?
+//       // links: topic.links.map
+//       topicAsMarkdown: topic.topicAsMarkdown,
+//     })
+//     .run(client)
+//   console.log(res)
+//   return res
+// }
 
-function createUser() {
-  addUser({ name: process.env.name!, email: process.env.email! })
+async function createUser() {
+  await addUser({ name: process.env.name!, email: process.env.email! })
 }
 
 main()

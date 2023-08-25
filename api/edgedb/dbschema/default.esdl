@@ -13,6 +13,8 @@ module default {
     required email: str {
       constraint exclusive;
     };
+    # custom name user can choose for themselves similar to X
+    displayName: str;
     # aws s3 url with image
     profileImage: str;
     # user owns one wiki
