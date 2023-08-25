@@ -3,19 +3,38 @@ import { client } from "../client"
 import e from "../dbschema/edgeql-js"
 
 async function addTopic(topic: Topic, wikiId: string) {
-  const res = await e
-    .insert(e.Topic, {
-      wiki: wikiId,
-      name: topic.name,
-      public: topic.public,
-      content: topic.content,
-      // notes: topic.notes.map
-      // links: topic.links.map
-      topicAsMarkdown: topic.topicAsMarkdown,
-    })
-    .run(client)
-  console.log(res)
-  return res
+  const query = e.params(
+    {
+      wikiId: e.uuid,
+      topic: e.tuple({
+        name: e.str,
+        content: e.str,
+        public: e.bool,
+      }),
+      notes: e.json,
+      links: e.json,
+    },
+    (params) => {
+      const newTopic = e.insert(e.Topic, {
+        wiki: e.select(e.Wiki, (wiki) => ({
+          filter: e.op(wiki.id, "=", e.uuid(wikiId)),
+        })),
+      })
+    },
+  )
+  // const res = await e
+  //   .insert(e.Topic, {
+  //     wiki: wikiId,
+  //     name: topic.name,
+  //     public: topic.public,
+  //     content: topic.content,
+  //     // notes: topic.notes.map
+  //     // links: topic.links.map
+  //     topicAsMarkdown: topic.topicAsMarkdown,
+  //   })
+  //   .run(client)
+  // console.log(res)
+  // return res
 }
 
 // export interface Link {
