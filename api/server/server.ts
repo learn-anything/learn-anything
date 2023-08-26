@@ -1,10 +1,11 @@
 import { serve } from "@hono/node-server"
 import dotenv from "dotenv"
-import { getSidebar, getTopic } from "grafbase/db/topic"
-import { getUserIdByName } from "grafbase/db/user"
+// import { getSidebar, getTopic } from "grafbase/db/topic"
+// import { getUserIdByName } from "grafbase/db/user"
 import { Hono } from "hono"
 import { cors } from "hono/cors"
 import { type z } from "zod"
+import { getUserIdByName } from "~/edgedb/crud/user"
 
 dotenv.config()
 
@@ -21,26 +22,45 @@ app.onError((err, ctx) => {
 
 app.use("*", cors())
 
-// return public content/notes/links for a topic of a user
-app.post("/topic", async (context) => {
+// Return global topic content
+app.post("/global-topic", async (context) => {
   const params = await context.req.json()
-  const userId = await getUserIdByName(params.user)
-  const topic = await getTopic(params.topic, userId)
-  return context.json({
-    name: topic[0].name,
-    content: topic[0].content,
-    prettyName: topic[0].prettyName,
-    notes: topic[0].notes,
-    links: topic[0].links,
-  })
+  const topic = params.topic
+  let userId = await getUserIdByName("nikiv")
+  console.log(userId)
+  return context.json({ name: ".." })
+  // const userId = await getUserIdByName(params.user)
+  // const topic = await getTopic(params.topic, userId)
+  // return context.json({
+  //   name: topic[0].name,
+  //   content: topic[0].content,
+  //   prettyName: topic[0].prettyName,
+  //   notes: topic[0].notes,
+  //   links: topic[0].links,
+  // })
+})
+
+app.post("/user-topic", async (context) => {
+  const params = await context.req.json()
+  const topic = params.topic
+  return context.json({ name: ".." })
+  // const userId = await getUserIdByName(params.user)
+  // const topic = await getTopic(params.topic, userId)
+  // return context.json({
+  //   name: topic[0].name,
+  //   content: topic[0].content,
+  //   prettyName: topic[0].prettyName,
+  //   notes: topic[0].notes,
+  //   links: topic[0].links,
+  // })
 })
 
 // return topic sidebar for a user
 app.post("/topic-sidebar", async (context) => {
   const params = await context.req.json()
-  const userId = await getUserIdByName(params.user)
-  const sidebar = await getSidebar(userId)
-  return context.json(sidebar)
+  // const userId = await getUserIdByName(params.user)
+  // const sidebar = await getSidebar(userId)
+  // return context.json(idebar)
 })
 
 async function main() {

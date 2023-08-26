@@ -2,6 +2,7 @@ import { Link, Note, Topic } from "../cli/cli"
 import { client } from "../client"
 import e from "../dbschema/edgeql-js"
 
+// Add a topic to a wiki of a user
 export async function addTopic(topic: Topic, wikiId: string) {
   const query = e.params(
     {
@@ -65,6 +66,33 @@ export async function addTopic(topic: Topic, wikiId: string) {
   })
 }
 
+// Get all details to render the topic page
+// learn-anything.xyz/<global-topic>
+export async function getGlobalTopic(topic: string) {
+  const query = e.select(e.Topic, (topic) => ({
+    name: true,
+    content: true,
+    notes_count: e.count(topic.notes),
+    link_count: e.count(topic.links),
+    notes: {
+      content: true,
+      url: true,
+      additionalContent: true,
+    },
+    links: {
+      title: true,
+      url: true,
+      description: true,
+      relatedLinks: {
+        title: true,
+        url: true,
+        description: true,
+      },
+    },
+  }))
+  return query.run(client)
+}
+
 // export interface Link {
 //   title: string
 //   url: string
@@ -93,74 +121,6 @@ export async function addTopic(topic: Topic, wikiId: string) {
 // //   links: Link[]
 // //   prettyName: string
 // // }
-
-// TODO: in topic: Topic, Topic should come from generated EdgeDB TS bindings I think
-export async function addTopicOld(topic: Topic, userId: string) {
-  const query = e.params(
-    {
-      userId: e.uuid,
-      topic: e.tuple({
-        name: e.str,
-        content: e.str,
-        public: e.bool,
-        prettyName: e.str,
-      }),
-      notes: e.json,
-      links: e.json,
-    },
-    (params) => {
-      const newTopic = e.insert(e.Topic, {
-        user: e
-          .select(e.User, (user) => ({
-            filter: e.op(user.id, "=", params.userId),
-          }))
-          .assert_single(),
-        name: params.topic.name,
-        content: params.topic.content,
-        public: params.topic.public,
-        prettyName: params.topic.prettyName,
-      })
-
-      return e.with(
-        [newTopic],
-        e.for(e.json_array_unpack(params.notes), (note) =>
-          e.op(
-            e.insert(e.Note, {
-              content: e.cast(e.str, e.json_get(note, "content")),
-              url: e.cast(e.str, e.json_get(note, "url")),
-              public: e.cast(e.bool, e.json_get(note, "public")),
-              topic: e.assert_exists(e.select(newTopic, () => ({ id: true }))),
-            }),
-            "union",
-            e.for(e.json_array_unpack(params.links), (link) =>
-              e.insert(e.Link, {
-                title: e.cast(e.str, e.json_get(link, "title")),
-                url: e.cast(e.str, e.json_get(link, "url")),
-                public: e.cast(e.bool, e.json_get(link, "public")),
-                topic: e.assert_exists(
-                  e.select(newTopic, () => ({
-                    filter_single: { id: newTopic.id },
-                  })),
-                ),
-              }),
-            ),
-          ),
-        ),
-      )
-    },
-  )
-  return query.run(client, {
-    userId,
-    topic: {
-      name: topic.name,
-      content: topic.content,
-      public: topic.public,
-      prettyName: topic.prettyName,
-    },
-    links: topic.links,
-    notes: topic.notes,
-  })
-}
 
 export async function deleteTopic(id: string) {
   const res = await e

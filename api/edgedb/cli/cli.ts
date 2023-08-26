@@ -10,7 +10,7 @@ import e from "../dbschema/edgeql-js"
 import { client } from "../client"
 import { addUser, getUserIdByName } from "../crud/user"
 import { getWikiIdByUserId } from "../crud/wiki"
-import { addTopic } from "../crud/topic"
+import { addTopic, getGlobalTopic } from "../crud/topic"
 
 dotenv.config()
 
@@ -36,12 +36,18 @@ async function main() {
   if (!wikiId) {
     await addWiki(userId!)
   }
+  // console.log(wikiId, "wiki id")
 
-  const paths = await markdownFilePaths(process.env.wikiFolderPath!)
-  const topic = await await parseMdFile(paths[0])
+  const topic = await getGlobalTopic("3d-printing")
+  console.log(topic)
+
+  // const paths = await markdownFilePaths(process.env.wikiFolderPath!)
+  // const topic = await await parseMdFile(paths[0])
+  // console.log(topic, "topic")
+  // console.log(topic.notes)
   // console.log(topic.links)
 
-  await addTopic(topic, wikiId!)
+  // await addTopic(topic, wikiId!)
 
   // const userId = await getUserIdByName(process.env.name!)
   // topic.links.map((link) => {
@@ -295,8 +301,8 @@ async function parseMdFile(filePath: string): Promise<Topic> {
             noteAsMarkdown = noteAsMarkdown.split("[")[1].split("]")[0]
           }
           notes.push({
-            note: noteAsMarkdown.replace("\n", ""),
-            subnotes,
+            content: noteAsMarkdown.replace("\n", ""),
+            additionalContent: subnotes.join("\n"), // TODO: maybe need to change
             url: noteUrl,
             public: true,
           })
