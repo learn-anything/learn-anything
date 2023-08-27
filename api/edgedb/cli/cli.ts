@@ -10,7 +10,7 @@ import { client } from "../client"
 import { addUser, getUserIdByName } from "../crud/user"
 import { getWikiIdByUserId } from "../crud/wiki"
 import e from "../dbschema/edgeql-js"
-import { addTopic } from "../crud/topic"
+import { addTopic, topicExists } from "../crud/topic"
 
 dotenv.config()
 
@@ -37,16 +37,43 @@ async function main() {
     await addWiki(userId!)
   }
   const paths = await markdownFilePaths(process.env.wikiFolderPath!)
-  const pathsToAdd = paths.slice(30, 40)
-  pathsToAdd.map(async (path) => {
-    const topic = await parseMdFile(path)
-    console.log(topic.notes.length, "notes length")
-    console.log(topic.links.length, "links length")
-    console.log(topic.name, "name")
-    console.log(topic.prettyName, "pretty name")
-
-    await addTopic(topic, wikiId!)
+  paths.map(async (mdPath) => {
+    const baseName = path.basename(mdPath)
+    const topicName = path.parse(baseName).name
+    const exists = await topicExists(topicName)
+    if (exists) {
+      return
+    } else {
+      const topic = await parseMdFile(mdPath)
+      console.log(topic.name, "name")
+      console.log(topic.prettyName, "pretty name")
+      await addTopic(topic, wikiId!)
+    }
   })
+
+  // const brokenPath = paths.find((path) => {
+  //   return path.includes("webrtc")
+  // })
+  // console.log(brokenPath)
+  // const topic = await parseMdFile(brokenPath!)
+  // console.log(topic.content, "content")
+  // console.log(topic.notes, "notes")
+  // console.log(topic.links, "links")
+  // console.log(topic.notes.length, "notes length")
+  // console.log(topic.links.length, "links length")
+  // console.log(topic.name, "name")
+  // console.log(topic.prettyName, "pretty name")
+
+  // const pathsToAdd = paths.slice(40, 1000)
+  // pathsToAdd.map(async (path) => {
+  //   const topic = await parseMdFile(path)
+  //   console.log(topic.notes.length, "notes length")
+  //   console.log(topic.links.length, "links length")
+  //   console.log(topic.name, "name")
+  //   console.log(topic.prettyName, "pretty name")
+
+  //   await addTopic(topic, wikiId!)
+  // })
   // const topic = await parseMdFile(paths[30])
   // console.log(topic.topicAsMarkdown, "topic as markdown")
   // console.log(topic.content, "content")

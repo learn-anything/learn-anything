@@ -97,6 +97,17 @@ export async function getGlobalTopic(topicName: string) {
   return query.run(client)
 }
 
+export async function topicExists(topicName: string) {
+  const query = e.select(e.Topic, (topic) => ({
+    filter: e.op(topic.name, "=", topicName),
+  }))
+  const res = await query.run(client)
+  if (res.length === 0) {
+    return false
+  }
+  return true
+}
+
 // export interface Link {
 //   title: string
 //   url: string
