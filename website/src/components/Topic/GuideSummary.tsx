@@ -46,9 +46,9 @@ export default function GuideSummary() {
         <div class="w-full flex justify-between items-center text-[#696969]">
           <div>Contents</div>
           <div class="flex gap-[23px]">
-            <div>Duplicate</div>
+            {/* <div>Duplicate</div> */}
             <div>Improve Guide</div>
-            <div>Filter</div>
+            {/* <div>Filter</div> */}
           </div>
         </div>
       </div>
