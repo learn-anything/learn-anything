@@ -4,19 +4,20 @@ import { useNavigate } from "solid-start"
 
 export default function Home() {
   const navigate = useNavigate()
-  const [TopicArray, setTopicArray] = createSignal([
-    "nlp",
-    "chemistry",
-    "physics",
-    "physics 2",
+  const [topics, setTopics] = createSignal([
+    "NLP",
+    "Chemistry",
+    "Physics",
+    "Nature",
+    "Math",
   ])
-  const [filteredTopic, setFilteredTopic] = createSignal([])
-  const [filteredWord, setFilteredWord] = createSignal("")
+  const [topicSearchResults, setTopicSearchResults] = createSignal<string[]>([])
+  const [topicSearchInput, setTopicSearchInput] = createSignal("")
   const [focusedTopic, setFocusedTopic] = createSignal(0)
   const [focusedTodoTitle, setFocusedTodoTitle] = createSignal("")
 
   createShortcut(["ARROWDOWN"], () => {
-    if (focusedTopic() === filteredTopic().length - 1) {
+    if (focusedTopic() === topicSearchResults().length - 1) {
       setFocusedTopic(0)
       return
     }
@@ -24,29 +25,29 @@ export default function Home() {
   })
   createShortcut(["ARROWUP"], () => {
     if (focusedTopic() === 0) {
-      setFocusedTopic(filteredTopic().length - 1)
+      setFocusedTopic(topicSearchResults().length - 1)
       return
     }
     setFocusedTopic(focusedTopic() - 1)
   })
 
   createEffect(() => {
-    if (filteredWord()) {
+    if (topicSearchInput()) {
       untrack(() => {
-        setFilteredTopic(TopicArray())
-        setFilteredTopic(
-          filteredTopic().filter((word: any) =>
-            filteredWord()
+        setTopicSearchResults(topics())
+        setTopicSearchResults(
+          topicSearchResults().filter((word: any) =>
+            topicSearchInput()
               .split("")
               .every((v) => {
                 return word.split("").includes(v)
-              })
-          )
+              }),
+          ),
         )
 
-        console.log(filteredTopic())
+        console.log(topicSearchResults())
       })
-      setFocusedTodoTitle(filteredTopic()[focusedTopic()])
+      setFocusedTodoTitle(topicSearchResults()[focusedTopic()])
     }
   })
 
@@ -92,23 +93,25 @@ export default function Home() {
                 type="text"
                 placeholder="Search"
                 onInput={(e) => {
-                  setFilteredWord(e.target.value)
+                  setTopicSearchInput(e.target.value)
                 }}
                 class=" rounded text-lg font-semibold py-2 px-4 outline-none text-black"
                 style={{ width: "100%" }}
               />
               <Show
-                when={filteredWord() !== "" && filteredTopic().length !== 0}
+                when={
+                  topicSearchInput() !== "" && topicSearchResults().length !== 0
+                }
               >
                 <div class="bg-white absolute top-12 left-0 text-black font-semibold text-opacity-40 flex flex-col rounded w-full">
-                  <For each={filteredTopic()}>
+                  <For each={topicSearchResults()}>
                     {(topic) => (
                       <div
                         id={
                           focusedTodoTitle() === topic ? "Focused" : "UnFocused"
                         }
                         onClick={() => {
-                          setFocusedTopic(filteredTopic().indexOf(topic))
+                          setFocusedTopic(topicSearchResults().indexOf(topic))
                         }}
                         class="px-4 overflow-auto py-2"
                       >

@@ -1,8 +1,8 @@
 import { makeEventListener } from "@solid-primitives/event-listener"
 import { onMount } from "solid-js"
-import { getHankoCookie } from "../lib/auth"
 import { register } from "@teamhanko/hanko-elements"
 import { useNavigate } from "solid-start"
+import { getHankoCookie } from "../../lib/auth"
 
 // uses https://hanko.io authentication
 // https://github.com/teamhanko/hanko/blob/main/frontend/elements/README.md
@@ -39,9 +39,9 @@ export default function SignInPage() {
     document,
     "hankoAuthSuccess",
     async (e) => {
-      console.log(e, "hanko auth success event")
+      // console.log(e, "hanko auth success event")
       // auth success, navigate to using app
-      // navigate("/")
+      navigate("/")
     },
     { passive: true },
   )
@@ -96,6 +96,7 @@ export default function SignInPage() {
           {/* TODO: types.d.ts not helping solve type error, maybe wrong place for the file? */}
           {/* TODO: there is also CORS issue */}
           {/* hanko-auth element does not render */}
+          {/* @ts-ignore */}
           <hanko-auth />
         </div>
       </div>
