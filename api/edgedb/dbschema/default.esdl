@@ -61,13 +61,19 @@ module default {
   type Topic {
     # wiki this topic belongs to
     required link wiki: Wiki;
-    # topic name. i.e. 'Physics'
-    name: str;
-    # url friendly name of topic name. i.e. 'physics' or 'linear-algebra'
-    # lowercase `name` + dash separate words
-    globalTopic: GlobalTopic;
+    # url friendly unique name of topic. i.e. 'physics' or 'linear-algebra'
+    # lowercase + dash separate words
+    # the connected .md file name of topic is also this name
+    required name: str {
+      constraint exclusive;
+    };
+    # pretty version of `name`, uppercased nicely, proper capitalisation
+    # i.e. Physics
+    prettyName: str;
     # true = anyone can see the topic. false = only user can see topic
     required public: bool;
+    # each published topic is part of a global topic
+    globalTopic: GlobalTopic;
     # markdown content of topic (user's knowledge/thoughts on the topic)
     required content: str;
     # all notes belonging to this topic
@@ -132,7 +138,8 @@ module default {
     multi relatedLinks: Link;
   }
   type GlobalTopic {
-    # url friendly unique name of topic. i.e. 'physics'
+    # url friendly unique name of topic. i.e. 'physics' or 'linear-algebra'
+    # lowercase + dash separate words
     required name: str {
       constraint exclusive;
     };

@@ -1,16 +1,16 @@
-import { readFile } from "fs/promises"
-import * as prettier from "prettier"
-import * as path from "path"
+import dotenv from "dotenv"
 import * as fs from "fs"
+import { readFile } from "fs/promises"
 import { fromMarkdown } from "mdast-util-from-markdown"
 import { toMarkdown } from "mdast-util-to-markdown"
 import { toString } from "mdast-util-to-string"
-import dotenv from "dotenv"
-import e from "../dbschema/edgeql-js"
+import * as path from "path"
+import * as prettier from "prettier"
 import { client } from "../client"
 import { addUser, getUserIdByName } from "../crud/user"
 import { getWikiIdByUserId } from "../crud/wiki"
-import { addTopic, getGlobalTopic } from "../crud/topic"
+import e from "../dbschema/edgeql-js"
+import { addTopic } from "../crud/topic"
 
 dotenv.config()
 
@@ -36,24 +36,48 @@ async function main() {
   if (!wikiId) {
     await addWiki(userId!)
   }
-  // console.log(wikiId, "wiki id")
+  const paths = await markdownFilePaths(process.env.wikiFolderPath!)
+  const pathsToAdd = paths.slice(30, 40)
+  pathsToAdd.map(async (path) => {
+    const topic = await parseMdFile(path)
+    console.log(topic.notes.length, "notes length")
+    console.log(topic.links.length, "links length")
+    console.log(topic.name, "name")
+    console.log(topic.prettyName, "pretty name")
 
-  const topic = await getGlobalTopic("3d-printing")
-  console.log(topic)
-
-  // const paths = await markdownFilePaths(process.env.wikiFolderPath!)
-  // const topic = await await parseMdFile(paths[0])
-  // console.log(topic, "topic")
-  // console.log(topic.notes)
-  // console.log(topic.links)
+    await addTopic(topic, wikiId!)
+  })
+  // const topic = await parseMdFile(paths[30])
+  // console.log(topic.topicAsMarkdown, "topic as markdown")
+  // console.log(topic.content, "content")
+  // console.log(topic.notes, "notes")
+  // console.log(topic.links, "links")
+  // console.log(topic.notes.length, "notes length")
+  // console.log(topic.links.length, "links length")
+  // console.log(topic.name, "name")
+  // console.log(topic.prettyName, "pretty name")
 
   // await addTopic(topic, wikiId!)
+  // console.log("done")
+
+  // paths.map(async (path) => {
+  //   const topic = await parseMdFile(path)
+  //   // console.log(topic.notes, "notes")
+  //   // console.log(topic.links, "links")
+  //   // console.log(topic.notes.length, "notes length")
+  //   // console.log(topic.links.length, "links length")
+  //   // console.log(topic.name, "topic name")
+  //   // await addTopic(topic, wikiId!)
+  // })
 
   // const userId = await getUserIdByName(process.env.name!)
   // topic.links.map((link) => {
   //   console.log(link, "link")
   //   console.log(link.relatedLinks, "related links")
   // })
+  // console.log(wikiId, "wiki id")
+  // const topic = await getGlobalTopic("3d-printing")
+  // console.log(topic)
 }
 
 // creates a wiki linked to user
@@ -73,13 +97,13 @@ async function addWiki(userId: string) {
 main()
 
 export type Topic = {
-  name: string // extracted from front matter (i.e. title: Solid) or first heading (if no title: in front matter)
-  globalTopic: string // topic in LA (i.e. topic name can be 3D Printing but LA global topic is 3d-printing)
+  name: string // extracted from file name i.e. in physics.md `physics` is name
+  prettyName: string // extracted from front matter (i.e. title: Solid) or first heading (if no title: in front matter)
   public: boolean // extracted from front matter (i.e. public: true/false) if found
   content: string // everything before ## Notes or ## Links (excluding front matter)
   notes: Note[] // everything inside ## Notes heading
   links: Link[] // everything inside ## Links heading
-  topicAsMarkdown: string // everything in the topic as markdown
+  topicAsMarkdown: string // everything in the topic as markdown (including front matter)
 }
 
 export type Note = {
@@ -167,8 +191,8 @@ async function parseMdFile(filePath: string): Promise<Topic> {
   // console.log(tree, "tree")
 
   // CLI assumes that the file name is LA global topic name
-  let globalTopic = path.basename(filePath, path.extname(filePath))
-  let title
+  let name = path.basename(filePath, path.extname(filePath))
+  let prettyName
   let content = ""
   let notes: Note[] = []
   let links: Link[] = []
@@ -189,7 +213,7 @@ async function parseMdFile(filePath: string): Promise<Topic> {
     }
     // parse `title: ..` from front matter and use it as title
     if (parsingFrontMatter && node.type === "heading") {
-      title = toString(node).replace(/title: /, "")
+      prettyName = toString(node).replace(/title: /, "")
       parsingFrontMatter = false
       gotTitleFromFrontMatter = true
       continue
@@ -215,14 +239,14 @@ async function parseMdFile(filePath: string): Promise<Topic> {
         node.children[0].type === "link" &&
         node.children[0].children[0].type === "text"
       ) {
-        title = node.children[0].children[0].value
+        prettyName = node.children[0].children[0].value
         content = content + toMarkdown(node)
       }
       // if its heading without a link like
       // # Learn Anything
       // then title is Learn Anything
       else if (node.children.length > 0 && node.children[0].type === "text") {
-        title = node.children[0].value
+        prettyName = node.children[0].value
         content = content + toMarkdown(node)
       }
       gotTitle = true
@@ -419,8 +443,8 @@ async function parseMdFile(filePath: string): Promise<Topic> {
   // console.log(content, "content")
 
   return {
-    name: title!,
-    globalTopic,
+    name,
+    prettyName: prettyName!,
     content,
     notes,
     links,

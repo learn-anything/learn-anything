@@ -1,4 +1,4 @@
-import { Link, Note, Topic } from "../cli/cli"
+import { Topic } from "../cli/cli"
 import { client } from "../client"
 import e from "../dbschema/edgeql-js"
 
@@ -9,8 +9,9 @@ export async function addTopic(topic: Topic, wikiId: string) {
       wikiId: e.uuid,
       topic: e.tuple({
         name: e.str,
-        content: e.str,
+        prettyName: e.str,
         public: e.bool,
+        content: e.str,
       }),
       notes: e.json,
       links: e.json,
@@ -24,9 +25,10 @@ export async function addTopic(topic: Topic, wikiId: string) {
             })),
           ),
         ),
-        content: topic.content,
-        public: topic.public,
         name: topic.name,
+        prettyName: topic.prettyName,
+        public: topic.public,
+        content: topic.content,
       })
       return e.with(
         [newTopic],
@@ -58,8 +60,9 @@ export async function addTopic(topic: Topic, wikiId: string) {
     wikiId,
     topic: {
       name: topic.name,
-      content: topic.content,
+      prettyName: topic.prettyName,
       public: topic.public,
+      content: topic.content,
     },
     links: topic.links,
     notes: topic.notes,
@@ -68,8 +71,9 @@ export async function addTopic(topic: Topic, wikiId: string) {
 
 // Get all details to render the topic page
 // learn-anything.xyz/<global-topic>
-export async function getGlobalTopic(topic: string) {
+export async function getGlobalTopic(topicName: string) {
   const query = e.select(e.Topic, (topic) => ({
+    filter: e.op(topic.name, "=", topicName),
     name: true,
     content: true,
     notes_count: e.count(topic.notes),
