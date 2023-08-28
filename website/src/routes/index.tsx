@@ -1,6 +1,47 @@
 import { createShortcut } from "@solid-primitives/keyboard"
-import { For, Show, createEffect, createSignal, untrack } from "solid-js"
+import {
+  For,
+  Show,
+  createEffect,
+  createSignal,
+  onCleanup,
+  untrack,
+} from "solid-js"
 import { useNavigate } from "solid-start"
+import { Canvas, Graph, Anim } from "@nothing-but/force-graph"
+import { Num } from "@nothing-but/utils"
+
+export const graph_options = Graph.graphOptions({
+  inertia_strength: 0.3,
+  origin_strength: 0.01,
+  repel_distance: 22,
+  repel_strength: 0.5,
+})
+
+export function generateInitialGraph(length: number = 256): Graph.Graph {
+  const nodes: Graph.Node[] = Array.from({ length }, Graph.makeNode)
+
+  const edges: Graph.Edge[] = []
+
+  for (let i = 0; i < length; i++) {
+    const node = nodes[i]!
+
+    if (node.edges.length > 0 && Math.random() < 0.8) continue
+
+    const b_index = Num.random_int(length)
+    let node_b = nodes[b_index]!
+
+    if (node_b === node) {
+      node_b = nodes[(b_index + 1) % length]!
+    }
+
+    edges.push(Graph.connect(node, node_b))
+  }
+
+  Graph.randomizeNodePositions(nodes, graph_options.grid_size)
+
+  return Graph.makeGraph(graph_options, nodes, edges)
+}
 
 export default function Home() {
   const navigate = useNavigate()
@@ -15,6 +56,66 @@ export default function Home() {
   const [topicSearchInput, setTopicSearchInput] = createSignal("")
   const [focusedTopic, setFocusedTopic] = createSignal(0)
   const [focusedTodoTitle, setFocusedTodoTitle] = createSignal("")
+  // const graph = (<canvas class="absolute w-full h-full" />) as HTMLCanvasElement
+
+  const graph = generateInitialGraph()
+
+  const el = (<canvas class="absolute w-full h-full" />) as HTMLCanvasElement
+
+  const ctx = el.getContext("2d")
+  if (!ctx) throw new Error("no context")
+
+  const canvas = Canvas.canvasState({
+    ...Canvas.default_options,
+    el,
+    ctx,
+    graph,
+    init_scale: 2,
+  })
+
+  const animation = Anim.frameAnimation({
+    ...Anim.default_options,
+    onIteration(alpha) {
+      Graph.simulate(graph, alpha)
+    },
+    onFrame() {
+      Canvas.drawCanvas(canvas)
+    },
+  })
+  Anim.bump(animation)
+
+  onCleanup(() => Anim.cleanup(animation))
+
+  const ro = Canvas.resizeObserver(el, (size) => {
+    Canvas.updateCanvasSize(canvas, size)
+    Anim.requestFrame(animation)
+  })
+  onCleanup(() => ro.disconnect())
+
+  const gestures = Canvas.canvasGestures({
+    canvas,
+    onTranslate() {
+      Anim.requestFrame(animation)
+    },
+    onNodeClick(node) {
+      console.log("click", node)
+    },
+    onNodeHover(node) {
+      canvas.hovered_node = node
+    },
+    onNodeDrag(node, pos) {
+      Graph.changeNodePosition(canvas.options.graph.grid, node, pos.x, pos.y)
+      Anim.requestFrame(animation)
+    },
+    onModeChange(mode) {
+      if (mode === Canvas.Mode.DraggingNode) {
+        Anim.start(animation)
+      } else {
+        Anim.pause(animation)
+      }
+    },
+  })
+  onCleanup(() => Canvas.cleanupCanvasGestures(gestures))
 
   createShortcut(["ARROWDOWN"], () => {
     if (focusedTopic() === topicSearchResults().length - 1) {
@@ -57,7 +158,6 @@ export default function Home() {
         {`
     #Focused {
       background-color: rgba(124,124,124,0.4);
-
     }
     #UnFocused {
       background-color: transparent;
@@ -123,6 +223,7 @@ export default function Home() {
               </Show>
             </div>
           </div>
+          {el}
           <div
             onClick={() => {
               navigate("/auth")

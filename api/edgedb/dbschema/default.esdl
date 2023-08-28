@@ -26,11 +26,15 @@ module default {
     # topics user learned
     multi topicsLearned: GlobalTopic;
     # links user has `completed` in some way
-    multi completedLinks: Link;
-    # links user has reported
-    multi reportedLinks: Link;
-    # notes user has reported
-    multi reportedNotes: Note;
+    multi completedLinks: GlobalLink;
+    # links user has liked
+    multi likedLinks: GlobalLink;
+    # links user has disliked
+    multi dislikedLinks: GlobalLink;
+    # notes user has liked
+    multi likedNotes: Note;
+    # notes user has disliked
+    multi dislikedNotes: Note;
     # list of topics user is moderating
     multi topicsModerated: GlobalTopic;
     # date until user has paid membership for
@@ -69,13 +73,15 @@ module default {
     };
     # pretty version of `name`, uppercased nicely, proper capitalisation
     # i.e. Physics
-    prettyName: str;
+    required prettyName: str;
     # true = anyone can see the topic. false = only user can see topic
     required public: bool;
-    # each published topic is part of a global topic
-    globalTopic: GlobalTopic;
     # markdown content of topic (user's knowledge/thoughts on the topic)
     required content: str;
+    # each published topic is part of a global topic
+    globalTopic: GlobalTopic;
+    # optional path of topic: /physics/quantum-physics where each GlobalTopic name is separated by /
+    topicPath: str;
     # all notes belonging to this topic
     multi link notes := .<topic[is Note];
     # all links belonging to this topic
@@ -114,12 +120,12 @@ module default {
     url: str;
   }
   type Link {
-    # main topic this note belongs to
+    # all links are mapped by unique URL to a global link
+    required link globalLink: GlobalLink;
+    # main topic this link belongs to
     required topic: Topic;
-    # title of the link
-    required title: str;
-    # url of the link
-    required url: str;
+    # title of link as set by the user
+    prettyTitle: str;
     # true = anyone can see the link. false = only user can see link
     required public: bool;
     # type of the link: course/pdf/video/..
@@ -137,50 +143,81 @@ module default {
     # could be link to `Code` or `Tweet` or some other Link
     multi relatedLinks: Link;
   }
+  type GlobalLink {
+    # title as grabbed from the url
+    required urlTitle: str;
+    # unique url of the link
+    required url: str {
+      constraint exclusive;
+    };
+    # true = link is available for all to see/search. false = link is private
+    required public: bool;
+    # optionally nicer title of the link
+    prettyTitle: str;
+    # optionally have a main topic that the link belongs to
+    link mainTopic: GlobalTopic;
+    # connected topics for this link
+    multi link links := .<globalLink[is Link];
+  }
   type GlobalTopic {
     # url friendly unique name of topic. i.e. 'physics' or 'linear-algebra'
     # lowercase + dash separate words
     required name: str {
       constraint exclusive;
     };
-    # pretty version of `name`, uppercased nicely, proper capitalisation
-    # i.e. Physics
-    prettyName: str;
+    # pretty version of `name`, uppercased nicely, proper capitalisation i.e. Physics
+    required prettyName: str;
+    # detailed summary of the topic
+    required topicSummary: str;
+    # summary of the topic (short version)
+    topicSummaryShort: str;
+    # global guide for the topic, improved by community
+    required link globalGuide: GlobalGuide;
     # true = topic is available to anyone to see
     # i.e. learn-anything.xyz/physics
     # false = not available for all to see
     # global topics are first reviewed by LA before becoming public
-    public: bool;
-    # parent topic if there is one
-    parentTopic: GlobalTopic;
-    # guide for the topic, improved by community
-    guide: Guide;
+    required public: bool;
+    # optional path of topic: /physics/quantum-physics where each GlobalTopic name is separated by /
+    topicPath: str;
     # used to generate interactive graph of topics for the global topic
-    # TODO: find out structure needed for this
-    topicGraph: json;
+    # check GlobalGraph type for structure
+    similarTopicsGraph: json;
     # related topics to this global topic
-    multi relatedTopics: Topic;
-    # all links related to the global topic
+    multi relatedTopics: GlobalTopic;
+    # all links submitted to the global topic
     multi relatedLinks: Link;
-    # all notes related to the global topic
+    # all notes submitted to the global topic
     multi relatedNotes: Note;
   }
-  type Guide {
-    # summary of the topic
-    required topicSummary: str;
+  type GlobalGuide {
+    # global topic
+    required link globalTopic: GlobalTopic;
     # guide can be modified by submitting changes to it
     # when changes land to guide, a new revision with time stamp is created
     # there is a way to view history of the guide as it improves by picking time stamps
     lastUpdateTime: str;
     # guide is split by sections
-    multi sections: GuideSection;
+    multi sections: GlobalGuideSection;
   }
-  type GuideSection {
+  type GlobalGuideSection {
     # title of section
     required title: str;
     # list of links in a section
-    multi links: Link;
+    multi links: GlobalLink;
     # position of the section in the guide
     order: int16;
+  }
+  type GlobalGraph {
+    # JSON graph of all topics and connections
+    # structure:
+    # [
+    #  {
+    #     'topic': "physics",
+    #     'links': [{"topic": "quantum-physics", "weight": 1}, {"topic": "relativity", "weight": 1}"}]
+    #  }
+    # ]
+    # gets recomputed from how users in LA draw connections between topics
+    required connections: json;
   }
 }

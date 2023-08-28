@@ -292,6 +292,12 @@ importers:
       '@hono/node-server':
         specifier: ^1.0.2
         version: 1.0.2
+      '@nothing-but/force-graph':
+        specifier: ^0.2.1
+        version: 0.2.1
+      '@nothing-but/utils':
+        specifier: ^0.8.0
+        version: 0.8.0
       '@solid-primitives/event-listener':
         specifier: ^2.2.13
         version: 2.2.13(solid-js@1.7.7)
@@ -3294,9 +3300,26 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
 
+  /@nothing-but/dom@0.1.0:
+    resolution: {integrity: sha512-quCMd5+ZT0Ndu5Wi1L/E8rYa9zg68toiKo9cAk3/fKdgGZmZIy2QDUit4II/EeShxnjkr11g6gCWTlsZN0KLLQ==}
+    dependencies:
+      '@nothing-but/utils': 0.8.0
+    dev: false
+
+  /@nothing-but/force-graph@0.2.1:
+    resolution: {integrity: sha512-ZG5Q2sqP77jRud7/s42JvL1zpwjEZd1mwlFv1J6FwNzpjZbuCTe4Do+W3HohrqOezNheUzFgdcmiv8hCqIGDnA==}
+    dependencies:
+      '@nothing-but/dom': 0.1.0
+      '@nothing-but/utils': 0.8.0
+    dev: false
+
   /@nothing-but/utils@0.3.2:
     resolution: {integrity: sha512-y7ynAt3lVjvXF7+xVVezGnq4pJliX/ducCa9/AV6iB03M1JUcV0iq/9qK6h+4ieFPXhTAX2a/VuBNgksjnUQZw==}
     dev: true
+
+  /@nothing-but/utils@0.8.0:
+    resolution: {integrity: sha512-c4lbB8jzSLm5hEI8KRYwvIeWxRPVDbGWOvj9EfbLSpy0X+7FIx3D2LkWLz45qEyx7iIuwCrQ6iKMzo0O43hoKA==}
+    dev: false
 
   /@nozbe/microfuzz@1.0.0:
     resolution: {integrity: sha512-XKIg/guk+s1tkPTkHch9hfGOWgsKojT7BqSQddXTppOfVr3SWQhhTCqbgQaPTbppf9gc2kFeG0gpBZZ612UXHA==}

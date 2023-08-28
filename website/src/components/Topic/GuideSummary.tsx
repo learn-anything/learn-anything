@@ -40,7 +40,10 @@ export default function GuideSummary() {
             Lorem ipsum dolor, sit amet consectetur adipisicing elit.
             Voluptatem, dolor ratione est iste facilis et accusantium tempore
             eius, cumque aut voluptate veritatis in qui doloremque. Aspernatur
-            aliquid et vitae sint.
+            aliquid et vitae sint. Lorem ipsum dolor, sit amet consectetur
+            adipisicing elit. Voluptatem, dolor ratione est iste facilis et
+            accusantium tempore eius, cumque aut voluptate veritatis in qui
+            doloremque. Aspernatur aliquid et vitae sint.
           </div>
         </div>
         <div class="w-full flex justify-between items-center text-[#696969]">
