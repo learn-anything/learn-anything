@@ -27,17 +27,20 @@ async function main() {
   if (!wikiId) {
     await addWiki(userId!)
   }
-  const paths = await markdownFilePaths(process.env.wikiFolderPath!)
-  const mdPath = paths[1]
-  const baseName = path.basename(mdPath)
-  const topicName = path.parse(baseName).name
-  const topic = await parseMdFile(mdPath)
-  // console.log(topic.links, "links")
-  // console.log(topic.links, "topic")
-  await addTopic(topic, wikiId!)
+  // const paths = await markdownFilePaths(process.env.wikiFolderPath!)
+  // const mdPath = paths[1080]
+
+  // const folderPath = process.env.wikiFolderPath!
+  // const relativePath = mdPath.substring(folderPath.length + 1)
+  // const topicPath = relativePath.replace(".md", "")
+
+  // const baseName = path.basename(mdPath)
+  // const topicName = path.parse(baseName).name
+  // const topic = await parseMdFile(mdPath)
+  // await addTopic(topic, wikiId!, topicPath)
   // await deleteTopic("31d7d68c-45d6-11ee-8020-77a7d148ca41")
-  console.log(topicName, "topic name")
-  console.log("complete")
+  // console.log(topicName, "topic name")
+  // console.log("complete")
 }
 
 main()

@@ -4,12 +4,34 @@ import clsx from "clsx"
 
 export default function Pricing() {
   const [planChosen, setPlanChosen] = createSignal("monthly")
+  const [showModal, setShowModal] = createSignal(false)
   const navigate = useNavigate()
 
   return (
     <>
       <style></style>
       <div class="h-full w-screen flex flex-col gap-10 bg-[#fafafa] text-black pb-[50px]">
+        <Show when={showModal()}>
+          <div class="fixed h-screen w-screen flex top-0 right-0 items-center z-10 justify-center">
+            <div
+              class="absolute w-screen h-screen top-0 left-0 backdrop-blur-sm z-20"
+              onClick={() => {
+                setShowModal(false)
+              }}
+            ></div>
+            <div class="h-fit w-[375px] z-30 rounded-lg border bg-white border-slate-400 border-opacity-30 flex flex-col justify-between gap-6 p-6">
+              <div class="text-xl font-light">Create new profile</div>
+              <button
+                class="cursor-pointer bg-black text-white text-sm px-4 p-2 rounded-lg hover:scale-[1.1]"
+                onClick={() => {
+                  navigate("/auth")
+                }}
+              >
+                Sign up / log in with email
+              </button>
+            </div>
+          </div>
+        </Show>
         <div class="h-[80px] px-[15%] w-full flex items-center justify-between gap-6 font-semibold">
           <div
             class="w-[30px] h-[30px] cursor-pointer"
@@ -57,8 +79,8 @@ export default function Pricing() {
               </div>
             </div>
           </div>
-          <div class="w-full h-[420px] border border-slate-400 border-opacity-30 rounded-xl bg-white flex">
-            <div class="w-full h-full border-r border-slate-400 border-opacity-30 p-8 flex flex-col gap-6">
+          <div class="w-full h-[500px] border border-slate-400 border-opacity-30 rounded-xl bg-white flex">
+            <div class="w-full h-full border-r border-slate-400 border-opacity-30 p-8 flex flex-col gap-6 justify-between">
               <div class="border border-slate-400 border-opacity-30 px-2 p-0.5 w-fit rounded-full font-light text-sm">
                 Free
               </div>
@@ -80,7 +102,15 @@ export default function Pricing() {
                   </div>
                 </div>
               </div>
-              <div class="flex items-center justify-center rounded-lg bg-black w-full h-16 opacity-80 text-white">
+              <div
+                class={clsx(
+                  "flex items-center justify-center rounded-lg bg-black w-full h-16 opacity-80 text-white cursor-pointer",
+                  true && "bg-neutral-800 opacity-80 text-gray-300",
+                )}
+                onClick={() => {
+                  setShowModal(true)
+                }}
+              >
                 Current plan
               </div>
             </div>
@@ -103,7 +133,7 @@ export default function Pricing() {
                     </span>
                   </div>
                 </Show>
-                <div class="font-light opacity-60 flex flex-col gap-2">
+                <div class="font-light opacity-60 flex flex-col gap-2 h-[250px] overflow-auto">
                   <div>
                     • See in full 1,000+ high quality guides on various topics
                   </div>
@@ -121,7 +151,7 @@ export default function Pricing() {
                 </div>
               </div>
               <div class="flex items-center justify-center rounded-lg bg-black w-full h-16 opacity-80 text-white">
-                Current plan
+                Select this plan
               </div>
             </div>
           </div>

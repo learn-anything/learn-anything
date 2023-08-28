@@ -4,7 +4,11 @@ import e from "../dbschema/edgeql-js"
 
 // Add a topic to a wiki of a user
 // Also add links to GlobalLink and have references
-export async function addTopic(topic: Topic, wikiId: string) {
+export async function addTopic(
+  topic: Topic,
+  wikiId: string,
+  topicPath: string,
+) {
   const query = e.params(
     {
       wikiId: e.uuid,
@@ -16,6 +20,7 @@ export async function addTopic(topic: Topic, wikiId: string) {
       }),
       notes: e.json,
       links: e.json,
+      topicPath: e.str,
     },
     (params) => {
       const newTopic = e
@@ -31,6 +36,7 @@ export async function addTopic(topic: Topic, wikiId: string) {
           prettyName: topic.prettyName,
           public: topic.public,
           content: topic.content,
+          topicPath: topicPath,
         })
         .unlessConflict((topic) => ({
           on: topic.name,
@@ -64,26 +70,25 @@ export async function addTopic(topic: Topic, wikiId: string) {
                       title: e.cast(e.str, e.json_get(relatedLink, "title")),
                     }),
                 ),
-                globalLink: e
-                  .insert(e.GlobalLink, {
-                    title: e.cast(e.str, e.json_get(link, "title")),
-                    url: e.cast(e.str, e.json_get(link, "url")),
-                    description: e.cast(e.str, e.json_get(link, "description")),
-                    public: e.cast(e.bool, e.json_get(link, "public")),
-                    year: e.cast(e.str, e.json_get(link, "year")),
-                    relatedLinks: e.for(
-                      e.json_array_unpack(e.json_get(link, "relatedLinks")),
-                      (relatedLink) =>
-                        e.insert(e.RelatedLink, {
-                          url: e.cast(e.str, e.json_get(relatedLink, "url")),
-                          title: e.cast(
-                            e.str,
-                            e.json_get(relatedLink, "title"),
-                          ),
-                        }),
-                    ),
-                  })
-                  .unlessConflict((gl) => ({ on: gl.url })),
+                globalLink: e.insert(e.GlobalLink, {
+                  title: e.cast(e.str, e.json_get(link, "title")),
+                  url: e.cast(e.str, e.json_get(link, "url")),
+                  description: e.cast(e.str, e.json_get(link, "description")),
+                  public: e.cast(e.bool, e.json_get(link, "public")),
+                  year: e.cast(e.str, e.json_get(link, "year")),
+                  relatedLinks: e.for(
+                    e.json_array_unpack(e.json_get(link, "relatedLinks")),
+                    (relatedLink) =>
+                      e.insert(e.RelatedLink, {
+                        url: e.cast(e.str, e.json_get(relatedLink, "url")),
+                        title: e.cast(e.str, e.json_get(relatedLink, "title")),
+                      }),
+                  ),
+                }),
+                // TODO: was crashing for random reason
+                // even though below code should in theory prevent it
+                // made url not unique to avoid this
+                // .unlessConflict((gl) => ({ on: gl.url })),
               }),
             ),
           ),
@@ -101,6 +106,7 @@ export async function addTopic(topic: Topic, wikiId: string) {
     },
     links: topic.links,
     notes: topic.notes,
+    topicPath: topicPath,
   })
 }
 
