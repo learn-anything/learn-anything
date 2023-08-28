@@ -1,3 +1,6 @@
+// goal of CLI is to seed LA EdgeDB database with topics
+// see readme.md for more info on how to run this script
+
 import dotenv from "dotenv"
 import * as fs from "fs"
 import { readFile } from "fs/promises"
@@ -6,23 +9,10 @@ import { toMarkdown } from "mdast-util-to-markdown"
 import { toString } from "mdast-util-to-string"
 import * as path from "path"
 import * as prettier from "prettier"
-import { client } from "../client"
 import { addUser, getUserIdByName } from "../crud/user"
 import { addWiki, getWikiIdByUserId } from "../crud/wiki"
-import e from "../dbschema/edgeql-js"
-import { addTopic, topicExists } from "../crud/topic"
 
 dotenv.config()
-
-// goal of the CLI is to seed LA EdgeDB database with topics
-// for the script to run, create `.env` file in this folder with content:
-// name=your-name
-// email=your-email@gmail.com
-// wikiFolderPath=path/to/your/wiki/or/seed/wiki
-// for example, if you ran `pnpm dev-setup`, in root of this project you have `seed` folder
-// from this repo https://github.com/learn-anything/seed
-// the path can be something like:
-// wikiFolderPath=/Users/nikiv/src/learn-anything.xyz/seed/wiki/nikita
 
 async function main() {
   let userId = await getUserIdByName(process.env.name!)
@@ -41,74 +31,6 @@ async function main() {
   const baseName = path.basename(mdPath)
   const topicName = path.parse(baseName).name
   console.log(topicName)
-  // paths.map(async (mdPath) => {
-  //   const baseName = path.basename(mdPath)
-  //   const topicName = path.parse(baseName).name
-  //   const exists = await topicExists(topicName)
-  //   if (exists) {
-  //     return
-  //   } else {
-  //     const topic = await parseMdFile(mdPath)
-  //     console.log(topic.name, "name")
-  //     console.log(topic.prettyName, "pretty name")
-  //     await addTopic(topic, wikiId!)
-  //   }
-  // })
-
-  // const brokenPath = paths.find((path) => {
-  //   return path.includes("united-kingdom")
-  // })
-  // console.log(brokenPath)
-  // const topic = await parseMdFile(brokenPath!)
-  // console.log(topic.content, "content")
-  // console.log(topic.notes, "notes")
-  // console.log(topic.links, "links")
-  // console.log(topic.notes.length, "notes length")
-  // console.log(topic.links.length, "links length")
-  // console.log(topic.name, "name")
-  // console.log(topic.prettyName, "pretty name")
-
-  // const pathsToAdd = paths.slice(40, 1000)
-  // pathsToAdd.map(async (path) => {
-  //   const topic = await parseMdFile(path)
-  //   console.log(topic.notes.length, "notes length")
-  //   console.log(topic.links.length, "links length")
-  //   console.log(topic.name, "name")
-  //   console.log(topic.prettyName, "pretty name")
-
-  //   await addTopic(topic, wikiId!)
-  // })
-  // const topic = await parseMdFile(paths[30])
-  // console.log(topic.topicAsMarkdown, "topic as markdown")
-  // console.log(topic.content, "content")
-  // console.log(topic.notes, "notes")
-  // console.log(topic.links, "links")
-  // console.log(topic.notes.length, "notes length")
-  // console.log(topic.links.length, "links length")
-  // console.log(topic.name, "name")
-  // console.log(topic.prettyName, "pretty name")
-
-  // await addTopic(topic, wikiId!)
-  // console.log("done")
-
-  // paths.map(async (path) => {
-  //   const topic = await parseMdFile(path)
-  //   // console.log(topic.notes, "notes")
-  //   // console.log(topic.links, "links")
-  //   // console.log(topic.notes.length, "notes length")
-  //   // console.log(topic.links.length, "links length")
-  //   // console.log(topic.name, "topic name")
-  //   // await addTopic(topic, wikiId!)
-  // })
-
-  // const userId = await getUserIdByName(process.env.name!)
-  // topic.links.map((link) => {
-  //   console.log(link, "link")
-  //   console.log(link.relatedLinks, "related links")
-  // })
-  // console.log(wikiId, "wiki id")
-  // const topic = await getGlobalTopic("3d-printing")
-  // console.log(topic)
 }
 
 main()
@@ -469,3 +391,74 @@ async function parseMdFile(filePath: string): Promise<Topic> {
     topicAsMarkdown: markdownFileContent,
   }
 }
+
+// TODO: delete below, just random attempts at logging, adding topics, etc
+// used as reference for now
+// paths.map(async (mdPath) => {
+//   const baseName = path.basename(mdPath)
+//   const topicName = path.parse(baseName).name
+//   const exists = await topicExists(topicName)
+//   if (exists) {
+//     return
+//   } else {
+//     const topic = await parseMdFile(mdPath)
+//     console.log(topic.name, "name")
+//     console.log(topic.prettyName, "pretty name")
+//     await addTopic(topic, wikiId!)
+//   }
+// })
+
+// const brokenPath = paths.find((path) => {
+//   return path.includes("united-kingdom")
+// })
+// console.log(brokenPath)
+// const topic = await parseMdFile(brokenPath!)
+// console.log(topic.content, "content")
+// console.log(topic.notes, "notes")
+// console.log(topic.links, "links")
+// console.log(topic.notes.length, "notes length")
+// console.log(topic.links.length, "links length")
+// console.log(topic.name, "name")
+// console.log(topic.prettyName, "pretty name")
+
+// const pathsToAdd = paths.slice(40, 1000)
+// pathsToAdd.map(async (path) => {
+//   const topic = await parseMdFile(path)
+//   console.log(topic.notes.length, "notes length")
+//   console.log(topic.links.length, "links length")
+//   console.log(topic.name, "name")
+//   console.log(topic.prettyName, "pretty name")
+
+//   await addTopic(topic, wikiId!)
+// })
+// const topic = await parseMdFile(paths[30])
+// console.log(topic.topicAsMarkdown, "topic as markdown")
+// console.log(topic.content, "content")
+// console.log(topic.notes, "notes")
+// console.log(topic.links, "links")
+// console.log(topic.notes.length, "notes length")
+// console.log(topic.links.length, "links length")
+// console.log(topic.name, "name")
+// console.log(topic.prettyName, "pretty name")
+
+// await addTopic(topic, wikiId!)
+// console.log("done")
+
+// paths.map(async (path) => {
+//   const topic = await parseMdFile(path)
+//   // console.log(topic.notes, "notes")
+//   // console.log(topic.links, "links")
+//   // console.log(topic.notes.length, "notes length")
+//   // console.log(topic.links.length, "links length")
+//   // console.log(topic.name, "topic name")
+//   // await addTopic(topic, wikiId!)
+// })
+
+// const userId = await getUserIdByName(process.env.name!)
+// topic.links.map((link) => {
+//   console.log(link, "link")
+//   console.log(link.relatedLinks, "related links")
+// })
+// console.log(wikiId, "wiki id")
+// const topic = await getGlobalTopic("3d-printing")
+// console.log(topic)

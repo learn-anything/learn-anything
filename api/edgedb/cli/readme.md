@@ -4,14 +4,37 @@ Current purpose of CLI is to seed EdgeDB database from content of a folder with 
 
 [This folder](https://github.com/learn-anything/seed/tree/main/wiki/nikita).
 
+## Setup
+
+Create `.env` file in this folder with content:
+
+```
+name=your-name
+email=your-email@gmail.com
+wikiFolderPath=path/to/wiki/
+```
+
+Example `wikiFolderPath` can link to the `seed` folder. If you ran `pnpm dev-setup` in root of project, you have [seed](https://github.com/learn-anything/seed) folder available. The path can then be something like:
+
+```
+wikiFolderPath=/Users/nikiv/src/learn-anything.xyz/seed/wiki/nikita
+```
+
 ## Run
 
 ```
 tsx cli.ts
 ```
 
+Or using [watchexec](https://watchexec.github.io) to rerun the file on any of the `.ts` file changes.
+
+```
+watchexec --no-vcs-ignore --restart --exts ts "tput reset && tsx $argv" --project-origin
+```
+
 ## Tasks
 
+- move all the .md files into topics with everything correctly stored in EdgeDB as per the schema
 - move ts code from electron version into this CLI
   - pre seed Nikita's wiki so LA can release
 - make a more generic CLI to allow all kinds of operations on top of Learn Anything (local and server)
