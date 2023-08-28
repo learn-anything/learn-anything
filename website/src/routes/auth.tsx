@@ -50,54 +50,94 @@ export default function SignInPage() {
     <>
       <style>
         {`
-          #Auth:hover {
-            transform: translateY(-4px);
-            transition: all 0.3s linear;
-          }
-          #Auth {
-            transition: all 0.3s linear
-          }
-          #text {
-            padding-top: 10px;
-            opacity: 0.7;
-            font-weight: bold;
-          }
-          hanko-auth, hanko-profile {
-            --color: #000000;
-            --color-shade-1: #989BA1;
-            --color-shade-2: #43464E;
-            --brand-color: #AEDFFF;
-            --brand-color-shade-1: #A1C9E7;
-            --brand-contrast-color: #0B0D0E;
-            --background-color: transparent;
-            --error-color: #FF2E4C;
-            --link-color: #AEDFFF;
-            --font-family: "Inter";
-            --font-size: 1rem;
-            --font-weight: 400;
-            --headline1-font-size: 0px;
-            --headline1-font-weight: 600;
-            --headline2-font-size: 1rem;
-            --headline2-font-weight: 600;
-            --border-radius: 8px;
-            --item-height: 40px;
-            --item-margin: 18px 0px;
-            --container-padding: 20px 50px 50px 50px;
-            --container-max-width: 800px;
-            --headline1-margin: 0 0 1rem;
-            --headline2-margin: 1rem 0 .5rem;
-
-          }
+        #Auth:hover {
+          transform: translateY(-4px);
+          transition: all 0.3s linear;
         }
-        `}
+        #Auth {
+          transition: all 0.3s linear
+        }
+        #text {
+          padding-top: 10px;
+          opacity: 0.7;
+          font-weight: bold;
+        }
+        hanko-auth, hanko-profile {
+          --color: #fff;
+          --color-shade-1: #989BA1;
+          --color-shade-2: #43464E;
+          --brand-color: #AEDFFF;
+          --brand-color-shade-1: #A1C9E7;
+          --brand-contrast-color: #0B0D0E;
+          --background-color: transparent;
+          --error-color: #FF2E4C;
+          --link-color: #AEDFFF;
+          --font-family: "IBM Plex Sans";
+          --font-size: 1rem;
+          --font-weight: 400;
+          --headline1-font-size: 0px;
+          --headline1-font-weight: 600;
+          --headline2-font-size: 1rem;
+          --headline2-font-weight: 600;
+          --border-radius: 8px;
+          --item-height: 40px;
+          --item-margin: 18px 0px;
+          --container-padding: 20px 50px 50px 50px;
+          --container-max-width: 800px;
+          --headline1-margin: 0 0 1rem;
+          --headline2-margin: 1rem 0 .5rem;
+        }
+      }
+      `}
       </style>
-      <div class="absolute flex items-center justify-center top-0 right-0 z-40 w-screen h-screen bg-slate-100 dark:bg-neutral-950">
-        <div class="rounded-3xl bg-white p-5 flex items-center justify-center flex-col gap-5 border-slate-400 border-opacity-70 border">
-          {/* TODO: types.d.ts not helping solve type error, maybe wrong place for the file? */}
-          {/* TODO: there is also CORS issue */}
-          {/* hanko-auth element does not render */}
-          {/* @ts-ignore */}
-          <hanko-auth />
+      <div
+        style={{
+          "background-color": "#02050e",
+        }}
+      >
+        <div
+          style={{
+            "background-image": "url('./blue-left.svg')",
+            "background-size": "cover",
+          }}
+        >
+          <div
+            style={{
+              "background-image": "url('./blue-right.svg')",
+              "background-size": "cover",
+            }}
+            class="flex flex-col items-center h-screen justify-center text-white"
+          >
+            <div
+              style={{
+                border: "solid 1px rgba(13, 19, 39, 0.5)",
+                "background-image": `linear-gradient(
+                  34deg in oklab,
+                  rgb(1% 2% 5% / 86%) 0%, rgb(7, 12, 25) 50%, rgb(1% 2% 5% / 86%) 100%
+                )`,
+              }}
+              class="flex flex-col items-center p-10 rounded-lg border-2 border-neutral-900"
+            >
+              {/* TODO: make logo look good in dark theme */}
+              {/* <img
+                style={{
+                  "border-radius": "25px",
+                  border: "2.5px solid black",
+                  width: "90px",
+                  height: "90px",
+                }}
+                src="./logo.jpg"
+              /> */}
+              <div id="text" class="text-2xl mt-3 mb-2">
+                Sign in/up with
+              </div>
+              {/* TODO: types.d.ts not helping solve type error, maybe wrong place for the file? */}
+              {/* TODO: there is also CORS issue */}
+              {/* hanko-auth element does not render */}
+              {/* @ts-ignore */}
+              <hanko-auth />
+            </div>
+          </div>
         </div>
       </div>
     </>

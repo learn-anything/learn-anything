@@ -3,6 +3,7 @@ import {
   For,
   Show,
   createEffect,
+  createResource,
   createSignal,
   onCleanup,
   untrack,
@@ -10,6 +11,9 @@ import {
 import { useNavigate } from "solid-start"
 import { Canvas, Graph, Anim } from "@nothing-but/force-graph"
 import { Num } from "@nothing-but/utils"
+import { getHankoCookie } from "../../lib/auth"
+
+// TODO: add fuzzy search of topics, especially consider lower case should also match
 
 export const graph_options = Graph.graphOptions({
   inertia_strength: 0.3,
@@ -56,7 +60,11 @@ export default function Home() {
   const [topicSearchInput, setTopicSearchInput] = createSignal("")
   const [focusedTopic, setFocusedTopic] = createSignal(0)
   const [focusedTodoTitle, setFocusedTodoTitle] = createSignal("")
-  // const graph = (<canvas class="absolute w-full h-full" />) as HTMLCanvasElement
+
+  const [hankoCookie] = createResource(async () => {
+    const hankoCookie = await getHankoCookie()
+    return hankoCookie
+  })
 
   const graph = generateInitialGraph()
 
@@ -145,7 +153,6 @@ export default function Home() {
               }),
           ),
         )
-
         console.log(topicSearchResults())
       })
       setFocusedTodoTitle(topicSearchResults()[focusedTopic()])
@@ -198,6 +205,17 @@ export default function Home() {
                 onInput={(e) => {
                   setTopicSearchInput(e.target.value)
                 }}
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    // console.log(e.target.value)
+                    console.log(focusedTodoTitle())
+                    if (focusedTodoTitle()) {
+                      navigate(
+                        focusedTodoTitle().toLowerCase().replace(/ /g, "-"),
+                      )
+                    }
+                  }
+                }}
                 class=" rounded text-lg font-semibold py-2 px-4 outline-none text-black"
                 style={{ width: "100%" }}
               />
@@ -227,14 +245,16 @@ export default function Home() {
             </div>
           </div>
           <div class="w-[80%] flex justify-center">{el}</div>
-          <div
-            onClick={() => {
-              navigate("/auth")
-            }}
-            class="absolute top-5 right-5 hover:text-green-400 font-bold text-lg transition-all cursor-pointer"
-          >
-            Sign In
-          </div>
+          <Show when={!hankoCookie}>
+            <div
+              onClick={() => {
+                navigate("/auth")
+              }}
+              class="absolute top-5 right-5 hover:text-green-400 font-bold text-lg transition-all cursor-pointer"
+            >
+              Sign In
+            </div>
+          </Show>
         </div>
         <div class="w-screen h-screen flex items-center justify-center bg-neutral-950">
           <div
