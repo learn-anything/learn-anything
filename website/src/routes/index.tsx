@@ -256,27 +256,6 @@ export default function Home() {
             </div>
           </Show>
         </div>
-        <div class="w-screen h-screen flex items-center justify-center bg-neutral-950">
-          <div
-            id="RotatePlanet"
-            class="relative border-slate-400 border-opacity-50 border-2 rounded-full p-16"
-          >
-            <div class="absolute top-14 left-12 bg-white p-8 rounded-full"></div>
-            <div
-              id="RotatePlanet2"
-              class="relative border-slate-400 border-opacity-50 border-2 rounded-full p-16"
-            >
-              <div class="absolute bottom-10 right-12 bg-white p-6 rounded-full"></div>
-              <div
-                id="RotatePlanet3"
-                class="relative border-slate-400 border-opacity-50 border-2 rounded-full p-16"
-              >
-                <div class="absolute top-7 right-7 bg-white p-5 rounded-full"></div>
-                <div class="bg-white flex items-center justify-center h-48 w-48 rounded-full"></div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </>
   )
