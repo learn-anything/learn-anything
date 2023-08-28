@@ -17,19 +17,25 @@ export async function addTopic(topic: Topic, wikiId: string) {
       links: e.json,
     },
     (params) => {
-      const newTopic = e.insert(e.Topic, {
-        wiki: e.assert_exists(
-          e.assert_single(
-            e.select(e.Wiki, (wiki) => ({
-              filter: e.op(wiki.id, "=", e.uuid(wikiId)),
-            })),
+      const newTopic = e
+        .insert(e.Topic, {
+          wiki: e.assert_exists(
+            e.assert_single(
+              e.select(e.Wiki, (wiki) => ({
+                filter: e.op(wiki.id, "=", e.uuid(wikiId)),
+              })),
+            ),
           ),
-        ),
-        name: topic.name,
-        prettyName: topic.prettyName,
-        public: topic.public,
-        content: topic.content,
-      })
+          name: topic.name,
+          prettyName: topic.prettyName,
+          public: topic.public,
+          content: topic.content,
+        })
+        // don't crash on conflicts
+        // TODO: check it actually works
+        .unlessConflict((topic) => ({
+          on: topic.name,
+        }))
       return e.with(
         [newTopic],
         e.select(
@@ -47,6 +53,7 @@ export async function addTopic(topic: Topic, wikiId: string) {
               e.insert(e.Link, {
                 title: e.cast(e.str, e.json_get(link, "title")),
                 url: e.cast(e.str, e.json_get(link, "url")),
+                description: e.cast(e.str, e.json_get(link, "description")),
                 public: e.cast(e.bool, e.json_get(link, "public")),
                 topic: newTopic,
               }),

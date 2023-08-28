@@ -11,6 +11,7 @@ import * as path from "path"
 import * as prettier from "prettier"
 import { addUser, getUserIdByName } from "../crud/user"
 import { addWiki, getWikiIdByUserId } from "../crud/wiki"
+import { addTopic } from "../crud/topic"
 
 dotenv.config()
 
@@ -30,7 +31,12 @@ async function main() {
   const mdPath = paths[0]
   const baseName = path.basename(mdPath)
   const topicName = path.parse(baseName).name
-  console.log(topicName)
+  // console.log(topicName)
+  const topic = await parseMdFile(mdPath)
+  console.log(topic.links, "links")
+  // console.log(topic.links, "topic")
+  // await addTopic(topic, wikiId!)
+  // console.log("added")
 }
 
 main()
@@ -62,7 +68,7 @@ export type Note = {
 }
 
 export type Link = {
-  title: string // link title
+  title: string // link title as set by user
   url: string // link url
   public: boolean // default is configurable by user, set to true initially
   // example:
@@ -391,74 +397,3 @@ async function parseMdFile(filePath: string): Promise<Topic> {
     topicAsMarkdown: markdownFileContent,
   }
 }
-
-// TODO: delete below, just random attempts at logging, adding topics, etc
-// used as reference for now
-// paths.map(async (mdPath) => {
-//   const baseName = path.basename(mdPath)
-//   const topicName = path.parse(baseName).name
-//   const exists = await topicExists(topicName)
-//   if (exists) {
-//     return
-//   } else {
-//     const topic = await parseMdFile(mdPath)
-//     console.log(topic.name, "name")
-//     console.log(topic.prettyName, "pretty name")
-//     await addTopic(topic, wikiId!)
-//   }
-// })
-
-// const brokenPath = paths.find((path) => {
-//   return path.includes("united-kingdom")
-// })
-// console.log(brokenPath)
-// const topic = await parseMdFile(brokenPath!)
-// console.log(topic.content, "content")
-// console.log(topic.notes, "notes")
-// console.log(topic.links, "links")
-// console.log(topic.notes.length, "notes length")
-// console.log(topic.links.length, "links length")
-// console.log(topic.name, "name")
-// console.log(topic.prettyName, "pretty name")
-
-// const pathsToAdd = paths.slice(40, 1000)
-// pathsToAdd.map(async (path) => {
-//   const topic = await parseMdFile(path)
-//   console.log(topic.notes.length, "notes length")
-//   console.log(topic.links.length, "links length")
-//   console.log(topic.name, "name")
-//   console.log(topic.prettyName, "pretty name")
-
-//   await addTopic(topic, wikiId!)
-// })
-// const topic = await parseMdFile(paths[30])
-// console.log(topic.topicAsMarkdown, "topic as markdown")
-// console.log(topic.content, "content")
-// console.log(topic.notes, "notes")
-// console.log(topic.links, "links")
-// console.log(topic.notes.length, "notes length")
-// console.log(topic.links.length, "links length")
-// console.log(topic.name, "name")
-// console.log(topic.prettyName, "pretty name")
-
-// await addTopic(topic, wikiId!)
-// console.log("done")
-
-// paths.map(async (path) => {
-//   const topic = await parseMdFile(path)
-//   // console.log(topic.notes, "notes")
-//   // console.log(topic.links, "links")
-//   // console.log(topic.notes.length, "notes length")
-//   // console.log(topic.links.length, "links length")
-//   // console.log(topic.name, "topic name")
-//   // await addTopic(topic, wikiId!)
-// })
-
-// const userId = await getUserIdByName(process.env.name!)
-// topic.links.map((link) => {
-//   console.log(link, "link")
-//   console.log(link.relatedLinks, "related links")
-// })
-// console.log(wikiId, "wiki id")
-// const topic = await getGlobalTopic("3d-printing")
-// console.log(topic)

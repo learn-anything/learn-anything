@@ -1,4 +1,4 @@
-CREATE MIGRATION m14snolsqmamdocdqjiwudppiurdgh6p72ek22vyntmri6yvrreynq
+CREATE MIGRATION m1wukhe74lcuopzoqq5tfwyslmnmmsfjmm7rcjfsi57ssacphijhpa
     ONTO initial
 {
   CREATE TYPE default::GlobalGraph {
@@ -32,8 +32,8 @@ CREATE MIGRATION m14snolsqmamdocdqjiwudppiurdgh6p72ek22vyntmri6yvrreynq
   };
   CREATE TYPE default::GlobalLink {
       CREATE LINK mainTopic: default::GlobalTopic;
-      CREATE PROPERTY prettyTitle: std::str;
       CREATE REQUIRED PROPERTY public: std::bool;
+      CREATE PROPERTY title: std::str;
       CREATE REQUIRED PROPERTY url: std::str {
           CREATE CONSTRAINT std::exclusive;
       };
@@ -43,14 +43,16 @@ CREATE MIGRATION m14snolsqmamdocdqjiwudppiurdgh6p72ek22vyntmri6yvrreynq
       CREATE MULTI LINK links: default::GlobalLink;
   };
   CREATE TYPE default::Link {
-      CREATE REQUIRED LINK globalLink: default::GlobalLink;
+      CREATE LINK globalLink: default::GlobalLink;
       CREATE MULTI LINK relatedLinks: default::Link;
       CREATE PROPERTY author: std::str;
       CREATE PROPERTY description: std::str;
-      CREATE PROPERTY prettyTitle: std::str;
       CREATE REQUIRED PROPERTY public: std::bool;
       CREATE PROPERTY timeEstimate: std::str;
+      CREATE PROPERTY title: std::str;
       CREATE PROPERTY type: std::str;
+      CREATE REQUIRED PROPERTY url: std::str;
+      CREATE PROPERTY urlTitle: std::str;
   };
   ALTER TYPE default::GlobalLink {
       CREATE MULTI LINK links := (.<globalLink[IS default::Link]);

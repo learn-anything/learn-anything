@@ -120,12 +120,14 @@ module default {
     url: str;
   }
   type Link {
-    # all links are mapped by unique URL to a global link
-    required link globalLink: GlobalLink;
     # main topic this link belongs to
     required topic: Topic;
+    # url of the link
+    required url: str;
+    # title as grabbed from the url
+    urlTitle: str;
     # title of link as set by the user
-    prettyTitle: str;
+    title: str;
     # true = anyone can see the link. false = only user can see link
     required public: bool;
     # type of the link: course/pdf/video/..
@@ -142,6 +144,9 @@ module default {
     # related links to this link
     # could be link to `Code` or `Tweet` or some other Link
     multi relatedLinks: Link;
+    # all links are mapped by unique URL to a global link
+    # TODO: should be required in future
+    link globalLink: GlobalLink;
   }
   type GlobalLink {
     # title as grabbed from the url
@@ -153,7 +158,7 @@ module default {
     # true = link is available for all to see/search. false = link is private
     required public: bool;
     # optionally nicer title of the link
-    prettyTitle: str;
+    title: str;
     # optionally have a main topic that the link belongs to
     link mainTopic: GlobalTopic;
     # connected topics for this link
