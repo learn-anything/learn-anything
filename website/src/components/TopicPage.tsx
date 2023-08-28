@@ -1,19 +1,17 @@
+import { For, Setter, Show, createSignal, onMount } from "solid-js"
 import SolidMarkdown from "solid-markdown"
 import MiniSidebar from "./MiniSidebar"
 import TopBar from "./TopBar"
-import {
-  For,
-  Setter,
-  Show,
-  createEffect,
-  createMemo,
-  createResource,
-  createSignal,
-  onMount,
-} from "solid-js"
-import { useParams } from "solid-start"
-import { Link, Note } from "grafbase/db/topic"
-import { div } from "edgedb/dist/primitives/bigint"
+
+type Note = {
+  url: string
+  content: string
+}
+
+type Link = {
+  url: string
+  title: string
+}
 
 interface Props {
   content: string
@@ -22,35 +20,7 @@ interface Props {
   links: Link[]
 }
 
-export default function useViewportChecker(elementIds: any) {
-  const [visibleElement, setVisibleElement] = createSignal()
-
-  onMount(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry: any) => {
-        if (entry.isIntersecting) {
-          setVisibleElement(entry.target.id)
-        }
-      })
-    })
-
-    elementIds.forEach((id: any) => {
-      const targetElement = document.getElementById(id)
-      observer.observe(targetElement!)
-    })
-
-    return () => {
-      elementIds.forEach((id: any) => {
-        const targetElement = document.getElementById(id)
-        observer.unobserve(targetElement!)
-      })
-    }
-  })
-
-  return visibleElement
-}
-
-export function TopicPage(props: Props) {
+export default function TopicPage(props: Props) {
   return (
     <>
       <style>
@@ -87,12 +57,9 @@ export function TopicPage(props: Props) {
         background: linear-gradient( #ffffff,  rgba(30,30,32, 0))
       }
       @media (prefers-color-scheme: dark) {
-
        .Topbar {
          background-color: #1e1e20;
-
        }
-
        .Divider {
         background: linear-gradient( rgb(30,30,32),  rgba(30,30,32, 0))
        }
@@ -140,7 +107,6 @@ export function TopicPage(props: Props) {
         padding-left: 250px
       }
      }
-
       `}
       </style>
 
@@ -206,7 +172,7 @@ export function TopicPage(props: Props) {
                 <Show when={props.notes}>
                   <h2>Notes</h2>
                   <div id="Notes" class="flex flex-col justify-center gap-2">
-                    <For each={props.notes}>
+                    {/* <For each={props.notes}>
                       {(note) => {
                         if (note.url) {
                           return (
@@ -231,13 +197,13 @@ export function TopicPage(props: Props) {
                         }
                         return <div>{note.content}</div>
                       }}
-                    </For>
+                    </For> */}
                   </div>
                 </Show>
                 <Show when={props.links}>
                   <h2>Links</h2>
                   <div id="Links" class="flex flex-col justify-center gap-2">
-                    <For each={props.links}>
+                    {/* <For each={props.links}>
                       {(link) => {
                         return (
                           <div class="w-full flex items-center gap-1">
@@ -257,7 +223,7 @@ export function TopicPage(props: Props) {
                           </div>
                         )
                       }}
-                    </For>
+                    </For> */}
                   </div>
                 </Show>
               </div>

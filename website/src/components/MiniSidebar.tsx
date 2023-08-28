@@ -1,8 +1,4 @@
-import useViewportChecker from "./TopicPage"
-
 export default function MiniSidebar() {
-  const myElement = useViewportChecker(["Links", "Notes", "Main"])
-
   return (
     <>
       <style>
@@ -22,24 +18,9 @@ export default function MiniSidebar() {
       <div class="h-full pt-10">
         <div class="border-l-2 flex flex-col h-fit py-2  text-sm font-semibold border-gray-500 border-opacity-20">
           <div class="opacity-60 flex flex-col gap-2">
-            <div
-              id={myElement() === "Main" ? "Active" : "Inactive"}
-              class="px-3 cursor-pointer"
-            >
-              Main
-            </div>
-            <div
-              id={myElement() === "Notes" ? "Active" : "Inactive"}
-              class="px-3 cursor-pointer"
-            >
-              Notes
-            </div>
-            <div
-              id={myElement() === "Links" ? "Active" : "Inactive"}
-              class="px-3 cursor-pointer"
-            >
-              Links
-            </div>
+            <div class="px-3 cursor-pointer">Main</div>
+            <div class="px-3 cursor-pointer">Notes</div>
+            <div class="px-3 cursor-pointer">Links</div>
           </div>
         </div>
       </div>

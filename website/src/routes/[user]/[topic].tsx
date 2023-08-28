@@ -1,53 +1,68 @@
 import { Show, createResource, createSignal, onMount } from "solid-js"
 import { useParams } from "solid-start"
-import Sidebar from "~/components/Sidebar"
-import { TopicPage } from "~/components/TopicPage"
+import TopicPage from "../../components/TopicPage"
+// import Sidebar from "../../components/Sidebar"
+// import { TopicPage } from "../../components/TopicPage"
 
 export default function Topic() {
   const params = useParams()
 
-  // topic's content/notes/links
-  const [topic] = createResource(
-    () => params.topic,
-    async () => {
-      console.log(params.topic, "topic")
-      console.log(params.user, "user")
-      const res = await fetch(`http://127.0.0.1:3000/topic`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          topic: params.topic,
-          user: params.user.replace("@", ""),
-        }),
-      })
-      const topic = await res.json()
-      console.log(topic, "topic")
-      if (topic) {
-        return topic
-      }
-      return null
+  const [notes, setNotes] = createSignal([
+    {
+      content: "hello",
+      url: "..",
     },
-  )
+  ])
 
-  const [sidebarTopics] = createResource(
-    () => params.topic,
-    async () => {
-      const res = await fetch(`http://127.0.0.1:3000/topic-sidebar`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          user: params.user.replace("@", ""),
-        }),
-      })
-      const sidebarTopics = await res.json()
-      console.log(sidebarTopics, "sidebar topics")
-      return sidebarTopics
+  const [links, setLinks] = createSignal([
+    {
+      title: "hello",
+      url: "..",
     },
-  )
+  ])
+
+  // topic's content/notes/links
+  // const [topic] = createResource(
+  //   () => params.topic,
+  //   async () => {
+  //     console.log(params.topic, "topic")
+  //     console.log(params.user, "user")
+  //     const res = await fetch(`http://127.0.0.1:3000/topic`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         topic: params.topic,
+  //         user: params.user.replace("@", ""),
+  //       }),
+  //     })
+  //     const topic = await res.json()
+  //     console.log(topic, "topic")
+  //     if (topic) {
+  //       return topic
+  //     }
+  //     return null
+  //   },
+  // )
+
+  // const [sidebarTopics] = createResource(
+  //   () => params.topic,
+  //   async () => {
+  //     const res = await fetch(`http://127.0.0.1:3000/topic-sidebar`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         user: params.user.replace("@", ""),
+  //       }),
+  //     })
+  //     const sidebarTopics = await res.json()
+  //     console.log(sidebarTopics, "sidebar topics")
+  //     return sidebarTopics
+  //   },
+  // )
 
   const [showSidebar, setShowSidebar] = createSignal(true)
 
@@ -108,7 +123,8 @@ export default function Topic() {
           rel="stylesheet"
         />
 
-        <Show when={sidebarTopics() && showSidebar()}>
+        {/* <Show when={sidebarTopics() && showSidebar()}> */}
+        <Show when={true}>
           <div
             style={{
               "min-width": "250px",
@@ -116,7 +132,7 @@ export default function Topic() {
             class="fixed top-0 left-0 h-full z-50 "
             id="FixedSidebar"
           >
-            <Sidebar sidebarTopics={sidebarTopics()} />
+            {/* <Sidebar sidebarTopics={sidebarTopics()} /> */}
           </div>
           <div
             id="PhoneBlur"
@@ -128,12 +144,13 @@ export default function Topic() {
         </Show>
 
         <div style={{ width: "100%" }} class=" h-full">
-          <Show when={topic() && topic().content}>
+          {/* <Show when={topic() && topic().content}> */}
+          <Show when={true}>
             <TopicPage
               setShowSidebar={setShowSidebar}
-              content={topic().content}
-              notes={topic().notes}
-              links={topic().links}
+              content={"# Hello"}
+              notes={notes()}
+              links={links()}
             />
           </Show>
         </div>
