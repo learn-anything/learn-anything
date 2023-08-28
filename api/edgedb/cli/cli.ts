@@ -8,7 +8,7 @@ import * as path from "path"
 import * as prettier from "prettier"
 import { client } from "../client"
 import { addUser, getUserIdByName } from "../crud/user"
-import { getWikiIdByUserId } from "../crud/wiki"
+import { addWiki, getWikiIdByUserId } from "../crud/wiki"
 import e from "../dbschema/edgeql-js"
 import { addTopic, topicExists } from "../crud/topic"
 
@@ -37,19 +37,23 @@ async function main() {
     await addWiki(userId!)
   }
   const paths = await markdownFilePaths(process.env.wikiFolderPath!)
-  paths.map(async (mdPath) => {
-    const baseName = path.basename(mdPath)
-    const topicName = path.parse(baseName).name
-    const exists = await topicExists(topicName)
-    if (exists) {
-      return
-    } else {
-      const topic = await parseMdFile(mdPath)
-      console.log(topic.name, "name")
-      console.log(topic.prettyName, "pretty name")
-      await addTopic(topic, wikiId!)
-    }
-  })
+  const mdPath = paths[0]
+  const baseName = path.basename(mdPath)
+  const topicName = path.parse(baseName).name
+  console.log(topicName)
+  // paths.map(async (mdPath) => {
+  //   const baseName = path.basename(mdPath)
+  //   const topicName = path.parse(baseName).name
+  //   const exists = await topicExists(topicName)
+  //   if (exists) {
+  //     return
+  //   } else {
+  //     const topic = await parseMdFile(mdPath)
+  //     console.log(topic.name, "name")
+  //     console.log(topic.prettyName, "pretty name")
+  //     await addTopic(topic, wikiId!)
+  //   }
+  // })
 
   // const brokenPath = paths.find((path) => {
   //   return path.includes("united-kingdom")
@@ -105,20 +109,6 @@ async function main() {
   // console.log(wikiId, "wiki id")
   // const topic = await getGlobalTopic("3d-printing")
   // console.log(topic)
-}
-
-// creates a wiki linked to user
-// TODO: userId need?
-async function addWiki(userId: string) {
-  const res = await e
-    .insert(e.Wiki, {
-      user: e.select(e.User, () => ({
-        filter_single: { id: userId },
-      })),
-    })
-    .run(client)
-  console.log(res)
-  return res
 }
 
 main()
