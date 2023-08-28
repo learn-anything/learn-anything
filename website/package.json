@@ -27,6 +27,7 @@
     "clsx": "^1.2.1",
     "dotenv": "^16.3.1",
     "edgedb": "^1.3.2",
+    "graphql-mobius": "^0.1.10",
     "graphql-request": "^6.1.0",
     "hono": "^3.2.7",
     "mri": "^1.2.0",

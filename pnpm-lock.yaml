@@ -139,6 +139,16 @@ importers:
         specifier: ^4.4.9
         version: 4.4.9(@types/node@20.4.1)
 
+  api/server/elysia:
+    dependencies:
+      elysia:
+        specifier: latest
+        version: 'link:'
+    devDependencies:
+      bun-types:
+        specifier: latest
+        version: 0.8.1
+
   app:
     dependencies:
       '@chronark/zod-bird':
@@ -325,6 +335,9 @@ importers:
       edgedb:
         specifier: ^1.3.2
         version: 1.3.2
+      graphql-mobius:
+        specifier: ^0.1.10
+        version: 0.1.10(graphql@16.7.1)
       graphql-request:
         specifier: ^6.1.0
         version: 6.1.0(graphql@16.7.1)
@@ -5869,7 +5882,6 @@ packages:
 
   /bun-types@0.8.1:
     resolution: {integrity: sha512-VuCBox66P/3a8gVOffLCWIS6vdpXq4y3eJuF3VnsyC5HpykmIjkcr5wYDn22qQdeTUmOfCcBy1SZmtrZCeUr3A==}
-    dev: false
 
   /bundle-name@3.0.0:
     resolution: {integrity: sha512-PKA4BeSvBpQKQ8iPOGCSiell+N8P+Tf1DlwqmYhpe2gAhKPHn8EYOxVT+ShuGmhg8lN8XiSlS80yiExKXrURlw==}
@@ -7292,6 +7304,20 @@ packages:
       - bufferutil
       - encoding
       - utf-8-validate
+    dev: false
+
+  /graphql-mobius@0.1.10(graphql@16.7.1):
+    resolution: {integrity: sha512-VgXzeWOc+VRDX+vQSB+LM7BjPdqfCdWzjwkXl9NBDqjZeDhfXEj5ZjyzB9IH7mHLqSyzPxG38seTcXRQ82QVZw==}
+    peerDependencies:
+      graphql: '*'
+      graphql-yoga: '*'
+    peerDependenciesMeta:
+      graphql:
+        optional: true
+      graphql-yoga:
+        optional: true
+    dependencies:
+      graphql: 16.7.1
     dev: false
 
   /graphql-request@6.1.0(graphql@16.7.1):
