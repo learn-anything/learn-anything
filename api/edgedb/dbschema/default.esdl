@@ -145,8 +145,7 @@ module default {
     # could be link to `Code` or `Tweet` or some other Link
     multi relatedLinks: Link;
     # all links are mapped by unique URL to a global link
-    # TODO: should be required in future
-    link globalLink: GlobalLink;
+    required link globalLink: GlobalLink;
   }
   type GlobalLink {
     # title as grabbed from the url

@@ -1,5 +1,6 @@
-import { createSignal } from "solid-js"
+import { Show, createSignal } from "solid-js"
 import { useNavigate } from "solid-start"
+import clsx from "clsx"
 
 export default function Pricing() {
   const [planChosen, setPlanChosen] = createSignal("monthly")
@@ -8,8 +9,8 @@ export default function Pricing() {
   return (
     <>
       <style></style>
-      <div class="h-screen w-screen flex flex-col gap-10 bg-[#fafafa] text-black">
-        <div class="h-[80px] w-full flex justify-center items-center gap-6 font-semibold">
+      <div class="h-full w-screen flex flex-col gap-10 bg-[#fafafa] text-black pb-[50px]">
+        <div class="h-[80px] px-[15%] w-full flex items-center justify-between gap-6 font-semibold">
           <div
             class="w-[30px] h-[30px] cursor-pointer"
             onClick={() => {
@@ -18,19 +19,45 @@ export default function Pricing() {
           >
             <img class="rounded-full" src="/logo.jpg" alt="" />
           </div>
-          {/* <div>About</div> */}
           {/* TODO: conditional on user log in */}
-          <div>Log In</div>
+          <div
+            class="cursor-pointer bg-black text-white px-4 p-1 rounded-full hover:scale-[1.1]"
+            onClick={() => {
+              navigate("/auth")
+            }}
+          >
+            Log In
+          </div>
         </div>
         <div class="h-full w-full px-[15%] flex flex-col gap-6">
           <div class="flex items-center justify-between">
             <div class="font-bold text-2xl">Choose a plan</div>
             <div class="flex bg-[#f2f2f2] p-0.5 rounded-full items-center gap-1 text-sm font-light">
-              <div class="bg-white p-0.5 px-2 rounded-full">Monthly</div>
-              <div class="p-0.5 px-2">Yearly -20%</div>
+              <div
+                class={clsx(
+                  "p-0.5 px-2 rounded-full cursor-pointer",
+                  planChosen() === "monthly" && "bg-white",
+                )}
+                onClick={() => {
+                  setPlanChosen("monthly")
+                }}
+              >
+                Monthly
+              </div>
+              <div
+                class={clsx(
+                  "p-0.5 px-2 cursor-pointer rounded-full",
+                  planChosen() === "yearly" && "bg-white",
+                )}
+                onClick={() => {
+                  setPlanChosen("yearly")
+                }}
+              >
+                Yearly -20%
+              </div>
             </div>
           </div>
-          <div class="w-full h-[380px] border border-slate-400 border-opacity-30 rounded-xl bg-white flex">
+          <div class="w-full h-[420px] border border-slate-400 border-opacity-30 rounded-xl bg-white flex">
             <div class="w-full h-full border-r border-slate-400 border-opacity-30 p-8 flex flex-col gap-6">
               <div class="border border-slate-400 border-opacity-30 px-2 p-0.5 w-fit rounded-full font-light text-sm">
                 Free
@@ -58,14 +85,24 @@ export default function Pricing() {
               </div>
             </div>
             <div class="w-full h-full p-8 flex flex-col gap-6">
-              <div class="border border-slate-400 border-opacity-30 px-2 p-0.5 w-fit rounded-full font-light text-sm">
-                Member
+              <div class="px-2 p-0.5 w-fit rounded-full font-light text-sm bg-[#E7EBF9] text-[#3B5CCC]">
+                ♥️ Member
               </div>
               <div class="w-full h-full flex flex-col gap-4">
-                <div class="text-2xl font-semibold gap-2">
-                  $6{" "}
-                  <span class="opacity-90 font-light text-sm">per month</span>
-                </div>
+                <Show when={planChosen() === "monthly"}>
+                  <div class="text-2xl font-semibold gap-2">
+                    $6{" "}
+                    <span class="opacity-90 font-light text-sm">per month</span>
+                  </div>
+                </Show>
+                <Show when={planChosen() === "yearly"}>
+                  <div class="text-2xl font-semibold gap-2">
+                    $60{" "}
+                    <span class="opacity-90 font-light text-sm">
+                      per year (5$ / month)
+                    </span>
+                  </div>
+                </Show>
                 <div class="font-light opacity-60 flex flex-col gap-2">
                   <div>
                     • See in full 1,000+ high quality guides on various topics
@@ -80,7 +117,7 @@ export default function Pricing() {
                     • Sync all your private/public notes with a mobile app
                     (soon)
                   </div>
-                  {/* <div>• AI interface to all your notes (soon) </div> */}
+                  <div>• AI interface to all your notes (soon) </div>
                 </div>
               </div>
               <div class="flex items-center justify-center rounded-lg bg-black w-full h-16 opacity-80 text-white">
@@ -88,15 +125,15 @@ export default function Pricing() {
               </div>
             </div>
           </div>
-          <div class="flex w-full h-full ">
-            <div class="w-full font-light text-3xl">
+          <div class="flex w-full h-full relative">
+            <div class="w-full font-light text-3xl sticky">
               <div>Become a member</div>
               <div class="opacity-50 text-xl">
                 Unlock premium features and help us build the future of
                 education together ♥️
               </div>
             </div>
-            <div class="w-full flex flex-col gap-2">
+            <div class="w-full flex flex-col gap-4 text-lg font-light">
               <div>
                 Learn Anything first came to existence in{" "}
                 <a href="https://wiki.nikiv.dev/looking-back/2017">2017</a> to

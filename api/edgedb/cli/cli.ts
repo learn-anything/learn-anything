@@ -80,7 +80,7 @@ export type Link = {
   // `[Code](https://github.com/learn-anything/learn-anything.xyz)` is related link
   relatedLinks: RelatedLink[]
   // year link was created in
-  year?: number
+  year?: string
 }
 
 export type RelatedLink = {

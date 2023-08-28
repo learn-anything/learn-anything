@@ -10,6 +10,7 @@ export async function addTopic(topic: Topic, wikiId: string) {
       url: e.str,
       urlTitle: e.str,
       public: e.bool,
+      year: e.optional(e.str),
     },
     (params) => {
       e.insert(e.GlobalLink, {
@@ -25,6 +26,7 @@ export async function addTopic(topic: Topic, wikiId: string) {
       url: link.url,
       urlTitle: link.title,
       public: true,
+      year: link?.year,
     })
   })
 

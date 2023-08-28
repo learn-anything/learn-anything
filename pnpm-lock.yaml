@@ -316,6 +316,9 @@ importers:
       clipboardy:
         specifier: ^3.0.0
         version: 3.0.0
+      clsx:
+        specifier: ^1.2.1
+        version: 1.2.1
       dotenv:
         specifier: ^16.3.1
         version: 16.3.1
