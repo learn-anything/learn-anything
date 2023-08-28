@@ -18,7 +18,7 @@ module default {
     # aws s3 url with image
     profileImage: str;
     # user owns one wiki
-    link wiki: Wiki;
+    link wiki := .<user[is Wiki];
     # topics user wants to learn
     multi topicsToLearn: GlobalTopic;
     # topics user is learning

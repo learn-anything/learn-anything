@@ -3,6 +3,7 @@ import { client } from "../client"
 import e from "../dbschema/edgeql-js"
 
 // Add a topic to a wiki of a user
+// Also add links to GlobalLink and have references
 export async function addTopic(topic: Topic, wikiId: string) {
   const query = e.params(
     {

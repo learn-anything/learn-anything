@@ -157,10 +157,12 @@ export default function Home() {
       <style>
         {`
     #Focused {
-      background-color: rgba(124,124,124,0.4);
+      background-color: rgb(237 237 237);
+      color: rgb(23 23 23);
     }
     #UnFocused {
       background-color: transparent;
+      color: rgb(38 38 38);
     }
     #RotatePlanet {
       animation: 20s RotatePlanets infinite linear;
@@ -173,11 +175,12 @@ export default function Home() {
         transform: rotate(360deg)
       }
     }
+
     `}
       </style>
       <div class="w-full h-full">
-        <div class="w-screen bg-neutral-950 text-white h-screen flex items-center justify-center">
-          <div class="flex flex-col gap-1 items-center justify-center">
+        <div class="w-screen bg-neutral-950 text-white h-screen flex flex-col  items-center justify-start">
+          <div class="flex flex-col gap-1 items-center p-[50px] z-50">
             <div
               class=" tracking-wide font-bold bg-clip-text text-transparent"
               style={{
@@ -203,7 +206,7 @@ export default function Home() {
                   topicSearchInput() !== "" && topicSearchResults().length !== 0
                 }
               >
-                <div class="bg-white absolute top-12 left-0 text-black font-semibold text-opacity-40 flex flex-col rounded w-full">
+                <div class="bg-white p-2 absolute top-12 left-0 text-black font-semibold text-opacity-40 flex flex-col rounded w-full">
                   <For each={topicSearchResults()}>
                     {(topic) => (
                       <div
@@ -213,7 +216,7 @@ export default function Home() {
                         onClick={() => {
                           setFocusedTopic(topicSearchResults().indexOf(topic))
                         }}
-                        class="px-4 overflow-auto py-2"
+                        class="px-4 overflow-auto py-2 rounded-lg"
                       >
                         <div>{topic}</div>
                       </div>
@@ -223,7 +226,7 @@ export default function Home() {
               </Show>
             </div>
           </div>
-          {el}
+          <div class="w-[80%] flex justify-center">{el}</div>
           <div
             onClick={() => {
               navigate("/auth")
