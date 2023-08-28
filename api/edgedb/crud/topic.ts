@@ -5,6 +5,29 @@ import e from "../dbschema/edgeql-js"
 // Add a topic to a wiki of a user
 // Also add links to GlobalLink and have references
 export async function addTopic(topic: Topic, wikiId: string) {
+  const addGlobalLinkQuery = e.params(
+    {
+      url: e.str,
+      urlTitle: e.str,
+      public: e.bool,
+    },
+    (params) => {
+      e.insert(e.GlobalLink, {
+        urlTitle: params.urlTitle,
+        url: params.url,
+        public: params.public,
+      })
+    },
+  )
+
+  topic.links.map((link) => {
+    addGlobalLinkQuery.run(client, {
+      url: link.url,
+      urlTitle: link.title,
+      public: true,
+    })
+  })
+
   const query = e.params(
     {
       wikiId: e.uuid,

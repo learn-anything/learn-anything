@@ -79,6 +79,8 @@ export type Link = {
   // - [Learn Anything](https://learn-anything.xyz) - Explore knowledge. ([Code](https://github.com/learn-anything/learn-anything.xyz))
   // `[Code](https://github.com/learn-anything/learn-anything.xyz)` is related link
   relatedLinks: RelatedLink[]
+  // year link was created in
+  year?: number
 }
 
 export type RelatedLink = {
