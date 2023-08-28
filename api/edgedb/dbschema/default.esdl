@@ -145,11 +145,15 @@ module default {
     year: str;
     # related links to this link
     # could be link to `Code` or `Tweet` or some other Link
-    multi relatedLinks: Link;
+    multi relatedLinks: RelatedLink;
     # all links are mapped by unique URL to a global link
     link globalLink: GlobalLink {
       on target delete allow;
     };
+  }
+  type RelatedLink {
+    url: str;
+    title: str;
   }
   type GlobalLink {
     # nice title from url
@@ -168,6 +172,9 @@ module default {
     link mainTopic: GlobalTopic;
     # TODO: should probably be int, but keeping it str for now
     year: str;
+    # related links to this link
+    # could be link to `Code` or `Tweet` or some other Link
+    multi relatedLinks: RelatedLink;
     # connected topics for this link
     multi link links := .<globalLink[is Link];
   }

@@ -56,6 +56,14 @@ export async function addTopic(topic: Topic, wikiId: string) {
                 public: e.cast(e.bool, e.json_get(link, "public")),
                 topic: newTopic,
                 year: e.cast(e.str, e.json_get(link, "year")),
+                relatedLinks: e.for(
+                  e.json_array_unpack(e.json_get(link, "relatedLinks")),
+                  (relatedLink) =>
+                    e.insert(e.RelatedLink, {
+                      url: e.cast(e.str, e.json_get(relatedLink, "url")),
+                      title: e.cast(e.str, e.json_get(relatedLink, "title")),
+                    }),
+                ),
                 globalLink: e
                   .insert(e.GlobalLink, {
                     title: e.cast(e.str, e.json_get(link, "title")),
@@ -63,6 +71,17 @@ export async function addTopic(topic: Topic, wikiId: string) {
                     description: e.cast(e.str, e.json_get(link, "description")),
                     public: e.cast(e.bool, e.json_get(link, "public")),
                     year: e.cast(e.str, e.json_get(link, "year")),
+                    relatedLinks: e.for(
+                      e.json_array_unpack(e.json_get(link, "relatedLinks")),
+                      (relatedLink) =>
+                        e.insert(e.RelatedLink, {
+                          url: e.cast(e.str, e.json_get(relatedLink, "url")),
+                          title: e.cast(
+                            e.str,
+                            e.json_get(relatedLink, "title"),
+                          ),
+                        }),
+                    ),
                   })
                   .unlessConflict((gl) => ({ on: gl.url })),
               }),

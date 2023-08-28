@@ -33,9 +33,9 @@ async function main() {
   const topicName = path.parse(baseName).name
   // console.log(topicName)
   const topic = await parseMdFile(mdPath)
-  console.log(topic.links, "links")
+  // console.log(topic.links, "links")
   // console.log(topic.links, "topic")
-  // await addTopic(topic, wikiId!)
+  await addTopic(topic, wikiId!)
   // await deleteTopic("31d7d68c-45d6-11ee-8020-77a7d148ca41")
   console.log("complete")
 }

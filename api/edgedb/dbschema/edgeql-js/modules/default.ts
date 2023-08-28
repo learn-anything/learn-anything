@@ -44,6 +44,7 @@ const GlobalGuideSection: $.$expr_PathNode<$.TypeSet<$GlobalGuideSection, $.Card
 export type $GlobalLinkλShape = $.typeutil.flatten<_std.$Object_6b06be9b27fe11ee83ff159af7e1bb81λShape & {
   "mainTopic": $.LinkDesc<$GlobalTopic, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
   "links": $.LinkDesc<$Link, $.Cardinality.Many, {}, false, true,  false, false>;
+  "relatedLinks": $.LinkDesc<$RelatedLink, $.Cardinality.Many, {}, false, false,  false, false>;
   "description": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "public": $.PropertyDesc<_std.$bool, $.Cardinality.One, false, false, false, false>;
   "title": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
@@ -109,8 +110,8 @@ const GlobalTopic: $.$expr_PathNode<$.TypeSet<$GlobalTopic, $.Cardinality.Many>,
 
 export type $LinkλShape = $.typeutil.flatten<_std.$Object_6b06be9b27fe11ee83ff159af7e1bb81λShape & {
   "globalLink": $.LinkDesc<$GlobalLink, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
-  "relatedLinks": $.LinkDesc<$Link, $.Cardinality.Many, {}, false, false,  false, false>;
   "topic": $.LinkDesc<$Topic, $.Cardinality.One, {}, false, false,  false, false>;
+  "relatedLinks": $.LinkDesc<$RelatedLink, $.Cardinality.Many, {}, false, false,  false, false>;
   "author": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "description": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "public": $.PropertyDesc<_std.$bool, $.Cardinality.One, false, false, false, false>;
@@ -120,11 +121,9 @@ export type $LinkλShape = $.typeutil.flatten<_std.$Object_6b06be9b27fe11ee83ff1
   "url": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
   "urlTitle": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "year": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
-  "<relatedLinks[is Link]": $.LinkDesc<$Link, $.Cardinality.Many, {}, false, false,  false, false>;
   "<links[is GlobalLink]": $.LinkDesc<$GlobalLink, $.Cardinality.Many, {}, false, false,  false, false>;
   "<links[is Topic]": $.LinkDesc<$Topic, $.Cardinality.Many, {}, false, false,  false, false>;
   "<links": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
-  "<relatedLinks": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
 type $Link = $.ObjectType<"default::Link", $LinkλShape, null, [
   ..._std.$Object_6b06be9b27fe11ee83ff159af7e1bb81['__exclusives__'],
@@ -155,6 +154,20 @@ type $Note = $.ObjectType<"default::Note", $NoteλShape, null, [
 const $Note = $.makeType<$Note>(_.spec, "9683dd67-45df-11ee-a9b1-ede207f5c0d7", _.syntax.literal);
 
 const Note: $.$expr_PathNode<$.TypeSet<$Note, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Note, $.Cardinality.Many), null);
+
+export type $RelatedLinkλShape = $.typeutil.flatten<_std.$Object_6b06be9b27fe11ee83ff159af7e1bb81λShape & {
+  "title": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "url": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "<relatedLinks[is GlobalLink]": $.LinkDesc<$GlobalLink, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<relatedLinks[is Link]": $.LinkDesc<$Link, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<relatedLinks": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
+}>;
+type $RelatedLink = $.ObjectType<"default::RelatedLink", $RelatedLinkλShape, null, [
+  ..._std.$Object_6b06be9b27fe11ee83ff159af7e1bb81['__exclusives__'],
+]>;
+const $RelatedLink = $.makeType<$RelatedLink>(_.spec, "597bff78-45e1-11ee-89ab-35fa2b8836a6", _.syntax.literal);
+
+const RelatedLink: $.$expr_PathNode<$.TypeSet<$RelatedLink, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($RelatedLink, $.Cardinality.Many), null);
 
 export type $TopicλShape = $.typeutil.flatten<_std.$Object_6b06be9b27fe11ee83ff159af7e1bb81λShape & {
   "globalTopic": $.LinkDesc<$GlobalTopic, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
@@ -239,7 +252,7 @@ const Wiki: $.$expr_PathNode<$.TypeSet<$Wiki, $.Cardinality.Many>, null> = _.syn
 
 
 
-export { $GlobalGraph, GlobalGraph, $GlobalGuide, GlobalGuide, $GlobalGuideSection, GlobalGuideSection, $GlobalLink, GlobalLink, $GlobalTopic, GlobalTopic, $Link, Link, $Note, Note, $Topic, Topic, $User, User, $Wiki, Wiki };
+export { $GlobalGraph, GlobalGraph, $GlobalGuide, GlobalGuide, $GlobalGuideSection, GlobalGuideSection, $GlobalLink, GlobalLink, $GlobalTopic, GlobalTopic, $Link, Link, $Note, Note, $RelatedLink, RelatedLink, $Topic, Topic, $User, User, $Wiki, Wiki };
 
 type __defaultExports = {
   "GlobalGraph": typeof GlobalGraph;
@@ -249,6 +262,7 @@ type __defaultExports = {
   "GlobalTopic": typeof GlobalTopic;
   "Link": typeof Link;
   "Note": typeof Note;
+  "RelatedLink": typeof RelatedLink;
   "Topic": typeof Topic;
   "User": typeof User;
   "Wiki": typeof Wiki
@@ -261,6 +275,7 @@ const __defaultExports: __defaultExports = {
   "GlobalTopic": GlobalTopic,
   "Link": Link,
   "Note": Note,
+  "RelatedLink": RelatedLink,
   "Topic": Topic,
   "User": User,
   "Wiki": Wiki
