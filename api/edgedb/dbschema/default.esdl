@@ -141,11 +141,15 @@ module default {
     timeEstimate: str;
     # author of the link
     author: str;
+    # TODO: should probably be int, but keeping it str for now
+    year: str;
     # related links to this link
     # could be link to `Code` or `Tweet` or some other Link
     multi relatedLinks: Link;
     # all links are mapped by unique URL to a global link
-    required link globalLink: GlobalLink;
+    link globalLink: GlobalLink {
+      on target delete allow;
+    };
   }
   type GlobalLink {
     # title as grabbed from the url
@@ -160,6 +164,8 @@ module default {
     title: str;
     # optionally have a main topic that the link belongs to
     link mainTopic: GlobalTopic;
+    # TODO: should probably be int, but keeping it str for now
+    year: str;
     # connected topics for this link
     multi link links := .<globalLink[is Link];
   }

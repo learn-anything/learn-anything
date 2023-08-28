@@ -11,7 +11,7 @@ import * as path from "path"
 import * as prettier from "prettier"
 import { addUser, getUserIdByName } from "../crud/user"
 import { addWiki, getWikiIdByUserId } from "../crud/wiki"
-import { addTopic } from "../crud/topic"
+import { addTopic, deleteTopic } from "../crud/topic"
 
 dotenv.config()
 
@@ -36,7 +36,8 @@ async function main() {
   console.log(topic.links, "links")
   // console.log(topic.links, "topic")
   // await addTopic(topic, wikiId!)
-  // console.log("added")
+  // await deleteTopic("31d7d68c-45d6-11ee-8020-77a7d148ca41")
+  console.log("complete")
 }
 
 main()
@@ -290,6 +291,7 @@ async function parseMdFile(filePath: string): Promise<Topic> {
           let linkUrl = ""
           let linkDescription = ""
           let relatedLinks: { title: string; url: string }[] = []
+          let year: string | undefined
 
           linkNode.children.forEach((link) => {
             // console.log(link, "link")
@@ -342,12 +344,19 @@ async function parseMdFile(filePath: string): Promise<Topic> {
                 }
               })
             }
+            const yearRegex = /\((\d{4})\)/
+            const yearMatch = linkTitle.match(yearRegex)
+            if (yearMatch) {
+              year = yearMatch[1]
+              linkTitle = linkTitle.replace(yearRegex, "").trim()
+            }
             links.push({
               title: linkTitle,
               url: linkUrl,
               description: linkDescription,
               relatedLinks,
               public: true,
+              year,
             })
           })
         })

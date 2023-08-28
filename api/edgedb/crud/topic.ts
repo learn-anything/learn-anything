@@ -5,31 +5,6 @@ import e from "../dbschema/edgeql-js"
 // Add a topic to a wiki of a user
 // Also add links to GlobalLink and have references
 export async function addTopic(topic: Topic, wikiId: string) {
-  const addGlobalLinkQuery = e.params(
-    {
-      url: e.str,
-      urlTitle: e.str,
-      public: e.bool,
-      year: e.optional(e.str),
-    },
-    (params) => {
-      e.insert(e.GlobalLink, {
-        urlTitle: params.urlTitle,
-        url: params.url,
-        public: params.public,
-      })
-    },
-  )
-
-  topic.links.map((link) => {
-    addGlobalLinkQuery.run(client, {
-      url: link.url,
-      urlTitle: link.title,
-      public: true,
-      year: link?.year,
-    })
-  })
-
   const query = e.params(
     {
       wikiId: e.uuid,
@@ -57,8 +32,6 @@ export async function addTopic(topic: Topic, wikiId: string) {
           public: topic.public,
           content: topic.content,
         })
-        // don't crash on conflicts
-        // TODO: check it actually works
         .unlessConflict((topic) => ({
           on: topic.name,
         }))
@@ -82,6 +55,13 @@ export async function addTopic(topic: Topic, wikiId: string) {
                 description: e.cast(e.str, e.json_get(link, "description")),
                 public: e.cast(e.bool, e.json_get(link, "public")),
                 topic: newTopic,
+                globalLink: e
+                  .insert(e.GlobalLink, {
+                    url: e.cast(e.str, e.json_get(link, "url")),
+                    urlTitle: e.cast(e.str, e.json_get(link, "title")),
+                    public: e.cast(e.bool, e.json_get(link, "public")),
+                  })
+                  .unlessConflict((gl) => ({ on: gl.url })),
               }),
             ),
           ),
@@ -170,10 +150,25 @@ export async function topicExists(topicName: string) {
 // //   prettyName: string
 // // }
 
-export async function deleteTopic(id: string) {
+export async function deleteTopic(topicId: string) {
+  // Delete all Link objects associated with the Topic
+  await e
+    .delete(e.Link, (link) => ({
+      filter: e.op(link.topic.id, "=", e.cast(e.uuid, topicId)),
+    }))
+    .run(client)
+
+  // Delete all Note objects associated with the Topic
+  await e
+    .delete(e.Note, (note) => ({
+      filter: e.op(note.topic.id, "=", e.cast(e.uuid, topicId)),
+    }))
+    .run(client)
+
+  // Delete the Topic
   const res = await e
     .delete(e.Topic, (topic) => ({
-      filter: e.op(topic.id, "=", id),
+      filter: e.op(topic.id, "=", e.cast(e.uuid, topicId)),
     }))
     .run(client)
   return res
