@@ -55,11 +55,13 @@ export async function addTopic(topic: Topic, wikiId: string) {
                 description: e.cast(e.str, e.json_get(link, "description")),
                 public: e.cast(e.bool, e.json_get(link, "public")),
                 topic: newTopic,
+                year: e.cast(e.str, e.json_get(link, "year")),
                 globalLink: e
                   .insert(e.GlobalLink, {
                     url: e.cast(e.str, e.json_get(link, "url")),
                     urlTitle: e.cast(e.str, e.json_get(link, "title")),
                     public: e.cast(e.bool, e.json_get(link, "public")),
+                    year: e.cast(e.str, e.json_get(link, "year")),
                   })
                   .unlessConflict((gl) => ({ on: gl.url })),
               }),
