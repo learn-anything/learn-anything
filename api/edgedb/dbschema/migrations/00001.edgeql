@@ -1,4 +1,4 @@
-CREATE MIGRATION m1wukhe74lcuopzoqq5tfwyslmnmmsfjmm7rcjfsi57ssacphijhpa
+CREATE MIGRATION m1ttov2vgklbijrxmcyg35adqqczofc4kuttua3yrbale4mhtasw3a
     ONTO initial
 {
   CREATE TYPE default::GlobalGraph {
@@ -32,18 +32,22 @@ CREATE MIGRATION m1wukhe74lcuopzoqq5tfwyslmnmmsfjmm7rcjfsi57ssacphijhpa
   };
   CREATE TYPE default::GlobalLink {
       CREATE LINK mainTopic: default::GlobalTopic;
+      CREATE PROPERTY description: std::str;
       CREATE REQUIRED PROPERTY public: std::bool;
-      CREATE PROPERTY title: std::str;
+      CREATE REQUIRED PROPERTY title: std::str;
       CREATE REQUIRED PROPERTY url: std::str {
           CREATE CONSTRAINT std::exclusive;
       };
-      CREATE REQUIRED PROPERTY urlTitle: std::str;
+      CREATE PROPERTY urlTitle: std::str;
+      CREATE PROPERTY year: std::str;
   };
   ALTER TYPE default::GlobalGuideSection {
       CREATE MULTI LINK links: default::GlobalLink;
   };
   CREATE TYPE default::Link {
-      CREATE LINK globalLink: default::GlobalLink;
+      CREATE LINK globalLink: default::GlobalLink {
+          ON TARGET DELETE ALLOW;
+      };
       CREATE MULTI LINK relatedLinks: default::Link;
       CREATE PROPERTY author: std::str;
       CREATE PROPERTY description: std::str;
@@ -53,6 +57,7 @@ CREATE MIGRATION m1wukhe74lcuopzoqq5tfwyslmnmmsfjmm7rcjfsi57ssacphijhpa
       CREATE PROPERTY type: std::str;
       CREATE REQUIRED PROPERTY url: std::str;
       CREATE PROPERTY urlTitle: std::str;
+      CREATE PROPERTY year: std::str;
   };
   ALTER TYPE default::GlobalLink {
       CREATE MULTI LINK links := (.<globalLink[IS default::Link]);
@@ -131,6 +136,6 @@ CREATE MIGRATION m1wukhe74lcuopzoqq5tfwyslmnmmsfjmm7rcjfsi57ssacphijhpa
       CREATE MULTI LINK topics := (.<wiki[IS default::Topic]);
   };
   ALTER TYPE default::User {
-      CREATE LINK wiki: default::Wiki;
+      CREATE LINK wiki := (.<user[IS default::Wiki]);
   };
 };

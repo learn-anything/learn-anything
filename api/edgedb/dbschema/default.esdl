@@ -152,16 +152,18 @@ module default {
     };
   }
   type GlobalLink {
-    # title as grabbed from the url
-    required urlTitle: str;
+    # nice title from url
+    required title: str;
+    # title as grabbed from url
+    urlTitle: str;
     # unique url of the link
     required url: str {
       constraint exclusive;
     };
     # true = link is available for all to see/search. false = link is private
     required public: bool;
-    # optionally nicer title of the link
-    title: str;
+    # link description
+    description: str;
     # optionally have a main topic that the link belongs to
     link mainTopic: GlobalTopic;
     # TODO: should probably be int, but keeping it str for now

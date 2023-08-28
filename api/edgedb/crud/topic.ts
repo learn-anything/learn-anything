@@ -58,8 +58,9 @@ export async function addTopic(topic: Topic, wikiId: string) {
                 year: e.cast(e.str, e.json_get(link, "year")),
                 globalLink: e
                   .insert(e.GlobalLink, {
+                    title: e.cast(e.str, e.json_get(link, "title")),
                     url: e.cast(e.str, e.json_get(link, "url")),
-                    urlTitle: e.cast(e.str, e.json_get(link, "title")),
+                    description: e.cast(e.str, e.json_get(link, "description")),
                     public: e.cast(e.bool, e.json_get(link, "public")),
                     year: e.cast(e.str, e.json_get(link, "year")),
                   })
