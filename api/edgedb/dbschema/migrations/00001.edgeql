@@ -1,4 +1,4 @@
-CREATE MIGRATION m1bysn4cqubvobvc2tp5n7eikiuxhnm6m77dt4t24ewsbf3nq4auvq
+CREATE MIGRATION m14snolsqmamdocdqjiwudppiurdgh6p72ek22vyntmri6yvrreynq
     ONTO initial
 {
   CREATE TYPE default::GlobalGraph {
@@ -74,7 +74,7 @@ CREATE MIGRATION m1bysn4cqubvobvc2tp5n7eikiuxhnm6m77dt4t24ewsbf3nq4auvq
       CREATE PROPERTY profileImage: std::str;
   };
   ALTER TYPE default::GlobalTopic {
-      CREATE MULTI LINK relatedLinks: default::Link;
+      CREATE MULTI LINK relatedLinks: default::GlobalLink;
   };
   CREATE TYPE default::Note {
       CREATE PROPERTY additionalContent: std::str;

@@ -10,6 +10,7 @@ export async function addWiki(userId: string) {
       })),
     })
     .run(client)
+  console.log(res, "wiki added")
   return res
 }
 

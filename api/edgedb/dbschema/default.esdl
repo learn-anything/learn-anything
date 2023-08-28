@@ -186,7 +186,7 @@ module default {
     # related topics to this global topic
     multi relatedTopics: GlobalTopic;
     # all links submitted to the global topic
-    multi relatedLinks: Link;
+    multi relatedLinks: GlobalLink;
     # all notes submitted to the global topic
     multi relatedNotes: Note;
   }
