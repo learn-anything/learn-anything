@@ -676,13 +676,13 @@ export type $ObjectTypeλShape = $.typeutil.flatten<$SourceλShape & Omit<$Consi
   "<__type__[is GlobalGuide]": $.LinkDesc<_default.$GlobalGuide, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is GlobalTopic]": $.LinkDesc<_default.$GlobalTopic, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is GlobalGuideSection]": $.LinkDesc<_default.$GlobalGuideSection, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<__type__[is RelatedLink]": $.LinkDesc<_default.$RelatedLink, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is GlobalLink]": $.LinkDesc<_default.$GlobalLink, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is Link]": $.LinkDesc<_default.$Link, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is User]": $.LinkDesc<_default.$User, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is Note]": $.LinkDesc<_default.$Note, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is Topic]": $.LinkDesc<_default.$Topic, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is Wiki]": $.LinkDesc<_default.$Wiki, $.Cardinality.Many, {}, false, false,  false, false>;
-  "<__type__[is RelatedLink]": $.LinkDesc<_default.$RelatedLink, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<intersection_of": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<subject": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;

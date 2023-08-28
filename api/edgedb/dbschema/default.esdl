@@ -161,9 +161,11 @@ module default {
     # title as grabbed from url
     urlTitle: str;
     # unique url of the link
-    required url: str {
-      constraint exclusive;
-    };
+    url: str;
+    # TODO: should be exclusive but that was giving issues in migration of wiki
+    # required url: str {
+    #   constraint exclusive;
+    # };
     # true = link is available for all to see/search. false = link is private
     required public: bool;
     # link description

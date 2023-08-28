@@ -9,7 +9,7 @@ export type $GlobalGraphλShape = $.typeutil.flatten<_std.$Object_6b06be9b27fe11
 type $GlobalGraph = $.ObjectType<"default::GlobalGraph", $GlobalGraphλShape, null, [
   ..._std.$Object_6b06be9b27fe11ee83ff159af7e1bb81['__exclusives__'],
 ]>;
-const $GlobalGraph = $.makeType<$GlobalGraph>(_.spec, "966e7704-45df-11ee-9cdc-7dede69c3286", _.syntax.literal);
+const $GlobalGraph = $.makeType<$GlobalGraph>(_.spec, "f7d3ef02-45e2-11ee-9604-c73b537dd54c", _.syntax.literal);
 
 const GlobalGraph: $.$expr_PathNode<$.TypeSet<$GlobalGraph, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($GlobalGraph, $.Cardinality.Many), null);
 
@@ -23,7 +23,7 @@ export type $GlobalGuideλShape = $.typeutil.flatten<_std.$Object_6b06be9b27fe11
 type $GlobalGuide = $.ObjectType<"default::GlobalGuide", $GlobalGuideλShape, null, [
   ..._std.$Object_6b06be9b27fe11ee83ff159af7e1bb81['__exclusives__'],
 ]>;
-const $GlobalGuide = $.makeType<$GlobalGuide>(_.spec, "966fff09-45df-11ee-afc6-136620050ef6", _.syntax.literal);
+const $GlobalGuide = $.makeType<$GlobalGuide>(_.spec, "f7d57814-45e2-11ee-bd07-51316c33895f", _.syntax.literal);
 
 const GlobalGuide: $.$expr_PathNode<$.TypeSet<$GlobalGuide, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($GlobalGuide, $.Cardinality.Many), null);
 
@@ -37,18 +37,18 @@ export type $GlobalGuideSectionλShape = $.typeutil.flatten<_std.$Object_6b06be9
 type $GlobalGuideSection = $.ObjectType<"default::GlobalGuideSection", $GlobalGuideSectionλShape, null, [
   ..._std.$Object_6b06be9b27fe11ee83ff159af7e1bb81['__exclusives__'],
 ]>;
-const $GlobalGuideSection = $.makeType<$GlobalGuideSection>(_.spec, "9675241c-45df-11ee-b7af-49a240ced437", _.syntax.literal);
+const $GlobalGuideSection = $.makeType<$GlobalGuideSection>(_.spec, "f7fe826c-45e2-11ee-8178-43dbd533c525", _.syntax.literal);
 
 const GlobalGuideSection: $.$expr_PathNode<$.TypeSet<$GlobalGuideSection, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($GlobalGuideSection, $.Cardinality.Many), null);
 
 export type $GlobalLinkλShape = $.typeutil.flatten<_std.$Object_6b06be9b27fe11ee83ff159af7e1bb81λShape & {
   "mainTopic": $.LinkDesc<$GlobalTopic, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
-  "links": $.LinkDesc<$Link, $.Cardinality.Many, {}, false, true,  false, false>;
   "relatedLinks": $.LinkDesc<$RelatedLink, $.Cardinality.Many, {}, false, false,  false, false>;
+  "links": $.LinkDesc<$Link, $.Cardinality.Many, {}, false, true,  false, false>;
   "description": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "public": $.PropertyDesc<_std.$bool, $.Cardinality.One, false, false, false, false>;
   "title": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
-  "url": $.PropertyDesc<_std.$str, $.Cardinality.One, true, false, false, false>;
+  "url": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "urlTitle": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "year": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "<links[is GlobalGuideSection]": $.LinkDesc<$GlobalGuideSection, $.Cardinality.Many, {}, false, false,  false, false>;
@@ -66,9 +66,8 @@ export type $GlobalLinkλShape = $.typeutil.flatten<_std.$Object_6b06be9b27fe11e
 }>;
 type $GlobalLink = $.ObjectType<"default::GlobalLink", $GlobalLinkλShape, null, [
   ..._std.$Object_6b06be9b27fe11ee83ff159af7e1bb81['__exclusives__'],
-  {url: {__element__: _std.$str, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
 ]>;
-const $GlobalLink = $.makeType<$GlobalLink>(_.spec, "9676f342-45df-11ee-8752-5383905b3911", _.syntax.literal);
+const $GlobalLink = $.makeType<$GlobalLink>(_.spec, "f8021211-45e2-11ee-9396-9f99634fa505", _.syntax.literal);
 
 const GlobalLink: $.$expr_PathNode<$.TypeSet<$GlobalLink, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($GlobalLink, $.Cardinality.Many), null);
 
@@ -104,14 +103,16 @@ type $GlobalTopic = $.ObjectType<"default::GlobalTopic", $GlobalTopicλShape, nu
   ..._std.$Object_6b06be9b27fe11ee83ff159af7e1bb81['__exclusives__'],
   {name: {__element__: _std.$str, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
 ]>;
-const $GlobalTopic = $.makeType<$GlobalTopic>(_.spec, "96718510-45df-11ee-a360-cd01304f7aae", _.syntax.literal);
+const $GlobalTopic = $.makeType<$GlobalTopic>(_.spec, "f7fb0b35-45e2-11ee-9e89-d34e1e773cc8", _.syntax.literal);
 
 const GlobalTopic: $.$expr_PathNode<$.TypeSet<$GlobalTopic, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($GlobalTopic, $.Cardinality.Many), null);
 
 export type $LinkλShape = $.typeutil.flatten<_std.$Object_6b06be9b27fe11ee83ff159af7e1bb81λShape & {
   "globalLink": $.LinkDesc<$GlobalLink, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
-  "topic": $.LinkDesc<$Topic, $.Cardinality.One, {}, false, false,  false, false>;
   "relatedLinks": $.LinkDesc<$RelatedLink, $.Cardinality.Many, {}, false, false,  false, false>;
+  "topic": $.LinkDesc<$Topic, $.Cardinality.One, {}, false, false,  false, false>;
+  "urlTitle": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "year": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "author": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "description": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "public": $.PropertyDesc<_std.$bool, $.Cardinality.One, false, false, false, false>;
@@ -119,8 +120,6 @@ export type $LinkλShape = $.typeutil.flatten<_std.$Object_6b06be9b27fe11ee83ff1
   "title": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "type": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "url": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
-  "urlTitle": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
-  "year": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "<links[is GlobalLink]": $.LinkDesc<$GlobalLink, $.Cardinality.Many, {}, false, false,  false, false>;
   "<links[is Topic]": $.LinkDesc<$Topic, $.Cardinality.Many, {}, false, false,  false, false>;
   "<links": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
@@ -128,7 +127,7 @@ export type $LinkλShape = $.typeutil.flatten<_std.$Object_6b06be9b27fe11ee83ff1
 type $Link = $.ObjectType<"default::Link", $LinkλShape, null, [
   ..._std.$Object_6b06be9b27fe11ee83ff159af7e1bb81['__exclusives__'],
 ]>;
-const $Link = $.makeType<$Link>(_.spec, "967a1151-45df-11ee-9b1c-9d526819fffa", _.syntax.literal);
+const $Link = $.makeType<$Link>(_.spec, "f804e362-45e2-11ee-8975-635fdcd8c98b", _.syntax.literal);
 
 const Link: $.$expr_PathNode<$.TypeSet<$Link, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Link, $.Cardinality.Many), null);
 
@@ -151,7 +150,7 @@ export type $NoteλShape = $.typeutil.flatten<_std.$Object_6b06be9b27fe11ee83ff1
 type $Note = $.ObjectType<"default::Note", $NoteλShape, null, [
   ..._std.$Object_6b06be9b27fe11ee83ff159af7e1bb81['__exclusives__'],
 ]>;
-const $Note = $.makeType<$Note>(_.spec, "9683dd67-45df-11ee-a9b1-ede207f5c0d7", _.syntax.literal);
+const $Note = $.makeType<$Note>(_.spec, "f80ed565-45e2-11ee-abb6-39c0845797dd", _.syntax.literal);
 
 const Note: $.$expr_PathNode<$.TypeSet<$Note, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Note, $.Cardinality.Many), null);
 
@@ -165,7 +164,7 @@ export type $RelatedLinkλShape = $.typeutil.flatten<_std.$Object_6b06be9b27fe11
 type $RelatedLink = $.ObjectType<"default::RelatedLink", $RelatedLinkλShape, null, [
   ..._std.$Object_6b06be9b27fe11ee83ff159af7e1bb81['__exclusives__'],
 ]>;
-const $RelatedLink = $.makeType<$RelatedLink>(_.spec, "597bff78-45e1-11ee-89ab-35fa2b8836a6", _.syntax.literal);
+const $RelatedLink = $.makeType<$RelatedLink>(_.spec, "f8007f3a-45e2-11ee-b7cf-a33587a1fdfb", _.syntax.literal);
 
 const RelatedLink: $.$expr_PathNode<$.TypeSet<$RelatedLink, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($RelatedLink, $.Cardinality.Many), null);
 
@@ -202,7 +201,7 @@ type $Topic = $.ObjectType<"default::Topic", $TopicλShape, null, [
   {name: {__element__: _std.$str, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },wiki: {__element__: $Wiki, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
   {name: {__element__: _std.$str, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
 ]>;
-const $Topic = $.makeType<$Topic>(_.spec, "9685dd1c-45df-11ee-9a42-07dcdf012854", _.syntax.literal);
+const $Topic = $.makeType<$Topic>(_.spec, "f810d54f-45e2-11ee-8320-cd23f761ca87", _.syntax.literal);
 
 const Topic: $.$expr_PathNode<$.TypeSet<$Topic, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Topic, $.Cardinality.Many), null);
 
@@ -227,10 +226,10 @@ export type $UserλShape = $.typeutil.flatten<_std.$Object_6b06be9b27fe11ee83ff1
 }>;
 type $User = $.ObjectType<"default::User", $UserλShape, null, [
   ..._std.$Object_6b06be9b27fe11ee83ff159af7e1bb81['__exclusives__'],
-  {email: {__element__: _std.$str, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
   {name: {__element__: _std.$str, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
+  {email: {__element__: _std.$str, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
 ]>;
-const $User = $.makeType<$User>(_.spec, "967e7ad2-45df-11ee-8b8e-c5c8b6ab2a23", _.syntax.literal);
+const $User = $.makeType<$User>(_.spec, "f8096267-45e2-11ee-b9c2-8f965de693db", _.syntax.literal);
 
 const User: $.$expr_PathNode<$.TypeSet<$User, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($User, $.Cardinality.Many), null);
 
@@ -246,7 +245,7 @@ export type $WikiλShape = $.typeutil.flatten<_std.$Object_6b06be9b27fe11ee83ff1
 type $Wiki = $.ObjectType<"default::Wiki", $WikiλShape, null, [
   ..._std.$Object_6b06be9b27fe11ee83ff159af7e1bb81['__exclusives__'],
 ]>;
-const $Wiki = $.makeType<$Wiki>(_.spec, "968fad01-45df-11ee-973c-c7ea1723430e", _.syntax.literal);
+const $Wiki = $.makeType<$Wiki>(_.spec, "f81a60b7-45e2-11ee-986b-2df5cba476b9", _.syntax.literal);
 
 const Wiki: $.$expr_PathNode<$.TypeSet<$Wiki, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Wiki, $.Cardinality.Many), null);
 

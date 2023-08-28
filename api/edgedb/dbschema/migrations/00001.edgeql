@@ -1,4 +1,4 @@
-CREATE MIGRATION m1ttov2vgklbijrxmcyg35adqqczofc4kuttua3yrbale4mhtasw3a
+CREATE MIGRATION m1ygq556iaizp32uxec5r6q67fgh6ghkf6uycz6t6evdsitqdhxooq
     ONTO initial
 {
   CREATE TYPE default::GlobalGraph {
@@ -30,14 +30,17 @@ CREATE MIGRATION m1ttov2vgklbijrxmcyg35adqqczofc4kuttua3yrbale4mhtasw3a
   ALTER TYPE default::GlobalGuide {
       CREATE MULTI LINK sections: default::GlobalGuideSection;
   };
+  CREATE TYPE default::RelatedLink {
+      CREATE PROPERTY title: std::str;
+      CREATE PROPERTY url: std::str;
+  };
   CREATE TYPE default::GlobalLink {
       CREATE LINK mainTopic: default::GlobalTopic;
+      CREATE MULTI LINK relatedLinks: default::RelatedLink;
       CREATE PROPERTY description: std::str;
       CREATE REQUIRED PROPERTY public: std::bool;
       CREATE REQUIRED PROPERTY title: std::str;
-      CREATE REQUIRED PROPERTY url: std::str {
-          CREATE CONSTRAINT std::exclusive;
-      };
+      CREATE PROPERTY url: std::str;
       CREATE PROPERTY urlTitle: std::str;
       CREATE PROPERTY year: std::str;
   };
@@ -48,7 +51,7 @@ CREATE MIGRATION m1ttov2vgklbijrxmcyg35adqqczofc4kuttua3yrbale4mhtasw3a
       CREATE LINK globalLink: default::GlobalLink {
           ON TARGET DELETE ALLOW;
       };
-      CREATE MULTI LINK relatedLinks: default::Link;
+      CREATE MULTI LINK relatedLinks: default::RelatedLink;
       CREATE PROPERTY author: std::str;
       CREATE PROPERTY description: std::str;
       CREATE REQUIRED PROPERTY public: std::bool;
