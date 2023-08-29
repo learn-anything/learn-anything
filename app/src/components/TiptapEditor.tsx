@@ -10,5 +10,11 @@ export default function TiptapEditor() {
     content: `<p>Example Text</p>`,
   }))
 
-  return <div id="editor" ref={ref} />
+  return (
+    <div
+      class="h-full w-full min-h-0 min-w-0 flex-1 pr-10 pt-10 pl-10"
+      id="editor"
+      ref={ref}
+    />
+  )
 }

@@ -6,12 +6,14 @@ import {
   createResource,
   createSignal,
   onCleanup,
+  onMount,
   untrack,
 } from "solid-js"
 import { useNavigate } from "solid-start"
 import { Canvas, Graph, Anim } from "@nothing-but/force-graph"
 import { Num } from "@nothing-but/utils"
 import { getHankoCookie } from "../../lib/auth"
+import Mobius from "graphql-mobius"
 
 // TODO: add fuzzy search of topics, especially consider lower case should also match
 
@@ -24,7 +26,6 @@ export const graph_options = Graph.graphOptions({
 
 export function generateInitialGraph(length: number = 256): Graph.Graph {
   const nodes: Graph.Node[] = Array.from({ length }, Graph.makeNode)
-
   const edges: Graph.Edge[] = []
 
   for (let i = 0; i < length; i++) {
@@ -65,6 +66,31 @@ export default function Home() {
     const hankoCookie = await getHankoCookie()
     return hankoCookie
   })
+
+  // onMount(() => {
+  //   // const mobius = new Mobius({
+  //   //   fetch: (query) =>
+  //   //     fetch("http://127.0.0.1:4000/graphql", {
+  //   //       method: "POST",
+  //   //       headers: {
+  //   //         "Content-Type": "application/json",
+  //   //       },
+  //   //       body: JSON.stringify({
+  //   //         query,
+  //   //         variables: {},
+  //   //       }),
+  //   //     }).then((res) => res.json()),
+  //   // })
+
+  //   // const res = await mobius.query({
+  //   //   GetTopic: {
+  //   //     getTopic: {
+  //   //       topicName: "physics",
+  //   //       userId: "1"
+  //   //     }
+  //   //   }
+  //   // })
+  // })
 
   const graph = generateInitialGraph()
 

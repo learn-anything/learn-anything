@@ -211,15 +211,35 @@ module default {
     # all notes submitted to the global topic
     multi relatedNotes: Note;
   }
+  # every time a change to GlobalGuide is made, a new revision is created
   type GlobalGuide {
     # global topic
     required link globalTopic: GlobalTopic;
-    # guide can be modified by submitting changes to it
-    # when changes land to guide, a new revision with time stamp is created
-    # there is a way to view history of the guide as it improves by picking time stamps
-    lastUpdateTime: str;
+    required created_at: datetime {
+      readonly := true;
+      default := datetime_of_statement();
+    }
     # guide is split by sections
     multi sections: GlobalGuideSection;
+  }
+  type UserGuide {
+    # global topic
+    required link globalTopic: GlobalTopic;
+    required created_at: datetime {
+      readonly := true;
+      default := datetime_of_statement();
+    }
+    # guide is split by sections
+    multi sections: UserGuideSection;
+    link pastRevision: UserGuide;
+  }
+  type UserGuideSection {
+    # title of section
+    required title: str;
+    # list of links in a section
+    multi links: GlobalLink;
+    # position of the section in the guide
+    order: int16;
   }
   type GlobalGuideSection {
     # title of section
