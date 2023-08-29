@@ -1,7 +1,7 @@
 import { div } from "edgedb/dist/primitives/bigint"
 import { Show, createSignal } from "solid-js"
 
-export default function GuideSummary() {
+export default function GuideSummary(props: any) {
   const [showSummary, setShowSummary] = createSignal(false)
   return (
     <>
@@ -14,7 +14,7 @@ export default function GuideSummary() {
         height: 97px
       }
     `}</style>
-      <div class="w-full flex flex-col gap-4 text-[16px] leading-[18.78px]">
+      <div class="w-full flex flex-col gap-4 text-[16px]  leading-[18.78px]">
         <div class="flex justify-between items-center ">
           <div class="font-bold text-[#131313]">GUIDE</div>
           <div class="text-[#696969]">v1.0</div>
@@ -50,7 +50,13 @@ export default function GuideSummary() {
           <div>Contents</div>
           <div class="flex gap-[23px]">
             {/* <div>Duplicate</div> */}
-            <div>Improve Guide</div>
+            <div
+              onClick={() => {
+                props.setCurrentTab("EditGuide")
+              }}
+            >
+              Improve Guide
+            </div>
             {/* <div>Filter</div> */}
           </div>
         </div>

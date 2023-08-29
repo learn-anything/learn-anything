@@ -1,34 +1,42 @@
-import { For } from "solid-js"
+import { For, Show, createEffect, createSignal } from "solid-js"
+import { createShortcut } from "@solid-primitives/keyboard"
 import Icon from "../Icon"
-import { Show } from "solid-js"
 
-type Link = {
-  title: string
-  url: string
-  year?: string
-  type?: string
-  author?: string
-  time?: string
-  relatedLinks?: Link[]
-}
+export default function GuideSectionEdit(props: any) {
+  const [editSection, setEditSection] = createSignal(false)
+  const [addLink, setAddLink] = createSignal(false)
 
-type Props = {
-  sectionTitle: string
-  links: Link[]
-}
+  createEffect(() => {
+    const editableDiv = document.getElementById("GuideSectionTitle")!
 
-export default function GuideSection(props: Props) {
+    editableDiv.addEventListener("click", () => {
+      editableDiv.setAttribute("contenteditable", "true")
+      editableDiv.focus()
+    })
+    createShortcut(["ENTER"], () => {
+      var details = document.getElementById("GuideSummary")!.innerHTML
+      console.log(details, "Details")
+      setEditSection(false)
+    })
+  })
+
   return (
     <div class="pt-6 flex flex-col gap-6 leading-[18.78px] border-[#EAEAEA] border rounded-lg p-3">
-      <div class="text-[#131313] font-bold">{props.sectionTitle}</div>
+      <div
+        class="text-[#131313] font-bold"
+        contentEditable={editSection()}
+        id="GuideSectionTitle"
+      >
+        {props.sectionTitle}
+      </div>
       <div class="flex flex-col gap-6">
         <For each={props.links}>
           {(link) => {
             return (
               <div class="flex items-center gap-6 justify-between">
                 {/* <div class="">
-                  <div class="bg-neutral-400 w-10 h-10 rounded-full"></div>
-                </div> */}
+                <div class="bg-neutral-400 w-10 h-10 rounded-full"></div>
+              </div> */}
                 <div class="w-full  h-full flex justify-between items-center">
                   <div class="w-fit flex flex-col">
                     <div class="font-bold text-[#3B5CCC]">{link.title}</div>
@@ -74,7 +82,47 @@ export default function GuideSection(props: Props) {
             )
           }}
         </For>
+        <div
+          class="font-light flex items-center gap-1 text-[16px] text-[#3B5CCC] self-center"
+          onClick={() => {
+            setAddLink(true)
+          }}
+        >
+          <Icon name="Plus"></Icon>Add a Link
+        </div>
       </div>
+      <Show when={addLink()}>
+        <div class="fixed flex items-center backdrop-blur-sm justify-center w-screen z-10 h-screen top-0 left-0">
+          <div
+            class="fixed w-screen h-screen top-0 right-0 z-20"
+            onClick={() => {
+              setAddLink(false)
+            }}
+          ></div>
+          <div class=" z-30 p-3 flex flex-col gap-2 rounded-lg bg-white border-slate-400 border border-opacity-30">
+            <div class="text-xl">Add a Link</div>
+            <div class="flex items-center justify-center gap-1">
+              <input
+                type="text"
+                name=""
+                id=""
+                class="w-full h-full border p-[8px] px-[10px] outline-none border-slate-400 border-opacity-30 rounded-[4px]"
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                name=""
+                id=""
+                class="w-full h-full border p-[8px] px-[10px] outline-none border-slate-400 border-opacity-30 rounded-[4px]"
+              />
+            </div>
+            <div class="px-[10px] p-[8px] border-[#3B5CCC] text-white bg-[#3B5CCC] rounded-[4px]">
+              Submit
+            </div>
+          </div>
+        </div>
+      </Show>
     </div>
   )
 }
