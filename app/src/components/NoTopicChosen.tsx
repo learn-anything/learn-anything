@@ -2,6 +2,9 @@ import { Show } from "solid-js"
 import { useWiki } from "../GlobalContext/wiki"
 import Button from "./Button"
 import { useUser } from "../GlobalContext/user"
+import { readTextFile, BaseDirectory } from "@tauri-apps/api/fs"
+import { open } from "@tauri-apps/api/dialog"
+import { select } from "~/edgedb/dbschema/edgeql-js"
 // import { connectWiki } from "#preload"
 
 export default function NoTopicChosen() {
@@ -16,8 +19,23 @@ export default function NoTopicChosen() {
         when={wiki.wiki.wikiFolderPath}
         fallback={
           <Button
-            onClick={() => {
+            onClick={async () => {
               // connectWiki()
+              // TODO: should take in a folder
+              // then you get access to all the files in folder
+              // check that it works across app restarts (same UX as Obsidian)
+              // below takes one .md file currently and prints the content of it
+              const selectedFile = await open({
+                multiple: false,
+                filters: [
+                  {
+                    name: "MD",
+                    extensions: ["md"],
+                  },
+                ],
+              })
+              const content = await readTextFile(selectedFile as string)
+              console.log(content)
             }}
           >
             Connect wiki

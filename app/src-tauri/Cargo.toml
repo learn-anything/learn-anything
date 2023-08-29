@@ -12,7 +12,7 @@ edition = "2021"
 tauri-build = { version = "1.2", features = [] }
 
 [dependencies]
-tauri = { version = "1.2", features = ["shell-open"] }
+tauri = { version = "1.2", features = [ "dialog-all", "fs-remove-file", "fs-remove-dir", "fs-rename-file", "fs-exists", "fs-create-dir", "fs-read-dir", "fs-write-file", "fs-read-file", "shell-open"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 

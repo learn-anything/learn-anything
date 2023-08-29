@@ -3,7 +3,6 @@ import { client } from "../client"
 import e from "../dbschema/edgeql-js"
 
 // Add a topic to a wiki of a user
-// Also add links to GlobalLink and have references
 export async function addTopic(
   topic: Topic,
   wikiId: string,
@@ -138,6 +137,44 @@ export async function getGlobalTopic(topicName: string) {
   return query.run(client)
 }
 
+// get everything related to topic
+export async function getTopic(name: string) {
+  const query = e.select(e.Topic, (topic) => ({
+    name: true,
+    prettyName: true,
+    public: true,
+    content: true,
+    topicPath: true,
+    notes: {
+      content: true,
+      url: true,
+      additionalContent: true,
+    },
+    links: {
+      title: true,
+      url: true,
+      description: true,
+      year: true,
+      topic: {
+        name: true,
+      },
+      globalLink: {
+        title: true,
+        url: true,
+        description: true,
+        year: true,
+      },
+      relatedLinks: {
+        url: true,
+        title: true,
+      },
+    },
+    filter: e.op(topic.name, "=", name),
+  }))
+
+  return query.run(client)
+}
+
 export async function topicExists(topicName: string) {
   const query = e.select(e.Topic, (topic) => ({
     filter: e.op(topic.name, "=", topicName),
@@ -148,6 +185,16 @@ export async function topicExists(topicName: string) {
   }
   return true
 }
+
+// export async function getTopic(wikiId: string) {
+//   const query = e.select(e.Topic, (topic) => ({
+//     name: true,
+//     prettyName: true,
+//     filter: e.op(topic.wiki.id, "=", e.cast(e.uuid, wikiId)),
+//   }))
+
+//   return query.run(client)
+// }
 
 // export interface Link {
 //   title: string
@@ -213,50 +260,59 @@ export async function getTopics() {
   return res
 }
 
-export async function getTopic(topicName: string, userId: string) {
+export async function getTopicTitles() {
   const res = await e
-    .select(e.Topic, (topic) => ({
+    .select(e.Topic, () => ({
       name: true,
-      content: true,
-      prettyName: true,
-      notes: {
-        content: true,
-        url: true,
-      },
-      links: {
-        title: true,
-        url: true,
-      },
-      filter: e.op(
-        e.op(topic.name, "=", topicName),
-        "and",
-        e.op(topic.user.id, "=", e.cast(e.uuid, userId)),
-      ),
-    }))
-    // .toEdgeQL()
-    .run(client)
-  return res
-}
-
-export async function getTopicCount(userId: string) {
-  const res = await e
-    .select(e.User, (user) => ({
-      topicCount: e.count(user.topics),
     }))
     .run(client)
   return res
 }
 
-export async function getSidebar(userId: string) {
-  const res = await e
-    .select(e.Topic, (topic) => ({
-      name: true,
-      prettyName: true,
-    }))
-    .run(client)
-  console.log(res, "res")
-  return res
-}
+// export async function getTopic(topicName: string, userId: string) {
+//   const res = await e
+//     .select(e.Topic, (topic) => ({
+//       name: true,
+//       content: true,
+//       prettyName: true,
+//       notes: {
+//         content: true,
+//         url: true,
+//       },
+//       links: {
+//         title: true,
+//         url: true,
+//       },
+//       filter: e.op(
+//         e.op(topic.name, "=", topicName),
+//         "and",
+//         e.op(topic.user.id, "=", e.cast(e.uuid, userId)),
+//       ),
+//     }))
+//     // .toEdgeQL()
+//     .run(client)
+//   return res
+// }
+
+// export async function getTopicCount(userId: string) {
+//   const res = await e
+//     .select(e.User, (user) => ({
+//       topicCount: e.count(user.topics),
+//     }))
+//     .run(client)
+//   return res
+// }
+
+// export async function getSidebar(userId: string) {
+//   const res = await e
+//     .select(e.Topic, (topic) => ({
+//       name: true,
+//       prettyName: true,
+//     }))
+//     .run(client)
+//   console.log(res, "res")
+//   return res
+// }
 
 // connections between topics
 // for force graph visualization
@@ -271,21 +327,21 @@ export async function getTopicGraph(userId: string) {
   return res
 }
 
-export async function getLinkCountForTopic(topicName: string, userId: string) {
-  const res = await e
-    .select(e.Topic, (topic) => ({
-      name: true,
-      content: true,
-      notes: true,
-      links: true,
-      filter: e.op(
-        e.op(topic.name, "=", topicName),
-        "and",
-        e.op(topic.user.id, "=", e.cast(e.uuid, userId)),
-      ),
-    }))
-    .toEdgeQL()
-  // .run(client)
-  console.log(res)
-  return res
-}
+// export async function getLinkCountForTopic(topicName: string, userId: string) {
+//   const res = await e
+//     .select(e.Topic, (topic) => ({
+//       name: true,
+//       content: true,
+//       notes: true,
+//       links: true,
+//       filter: e.op(
+//         e.op(topic.name, "=", topicName),
+//         "and",
+//         e.op(topic.user.id, "=", e.cast(e.uuid, userId)),
+//       ),
+//     }))
+//     .toEdgeQL()
+//   // .run(client)
+//   console.log(res)
+//   return res
+// }

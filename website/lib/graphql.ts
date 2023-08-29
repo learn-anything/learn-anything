@@ -1,4 +1,4 @@
-import { Mobius } from 'graphql-mobius'
+import { Mobius } from "graphql-mobius"
 
 const typeDefs = `
     type A {
@@ -12,28 +12,28 @@ const typeDefs = `
 `
 
 const mobius = new Mobius<typeof typeDefs>({
-    // Using Mobius default fetch client
-    url: 'https://api.saltyaom.com/graphql'
+  // Using Mobius default fetch client
+  url: "https://api.saltyaom.com/graphql",
 })
 
 // This is also fine, if you don't care about TypeDefs being available on client-side
-const mobius2 = new Mobius({
-    url: 'https://api.saltyaom.com/graphql'
-    typeDefs
-})
+// const mobius2 = new Mobius({
+//     url: 'https://api.saltyaom.com/graphql'
+//     typeDefs
+// })
 
 // Call query to execute query
 const result = await mobius.query({
-    Hello: {
-        where: {
-            word: 'Hi'
-        },
-        select: {
-            A: true
-        }
-    }
+  Hello: {
+    where: {
+      word: "Hi",
+    },
+    select: {
+      A: true,
+    },
+  },
 })
 
-result
-    .then(x => x?.Hello.A)
-    .then(console.log)
+// result
+//     .then(x => x?.Hello.A)
+//     .then(console.log)

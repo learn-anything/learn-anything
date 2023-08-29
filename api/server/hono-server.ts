@@ -1,11 +1,10 @@
 import { serve } from "@hono/node-server"
 import dotenv from "dotenv"
-// import { getSidebar, getTopic } from "grafbase/db/topic"
-// import { getUserIdByName } from "grafbase/db/user"
 import { Hono } from "hono"
 import { cors } from "hono/cors"
 import { type z } from "zod"
 import { getUserIdByName } from "~/edgedb/crud/user"
+import { basicAuth } from "hono/basic-auth"
 
 dotenv.config()
 
@@ -31,6 +30,17 @@ app.post("/global-topic", async (context) => {
   return context.json({ name: ".." })
   // const userId = await getUserIdByName(params.user)
   // const topic = await getTopic(params.topic, userId)
+  // return context.json({
+  //   name: topic[0].name,
+  //   content: topic[0].content,
+  //   prettyName: topic[0].prettyName,
+  //   notes: topic[0].notes,
+  //   links: topic[0].links,
+  // })
+})
+
+// Return a list of all global topics (for use in search)
+app.get("/global-topics", async (context) => {
   // return context.json({
   //   name: topic[0].name,
   //   content: topic[0].content,

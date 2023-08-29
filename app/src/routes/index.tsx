@@ -10,6 +10,7 @@ import SearchModal from "../components/SearchModal"
 import Settings from "../components/Settings"
 import Sidebar from "../components/Sidebar"
 import SignInPage from "../components/SignInPage"
+import TiptapEditor from "../components/TiptapEditor"
 
 export default function App() {
   const user = createUserState()
@@ -48,14 +49,15 @@ export default function App() {
               when={wiki.wiki.openTopic.fileContent}
               fallback={<NoTopicChosen />}
             >
-              <Editor />
+              {/* <Editor /> */}
+              <TiptapEditor />
             </Show>
 
-            <Show
+            {/* <Show
               when={!wiki.wiki.wikiFolderPath || user.user.mode === "Settings"}
             >
               <Settings />
-            </Show>
+            </Show> */}
             <Show when={user.user.mode === "Search Topics"}>
               <SearchModal
                 items={wiki.wiki.topics}

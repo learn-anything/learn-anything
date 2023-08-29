@@ -44,6 +44,9 @@
     "@tauri-apps/api": "^1.4.0",
     "@teamhanko/hanko-elements": "0.4.0-alpha",
     "@teamhanko/hanko-frontend-sdk": "0.4.0-alpha",
+    "@tiptap/core": "^2.1.7",
+    "@tiptap/pm": "^2.1.7",
+    "@tiptap/starter-kit": "^2.1.7",
     "@types/node": "^20.3.1",
     "clsx": "^1.2.1",
     "dotenv": "^16.1.4",
@@ -56,6 +59,7 @@
     "solid-js": "^1.7.6",
     "solid-start": "^0.2.26",
     "solid-start-cloudflare-pages": "^0.2.26",
+    "solid-tiptap": "^0.6.0",
     "split.js": "^1.6.5",
     "stripe": "^12.9.0",
     "zod": "^3.21.4"
