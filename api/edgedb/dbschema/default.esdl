@@ -231,7 +231,8 @@ module default {
     }
     # guide is split by sections
     multi sections: UserGuideSection;
-    link pastRevision: UserGuide;
+    # owner of guide
+    required link user: User;
   }
   type UserGuideSection {
     # title of section
