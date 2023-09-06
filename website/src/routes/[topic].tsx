@@ -47,7 +47,7 @@ export default function Topic() {
 
       @media (min-width: 700px) {
         #InfoSidebar {
-          display: block;
+          display: flex;
         }
         #InfoMain {
           width: 65%;
@@ -150,7 +150,8 @@ export default function Topic() {
             <div id="Cards" class="flex flex-col gap-2">
               {/* TODO:  */}
               {/* <Card name="Interactive Graph" /> */}
-              <Show when={topic.topic.learners.length > 0}>
+              {/* <Show when={topic.topic.learners.length > 0}> */}
+              <Show when={true}>
                 <Card name="Learners" />
               </Show>
             </div>

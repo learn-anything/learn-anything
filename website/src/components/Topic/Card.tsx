@@ -1,5 +1,5 @@
-import { div } from "edgedb/dist/primitives/bigint"
-import { For, Show } from "solid-js"
+import { For } from "solid-js"
+import { useTopic } from "../../GlobalContext/topic"
 
 type Link = {
   title: string
@@ -17,29 +17,130 @@ type Props = {
 }
 
 export default function Card(props: Props) {
+  const topic = useTopic()
+
   return (
     <div
-      class="w-full flex flex-col gap-2 border border-[#EAEAEA] rounded-[4px] p-4 overflow-auto"
+      class="w-full relative flex flex-col gap-2 border border-[#EAEAEA] rounded-[4px] overflow-auto"
       style={{
-        "min-height": "200px",
-        "max-height": "250px",
+        "max-height": "280px",
       }}
     >
-      <div class="font-semibold">{props.name}</div>
-      <For each={props.links}>
-        {(link) => {
-          return (
-            <div class="cursor-pointer">
-              <div class="font-bold text-[#3B5CCC] text-sm">{link.title}</div>
-              <div class="flex">
-                <div class="font-light text-[12px] text-[#696969] px-2">
-                  {link.url}
+      <div class="flex items-center">
+        <div class="font-semibold p-2 px-2 pl-4">{props.name}</div>
+        <div class="px-1 mt-[0.8px] p-[1px] h-fit text-[12px] font-light bg-neutral-200 flex items-center justify-center rounded-full w-fit">
+          1
+        </div>
+      </div>
+      <div class="flex font-light items-center p-1 px-4  gap-4 text-black">
+        <div class="relative w-[90px] h-[35px]">
+          <For each={topic.topic.usersWantToLearn}>
+            {(learner, i) => {
+              // only show 3 learners max
+              if (i() > 2) {
+                return
+              }
+              return (
+                <div
+                  style={{
+                    "z-index": i(),
+                    transform: `translateX(${i() * 30}px)`,
+                  }}
+                  class="w-[35px] p-[2px] absolute flex items-center justify-center h-[35px] rounded-full bg-white"
+                >
+                  <a href="">
+                    <img src={learner.image} alt="" class="rounded-full" />
+                  </a>
                 </div>
-              </div>
-            </div>
-          )
-        }}
-      </For>
+              )
+            }}
+          </For>
+        </div>
+        <div>{topic.topic.usersWantToLearn.length} want to learn</div>
+      </div>
+      <div class="flex font-light items-center p-1 px-4 gap-4 text-black">
+        <div class="relative w-[90px] h-[35px]">
+          <For each={topic.topic.usersCurrentlyLearning}>
+            {(learner, i) => {
+              // only show 3 learners max
+              if (i() > 2) {
+                return
+              }
+              return (
+                <div
+                  style={{
+                    "z-index": i(),
+                    transform: `translateX(${i() * 30}px)`,
+                  }}
+                  class="w-[35px] p-[2px] absolute flex items-center justify-center h-[35px] rounded-full bg-white"
+                >
+                  <a href="">
+                    <img src={learner.image} alt="" class="rounded-full" />
+                  </a>
+                </div>
+              )
+            }}
+          </For>
+        </div>
+        <div>
+          {topic.topic.usersCurrentlyLearning.length} currently learning
+        </div>
+      </div>
+      <div class="flex font-light items-center p-1 px-4 gap-4 text-black">
+        <div class="relative w-[90px] h-[35px]">
+          <For each={topic.topic.usersHaveLearned}>
+            {(learner, i) => {
+              // only show 3 learners max
+              if (i() > 2) {
+                return
+              }
+              return (
+                <div
+                  style={{
+                    "z-index": i(),
+                    transform: `translateX(${i() * 30}px)`,
+                  }}
+                  class="w-[35px] p-[2px] absolute flex items-center justify-center h-[35px] rounded-full bg-white"
+                >
+                  <a href="">
+                    <img src={learner.image} alt="" class="rounded-full" />
+                  </a>
+                </div>
+              )
+            }}
+          </For>
+        </div>
+        <div>{topic.topic.usersHaveLearned.length} have learned</div>
+      </div>
+      <div class="flex  font-light items-center justify-between  px-4  border-t border-slate-400 border-opacity-30 p-3 gap-4 text-black">
+        <div class="flex items-center gap-4">
+          <div class="relative w-[90px] h-[35px]">
+            <For each={topic.topic.moderators}>
+              {(learner, i) => {
+                // only show 3 learners max
+                if (i() > 2) {
+                  return
+                }
+                return (
+                  <div
+                    style={{
+                      "z-index": i(),
+                      transform: `translateX(${i() * 30}px)`,
+                    }}
+                    class="w-[35px] p-[2px] absolute flex items-center justify-center h-[35px] rounded-full bg-white"
+                  >
+                    <a href="">
+                      <img src={learner.image} alt="" class="rounded-full" />
+                    </a>
+                  </div>
+                )
+              }}
+            </For>
+          </div>
+          <div>{topic.topic.moderators.length} moderators</div>
+        </div>
+        <div class="text-blue-400 font-light text-[14px]">request to join</div>
+      </div>
     </div>
   )
 }

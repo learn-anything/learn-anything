@@ -35,8 +35,10 @@ export interface Topic {
   guideSections: Section[]
   links?: Link[]
   notes?: Note[]
-  learners: User[]
-  moderators?: User[]
+  usersWantToLearn: User[]
+  usersCurrentlyLearning: User[]
+  usersHaveLearned: User[]
+  moderators: User[]
   topicPath?: string
 }
 
@@ -61,7 +63,94 @@ export default function createTopicState() {
         ],
       },
     ],
-    learners: [],
+    usersWantToLearn: [
+      {
+        image:
+          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+        username: "nikiv",
+      },
+      {
+        image:
+          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+        username: "nikiv",
+      },
+      {
+        image:
+          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+        username: "nikiv",
+      },
+      {
+        image:
+          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+        username: "nikiv",
+      },
+    ],
+    usersCurrentlyLearning: [
+      {
+        image:
+          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+        username: "nikiv",
+      },
+      {
+        image:
+          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+        username: "nikiv",
+      },
+      {
+        image:
+          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+        username: "nikiv",
+      },
+      {
+        image:
+          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+        username: "nikiv",
+      },
+    ],
+    usersHaveLearned: [
+      {
+        image:
+          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+        username: "nikiv",
+      },
+      {
+        image:
+          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+        username: "nikiv",
+      },
+      {
+        image:
+          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+        username: "nikiv",
+      },
+      {
+        image:
+          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+        username: "nikiv",
+      },
+    ],
+    moderators: [
+      {
+        image:
+          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+        username: "nikiv",
+      },
+      {
+        image:
+          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+        username: "nikiv",
+      },
+      {
+        image:
+          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+        username: "nikiv",
+      },
+      {
+        image:
+          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+        username: "nikiv",
+      },
+    ],
   })
 
   return {
