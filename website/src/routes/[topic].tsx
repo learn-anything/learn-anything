@@ -1,4 +1,4 @@
-import { For, Match, Switch } from "solid-js"
+import { For, Match, Show, Switch } from "solid-js"
 import TitlePill from "../components/Topic/TitlePill"
 import TopicNav from "../components/Topic/TopicNav"
 import Guide from "../components/Topic/Guide"
@@ -71,11 +71,20 @@ export default function Topic() {
             onClick={() => {
               topic.setShowPage("Global Guide")
             }}
-            class="border-b-2 border-black"
+            class="border-b-2 border-black cursor-pointer"
           >
-            Guide
+            Global Guide
           </div>
           <div
+            class="cursor-pointer"
+            onClick={() => {
+              topic.setShowPage("Global Guide")
+            }}
+          >
+            Personal Guide
+          </div>
+          <div
+            class="cursor-pointer"
             onClick={() => {
               topic.setShowPage("Links")
             }}
@@ -83,6 +92,7 @@ export default function Topic() {
             Links
           </div>
           <div
+            class="cursor-pointer"
             onClick={() => {
               topic.setShowPage("Notes")
             }}
@@ -126,19 +136,23 @@ export default function Topic() {
                   class="flex items-center gap-1 text-[#3B5CCC] font-light"
                   // onClick={}
                 >
-                  <Icon name="Plus"></Icon>Add Section
+                  {/* <Icon name="Plus"></Icon>Add Section */}
                 </div>
               </div>
 
               <For each={topic.topic.guideSections}>
                 {(section) => {
+                  // TODO: clicking on ection, should jump to that section in focus
                   return <div>{section.title}</div>
                 }}
               </For>
             </div>
             <div id="Cards" class="flex flex-col gap-2">
-              <Card name="Interactive Graph" />
-              <Card name="Learners" />
+              {/* TODO:  */}
+              {/* <Card name="Interactive Graph" /> */}
+              <Show when={topic.topic.learners.length > 0}>
+                <Card name="Learners" />
+              </Show>
             </div>
           </div>
         </div>

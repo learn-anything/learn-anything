@@ -56,7 +56,7 @@ export default function GuideSummary(props: any) {
           </div>
         </div>
         <div class="w-full flex justify-between items-center text-[#696969]">
-          <div>Contents</div>
+          {/* <div>Contents</div> */}
           <div class="flex gap-[23px]">
             {/* <div>Duplicate</div> */}
             {/* <div

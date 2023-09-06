@@ -35,7 +35,7 @@ export interface Topic {
   guideSections: Section[]
   links?: Link[]
   notes?: Note[]
-  learners?: User[]
+  learners: User[]
   moderators?: User[]
   topicPath?: string
 }
@@ -61,6 +61,7 @@ export default function createTopicState() {
         ],
       },
     ],
+    learners: [],
   })
 
   return {

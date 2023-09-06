@@ -40,15 +40,15 @@ export default function Root() {
       <Body>
         <Suspense>
           <ErrorBoundary>
-            <Routes>
-              <UserProvider value={user}>
-                <TopicProvider value={topic}>
-                  <EditGuideProvider value={editGuide}>
+            <UserProvider value={user}>
+              <TopicProvider value={topic}>
+                <EditGuideProvider value={editGuide}>
+                  <Routes>
                     <FileRoutes />
-                  </EditGuideProvider>
-                </TopicProvider>
-              </UserProvider>
-            </Routes>
+                  </Routes>
+                </EditGuideProvider>
+              </TopicProvider>
+            </UserProvider>
           </ErrorBoundary>
         </Suspense>
         <Scripts />
