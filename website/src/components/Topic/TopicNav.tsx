@@ -67,6 +67,20 @@ export default function TopicNav() {
     }
     #UnFocused {
       background-color: transparent;
+ }
+    #NavMenu {
+      display: block;
+    }
+    #NavButtons {
+      display: none;
+    }
+    @media (min-width: 700px) {
+      #NavMenu {
+        display: none;
+      }
+      #NavButtons {
+        display: flex;
+      }
     }
       `}
       </style>
@@ -137,7 +151,8 @@ export default function TopicNav() {
               </Show>
             </div>
           </div>
-          <div class="flex items-center justify-center gap-4">
+          <div id="NavMenu">Burger</div>
+          <div id="NavButtons" class="flex items-center justify-center gap-4">
             {/* TODO:  */}
             {/* <div>Dark/Light switch</div> */}
             <div

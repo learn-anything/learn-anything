@@ -1,3 +1,7 @@
-export default function UserWiki() {
-  return <div>hello</div>
+export default function profile() {
+  return (
+    <>
+      <div>Hiii</div>
+    </>
+  )
 }

@@ -106,13 +106,38 @@ export default function Topic() {
   // const [notes, setNotes] = createSignal([{}])
   return (
     <>
-      <style>{``}</style>
+      <style>{`
+        #InfoSidebar {
+          display: none;
+        }
+        #InfoMain {
+          width: 100%;
+        }
+        #InfoOptions {
+          display: none;
+        }
+
+      @media (min-width: 700px) {
+        #InfoSidebar {
+          display: block;
+        }
+        #InfoMain {
+          width: 65%;
+        }
+        #InfoOptions {
+          display: flex
+        }
+      }
+
+
+      `}</style>
       <div class="w-screen h-full text-black bg-white">
         <TopicNav />
         <div class="w-full" style={{ padding: "24px 24px 0 24px" }}>
           <TitlePill />
         </div>
         <div
+          id="InfoOptions"
           class="w-full flex gap-8 text-lg font-light"
           style={{ padding: "24px 40px 0 40px" }}
         >
@@ -141,7 +166,8 @@ export default function Topic() {
         </div>
         <div class="h-fit w-full flex justify-center">
           <div
-            class="h-full w-[65%] flex gap-6 flex-col"
+            id="InfoMain"
+            class="h-full min-h-screen flex gap-6 flex-col"
             style={{ padding: "24px 40px 24px 40px" }}
           >
             {/* <Show when={false} fallback={<GuideEdit topics={topics()} />}>
@@ -163,6 +189,7 @@ export default function Topic() {
             </Switch>
           </div>
           <div
+            id="InfoSidebar"
             class="h-full w-[35%] flex flex-col gap-6 overflow-auto"
             style={{ padding: "24px 40px 24px 0px" }}
           >
@@ -184,8 +211,10 @@ export default function Topic() {
               </For>
               {/* <Show></Show> */}
             </div>
-            <Card name="Interactive Graph" />
-            <Card name="Learners" />
+            <div id="Cards" class="flex flex-col gap-2">
+              <Card name="Interactive Graph" />
+              <Card name="Learners" />
+            </div>
           </div>
         </div>
       </div>
