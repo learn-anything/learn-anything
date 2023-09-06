@@ -1,6 +1,5 @@
 import { createShortcut } from "@solid-primitives/keyboard"
 import { Show } from "solid-js"
-import createTopicState, { TopicProvider } from "../GlobalContext/topic"
 import { UserProvider, createUserState } from "../GlobalContext/user"
 import createWikiState, { WikiProvider } from "../GlobalContext/wiki"
 import DevToolsPanel from "../components/DevToolsPanel"
@@ -9,15 +8,10 @@ import NoTopicChosen from "../components/NoTopicChosen"
 import SearchModal from "../components/SearchModal"
 import Sidebar from "../components/Sidebar"
 import SignInPage from "../components/SignInPage"
-import createEditGuideState, {
-  EditGuideProvider,
-} from "../GlobalContext/edit-guide"
 
 export default function App() {
   const user = createUserState()
   const wiki = createWikiState()
-  const topic = createTopicState()
-  const editGuide = createEditGuideState()
 
   // TODO: Meta + L gives problems
   // does not trigger most of the time
@@ -37,50 +31,46 @@ export default function App() {
       `}
       </style>
       <UserProvider value={user}>
-        <TopicProvider value={topic}>
-          <EditGuideProvider value={editGuide}>
-            <WikiProvider value={wiki}>
-              <div
-                style={{ width: "100vw", height: "100vh" }}
-                class="flex items-center dark:bg-[#1e1e1e] bg-white"
-              >
-                <Show when={user.user.showSignIn}>
-                  {/* TODO: make a modal, pretty */}
-                  {/* TODO: try not to have 'pages', just have modals on top of the editor */}
-                  <SignInPage />
-                </Show>
-                <Sidebar />
-                <Show
-                  when={wiki.wiki.openTopic.fileContent}
-                  fallback={<NoTopicChosen />}
-                >
-                  {/* <Editor /> */}
-                  {/* <TiptapEditor /> */}
-                  <CodemirrorEditor />
-                </Show>
+        <WikiProvider value={wiki}>
+          <div
+            style={{ width: "100vw", height: "100vh" }}
+            class="flex items-center dark:bg-[#1e1e1e] bg-white"
+          >
+            <Show when={user.user.showSignIn}>
+              {/* TODO: make a modal, pretty */}
+              {/* TODO: try not to have 'pages', just have modals on top of the editor */}
+              <SignInPage />
+            </Show>
+            <Sidebar />
+            <Show
+              when={wiki.wiki.openTopic.fileContent}
+              fallback={<NoTopicChosen />}
+            >
+              {/* <Editor /> */}
+              {/* <TiptapEditor /> */}
+              <CodemirrorEditor />
+            </Show>
 
-                {/* <Show
+            {/* <Show
               when={!wiki.wiki.wikiFolderPath || user.user.mode === "Settings"}
             >
               <Settings />
             </Show> */}
-                <Show when={user.user.mode === "Search Topics"}>
-                  <SearchModal
-                    items={wiki.wiki.topics}
-                    action={() => {}}
-                    searchPlaceholder="Search Topics"
-                  />
-                </Show>
-              </div>
-              <Show when={import.meta.env.MODE === "development"}>
-                <DevToolsPanel />
-              </Show>
-              <Show when={user.user.mode === "New Note"}>
-                <InputModal />
-              </Show>
-            </WikiProvider>
-          </EditGuideProvider>
-        </TopicProvider>
+            <Show when={user.user.mode === "Search Topics"}>
+              <SearchModal
+                items={wiki.wiki.topics}
+                action={() => {}}
+                searchPlaceholder="Search Topics"
+              />
+            </Show>
+          </div>
+          <Show when={import.meta.env.MODE === "development"}>
+            <DevToolsPanel />
+          </Show>
+          <Show when={user.user.mode === "New Note"}>
+            <InputModal />
+          </Show>
+        </WikiProvider>
       </UserProvider>
     </>
   )

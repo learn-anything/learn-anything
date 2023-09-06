@@ -7,7 +7,7 @@ import GuideEdit from "../components/Topic/GuideEdit"
 import Icon from "../components/Icon"
 import GuideLinks from "../components/Topic/GuideLinks"
 import GuideNotes from "../components/Topic/GuideNotes"
-import { useTopic } from "~/src/GlobalContext/topic"
+import { useTopic } from "../GlobalContext/topic"
 
 // TODO: for some reason when you first run `pnpm dev`
 // nothing shows
@@ -56,8 +56,6 @@ export default function Topic() {
           display: flex
         }
       }
-
-
       `}</style>
       <div class="w-screen h-full text-black bg-white">
         <TopicNav />

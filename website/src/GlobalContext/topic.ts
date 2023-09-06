@@ -6,17 +6,12 @@ interface Section {
   summary?: string
   ordered: boolean
   links?: Link[]
-  // orederedLinks?: OrderedLink[]
 }
 
 interface Note {
   title: string
   url: string
 }
-
-// interface OrderedLink extends Link {
-//   // order: number
-// }
 
 interface Link {
   title: string

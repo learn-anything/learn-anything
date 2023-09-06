@@ -14,8 +14,17 @@ import {
   Title,
 } from "solid-start"
 import "./root.css"
+import createTopicState, { TopicProvider } from "./GlobalContext/topic"
+import createEditGuideState, {
+  EditGuideProvider,
+} from "./GlobalContext/edit-guide"
+import { UserProvider, createUserState } from "./GlobalContext/user"
 
 export default function Root() {
+  const user = createUserState()
+  const topic = createTopicState()
+  const editGuide = createEditGuideState()
+
   const location = useLocation()
   const active = (path: string) =>
     path == location.pathname
@@ -32,7 +41,13 @@ export default function Root() {
         <Suspense>
           <ErrorBoundary>
             <Routes>
-              <FileRoutes />
+              <UserProvider value={user}>
+                <TopicProvider value={topic}>
+                  <EditGuideProvider value={editGuide}>
+                    <FileRoutes />
+                  </EditGuideProvider>
+                </TopicProvider>
+              </UserProvider>
             </Routes>
           </ErrorBoundary>
         </Suspense>
