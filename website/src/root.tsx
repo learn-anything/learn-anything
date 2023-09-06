@@ -50,24 +50,26 @@ export default function Root() {
       </Head>
       <Body>
         <Suspense>
-          <Routes>
-            <Route path="/:topic" component={Topic} matchFilters={filters} />
-            <Route
-              path="/:username"
-              component={UserProfile}
-              matchFilters={filters}
-            />
-            <Route
-              path="/:username/:topic"
-              component={Topic}
-              matchFilters={filters}
-            />
-          </Routes>
           <ErrorBoundary>
             <UserProvider value={user}>
               <TopicProvider value={topic}>
                 <EditGuideProvider value={editGuide}>
                   <Routes>
+                    <Route
+                      path="/:topic"
+                      component={Topic}
+                      matchFilters={filters}
+                    />
+                    <Route
+                      path="/:username"
+                      component={UserProfile}
+                      matchFilters={filters}
+                    />
+                    <Route
+                      path="/:username/:topic"
+                      component={Topic}
+                      matchFilters={filters}
+                    />
                     <FileRoutes />
                   </Routes>
                 </EditGuideProvider>
