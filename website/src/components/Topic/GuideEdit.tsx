@@ -1,15 +1,14 @@
 import { For } from "solid-js"
-import GuideSection from "./GuideSection"
-import GuideSummary from "./GuideSummary"
 import GuideSummaryEdit from "./GuideSummaryEdit"
-import { div } from "edgedb/dist/primitives/bigint"
 import GuideSectionEdit from "./GuideSectionEdit"
+import { useTopic } from "../../GlobalContext/topic"
 
-export default function GuideEdit(props: any) {
+export default function GuideEdit() {
+  const topic = useTopic()
   return (
     <>
       <GuideSummaryEdit />
-      <For each={props.topics?.sections}>
+      <For each={topic.topic.guideSections}>
         {(section) => {
           return (
             <GuideSectionEdit

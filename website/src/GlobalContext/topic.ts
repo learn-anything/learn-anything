@@ -159,7 +159,9 @@ export default function createTopicState() {
     // state
     topic,
     // actions
-    setShowPage: (state: "Global Guide" | "Links" | "Notes") => {
+    setShowPage: (
+      state: "Global Guide" | "Links" | "Notes" | "Edit Global Guide",
+    ) => {
       setTopic({ showPage: state })
     },
   }

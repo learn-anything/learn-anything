@@ -1,8 +1,10 @@
 import { Show, createEffect, createSignal } from "solid-js"
 import { createShortcut } from "@solid-primitives/keyboard"
+import { useTopic } from "../../GlobalContext/topic"
 
 export default function GuideSummaryEdit() {
-  const [editSummary, setEditSummary] = createSignal(false)
+  // const [editSummary, setEditSummary] = createSignal(false)
+  const topic = useTopic()
 
   createEffect(() => {
     const editableDiv = document.getElementById("GuideSummary")!
@@ -14,7 +16,7 @@ export default function GuideSummaryEdit() {
     createShortcut(["ENTER"], () => {
       var details = document.getElementById("GuideSummary")!.innerHTML
       console.log(details, "Details")
-      setEditSummary(false)
+      // setEditSummary(false)
     })
   })
 
@@ -62,9 +64,9 @@ export default function GuideSummaryEdit() {
             class="text-[#696969] font-light overflow-hidden text-ellipsis outline-none"
             id="GuideSummary"
             onClick={() => {
-              setEditSummary(true)
+              // setEditSummary(true)
             }}
-            contentEditable={editSummary()}
+            // contentEditable={editSummary()}
           >
             Lorem ipsum dolor, sit amet consectetur adipisicing elit.
             Voluptatem, dolor ratione est iste facilis et accusantium tempore

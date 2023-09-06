@@ -20,11 +20,12 @@ interface Link {
 interface EditGuide {
   guideSummary: string
   guideSections: Section[]
+  editingSection?: number // id of section being edited
 }
 
 // global state of wiki
 export default function createEditGuideState() {
-  const [topic, setTopic] = createStore<EditGuide>({
+  const [editedTopic, setEditedTopic] = createStore<EditGuide>({
     guideSummary:
       "Physics is the study of matter, energy, and the fundamental forces that drive the natural phenomena of the universe.",
     guideSections: [
@@ -44,8 +45,11 @@ export default function createEditGuideState() {
 
   return {
     // state
-    topic,
+    editedTopic,
     // actions
+    setEditingSection(id: number) {
+      // setEditedTopic(...editedTopic, { editingSection: id })
+    },
   }
 }
 

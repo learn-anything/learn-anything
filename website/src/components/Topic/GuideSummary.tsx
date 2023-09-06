@@ -1,4 +1,4 @@
-import { Show, createSignal, onMount } from "solid-js"
+import { Show, createSignal } from "solid-js"
 import { useTopic } from "../../GlobalContext/topic"
 
 export default function GuideSummary(props: any) {
@@ -25,7 +25,7 @@ export default function GuideSummary(props: any) {
           <div
             class="text-[#696969] cursor-pointer hover:text-black transition-all"
             onClick={() => {
-              props.setCurrentTab("EditGuide")
+              topic.setShowPage("Edit Global Guide")
             }}
           >
             Improve Guide
