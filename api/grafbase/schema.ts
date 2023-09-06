@@ -4,9 +4,18 @@ export default config({
   schema: g,
 })
 
-// const topicPathsOutput = g.input
+// g.enum
 
-// g.type("TopicPathOutput", {})
+const topic = g.type("Topic", {
+  name: g.string(),
+  // status: ""
+})
+
+g.query("getTopic", {
+  args: { topic: g.string() },
+  returns: g.ref(topic),
+  resolver: "getTopic",
+})
 
 // g.query("getTopicPaths", {
 //   returns: g.list(
@@ -17,6 +26,10 @@ export default config({
 //   ),
 //   resolver: "getTopicPaths",
 // })
+
+// const topicPathsOutput = g.input
+
+// g.type("TopicPathOutput", {})
 
 // g.mutation('updateTopic', {
 //   args: { name: g.object({

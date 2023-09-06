@@ -15,7 +15,7 @@ type Link = {
 
 interface Props {
   content: string
-  setShowSidebar: Setter<boolean>
+  // setShowSidebar: Setter<boolean>
   notes: Note[]
   links: Link[]
 }
@@ -148,7 +148,7 @@ export default function TopicPage(props: Props) {
               <div
                 style={{ height: "49px" }}
                 onClick={() => {
-                  props.setShowSidebar(true)
+                  // props.setShowSidebar(true)
                 }}
                 class="text-xs p-2 sticky w-full top-0 px-3 flex items-center  border-b border-[rgba(60,60,67,0.12)] dark:border-[rgba(85,85,95,0.48)]"
               >

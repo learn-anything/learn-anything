@@ -64,7 +64,7 @@ export default function Topic() {
   //   },
   // )
 
-  const [showSidebar, setShowSidebar] = createSignal(true)
+  // const [showSidebar, setShowSidebar] = createSignal(true)
 
   return (
     <>
@@ -138,7 +138,7 @@ export default function Topic() {
             id="PhoneBlur"
             class="fixed top-0 right-0 h-full w-full bg-black bg-opacity-60 z-40"
             onClick={() => {
-              setShowSidebar(false)
+              // setShowSidebar(false)
             }}
           ></div>
         </Show>
@@ -147,7 +147,7 @@ export default function Topic() {
           {/* <Show when={topic() && topic().content}> */}
           <Show when={true}>
             <TopicPage
-              setShowSidebar={setShowSidebar}
+              // setShowSidebar={setShowSidebar}
               content={"# Hello"}
               notes={notes()}
               links={links()}

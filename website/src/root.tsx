@@ -9,6 +9,7 @@ import {
   Head,
   Html,
   Meta,
+  Route,
   Routes,
   Scripts,
   Title,
@@ -19,11 +20,21 @@ import createEditGuideState, {
   EditGuideProvider,
 } from "./GlobalContext/edit-guide"
 import { UserProvider, createUserState } from "./GlobalContext/user"
+import { MatchFilters } from "@solidjs/router/dist/types"
+import Topic from "./routes/(topic)"
+
+function UserProfile() {
+  return <div>user profile</div>
+}
 
 export default function Root() {
   const user = createUserState()
   const topic = createTopicState()
   const editGuide = createEditGuideState()
+
+  const filters: MatchFilters = {
+    username: /^@/,
+  }
 
   const location = useLocation()
   const active = (path: string) =>
@@ -39,6 +50,19 @@ export default function Root() {
       </Head>
       <Body>
         <Suspense>
+          <Routes>
+            <Route path="/:topic" component={Topic} matchFilters={filters} />
+            <Route
+              path="/:username"
+              component={UserProfile}
+              matchFilters={filters}
+            />
+            <Route
+              path="/:username/:topic"
+              component={Topic}
+              matchFilters={filters}
+            />
+          </Routes>
           <ErrorBoundary>
             <UserProvider value={user}>
               <TopicProvider value={topic}>

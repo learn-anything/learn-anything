@@ -1,10 +1,9 @@
-import { For, Match, Show, Switch } from "solid-js"
+import { For, Match, Show, Switch, onMount } from "solid-js"
 import TitlePill from "../components/Topic/TitlePill"
 import TopicNav from "../components/Topic/TopicNav"
 import Guide from "../components/Topic/Guide"
 import Card from "../components/Topic/Card"
 import GuideEdit from "../components/Topic/GuideEdit"
-import Icon from "../components/Icon"
 import GuideLinks from "../components/Topic/GuideLinks"
 import GuideNotes from "../components/Topic/GuideNotes"
 import { useTopic } from "../GlobalContext/topic"
@@ -31,6 +30,10 @@ type Guide = {
 
 export default function Topic() {
   const topic = useTopic()
+
+  onMount(() => {
+    console.log("run")
+  })
 
   return (
     <>
