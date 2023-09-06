@@ -1,4 +1,4 @@
-import { For, Show, createEffect, createSignal } from "solid-js"
+import { For, Show, createEffect, createSignal, untrack } from "solid-js"
 import { createShortcut } from "@solid-primitives/keyboard"
 import Icon from "../Icon"
 import { useEditGuide } from "../../GlobalContext/edit-guide"
@@ -22,6 +22,50 @@ export default function GuideSectionEdit(props: any) {
       setEditSection(false)
     })
   })
+  const [topics, setTopics] = createSignal([
+    "NLP",
+    "Chemistry",
+    "Physics",
+    "Nature",
+    "Math",
+  ])
+  const [topicSearchResults, setTopicSearchResults] = createSignal<string[]>([])
+  const [topicSearchInput, setTopicSearchInput] = createSignal("")
+  const [focusedTopic, setFocusedTopic] = createSignal(0)
+  const [focusedTodoTitle, setFocusedTodoTitle] = createSignal("")
+
+  createShortcut(["ARROWDOWN"], () => {
+    if (focusedTopic() === topicSearchResults().length - 1) {
+      setFocusedTopic(0)
+      return
+    }
+    setFocusedTopic(focusedTopic() + 1)
+  })
+  createShortcut(["ARROWUP"], () => {
+    if (focusedTopic() === 0) {
+      setFocusedTopic(topicSearchResults().length - 1)
+      return
+    }
+    setFocusedTopic(focusedTopic() - 1)
+  })
+
+  createEffect(() => {
+    if (topicSearchInput()) {
+      untrack(() => {
+        setTopicSearchResults(topics())
+        setTopicSearchResults(
+          topicSearchResults().filter((word: string) =>
+            topicSearchInput()
+              .split("")
+              .every((value) => {
+                return word.split("").includes(value)
+              }),
+          ),
+        )
+      })
+      setFocusedTodoTitle(topicSearchResults()[focusedTopic()])
+    }
+  })
 
   return (
     <>
@@ -32,16 +76,140 @@ export default function GuideSectionEdit(props: any) {
       }
       @keyframes SlideIn {
         0% {
-          transform: translateX()
+          transform: translateX(800px)
+        }
+        100% {
+          transform: translateX(0px)
         }
       }
       `}
       </style>
       <div class="pt-6 flex flex-col gap-6 leading-[18.78px] border-[#EAEAEA] border rounded-lg p-3">
-        <div class="fixed top-0 left-0 items-center justify-end w-screen h-screen z-10">
-          <div class="fixed top-0 left-0 backdrop-blur-sm w-screen h-screen z-20"></div>
-          <div id="EditSection" class="bg-gray-200 w-[800px] h-full"></div>
-        </div>
+        <Show when={editGuide.editedGuide.editingSection}>
+          <div class="fixed top-0 left-0 w-screen h-screen flex items-center justify-end z-10">
+            <div
+              class="fixed top-0 left-0 backdrop-blur-sm w-screen h-screen z-20"
+              onClick={() => {
+                editGuide.setEditingSection(0)
+              }}
+            ></div>
+            <div id="EditSection" class="bg-gray-200 p-2 z-30 w-[65%] h-full">
+              <div class="rounded-[8px] relative flex flex-col gap-4 p-4 h-full w-full bg-white">
+                <div class="text-[20px]">Section Title</div>
+                <div
+                  class="w-full min-h-[150px] border border-slate-400 border-opacity-30 rounded-md"
+                  contentEditable={true}
+                ></div>
+                <For each={props.links}>
+                  {(link) => {
+                    return (
+                      <div class="flex p-5 border rounded-md border-slate-400 border-opacity-30 items-center gap-6 justify-between">
+                        {/* <div class="">
+                      <div class="bg-neutral-400 w-10 h-10 rounded-full"></div>
+                    </div> */}
+                        <div class="w-full  h-full flex justify-between items-center">
+                          <div class="w-fit gap-1 flex flex-col">
+                            <div class="font-bold flex gap-2 px-2 text-[#3B5CCC]">
+                              <div class="relative w-full">
+                                <div class="flex items-center">
+                                  <input
+                                    type="text"
+                                    class="w-full h-full bg-transparent border border-slate-400 rounded-md"
+                                    onInput={(e) => {
+                                      setTopicSearchInput(e.target.value)
+                                    }}
+                                  />
+                                </div>
+                                <Show
+                                  when={
+                                    topicSearchInput() !== "" &&
+                                    topicSearchResults().length !== 0
+                                  }
+                                >
+                                  <div class=" absolute top-[24px] bg-neutral-200 left-0 text-black font-semibold text-opacity-40 flex flex-col rounded w-full">
+                                    <For each={topicSearchResults()}>
+                                      {(topic) => (
+                                        <div
+                                          id={
+                                            focusedTodoTitle() === topic
+                                              ? "Focused"
+                                              : "UnFocused"
+                                          }
+                                          onClick={() => {
+                                            setFocusedTopic(
+                                              topicSearchResults().indexOf(
+                                                topic,
+                                              ),
+                                            )
+                                          }}
+                                          class="px-4 overflow-auto py-2"
+                                        >
+                                          <div>{topic}</div>
+                                        </div>
+                                      )}
+                                    </For>
+                                  </div>
+                                </Show>
+                              </div>
+                              <input
+                                type="text"
+                                class="border border-slate-400 px-4 p-1 rounded-[4px]"
+                              />
+                            </div>
+                            <div class="flex">
+                              <div class="font-light w-[100px] text-[12px] text-[#696969] border-r border-[#CCCCCC] px-2">
+                                <input
+                                  type="text"
+                                  class="border w-full border-slate-400 px-4 p-0.5 rounded-[4px]"
+                                />
+                              </div>
+
+                              <div class="font-light w-[100px] text-[12px] text-[#696969] border-r border-[#CCCCCC] px-2">
+                                <input
+                                  type="text"
+                                  class="border w-full border-slate-400 px-4 p-0.5 rounded-[4px]"
+                                />
+                              </div>
+
+                              <div class="font-light w-[100px] text-[12px] text-[#696969] border-r border-[#CCCCCC] px-2">
+                                <input
+                                  type="text"
+                                  class="border w-full border-slate-400 px-4 p-0.5 rounded-[4px]"
+                                />
+                              </div>
+
+                              <div class="font-light w-[100px] text-[12px] text-[#696969] border-r border-[#CCCCCC] px-2">
+                                <input
+                                  type="text"
+                                  class="border w-full border-slate-400 px-4 p-0.5 rounded-[4px]"
+                                />
+                              </div>
+
+                              <div class="font-light w-[100px] text-[12px] text-[#696969] px-2">
+                                <input
+                                  type="text"
+                                  class="border w-full border-slate-400 px-4 p-0.5 rounded-[4px]"
+                                />
+                              </div>
+                            </div>
+                            {/* <div class="font-light text-[12px] text-[#696969]">PDF</div> */}
+                          </div>
+                        </div>
+                        <div>drag</div>
+                      </div>
+                    )
+                  }}
+                </For>
+                <div class="absolute bottom-4 px-3 p-1 right-4 bg-blue-400 rounded-[6px] text-white">
+                  Save
+                </div>
+                <div class="absolute bottom-4 px-3 p-1 left-4 border border-slate-400 border-opacity-30 rounded-[6px]">
+                  Close
+                </div>
+              </div>
+            </div>
+          </div>
+        </Show>
         <div class="flex justify-between items-center">
           <div
             class="text-[#131313] font-bold"
@@ -50,7 +218,12 @@ export default function GuideSectionEdit(props: any) {
           >
             {props.sectionTitle}
           </div>
-          <div onClick={() => {}} class="font-light">
+          <div
+            onClick={() => {
+              editGuide.setEditingSection(1)
+            }}
+            class="font-light"
+          >
             Edit section
           </div>
         </div>

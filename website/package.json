@@ -1,7 +1,8 @@
 {
   "name": "website",
   "scripts": {
-    "dev": "solid-start dev"
+    "dev": "solid-start dev",
+    "build": "solid-start build"
   },
   "type": "module",
   "devDependencies": {
