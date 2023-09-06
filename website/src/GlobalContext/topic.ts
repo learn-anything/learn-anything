@@ -32,6 +32,7 @@ export interface Topic {
   status: "to learn" | "learning" | "learned" | null
   showPage: "Global Guide" | "Links" | "Notes" | "Edit Global Guide"
   guideSummary: string
+  expandedSummary: boolean
   guideSections: Section[]
   links?: Link[]
   notes?: Note[]
@@ -50,6 +51,7 @@ export default function createTopicState() {
     showPage: "Global Guide",
     guideSummary:
       "Physics is the study of matter, energy, and the fundamental forces that drive the natural phenomena of the universe.",
+    expandedSummary: true,
     guideSections: [
       {
         title: "Intro",

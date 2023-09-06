@@ -1,7 +1,10 @@
-import { Show, createSignal } from "solid-js"
+import { Show, createSignal, onMount } from "solid-js"
+import { useTopic } from "../../GlobalContext/topic"
 
 export default function GuideSummary(props: any) {
   const [showSummary, setShowSummary] = createSignal(false)
+  const topic = useTopic()
+
   return (
     <>
       <style>{`
@@ -40,19 +43,16 @@ export default function GuideSummary(props: any) {
                 setShowSummary(!showSummary())
               }}
             >
-              <Show when={showSummary()} fallback={<div>Expand</div>}>
-                Minimise
+              {/* don't show minimise/expand if summary is less than 30 words */}
+              <Show when={topic.topic.guideSummary.split(/\s+/).length > 30}>
+                <Show when={showSummary()} fallback={<div>Expand</div>}>
+                  Minimise
+                </Show>
               </Show>
             </div>
           </div>
           <div class="text-[#696969] font-light overflow-hidden text-ellipsis">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-            Voluptatem, dolor ratione est iste facilis et accusantium tempore
-            eius, cumque aut voluptate veritatis in qui doloremque. Aspernatur
-            aliquid et vitae sint. Lorem ipsum dolor, sit amet consectetur
-            adipisicing elit. Voluptatem, dolor ratione est iste facilis et
-            accusantium tempore eius, cumque aut voluptate veritatis in qui
-            doloremque. Aspernatur aliquid et vitae sint.
+            {topic.topic.guideSummary}
           </div>
         </div>
         <div class="w-full flex justify-between items-center text-[#696969]">
