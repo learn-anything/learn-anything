@@ -3,11 +3,11 @@ import Icon from "../Icon"
 export default function TitlePill() {
   return (
     <div
-      class="w-full flex items-center justify-between rounded-full bg-[#F3F3F3]"
-      style={{ padding: "8px 16px 8px 8px" }}
+      class="w-full flex items-center justify-between rounded-[8px]  bg-[#F3F3F3]"
+      style={{ padding: "8px 16px 8px 16px" }}
     >
       <div class="flex items-center justify-center gap-4">
-        <div class="w-8 h-8 bg-neutral-200 rounded-full"></div>
+        {/* <div class="w-8 h-8 bg-neutral-200"></div> */}
         {/* TODO: should come from server */}
         <div class="font-bold text-[20px] text-[#131313]">Physics</div>
         <div

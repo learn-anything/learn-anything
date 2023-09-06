@@ -193,7 +193,7 @@ module default {
     # summary of the topic (short version)
     topicSummaryShort: str;
     # global guide for the topic, improved by community
-    required link globalGuide: GlobalGuide;
+    # required globalTopic := .<globalTopic[is GlobalTopic];
     # true = topic is available to anyone to see
     # i.e. learn-anything.xyz/physics
     # false = not available for all to see
@@ -214,7 +214,8 @@ module default {
   # every time a change to GlobalGuide is made, a new revision is created
   type GlobalGuide {
     # global topic
-    required link globalTopic: GlobalTopic;
+    required globalTopic := .<globalGuide[is GlobalTopic];
+    # required link globalTopic: GlobalTopic;
     required created_at: datetime {
       readonly := true;
       default := datetime_of_statement();

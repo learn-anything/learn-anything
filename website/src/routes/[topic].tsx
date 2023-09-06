@@ -1,22 +1,13 @@
-import {
-  For,
-  Match,
-  Show,
-  Switch,
-  createEffect,
-  createSignal,
-  untrack,
-} from "solid-js"
-import GuideSummary from "../components/Topic/GuideSummary"
+import { For, Match, Switch } from "solid-js"
 import TitlePill from "../components/Topic/TitlePill"
 import TopicNav from "../components/Topic/TopicNav"
 import Guide from "../components/Topic/Guide"
 import Card from "../components/Topic/Card"
 import GuideEdit from "../components/Topic/GuideEdit"
 import Icon from "../components/Icon"
-import { div } from "edgedb/dist/primitives/bigint"
 import GuideLinks from "../components/Topic/GuideLinks"
 import GuideNotes from "../components/Topic/GuideNotes"
+import { useTopic } from "~/src/GlobalContext/topic"
 
 // TODO: for some reason when you first run `pnpm dev`
 // nothing shows
@@ -39,71 +30,8 @@ type Guide = {
 }
 
 export default function Topic() {
-  const [currentTab, setCurrentTab] = createSignal("Guide")
-  const [topics, setTopics] = createSignal<Guide>({
-    summary:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam rem est deleniti repudiandae voluptatum explicabo autem libero alias eveniet nobis at doloribus nulla, ullam magnam, fuga incidunt. Dignissimos, repudiandae distinctio",
-    sections: [
-      {
-        title: "Introduction to cooking pasta",
-        summary:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam rem est deleniti repudiandae voluptatum explicabo autem libero alias eveniet nobis at doloribus nulla, ullam magnam, fuga incidunt. Dignissimos, repudiandae distinctio",
-        links: [
-          {
-            title: "verb",
-            url: "x.com",
-          },
-          {
-            title: "verb",
-            url: "x.com",
-          },
-          {
-            title: "verb",
-            url: "x.com",
-          },
-        ],
-      },
-      {
-        title: "Intermediate cooking pasta with tomato sauce",
-        summary:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam rem est deleniti repudiandae voluptatum explicabo autem libero alias eveniet nobis at doloribus nulla, ullam magnam, fuga incidunt. Dignissimos, repudiandae distinctio",
-        links: [
-          {
-            title: "verb",
-            url: "x.com",
-          },
-          {
-            title: "verb",
-            url: "x.com",
-          },
-          {
-            title: "verb",
-            url: "x.com",
-          },
-        ],
-      },
-      {
-        title: "End cooking pasta the italian way",
-        summary:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam rem est deleniti repudiandae voluptatum explicabo autem libero alias eveniet nobis at doloribus nulla, ullam magnam, fuga incidunt. Dignissimos, repudiandae distinctio",
-        links: [
-          {
-            title: "verb",
-            url: "x.com",
-          },
-          {
-            title: "verb",
-            url: "x.com",
-          },
-          {
-            title: "verb",
-            url: "x.com",
-          },
-        ],
-      },
-    ],
-  })
-  // const [notes, setNotes] = createSignal([{}])
+  const topic = useTopic()
+
   return (
     <>
       <style>{`
@@ -143,7 +71,7 @@ export default function Topic() {
         >
           <div
             onClick={() => {
-              setCurrentTab("Guide")
+              topic.setShowPage("Global Guide")
             }}
             class="border-b-2 border-black"
           >
@@ -151,14 +79,14 @@ export default function Topic() {
           </div>
           <div
             onClick={() => {
-              setCurrentTab("Links")
+              topic.setShowPage("Links")
             }}
           >
             Links
           </div>
           <div
             onClick={() => {
-              setCurrentTab("Notes")
+              topic.setShowPage("Notes")
             }}
           >
             Notes
@@ -174,17 +102,17 @@ export default function Topic() {
               <Guide />
             </Show> */}
             <Switch>
-              <Match when={currentTab() === "Guide"}>
-                <Guide setCurrentTab={setCurrentTab} />
+              <Match when={topic.topic.showPage === "Global Guide"}>
+                <Guide />
               </Match>
-              <Match when={currentTab() === "Links"}>
+              <Match when={topic.topic.showPage === "Links"}>
                 <GuideLinks />
               </Match>
-              <Match when={currentTab() === "Notes"}>
+              <Match when={topic.topic.showPage === "Notes"}>
                 <GuideNotes />
               </Match>
-              <Match when={currentTab() === "EditGuide"}>
-                <GuideEdit topics={topics()} />
+              <Match when={topic.topic.showPage === "Edit Global Guide"}>
+                <GuideEdit />
               </Match>
             </Switch>
           </div>
@@ -204,12 +132,11 @@ export default function Topic() {
                 </div>
               </div>
 
-              <For each={topics().sections}>
+              <For each={topic.topic.guideSections}>
                 {(section) => {
                   return <div>{section.title}</div>
                 }}
               </For>
-              {/* <Show></Show> */}
             </div>
             <div id="Cards" class="flex flex-col gap-2">
               <Card name="Interactive Graph" />

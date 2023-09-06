@@ -121,7 +121,6 @@ fn extract_title_from_front_matter(markdown: &str) -> Option<String> {
 pub fn parse_md_content_as_topic<'a>(markdown_string: &'a str) -> Result<TopicStruct> {
     let options = ParseOptions::default();
     let ast = to_mdast(markdown_string, &options).map_err(anyhow::Error::msg)?;
-    log!(ast);
 
     let mut nodes = VecDeque::new();
     nodes.push_back(ast);

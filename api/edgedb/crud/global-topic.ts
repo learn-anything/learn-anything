@@ -18,13 +18,18 @@ export async function addGlobalTopic(topic: GlobalTopic) {
       public: e.bool,
     },
     (params) => {
-      const newGlobalTopic = e.insert(e.GlobalTopic, {
-        name: params.name,
-        prettyName: params.prettyName,
-        topicSummary: params.topicSummary,
-        public: params.public,
-        globalGuide: e.insert(e.GlobalGuide, {}),
-      })
+      // const newGlobalTopic = e.insert(e.GlobalTopic, {
+      //   name: params.name,
+      //   prettyName: params.prettyName,
+      //   topicSummary: params.topicSummary,
+      //   public: params.public,
+      // })
+      // return e.with([newGlobalTopic],
+      //   e.insert(e.GlobalGuide ,{
+      //     globalTopic: newGlobalTopic,
+      //     sections
+      //   })
+      //   )
     },
   )
   return query.run(client, {

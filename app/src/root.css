@@ -84,3 +84,26 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.tiptap-container {
+  margin: 1em 0 0 0;
+}
+.tiptap-container .ProseMirror {
+  outline: none;
+  font-size: 20px;
+  caret-color: transparent;
+}
+/* .tiptap-container .editor-content .ProseMirror[show-cursor="true"] {
+  caret-color: black;
+} */
+.tiptap-container .ProseMirror[mode="normal"] .vim-cursor {
+  background: black;
+  color: white;
+}
+.tiptap-container .ProseMirror[mode="insert"] .vim-cursor::before {
+  content: " ";
+  position: absolute;
+  width: 2px;
+  background: black;
+  animation: blink 1s step-start 0s infinite;
+}

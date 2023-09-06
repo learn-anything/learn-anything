@@ -1,4 +1,3 @@
-import { div } from "edgedb/dist/primitives/bigint"
 import { Show, createSignal } from "solid-js"
 
 export default function GuideSummary(props: any) {
@@ -16,8 +15,18 @@ export default function GuideSummary(props: any) {
     `}</style>
       <div class="w-full flex flex-col gap-4 text-[16px]  leading-[18.78px]">
         <div class="flex justify-between items-center ">
-          <div class="font-bold text-[#131313]">GUIDE</div>
-          <div class="text-[#696969]">v1.0</div>
+          {/* <div class="font-bold text-[#131313]">GUIDE</div> */}
+          <div class="text-[#696969] cursor-pointer hover:text-black transition-all">
+            v1.0
+          </div>
+          <div
+            class="text-[#696969] cursor-pointer hover:text-black transition-all"
+            onClick={() => {
+              props.setCurrentTab("EditGuide")
+            }}
+          >
+            Improve Guide
+          </div>
         </div>
         <div
           id={showSummary() ? "GuideSummaryExpanded" : "GuideSummaryMinimised"}
@@ -50,13 +59,13 @@ export default function GuideSummary(props: any) {
           <div>Contents</div>
           <div class="flex gap-[23px]">
             {/* <div>Duplicate</div> */}
-            <div
+            {/* <div
               onClick={() => {
                 props.setCurrentTab("EditGuide")
               }}
             >
               Improve Guide
-            </div>
+            </div> */}
             {/* <div>Filter</div> */}
           </div>
         </div>
