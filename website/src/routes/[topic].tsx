@@ -62,7 +62,9 @@ export default function Topic() {
     })
 
     const res = await mobius.query({
-      topicName: "physics"
+      getGlobalTopic: {
+        topicName: "physics"
+      }
   })
 
 
