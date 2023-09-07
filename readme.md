@@ -4,7 +4,7 @@
 
 Explanation of project's high level goals is [here](https://wiki.nikiv.dev/ideas/learn-anything).
 
-Current focus is on making [Tauri app](#run-tauri-app) working. Essentially making an app like [Obsidian](https://obsidian.md/).
+<!-- Current focus is on making [Tauri app](#run-tauri-app) working. Essentially making an app like [Obsidian](https://obsidian.md/). -->
 
 Reference [file structure](#file-structure) to make sense of how code is laid out in the repo.
 
@@ -18,23 +18,22 @@ Ask questions on [Discord](https://discord.com/invite/bxtD8x6aNF) if interested 
 
 Tech stack is described [here](docs/tech-stack.md).
 
-- [api](api) - server related actions
-  - [edgedb](api/edgedb) - [EdgeDB](https://www.edgedb.com/) used as main server database
-    - [dbschema](api/edgedb/dbschema)
-      - [default.esdl](api/edgedb/dbschema/default.esdl) - [EdgeDB schema](https://www.edgedb.com/docs/intro/schema) definining all the models and relations
-      - [migrations](api/edgedb/dbschema/migrations) - migration files get generated after running `pnpm db:migrate`
-    - [client.ts](api/edgedb/client.ts) - exports client to connect with EdgeDB
-    - [topic.ts](api/edgedb/topic.ts) / [user.ts](api/edgedb/user.ts) - CRUD functions on models
-  - [grafbase](api/grafbase) - [Grafbase](https://grafbase.com/) provides GraphQL API layer for all server functions like talking with DB
-    - [resolvers](api/grafbase/resolvers) - [edge resolvers](https://grafbase.com/docs/edge-gateway/resolvers) are server functions exposed with GraphQL
-    - [schema.graphql](api/grafbase/schema.graphql) - [Grafbase's config](https://grafbase.com/docs/config)
-  - [server](api/server) - temporary [hono](https://hono.dev/) server until grafbase supports public resolvers
 - [app](app) - desktop app in Tauri/Solid
+- [docs](docs) - all the docs
+- [edgedb](edgedb) - [EdgeDB](https://www.edgedb.com/) used as main server database
+  - [dbschema](edgedb/dbschema)
+    - [default.esdl](edgedb/dbschema/default.esdl) - [EdgeDB schema](https://www.edgedb.com/docs/intro/schema) definining all the models and relations
+    - [migrations](edgedb/dbschema/migrations) - migration files get generated after running `pnpm db:migrate`
+  - [client.ts](edgedb/client.ts) - exports client to connect with EdgeDB
+  - [topic.ts](edgedb/topic.ts) / [user.ts](api/edgedb/user.ts) - CRUD functions on models
+- [grafbase](grafbase) - [Grafbase](https://grafbase.com/) provides GraphQL API layer for all server functions like talking with DB
+  - [resolvers](grafbase/resolvers) - [edge resolvers](https://grafbase.com/docs/edge-gateway/resolvers) are server functions exposed with GraphQL
+  - [grafbase.config.ts](grafbase/grafbase.config.ts) - [Grafbase's config](https://grafbase.com/docs/config)
 - [lib](lib) - shared utility functions
 - [test](test) - test cases (useful for itereating quickly)
 - [website](website) - learn-anything.xyz website code in Solid
   - [components](website/components) - solid components
-  - [routes](app/packages/website/routes) - routes defined using file system
+  - [routes](website/src/routes) - routes defined using file system
 
 ## Setup
 
