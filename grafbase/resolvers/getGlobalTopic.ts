@@ -1,4 +1,4 @@
-import { createRemoteJWKSet, jwtVerify } from "jose"
+// import { createRemoteJWKSet, jwtVerify } from "jose"
 
 export default async function getTopicResolver(
   root: any,
@@ -6,19 +6,19 @@ export default async function getTopicResolver(
   context: any,
 ) {
   try {
-    const JWKS = createRemoteJWKSet(new URL(process.env.JWKS_URL!))
+    // const JWKS = createRemoteJWKSet(new URL(process.env.JWKS_URL!))
 
-    const authHeader = context.request.headers["Authorization"]
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return "Missing or invalid Authorization header"
-    }
+    // const authHeader = context.request.headers["Authorization"]
+    // if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    //   return "Missing or invalid Authorization header"
+    // }
 
-    const token = authHeader.split(" ")[1]
+    // const token = authHeader.split(" ")[1]
 
-    const { payload } = await jwtVerify(token, JWKS, {
-      audience: process.env.AUDIENCE,
-      issuer: process.env.ISSUER,
-    })
+    // const { payload } = await jwtVerify(token, JWKS, {
+    //   audience: process.env.AUDIENCE,
+    //   issuer: process.env.ISSUER,
+    // })
 
     const globalTopic = {
       prettyTopicName: "Physics",
@@ -41,7 +41,7 @@ export default async function getTopicResolver(
     }
     return globalTopic
 
-    return "Verified. You got in."
+    // return "Verified. You got in."
   } catch (error) {
     return "Verification failed. You shall not pass."
   }

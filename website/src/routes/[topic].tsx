@@ -104,13 +104,15 @@ export default function Topic() {
     const result = await mobius.query({
       getGlobalTopic: {
         where: {
-          topicName: "Physics",
+          topicName: "physics",
         },
         select: {
           prettyTopicName: true,
         },
       },
     })
+
+    console.log(result, "result")
   })
 
   return (
