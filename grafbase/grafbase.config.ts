@@ -38,10 +38,16 @@ const globalTopic = g.type("GlobalTopic", {
   globalGuideSections: g.ref(section).list(),
 })
 
-g.query("getGlobalTopic", {
+g.query("publicGetGlobalTopic", {
   args: { topicName: g.string() },
   returns: g.ref(globalTopic),
-  resolver: "getGlobalTopic",
+  resolver: "public/getGlobalTopic",
+})
+
+g.mutation("addUser", {
+  args: { email: g.string() },
+  returns: g.string(),
+  resolver: "createUser",
 })
 
 // g.mutation("")

@@ -210,14 +210,15 @@ module default {
     multi relatedLinks: GlobalLink;
     # all notes submitted to the global topic
     multi relatedNotes: Note;
-    link globalGuide: GlobalGuide {
-      on target delete allow;
-    };
+    # link globalGuide: GlobalGuide {
+    #   on target delete allow;
+    # };
+    multi globalGuides: GlobalGuide;
   }
   # every time a change to GlobalGuide is made, a new revision is created
   type GlobalGuide {
     # global topic
-    required link globalTopic := .<globalGuide[is GlobalTopic];
+    # required link globalTopic := .<globalGuide[is GlobalTopic];
     # required link globalTopic: GlobalTopic;
     required created_at: datetime {
       readonly := true;

@@ -1,6 +1,6 @@
 import { validHankoToken } from "lib/grafbase/grafbase"
 
-export default async function getTopic(
+export default async function getGlobalTopic(
   root: any,
   args: { topicName: string },
   context: any,

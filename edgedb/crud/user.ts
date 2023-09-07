@@ -2,14 +2,13 @@ import { client } from "../client"
 import e from "../dbschema/edgeql-js"
 
 export interface User {
-  name: string
+  name?: string
   email: string
 }
 
 export async function addUser(user: User) {
   const res = await e
     .insert(e.User, {
-      name: user.name,
       email: user.email,
     })
     .run(client)

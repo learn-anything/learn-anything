@@ -12,7 +12,7 @@
     "db:ui": "cd edgedb && edgedb ui",
     "db:sync": "cd edgedb/sync && tsx sync.ts",
     "db:watch": "cd edgedb && edgedb watch",
-    "db:migrate": "cd edgedb && edgedb migration create",
+    "db:migrate": "cd edgedb && edgedb migration create && edgedb migrate && npx @edgedb/generate edgeql-js --target ts",
     "db:ts-generate": "cd edgedb && npx @edgedb/generate edgeql-js --target ts",
     "grafbase": "npx grafbase@latest dev",
     "ts-run": "tsx run.ts",
