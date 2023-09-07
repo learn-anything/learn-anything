@@ -8,7 +8,7 @@ export default async function getTopicResolver(
   try {
     const JWKS = createRemoteJWKSet(new URL(process.env.JWKS_URL!))
 
-    const authHeader = request.headers["Authorization"]
+    const authHeader = context.request.headers["Authorization"]
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return "Missing or invalid Authorization header"
     }

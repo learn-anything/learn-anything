@@ -7,6 +7,7 @@ import GuideEdit from "../components/Topic/GuideEdit"
 import GuideLinks from "../components/Topic/GuideLinks"
 import GuideNotes from "../components/Topic/GuideNotes"
 import { useTopic } from "../GlobalContext/topic"
+import Mobius from "graphql-mobius"
 
 // TODO: for some reason when you first run `pnpm dev`
 // nothing shows
@@ -28,12 +29,42 @@ type Guide = {
   sections: Section[]
 }
 
+async function getHankoCookie() {
+  const allCookies = document.cookie
+  const hankoCookie = allCookies
+    .split(";")
+    .find((cookie) => {
+      return cookie
+    })
+    ?.split("=")[1]
+  return hankoCookie
+}
+
 export default function Topic() {
   const topic = useTopic()
 
-  onMount(() => {
-    console.log("run")
+  onMount(async () => {
+    const hankoCookie = await getHankoCookie()
+
+    const mobius = new Mobius({
+      fetch: (query) =>
+        fetch("http://127.0.0.1:4000/graphql", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${hankoCookie}`
+          },
+          body: JSON.stringify({
+            query,
+            variables: {},
+          }),
+        }).then((res) => res.json()),
+    })
+
+    const res = await mobius.query({
+      topicName: "physics"
   })
+
 
   return (
     <>
