@@ -1,6 +1,6 @@
 export default async function getTopicResolver(
   root: any,
-  args: { topicName: string; userId: string },
+  args: { topicName: string },
   context: any,
 ) {
   console.log("runs")
