@@ -289,7 +289,7 @@ export default function GuideSectionEdit(props: any) {
             <Icon name="Plus"></Icon>Add a Link
           </div>
         </div>
-        <Show when={addLink()}>
+        <Show when={true}>
           <div class="fixed flex items-center backdrop-blur-sm justify-center w-screen z-10 h-screen top-0 left-0">
             <div
               class="fixed w-screen h-screen top-0 right-0 z-20"
@@ -297,26 +297,59 @@ export default function GuideSectionEdit(props: any) {
                 setAddLink(false)
               }}
             ></div>
-            <div class=" z-30 p-3 flex flex-col gap-2 rounded-lg bg-white border-slate-400 border border-opacity-30">
-              <div class="text-xl">Add a Link</div>
-              <div class="flex items-center justify-center gap-1">
-                <input
-                  type="text"
-                  name=""
-                  id=""
-                  class="w-full h-full border p-[8px] px-[10px] outline-none border-slate-400 border-opacity-30 rounded-[4px]"
-                />
+            <div class="w-[60%] relative h-[80%] z-30 pb-10 px-10 flex flex-col gap-2 rounded-lg bg-white border-slate-400 border drop-shadow-md">
+              <div class="text-xl w-full py-8 border-b border-slate-400 border-opacity-30 flex items-center justify-center">
+                New Link
               </div>
-              <div>
-                <input
-                  type="text"
-                  name=""
-                  id=""
-                  class="w-full h-full border p-[8px] px-[10px] outline-none border-slate-400 border-opacity-30 rounded-[4px]"
-                />
+              <div class="py-8 flex flex-col gap-4">
+                <div>Section</div>
+                <div
+                  contentEditable={true}
+                  class="min-w-[200px] outline-none text-[14px] text-black text-opacity-70 w-fit rounded-[4px] p-2 px-4 border border-slate-400 border-opacity-50"
+                ></div>
               </div>
-              <div class="px-[10px] p-[8px] border-[#3B5CCC] text-white bg-[#3B5CCC] rounded-[4px]">
-                Submit
+              <div class="flex flex-col gap-4">
+                <div>Links</div>
+                <div class="flex flex-col gap-2">
+                  <input
+                    type="text"
+                    placeholder="type URL"
+                    class="border-slate-400 font-light border rounded-[4px] border-opacity-50 w-full p-2 px-4"
+                  />
+                  <input
+                    type="text"
+                    placeholder="type URL"
+                    class="border-slate-400 font-light border rounded-[4px] border-opacity-50 w-full p-2 px-4"
+                  />
+                </div>
+              </div>
+              <div class="flex flex-col gap-4 pt-8">
+                <div>Information</div>
+                <div class="w-full flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="time"
+                    class="p-2 px-4 rounded-[4px] border-opacity-50 border-slate-400 border w-[30%]"
+                  />
+                  <input
+                    type="text"
+                    placeholder="type"
+                    class="p-2 px-4 rounded-[4px] border-opacity-50 border-slate-400 border w-[30%]"
+                  />
+                  <input
+                    type="text"
+                    placeholder="author"
+                    class="p-2 px-4 rounded-[4px] border-opacity-50 border-slate-400 border w-[40%]"
+                  />
+                </div>
+              </div>
+              <div class="absolute pb-10 px-10 bottom-0 left-0 flex items-center justify-between w-full">
+                <div class="border border-slate-400 px-6 p-3 rounded-[4px] border-opacity-50">
+                  Cancel
+                </div>
+                <div class="bg-blue-400 rounded-[4px] px-6 text-white p-3">
+                  Save
+                </div>
               </div>
             </div>
           </div>
