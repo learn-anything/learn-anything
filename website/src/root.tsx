@@ -1,8 +1,7 @@
 // @refresh reload
+import { MatchFilters } from "@solidjs/router/dist/types"
 import { Suspense } from "solid-js"
 import {
-  useLocation,
-  A,
   Body,
   ErrorBoundary,
   FileRoutes,
@@ -14,19 +13,13 @@ import {
   Scripts,
   Title,
 } from "solid-start"
-import "./root.css"
-import createTopicState, { TopicProvider } from "./GlobalContext/topic"
 import createEditGuideState, {
   EditGuideProvider,
 } from "./GlobalContext/edit-guide"
+import createTopicState, { TopicProvider } from "./GlobalContext/topic"
 import { UserProvider, createUserState } from "./GlobalContext/user"
-import { MatchFilters } from "@solidjs/router/dist/types"
-// import Topic from "./routes/(topic)"
-// import Topic from "./routes/(topic)"
-
-function UserProfile() {
-  return <div>user profile</div>
-}
+import "./root.css"
+import UserProfile from "./routes/@(username)"
 
 export default function Root() {
   const user = createUserState()
@@ -37,11 +30,12 @@ export default function Root() {
     username: /^@.+/,
   }
 
-  const location = useLocation()
-  const active = (path: string) =>
-    path == location.pathname
-      ? "border-sky-600"
-      : "border-transparent hover:border-sky-600"
+  // const location = useLocation()
+  // const active = (path: string) =>
+  //   path == location.pathname
+  //     ? "border-sky-600"
+  //     : "border-transparent hover:border-sky-600"
+
   return (
     <Html lang="en">
       <Head>
@@ -57,7 +51,7 @@ export default function Root() {
                 <EditGuideProvider value={editGuide}>
                   <Routes>
                     <Route
-                      path="/@:username"
+                      path="/:username"
                       component={UserProfile}
                       matchFilters={filters}
                     />
@@ -65,8 +59,8 @@ export default function Root() {
                       path="/:topic"
                       component={Topic}
                       matchFilters={filters}
-                    />
-                    <Route
+                    /> */}
+                    {/* <Route
                       path="/:username/:topic"
                       component={Topic}
                       matchFilters={filters}
