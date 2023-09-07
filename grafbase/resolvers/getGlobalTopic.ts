@@ -6,6 +6,7 @@ export default async function getTopicResolver(
   context: any,
 ) {
   try {
+    console.log("trying to verify")
     const authHeader = context.request.headers["Authorization"]
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return "Missing or invalid Authorization header"
@@ -17,9 +18,12 @@ export default async function getTopicResolver(
 
     const hankoToken = authHeader.split(" ")[1]
     const verifiedJWT = await jwtVerify(hankoToken ?? "", JWKS)
+    console.log(verifiedJWT, "verifiedJWT")
     if (!verifiedJWT) {
       return "Verification failed"
     }
+
+    console.log("verified!")
 
     const globalTopic = {
       prettyTopicName: "Physics",
@@ -42,6 +46,7 @@ export default async function getTopicResolver(
     }
     return globalTopic
   } catch (error) {
+    console.log("verify failed")
     return "Verification failed"
   }
 }

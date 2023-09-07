@@ -85,6 +85,7 @@ export default function Topic() {
 
   onMount(async () => {
     const hankoCookie = await getHankoCookie()
+    console.log(hankoCookie, "cookie")
 
     const mobius = new Mobius<typeof typeDefs>({
       fetch: (query) =>
