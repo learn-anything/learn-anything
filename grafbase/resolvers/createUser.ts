@@ -8,5 +8,7 @@ export default async function createUser(
 ) {
   if (await validHankoToken(context)) {
     await addUser({ email: args.email })
+    return "success"
   }
+  return "failed to validate hanko token"
 }

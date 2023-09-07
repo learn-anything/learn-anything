@@ -3,14 +3,14 @@ import { onMount } from "solid-js"
 import { register } from "@teamhanko/hanko-elements"
 import { useNavigate } from "solid-start"
 import { getHankoCookie } from "../../lib/auth"
-import { useSignIn } from "../root"
+import { useMobius, useSignIn } from "../root"
 
 // uses https://hanko.io authentication
 // https://github.com/teamhanko/hanko/blob/main/frontend/elements/README.md
 export default function SignInPage() {
   const navigate = useNavigate()
-
   const signIn = useSignIn()
+  const mobius = useMobius()
 
   onMount(async () => {
     console.log(import.meta.env.VITE_HANKO_API, "hanko api")
@@ -43,9 +43,7 @@ export default function SignInPage() {
     document,
     "hankoAuthSuccess",
     async (e) => {
-      // TODO: should come from event, check
-      // don't do below
-      console.log(e, "e")
+      // console.log(e, "e from hanko auth success")
 
       const allCookies = document.cookie
       const hankoCookie = allCookies
@@ -55,8 +53,18 @@ export default function SignInPage() {
         })
         ?.split("=")[1]
 
-      signIn(hankoCookie!)
-      navigate("/")
+      const res = await mobius.mutate({
+        addUser: {
+          where: {
+            email: "nikita.voloboev@gmail.com",
+          },
+          select: true,
+        },
+      })
+      console.log(res, "res")
+      // console.log(hankoCookie, "hanko cookie")
+      // signIn(hankoCookie!)
+      // navigate("/")
     },
     { passive: true },
   )

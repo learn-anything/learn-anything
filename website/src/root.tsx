@@ -64,8 +64,12 @@ type Link {
   addedByUser: Boolean
 }
 
+type Mutation {
+  addUser(email: String!): String!
+}
+
 type Query {
-  getGlobalTopic(topicName: String!): GlobalTopic!
+  publicGetGlobalTopic(topicName: String!): GlobalTopic!
 }
 
 type Section {

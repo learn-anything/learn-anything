@@ -4,7 +4,7 @@ import TitlePill from "../../components/Topic/TitlePill"
 import Guide from "../../components/Topic/Guide"
 import Card from "../../components/Topic/Card"
 import { useTopic } from "../../GlobalContext/topic"
-import ProfilePage from "../../components/ProfilePage"
+// import ProfilePage from "../../components/ProfilePage"
 
 export default function UserProfile() {
   const topic = useTopic()
@@ -45,7 +45,7 @@ export default function UserProfile() {
             {/* <Show when={false} fallback={<GuideEdit topics={topics()} />}>
             <Guide />
           </Show> */}
-            <ProfilePage />
+            {/* <ProfilePage /> */}
             {/* <Switch>
             <Match when={topic.topic.showPage === "Global Guide"}>
 
