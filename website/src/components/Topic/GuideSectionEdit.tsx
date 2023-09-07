@@ -289,7 +289,7 @@ export default function GuideSectionEdit(props: any) {
             <Icon name="Plus"></Icon>Add a Link
           </div>
         </div>
-        <Show when={true}>
+        <Show when={addLink()}>
           <div class="fixed flex items-center backdrop-blur-sm justify-center w-screen z-10 h-screen top-0 left-0">
             <div
               class="fixed w-screen h-screen top-0 right-0 z-20"
