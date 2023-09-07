@@ -21,7 +21,8 @@ import createEditGuideState, {
 } from "./GlobalContext/edit-guide"
 import { UserProvider, createUserState } from "./GlobalContext/user"
 import { MatchFilters } from "@solidjs/router/dist/types"
-import Topic from "./routes/(topic)"
+// import Topic from "./routes/(topic)"
+// import Topic from "./routes/(topic)"
 
 function UserProfile() {
   return <div>user profile</div>
@@ -33,7 +34,7 @@ export default function Root() {
   const editGuide = createEditGuideState()
 
   const filters: MatchFilters = {
-    username: /^@/,
+    username: /^@.+/,
   }
 
   const location = useLocation()
@@ -56,20 +57,20 @@ export default function Root() {
                 <EditGuideProvider value={editGuide}>
                   <Routes>
                     <Route
-                      path="/:topic"
-                      component={Topic}
+                      path="/@:username"
+                      component={UserProfile}
                       matchFilters={filters}
                     />
-                    <Route
-                      path="/:username"
-                      component={UserProfile}
+                    {/* <Route
+                      path="/:topic"
+                      component={Topic}
                       matchFilters={filters}
                     />
                     <Route
                       path="/:username/:topic"
                       component={Topic}
                       matchFilters={filters}
-                    />
+                    /> */}
                     <FileRoutes />
                   </Routes>
                 </EditGuideProvider>
