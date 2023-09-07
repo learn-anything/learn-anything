@@ -8,46 +8,7 @@ import GuideLinks from "../components/Topic/GuideLinks"
 import GuideNotes from "../components/Topic/GuideNotes"
 import { useTopic } from "../GlobalContext/topic"
 import Mobius from "graphql-mobius"
-
-const typeDefs = `
-"""Directs the executor to return values as a Streaming response."""
-directive @live on QUERY
-
-"""Indicates that an input object is a oneOf input object"""
-directive @oneOf on INPUT_OBJECT
-
-type GlobalTopic {
-  prettyTopicName: String!
-  userLearningStatus: learningStatus
-  globalGuideSummary: String!
-  globalGuideSections: [Section!]!
-}
-
-type Link {
-  title: String!
-  url: String!
-  author: String
-  year: Int
-  completed: Boolean
-  addedByUser: Boolean
-}
-
-type Query {
-  getGlobalTopic(topicName: String!): GlobalTopic!
-}
-
-type Section {
-  title: String!
-  summary: String
-  ordered: Boolean!
-  links: [Link!]!
-}
-
-enum learningStatus {
-  to_learn
-  learning
-}
-`
+import { useMobius } from "../root"
 
 // TODO: for some reason when you first run `pnpm dev`
 // nothing shows
@@ -69,51 +30,23 @@ type Guide = {
   sections: Section[]
 }
 
-async function getHankoCookie() {
-  const allCookies = document.cookie
-  const hankoCookie = allCookies
-    .split(";")
-    .find((cookie) => {
-      return cookie
-    })
-    ?.split("=")[1]
-  return hankoCookie
-}
-
 export default function Topic() {
   const topic = useTopic()
+  const mobius = useMobius()
 
   onMount(async () => {
-    const hankoCookie = await getHankoCookie()
-    console.log(hankoCookie, "cookie")
-
-    const mobius = new Mobius<typeof typeDefs>({
-      fetch: (query) =>
-        fetch("http://127.0.0.1:4000/graphql", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${hankoCookie}`,
-          },
-          body: JSON.stringify({
-            query,
-            variables: {},
-          }),
-        }).then((res) => res.json()),
-    })
-
-    const result = await mobius.query({
+    const res = await mobius.query({
       getGlobalTopic: {
         where: {
           topicName: "physics",
         },
         select: {
           prettyTopicName: true,
+          userLearningStatus: true,
         },
       },
     })
-
-    console.log(result, "result")
+    console.log(res, "res")
   })
 
   return (

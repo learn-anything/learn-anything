@@ -1,4 +1,4 @@
-import { createContext, useContext } from "solid-js"
+import { createContext, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 
 interface Section {
@@ -153,6 +153,10 @@ export default function createTopicState() {
         username: "nikiv",
       },
     ],
+  })
+
+  onMount(() => {
+    // mobi
   })
 
   return {

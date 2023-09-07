@@ -3,11 +3,15 @@ import { onMount } from "solid-js"
 import { register } from "@teamhanko/hanko-elements"
 import { useNavigate } from "solid-start"
 import { getHankoCookie } from "../../lib/auth"
+import { useSignIn } from "../root"
 
 // uses https://hanko.io authentication
 // https://github.com/teamhanko/hanko/blob/main/frontend/elements/README.md
 export default function SignInPage() {
   const navigate = useNavigate()
+
+  const signIn = useSignIn()
+
   onMount(async () => {
     console.log(import.meta.env.VITE_HANKO_API, "hanko api")
 
@@ -39,8 +43,19 @@ export default function SignInPage() {
     document,
     "hankoAuthSuccess",
     async (e) => {
-      // console.log(e, "hanko auth success event")
-      // auth success, navigate to using app
+      // TODO: should come from event, check
+      // don't do below
+      console.log(e, "e")
+
+      const allCookies = document.cookie
+      const hankoCookie = allCookies
+        .split(";")
+        .find((cookie) => {
+          return cookie
+        })
+        ?.split("=")[1]
+
+      signIn(hankoCookie!)
       navigate("/")
     },
     { passive: true },

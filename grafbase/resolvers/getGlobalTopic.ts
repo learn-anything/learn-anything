@@ -1,30 +1,11 @@
-import { jwtVerify, createRemoteJWKSet } from "jose"
+import { validHankoToken } from "lib/grafbase/grafbase"
 
-export default async function getTopicResolver(
+export default async function getTopic(
   root: any,
   args: { topicName: string },
   context: any,
 ) {
-  try {
-    console.log("trying to verify")
-    const authHeader = context.request.headers["Authorization"]
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return "Missing or invalid Authorization header"
-    }
-
-    const JWKS = createRemoteJWKSet(
-      new URL(`${process.env.PUBLIC_HANKO_API_URL}/.well-known/jwks.json`),
-    )
-
-    const hankoToken = authHeader.split(" ")[1]
-    const verifiedJWT = await jwtVerify(hankoToken ?? "", JWKS)
-    console.log(verifiedJWT, "verifiedJWT")
-    if (!verifiedJWT) {
-      return "Verification failed"
-    }
-
-    console.log("verified!")
-
+  if (await validHankoToken(context)) {
     const globalTopic = {
       prettyTopicName: "Physics",
       userLearningStatus: "learning",
@@ -45,8 +26,5 @@ export default async function getTopicResolver(
       ],
     }
     return globalTopic
-  } catch (error) {
-    console.log("verify failed")
-    return "Verification failed"
   }
 }

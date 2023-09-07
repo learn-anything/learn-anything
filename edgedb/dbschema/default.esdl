@@ -5,12 +5,12 @@
 # GlobalTopic: public GlobalTopic is found on learn-anything.xyz/<GlobalTopic>
 module default {
   type User {
-    # unique username
-    required name: str {
-      constraint exclusive;
-    };
     # unique email
     required email: str {
+      constraint exclusive;
+    };
+    # unique username
+    name: str {
       constraint exclusive;
     };
     # custom name user can choose for themselves similar to X
@@ -210,11 +210,14 @@ module default {
     multi relatedLinks: GlobalLink;
     # all notes submitted to the global topic
     multi relatedNotes: Note;
+    link globalGuide: GlobalGuide {
+      on target delete allow;
+    };
   }
   # every time a change to GlobalGuide is made, a new revision is created
   type GlobalGuide {
     # global topic
-    required globalTopic := .<globalGuide[is GlobalTopic];
+    required link globalTopic := .<globalGuide[is GlobalTopic];
     # required link globalTopic: GlobalTopic;
     required created_at: datetime {
       readonly := true;

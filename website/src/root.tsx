@@ -1,6 +1,13 @@
 // @refresh reload
 import { MatchFilters } from "@solidjs/router/dist/types"
-import { Suspense } from "solid-js"
+import {
+  Show,
+  Suspense,
+  createContext,
+  createResource,
+  createSignal,
+  useContext,
+} from "solid-js"
 import {
   Body,
   ErrorBoundary,
@@ -20,6 +27,92 @@ import createTopicState, { TopicProvider } from "./GlobalContext/topic"
 import { UserProvider, createUserState } from "./GlobalContext/user"
 import "./root.css"
 import UserProfile from "./routes/@(username)"
+import Mobius from "graphql-mobius"
+
+// TODO: probably hanko front end sdk has function to do this
+function getHankoCookie(): string {
+  const allCookies = document.cookie
+  const hankoCookie = allCookies
+    .split(";")
+    .find((cookie) => {
+      return cookie
+    })
+    ?.split("=")[1]
+  return hankoCookie ?? ""
+}
+
+const typeDefs = `
+"""Directs the executor to return values as a Streaming response."""
+directive @live on QUERY
+
+"""Indicates that an input object is a oneOf input object"""
+directive @oneOf on INPUT_OBJECT
+
+type GlobalTopic {
+  prettyTopicName: String!
+  userLearningStatus: learningStatus
+  globalGuideSummary: String!
+  globalGuideSections: [Section!]!
+}
+
+type Link {
+  title: String!
+  url: String!
+  author: String
+  year: Int
+  completed: Boolean
+  addedByUser: Boolean
+}
+
+type Query {
+  getGlobalTopic(topicName: String!): GlobalTopic!
+}
+
+type Section {
+  title: String!
+  summary: String
+  ordered: Boolean!
+  links: [Link!]!
+}
+
+enum learningStatus {
+  to_learn
+  learning
+}
+`
+
+function createMobius(options: { hankoCookie: () => string }) {
+  const { hankoCookie } = options
+
+  const mobius = new Mobius<typeof typeDefs>({
+    fetch: (query) =>
+      fetch("http://127.0.0.1:4000/graphql", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${hankoCookie()}`,
+        },
+        body: JSON.stringify({
+          query,
+          variables: {},
+        }),
+      }).then((res) => res.json()),
+  })
+
+  return mobius
+}
+
+const MobiusCtx = createContext({} as ReturnType<typeof createMobius>)
+
+export function useMobius() {
+  return useContext(MobiusCtx)
+}
+
+const SignInCtx = createContext({} as (cookie: string) => void)
+
+export function useSignIn() {
+  return useContext(SignInCtx)
+}
 
 export default function Root() {
   const user = createUserState()
@@ -30,11 +123,11 @@ export default function Root() {
     username: /^@.+/,
   }
 
-  // const location = useLocation()
-  // const active = (path: string) =>
-  //   path == location.pathname
-  //     ? "border-sky-600"
-  //     : "border-transparent hover:border-sky-600"
+  const [hankoCookie, setHankoCookie] = createSignal(getHankoCookie())
+
+  const mobius = createMobius({
+    hankoCookie,
+  })
 
   return (
     <Html lang="en">
@@ -46,30 +139,24 @@ export default function Root() {
       <Body>
         <Suspense>
           <ErrorBoundary>
-            <UserProvider value={user}>
-              <TopicProvider value={topic}>
-                <EditGuideProvider value={editGuide}>
-                  <Routes>
-                    <Route
-                      path="/:username"
-                      component={UserProfile}
-                      matchFilters={filters}
-                    />
-                    {/* <Route
-                      path="/:topic"
-                      component={Topic}
-                      matchFilters={filters}
-                    /> */}
-                    {/* <Route
-                      path="/:username/:topic"
-                      component={Topic}
-                      matchFilters={filters}
-                    /> */}
-                    <FileRoutes />
-                  </Routes>
-                </EditGuideProvider>
-              </TopicProvider>
-            </UserProvider>
+            <SignInCtx.Provider value={setHankoCookie}>
+              <MobiusCtx.Provider value={mobius}>
+                <UserProvider value={user}>
+                  <TopicProvider value={topic}>
+                    <EditGuideProvider value={editGuide}>
+                      <Routes>
+                        <Route
+                          path="/:username"
+                          component={UserProfile}
+                          matchFilters={filters}
+                        />
+                        <FileRoutes />
+                      </Routes>
+                    </EditGuideProvider>
+                  </TopicProvider>
+                </UserProvider>
+              </MobiusCtx.Provider>
+            </SignInCtx.Provider>
           </ErrorBoundary>
         </Suspense>
         <Scripts />

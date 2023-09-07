@@ -3,12 +3,14 @@ import { createStore } from "solid-js/store"
 
 type User = {
   username: string
+  email: string
 }
 
 // global state of user
 export function createUserState() {
   const [user, setUser] = createStore<User>({
     username: "nikiv",
+    email: "nikita@nikiv.dev",
   })
 
   return {
