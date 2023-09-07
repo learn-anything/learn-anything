@@ -1,4 +1,4 @@
-// import { createRemoteJWKSet, jwtVerify } from "jose"
+import { jwtVerify, createRemoteJWKSet } from "jose"
 
 export default async function getTopicResolver(
   root: any,
@@ -6,19 +6,20 @@ export default async function getTopicResolver(
   context: any,
 ) {
   try {
-    // const JWKS = createRemoteJWKSet(new URL(process.env.JWKS_URL!))
+    const authHeader = context.request.headers["Authorization"]
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return "Missing or invalid Authorization header"
+    }
 
-    // const authHeader = context.request.headers["Authorization"]
-    // if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    //   return "Missing or invalid Authorization header"
-    // }
+    const JWKS = createRemoteJWKSet(
+      new URL(`${process.env.PUBLIC_HANKO_API_URL}/.well-known/jwks.json`),
+    )
 
-    // const token = authHeader.split(" ")[1]
-
-    // const { payload } = await jwtVerify(token, JWKS, {
-    //   audience: process.env.AUDIENCE,
-    //   issuer: process.env.ISSUER,
-    // })
+    const hankoToken = authHeader.split(" ")[1]
+    const verifiedJWT = await jwtVerify(hankoToken ?? "", JWKS)
+    if (!verifiedJWT) {
+      return "Verification failed"
+    }
 
     const globalTopic = {
       prettyTopicName: "Physics",
@@ -40,9 +41,7 @@ export default async function getTopicResolver(
       ],
     }
     return globalTopic
-
-    // return "Verified. You got in."
   } catch (error) {
-    return "Verification failed. You shall not pass."
+    return "Verification failed"
   }
 }

@@ -56,6 +56,9 @@ importers:
       hono:
         specifier: ^3.5.8
         version: 3.5.8
+      jose:
+        specifier: ^4.14.6
+        version: 4.14.6
       micromark:
         specifier: ^4.0.0
         version: 4.0.0
@@ -8313,6 +8316,10 @@ packages:
 
   /jose@4.14.4:
     resolution: {integrity: sha512-j8GhLiKmUAh+dsFXlX1aJCbt5KMibuKb+d7j1JaOJG6s2UjX1PQlW+OKB/sD4a/5ZYF4RcmYmLSndOoU3Lt/3g==}
+    dev: false
+
+  /jose@4.14.6:
+    resolution: {integrity: sha512-EqJPEUlZD0/CSUMubKtMaYUOtWe91tZXTWMJZoKSbLk+KtdhNdcvppH8lA9XwVu2V4Ailvsj0GBZJ2ZwDjfesQ==}
     dev: false
 
   /js-tokens@4.0.0:

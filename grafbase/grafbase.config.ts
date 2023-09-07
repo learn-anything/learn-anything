@@ -2,6 +2,11 @@ import { config, g } from "@grafbase/sdk"
 
 export default config({
   schema: g,
+  auth: {
+    rules: (rules) => {
+      rules.public()
+    },
+  },
 })
 
 const learningStatus = g.enum("learningStatus", [
