@@ -139,6 +139,22 @@ importers:
         specifier: ^4.4.9
         version: 4.4.9(@types/node@20.4.1)
 
+  api:
+    dependencies:
+      edgedb:
+        specifier: ^1.3.5
+        version: 1.3.5
+      jose:
+        specifier: ^4.14.6
+        version: 4.14.6
+    devDependencies:
+      '@edgedb/generate':
+        specifier: ^0.3.3
+        version: 0.3.3(edgedb@1.3.5)
+      '@grafbase/sdk':
+        specifier: ~0.6.1
+        version: 0.6.1
+
   app:
     dependencies:
       '@chronark/zod-bird':
@@ -8139,6 +8155,10 @@ packages:
 
   /jose@4.14.4:
     resolution: {integrity: sha512-j8GhLiKmUAh+dsFXlX1aJCbt5KMibuKb+d7j1JaOJG6s2UjX1PQlW+OKB/sD4a/5ZYF4RcmYmLSndOoU3Lt/3g==}
+    dev: false
+
+  /jose@4.14.6:
+    resolution: {integrity: sha512-EqJPEUlZD0/CSUMubKtMaYUOtWe91tZXTWMJZoKSbLk+KtdhNdcvppH8lA9XwVu2V4Ailvsj0GBZJ2ZwDjfesQ==}
     dev: false
 
   /js-tokens@4.0.0:

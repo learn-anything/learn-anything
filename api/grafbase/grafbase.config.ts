@@ -5,7 +5,7 @@ export default config({
 })
 
 const learningStatus = g.enum("learningStatus", [
-  "to learn",
+  "to_learn",
   "learning",
   "learning",
 ])
