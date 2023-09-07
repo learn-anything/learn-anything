@@ -52,7 +52,7 @@ export default function Topic() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${hankoCookie}`
+            Authorization: `Bearer ${hankoCookie}`,
           },
           body: JSON.stringify({
             query,
@@ -61,12 +61,17 @@ export default function Topic() {
         }).then((res) => res.json()),
     })
 
-    const res = await mobius.query({
+    const result = await mobius.query({
       getGlobalTopic: {
-        topicName: "physics"
-      }
+        where: {
+          topicName: "Physics",
+        },
+        select: {
+          prettyTopicName: true,
+        },
+      },
+    })
   })
-
 
   return (
     <>

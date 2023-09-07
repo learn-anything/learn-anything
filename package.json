@@ -19,7 +19,6 @@
     "ts-run": "tsx run.ts",
     "test-rust-wiki": "cd app/src-tauri/crates/wiki/ && cargo watch -q -- sh -c \"tput reset && cargo test -q --lib\""
   },
-  "type": "module",
   "devDependencies": {
     "@edgedb/generate": "^0.3.3",
     "@grafbase/sdk": "~0.6.1",
