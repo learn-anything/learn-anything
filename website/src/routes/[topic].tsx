@@ -9,6 +9,46 @@ import GuideNotes from "../components/Topic/GuideNotes"
 import { useTopic } from "../GlobalContext/topic"
 import Mobius from "graphql-mobius"
 
+const typeDefs = `
+"""Directs the executor to return values as a Streaming response."""
+directive @live on QUERY
+
+"""Indicates that an input object is a oneOf input object"""
+directive @oneOf on INPUT_OBJECT
+
+type GlobalTopic {
+  prettyTopicName: String!
+  userLearningStatus: learningStatus
+  globalGuideSummary: String!
+  globalGuideSections: [Section!]!
+}
+
+type Link {
+  title: String!
+  url: String!
+  author: String
+  year: Int
+  completed: Boolean
+  addedByUser: Boolean
+}
+
+type Query {
+  getGlobalTopic(topicName: String!): GlobalTopic!
+}
+
+type Section {
+  title: String!
+  summary: String
+  ordered: Boolean!
+  links: [Link!]!
+}
+
+enum learningStatus {
+  to_learn
+  learning
+}
+`
+
 // TODO: for some reason when you first run `pnpm dev`
 // nothing shows
 // you have to add a div below and save then things show..
@@ -46,7 +86,7 @@ export default function Topic() {
   onMount(async () => {
     const hankoCookie = await getHankoCookie()
 
-    const mobius = new Mobius({
+    const mobius = new Mobius<typeof typeDefs>({
       fetch: (query) =>
         fetch("http://127.0.0.1:4000/graphql", {
           method: "POST",
