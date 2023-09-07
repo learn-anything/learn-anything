@@ -4,18 +4,42 @@ export default config({
   schema: g,
 })
 
-// g.enum
+const learningStatus = g.enum("learningStatus", [
+  "to learn",
+  "learning",
+  "learning",
+])
 
-const topic = g.type("Topic", {
-  name: g.string(),
-  // status: ""
+const link = g.type("Link", {
+  title: g.string(),
+  url: g.string(),
+  author: g.string().optional(),
+  year: g.int().optional(),
+  completed: g.boolean().optional(),
+  addedByUser: g.boolean().optional(),
 })
 
-g.query("getTopic", {
-  args: { topic: g.string() },
-  returns: g.ref(topic),
-  resolver: "getTopic",
+const section = g.type("Section", {
+  title: g.string(),
+  summary: g.string().optional(),
+  ordered: g.boolean(),
+  links: g.ref(link).list(),
 })
+
+const globalTopic = g.type("GlobalTopic", {
+  prettyTopicName: g.string(),
+  userLearningStatus: g.enumRef(learningStatus).optional(),
+  globalGuideSummary: g.string(),
+  globalGuideSections: g.ref(section).list(),
+})
+
+g.query("getGlobalTopic", {
+  args: { topicName: g.string() },
+  returns: g.ref(globalTopic),
+  resolver: "getGlobalTopic",
+})
+
+// g.mutation("")
 
 // g.query("getTopicPaths", {
 //   returns: g.list(

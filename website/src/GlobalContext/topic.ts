@@ -5,7 +5,7 @@ interface Section {
   title: string
   summary?: string
   ordered: boolean
-  links?: Link[]
+  links: Link[]
 }
 
 interface Note {
@@ -30,7 +30,6 @@ interface User {
 export interface Topic {
   name: string
   status: "to learn" | "learning" | "learned" | null
-  showPage: "Global Guide" | "Links" | "Notes" | "Edit Global Guide"
   guideSummary: string
   expandedSummary: boolean
   guideSections: Section[]
@@ -41,6 +40,7 @@ export interface Topic {
   usersHaveLearned: User[]
   moderators: User[]
   topicPath?: string
+  showPage: "Global Guide" | "Links" | "Notes" | "Edit Global Guide"
 }
 
 // global state of wiki
