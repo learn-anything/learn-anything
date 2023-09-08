@@ -9,11 +9,13 @@ import { toMarkdown } from "mdast-util-to-markdown"
 import { toString } from "mdast-util-to-string"
 import * as path from "path"
 import * as prettier from "prettier"
-import { getTopic, getTopicTitles, getTopics } from "../crud/topic"
+import { getTopic, getTopicTitles } from "../crud/topic"
 import { addUser, getUserIdByName } from "../crud/user"
 import { addWiki, getWikiIdByUserId } from "../crud/wiki"
-import { getAllGlobalTopics } from "../crud/global-topic"
-import { writeContentToDesktopFile } from "./util"
+import { getGlobalDispatcher } from "undici"
+import { getGlobalTopicPublic } from "edgedb/crud/global-topic"
+// import { getAllGlobalTopics } from "../crud/global-topic"
+// import { writeContentToDesktopFile } from "./util"
 
 dotenv.config()
 
@@ -53,64 +55,56 @@ async function main() {
       email: process.env.email!,
     })
   }
-  let wikiId = await getWikiIdByUserId(userId)
-  if (!wikiId) {
-    await addWiki(userId!)
-  }
+  // let wikiId = await getWikiIdByUserId(userId)
+  // if (!wikiId) {
+  //   await addWiki(userId!)
+  // }
 
-  const topicTitles = await getTopicTitles()
-  const topicName = topicTitles[0].name
+  const res = await getGlobalTopicPublic("3d-printing")
+  console.log(res)
 
+  return true
+  // const topicTitles = await getTopicTitles()
+  // const topicName = topicTitles[0].name
   // assume it always returns
   // @ts-ignore
-  const topic = await getTopic(topicName)
-  const topicContent = topic[0]
-
-  const globalTopic = {
-    name: topicName,
-    pretyName: topicContent.prettyName,
-    public: true,
-    topicPath: topicContent.topicPath,
-    topicSummary: `## Overview
-    3D Printing, or additive manufacturing, transforms digital designs into physical objects by layering material.
-
-    ## Core Technologies
-    - **FDM**: Uses plastic filament, great for prototypes
-    - **SLA**: High detail, uses liquid resin
-    - **SLS**: Complex shapes, uses powder
-
-    ## Common Materials
-    - Plastics: PLA, ABS
-    - Metals: Titanium, Aluminum
-
-    ## Applications
-    - **Medical**: Prosthetics, bioprinting
-    - **Industrial**: Prototypes, manufacturing
-    - **Consumer**: Custom products
-
-    ## Advantages and Disadvantages
-    ### Pros
-    - Rapid prototyping
-    - Customization
-    ### Cons
-    - Limited build size
-    - Material constraints`,
-  }
-
-  console.log(globalTopic)
-
+  // const topic = await getTopic(topicName)
+  // const topicContent = topic[0]
+  // const globalTopic = {
+  //   name: topicName,
+  //   pretyName: topicContent.prettyName,
+  //   public: true,
+  //   topicPath: topicContent.topicPath,
+  //   topicSummary: `## Overview
+  //   3D Printing, or additive manufacturing, transforms digital designs into physical objects by layering material.
+  //   ## Core Technologies
+  //   - **FDM**: Uses plastic filament, great for prototypes
+  //   - **SLA**: High detail, uses liquid resin
+  //   - **SLS**: Complex shapes, uses powder
+  //   ## Common Materials
+  //   - Plastics: PLA, ABS
+  //   - Metals: Titanium, Aluminum
+  //   ## Applications
+  //   - **Medical**: Prosthetics, bioprinting
+  //   - **Industrial**: Prototypes, manufacturing
+  //   - **Consumer**: Custom products
+  //   ## Advantages and Disadvantages
+  //   ### Pros
+  //   - Rapid prototyping
+  //   - Customization
+  //   ### Cons
+  //   - Limited build size
+  //   - Material constraints`,
+  // }
+  // console.log(globalTopic)
   // const res = await addGlobalTopic(globalTopic)
-
   // const topic = await getTopic("physics")
   // console.log(topic, "topic")
-
   // const paths = await markdownFilePaths(process.env.wikiFolderPath!)
   // const mdPath = paths[1080]
-
   // const folderPath = process.env.wikiFolderPath!
   // const relativePath = mdPath.substring(folderPath.length + 1)
   // const topicPath = relativePath.replace(".md", "")
-
   // const baseName = path.basename(mdPath)
   // const topicName = path.parse(baseName).name
   // const topic = await parseMdFile(mdPath)
@@ -118,7 +112,6 @@ async function main() {
   // await deleteTopic("31d7d68c-45d6-11ee-8020-77a7d148ca41")
   // console.log(topicName, "topic name")
   // console.log("complete")
-
   // await writeContentToDesktopFile(JSON.stringify(names), "topics.json")
   // console.log(topicContent.topicPath)
   // const res = await getTopicPath(topicName)

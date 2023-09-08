@@ -37,7 +37,7 @@ export default function Card(props: Props) {
             </div>
             <div class="flex font-light items-center p-1 px-4  gap-4 text-black">
               <div class="relative w-[90px] h-[35px]">
-                <For each={topic.topic.usersWantToLearn}>
+                {/* <For each={topic.topic.usersWantToLearn}>
                   {(learner, i) => {
                     // only show 3 learners max
                     if (i() > 2) {
@@ -61,13 +61,13 @@ export default function Card(props: Props) {
                       </div>
                     )
                   }}
-                </For>
+                </For> */}
               </div>
-              <div>{topic.topic.usersWantToLearn.length} want to learn</div>
+              {/* <div>{topic.topic.usersWantToLearn.length} want to learn</div> */}
             </div>
             <div class="flex font-light items-center p-1 px-4 gap-4 text-black">
               <div class="relative w-[90px] h-[35px]">
-                <For each={topic.topic.usersCurrentlyLearning}>
+                {/* <For each={topic.topic.usersCurrentlyLearning}>
                   {(learner, i) => {
                     // only show 3 learners max
                     if (i() > 2) {
@@ -91,11 +91,11 @@ export default function Card(props: Props) {
                       </div>
                     )
                   }}
-                </For>
+                </For> */}
               </div>
-              <div>
+              {/* <div>
                 {topic.topic.usersCurrentlyLearning.length} currently learning
-              </div>
+              </div> */}
             </div>
             <div class="flex font-light items-center p-1 px-4 gap-4 text-black">
               <div class="relative w-[90px] h-[35px]">
@@ -125,12 +125,12 @@ export default function Card(props: Props) {
                   }}
                 </For>
               </div>
-              <div>{topic.topic.usersHaveLearned.length} have learned</div>
+              {/* <div>{topic.topic.usersHaveLearned.length} have learned</div> */}
             </div>
             <div class="flex  font-light items-center justify-between  px-4  border-t border-slate-400 border-opacity-30 p-3 gap-4 text-black">
               <div class="flex items-center gap-4">
                 <div class="relative w-[90px] h-[35px]">
-                  <For each={topic.topic.moderators}>
+                  {/* <For each={topic.topic.moderators}>
                     {(learner, i) => {
                       // only show 3 learners max
                       if (i() > 2) {
@@ -154,9 +154,9 @@ export default function Card(props: Props) {
                         </div>
                       )
                     }}
-                  </For>
+                  </For> */}
                 </div>
-                <div>{topic.topic.moderators.length} moderators</div>
+                {/* <div>{topic.topic.moderators.length} moderators</div> */}
               </div>
               <div class="text-blue-400 font-light text-[14px]">
                 request to join

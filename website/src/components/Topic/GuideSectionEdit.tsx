@@ -309,22 +309,23 @@ export default function GuideSectionEdit(props: any) {
                 ></div>
               </div>
               <div class="flex flex-col gap-4">
-                <div>Links</div>
+                <div>URL</div>
                 <div class="flex flex-col gap-2">
                   <input
                     type="text"
-                    placeholder="type URL"
+                    placeholder="URL"
                     class="border-slate-400 font-light border rounded-[4px] border-opacity-50 w-full p-2 px-4"
                   />
+                  <div>Title</div>
                   <input
                     type="text"
-                    placeholder="type URL"
+                    placeholder="Title"
                     class="border-slate-400 font-light border rounded-[4px] border-opacity-50 w-full p-2 px-4"
                   />
                 </div>
               </div>
               <div class="flex flex-col gap-4 pt-8">
-                <div>Information</div>
+                <div>Time</div>
                 <div class="w-full flex gap-2">
                   <input
                     type="text"

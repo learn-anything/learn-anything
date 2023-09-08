@@ -53,6 +53,7 @@ export default function SignInPage() {
         })
         ?.split("=")[1]
 
+      signIn(hankoCookie!)
       const res = await mobius.mutate({
         addUser: {
           where: {
@@ -63,7 +64,6 @@ export default function SignInPage() {
       })
       console.log(res, "res")
       // console.log(hankoCookie, "hanko cookie")
-      // signIn(hankoCookie!)
       // navigate("/")
     },
     { passive: true },

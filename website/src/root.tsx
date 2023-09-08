@@ -1,13 +1,7 @@
 // @refresh reload
 import { MatchFilters } from "@solidjs/router/dist/types"
-import {
-  Show,
-  Suspense,
-  createContext,
-  createResource,
-  createSignal,
-  useContext,
-} from "solid-js"
+import Mobius from "graphql-mobius"
+import { Suspense, createContext, createSignal, useContext } from "solid-js"
 import {
   Body,
   ErrorBoundary,
@@ -27,7 +21,6 @@ import createTopicState, { TopicProvider } from "./GlobalContext/topic"
 import { UserProvider, createUserState } from "./GlobalContext/user"
 import "./root.css"
 import UserProfile from "./routes/@(username)"
-import Mobius from "graphql-mobius"
 
 // TODO: probably hanko front end sdk has function to do this
 function getHankoCookie(): string {
@@ -49,34 +42,21 @@ directive @live on QUERY
 directive @oneOf on INPUT_OBJECT
 
 type GlobalTopic {
-  prettyTopicName: String!
-  userLearningStatus: learningStatus
-  globalGuideSummary: String!
-  globalGuideSections: [Section!]!
+  name: String!
+  prettyName: String!
+  topicSummary: String!
+  learningStatus: learningStatus
 }
 
-type Link {
-  title: String!
-  url: String!
-  author: String
-  year: Int
-  completed: Boolean
-  addedByUser: Boolean
-}
-
-type Mutation {
-  addUser(email: String!): String!
+type GlobalTopicPublic {
+  name: String!
+  prettyName: String!
+  topicSummary: String!
 }
 
 type Query {
-  publicGetGlobalTopic(topicName: String!): GlobalTopic!
-}
-
-type Section {
-  title: String!
-  summary: String
-  ordered: Boolean!
-  links: [Link!]!
+  GlobalTopicPublic(topicName: String!): GlobalTopicPublic!
+  GlobalTopic(topicName: String!): GlobalTopic!
 }
 
 enum learningStatus {

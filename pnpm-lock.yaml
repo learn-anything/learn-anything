@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -87,8 +87,8 @@ importers:
         specifier: ^5.1.6
         version: 5.1.6
       tinybase:
-        specifier: ^4.1.4
-        version: 4.1.4(prettier@3.0.3)(sqlite3@5.1.6)
+        specifier: ^4.2.0
+        version: 4.2.0(prettier@3.0.3)(sqlite3@5.1.6)
       undici:
         specifier: ^5.23.0
         version: 5.23.0
@@ -11663,14 +11663,14 @@ packages:
       when-exit: 2.1.1
     dev: false
 
-  /tinybase@4.1.4(prettier@3.0.3)(sqlite3@5.1.6):
-    resolution: {integrity: sha512-MnxNEJhlUJfYMgZ/Vz6Q/jdP/LYAJzqopPSUsDCNa3iim7PX6MWMYIArLRsV1ru4+LGWRXpgJNseGANsRPJz0Q==}
+  /tinybase@4.2.0(prettier@3.0.3)(sqlite3@5.1.6):
+    resolution: {integrity: sha512-GX4gGfOa6rfHKrQ7daONnvqTBgJ5WDfH+gi5cKpxd9Kv9WmgBZRt3W6SI5sPyCL7MYE2eppjFoh7nwi9G/qa0g==}
     hasBin: true
     peerDependencies:
       '@sqlite.org/sqlite-wasm': ^3.42.0-build4
       '@vlcn.io/crsqlite-wasm': ^0.14.0
       automerge-repo: ^0.1.0
-      prettier: '>2.8.8'
+      prettier: ^3.0.3
       react: ^18.2.0
       react-dom: ^18.2.0
       sqlite3: ^5.1.6

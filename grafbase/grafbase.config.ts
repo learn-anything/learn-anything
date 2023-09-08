@@ -31,24 +31,45 @@ const section = g.type("Section", {
   links: g.ref(link).list(),
 })
 
-const globalTopic = g.type("GlobalTopic", {
-  prettyTopicName: g.string(),
-  userLearningStatus: g.enumRef(learningStatus).optional(),
-  globalGuideSummary: g.string(),
-  globalGuideSections: g.ref(section).list(),
+const globalTopicPublic = g.type("GlobalTopicPublic", {
+  name: g.string(),
+  prettyName: g.string(),
+  topicSummary: g.string(),
 })
 
-g.query("publicGetGlobalTopic", {
+g.query("GlobalTopicPublic", {
+  args: { topicName: g.string() },
+  returns: g.ref(globalTopicPublic),
+  resolver: "public/getGlobalTopicPublic",
+})
+
+const globalTopic = g.type("GlobalTopic", {
+  name: g.string(),
+  prettyName: g.string(),
+  topicSummary: g.string(),
+  learningStatus: g.enumRef(learningStatus).optional(),
+})
+
+g.query("GlobalTopic", {
   args: { topicName: g.string() },
   returns: g.ref(globalTopic),
-  resolver: "public/getGlobalTopic",
+  resolver: "getGlobalTopic",
 })
 
-g.mutation("addUser", {
-  args: { email: g.string() },
-  returns: g.string(),
-  resolver: "createUser",
-})
+// g.query("GlobalTopic", {
+//   args: { topicName: g.string() },
+//   returns: g.ref(globalTopic),
+//   resolver: "public/getGlobalTopic",
+// userLearningStatus: g.enumRef(learningStatus).optional(),
+// globalGuideSummary: g.string(),
+// globalGuideSections: g.ref(section).list(),
+// })
+
+// g.mutation("addUser", {
+//   args: { email: g.string() },
+//   returns: g.string(),
+//   resolver: "createUser",
+// })
 
 // g.mutation("")
 

@@ -1,6 +1,8 @@
+import { useTopic } from "../../GlobalContext/topic"
 import Icon from "../Icon"
 
 export default function TitlePill() {
+  const topic = useTopic()
   return (
     <div
       class="w-full flex items-center justify-between rounded-[8px]  bg-[#F3F3F3]"
@@ -9,7 +11,9 @@ export default function TitlePill() {
       <div class="flex items-center justify-center gap-4">
         {/* <div class="w-8 h-8 bg-neutral-200"></div> */}
         {/* TODO: should come from server */}
-        <div class="font-bold text-[20px] text-[#131313]">Physics</div>
+        <div class="font-bold text-[20px] text-[#131313]">
+          {topic.topic.prettyName}
+        </div>
         <div
           class="cursor-pointer text-[#696969] flex items-center justify-center gap-1 text-[16px] leading-[18.78px] border-[#CCCCCC] border-[1px] rounded-[4px]"
           style={{ padding: "6px 10px 6px 10px" }}

@@ -44,16 +44,16 @@ export default function GuideSummary(props: any) {
               }}
             >
               {/* don't show minimise/expand if summary is less than 30 words */}
-              <Show when={topic.topic.guideSummary.split(/\s+/).length > 30}>
+              {/* <Show when={topic.topic.guideSummary.split(/\s+/).length > 30}>
                 <Show when={showSummary()} fallback={<div>Expand</div>}>
                   Minimise
                 </Show>
-              </Show>
+              </Show> */}
             </div>
           </div>
-          <div class="text-[#696969] font-light overflow-hidden text-ellipsis">
+          {/* <div class="text-[#696969] font-light overflow-hidden text-ellipsis">
             {topic.topic.guideSummary}
-          </div>
+          </div> */}
         </div>
         <div class="w-full flex justify-between items-center text-[#696969]">
           {/* <div>Contents</div> */}

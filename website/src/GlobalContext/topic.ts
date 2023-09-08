@@ -27,6 +27,13 @@ interface User {
   username: string
 }
 
+export interface GlobalTopicPublic {
+  name: string
+  prettyName: string
+  topicSummary: string
+  showPage: "Global Guide" | "Links" | "Notes" | "Edit Global Guide"
+}
+
 export interface Topic {
   name: string
   status: "to learn" | "learning" | "learned" | null
@@ -45,124 +52,128 @@ export interface Topic {
 
 // global state of wiki
 export default function createTopicState() {
-  const [topic, setTopic] = createStore<Topic>({
-    name: "Physics",
-    status: null,
+  const [topic, setTopic] = createStore<GlobalTopicPublic>({
+    name: "",
+    prettyName: "",
+    topicSummary: "",
     showPage: "Global Guide",
-    guideSummary:
-      "Physics is the study of matter, energy, and the fundamental forces that drive the natural phenomena of the universe.",
-    expandedSummary: true,
-    guideSections: [
-      {
-        title: "Intro",
-        ordered: true,
-        links: [
-          {
-            title: "So You Want to Learn Physics…",
-            url: "https://www.susanrigetti.com/physics",
-            year: 2021,
-          },
-        ],
-      },
-    ],
-    usersWantToLearn: [
-      {
-        image:
-          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
-        username: "nikiv",
-      },
-      {
-        image:
-          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
-        username: "nikiv",
-      },
-      {
-        image:
-          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
-        username: "nikiv",
-      },
-      {
-        image:
-          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
-        username: "nikiv",
-      },
-    ],
-    usersCurrentlyLearning: [
-      {
-        image:
-          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
-        username: "nikiv",
-      },
-      {
-        image:
-          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
-        username: "nikiv",
-      },
-      {
-        image:
-          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
-        username: "nikiv",
-      },
-      {
-        image:
-          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
-        username: "nikiv",
-      },
-    ],
-    usersHaveLearned: [
-      {
-        image:
-          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
-        username: "nikiv",
-      },
-      {
-        image:
-          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
-        username: "nikiv",
-      },
-      {
-        image:
-          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
-        username: "nikiv",
-      },
-      {
-        image:
-          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
-        username: "nikiv",
-      },
-    ],
-    moderators: [
-      {
-        image:
-          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
-        username: "nikiv",
-      },
-      {
-        image:
-          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
-        username: "nikiv",
-      },
-      {
-        image:
-          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
-        username: "nikiv",
-      },
-      {
-        image:
-          "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
-        username: "nikiv",
-      },
-    ],
   })
 
-  onMount(() => {
-    // mobi
-  })
+  // const [topic, setTopic] = createStore<Topic>({
+  //   name: "Physics",
+  //   status: null,
+  //   showPage: "Global Guide",
+  //   guideSummary:
+  //     "Physics is the study of matter, energy, and the fundamental forces that drive the natural phenomena of the universe.",
+  //   expandedSummary: true,
+  //   guideSections: [
+  //     {
+  //       title: "Intro",
+  //       ordered: true,
+  //       links: [
+  //         {
+  //           title: "So You Want to Learn Physics…",
+  //           url: "https://www.susanrigetti.com/physics",
+  //           year: 2021,
+  //         },
+  //       ],
+  //     },
+  //   ],
+  //   usersWantToLearn: [
+  //     {
+  //       image:
+  //         "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+  //       username: "nikiv",
+  //     },
+  //     {
+  //       image:
+  //         "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+  //       username: "nikiv",
+  //     },
+  //     {
+  //       image:
+  //         "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+  //       username: "nikiv",
+  //     },
+  //     {
+  //       image:
+  //         "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+  //       username: "nikiv",
+  //     },
+  //   ],
+  //   usersCurrentlyLearning: [
+  //     {
+  //       image:
+  //         "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+  //       username: "nikiv",
+  //     },
+  //     {
+  //       image:
+  //         "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+  //       username: "nikiv",
+  //     },
+  //     {
+  //       image:
+  //         "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+  //       username: "nikiv",
+  //     },
+  //     {
+  //       image:
+  //         "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+  //       username: "nikiv",
+  //     },
+  //   ],
+  //   usersHaveLearned: [
+  //     {
+  //       image:
+  //         "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+  //       username: "nikiv",
+  //     },
+  //     {
+  //       image:
+  //         "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+  //       username: "nikiv",
+  //     },
+  //     {
+  //       image:
+  //         "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+  //       username: "nikiv",
+  //     },
+  //     {
+  //       image:
+  //         "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+  //       username: "nikiv",
+  //     },
+  //   ],
+  //   moderators: [
+  //     {
+  //       image:
+  //         "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+  //       username: "nikiv",
+  //     },
+  //     {
+  //       image:
+  //         "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+  //       username: "nikiv",
+  //     },
+  //     {
+  //       image:
+  //         "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+  //       username: "nikiv",
+  //     },
+  //     {
+  //       image:
+  //         "https://pbs.twimg.com/profile_images/1670708987816280065/KgCurTBh_400x400.jpg",
+  //       username: "nikiv",
+  //     },
+  //   ],
+  // })
 
   return {
-    // state
     topic,
-    // actions
+    setTopic: (state: GlobalTopicPublic) => {
+      setTopic(state)
+    },
     setShowPage: (
       state: "Global Guide" | "Links" | "Notes" | "Edit Global Guide",
     ) => {

@@ -1,13 +1,13 @@
 import { For, Match, Show, Switch, onMount } from "solid-js"
-import TitlePill from "../components/Topic/TitlePill"
-import TopicNav from "../components/Topic/TopicNav"
-import Guide from "../components/Topic/Guide"
+import { signedIn } from "../../lib/auth"
+import { useTopic } from "../GlobalContext/topic"
 import Card from "../components/Topic/Card"
+import Guide from "../components/Topic/Guide"
 import GuideEdit from "../components/Topic/GuideEdit"
 import GuideLinks from "../components/Topic/GuideLinks"
 import GuideNotes from "../components/Topic/GuideNotes"
-import { useTopic } from "../GlobalContext/topic"
-import Mobius from "graphql-mobius"
+import TitlePill from "../components/Topic/TitlePill"
+import TopicNav from "../components/Topic/TopicNav"
 import { useMobius } from "../root"
 
 // TODO: for some reason when you first run `pnpm dev`
@@ -35,18 +35,44 @@ export default function Topic() {
   const mobius = useMobius()
 
   onMount(async () => {
-    const res = await mobius.query({
-      getGlobalTopic: {
-        where: {
-          topicName: "physics",
+    if (signedIn()) {
+      const globalTopic = await mobius.query({
+        GlobalTopic: {
+          where: {
+            topicName: "3d-printing",
+          },
+          select: {
+            name: true,
+            prettyName: true,
+            topicSummary: true,
+            learningStatus: true,
+          },
         },
-        select: {
-          prettyTopicName: true,
-          userLearningStatus: true,
+      })
+      if (globalTopic !== null) {
+        // @ts-ignore
+        topic.setTopic(globalTopic.data.GlobalTopic)
+      }
+      console.log(globalTopic, "global topic")
+    } else {
+      const globalTopicPublic = await mobius.query({
+        GlobalTopicPublic: {
+          where: {
+            topicName: "3d-printing",
+          },
+          select: {
+            name: true,
+            prettyName: true,
+            topicSummary: true,
+          },
         },
-      },
-    })
-    console.log(res, "res")
+      })
+      if (globalTopicPublic !== null) {
+        // @ts-ignore
+        topic.setTopic(globalTopicPublic.data.GlobalTopicPublic)
+      }
+      // console.log(globalTopicPublic, "global topic public")
+    }
   })
 
   return (
@@ -157,12 +183,12 @@ export default function Topic() {
                 </div>
               </div>
 
-              <For each={topic.topic.guideSections}>
+              {/* <For each={topic.topic.guideSections}>
                 {(section) => {
                   // TODO: clicking on ection, should jump to that section in focus
                   return <div>{section.title}</div>
                 }}
-              </For>
+              </For> */}
             </div>
             <div id="Cards" class="flex flex-col gap-2">
               {/* TODO:  */}
