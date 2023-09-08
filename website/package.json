@@ -28,7 +28,7 @@
     "clsx": "^2.0.0",
     "dotenv": "^16.3.1",
     "edgedb": "^1.3.5",
-    "graphql-mobius": "/Users/nikiv/clones/mobius",
+    "graphql-mobius": "^0.1.11",
     "graphql-request": "^6.1.0",
     "hono": "^3.5.8",
     "mri": "^1.2.0",
