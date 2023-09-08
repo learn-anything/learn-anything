@@ -1,4 +1,4 @@
-import { For, Match, Show, Switch, onMount } from "solid-js"
+import { Match, Show, Switch, onMount } from "solid-js"
 import { signedIn } from "../../lib/auth"
 import { useTopic } from "../GlobalContext/topic"
 import Card from "../components/Topic/Card"

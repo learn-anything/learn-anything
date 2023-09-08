@@ -1,10 +1,15 @@
 import { For, Show, createEffect, createSignal, untrack } from "solid-js"
-import { useNavigate } from "solid-start"
+import { A, Link, useNavigate } from "solid-start"
 import { createShortcut } from "@solid-primitives/keyboard"
+import { useTopic } from "../../GlobalContext/topic"
+import { useUser } from "../../GlobalContext/user"
+import Icon from "../Icon"
 
 export default function TopicNav() {
   const [showInput, setShowInput] = createSignal(false)
   const navigate = useNavigate()
+  const topic = useTopic()
+  const user = useUser()
 
   // TODO: add fuzzy searching for topics. also consider lower case inputs matching results too
   const [topics, setTopics] = createSignal([
@@ -61,13 +66,12 @@ export default function TopicNav() {
       #InputExpanded {
         width: 500px;
       }
-       #Focused {
+    #Focused {
       background-color: rgba(124,124,124,0.4);
-
     }
     #UnFocused {
       background-color: transparent;
- }
+    }
     #NavMenu {
       display: block;
     }
@@ -102,7 +106,7 @@ export default function TopicNav() {
                 setShowInput(true)
               }}
               id={showInput() ? "InputExpanded" : "InputMinimised"}
-              class="bg-neutral-200 rounded-[4px] transition-all h-full flex items-center text-[#696969] font-light"
+              class="rounded-[4px] transition-all h-full flex items-center text-[#696969] font-light border border-slate-400 drop-shadow-lg"
             >
               <Show
                 when={showInput()}
@@ -155,7 +159,7 @@ export default function TopicNav() {
           <div id="NavButtons" class="flex items-center justify-center gap-4">
             {/* TODO:  */}
             {/* <div>Dark/Light switch</div> */}
-            <div
+            {/* <div
               class="text-black cursor-pointer font-medium"
               onClick={() => {
                 navigate("/about")
@@ -168,22 +172,39 @@ export default function TopicNav() {
               href="https://github.com/learn-anything/learn-anything.xyz"
             >
               GitHub
-            </a>
-            <div
-              onClick={() => {
-                navigate("/auth")
-              }}
-              class="bg-[#3B5CCC] leading-[23.48px] w-[91px] text-white h-[39px] flex items-center justify-center font-light text-[20px] px-4 p-2 rounded-full cursor-pointer"
+            </a>/ */}
+            <Show
+              when={!user.user.signedIn}
+              fallback={
+                <A
+                  class="cursor-pointer"
+                  style={{
+                    color: "black",
+                  }}
+                  href={`/@${user.user.username}`}
+                >
+                  <Icon name="UserProfile" />
+                </A>
+              }
             >
-              Log In
-            </div>
-            {/* TODO:  */}
+              <A class="text-black font-medium" href="/auth">
+                Sign In
+              </A>
+              <A
+                href="/auth"
+                class="bg-black hover:scale-[1.1] leading-[23.48px] w-fit text-white h-[39px] flex items-center justify-center font-medium text-[17px] px-4 p-2 rounded-full cursor-pointer"
+              >
+                Sign Up
+              </A>
+            </Show>
             {/* <div>Menu</div> */}
           </div>
         </div>
-        <div class="flex items-center font-light text-[14px] px-2 h-[30px] w-full bg-[#f5f5f5] text-[#696969]">
-          Art / Physics
-        </div>
+        <Show when={topic.topic.path}>
+          <div class="flex items-center font-light text-[14px] px-2 h-[30px] w-full bg-[#f5f5f5] text-[#696969]">
+            {topic.topic.path}
+          </div>
+        </Show>
       </div>
     </>
   )

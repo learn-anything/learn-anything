@@ -27,13 +27,6 @@ interface User {
   username: string
 }
 
-export interface GlobalTopicPublic {
-  name: string
-  prettyName: string
-  topicSummary: string
-  showPage: "Global Guide" | "Links" | "Notes" | "Edit Global Guide"
-}
-
 export interface Topic {
   name: string
   status: "to learn" | "learning" | "learned" | null
@@ -50,13 +43,22 @@ export interface Topic {
   showPage: "Global Guide" | "Links" | "Notes" | "Edit Global Guide"
 }
 
+export interface GlobalTopicPublic {
+  showPage: "Global Guide" | "Links" | "Notes" | "Edit Global Guide"
+  name: string
+  prettyName: string
+  status?: "to learn" | "learning" | "learned" | null
+  topicSummary?: string
+  path?: string
+}
+
 // global state of wiki
 export default function createTopicState() {
   const [topic, setTopic] = createStore<GlobalTopicPublic>({
+    showPage: "Global Guide",
     name: "",
     prettyName: "",
-    topicSummary: "",
-    showPage: "Global Guide",
+    status: "to learn",
   })
 
   // const [topic, setTopic] = createStore<Topic>({
@@ -173,6 +175,9 @@ export default function createTopicState() {
     topic,
     setTopic: (state: GlobalTopicPublic) => {
       setTopic(state)
+    },
+    setLearningStatus: (state: any) => {
+      setTopic({ status: state })
     },
     setShowPage: (
       state: "Global Guide" | "Links" | "Notes" | "Edit Global Guide",

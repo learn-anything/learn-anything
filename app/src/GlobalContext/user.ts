@@ -32,9 +32,7 @@ export function createUserState() {
   })
 
   return {
-    // state
     user,
-    // actions
     setShowCommandPalette: (state: boolean) => {
       return setUser({ showCommandPalette: state })
     },
