@@ -63,7 +63,7 @@ export default function SignInPage() {
           select: true,
         },
       })
-      // console.log(res, "res")
+      console.log(res, "res")
       // console.log(hankoCookie, "hanko cookie")
       // navigate("/")
     },

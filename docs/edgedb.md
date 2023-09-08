@@ -73,8 +73,15 @@ select User {
 
 ```
 update User
-  filter .email = "nikita@nikiv.dev"
+  filter .email = ".."
   set {
     topicsLearning += (select GlobalTopic filter .id = <uuid>"30166980-4e3c-11ee-8ff7-4363a129bf00")
   }
+```
+
+### Delete user
+
+```
+delete User
+filter .email = '..';
 ```
