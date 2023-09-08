@@ -1,5 +1,5 @@
-import { getGlobalTopicPublic } from "edgedb/crud/global-topic"
-import { validHankoToken } from "lib/grafbase/grafbase"
+import { getGlobalTopicPublic } from "../../edgedb/crud/global-topic"
+import { validHankoToken } from "../../lib/grafbase/grafbase"
 
 export default async function getGlobalTopic(
   root: any,

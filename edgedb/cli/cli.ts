@@ -13,7 +13,8 @@ import { getTopic, getTopicTitles } from "../crud/topic"
 import { addUser, getUserIdByName } from "../crud/user"
 import { addWiki, getWikiIdByUserId } from "../crud/wiki"
 import { getGlobalDispatcher } from "undici"
-import { getGlobalTopicPublic } from "edgedb/crud/global-topic"
+import { getGlobalTopicPublic } from "../crud/global-topic"
+// import { getGlobalTopicPublic } from "edgedb/crud/global-topic"
 // import { getAllGlobalTopics } from "../crud/global-topic"
 // import { writeContentToDesktopFile } from "./util"
 
@@ -60,8 +61,8 @@ async function main() {
   //   await addWiki(userId!)
   // }
 
-  const res = await getGlobalTopicPublic("3d-printing")
-  console.log(res)
+  // const res = await getGlobalTopicPublic("3d-printing")
+  // console.log(res)
 
   return true
   // const topicTitles = await getTopicTitles()

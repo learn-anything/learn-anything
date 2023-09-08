@@ -10,9 +10,9 @@ type User = {
 // global state of user
 export function createUserState() {
   const [user, setUser] = createStore<User>({
-    username: "nikiv",
+    username: "",
     email: "",
-    signedIn: true,
+    signedIn: false,
   })
 
   return {
