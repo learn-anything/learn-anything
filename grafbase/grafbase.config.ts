@@ -65,11 +65,11 @@ g.query("GlobalTopic", {
 // globalGuideSections: g.ref(section).list(),
 // })
 
-// g.mutation("addUser", {
-//   args: { email: g.string() },
-//   returns: g.string(),
-//   resolver: "createUser",
-// })
+g.mutation("addUser", {
+  args: { email: g.string() },
+  returns: g.string(),
+  resolver: "addUser",
+})
 
 // g.mutation("")
 

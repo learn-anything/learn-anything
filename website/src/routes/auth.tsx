@@ -55,14 +55,14 @@ export default function SignInPage() {
 
       signIn(hankoCookie!)
 
-      // const res = await mobius.mutate({
-      //   addUser: {
-      //     where: {
-      //       email: "nikita.voloboev@gmail.com",
-      //     },
-      //     select: true,
-      //   },
-      // })
+      const res = await mobius.mutate({
+        addUser: {
+          where: {
+            email: "nikita.voloboev@gmail.com",
+          },
+          select: true,
+        },
+      })
       // console.log(res, "res")
       // console.log(hankoCookie, "hanko cookie")
       // navigate("/")

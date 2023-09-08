@@ -1,7 +1,7 @@
 import { addUser } from "../../edgedb/crud/user"
 import { validHankoToken } from "../../lib/grafbase/grafbase"
 
-export default async function createUser(
+export default async function addUserResolver(
   root: any,
   args: { email: string },
   context: any,

@@ -28,7 +28,7 @@
     "clsx": "^2.0.0",
     "dotenv": "^16.3.1",
     "edgedb": "^1.3.5",
-    "graphql-mobius": "^0.1.11",
+    "graphql-mobius": "^0.1.12",
     "graphql-request": "^6.1.0",
     "hono": "^3.5.8",
     "mri": "^1.2.0",
@@ -37,7 +37,7 @@
     "solid-markdown": "^1.2.2",
     "solid-start": "^0.3.5",
     "solid-start-cloudflare-pages": "^0.3.5",
-    "undici": "^5.23.0",
+    "undici": "^5.24.0",
     "zod": "^3.22.2"
   },
   "engines": {

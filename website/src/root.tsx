@@ -54,6 +54,10 @@ type GlobalTopicPublic {
   topicSummary: String!
 }
 
+type Mutation {
+  addUser(email: String!): String!
+}
+
 type Query {
   GlobalTopicPublic(topicName: String!): GlobalTopicPublic!
   GlobalTopic(topicName: String!): GlobalTopic!

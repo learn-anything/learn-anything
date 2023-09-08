@@ -288,7 +288,7 @@ importers:
         version: 0.27.3(solid-js@1.7.8)(solid-start@0.2.29)(vite@4.4.7)
       solid-start-node:
         specifier: ^0.2.26
-        version: 0.2.29(solid-start@0.2.29)(undici@5.23.0)(vite@4.4.7)
+        version: 0.2.29(solid-start@0.2.29)(undici@5.24.0)(vite@4.4.7)
       tailwindcss:
         specifier: ^3.3.2
         version: 3.3.3
@@ -341,8 +341,8 @@ importers:
         specifier: ^1.3.5
         version: 1.3.5
       graphql-mobius:
-        specifier: ^0.1.11
-        version: 0.1.11(graphql@16.7.1)
+        specifier: ^0.1.12
+        version: 0.1.12(graphql@16.7.1)
       graphql-request:
         specifier: ^6.1.0
         version: 6.1.0(graphql@16.7.1)
@@ -368,8 +368,8 @@ importers:
         specifier: ^0.3.5
         version: 0.3.5(solid-start@0.3.5)(vite@4.4.9)
       undici:
-        specifier: ^5.23.0
-        version: 5.23.0
+        specifier: ^5.24.0
+        version: 5.24.0
       zod:
         specifier: ^3.22.2
         version: 3.22.2
@@ -7693,8 +7693,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /graphql-mobius@0.1.11(graphql@16.7.1):
-    resolution: {integrity: sha512-yvliQg5vH3Ay0/eDl3zBfA7lXuGGJ8N4E6GR8xQ1G2Af/nvDDbI373BXWOE5acCrlV5pPx/pN7SJOinVck2paQ==}
+  /graphql-mobius@0.1.12(graphql@16.7.1):
+    resolution: {integrity: sha512-EyKpCLzpW0e5BSLy4dJ9s/WCC8n6UEdNLS4dLbVMimOD2OIMq1bm+8t7PpjPvdve7JASjFrzM8S0XNKKhRePLg==}
     peerDependencies:
       graphql: '*'
       graphql-yoga: '*'
@@ -11038,7 +11038,7 @@ packages:
       - ioredis
       - utf-8-validate
 
-  /solid-start-node@0.2.29(solid-start@0.2.29)(undici@5.23.0)(vite@4.4.7):
+  /solid-start-node@0.2.29(solid-start@0.2.29)(undici@5.24.0)(vite@4.4.7):
     resolution: {integrity: sha512-mvQADQN6K7NF88J9ZH2E7aG4DiXpuCj97FWpY+SUoezNJw2pHsDGhbYFONinAic+Baa6tbzuPP2jszb6xoRsag==}
     peerDependencies:
       solid-start: '*'
@@ -11054,7 +11054,7 @@ packages:
       sirv: 2.0.3
       solid-start: 0.2.29(@solidjs/meta@0.28.6)(@solidjs/router@0.8.2)(solid-js@1.7.8)(solid-start-cloudflare-pages@0.2.29)(solid-start-node@0.2.29)(vite@4.4.7)
       terser: 5.18.1
-      undici: 5.23.0
+      undici: 5.24.0
       vite: 4.4.7(@types/node@20.4.1)
     transitivePeerDependencies:
       - supports-color
@@ -11143,7 +11143,7 @@ packages:
       sirv: 2.0.3
       solid-js: 1.7.8
       solid-start-cloudflare-pages: 0.2.29(solid-start@0.2.29)(vite@4.4.7)
-      solid-start-node: 0.2.29(solid-start@0.2.29)(undici@5.23.0)(vite@4.4.7)
+      solid-start-node: 0.2.29(solid-start@0.2.29)(undici@5.24.0)(vite@4.4.7)
       terser: 5.18.1
       undici: 5.23.0
       vite: 4.4.7(@types/node@20.4.1)
@@ -11908,6 +11908,12 @@ packages:
 
   /undici@5.23.0:
     resolution: {integrity: sha512-1D7w+fvRsqlQ9GscLBwcAJinqcZGHUKjbOmXdlE/v8BvEGXjeWAax+341q44EuTcHXXnfyKNbKRq4Lg7OzhMmg==}
+    engines: {node: '>=14.0'}
+    dependencies:
+      busboy: 1.6.0
+
+  /undici@5.24.0:
+    resolution: {integrity: sha512-OKlckxBjFl0oXxcj9FU6oB8fDAaiRUq+D8jrFWGmOfI/gIyjk/IeS75LMzgYKUaeHzLUcYvf9bbJGSrUwTfwwQ==}
     engines: {node: '>=14.0'}
     dependencies:
       busboy: 1.6.0

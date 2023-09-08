@@ -20,31 +20,34 @@ export async function getGlobalTopicPublic(topicName: string) {
   return result
 }
 
-export async function getGlobalTopic(topicName: string, email: string) {
-  const query = e.params(
-    {
-      topicName: e.str,
-      email: e.str,
-    },
-    (params) => {
-      e.select(e.GlobalTopic, (gt) => {
-        return {
-          id: true,
-          name: true,
-          prettyName: true,
-          topicSummary: true,
-          // learningStatus:
-          filter_single: { name: topicName },
-        }
-      })
-    },
-  )
+// export async function getGlobalTopic(topicName: string, email: string) {
+//   const query = e.params(
+//     {
+//       topicName: e.str,
+//       email: e.str,
+//     },
+//     (params) => {
+//       e.select(e.GlobalTopic, (gt) => {
+//         const userQuery = e.select(e.User, (user) => {
+//           topicsToLearn: e.op("exists", user.topicsToLearn)
+//         })
+//         return {
+//           id: true,
+//           name: true,
+//           prettyName: true,
+//           topicSummary: true,
+//           filter_single: { name: topicName },
+//           // learningStatus:
+//         }
+//       })
+//     },
+//   )
 
-  // const result = await query.run(client)
-
-  // const q = e.select(e.User, () => ({}))
-  // return result
-}
+//   return query.run(client, {
+//     topicName,
+//     email
+//   })
+// }
 
 // Add a global topic
 // export async function addGlobalTopic(topic: GlobalTopic) {
