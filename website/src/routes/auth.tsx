@@ -43,8 +43,6 @@ export default function SignInPage() {
     document,
     "hankoAuthSuccess",
     async (e) => {
-      // console.log(e, "e from hanko auth success")
-
       const allCookies = document.cookie
       const hankoCookie = allCookies
         .split(";")
@@ -52,20 +50,16 @@ export default function SignInPage() {
           return cookie
         })
         ?.split("=")[1]
-
       signIn(hankoCookie!)
-
-      const res = await mobius.mutate({
+      await mobius.mutate({
         addUser: {
           where: {
-            email: "nikita.voloboev@gmail.com",
+            email: "nikita@nikiv.dev",
           },
           select: true,
         },
       })
-      console.log(res, "res")
-      // console.log(hankoCookie, "hanko cookie")
-      // navigate("/")
+      navigate("/")
     },
     { passive: true },
   )

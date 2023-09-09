@@ -61,6 +61,7 @@ type Mutation {
 type Query {
   GlobalTopicPublic(topicName: String!): GlobalTopicPublic!
   GlobalTopic(topicName: String!): GlobalTopic!
+  stripe(plan: String!): String!
 }
 
 enum learningStatus {

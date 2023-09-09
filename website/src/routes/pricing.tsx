@@ -1,11 +1,21 @@
-import { Show, createSignal } from "solid-js"
+import { Show, createSignal, onMount } from "solid-js"
 import { useNavigate } from "solid-start"
 import clsx from "clsx"
+import { signedIn } from "../../lib/auth"
+import { useMobius } from "../root"
 
 export default function Pricing() {
   const [planChosen, setPlanChosen] = createSignal("monthly")
   const [showModal, setShowModal] = createSignal(false)
   const navigate = useNavigate()
+  const [signedInSignal, setSignedInSignal] = createSignal(false)
+  const mobius = useMobius()
+
+  onMount(() => {
+    if (signedIn()) {
+      setSignedInSignal(true)
+    }
+  })
 
   return (
     <>
@@ -41,15 +51,16 @@ export default function Pricing() {
           >
             <img class="rounded-full" src="/logo.jpg" alt="" />
           </div>
-          {/* TODO: conditional on user log in */}
-          <div
-            class="cursor-pointer bg-black text-white px-4 p-1 rounded-full hover:scale-[1.1]"
-            onClick={() => {
-              navigate("/auth")
-            }}
-          >
-            Log In
-          </div>
+          <Show when={!signedInSignal()}>
+            <div
+              class="cursor-pointer bg-black text-white px-4 p-1 rounded-full hover:scale-[1.1]"
+              onClick={() => {
+                navigate("/auth")
+              }}
+            >
+              Log In
+            </div>
+          </Show>
         </div>
         <div class="h-full w-full px-[15%] flex flex-col gap-6">
           <div class="flex items-center justify-between">
@@ -104,12 +115,9 @@ export default function Pricing() {
               </div>
               <div
                 class={clsx(
-                  "flex items-center justify-center rounded-lg bg-black w-full h-16 opacity-80 text-white cursor-pointer",
+                  "flex items-center justify-center rounded-lg bg-black w-full h-16 opacity-80 text-white",
                   true && "bg-neutral-800 opacity-80 text-gray-300",
                 )}
-                onClick={() => {
-                  setShowModal(true)
-                }}
               >
                 Current plan
               </div>
@@ -150,7 +158,34 @@ export default function Pricing() {
                   <div>• AI interface to all your notes (soon) </div>
                 </div>
               </div>
-              <div class="flex items-center justify-center rounded-lg bg-black w-full h-16 opacity-80 text-white">
+              <div
+                class="flex items-center justify-center rounded-lg bg-black w-full h-16 opacity-80 text-white cursor-pointer"
+                onClick={async () => {
+                  if (signedInSignal()) {
+                    if (planChosen() === "monthly") {
+                      await mobius.query({
+                        stripe: {
+                          where: {
+                            plan: "month",
+                          },
+                          select: true,
+                        },
+                      })
+                    } else {
+                      await mobius.query({
+                        stripe: {
+                          where: {
+                            plan: "year",
+                          },
+                          select: true,
+                        },
+                      })
+                    }
+                  } else {
+                    setShowModal(true)
+                  }
+                }}
+              >
                 Select this plan
               </div>
             </div>

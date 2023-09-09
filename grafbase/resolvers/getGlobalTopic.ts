@@ -1,12 +1,12 @@
 import { getGlobalTopicPublic } from "../../edgedb/crud/global-topic"
-import { validHankoToken } from "../../lib/grafbase/grafbase"
+import { userEmailFromHankoToken } from "../../lib/grafbase/grafbase"
 
 export default async function getGlobalTopic(
   root: any,
   args: { topicName: string },
   context: any,
 ) {
-  if (await validHankoToken(context)) {
+  if (await userEmailFromHankoToken(context)) {
     const topic = await getGlobalTopicPublic("3d-printing")
     return topic
     // const globalTopic = {

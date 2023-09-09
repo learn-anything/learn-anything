@@ -1,7 +1,6 @@
 import { jwtVerify, createRemoteJWKSet } from "jose"
 
-// used in grafbase resolvers to validate the token
-export async function validHankoToken(context: any) {
+export async function userEmailFromHankoToken(context: any) {
   // validate as in local grafbase server
   if (process.env.LOCAL_USE) {
     return true
@@ -21,5 +20,5 @@ export async function validHankoToken(context: any) {
     // return "Verification failed"
     return false
   }
-  return true
+  return "nikita@nikiv.dev"
 }
