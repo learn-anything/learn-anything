@@ -50,6 +50,7 @@ export interface GlobalTopicPublic {
   status?: "to learn" | "learning" | "learned" | null
   topicSummary?: string
   path?: string
+  mode: "Default" | "AddLinkModal" | "EditGuide"
 }
 
 // global state of wiki
@@ -59,6 +60,7 @@ export default function createTopicState() {
     name: "",
     prettyName: "",
     status: "to learn",
+    mode: "Default",
   })
 
   // const [topic, setTopic] = createStore<Topic>({
@@ -183,6 +185,9 @@ export default function createTopicState() {
       state: "Global Guide" | "Links" | "Notes" | "Edit Global Guide",
     ) => {
       setTopic({ showPage: state })
+    },
+    setMode: (state: "Default" | "AddLinkModal" | "EditGuide") => {
+      setTopic({ mode: state })
     },
   }
 }
