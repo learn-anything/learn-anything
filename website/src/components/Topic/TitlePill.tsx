@@ -20,9 +20,9 @@ export default function TitlePill() {
             topic.setLearningStatus("to learn")
           }}
           class={clsx(
-            "px-[10px] p-[6px] pl-[4.5px] active:px-[12px] cursor-pointer text-[#696969] flex items-center justify-center gap-1 text-[16px] leading-[18.78px] border-[#CCCCCC] border-[1px] rounded-[6px] hover:bg-black hover:text-white transition-all",
+            "px-[10px] p-[6px] pl-[4.5px] active:scale-[1.03] cursor-pointer text-[#696969] flex items-center justify-center gap-1 text-[16px] leading-[18.78px] border-[#CCCCCC] border-[1px] rounded-[6px] hover:bg-blue-500 hover:text-white transition-all",
             topic.topic.status === "to learn" &&
-              "bg-[#CCCCCC] text-black border-black",
+              "text-white border-none bg-blue-500",
           )}
         >
           <Icon name="Learn" />
@@ -33,9 +33,9 @@ export default function TitlePill() {
             topic.setLearningStatus("learning")
           }}
           class={clsx(
-            "px-[10px] p-[6px] pl-[4.5px] active:px-[12px] cursor-pointer text-[#696969] flex items-center justify-center gap-1 text-[16px] leading-[18.78px] border-[#CCCCCC] border-[1px] rounded-[6px]  hover:bg-black hover:text-white transition-all",
+            "px-[10px] p-[6px] pl-[4.5px] active:scale-[1.03] cursor-pointer text-[#696969] flex items-center justify-center gap-1 text-[16px] leading-[18.78px] border-[#CCCCCC] border-[1px] rounded-[6px]  hover:bg-blue-500 hover:text-white transition-all",
             topic.topic.status === "learning" &&
-              "bg-[#CCCCCC] text-black border-black",
+              "bg-blue-500 text-white border-none",
           )}
         >
           <Icon name="Learn" />
@@ -46,9 +46,9 @@ export default function TitlePill() {
             topic.setLearningStatus("learned")
           }}
           class={clsx(
-            "px-[10px] p-[6px] pl-[4.5px] active:px-[12px] cursor-pointer text-[#696969] flex items-center justify-center gap-1 text-[16px] leading-[18.78px] border-[#CCCCCC] border-[1px] rounded-[6px]  hover:bg-black hover:text-white transition-all",
+            "px-[10px] p-[6px] pl-[4.5px] active:scale-[1.03] cursor-pointer text-[#696969] flex items-center justify-center gap-1 text-[16px] leading-[18.78px] border-[#CCCCCC] border-[1px] rounded-[6px]  hover:bg-blue-500 hover:text-white transition-all",
             topic.topic.status === "learned" &&
-              "bg-[#CCCCCC] text-black border-black",
+              "bg-blue-500 text-white border-none",
           )}
         >
           <Icon name="Learn" />

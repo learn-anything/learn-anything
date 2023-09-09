@@ -14,33 +14,46 @@ export default function UserProfile() {
   return (
     <>
       <style>{`
-      #InfoSidebar {
+      #ProfileSuggest {
         display: none;
       }
-      #InfoMain {
+      #ProfileInfo {
         width: 100%;
       }
-      #InfoOptions {
-        display: none;
+
+      #ProfileMain {
+        flex-direction: column;
+      }
+      #ProfileSidebar {
+        width: 100%;
+        height: fit-content;
       }
 
     @media (min-width: 700px) {
-      #InfoSidebar {
+      #ProfileMain {
+       flex-direction: row;
+      }
+      #ProfileSuggest {
         display: flex;
       }
-      #InfoMain {
-        width: 65%;
+      #ProfileMain {
+        width: 100%;
       }
-      #InfoOptions {
-        display: flex
+      #ProfileSidebar {
+        width: 30%;
+        height: 100vh;
       }
+
     }
     `}</style>
       <div class="w-screen h-full text-black bg-white">
         <TopicNav />
 
-        <div class="h-full w-full flex justify-center">
-          <div class="p-[40px] h-screen w-[30%] flex flex-col gap-6 overflow-auto bg-[#F6F6F7]">
+        <div id="ProfileMain" class="h-full w-full flex justify-center">
+          <div
+            id="ProfileSidebar"
+            class="p-[40px] min-w-[250px] h-screen w-[30%] flex flex-col gap-6 overflow-auto bg-[#F6F6F7]"
+          >
             <div class="flex justify-between items-center">
               <div class="font-bold gap-2 flex items-center">
                 <div class="h-[35px] w-[35px] bg-neutral-300 rounded-full"></div>
@@ -67,7 +80,7 @@ export default function UserProfile() {
             <div>Socials</div>
           </div>
           <div
-            id="InfoMain"
+            id="ProfileInfo"
             class="h-full min-h-screen flex gap-6 flex-col p-[40px]"
           >
             <div class="w-full bg-[#FAFAFA] rounded-[4px]">
@@ -143,8 +156,8 @@ export default function UserProfile() {
             </Switch>
           </div>
           <div
-            id="InfoSidebar"
-            class="h-full w-[25%] flex flex-col gap-6 overflow-auto"
+            id="ProfileSuggest"
+            class="h-full w-[30%] flex flex-col gap-6 overflow-auto"
             style={{ padding: "40px 40px 40px 0px" }}
           >
             <div id="Cards" class="flex flex-col gap-2">
