@@ -51,27 +51,33 @@ export async function addSectionToGlobalGuideOfTopic(
   sectionName: string,
   order: number,
 ) {
-  const query = e.update(e.GlobalGuide, (globalGuide) => {
-    return {
-      filter:
-    }
-  })
-  // const query = e.select(e.GlobalTopic, (gt) => {
-  //   return {
-  //     filter_single: { name: topicName },
-  //     latestGlobalGuide: e.update(e.GlobalGuide, (globalGuide) => {
+  const newSection = await e
+    .insert(e.GlobalGuideSection, {
+      title: sectionName,
+      order: order,
+    })
+    .run(client)
+
+  const topic = await e
+    .select(e.GlobalTopic, () => ({
+      filter_single: { name: topicName },
+      latestGlobalGuide: true,
+    }))
+    .run(client)
+
+  // return await e
+  //   .update(e.GlobalGuide, () => {
   //     return {
-  //      set: {
-  //       sections: {"+=": e.insert(e.GlobalGuideSection, {
-  //         title: sectionName,
-  //         order: order
-  //       })}
-  //      }
+  //       filter_single: { id: topic.latestGlobalGuide.id },
+  //       set: {
+  //         "+=": e.select(e.GlobalGuideSection, () => ({
+  //           filter_single: { id: newSection.id },
+  //         })),
+  //       },
   //     }
-  //     })
-  //   }
-  // })
-  // return query.run(client)
+  //   })
+  // .toEdgeQL()
+  // .run(client)
 }
 
 // export async function getGlobalTopic(topicName: string, email: string) {
