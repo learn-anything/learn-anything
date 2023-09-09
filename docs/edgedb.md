@@ -85,3 +85,13 @@ update User
 delete User
 filter .email = '..';
 ```
+
+### Add GlobalGuide to a GlobalTopic
+
+```
+update GlobalTopic
+  filter .name = "3d-printing"
+  set {
+    latestGlobalGuide := (insert GlobalGuide {})
+  }
+```

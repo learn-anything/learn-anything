@@ -71,8 +71,13 @@ g.mutation("addUser", {
   resolver: "addUser",
 })
 
-// g.mutation("")
+g.query("stripe", {
+  args: { plan: g.string() },
+  returns: g.string(),
+  resolver: "stripe",
+})
 
+// g.mutation("")
 // g.query("getTopicPaths", {
 //   returns: g.list(
 //     g.object({
@@ -82,11 +87,8 @@ g.mutation("addUser", {
 //   ),
 //   resolver: "getTopicPaths",
 // })
-
 // const topicPathsOutput = g.input
-
 // g.type("TopicPathOutput", {})
-
 // g.mutation('updateTopic', {
 //   args: { name: g.object({
 //     summary: g.string(),

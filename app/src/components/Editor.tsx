@@ -1,5 +1,11 @@
 import { KeyCode, KeyMod, editor as mEditor } from "monaco-editor"
-import { createEffect, createSignal, onCleanup, onMount } from "solid-js"
+import {
+  createEffect,
+  createSignal,
+  onCleanup,
+  onMount,
+  untrack,
+} from "solid-js"
 import { useWiki } from "../GlobalContext/wiki"
 
 const [darkMode, setDarkMode] = createSignal("vs")

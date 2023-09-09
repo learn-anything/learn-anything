@@ -51,3 +51,27 @@ export async function getUserIdByName(name: string) {
     return res[0].id
   }
 }
+
+export async function updateLearningStatusForGlobalTopic(
+  email: string,
+  topicName: string,
+  learningStatus: "learning" | "learned" | "to learn",
+) {
+  if (learningStatus === "learning") {
+    const res = await e.update(e.User, (user) => {
+      return {
+        filter_single: { email },
+        set: {
+          topicsLearning: {
+            "+=": e.select(e.GlobalTopic, (gt) => {
+              return {
+                filter_single: { name: topicName },
+              }
+            }),
+          },
+        },
+      }
+    })
+    return res.run(client)
+  }
+}

@@ -214,18 +214,24 @@ module default {
     #   on target delete allow;
     # };
     multi globalGuides: GlobalGuide;
+    required latestGlobalGuide: GlobalGuide
   }
   # every time a change to GlobalGuide is made, a new revision is created
   type GlobalGuide {
-    # global topic
-    # required link globalTopic := .<globalGuide[is GlobalTopic];
-    # required link globalTopic: GlobalTopic;
     required created_at: datetime {
       readonly := true;
       default := datetime_of_statement();
     }
     # guide is split by sections
     multi sections: GlobalGuideSection;
+  }
+  type GlobalGuideSection {
+    # title of section
+    required title: str;
+    # list of links in a section
+    multi links: GlobalLink;
+    # position of the section in the guide
+    order: int16;
   }
   type UserGuide {
     # global topic
@@ -240,14 +246,6 @@ module default {
     required link user: User;
   }
   type UserGuideSection {
-    # title of section
-    required title: str;
-    # list of links in a section
-    multi links: GlobalLink;
-    # position of the section in the guide
-    order: int16;
-  }
-  type GlobalGuideSection {
     # title of section
     required title: str;
     # list of links in a section

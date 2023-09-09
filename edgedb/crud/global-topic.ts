@@ -20,6 +20,60 @@ export async function getGlobalTopicPublic(topicName: string) {
   return result
 }
 
+export async function addNewSectionToGlobalGuide(
+  topicName: string,
+  sectionTitle: string,
+  order: number,
+) {
+  const query = e.insert(e.GlobalGuideSection, {
+    title: sectionTitle,
+    order: order,
+  })
+}
+
+export async function createGlobalTopicWithGlobalGuide(
+  topicName: string,
+  prettyName: string,
+  topicSummary: string,
+) {
+  const query = e.insert(e.GlobalTopic, {
+    name: topicName,
+    prettyName: prettyName,
+    topicSummary: topicSummary,
+    public: true,
+    latestGlobalGuide: e.insert(e.GlobalGuide, {}),
+  })
+  return query.run(client)
+}
+
+export async function addSectionToGlobalGuideOfTopic(
+  topicName: string,
+  sectionName: string,
+  order: number,
+) {
+  const query = e.update(e.GlobalGuide, (globalGuide) => {
+    return {
+      filter:
+    }
+  })
+  // const query = e.select(e.GlobalTopic, (gt) => {
+  //   return {
+  //     filter_single: { name: topicName },
+  //     latestGlobalGuide: e.update(e.GlobalGuide, (globalGuide) => {
+  //     return {
+  //      set: {
+  //       sections: {"+=": e.insert(e.GlobalGuideSection, {
+  //         title: sectionName,
+  //         order: order
+  //       })}
+  //      }
+  //     }
+  //     })
+  //   }
+  // })
+  // return query.run(client)
+}
+
 // export async function getGlobalTopic(topicName: string, email: string) {
 //   const query = e.params(
 //     {

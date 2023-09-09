@@ -60,6 +60,7 @@
     "solid-start": "^0.3.5",
     "solid-start-cloudflare-pages": "^0.3.5",
     "sqlite3": "^5.1.6",
+    "stripe": "^12.9.0",
     "tinybase": "^4.2.0",
     "undici": "^5.23.0",
     "vite-tsconfig-paths": "^4.2.0",
