@@ -213,10 +213,11 @@ module default {
     # link globalGuide: GlobalGuide {
     #   on target delete allow;
     # };
+    # past changes to global guide versioned by time
     multi globalGuides: GlobalGuide;
+    # there is one global guide attached to each global topic
     required latestGlobalGuide: GlobalGuide
   }
-  # every time a change to GlobalGuide is made, a new revision is created
   type GlobalGuide {
     required created_at: datetime {
       readonly := true;

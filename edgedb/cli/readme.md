@@ -22,14 +22,22 @@ wikiFolderPath=/Users/nikiv/src/learn-anything.xyz/seed/wiki/nikita
 
 ## Run
 
+Can run from root using:
+
+```
+pnpm run db:cli
+```
+
+Which using [watchexec](https://watchexec.github.io) will rerun the file on any of the `.ts` file changes.
+
+```
+watchexec --no-vcs-ignore --restart --exts ts "tput reset && tsx edgedb/cli/cli.ts" --project-origin
+```
+
+Can also run with:
+
 ```
 tsx cli.ts
-```
-
-Or using [watchexec](https://watchexec.github.io) to rerun the file on any of the `.ts` file changes.
-
-```
-watchexec --no-vcs-ignore --restart --exts ts "tput reset && tsx $argv" --project-origin
 ```
 
 ## Tasks

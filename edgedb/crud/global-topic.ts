@@ -51,21 +51,38 @@ export async function addSectionToGlobalGuideOfTopic(
   sectionName: string,
   order: number,
 ) {
-  const newSection = await e
-    .insert(e.GlobalGuideSection, {
-      title: sectionName,
-      order: order,
-    })
-    .run(client)
-
   const topic = await e
     .select(e.GlobalTopic, () => ({
       filter_single: { name: topicName },
       latestGlobalGuide: true,
     }))
     .run(client)
+  console.log(topic)
 
-  // return await e
+  const newSection = await e.insert(e.GlobalGuideSection, {
+    title: sectionName,
+    order: order,
+  })
+  // .run(client)
+  // .toEdgeQL()
+
+  // TODO: not working, should also consider order when adding a section
+  await e.update(e.GlobalTopic, (globalTopic) => {
+    return {
+      filter_single: { name: topicName },
+      set: {
+        latestGlobalGuide: {
+          sections: {
+            "+=": e.select(e.GlobalGuideSection, () => ({
+              filter_single: { id: newSection.id },
+            })),
+          },
+        },
+      },
+    }
+  })
+
+  // const updatedSection = await e
   //   .update(e.GlobalGuide, () => {
   //     return {
   //       filter_single: { id: topic.latestGlobalGuide.id },
@@ -76,8 +93,10 @@ export async function addSectionToGlobalGuideOfTopic(
   //       },
   //     }
   //   })
-  // .toEdgeQL()
+  //   .toEdgeQL()
   // .run(client)
+
+  // console.log(updatedSection)
 }
 
 // export async function getGlobalTopic(topicName: string, email: string) {

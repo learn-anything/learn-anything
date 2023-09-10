@@ -14,6 +14,7 @@
     "db:watch": "cd edgedb && edgedb watch",
     "db:migrate": "cd edgedb && edgedb migration create && edgedb migrate && npx @edgedb/generate edgeql-js --target ts",
     "db:ts-generate": "cd edgedb && npx @edgedb/generate edgeql-js --target ts",
+    "db:cli": "cd edgedb && watchexec --no-vcs-ignore --restart --exts ts \"tput reset && tsx cli/cli.ts\" --project-origin .",
     "grafbase": "npx grafbase@latest dev",
     "ts-run": "tsx run.ts",
     "test": "vitest",

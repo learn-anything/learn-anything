@@ -1,5 +1,5 @@
-// goal of CLI is to seed LA EdgeDB database with topics
-// see readme.md for more info on how to run this script
+// goal of CLI is to quickly iterate with EdgeDB using edgedb-js query builder
+// see readme.md for info on how to run this script
 
 import dotenv from "dotenv"
 import * as fs from "fs"
@@ -9,53 +9,14 @@ import { toMarkdown } from "mdast-util-to-markdown"
 import { toString } from "mdast-util-to-string"
 import * as path from "path"
 import * as prettier from "prettier"
-import { getTopic, getTopicTitles } from "../crud/topic"
+import { addSectionToGlobalGuideOfTopic } from "../crud/global-topic"
 import { addUser, getUserIdByName } from "../crud/user"
-import { addWiki, getWikiIdByUserId } from "../crud/wiki"
-import { getGlobalDispatcher } from "undici"
-import { getGlobalTopicPublic } from "../crud/global-topic"
-// import { getGlobalTopicPublic } from "edgedb/crud/global-topic"
-// import { getAllGlobalTopics } from "../crud/global-topic"
-// import { writeContentToDesktopFile } from "./util"
 
 dotenv.config()
 
-async function getTopicPath(name: string) {
-  const folder = process.env.wikiFolderPath!
-
-  // @ts-ignore
-  const searchFile = async (dir) => {
-    const files = fs.readdirSync(dir)
-
-    for (const file of files) {
-      const filePath = path.join(dir, file)
-      const stats = fs.statSync(filePath)
-
-      if (stats.isDirectory()) {
-        // @ts-ignore
-        const result = await searchFile(filePath)
-        if (result) return result
-      } else {
-        if (file === `${name}.md`) {
-          return filePath
-        }
-      }
-    }
-
-    return null
-  }
-
-  return await searchFile(folder)
-}
-
 async function main() {
-  let userId = await getUserIdByName(process.env.name!)
-  if (!userId) {
-    userId = await addUser({
-      name: process.env.name!,
-      email: process.env.email!,
-    })
-  }
+  await addSectionToGlobalGuideOfTopic("3d-printing", "Intro", 0)
+
   // let wikiId = await getWikiIdByUserId(userId)
   // if (!wikiId) {
   //   await addWiki(userId!)
@@ -63,8 +24,6 @@ async function main() {
 
   // const res = await getGlobalTopicPublic("3d-printing")
   // console.log(res)
-
-  return true
   // const topicTitles = await getTopicTitles()
   // const topicName = topicTitles[0].name
   // assume it always returns
@@ -486,4 +445,43 @@ async function parseMdFile(filePath: string): Promise<Topic> {
     public: true, // TODO: it should come from front matter `public: true/false`
     topicAsMarkdown: markdownFileContent,
   }
+}
+
+async function getTopicPath(name: string) {
+  const folder = process.env.wikiFolderPath!
+
+  // @ts-ignore
+  const searchFile = async (dir) => {
+    const files = fs.readdirSync(dir)
+
+    for (const file of files) {
+      const filePath = path.join(dir, file)
+      const stats = fs.statSync(filePath)
+
+      if (stats.isDirectory()) {
+        // @ts-ignore
+        const result = await searchFile(filePath)
+        if (result) return result
+      } else {
+        if (file === `${name}.md`) {
+          return filePath
+        }
+      }
+    }
+
+    return null
+  }
+
+  return await searchFile(folder)
+}
+
+async function getOrCreateUserId() {
+  let userId = await getUserIdByName(process.env.name!)
+  if (!userId) {
+    userId = await addUser({
+      name: process.env.name!,
+      email: process.env.email!,
+    })
+  }
+  return userId
 }
