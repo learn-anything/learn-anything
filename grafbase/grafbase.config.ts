@@ -24,13 +24,6 @@ const link = g.type("Link", {
   addedByUser: g.boolean().optional(),
 })
 
-const section = g.type("Section", {
-  title: g.string(),
-  summary: g.string().optional(),
-  ordered: g.boolean(),
-  links: g.ref(link).list(),
-})
-
 const globalTopicPublic = g.type("GlobalTopicPublic", {
   name: g.string(),
   prettyName: g.string(),
@@ -40,7 +33,7 @@ const globalTopicPublic = g.type("GlobalTopicPublic", {
 g.query("GlobalTopicPublic", {
   args: { topicName: g.string() },
   returns: g.ref(globalTopicPublic),
-  resolver: "public/getGlobalTopicPublic",
+  resolver: "public/getGlobalTopic",
 })
 
 const globalTopic = g.type("GlobalTopic", {
@@ -56,19 +49,26 @@ g.query("GlobalTopic", {
   resolver: "getGlobalTopic",
 })
 
-// g.query("GlobalTopic", {
-//   args: { topicName: g.string() },
-//   returns: g.ref(globalTopic),
-//   resolver: "public/getGlobalTopic",
-// userLearningStatus: g.enumRef(learningStatus).optional(),
-// globalGuideSummary: g.string(),
-// globalGuideSections: g.ref(section).list(),
-// })
-
 g.mutation("addUser", {
   args: { email: g.string() },
   returns: g.string(),
   resolver: "addUser",
+})
+
+const SectionPublic = g.type("SectionPublic", {
+  title: g.string(),
+  links: g.ref(link).list(),
+})
+
+const globalTopicPublicUpdate = g.input("GlobalTopicPublicUpdate", {
+  topicSummary: g.string(),
+  sections: g.ref(SectionPublic).list()
+})
+
+g.mutation("updateGlobalTopic", {
+  args: { input: g.inputRef(globalTopicPublicUpdate) },
+  returns: g.string(),
+  resolver: "updateGlobalTopic",
 })
 
 g.query("stripe", {
@@ -76,30 +76,3 @@ g.query("stripe", {
   returns: g.string(),
   resolver: "stripe",
 })
-
-// g.mutation("")
-// g.query("getTopicPaths", {
-//   returns: g.list(
-//     g.object({
-//       name: g.string(),
-//       urlPath: g.string(),
-//     }),
-//   ),
-//   resolver: "getTopicPaths",
-// })
-// const topicPathsOutput = g.input
-// g.type("TopicPathOutput", {})
-// g.mutation('updateTopic', {
-//   args: { name: g.object({
-//     summary: g.string(),
-//     sections: g.array(g.object({
-//       summary: g.string(),
-//       links: g.array(g.object(({
-//         title: g.string(),
-//         url: g.string()
-//       })))
-//     }))
-//   }) },
-//   returns: g.string(),
-//   resolver: 'updateTopic'
-// })

@@ -49,6 +49,8 @@ export default function Topic() {
           },
         },
       })
+
+      console.log(globalTopic, "global topic")
       if (globalTopic !== null) {
         // @ts-ignore
         topic.setTopic(globalTopic.data.GlobalTopic)
@@ -177,7 +179,7 @@ export default function Topic() {
                 <div class="font-semibold">Sections</div>
                 <div
                   class="flex items-center gap-1 text-[#3B5CCC] font-light"
-                  // onClick={}
+                // onClick={}
                 >
                   {/* <Icon name="Plus"></Icon>Add Section */}
                 </div>

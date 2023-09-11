@@ -1,3 +1,4 @@
+import { GraphQLError } from "graphql"
 import { addUser } from "../../edgedb/crud/user"
 import { validUserEmailFromToken } from "../../lib/grafbase/grafbase"
 
@@ -8,9 +9,10 @@ export default async function addUserResolver(
 ) {
   const email = await validUserEmailFromToken(context)
   if (email) {
-    await addUser({ email: args.email })
-    return {
-      success: true,
+    const userId = await addUser({ email: args.email })
+    if (userId) {
+      return userId
     }
+    throw new GraphQLError("User already exists")
   }
 }

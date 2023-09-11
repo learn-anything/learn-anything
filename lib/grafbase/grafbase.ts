@@ -5,9 +5,9 @@ import { GraphQLError } from 'graphql'
 // if it is valid, returns email of the user (passed in as separate header)
 export async function validUserEmailFromToken(context: any) {
   // when run locally, don't validate the token, return local user email
-  if (process.env.LOCAL_USE) {
-    return process.env.LOCAL_USER_EMAIL
-  }
+  // if (process.env.LOCAL_USE) {
+  //   return process.env.LOCAL_USER_EMAIL
+  // }
   const authHeader = context.request.headers["authorization"]
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     throw new GraphQLError("Missing or invalid Authorization header")
@@ -21,6 +21,9 @@ export async function validUserEmailFromToken(context: any) {
   if (!verifiedJWT) {
     throw new GraphQLError("Verification failed")
   }
-  const email = context.request.headers["email"]
-  return email
+  console.log(verifiedJWT, "verified JWT")
+  return "nikita@nikiv.dev"
+
+  // const email = await fetch("https://e879ccc9-285e-49d3-b37e-b569f0db4035.hanko.io/users/")
+  // return email
 }

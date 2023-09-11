@@ -54,49 +54,39 @@ export async function addSectionToGlobalGuideOfTopic(
   const topic = await e
     .select(e.GlobalTopic, () => ({
       filter_single: { name: topicName },
+      id: true,
       latestGlobalGuide: true,
     }))
     .run(client)
-  console.log(topic)
 
-  const newSection = await e.insert(e.GlobalGuideSection, {
-    title: sectionName,
-    order: order,
-  })
-  // .run(client)
-  // .toEdgeQL()
+  // check that `topic` and `latestGlobalGuide` are not null here
+  // probably need to add some logic to initialize a new GlobalGuide
+  // if it isn't set, right?
 
-  // TODO: not working, should also consider order when adding a section
-  await e.update(e.GlobalTopic, (globalTopic) => {
-    return {
-      filter_single: { name: topicName },
-      set: {
-        latestGlobalGuide: {
-          sections: {
-            "+=": e.insert(e.GlobalGuideSection, () => ({
-              filter_single: { id: newSection.id },
-            })),
+  const newSection = await e
+    .insert(e.GlobalGuideSection, {
+      title: sectionName,
+      order: order,
+    })
+    .run(client)
+
+  if (topic) {
+    await e
+      .update(e.GlobalGuide, (globalGuide) => {
+        return {
+          filter_single: { id: topic.latestGlobalGuide.id },
+          set: {
+            sections: {
+              "+=": e.select(e.GlobalGuideSection, () => ({
+                filter_single: { id: newSection.id },
+              })),
+            },
           },
-        },
-      },
-    }
-  })
-
-  // const updatedSection = await e
-  //   .update(e.GlobalGuide, () => {
-  //     return {
-  //       filter_single: { id: topic.latestGlobalGuide.id },
-  //       set: {
-  //         "+=": e.select(e.GlobalGuideSection, () => ({
-  //           filter_single: { id: newSection.id },
-  //         })),
-  //       },
-  //     }
-  //   })
-  //   .toEdgeQL()
-  // .run(client)
-
-  // console.log(updatedSection)
+        }
+      })
+      .run(client)
+    console.log("added")
+  }
 }
 
 // export async function getGlobalTopic(topicName: string, email: string) {
