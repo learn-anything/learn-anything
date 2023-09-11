@@ -1,6 +1,7 @@
 import { makeEventListener } from "@solid-primitives/event-listener"
 import { onMount } from "solid-js"
 import { register } from "@teamhanko/hanko-elements"
+import { UserClient } from "@teamhanko/hanko-frontend-sdk"
 import { useNavigate } from "solid-start"
 import { getHankoCookie } from "../../lib/auth"
 import { useMobius, useSignIn } from "../root"
@@ -43,6 +44,16 @@ export default function SignInPage() {
     document,
     "hankoAuthSuccess",
     async (e) => {
+      const userClient = new UserClient(import.meta.env.VITE_HANKO_API, {
+        timeout: 0,
+        cookieName: "hanko",
+        localStorageKey: "hanko",
+      })
+      const user = await userClient.getCurrent()
+      const email = user.email
+
+      localStorage.setItem("email", email)
+
       const allCookies = document.cookie
       const hankoCookie = allCookies
         .split(";")
@@ -51,10 +62,11 @@ export default function SignInPage() {
         })
         ?.split("=")[1]
       signIn(hankoCookie!)
+
       await mobius.mutate({
         addUser: {
           where: {
-            email: "nikita@nikiv.dev",
+            email: email,
           },
           select: true,
         },

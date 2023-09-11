@@ -1,14 +1,16 @@
 import { addUser } from "../../edgedb/crud/user"
-import { validHankoToken } from "../../lib/grafbase/grafbase"
+import { validUserEmailFromToken } from "../../lib/grafbase/grafbase"
 
 export default async function addUserResolver(
   root: any,
   args: { email: string },
   context: any,
 ) {
-  if (await validHankoToken(context)) {
+  const email = await validUserEmailFromToken(context)
+  if (email) {
     await addUser({ email: args.email })
-    return "success"
+    return {
+      success: true,
+    }
   }
-  return "failed to validate hanko token"
 }

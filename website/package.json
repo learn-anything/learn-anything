@@ -24,6 +24,7 @@
     "@solidjs/meta": "^0.28.6",
     "@solidjs/router": "^0.8.3",
     "@teamhanko/hanko-elements": "0.8.3",
+    "@teamhanko/hanko-frontend-sdk": "0.8.3",
     "clipboardy": "^3.0.0",
     "clsx": "^2.0.0",
     "dotenv": "^16.3.1",

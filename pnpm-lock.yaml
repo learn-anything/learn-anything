@@ -50,6 +50,9 @@ importers:
       fava:
         specifier: ^0.3.1
         version: 0.3.1
+      graphql:
+        specifier: ^16.6.0
+        version: 16.7.1
       graphql-request:
         specifier: ^6.1.0
         version: 6.1.0(graphql@16.7.1)
@@ -351,6 +354,9 @@ importers:
         specifier: ^0.8.3
         version: 0.8.3(solid-js@1.7.11)
       '@teamhanko/hanko-elements':
+        specifier: 0.8.3
+        version: 0.8.3
+      '@teamhanko/hanko-frontend-sdk':
         specifier: 0.8.3
         version: 0.8.3
       clipboardy:

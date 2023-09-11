@@ -73,7 +73,7 @@ export async function addSectionToGlobalGuideOfTopic(
       set: {
         latestGlobalGuide: {
           sections: {
-            "+=": e.select(e.GlobalGuideSection, () => ({
+            "+=": e.insert(e.GlobalGuideSection, () => ({
               filter_single: { id: newSection.id },
             })),
           },
