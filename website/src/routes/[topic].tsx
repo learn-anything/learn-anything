@@ -10,10 +10,6 @@ import TitlePill from "../components/Topic/TitlePill"
 import TopicNav from "../components/Topic/TopicNav"
 import { useMobius } from "../root"
 
-// TODO: for some reason when you first run `pnpm dev`
-// nothing shows
-// you have to add a div below and save then things show..
-
 type Link = {
   title: string
   url: string
@@ -206,3 +202,9 @@ export default function Topic() {
     </>
   )
 }
+
+
+// TODO: for some reason when you first run `pnpm dev`
+// nothing shows
+// you have to add a div below and save then things show..
+// doesn't happen all the time..

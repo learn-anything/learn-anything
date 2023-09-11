@@ -53,6 +53,7 @@ type TopicSearchResult = {
   name: string
 }
 
+// TODO: load the graph with graph data from server (no undefined flying around)
 export default function Home() {
   const navigate = useNavigate()
   const mobius = useMobius()

@@ -4,8 +4,7 @@ import { batch, createMemo, createSignal } from "solid-js"
 
 type SearchResult = {
   name: string
-  value?: string
-  action?: () => void
+  action: () => void
 }
 
 type Props = {
@@ -13,6 +12,10 @@ type Props = {
   searchResults: SearchResult[]
 }
 
+// TODO: make component work logically
+// and make it look as in https://lu.ma/create `Add Event Location` visually
+// to be used in landing page and all across LA
+// replace the mess search that is inside routes/index (landing page) with this component
 export default function Search(props: Props) {
   const [searchResults, setSearchResults] = createSignal(props.searchResults)
   const [query, setQuery] = createSignal("")
@@ -63,6 +66,7 @@ export default function Search(props: Props) {
   //   },
   // })
 
+  // TODO: show results too, not just input
   return (
     <input
       style={{ outline: "none", height: "44px" }}
