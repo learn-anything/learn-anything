@@ -13,7 +13,6 @@ import { useNavigate } from "solid-start"
 import { Canvas, Graph, Anim } from "@nothing-but/force-graph"
 import { Num } from "@nothing-but/utils"
 import { getHankoCookie } from "../../lib/auth"
-import Mobius from "graphql-mobius"
 import { useMobius } from "../root"
 
 // TODO: add fuzzy search of topics, especially consider lower case should also match
@@ -49,16 +48,33 @@ export function generateInitialGraph(length: number = 256): Graph.Graph {
   return Graph.makeGraph(graph_options, nodes, edges)
 }
 
+type TopicSearchResult = {
+  prettyName: string,
+  name: string
+}
+
 export default function Home() {
   const navigate = useNavigate()
   const mobius = useMobius()
-  const [topics, setTopics] = createSignal([])
+  const [topics, setTopics] = createSignal<TopicSearchResult[]>([])
 
-  onMount(() => {
-    mobius.query({
-      // publi
+  createEffect(() => {
+    console.log(topics(), "topics")
+  })
+
+  onMount(async () => {
+    const res = await mobius.query({
+      publicGetGlobalTopics: {
+        prettyName: true,
+        name: true
+      }
     })
-
+    console.log(res)
+    if (res) {
+      // TODO: no idea why it complains
+      // @ts-ignore
+      setTopics(res.data?.publicGetGlobalTopics)
+    }
   })
 
   const [topicSearchResults, setTopicSearchResults] = createSignal<string[]>([])
@@ -66,8 +82,8 @@ export default function Home() {
   const [focusedTopic, setFocusedTopic] = createSignal(0)
   const [focusedTodoTitle, setFocusedTodoTitle] = createSignal("")
 
-  const [hankoCookie] = createResource(async () => {
-    const hankoCookie = await getHankoCookie()
+  const [hankoCookie] = createResource(() => {
+    const hankoCookie = getHankoCookie()
     return hankoCookie
   })
 
@@ -148,7 +164,7 @@ export default function Home() {
   createEffect(() => {
     if (topicSearchInput()) {
       untrack(() => {
-        setTopicSearchResults(topics())
+        setTopicSearchResults(topics().map(topic => topic.prettyName))
         setTopicSearchResults(
           topicSearchResults().filter((word: any) =>
             topicSearchInput()

@@ -3,7 +3,8 @@ import e from "../dbschema/edgeql-js"
 
 export async function getGlobalTopics() {
   const globalTopics = await e.select(e.GlobalTopic, () => ({
-    prettyName: true
+    prettyName: true,
+    name: true
   })).run(client)
   return globalTopics
 }

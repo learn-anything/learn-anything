@@ -35,39 +35,64 @@ function getHankoCookie(): string {
 }
 
 const typeDefs = `
-"""Directs the executor to return values as a Streaming response."""
-directive @live on QUERY
+  """Directs the executor to return values as a Streaming response."""
+  directive @live on QUERY
 
-"""Indicates that an input object is a oneOf input object"""
-directive @oneOf on INPUT_OBJECT
+  """Indicates that an input object is a oneOf input object"""
+  directive @oneOf on INPUT_OBJECT
 
-type GlobalTopic {
-  name: String!
-  prettyName: String!
-  topicSummary: String!
-  learningStatus: learningStatus
-}
+  type Mutation {
+    createUser(email: String!): String!
+    updateGlobalTopic(input: inputToUpdateGlobalTopic!): String!
+  }
 
-type GlobalTopicPublic {
-  name: String!
-  prettyName: String!
-  topicSummary: String!
-}
+  type Query {
+    publicGetGlobalTopics: [outputOfPublicGetGlobalTopics!]!
+    publicGetGlobalTopic(topicName: String!): publicGlobalTopic!
+    getGlobalTopic(topicName: String!): globalTopic!
+    stripe(plan: String!): String!
+  }
 
-type Mutation {
-  addUser(email: String!): String!
-}
+  type globalTopic {
+    name: String!
+    prettyName: String!
+    topicSummary: String!
+    learningStatus: learningStatus
+  }
 
-type Query {
-  GlobalTopicPublic(topicName: String!): GlobalTopicPublic!
-  GlobalTopic(topicName: String!): GlobalTopic!
-  stripe(plan: String!): String!
-}
+  input inputToUpdateGlobalTopic {
+    topicSummary: String!
+    sections: [section!]!
+  }
 
-enum learningStatus {
-  to_learn
-  learning
-}
+  enum learningStatus {
+    to_learn
+    learning
+  }
+
+  input link {
+    title: String!
+    url: String!
+    author: String
+    year: Int
+    completed: Boolean
+    addedByUser: Boolean
+  }
+
+  type outputOfPublicGetGlobalTopics {
+    prettyName: String!
+  }
+
+  type publicGlobalTopic {
+    name: String!
+    prettyName: String!
+    topicSummary: String!
+  }
+
+  input section {
+    title: String!
+    links: [link!]!
+  }
 `
 
 function createMobius(options: { hankoCookie: () => string }) {

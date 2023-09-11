@@ -47,7 +47,8 @@ const section = g.input("section", {
 // public queries
 
 const outputOfPublicGetGlobalTopics = g.type("outputOfPublicGetGlobalTopics", {
-  prettyName: g.string()
+  prettyName: g.string(),
+  name: g.string()
 })
 g.query("publicGetGlobalTopics", {
   args: {},
