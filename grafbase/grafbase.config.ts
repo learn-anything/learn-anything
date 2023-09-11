@@ -46,14 +46,6 @@ const section = g.input("section", {
 
 // public queries
 
-g.query("publicGetGlobalTopic", {
-  args: { topicName: g.string() },
-  returns: g.ref(publicGlobalTopic),
-  resolver: "public/getGlobalTopic",
-})
-
-// auth'd queries
-
 const outputOfPublicGetGlobalTopics = g.type("outputOfPublicGetGlobalTopics", {
   prettyName: g.string()
 })
@@ -62,6 +54,14 @@ g.query("publicGetGlobalTopics", {
   returns: g.ref(outputOfPublicGetGlobalTopics).list(),
   resolver: "public/getGlobalTopics",
 })
+
+g.query("publicGetGlobalTopic", {
+  args: { topicName: g.string() },
+  returns: g.ref(publicGlobalTopic),
+  resolver: "public/getGlobalTopic",
+})
+
+// auth'd queries
 
 g.query("getGlobalTopic", {
   args: { topicName: g.string() },
