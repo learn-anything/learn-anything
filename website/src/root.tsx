@@ -81,10 +81,10 @@ const typeDefs = `
 
   type outputOfPublicGetGlobalTopics {
     prettyName: String!
+    name: String!
   }
 
   type publicGlobalTopic {
-    name: String!
     prettyName: String!
     topicSummary: String!
   }

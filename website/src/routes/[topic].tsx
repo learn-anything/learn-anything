@@ -33,7 +33,7 @@ export default function Topic() {
   onMount(async () => {
     if (signedIn()) {
       const globalTopic = await mobius.query({
-        GlobalTopic: {
+        getGlobalTopic: {
           where: {
             topicName: "3d-printing",
           },
@@ -41,7 +41,7 @@ export default function Topic() {
             name: true,
             prettyName: true,
             topicSummary: true,
-            learningStatus: true,
+            // learningStatus: true,
           },
         },
       })
@@ -54,7 +54,7 @@ export default function Topic() {
       console.log(globalTopic, "global topic")
     } else {
       const globalTopicPublic = await mobius.query({
-        GlobalTopicPublic: {
+        publicGetGlobalTopic: {
           where: {
             topicName: "3d-printing",
           },

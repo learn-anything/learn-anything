@@ -1,31 +1,15 @@
-import { getGlobalTopicPublic } from "../../../edgedb/crud/global-topic"
+import { GraphQLError } from "graphql"
+import { publicGetGlobalTopic } from "../../../edgedb/crud/global-topic"
 
-export default async function getGlobalTopic(
+export default async function publicGetGlobalTopicResolver(
   root: any,
   args: { topicName: string },
   context: any,
 ) {
-  const topic = await getGlobalTopicPublic("3d-printing")
-  return topic
-
-  // const globalTopic = {
-  //   prettyTopicName: "Physics",
-  //   userLearningStatus: "learning",
-  //   globalGuideSummary:
-  //     "Physics is the study of matter, energy, and the fundamental forces that drive the natural phenomena of the universe.",
-  //   globalGuideSections: [
-  //     {
-  //       title: "Intro",
-  //       ordered: true,
-  //       links: [
-  //         {
-  //           title: "So You Want to Learn Physics…",
-  //           url: "https://www.susanrigetti.com/physics",
-  //           year: 2021,
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // }
-  // return globalTopic
+  const topic = await publicGetGlobalTopic(args.topicName)
+  if (topic) {
+    return topic
+  }
+  // TODO: make edgedb crud functions return better errors
+  throw new GraphQLError("Error")
 }

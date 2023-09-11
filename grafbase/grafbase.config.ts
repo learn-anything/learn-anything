@@ -27,16 +27,14 @@ const link = g.input("link", {
 })
 
 const publicGlobalTopic = g.type("publicGlobalTopic", {
-  name: g.string(),
   prettyName: g.string(),
   topicSummary: g.string(),
 })
 
 const globalTopic = g.type("globalTopic", {
-  name: g.string(),
   prettyName: g.string(),
   topicSummary: g.string(),
-  learningStatus: g.enumRef(learningStatus).optional(),
+  // learningStatus: g.enumRef(learningStatus).optional(),
 })
 
 const section = g.input("section", {
