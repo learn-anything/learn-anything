@@ -9,13 +9,15 @@ export default config({
   },
 })
 
+// definitions
+
 const learningStatus = g.enum("learningStatus", [
   "to_learn",
   "learning",
   "learning",
 ])
 
-const link = g.type("Link", {
+const link = g.type("link", {
   title: g.string(),
   url: g.string(),
   author: g.string().optional(),
@@ -24,55 +26,60 @@ const link = g.type("Link", {
   addedByUser: g.boolean().optional(),
 })
 
-const globalTopicPublic = g.type("GlobalTopicPublic", {
+const publicGlobalTopic = g.type("publicGlobalTopic", {
   name: g.string(),
   prettyName: g.string(),
   topicSummary: g.string(),
 })
 
-g.query("GlobalTopicPublic", {
-  args: { topicName: g.string() },
-  returns: g.ref(globalTopicPublic),
-  resolver: "public/getGlobalTopic",
-})
-
-const globalTopic = g.type("GlobalTopic", {
+const globalTopic = g.type("globalTopic", {
   name: g.string(),
   prettyName: g.string(),
   topicSummary: g.string(),
   learningStatus: g.enumRef(learningStatus).optional(),
 })
 
-g.query("GlobalTopic", {
-  args: { topicName: g.string() },
-  returns: g.ref(globalTopic),
-  resolver: "getGlobalTopic",
-})
-
-g.mutation("addUser", {
-  args: { email: g.string() },
-  returns: g.string(),
-  resolver: "addUser",
-})
-
-const SectionPublic = g.type("SectionPublic", {
+const section = g.type("section", {
   title: g.string(),
   links: g.ref(link).list(),
 })
 
-const globalTopicPublicUpdate = g.input("GlobalTopicPublicUpdate", {
-  topicSummary: g.string(),
-  sections: g.ref(SectionPublic).list()
+// public queries
+
+g.query("publicGetGlobalTopic", {
+  args: { topicName: g.string() },
+  returns: g.ref(publicGlobalTopic),
+  resolver: "public/getGlobalTopic",
 })
 
-g.mutation("updateGlobalTopic", {
-  args: { input: g.inputRef(globalTopicPublicUpdate) },
-  returns: g.string(),
-  resolver: "updateGlobalTopic",
+// auth'd queries
+
+g.query("getGlobalTopic", {
+  args: { topicName: g.string() },
+  returns: g.ref(globalTopic),
+  resolver: "getGlobalTopic",
 })
 
 g.query("stripe", {
   args: { plan: g.string() },
   returns: g.string(),
   resolver: "stripe",
+})
+
+// auth'd mutations
+
+g.mutation("createUser", {
+  args: { email: g.string() },
+  returns: g.string(),
+  resolver: "createUser",
+})
+
+const inputToUpdateGlobalTopic = g.input("inputToUpdateGlobalTopic", {
+  topicSummary: g.string(),
+  sections: g.ref(section).list()
+})
+g.mutation("updateGlobalTopic", {
+  args: { input: g.inputRef(inputToUpdateGlobalTopic) },
+  returns: g.string(),
+  resolver: "updateGlobalTopic",
 })

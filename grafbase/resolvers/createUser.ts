@@ -2,7 +2,7 @@ import { GraphQLError } from "graphql"
 import { addUser } from "../../edgedb/crud/user"
 import { validUserEmailFromToken } from "../../lib/grafbase/grafbase"
 
-export default async function addUserResolver(
+export default async function createUserResolver(
   root: any,
   args: { email: string },
   context: any,
