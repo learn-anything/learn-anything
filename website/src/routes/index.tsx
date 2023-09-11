@@ -59,7 +59,6 @@ export default function Home() {
       // publi
     })
 
-
   })
 
   const [topicSearchResults, setTopicSearchResults] = createSignal<string[]>([])

@@ -17,7 +17,7 @@ const learningStatus = g.enum("learningStatus", [
   "learning",
 ])
 
-const link = g.type("link", {
+const link = g.input("link", {
   title: g.string(),
   url: g.string(),
   author: g.string().optional(),
@@ -41,7 +41,7 @@ const globalTopic = g.type("globalTopic", {
 
 const section = g.input("section", {
   title: g.string(),
-  links: g.ref(link).list(),
+  links: g.inputRef(link).list(),
 })
 
 // public queries
