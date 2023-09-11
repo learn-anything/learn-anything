@@ -1,5 +1,5 @@
 import { jwtVerify, createRemoteJWKSet } from "jose"
-import { GraphQLError } from 'graphql'
+import { GraphQLError } from "graphql"
 
 // validates that the token in `authorization` header is correct
 // if it is valid, returns email of the user (passed in as separate header)

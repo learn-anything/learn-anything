@@ -1,23 +1,49 @@
 import { client } from "../client"
 import e from "../dbschema/edgeql-js"
 
-type GlobalTopic = {
-  name: string
-  prettyName: string
-  topicSummary: string
-  public: true
+export async function getGlobalTopics() {
+  const globalTopics = await e.select(e.GlobalTopic, () => ({
+    prettyName: true
+  })).run(client)
+  return globalTopics
 }
 
-export async function getGlobalTopicPublic(topicName: string) {
-  const query = e.select(e.GlobalTopic, (globalTopic) => ({
-    name: true,
-    prettyName: true,
-    topicSummary: true,
-    filter_single: { name: topicName },
-  }))
+export async function addSectionToGlobalTopic(
+  topicName: string,
+  sectionName: string,
+  order: number,
+) {
+  const topic = await e
+    .select(e.GlobalTopic, () => ({
+      filter_single: { name: topicName },
+      id: true,
+      latestGlobalGuide: true,
+    }))
+    .run(client)
 
-  const result = await query.run(client)
-  return result
+  const newSection = await e
+    .insert(e.GlobalGuideSection, {
+      title: sectionName,
+      order: order,
+    })
+    .run(client)
+
+  if (topic) {
+    return await e
+      .update(e.GlobalGuide, () => {
+        return {
+          filter_single: { id: topic.latestGlobalGuide.id },
+          set: {
+            sections: {
+              "+=": e.select(e.GlobalGuideSection, () => ({
+                filter_single: { id: newSection.id },
+              })),
+            },
+          },
+        }
+      })
+      .run(client)
+  }
 }
 
 export async function addNewSectionToGlobalGuide(
@@ -44,49 +70,6 @@ export async function createGlobalTopicWithGlobalGuide(
     latestGlobalGuide: e.insert(e.GlobalGuide, {}),
   })
   return query.run(client)
-}
-
-export async function addSectionToGlobalGuideOfTopic(
-  topicName: string,
-  sectionName: string,
-  order: number,
-) {
-  const topic = await e
-    .select(e.GlobalTopic, () => ({
-      filter_single: { name: topicName },
-      id: true,
-      latestGlobalGuide: true,
-    }))
-    .run(client)
-
-  // check that `topic` and `latestGlobalGuide` are not null here
-  // probably need to add some logic to initialize a new GlobalGuide
-  // if it isn't set, right?
-
-  const newSection = await e
-    .insert(e.GlobalGuideSection, {
-      title: sectionName,
-      order: order,
-    })
-    .run(client)
-
-  if (topic) {
-    await e
-      .update(e.GlobalGuide, (globalGuide) => {
-        return {
-          filter_single: { id: topic.latestGlobalGuide.id },
-          set: {
-            sections: {
-              "+=": e.select(e.GlobalGuideSection, () => ({
-                filter_single: { id: newSection.id },
-              })),
-            },
-          },
-        }
-      })
-      .run(client)
-    console.log("added")
-  }
 }
 
 // export async function getGlobalTopic(topicName: string, email: string) {
@@ -190,4 +173,23 @@ export async function addSectionToGlobalGuideOfTopic(
 //     return false
 //   }
 //   return true
+// }
+
+// type GlobalTopic = {
+//   name: string
+//   prettyName: string
+//   topicSummary: string
+//   public: true
+// }
+
+// export async function getGlobalTopics(topicName: string) {
+//   const query = e.select(e.GlobalTopic, (globalTopic) => ({
+//     name: true,
+//     prettyName: true,
+//     topicSummary: true,
+//     filter_single: { name: topicName },
+//   }))
+
+//   const result = await query.run(client)
+//   return result
 // }

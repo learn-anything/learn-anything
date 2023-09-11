@@ -1,4 +1,4 @@
-import { validUserEmailFromToken } from "../../lib/grafbase/grafbase"
+import { validUserEmailFromToken } from "../../lib/grafbase/hanko-validate"
 
 export default async function updateGlobalTopic(
   root: any,

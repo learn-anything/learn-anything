@@ -39,7 +39,7 @@ const globalTopic = g.type("globalTopic", {
   learningStatus: g.enumRef(learningStatus).optional(),
 })
 
-const section = g.type("section", {
+const section = g.input("section", {
   title: g.string(),
   links: g.ref(link).list(),
 })
@@ -53,6 +53,15 @@ g.query("publicGetGlobalTopic", {
 })
 
 // auth'd queries
+
+const outputOfPublicGetGlobalTopics = g.type("outputOfPublicGetGlobalTopics", {
+  prettyName: g.string()
+})
+g.query("publicGetGlobalTopics", {
+  args: {},
+  returns: g.ref(outputOfPublicGetGlobalTopics).list(),
+  resolver: "public/getGlobalTopics",
+})
 
 g.query("getGlobalTopic", {
   args: { topicName: g.string() },
@@ -76,7 +85,7 @@ g.mutation("createUser", {
 
 const inputToUpdateGlobalTopic = g.input("inputToUpdateGlobalTopic", {
   topicSummary: g.string(),
-  sections: g.ref(section).list()
+  sections: g.inputRef(section).list(),
 })
 g.mutation("updateGlobalTopic", {
   args: { input: g.inputRef(inputToUpdateGlobalTopic) },

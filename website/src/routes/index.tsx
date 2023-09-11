@@ -14,6 +14,7 @@ import { Canvas, Graph, Anim } from "@nothing-but/force-graph"
 import { Num } from "@nothing-but/utils"
 import { getHankoCookie } from "../../lib/auth"
 import Mobius from "graphql-mobius"
+import { useMobius } from "../root"
 
 // TODO: add fuzzy search of topics, especially consider lower case should also match
 
@@ -50,13 +51,17 @@ export function generateInitialGraph(length: number = 256): Graph.Graph {
 
 export default function Home() {
   const navigate = useNavigate()
-  const [topics, setTopics] = createSignal([
-    "NLP",
-    "Chemistry",
-    "Physics",
-    "Nature",
-    "Math",
-  ])
+  const mobius = useMobius()
+  const [topics, setTopics] = createSignal([])
+
+  onMount(() => {
+    mobius.query({
+      // publi
+    })
+
+
+  })
+
   const [topicSearchResults, setTopicSearchResults] = createSignal<string[]>([])
   const [topicSearchInput, setTopicSearchInput] = createSignal("")
   const [focusedTopic, setFocusedTopic] = createSignal(0)

@@ -9,116 +9,19 @@ import { toMarkdown } from "mdast-util-to-markdown"
 import { toString } from "mdast-util-to-string"
 import * as path from "path"
 import * as prettier from "prettier"
-import { addSectionToGlobalGuideOfTopic } from "../crud/global-topic"
-// import { getGlobalTopicPublic } from "edgedb/crud/global-topic"
-// import { getAllGlobalTopics } from "../crud/global-topic"
-// import { writeContentToDesktopFile } from "./util"
+import { getGlobalTopics } from "../crud/global-topic"
 
 dotenv.config()
 
-async function getTopicPath(name: string) {
-  const folder = process.env.wikiFolderPath!
-
-  // @ts-ignore
-  const searchFile = async (dir) => {
-    const files = fs.readdirSync(dir)
-
-    for (const file of files) {
-      const filePath = path.join(dir, file)
-      const stats = fs.statSync(filePath)
-
-      if (stats.isDirectory()) {
-        // @ts-ignore
-        const result = await searchFile(filePath)
-        if (result) return result
-      } else {
-        if (file === `${name}.md`) {
-          return filePath
-        }
-      }
-    }
-
-    return null
-  }
-
-  return await searchFile(folder)
-}
-
 async function main() {
-  // let userId = await getUserIdByName(process.env.name!)
-  // if (!userId) {
-  //   userId = await addUser({
-  //     name: process.env.name!,
-  //     email: process.env.email!,
-  //   })
-  // }
-
-  await addSectionToGlobalGuideOfTopic("3d-printing", "Intro", 0)
-
-  // let wikiId = await getWikiIdByUserId(userId)
-  // if (!wikiId) {
-  //   await addWiki(userId!)
-  // }
-
-  // const res = await getGlobalTopicPublic("3d-printing")
-  // console.log(res)
-
-  return true
-  // const topicTitles = await getTopicTitles()
-  // const topicName = topicTitles[0].name
-  // assume it always returns
-  // @ts-ignore
-  // const topic = await getTopic(topicName)
-  // const topicContent = topic[0]
-  // const globalTopic = {
-  //   name: topicName,
-  //   pretyName: topicContent.prettyName,
-  //   public: true,
-  //   topicPath: topicContent.topicPath,
-  //   topicSummary: `## Overview
-  //   3D Printing, or additive manufacturing, transforms digital designs into physical objects by layering material.
-  //   ## Core Technologies
-  //   - **FDM**: Uses plastic filament, great for prototypes
-  //   - **SLA**: High detail, uses liquid resin
-  //   - **SLS**: Complex shapes, uses powder
-  //   ## Common Materials
-  //   - Plastics: PLA, ABS
-  //   - Metals: Titanium, Aluminum
-  //   ## Applications
-  //   - **Medical**: Prosthetics, bioprinting
-  //   - **Industrial**: Prototypes, manufacturing
-  //   - **Consumer**: Custom products
-  //   ## Advantages and Disadvantages
-  //   ### Pros
-  //   - Rapid prototyping
-  //   - Customization
-  //   ### Cons
-  //   - Limited build size
-  //   - Material constraints`,
-  // }
-  // console.log(globalTopic)
-  // const res = await addGlobalTopic(globalTopic)
-  // const topic = await getTopic("physics")
-  // console.log(topic, "topic")
-  // const paths = await markdownFilePaths(process.env.wikiFolderPath!)
-  // const mdPath = paths[1080]
-  // const folderPath = process.env.wikiFolderPath!
-  // const relativePath = mdPath.substring(folderPath.length + 1)
-  // const topicPath = relativePath.replace(".md", "")
-  // const baseName = path.basename(mdPath)
-  // const topicName = path.parse(baseName).name
-  // const topic = await parseMdFile(mdPath)
-  // await addTopic(topic, wikiId!, topicPath)
-  // await deleteTopic("31d7d68c-45d6-11ee-8020-77a7d148ca41")
-  // console.log(topicName, "topic name")
-  // console.log("complete")
-  // await writeContentToDesktopFile(JSON.stringify(names), "topics.json")
-  // console.log(topicContent.topicPath)
-  // const res = await getTopicPath(topicName)
-  // console.log(res)
+  const topics = await getGlobalTopics()
+  console.log(topics, "topics")
 }
 
 main()
+
+// markdown parsing code below
+// TODO: move it to separate file
 
 export type Topic = {
   name: string // extracted from file name i.e. in physics.md `physics` is name
@@ -485,4 +388,104 @@ async function parseMdFile(filePath: string): Promise<Topic> {
     public: true, // TODO: it should come from front matter `public: true/false`
     topicAsMarkdown: markdownFileContent,
   }
+}
+
+async function getTopicPath(name: string) {
+  const folder = process.env.wikiFolderPath!
+
+  // @ts-ignore
+  const searchFile = async (dir) => {
+    const files = fs.readdirSync(dir)
+
+    for (const file of files) {
+      const filePath = path.join(dir, file)
+      const stats = fs.statSync(filePath)
+
+      if (stats.isDirectory()) {
+        // @ts-ignore
+        const result = await searchFile(filePath)
+        if (result) return result
+      } else {
+        if (file === `${name}.md`) {
+          return filePath
+        }
+      }
+    }
+
+    return null
+  }
+
+  return await searchFile(folder)
+}
+
+async function getUser() {
+  // let userId = await getUserIdByName(process.env.name!)
+  // if (!userId) {
+  //   userId = await addUser({
+  //     name: process.env.name!,
+  //     email: process.env.email!,
+  //   })
+  // }
+}
+
+async function oldAttempts() {
+  // await addSectionToGlobalGuideOfTopic("3d-printing", "Intro", 0)
+  // let wikiId = await getWikiIdByUserId(userId)
+  // if (!wikiId) {
+  //   await addWiki(userId!)
+  // }
+  // const res = await getGlobalTopicPublic("3d-printing")
+  // console.log(res)
+  // const topicTitles = await getTopicTitles()
+  // const topicName = topicTitles[0].name
+  // assume it always returns
+  // @ts-ignore
+  // const topic = await getTopic(topicName)
+  // const topicContent = topic[0]
+  // const globalTopic = {
+  //   name: topicName,
+  //   pretyName: topicContent.prettyName,
+  //   public: true,
+  //   topicPath: topicContent.topicPath,
+  //   topicSummary: `## Overview
+  //   3D Printing, or additive manufacturing, transforms digital designs into physical objects by layering material.
+  //   ## Core Technologies
+  //   - **FDM**: Uses plastic filament, great for prototypes
+  //   - **SLA**: High detail, uses liquid resin
+  //   - **SLS**: Complex shapes, uses powder
+  //   ## Common Materials
+  //   - Plastics: PLA, ABS
+  //   - Metals: Titanium, Aluminum
+  //   ## Applications
+  //   - **Medical**: Prosthetics, bioprinting
+  //   - **Industrial**: Prototypes, manufacturing
+  //   - **Consumer**: Custom products
+  //   ## Advantages and Disadvantages
+  //   ### Pros
+  //   - Rapid prototyping
+  //   - Customization
+  //   ### Cons
+  //   - Limited build size
+  //   - Material constraints`,
+  // }
+  // console.log(globalTopic)
+  // const res = await addGlobalTopic(globalTopic)
+  // const topic = await getTopic("physics")
+  // console.log(topic, "topic")
+  // const paths = await markdownFilePaths(process.env.wikiFolderPath!)
+  // const mdPath = paths[1080]
+  // const folderPath = process.env.wikiFolderPath!
+  // const relativePath = mdPath.substring(folderPath.length + 1)
+  // const topicPath = relativePath.replace(".md", "")
+  // const baseName = path.basename(mdPath)
+  // const topicName = path.parse(baseName).name
+  // const topic = await parseMdFile(mdPath)
+  // await addTopic(topic, wikiId!, topicPath)
+  // await deleteTopic("31d7d68c-45d6-11ee-8020-77a7d148ca41")
+  // console.log(topicName, "topic name")
+  // console.log("complete")
+  // await writeContentToDesktopFile(JSON.stringify(names), "topics.json")
+  // console.log(topicContent.topicPath)
+  // const res = await getTopicPath(topicName)
+  // console.log(res)
 }
