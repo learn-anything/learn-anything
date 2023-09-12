@@ -63,7 +63,7 @@ export default function Home() {
           name: true
         }
       })
-      console.log(res)
+      console.log(res, "res")
       if (res) {
         // @ts-ignore
         global.setGlobalTopicsSearchList(res.data?.publicGetGlobalTopics)
