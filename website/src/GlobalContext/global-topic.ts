@@ -1,29 +1,15 @@
 import { createContext, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 
-// example sections
-// guideSections: [
-//   {
-//     title: "Intro",
-//     ordered: true,
-//     links: [
-//       {
-//         title: "So You Want to Learn Physics…",
-//         url: "https://www.susanrigetti.com/physics",
-//         year: 2021,
-//       },
-//     ],
-//   },
-// ],
-
-type Section = {
+export type Section = {
+  order: number
   title: string
-  summary?: string
   ordered: boolean
-  links?: Link[]
+  links: Link[]
+  summary?: string
 }
 
-type Link = {
+export type Link = {
   title: string
   url: string
   author?: string
@@ -35,7 +21,7 @@ type Link = {
 // TODO: add sections, do query to edgedb
 type GlobalGuide = {
   summary: string
-  sections?: Section[]
+  sections: Section[]
 }
 
 type PageState = "Global Guide" | "Links" | "Notes" | "Edit Global Guide"
@@ -55,9 +41,10 @@ export default function createGlobalTopic() {
     prettyName: "",
     globalGuide: {
       summary: "",
+      sections: [],
     },
-    showPage: "Global Guide",
-    userLearningStatus: null
+    showPage: "Edit Global Guide",
+    userLearningStatus: null,
   })
 
   return {
@@ -71,6 +58,16 @@ export default function createGlobalTopic() {
     // TODO: add effect that will send db query to update learning status of user
     setUserLearningStatus: (state: LearningStatus) => {
       setGlobalTopic({ userLearningStatus: state })
+    },
+    addSection: (state: Section) => {
+      const newSections = [...globalTopic.globalGuide.sections, state]
+      setGlobalTopic({
+        ...globalTopic,
+        globalGuide: {
+          ...globalTopic.globalGuide,
+          sections: newSections,
+        },
+      })
     },
   }
 }

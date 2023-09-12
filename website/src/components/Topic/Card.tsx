@@ -34,6 +34,7 @@ export default function Card(props: Props) {
             <div class="">
               <div class="flex items-center">
                 <div class="font-semibold p-2 px-2 pl-4">{props.name}</div>
+                {/* TODO: have the 1 come from the server */}
                 <div class="px-1 mt-[0.8px] p-[1px] h-fit text-[12px] font-light bg-neutral-200 flex items-center justify-center rounded-full w-fit">
                   1
                 </div>

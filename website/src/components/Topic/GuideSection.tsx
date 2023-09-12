@@ -1,26 +1,17 @@
 import { For } from "solid-js"
 import Icon from "../Icon"
 import { Show } from "solid-js"
-
-type Link = {
-  title: string
-  url: string
-  year?: string
-  type?: string
-  author?: string
-  time?: string
-  relatedLinks?: Link[]
-}
+import { Link } from "../../GlobalContext/global-topic"
 
 type Props = {
-  sectionTitle: string
+  title: string
   links: Link[]
 }
 
 export default function GuideSection(props: Props) {
   return (
     <div class="pt-6 flex flex-col gap-6 leading-[18.78px] border-[#EAEAEA] border rounded-lg p-3">
-      <div class="text-[#131313] font-bold">{props.sectionTitle}</div>
+      <div class="text-[#131313] font-bold">{props.title}</div>
       <div class="flex flex-col gap-6">
         <For each={props.links}>
           {(link) => {
@@ -33,11 +24,11 @@ export default function GuideSection(props: Props) {
                   <div class="w-fit flex flex-col">
                     <div class="font-bold text-[#3B5CCC]">{link.title}</div>
                     <div class="flex">
-                      <Show when={link?.type}>
+                      {/* <Show when={link?.type}>
                         <div class="font-light text-[12px] text-[#696969] border-r border-[#CCCCCC] px-2">
                           {link?.type}
                         </div>
-                      </Show>
+                      </Show> */}
                       <Show when={link?.year}>
                         <div class="font-light text-[12px] text-[#696969] border-r border-[#CCCCCC] px-2">
                           {link?.year}
@@ -48,11 +39,11 @@ export default function GuideSection(props: Props) {
                           {link?.author}
                         </div>
                       </Show>
-                      <Show when={link?.time}>
+                      {/* <Show when={link?.time}>
                         <div class="font-light text-[12px] text-[#696969] border-r border-[#CCCCCC] px-2">
                           {link?.time}
                         </div>
-                      </Show>
+                      </Show> */}
                       <div class="font-light text-[12px] text-[#696969] px-2">
                         {link.url}
                       </div>

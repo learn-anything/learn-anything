@@ -1,10 +1,11 @@
-import { Show, createEffect, createSignal } from "solid-js"
+import { For, Show, createEffect, createSignal } from "solid-js"
 import { createShortcut } from "@solid-primitives/keyboard"
 import { useTopic } from "../../GlobalContext/topic"
+import { useGlobalTopic } from "../../GlobalContext/global-topic"
+import { div } from "edgedb/dist/primitives/bigint"
 
 export default function GuideSummaryEdit() {
-  // const [editSummary, setEditSummary] = createSignal(false)
-  const topic = useTopic()
+  const topic = useGlobalTopic()
 
   createEffect(() => {
     const editableDiv = document.getElementById("GuideSummary")!
@@ -14,9 +15,27 @@ export default function GuideSummaryEdit() {
       editableDiv.focus()
     })
     createShortcut(["ENTER"], () => {
-      var details = document.getElementById("GuideSummary")!.innerHTML
-      console.log(details, "Details")
-      // setEditSummary(false)
+      let summary = document.getElementById("GuideSummary")!.innerHTML
+      console.log(summary, "summary")
+    })
+  })
+
+  createEffect(() => {
+    topic.globalTopic.globalGuide.sections.map((section, index) => {
+      console.log(`${section.title}${index}`, "WAT")
+      const editableDiv = document.getElementById(`${section.title}${index}`)!
+
+      editableDiv.addEventListener("click", () => {
+        editableDiv.setAttribute("contenteditable", "true")
+        editableDiv.focus()
+      })
+      createShortcut(["ENTER"], () => {
+        let sectionTitle = document.getElementById(
+          `${section.title}${index}`,
+        )!.innerHTML
+        console.log(sectionTitle, "section title")
+        console.log(`${section.title}${index}`, "section title id")
+      })
     })
   })
 
@@ -60,31 +79,75 @@ export default function GuideSummaryEdit() {
               </Show> */}
             </div>
           </div>
-          <div
-            class="text-[#696969] font-light overflow-hidden text-ellipsis outline-none"
-            id="GuideSummary"
-            onClick={() => {
-              // setEditSummary(true)
-            }}
-            // contentEditable={editSummary()}
+          <Show
+            when={topic.globalTopic.globalGuide.summary.length > 0}
+            fallback={
+              <div
+                class="text-[#696969] font-light overflow-hidden text-ellipsis outline-none"
+                id="GuideSummary"
+                onClick={() => {
+                  // setEditSummary(true)
+                }}
+                // contentEditable={editSummary()}
+              >
+                Add summary
+              </div>
+            }
           >
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-            Voluptatem, dolor ratione est iste facilis et accusantium tempore
-            eius, cumque aut voluptate veritatis in qui doloremque. Aspernatur
-            aliquid et vitae sint. Lorem ipsum dolor, sit amet consectetur
-            adipisicing elit. Voluptatem, dolor ratione est iste facilis et
-            accusantium tempore eius, cumque aut voluptate veritatis in qui
-            doloremque. Aspernatur aliquid et vitae sint.
-          </div>
+            <div
+              class="text-[#696969] font-light overflow-hidden text-ellipsis outline-none"
+              id="GuideSummary"
+              onClick={() => {
+                // setEditSummary(true)
+              }}
+              // contentEditable={editSummary()}
+            >
+              {topic.globalTopic.globalGuide.summary}
+            </div>
+          </Show>
         </div>
-        <div class="w-full flex justify-between items-center text-[#696969]">
-          <div>Contents</div>
-          <div class="flex gap-[23px]">
-            {/* <div>Duplicate</div> */}
-            <div>Improve Guide</div>
-            {/* <div>Filter</div> */}
-          </div>
+        <div
+          class="bg-[#3B5CCC] text-white p-3 rounded-[4px] flex justify-center items-center cursor-pointer hover:bg-[#3554b9] transition-all"
+          onClick={() => {
+            topic.addSection({
+              order: 0,
+              title: "hello",
+              ordered: true,
+              links: [],
+            })
+            console.log(topic.globalTopic.globalGuide.sections, "sections")
+          }}
+        >
+          Add section
         </div>
+        <For each={topic.globalTopic.globalGuide.sections}>
+          {(section, index) => {
+            return (
+              <div class="border border-slate-400 border-opacity-30 rounded-lg flex flex-col gap-4 p-4">
+                <Show
+                  when={section.title.length > 0}
+                  fallback={
+                    <div
+                      class="text-[#696969] font-light overflow-hidden text-ellipsis outline-none"
+                      id={`${section.title}${index()}`}
+                      onClick={() => {}}
+                    >
+                      Add section title
+                    </div>
+                  }
+                >
+                  <div
+                    class="text-[#696969] font-light overflow-hidden text-ellipsis outline-none"
+                    id={`${section.title}${index()}`}
+                    onClick={() => {}}
+                  >
+                    {section.title}
+                  </div>
+                </Show>
+              </div>
+            )
+          }}
+        </For>
       </div>
     </>
   )

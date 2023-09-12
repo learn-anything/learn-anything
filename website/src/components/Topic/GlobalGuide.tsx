@@ -1,28 +1,19 @@
+import { For } from "solid-js"
+import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import GuideSection from "./GuideSection"
 import GuideSummary from "./GuideSummary"
 
 export default function GlobalGuide() {
+  const topic = useGlobalTopic()
+
   return (
     <>
       <GuideSummary />
-      <GuideSection
-        sectionTitle="Intro"
-        links={[
-          {
-            title: "Learn Physics",
-            url: "https://github.com/learn-anything/learn-anything.xyz",
-            year: "2023",
-          },
-          {
-            title: "Learn Physics",
-            url: "https://github.com/learn-anything/learn-anything.xyz",
-          },
-          {
-            title: "Learn Physics",
-            url: "https://github.com/learn-anything/learn-anything.xyz",
-          },
-        ]}
-      />
+      <For each={topic.globalTopic.globalGuide.sections}>
+        {(section) => {
+          return <GuideSection title={section.title} links={section.links} />
+        }}
+      </For>
     </>
   )
 }

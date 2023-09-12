@@ -11,7 +11,7 @@ import GlobalGuide from "../components/Topic/GlobalGuide"
 import { useGlobalTopic } from "../GlobalContext/global-topic"
 
 export default function GlobalTopic() {
-  const globalTopic = useGlobalTopic()
+  const topic = useGlobalTopic()
   const mobius = useMobius()
 
   onMount(async () => {
@@ -31,7 +31,7 @@ export default function GlobalTopic() {
       console.log(globalTopic, "global topic (signed in)")
       if (globalTopic !== null) {
         // @ts-ignore
-        globalTopic.set(globalTopic.data.getGlobalTopic)
+        topic.set(globalTopic.data.getGlobalTopic)
       }
     } else {
       const globalTopicPublic = await mobius.query({
@@ -46,10 +46,10 @@ export default function GlobalTopic() {
           },
         },
       })
-      console.log(globalTopic, "global topic (not signed in)")
+      console.log(topic, "global topic (not signed in)")
       if (globalTopicPublic !== null) {
         // @ts-ignore
-        globalTopic.set(globalTopic.data.getGlobalTopic)
+        topic.set(globalTopic.data.getGlobalTopic)
       }
     }
   })
@@ -91,7 +91,7 @@ export default function GlobalTopic() {
         >
           <div
             onClick={() => {
-              globalTopic.setShowPage("Global Guide")
+              topic.setShowPage("Global Guide")
             }}
             class="border-b-2 border-black cursor-pointer"
           >
@@ -100,7 +100,7 @@ export default function GlobalTopic() {
           <div
             class="cursor-pointer"
             onClick={() => {
-              globalTopic.setShowPage("Global Guide")
+              topic.setShowPage("Global Guide")
             }}
           >
             Personal Guide
@@ -108,7 +108,7 @@ export default function GlobalTopic() {
           <div
             class="cursor-pointer"
             onClick={() => {
-              globalTopic.setShowPage("Links")
+              topic.setShowPage("Links")
             }}
           >
             Links
@@ -116,7 +116,7 @@ export default function GlobalTopic() {
           <div
             class="cursor-pointer"
             onClick={() => {
-              globalTopic.setShowPage("Notes")
+              topic.setShowPage("Notes")
             }}
           >
             Notes
@@ -132,22 +132,22 @@ export default function GlobalTopic() {
               <Guide />
             </Show> */}
             <Switch>
-              <Match when={globalTopic.globalTopic.showPage === "Global Guide"}>
+              <Match when={topic.globalTopic.showPage === "Global Guide"}>
                 <GlobalGuide />
               </Match>
-              <Match when={globalTopic.globalTopic.showPage === "Links"}>
+              <Match when={topic.globalTopic.showPage === "Links"}>
                 <GuideLinks />
               </Match>
-              <Match when={globalTopic.globalTopic.showPage === "Notes"}>
+              <Match when={topic.globalTopic.showPage === "Notes"}>
                 <GuideNotes />
               </Match>
-              <Match
-                when={globalTopic.globalTopic.showPage === "Edit Global Guide"}
-              >
+              <Match when={topic.globalTopic.showPage === "Edit Global Guide"}>
                 <GuideEdit />
               </Match>
             </Switch>
           </div>
+          {/* TODO: only here because commenting below block failed.. */}
+          {/* add this when we have the data from server for who is learning the topic..  */}
           <div
             id="InfoSidebar"
             class="h-full w-[35%] flex flex-col gap-6 overflow-auto"
@@ -155,7 +155,6 @@ export default function GlobalTopic() {
           >
             <div class="flex flex-col w-full gap-2 font-light text-[#6B6B70]">
               <div class="flex justify-between">
-                <div class="font-semibold">Sections</div>
                 <div
                   class="flex items-center gap-1 text-[#3B5CCC] font-light"
                 // onClick={}
