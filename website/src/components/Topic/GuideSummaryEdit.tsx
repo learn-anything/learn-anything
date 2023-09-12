@@ -3,6 +3,7 @@ import { createShortcut } from "@solid-primitives/keyboard"
 import { useTopic } from "../../GlobalContext/topic"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import { div } from "edgedb/dist/primitives/bigint"
+import Icon from "../Icon"
 
 export default function GuideSummaryEdit() {
   const topic = useGlobalTopic()
@@ -144,6 +145,73 @@ export default function GuideSummaryEdit() {
                     {section.title}
                   </div>
                 </Show>
+                <div class="flex flex-col">
+                  <For each={section.links}>
+                    {(link) => {
+                      return (
+                        <div class="flex items-center gap-6 justify-between border-b border-slate-400 border-opacity-30 p-2">
+                          <div class="w-full  h-full flex justify-between items-center">
+                            <div class="w-fit gap-1 flex flex-col">
+                              <div class="font-bold text-[#3B5CCC]">
+                                <input
+                                  class="border border-slate-400 border-opacity-30 rounded-[6px] px-2 py-1"
+                                  type="text"
+                                  placeholder="Title"
+                                  value={link.title}
+                                />
+                              </div>
+                              <div class="flex w-full">
+                                {/* <Show when={link?.type}>
+                              <div class="font-light text-[12px] text-[#696969] border-r border-[#CCCCCC] px-2">
+                                {link?.type}
+                              </div>
+                            </Show> */}
+                                <Show when={link?.year}>
+                                  <div class="font-light text-[12px] text-[#696969] border-r border-[#CCCCCC] px-2">
+                                    {link?.year}
+                                  </div>
+                                </Show>
+                                <Show when={link?.author}>
+                                  <div class="font-light text-[12px] text-[#696969] border-r border-[#CCCCCC] px-2">
+                                    {link?.author}
+                                  </div>
+                                </Show>
+                                {/* <Show when={link?.time}>
+                              <div class="font-light text-[12px] text-[#696969] border-r border-[#CCCCCC] px-2">
+                                {link?.time}
+                              </div>
+                            </Show> */}
+                                <div class="font-light w-full text-[12px] text-[#696969]">
+                                  <input
+                                    class="border border-slate-400 border-opacity-30 rounded-[6px] px-2 py-1 w-full"
+                                    type="text"
+                                    placeholder="URL"
+                                    value={link.title}
+                                  />
+                                </div>
+                              </div>
+                              {/* <div class="font-light text-[12px] text-[#696969]">PDF</div> */}
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    }}
+                  </For>
+                </div>
+                <div class="w-full justify-end flex">
+                  <div
+                    class="bg-[#3B5CCC] text-white text-[14px] p-2 px-4 rounded-[6px] flex justify-center items-center cursor-pointer hover:bg-[#3554b9] transition-all"
+                    onClick={() => {
+                      topic.addLinkToSection(0, {
+                        title: "",
+                        url: "",
+                      })
+                      console.log(section.links, "links")
+                    }}
+                  >
+                    Add link
+                  </div>
+                </div>
               </div>
             )
           }}

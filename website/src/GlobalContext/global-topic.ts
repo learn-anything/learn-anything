@@ -69,6 +69,33 @@ export default function createGlobalTopic() {
         },
       })
     },
+    addLinkToSection: (sectionOrder: number, link: Link) => {
+      // Find the index of the section to modify
+      const sectionIndex = globalTopic.globalGuide.sections.findIndex(section => section.order === sectionOrder);
+
+      // If the section is found
+      if (sectionIndex !== -1) {
+        // Copy the current sections
+        const newSections = [...globalTopic.globalGuide.sections];
+
+        // Copy the links array of the specific section and add the new link
+        newSections[sectionIndex] = {
+          ...newSections[sectionIndex],
+          links: [...newSections[sectionIndex].links, link]
+        };
+
+        // Update the globalTopic state with the modified sections
+        setGlobalTopic({
+          ...globalTopic,
+          globalGuide: {
+            ...globalTopic.globalGuide,
+            sections: newSections
+          }
+        });
+      } else {
+        console.error(`Section with order ${sectionOrder} not found.`);
+      }
+    },
   }
 }
 
