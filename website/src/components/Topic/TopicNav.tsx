@@ -1,24 +1,19 @@
 import { For, Show, createEffect, createSignal, untrack } from "solid-js"
-import { A, Link, useNavigate } from "solid-start"
+import { A, useNavigate } from "solid-start"
 import { createShortcut } from "@solid-primitives/keyboard"
-import { useTopic } from "../../GlobalContext/topic"
 import { useUser } from "../../GlobalContext/user"
 import Icon from "../Icon"
+import { useGlobalTopic } from "../../GlobalContext/global-topic"
+import { useGlobalState } from "../../GlobalContext/global"
 
+// TODO: add fuzzy searching for topics. also consider lower case inputs matching results too
 export default function TopicNav() {
   const [showInput, setShowInput] = createSignal(false)
   const navigate = useNavigate()
-  const topic = useTopic()
+  const topic = useGlobalTopic()
+  const global = useGlobalState()
   const user = useUser()
 
-  // TODO: add fuzzy searching for topics. also consider lower case inputs matching results too
-  const [topics, setTopics] = createSignal([
-    "NLP",
-    "Chemistry",
-    "Physics",
-    "Nature",
-    "Math",
-  ])
   const [topicSearchResults, setTopicSearchResults] = createSignal<string[]>([])
   const [topicSearchInput, setTopicSearchInput] = createSignal("")
   const [focusedTopic, setFocusedTopic] = createSignal(0)
@@ -42,7 +37,8 @@ export default function TopicNav() {
   createEffect(() => {
     if (topicSearchInput()) {
       untrack(() => {
-        setTopicSearchResults(topics())
+        // TODO: breaking.. need custom search component
+        // setTopicSearchResults(global.state.globalTopicsSearchList)
         setTopicSearchResults(
           topicSearchResults().filter((word: string) =>
             topicSearchInput()
@@ -200,11 +196,11 @@ export default function TopicNav() {
             {/* <div>Menu</div> */}
           </div>
         </div>
-        <Show when={topic.topic.path}>
+        {/* <Show when={topic.topic.path}>
           <div class="flex items-center font-light text-[14px] px-2 h-[30px] w-full bg-[#f5f5f5] text-[#696969]">
             {topic.topic.path}
           </div>
-        </Show>
+        </Show> */}
       </div>
     </>
   )

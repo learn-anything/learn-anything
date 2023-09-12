@@ -1,8 +1,7 @@
 import { For, Match, Show, Switch, createSignal } from "solid-js"
 import TopicNav from "../../components/Topic/TopicNav"
 import TitlePill from "../../components/Topic/TitlePill"
-import Guide from "../../components/Topic/Guide"
-import Card from "../../components/Topic/Card"
+// import Card from "../../components/Topic/Card"
 import { useTopic } from "../../GlobalContext/topic"
 import clsx from "clsx"
 import Modal from "../../components/Modal"
@@ -164,9 +163,9 @@ export default function UserProfile() {
               {/* TODO:  */}
               {/* <Card name="Interactive Graph" /> */}
               {/* <Show when={topic.topic.learners.length > 0}> */}
-              <Show when={true}>
+              {/* <Show when={true}>
                 <Card name="Suggested" />
-              </Show>
+              </Show> */}
             </div>
           </div>
         </div>

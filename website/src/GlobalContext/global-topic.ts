@@ -38,9 +38,15 @@ type GlobalGuide = {
   sections?: Section[]
 }
 
+type PageState = "Global Guide" | "Links" | "Notes" | "Edit Global Guide"
+
+type LearningStatus = "to learn" | "learning" | "learned" | null
+
 type GlobalTopic = {
+  showPage: PageState
   prettyName: string
   globalGuide: GlobalGuide
+  userLearningStatus: LearningStatus
 }
 
 // all state needed to render global topic found in learn-anything.xyz/<topic>
@@ -50,12 +56,21 @@ export default function createGlobalTopic() {
     globalGuide: {
       summary: "",
     },
+    showPage: "Global Guide",
+    userLearningStatus: null
   })
 
   return {
     globalTopic,
     set: (state: GlobalTopic) => {
       setGlobalTopic(state)
+    },
+    setShowPage: (state: PageState) => {
+      setGlobalTopic({ showPage: state })
+    },
+    // TODO: add effect that will send db query to update learning status of user
+    setUserLearningStatus: (state: LearningStatus) => {
+      setGlobalTopic({ userLearningStatus: state })
     },
   }
 }

@@ -1,9 +1,9 @@
-import { Show, createSignal } from "solid-js"
-import { useTopic } from "../../GlobalContext/topic"
+import { createSignal } from "solid-js"
+import { useGlobalTopic } from "../../GlobalContext/global-topic"
 
 export default function GuideSummary(props: any) {
   const [showSummary, setShowSummary] = createSignal(false)
-  const topic = useTopic()
+  const topic = useGlobalTopic()
 
   return (
     <>

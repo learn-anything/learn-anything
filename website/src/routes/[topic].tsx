@@ -1,6 +1,5 @@
 import { Match, Show, Switch, onMount } from "solid-js"
 import { signedIn } from "../../lib/auth"
-import { useTopic } from "../GlobalContext/topic"
 import Card from "../components/Topic/Card"
 import GuideEdit from "../components/Topic/GuideEdit"
 import GuideLinks from "../components/Topic/GuideLinks"
@@ -9,12 +8,9 @@ import TitlePill from "../components/Topic/TitlePill"
 import TopicNav from "../components/Topic/TopicNav"
 import { useMobius } from "../root"
 import GlobalGuide from "../components/Topic/GlobalGuide"
-import { useGlobalState } from "../GlobalContext/global"
 import { useGlobalTopic } from "../GlobalContext/global-topic"
 
-export default function Topic() {
-  const topic = useTopic()
-  const global = useGlobalState()
+export default function GlobalTopic() {
   const globalTopic = useGlobalTopic()
   const mobius = useMobius()
 
@@ -95,7 +91,7 @@ export default function Topic() {
         >
           <div
             onClick={() => {
-              topic.setShowPage("Global Guide")
+              globalTopic.setShowPage("Global Guide")
             }}
             class="border-b-2 border-black cursor-pointer"
           >
@@ -104,7 +100,7 @@ export default function Topic() {
           <div
             class="cursor-pointer"
             onClick={() => {
-              topic.setShowPage("Global Guide")
+              globalTopic.setShowPage("Global Guide")
             }}
           >
             Personal Guide
@@ -112,7 +108,7 @@ export default function Topic() {
           <div
             class="cursor-pointer"
             onClick={() => {
-              topic.setShowPage("Links")
+              globalTopic.setShowPage("Links")
             }}
           >
             Links
@@ -120,7 +116,7 @@ export default function Topic() {
           <div
             class="cursor-pointer"
             onClick={() => {
-              topic.setShowPage("Notes")
+              globalTopic.setShowPage("Notes")
             }}
           >
             Notes
@@ -136,16 +132,18 @@ export default function Topic() {
               <Guide />
             </Show> */}
             <Switch>
-              <Match when={topic.topic.showPage === "Global Guide"}>
+              <Match when={globalTopic.globalTopic.showPage === "Global Guide"}>
                 <GlobalGuide />
               </Match>
-              <Match when={topic.topic.showPage === "Links"}>
+              <Match when={globalTopic.globalTopic.showPage === "Links"}>
                 <GuideLinks />
               </Match>
-              <Match when={topic.topic.showPage === "Notes"}>
+              <Match when={globalTopic.globalTopic.showPage === "Notes"}>
                 <GuideNotes />
               </Match>
-              <Match when={topic.topic.showPage === "Edit Global Guide"}>
+              <Match
+                when={globalTopic.globalTopic.showPage === "Edit Global Guide"}
+              >
                 <GuideEdit />
               </Match>
             </Switch>
@@ -187,7 +185,6 @@ export default function Topic() {
     </>
   )
 }
-
 
 // TODO: for some reason when you first run `pnpm dev`
 // nothing shows
