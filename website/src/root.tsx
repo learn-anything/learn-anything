@@ -14,26 +14,16 @@ import {
   Scripts,
   Title,
 } from "solid-start"
-import createEditGuideState, {
-  EditGuideProvider,
-} from "./GlobalContext/edit-guide"
-import createTopicState, { TopicProvider } from "./GlobalContext/topic"
+import { GlobalStateProvider, createGlobalState } from "./GlobalContext/global"
+import createGlobalTopic, {
+  GlobalTopicProvider,
+} from "./GlobalContext/global-topic"
 import { UserProvider, createUserState } from "./GlobalContext/user"
 import "./root.css"
 import UserProfile from "./routes/@(username)"
+import { getHankoCookie } from "../lib/auth"
 
-// TODO: probably hanko front end sdk has function to do this
-function getHankoCookie(): string {
-  const allCookies = document.cookie
-  const hankoCookie = allCookies
-    .split(";")
-    .find((cookie) => {
-      return cookie
-    })
-    ?.split("=")[1]
-  return hankoCookie ?? ""
-}
-
+// TODO: https://github.com/nikitavoloboev/la-issues/issues/54 (should stop having to manually update this schema )
 const typeDefs = `
   """Directs the executor to return values as a Streaming response."""
   directive @live on QUERY
@@ -100,7 +90,7 @@ function createMobius(options: { hankoCookie: () => string }) {
 
   const mobius = new Mobius<typeof typeDefs>({
     fetch: (query) =>
-      fetch("http://127.0.0.1:4000/graphql", {
+      fetch(import.meta.env.VITE_GRAFBASE_API_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -130,8 +120,8 @@ export function useSignIn() {
 
 export default function Root() {
   const user = createUserState()
-  const topic = createTopicState()
-  const editGuide = createEditGuideState()
+  const global = createGlobalState()
+  const globalTopic = createGlobalTopic()
 
   const filters: MatchFilters = {
     username: /^@.+/,
@@ -156,8 +146,8 @@ export default function Root() {
             <SignInCtx.Provider value={setHankoCookie}>
               <MobiusCtx.Provider value={mobius}>
                 <UserProvider value={user}>
-                  <TopicProvider value={topic}>
-                    <EditGuideProvider value={editGuide}>
+                  <GlobalStateProvider value={global}>
+                    <GlobalTopicProvider value={globalTopic}>
                       <Routes>
                         <Route
                           path="/:username"
@@ -166,8 +156,8 @@ export default function Root() {
                         />
                         <FileRoutes />
                       </Routes>
-                    </EditGuideProvider>
-                  </TopicProvider>
+                    </GlobalTopicProvider>
+                  </GlobalStateProvider>
                 </UserProvider>
               </MobiusCtx.Provider>
             </SignInCtx.Provider>

@@ -64,7 +64,7 @@ export default function SignInPage() {
       signIn(hankoCookie!)
 
       await mobius.mutate({
-        addUser: {
+        createUser: {
           where: {
             email: email,
           },

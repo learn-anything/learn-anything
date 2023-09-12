@@ -1,11 +1,10 @@
-import Icon from "../Icon"
 import GuideSection from "./GuideSection"
 import GuideSummary from "./GuideSummary"
 
-export default function Guide(props: any) {
+export default function GlobalGuide() {
   return (
     <>
-      <GuideSummary setCurrentTab={props.setCurrentTab} />
+      <GuideSummary />
       <GuideSection
         sectionTitle="Intro"
         links={[

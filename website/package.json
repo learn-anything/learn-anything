@@ -15,11 +15,11 @@
     "vite": "^4.4.9"
   },
   "dependencies": {
-    "@codemirror/view": "^6.18.0",
+    "@codemirror/view": "^6.18.1",
     "@hono/node-server": "^1.1.1",
     "@nothing-but/force-graph": "^0.2.1",
     "@nothing-but/utils": "^0.8.0",
-    "@solid-primitives/autofocus": "^0.0.107",
+    "@solid-primitives/autofocus": "^0.0.108",
     "@solid-primitives/event-listener": "^2.3.0",
     "@solid-primitives/keyboard": "^1.2.5",
     "@solidjs/meta": "^0.28.6",
@@ -33,7 +33,7 @@
     "fuse.js": "^6.6.2",
     "graphql-mobius": "^0.1.13",
     "graphql-request": "^6.1.0",
-    "hono": "^3.5.8",
+    "hono": "^3.6.0",
     "mri": "^1.2.0",
     "solid-codemirror": "^2.3.0",
     "solid-js": "^1.7.11",

@@ -1,10 +1,12 @@
 import { autofocus } from "@solid-primitives/autofocus"
+import type { JSX } from "solid-js"
 import Fuse from "fuse.js"
 import { batch, createMemo, createSignal } from "solid-js"
 
 type SearchResult = {
   name: string
   action: () => void
+  icon?: JSX.Element
 }
 
 type Props = {
@@ -16,6 +18,8 @@ type Props = {
 // and make it look as in https://lu.ma/create `Add Event Location` visually
 // to be used in landing page and all across LA
 // replace the mess search that is inside routes/index (landing page) with this component
+// search should be fuzzy too + case insensitive, but I think fuse lib takes care of that
+// you should be able to click on the results too to trigger the action
 export default function Search(props: Props) {
   const [searchResults, setSearchResults] = createSignal(props.searchResults)
   const [query, setQuery] = createSignal("")

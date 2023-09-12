@@ -1,4 +1,4 @@
-export function getHankoCookie() {
+export function getHankoCookie(): string {
   const allCookies = document.cookie
   const hankoCookie = allCookies
     .split(";")
@@ -6,7 +6,7 @@ export function getHankoCookie() {
       return cookie
     })
     ?.split("=")[1]
-  return hankoCookie
+  return hankoCookie ?? ""
 }
 
 export function signedIn() {

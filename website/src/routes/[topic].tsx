@@ -2,32 +2,20 @@ import { Match, Show, Switch, onMount } from "solid-js"
 import { signedIn } from "../../lib/auth"
 import { useTopic } from "../GlobalContext/topic"
 import Card from "../components/Topic/Card"
-import Guide from "../components/Topic/Guide"
 import GuideEdit from "../components/Topic/GuideEdit"
 import GuideLinks from "../components/Topic/GuideLinks"
 import GuideNotes from "../components/Topic/GuideNotes"
 import TitlePill from "../components/Topic/TitlePill"
 import TopicNav from "../components/Topic/TopicNav"
 import { useMobius } from "../root"
-
-type Link = {
-  title: string
-  url: string
-}
-
-type Section = {
-  title: string
-  summary: string
-  links?: Link[]
-}
-
-type Guide = {
-  summary: string
-  sections: Section[]
-}
+import GlobalGuide from "../components/Topic/GlobalGuide"
+import { useGlobalState } from "../GlobalContext/global"
+import { useGlobalTopic } from "../GlobalContext/global-topic"
 
 export default function Topic() {
   const topic = useTopic()
+  const global = useGlobalState()
+  const globalTopic = useGlobalTopic()
   const mobius = useMobius()
 
   onMount(async () => {
@@ -38,20 +26,17 @@ export default function Topic() {
             topicName: "3d-printing",
           },
           select: {
-            name: true,
             prettyName: true,
             topicSummary: true,
             // learningStatus: true,
           },
         },
       })
-
-      console.log(globalTopic, "global topic")
+      console.log(globalTopic, "global topic (signed in)")
       if (globalTopic !== null) {
         // @ts-ignore
-        topic.setTopic(globalTopic.data.GlobalTopic)
+        globalTopic.set(globalTopic.data.getGlobalTopic)
       }
-      console.log(globalTopic, "global topic")
     } else {
       const globalTopicPublic = await mobius.query({
         publicGetGlobalTopic: {
@@ -65,11 +50,11 @@ export default function Topic() {
           },
         },
       })
+      console.log(globalTopic, "global topic (not signed in)")
       if (globalTopicPublic !== null) {
         // @ts-ignore
-        topic.setTopic(globalTopicPublic.data.GlobalTopicPublic)
+        globalTopic.set(globalTopic.data.getGlobalTopic)
       }
-      // console.log(globalTopicPublic, "global topic public")
     }
   })
 
@@ -152,7 +137,7 @@ export default function Topic() {
             </Show> */}
             <Switch>
               <Match when={topic.topic.showPage === "Global Guide"}>
-                <Guide />
+                <GlobalGuide />
               </Match>
               <Match when={topic.topic.showPage === "Links"}>
                 <GuideLinks />

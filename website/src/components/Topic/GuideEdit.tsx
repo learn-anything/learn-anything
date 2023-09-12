@@ -1,14 +1,10 @@
-import { For } from "solid-js"
 import GuideSummaryEdit from "./GuideSummaryEdit"
-import GuideSectionEdit from "./GuideSectionEdit"
-import { useTopic } from "../../GlobalContext/topic"
 
 export default function GuideEdit() {
-  const topic = useTopic()
   return (
     <>
       <GuideSummaryEdit />
-      <For each={topic.topic.guideSections}>
+      {/* <For each={topic.topic.guideSections}>
         {(section) => {
           return (
             <GuideSectionEdit
@@ -17,7 +13,7 @@ export default function GuideEdit() {
             />
           )
         }}
-      </For>
+      </For> */}
     </>
   )
 }

@@ -14,6 +14,7 @@ import { Canvas, Graph, Anim } from "@nothing-but/force-graph"
 import { Num } from "@nothing-but/utils"
 import { getHankoCookie } from "../../lib/auth"
 import { useMobius } from "../root"
+import { useGlobalState } from "../GlobalContext/global"
 
 // TODO: add fuzzy search of topics, especially consider lower case should also match
 
@@ -48,33 +49,25 @@ export function generateInitialGraph(length: number = 256): Graph.Graph {
   return Graph.makeGraph(graph_options, nodes, edges)
 }
 
-type TopicSearchResult = {
-  prettyName: string,
-  name: string
-}
-
 // TODO: load the graph with graph data from server (no undefined flying around)
 export default function Home() {
   const navigate = useNavigate()
   const mobius = useMobius()
-  const [topics, setTopics] = createSignal<TopicSearchResult[]>([])
-
-  createEffect(() => {
-    console.log(topics(), "topics")
-  })
+  const global = useGlobalState()
 
   onMount(async () => {
-    const res = await mobius.query({
-      publicGetGlobalTopics: {
-        prettyName: true,
-        name: true
+    if (global.state.globalTopicsSearchList.length < 1) {
+      const res = await mobius.query({
+        publicGetGlobalTopics: {
+          prettyName: true,
+          name: true
+        }
+      })
+      console.log(res)
+      if (res) {
+        // @ts-ignore
+        global.setGlobalTopicsSearchList(res.data?.publicGetGlobalTopics)
       }
-    })
-    console.log(res)
-    if (res) {
-      // TODO: no idea why it complains
-      // @ts-ignore
-      setTopics(res.data?.publicGetGlobalTopics)
     }
   })
 
@@ -165,7 +158,7 @@ export default function Home() {
   createEffect(() => {
     if (topicSearchInput()) {
       untrack(() => {
-        setTopicSearchResults(topics().map(topic => topic.prettyName))
+        setTopicSearchResults(global.state.globalTopicsSearchList.map(topic => topic.prettyName))
         setTopicSearchResults(
           topicSearchResults().filter((word: any) =>
             topicSearchInput()

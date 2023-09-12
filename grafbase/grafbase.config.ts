@@ -11,11 +11,11 @@ export default config({
 
 // definitions
 
-const learningStatus = g.enum("learningStatus", [
-  "to_learn",
-  "learning",
-  "learning",
-])
+// const learningStatus = g.enum("learningStatus", [
+//   "to_learn",
+//   "learning",
+//   "learning",
+// ])
 
 const link = g.input("link", {
   title: g.string(),

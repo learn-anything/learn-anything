@@ -9,13 +9,11 @@ import { toMarkdown } from "mdast-util-to-markdown"
 import { toString } from "mdast-util-to-string"
 import * as path from "path"
 import * as prettier from "prettier"
-import { getGlobalTopics } from "../crud/global-topic"
 
 dotenv.config()
 
 async function main() {
-  const topics = await getGlobalTopics()
-  console.log(topics, "topics")
+
 }
 
 main()

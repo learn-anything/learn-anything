@@ -330,8 +330,8 @@ importers:
   website:
     dependencies:
       '@codemirror/view':
-        specifier: ^6.18.0
-        version: 6.18.0
+        specifier: ^6.18.1
+        version: 6.18.1
       '@hono/node-server':
         specifier: ^1.1.1
         version: 1.1.1
@@ -342,8 +342,8 @@ importers:
         specifier: ^0.8.0
         version: 0.8.0
       '@solid-primitives/autofocus':
-        specifier: ^0.0.107
-        version: 0.0.107(solid-js@1.7.11)
+        specifier: ^0.0.108
+        version: 0.0.108(solid-js@1.7.11)
       '@solid-primitives/event-listener':
         specifier: ^2.3.0
         version: 2.3.0(solid-js@1.7.11)
@@ -384,14 +384,14 @@ importers:
         specifier: ^6.1.0
         version: 6.1.0(graphql@16.7.1)
       hono:
-        specifier: ^3.5.8
-        version: 3.5.8
+        specifier: ^3.6.0
+        version: 3.6.0
       mri:
         specifier: ^1.2.0
         version: 1.2.0
       solid-codemirror:
         specifier: ^2.3.0
-        version: 2.3.0(@codemirror/state@6.2.1)(@codemirror/view@6.18.0)(solid-js@1.7.11)
+        version: 2.3.0(@codemirror/state@6.2.1)(@codemirror/view@6.18.1)(solid-js@1.7.11)
       solid-js:
         specifier: ^1.7.11
         version: 1.7.11
@@ -3013,6 +3013,14 @@ packages:
       w3c-keyname: 2.2.8
     dev: false
 
+  /@codemirror/view@6.18.1:
+    resolution: {integrity: sha512-xcsXcMkIMd7l3WZEWoc4ljteAiqzxb5gVerRxk5132p5cLix6rTydWTQjsj2oxORepfsrwy1fC4r20iMa9plrg==}
+    dependencies:
+      '@codemirror/state': 6.2.1
+      style-mod: 4.1.0
+      w3c-keyname: 2.2.8
+    dev: false
+
   /@denysvuika/preact-translate@0.4.1(preact@10.15.1):
     resolution: {integrity: sha512-JCgTwPd6iq0nD6betffGYT4C2mj+PYLjEPuDcMRny4Nsh4E2W7UHWD8/jHnUyGiDnt0nezqAzP0s/AB+6XMVJg==}
     peerDependencies:
@@ -4925,15 +4933,6 @@ packages:
       solid-js: 1.7.8
     dev: true
 
-  /@solid-primitives/autofocus@0.0.107(solid-js@1.7.11):
-    resolution: {integrity: sha512-CWa87WQA5McII2uOb74aMYdQq9oNVtKDEdzFKXHHwUY1yXQKXzoXE+yBu4jtqG81IVkJCDpEdaal7PvdSOMhag==}
-    peerDependencies:
-      solid-js: ^1.6.12
-    dependencies:
-      '@solid-primitives/utils': 6.2.1(solid-js@1.7.11)
-      solid-js: 1.7.11
-    dev: false
-
   /@solid-primitives/autofocus@0.0.107(solid-js@1.7.8):
     resolution: {integrity: sha512-CWa87WQA5McII2uOb74aMYdQq9oNVtKDEdzFKXHHwUY1yXQKXzoXE+yBu4jtqG81IVkJCDpEdaal7PvdSOMhag==}
     peerDependencies:
@@ -4941,6 +4940,15 @@ packages:
     dependencies:
       '@solid-primitives/utils': 6.2.0(solid-js@1.7.8)
       solid-js: 1.7.8
+    dev: false
+
+  /@solid-primitives/autofocus@0.0.108(solid-js@1.7.11):
+    resolution: {integrity: sha512-ZWPOwyas6jw6SgwzTTSQKmdf9bJU540+dEMSA4dwA7MHvbksh38Z4Tyjo8YiJmVfbzKzJXgO18g81I1lLR28jw==}
+    peerDependencies:
+      solid-js: ^1.6.12
+    dependencies:
+      '@solid-primitives/utils': 6.2.1(solid-js@1.7.11)
+      solid-js: 1.7.11
     dev: false
 
   /@solid-primitives/bounds@0.0.114(solid-js@1.7.8):
@@ -7960,6 +7968,11 @@ packages:
 
   /hono@3.5.8:
     resolution: {integrity: sha512-ZipTmGfHm43q5QOEBGog2wyejyNUcicjPt0BLDQ8yz9xij/y9RYXRpR1YPxMpQqeyNM7isvpsIAe9Ems51Wq0Q==}
+    engines: {node: '>=16.0.0'}
+    dev: false
+
+  /hono@3.6.0:
+    resolution: {integrity: sha512-snkW8naO1WCrQvpAGE/du30Ek0h71gSM3g4RzzdPIB2LQnl12BEwZYH3s2Kssd6kXGORqHmpoyMBMLWtc9nzKQ==}
     engines: {node: '>=16.0.0'}
     dev: false
 
@@ -11097,6 +11110,20 @@ packages:
       '@changesets/cli': 2.26.2
       '@codemirror/state': 6.2.1
       '@codemirror/view': 6.18.0
+      solid-js: 1.7.11
+    dev: false
+
+  /solid-codemirror@2.3.0(@codemirror/state@6.2.1)(@codemirror/view@6.18.1)(solid-js@1.7.11):
+    resolution: {integrity: sha512-ExqwuGYSK0f9jrRzJIl/aaPrLjqxecW5kCFvZegnvqm20wZOL1S53WxzvVof+ICzHyWOlM/3Zbg9+eD2jgD7Yw==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@codemirror/state': ^6.2.0
+      '@codemirror/view': ^6.12.0
+      solid-js: ^1.7.0
+    dependencies:
+      '@changesets/cli': 2.26.2
+      '@codemirror/state': 6.2.1
+      '@codemirror/view': 6.18.1
       solid-js: 1.7.11
     dev: false
 
