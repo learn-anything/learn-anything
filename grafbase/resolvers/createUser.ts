@@ -1,6 +1,6 @@
 import { GraphQLError } from "graphql"
 import { addUser } from "../../edgedb/crud/user"
-import { validUserEmailFromToken } from "../../lib/grafbase/grafbase"
+import { validUserEmailFromToken } from "../../lib/grafbase/hanko-validate"
 
 export default async function createUserResolver(
   root: any,

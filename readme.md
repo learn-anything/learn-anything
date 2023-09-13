@@ -217,7 +217,7 @@ It is advisable you read them, before you start developing anything as they try 
 
 There is big focus on documentation and clarity in the project. All code should be clear and understandable and well documented.
 
-Check [docs/dev-tips.md] for some advice on development.
+Check [docs/dev-tips.md](docs/dev-tips.md) for some advice on development.
 
 ### ♥️
 
