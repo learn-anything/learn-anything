@@ -1,7 +1,7 @@
 import { GraphQLError } from "graphql"
 import { validUserEmailFromToken } from "../../lib/grafbase/hanko-validate"
 
-export default async function createUserResolver(
+export default async function checkForGlobalLinkResolver(
   root: any,
   args: { email: string },
   context: any,

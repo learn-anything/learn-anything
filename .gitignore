@@ -9,6 +9,7 @@ app/.browserslistrc
 app/.electron-vendors.cache.json
 .eslintcache
 docs/private.md
+docs/private-todo.md
 
 # local sqlite dbs
 *.sqlite
