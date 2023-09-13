@@ -68,6 +68,18 @@ g.query("getGlobalTopic", {
   resolver: "getGlobalTopic",
 })
 
+const outputOfCheckForGlobalLink = g.type("outputOfCheckForGlobalLink", {
+  url: g.string(),
+  title: g.string(),
+  year: g.int().optional(),
+  description: g.string().optional()
+})
+g.query("checkForGlobalLink", {
+  args: { linkUrl: g.string() },
+  returns: g.ref(outputOfCheckForGlobalLink),
+  resolver: "checkForGlobalLink",
+})
+
 g.query("stripe", {
   args: { plan: g.string() },
   returns: g.string(),

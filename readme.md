@@ -2,21 +2,26 @@
 
 > Organize world's knowledge, explore connections and curate learning paths
 
-Explanation of project's high level goals is [here](https://wiki.nikiv.dev/ideas/learn-anything).
+<!-- See [learn-anything.xyz/about](https://learn-anything.xyz/about) for what problems LA is trying to solve. -->
 
-<!-- Current focus is on making [Tauri app](#run-tauri-app) working. Essentially making an app like [Obsidian](https://obsidian.md/). -->
+###### Contents
 
-Reference [file structure](#file-structure) to make sense of how code is laid out in the repo.
+- [File structure](#file-structure) - make sense of how code is laid out in the repo
+- [Setup](#setup) - get started with development
+    - [Setup EdgeDB](#setup-edgedb)
+- [Run GraphQL server (Grafbase)](#)
+- [Run website (Solid)](#)
+- [Run desktop app (Tauri/Rust)](#)
+- [Contribute](#contribute) - contribute to project effectively
+- [Docs](#docs)
 
-Read [setup](#setup) to get started with development.
-
-Current tasks to do are [here](#tasks).
+Current tasks to do are in [docs/todo.md](docs/todo.md) (sorted by priority).
 
 Ask questions on [Discord](https://discord.com/invite/bxtD8x6aNF) if interested in developing the project or you get issues with setup.
 
 ## File structure
 
-Tech stack is described [here](docs/tech-stack.md).
+Tech stack is described in [docs/tech-stack.md](docs/tech-stack.md).
 
 - [app](app) - desktop app in Tauri/Solid
 - [docs](docs) - all the docs
@@ -46,47 +51,16 @@ pnpm i
 pnpm dev-setup
 ```
 
-`pnpm dev-setup` will `git clone` [seed repo](https://github.com/learn-anything/seed). It's needed for dev setup + [test suite](#test) to work.
+`pnpm dev-setup` will `git clone` [seed repo](https://github.com/learn-anything/seed). It's needed for some commands below to work.
 
-## Run Tauri app
+### Setup EdgeDB
 
-> TODO: WIP
+> **Warning**
+> instructions might break, will be reviewed before first LA public release
 
-Moving code from [Electron version](https://github.com/learn-anything/electron-version).
+Install EdgeDB by running `curl ..` command from [EdgeDB](https://www.edgedb.com) website. It is used as main server database.
 
-Check [tasks](#tasks).
-
-### Useful DevTools panel
-
-> broken until tauri app is fixed
-
-In the app you get after running `pnpm app:dev`, you will see DevTools panel in bottom right corner. It contains a list of useful actions you can run to aid you.
-
-One of the actions is `Seed TinyBase`. This will seed your local TinyBase store/sqlite with [one of the wikis](https://github.com/learn-anything/seed/tree/main/wiki/nikita) in seed folder.
-
-Read [app/packages/preload/src/index.ts](app/packages/preload/src/index.ts) file for details. `syncWikiFromSeed` is the function.
-
-## Test
-
-> below tests are in TS, only relevant now to help migration to rust
-
-```
-pnpm test
-```
-
-Will run tests found in [test](test).
-
-[test/wiki.test.ts](test/wiki.test.ts) file tests markdown file parsing.
-
-Running code via tests is very effective. You can open terminal on your right and edit code on the left and on each `.ts` file save it will rerun the test and check if behavior you are testing is correct. Reading through the test suite is great way to understand the backend part of the app.
-
-<!-- You can point the tests at your own wiki/notes folder too. Put the folder with files into seed/test folder you get from running `pnpm dev-setup` -->
-
-## Setup EdgeDB
-
-> broken until tauri app is fixed
-
-Assumes you installed [EdgeDB](https://www.edgedb.com/) (run `curl ..` command).
+Then run:
 
 ```
 pnpm db:init
@@ -108,7 +82,7 @@ Then, generate [EdgeDB TS](https://github.com/edgedb/edgedb-js) bindings with:
 pnpm db:ts-generate
 ```
 
-<!-- ## Seed DB with content -->
+<!-- ### Seed DB with content -->
 
 <!-- The goal is to seed EdgeDB with [this content](https://github.com/learn-anything/seed/tree/main/wiki/nikita). Can be seen online [here](https://wiki.nikiv.dev).
 
@@ -116,7 +90,7 @@ However you can try seed it with a wiki / folder of markdown of yourself.
 
 Just add a folder in `seed/wiki` like `seed/wiki/my-wiki` and put some .md files inside. -->
 
-<!-- ## Run Sync DB code
+<!-- ### Run Sync DB code
 
 The goal of this command:
 
@@ -137,11 +111,12 @@ You can swap the names to your own. The `SEED_FOLDER_NAME` is the folder that is
 
 Read [api/edgedb/sync/sync.ts](api/edgedb/sync/sync.ts) and [api/edgedb/sync/wiki.ts](api/edgedb/sync/wiki.ts) for details how sync works. -->
 
-## Run server
+## Run GraphQL server (Grafbase)
 
-> broken until tauri app is fixed
+> **Warning**
+> instructions might break, will be reviewed before first LA public release
 
-Before running server, create file at `api/server/.env` with this content:
+Before running [Grafbase](https://grafbase.com) server, create file at `grafbase/.env` with this content:
 
 ```
 EDGEDB_INSTANCE=learn-anything
@@ -155,20 +130,17 @@ In terminal after running above command you will see url like `http://localhost:
 Then run:
 
 ```
-pnpm api
-```
-
-In future [Grafbase](https://grafbase.com/) will be used for all API requests. There is blocker there that you can't do both public and private resolvers.
-
-```
-pnpm api:grafbase
+pnpm grafbase
 ```
 
 Will start Grafbase locally and give you GraphQL access.
 
-## Run web
+Visit http://localhost:4000/ to see [Grafbase pathfinder](https://grafbase.com/docs/tools/pathfinder)
 
-> broken until tauri app is fixed
+## Run website (Solid)
+
+> **Warning**
+> instructions might break, will be reviewed before first LA public release
 
 <!-- TODO: automate creating of `.env` file with default content as part of `pnpm setup` command -->
 <!-- TODO: do same for API .env too -->
@@ -190,29 +162,62 @@ pnpm web:dev
 
 Open http://localhost:3000
 
+## Run desktop app (Tauri/Rust)
+
+> **Warning**
+> instructions might break, will be reviewed before first LA public release
+
+```
+pnpm app:dev
+```
+
+<!-- ### Useful DevTools panel
+
+In the app you get after running `pnpm app:dev`, you will see DevTools panel in bottom right corner. It contains a list of useful actions you can run to aid you.
+
+One of the actions is `Seed TinyBase`. This will seed your local TinyBase store/sqlite with [one of the wikis](https://github.com/learn-anything/seed/tree/main/wiki/nikita) in seed folder.
+
+Read [app/packages/preload/src/index.ts](app/packages/preload/src/index.ts) file for details. `syncWikiFromSeed` is the function. -->
+
+<!-- ## Run mobile app
+
+> WIP -->
+
+<!-- ## Test
+
+> below tests are in TS, only relevant now to help migration to rust
+
+```
+pnpm test
+```
+
+Will run tests found in [test](test).
+
+[test/wiki.test.ts](test/wiki.test.ts) file tests markdown file parsing.
+
+Running code via tests is very effective. You can open terminal on your right and edit code on the left and on each `.ts` file save it will rerun the test and check if behavior you are testing is correct. Reading through the test suite is great way to understand the backend part of the app.
+
+You can point the tests at your own wiki/notes folder too. Put the folder with files into seed/test folder you get from running `pnpm dev-setup` -->
+
 ## Contribute
 
-The tasks to do are [outlined below](#tasks) (sorted by priority).
+Current tasks to do are in [docs/todo.md](docs/todo.md) (sorted by priority).
 
-If you are interested in helping out, join [Discord](https://discord.com/invite/bxtD8x6aNF) and let's make it happen. ✨
+If task/bug is not mentioned there, open a GitHub issue or start a discussion.
 
-## Tasks
+Join [Discord](https://discord.com/invite/bxtD8x6aNF) to get any help you need to make your contribution.
 
-All issues are made in [this repo](https://github.com/nikitavoloboev/la-issues/issues) for now. Until [this](https://github.com/calcom/synclinear.com/issues/127) is solved.
-
-Most urgent tasks to do are:
-
-- [Move markdown parser from ts to rust](https://github.com/nikitavoloboev/la-issues/issues/2)
-- [Setup Tauri + SQLite + Wiki sync](https://github.com/nikitavoloboev/la-issues/issues/21)
-- [Publish all content correctly to EdgeDB](https://github.com/nikitavoloboev/la-issues/issues/31)
-- [Website release](https://github.com/nikitavoloboev/la-issues/issues/11)
-- [Desktop app release](https://github.com/nikitavoloboev/la-issues/issues/17)
+All PRs with improvements to docs/code or contributions to existing discussions/issues are welcome.
 
 ## Docs
 
 All docs can be seen in [docs](docs).
 
-Will be uploaded to the web and rendered nicely soon.
+It is advisable you read them, before you start developing anything as they try give a lot of context and general knowledge.
+
+There is big focus on documentation and clarity in the project. All code should be clear and understandable and well documented.
+
+Check [docs/dev-tips.md] for some advice on development.
 
 ### ♥️
 

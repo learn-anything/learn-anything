@@ -23,7 +23,10 @@ type Guide = {
   sections: Section[]
 }
 
-// all state needed to render global topic found in learn-anything.xyz/<topic>
+// state that holds the edit state of guide
+// learn-anything.xyz/<topic>/edit
+// on save, it validates the guide and creates a guide merge request
+// if admin makes an edit and validation passes, it directly updates latestGlobalGuide of topic
 export default function createEditGuide() {
   const [guide, setGuide] = createStore<Guide>({
     summary: "",

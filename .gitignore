@@ -8,6 +8,7 @@ seed
 app/.browserslistrc
 app/.electron-vendors.cache.json
 .eslintcache
+docs/private.md
 
 # local sqlite dbs
 *.sqlite

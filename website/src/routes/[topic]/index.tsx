@@ -1,14 +1,13 @@
 import { Match, Show, Switch, onMount } from "solid-js"
-import { signedIn } from "../../lib/auth"
-import Card from "../components/Topic/Card"
-import GuideEdit from "../components/Topic/GuideEdit"
-import GuideLinks from "../components/Topic/GuideLinks"
-import GuideNotes from "../components/Topic/GuideNotes"
-import TitlePill from "../components/Topic/TitlePill"
-import TopicNav from "../components/Topic/TopicNav"
-import { useMobius } from "../root"
-import GlobalGuide from "../components/Topic/GlobalGuide"
-import { useGlobalTopic } from "../GlobalContext/global-topic"
+import { signedIn } from "../../../lib/auth"
+import Card from "../../components/Topic/Card"
+import GuideLinks from "../../components/Topic/GuideLinks"
+import GuideNotes from "../../components/Topic/GuideNotes"
+import TitlePill from "../../components/Topic/TitlePill"
+import TopicNav from "../../components/Topic/TopicNav"
+import { useMobius } from "../../root"
+import GlobalGuide from "../../components/Topic/GlobalGuide"
+import { useGlobalTopic } from "../../GlobalContext/global-topic"
 
 export default function GlobalTopic() {
   const topic = useGlobalTopic()
@@ -19,6 +18,7 @@ export default function GlobalTopic() {
       const globalTopic = await mobius.query({
         getGlobalTopic: {
           where: {
+            // TODO: get topic name from route
             topicName: "3d-printing",
           },
           select: {
@@ -140,9 +140,6 @@ export default function GlobalTopic() {
               </Match>
               <Match when={topic.globalTopic.showPage === "Notes"}>
                 <GuideNotes />
-              </Match>
-              <Match when={topic.globalTopic.showPage === "Edit Global Guide"}>
-                <GuideEdit />
               </Match>
             </Switch>
           </div>

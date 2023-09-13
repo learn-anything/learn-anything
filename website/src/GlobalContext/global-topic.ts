@@ -43,7 +43,7 @@ export default function createGlobalTopic() {
       summary: "",
       sections: [],
     },
-    showPage: "Edit Global Guide",
+    showPage: "Global Guide",
     userLearningStatus: null,
   })
 
