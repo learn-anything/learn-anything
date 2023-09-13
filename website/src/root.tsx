@@ -22,6 +22,7 @@ import { UserProvider, createUserState } from "./GlobalContext/user"
 import "./root.css"
 import UserProfile from "./routes/@(username)"
 import { getHankoCookie } from "../lib/auth"
+import createEditGuide, { EditGuideProvider } from "./GlobalContext/edit-guide"
 
 // TODO: https://github.com/nikitavoloboev/la-issues/issues/54 (should stop having to manually update this schema )
 const typeDefs = `
@@ -122,6 +123,7 @@ export default function Root() {
   const user = createUserState()
   const global = createGlobalState()
   const globalTopic = createGlobalTopic()
+  const editGuide = createEditGuide()
 
   const filters: MatchFilters = {
     username: /^@.+/,
@@ -148,14 +150,16 @@ export default function Root() {
                 <UserProvider value={user}>
                   <GlobalStateProvider value={global}>
                     <GlobalTopicProvider value={globalTopic}>
-                      <Routes>
-                        <Route
-                          path="/:username"
-                          component={UserProfile}
-                          matchFilters={filters}
-                        />
-                        <FileRoutes />
-                      </Routes>
+                      <EditGuideProvider value={editGuide}>
+                        <Routes>
+                          <Route
+                            path="/:username"
+                            component={UserProfile}
+                            matchFilters={filters}
+                          />
+                          <FileRoutes />
+                        </Routes>
+                      </EditGuideProvider>
                     </GlobalTopicProvider>
                   </GlobalStateProvider>
                 </UserProvider>

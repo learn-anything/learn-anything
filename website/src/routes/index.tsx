@@ -15,6 +15,8 @@ import { Num } from "@nothing-but/utils"
 import { getHankoCookie } from "../../lib/auth"
 import { useMobius } from "../root"
 import { useGlobalState } from "../GlobalContext/global"
+import Icon from "../components/Icon"
+import Search from "../components/Search"
 
 // TODO: add fuzzy search of topics, especially consider lower case should also match
 
@@ -213,6 +215,21 @@ export default function Home() {
             >
               I want to learn
             </div>
+            {/* TODO: make this work using <Search /> instead of mess that is currently here */}
+            {/* <Search placeholder="Physics" searchResults={[
+              {
+                name: "Math",
+                action: () => {
+                  navigate("math")
+                }
+              },
+              {
+                name: "Physics",
+                action: () => {
+                  navigate("physics")
+                }
+              },
+            ]}  /> */}
             <div class="w-full relative flex flex-col gap-3">
               <input
                 type="text"

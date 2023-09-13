@@ -1,14 +1,6 @@
 import { createContext, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 
-export type Section = {
-  order: number
-  title: string
-  ordered: boolean
-  links: Link[]
-  summary?: string
-}
-
 export type Link = {
   title: string
   url: string
@@ -16,6 +8,14 @@ export type Link = {
   year?: number
   completed?: boolean
   addedByUser?: boolean
+}
+
+export type Section = {
+  order: number
+  title: string
+  ordered: boolean
+  links: Link[]
+  summary?: string
 }
 
 // TODO: add sections, do query to edgedb

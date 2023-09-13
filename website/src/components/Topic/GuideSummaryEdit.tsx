@@ -192,6 +192,10 @@ export default function GuideSummaryEdit() {
                               </div>
                               {/* <div class="font-light text-[12px] text-[#696969]">PDF</div> */}
                             </div>
+                            <div class="flex gap-5 text-[14px] opacity-50">
+                              <div>Sort</div>
+                              <div>Delete</div>
+                            </div>
                           </div>
                         </div>
                       )
