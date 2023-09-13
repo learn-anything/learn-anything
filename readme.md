@@ -9,9 +9,9 @@
 - [File structure](#file-structure) - make sense of how code is laid out in the repo
 - [Setup](#setup) - get started with development
     - [Setup EdgeDB](#setup-edgedb)
-- [Run GraphQL server (Grafbase)](#)
-- [Run website (Solid)](#)
-- [Run desktop app (Tauri/Rust)](#)
+- [Run GraphQL server (Grafbase)](#run-graphql-server-grafbase)
+- [Run website (Solid)](#run-website-solid)
+- [Run desktop app (Tauri/Rust)](#run-desktop-app-taurirust)
 - [Contribute](#contribute) - contribute to project effectively
 - [Docs](#docs)
 
