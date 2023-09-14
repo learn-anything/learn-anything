@@ -185,7 +185,7 @@ export default function GlobalTopic() {
   )
 }
 
-// TODO: for some reason when you first run `pnpm dev`
+// TODO: for some reason when you first run `bun dev`
 // nothing shows
 // you have to add a div below and save then things show..
 // doesn't happen all the time..

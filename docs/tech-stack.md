@@ -132,7 +132,7 @@
 
 ## Build system
 
-- [Turbo build](https://turbo.build/) with [pnpm workspaces](https://pnpm.io/workspaces)
+- [Turbo build](https://turbo.build/) with [bun workspaces](https://bun.sh/docs/install/workspaces)
 
 ## Analytics / Observability
 

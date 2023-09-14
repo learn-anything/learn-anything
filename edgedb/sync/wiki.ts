@@ -8,7 +8,7 @@ import { Link, Note, RelatedLink, addTopic } from "../topic"
 import clipboard from "clipboardy"
 
 // TODO: to remove potentially
-// assumes `pnpm dev-setup` was ran
+// assumes `bun dev-setup` was ran
 // syncs content of folder with .md files inside `seed` folder to tinybase
 // all markdown files are synced with tinybase sqlite db
 // export async function seedWikiSync(folderName: string, persister: Persister) {

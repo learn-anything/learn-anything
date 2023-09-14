@@ -14,7 +14,7 @@ email=your-email@gmail.com
 wikiFolderPath=path/to/wiki/
 ```
 
-Example `wikiFolderPath` can link to the `seed` folder. If you ran `pnpm dev-setup` in root of project, you have [seed](https://github.com/learn-anything/seed) folder available. The path can then be something like:
+Example `wikiFolderPath` can link to the `seed` folder. If you ran `bun dev-setup` in root of project, you have [seed](https://github.com/learn-anything/seed) folder available. The path can then be something like:
 
 ```
 wikiFolderPath=/Users/nikiv/src/learn-anything.xyz/seed/wiki/nikita
@@ -25,7 +25,7 @@ wikiFolderPath=/Users/nikiv/src/learn-anything.xyz/seed/wiki/nikita
 Can run from root using:
 
 ```
-pnpm run db:cli
+bun db:cli
 ```
 
 Which using [watchexec](https://watchexec.github.io) will rerun the file on any of the `.ts` file changes.

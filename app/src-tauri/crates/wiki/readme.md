@@ -6,7 +6,7 @@ Will be used in src-tauri (desktop app) but also the CLI.
 
 ## Run
 
-Assumes `pnpm dev-setup` was run at root and `seed` folder is present at root.
+Assumes `bun dev-setup` was run at root and `seed` folder is present at root.
 
 ```
 cargo watch -q -- sh -c "tput reset && cargo test -q --lib"

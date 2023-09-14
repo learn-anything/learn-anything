@@ -10,7 +10,7 @@ pub fn get_md_files(folder_path: &str) -> Result<Vec<String>, io::Error> {
         return Err(io::Error::new(
             io::ErrorKind::NotFound,
             format!(
-                "Folder '{}' does not exist. Run `pnpm run dev-setup` at root of project.",
+                "Folder '{}' does not exist. Run `bun dev-setup` at root of project.",
                 folder_path
             ),
         ));

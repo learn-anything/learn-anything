@@ -1,12 +1,12 @@
 ## Run
 
 ```
-pnpm i
-pnpm dev
+bun i
+bun dev
 ```
 
 ## Deploy
 
 ```
-pnpm run deploy --name stripe --keep-vars
+bun deploy --name stripe --keep-vars
 ```

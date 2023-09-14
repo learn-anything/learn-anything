@@ -1,7 +1,7 @@
 {
   "build": {
-    "beforeDevCommand": "pnpm dev",
-    "beforeBuildCommand": "pnpm build",
+    "beforeDevCommand": "bun dev",
+    "beforeBuildCommand": "bun build",
     "devPath": "http://localhost:3000",
     "distDir": "https://learn-anything.xyz",
     "withGlobalTauri": false

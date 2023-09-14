@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest"
 
 // TODO: don't use filePaths[2] as it's not deterministic
 // do it by file name instead
-// assumes `pnpm dev-setup` has been run and seed folder is available at root
+// assumes `bun dev-setup` has been run and seed folder is available at root
 describe("parses", async () => {
   const testFolderPath = getTestFolderPath()
   const filePaths = await markdownFilePaths(testFolderPath)

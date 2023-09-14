@@ -28,7 +28,7 @@ Tech stack is described in [docs/tech-stack.md](docs/tech-stack.md).
 - [edgedb](edgedb) - [EdgeDB](https://www.edgedb.com/) used as main server database
   - [dbschema](edgedb/dbschema)
     - [default.esdl](edgedb/dbschema/default.esdl) - [EdgeDB schema](https://www.edgedb.com/docs/intro/schema) definining all the models and relations
-    - [migrations](edgedb/dbschema/migrations) - migration files get generated after running `pnpm db:migrate`
+    - [migrations](edgedb/dbschema/migrations) - migration files get generated after running `bun db:migrate`
   - [client.ts](edgedb/client.ts) - exports client to connect with EdgeDB
   - [topic.ts](edgedb/topic.ts) / [user.ts](api/edgedb/user.ts) - CRUD functions on models
 - [grafbase](grafbase) - [Grafbase](https://grafbase.com/) provides GraphQL API layer for all server functions like talking with DB
@@ -42,16 +42,16 @@ Tech stack is described in [docs/tech-stack.md](docs/tech-stack.md).
 
 ## Setup
 
-Everything is driven using [pnpm](https://pnpm.io/installation) commands as part of monorepo setup using [pnpm workspaces](https://pnpm.io/workspaces).
+Everything is driven using [bun](https://bun.sh) commands as part of monorepo setup using [bun workspaces](https://bun.sh/docs/install/workspaces).
 
 First run:
 
 ```
-pnpm i
-pnpm dev-setup
+bun i
+bun dev-setup
 ```
 
-`pnpm dev-setup` will `git clone` [seed repo](https://github.com/learn-anything/seed). It's needed for some commands below to work.
+`bun dev-setup` will `git clone` [seed repo](https://github.com/learn-anything/seed). It's needed for some commands below to work.
 
 ### Setup EdgeDB
 
@@ -63,7 +63,7 @@ Install EdgeDB by running `curl ..` command from [EdgeDB](https://www.edgedb.com
 Then run:
 
 ```
-pnpm db:init
+bun db:init
 ```
 
 Follow instructions, name EdgeDB instance `learn-anything`.
@@ -73,13 +73,13 @@ Run `edgedb ui`. This will open EdgeDB graphical interface where you can run que
 Run below command to apply the schema defined in [default.esdl](db/dbschema/default.esdl) on your local DB:
 
 ```
-pnpm db:watch
+bun db:watch
 ```
 
 Then, generate [EdgeDB TS](https://github.com/edgedb/edgedb-js) bindings with:
 
 ```
-pnpm db:ts-generate
+bun db:ts-generate
 ```
 
 <!-- ### Seed DB with content -->
@@ -95,7 +95,7 @@ Just add a folder in `seed/wiki` like `seed/wiki/my-wiki` and put some .md files
 The goal of this command:
 
 ```
-pnpm db:sync
+bun db:sync
 ```
 
 Is to sync your local EdgeDB instance with the contents of the `seed` folder you just cloned.
@@ -123,14 +123,14 @@ EDGEDB_INSTANCE=learn-anything
 EDGEDB_SECRET_KEY=edbt_ey
 ```
 
-`EDGEDB_SECRET_KEY` can be gotten by running `pnpm db:ui` which will open the EdgeDB UI.
+`EDGEDB_SECRET_KEY` can be gotten by running `bun db:ui` which will open the EdgeDB UI.
 
 In terminal after running above command you will see url like `http://localhost:10700/ui?authToken=edbt_ey`. `EDGEDB_SECRET_KEY` is the authToken content.
 
 Then run:
 
 ```
-pnpm grafbase
+bun grafbase
 ```
 
 Will start Grafbase locally and give you GraphQL access.
@@ -142,7 +142,7 @@ Visit http://localhost:4000/ to see [Grafbase pathfinder](https://grafbase.com/d
 > **Warning**
 > instructions might break, will be reviewed before first LA public release
 
-<!-- TODO: automate creating of `.env` file with default content as part of `pnpm setup` command -->
+<!-- TODO: automate creating of `.env` file with default content as part of `bun setup` command -->
 <!-- TODO: do same for API .env too -->
 
 Create `.env` file inside [website](app/packages/website) with this content:
@@ -157,7 +157,7 @@ API_OF_GRAFBASE=http://127.0.0.1:4000/graphql
 Run:
 
 ```
-pnpm web:dev
+bun web:dev
 ```
 
 Open http://localhost:3000
@@ -168,12 +168,12 @@ Open http://localhost:3000
 > instructions might break, will be reviewed before first LA public release
 
 ```
-pnpm app:dev
+bun app:dev
 ```
 
 <!-- ### Useful DevTools panel
 
-In the app you get after running `pnpm app:dev`, you will see DevTools panel in bottom right corner. It contains a list of useful actions you can run to aid you.
+In the app you get after running `bun app:dev`, you will see DevTools panel in bottom right corner. It contains a list of useful actions you can run to aid you.
 
 One of the actions is `Seed TinyBase`. This will seed your local TinyBase store/sqlite with [one of the wikis](https://github.com/learn-anything/seed/tree/main/wiki/nikita) in seed folder.
 
@@ -188,7 +188,7 @@ Read [app/packages/preload/src/index.ts](app/packages/preload/src/index.ts) file
 > below tests are in TS, only relevant now to help migration to rust
 
 ```
-pnpm test
+bun test
 ```
 
 Will run tests found in [test](test).
@@ -197,7 +197,7 @@ Will run tests found in [test](test).
 
 Running code via tests is very effective. You can open terminal on your right and edit code on the left and on each `.ts` file save it will rerun the test and check if behavior you are testing is correct. Reading through the test suite is great way to understand the backend part of the app.
 
-You can point the tests at your own wiki/notes folder too. Put the folder with files into seed/test folder you get from running `pnpm dev-setup` -->
+You can point the tests at your own wiki/notes folder too. Put the folder with files into seed/test folder you get from running `bun dev-setup` -->
 
 ## Contribute
 

@@ -73,12 +73,6 @@
 - global links added should have `verified: false/true`
     - LA validates links that are non verified to make sure they have right metadata
 
-## DX
-
-- replace pnpm with bun
-    - make use of bun workspaces
-    - make sure everything works and does not break (update readme.md commands/setup)
-
 ## Other
 
 - if not editing guide sections inline, can highlight the section being edited when `section edit` slide window shows
