@@ -41,24 +41,18 @@ const typeDefs = `
     publicGetGlobalTopics: [outputOfPublicGetGlobalTopics!]!
     publicGetGlobalTopic(topicName: String!): publicGlobalTopic!
     getGlobalTopic(topicName: String!): globalTopic!
+    checkForGlobalLink(linkUrl: String!): outputOfCheckForGlobalLink!
     stripe(plan: String!): String!
   }
 
   type globalTopic {
-    name: String!
     prettyName: String!
     topicSummary: String!
-    learningStatus: learningStatus
   }
 
   input inputToUpdateGlobalTopic {
     topicSummary: String!
     sections: [section!]!
-  }
-
-  enum learningStatus {
-    to_learn
-    learning
   }
 
   input link {
@@ -68,6 +62,13 @@ const typeDefs = `
     year: Int
     completed: Boolean
     addedByUser: Boolean
+  }
+
+  type outputOfCheckForGlobalLink {
+    url: String!
+    title: String!
+    year: Int
+    description: String
   }
 
   type outputOfPublicGetGlobalTopics {

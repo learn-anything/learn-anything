@@ -22,9 +22,11 @@ export async function validUserEmailFromToken(context: any) {
     throw new GraphQLError("Verification failed")
   }
   console.log(verifiedJWT, "verified JWT")
-  return "nikita@nikiv.dev"
-  // process.env.PUBLIC_HANKO_API_URL
+  console.log(JSON.stringify(verifiedJWT), "verified JWT")
 
   // const email = await fetch(`${process.env.PUBLIC_HANKO_API_URL}/users/`)
+
   // return email
+  return "nikita@nikiv.dev"
+  // process.env.PUBLIC_HANKO_API_URL
 }

@@ -14,13 +14,13 @@ export async function publicGetGlobalTopics() {
 
 // for use in global topic page (i.e. learn-anything.xyz/physics) for non authenticated users
 export async function publicGetGlobalTopic(topicName: string) {
-  const globalTopic = await e.select(e.GlobalTopic, (globalTopic) => ({
+  const globalTopic = await e.assert_single(e.select(e.GlobalTopic, (globalTopic) => ({
     prettyName: true,
     topicSummary: true,
     filter: e.op(globalTopic.name, "=", topicName)
-  }))
+  })))
     .run(client)
-  return globalTopic[0]
+  return globalTopic
 }
 
 // for use in global topic page (i.e. learn-anything.xyz/physics) for authenticated users

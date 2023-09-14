@@ -221,6 +221,22 @@ export default function GuideSummaryEdit() {
                               </div>
                             </div>
                             <div class="flex gap-5 text-[14px] opacity-50">
+                              <div onClick={async () => {
+                                {/* @ts-ignore */ }
+                                const linkUrl = document.getElementById(linkUrlId)?.value
+                                const res = await mobius.query({
+                                  checkForGlobalLink: {
+                                    where: {
+                                      linkUrl: linkUrl
+                                    },
+                                    select: {
+                                      url: true,
+                                      title: true
+                                    }
+                                  }
+                                })
+                                console.log(res, "res")
+                              }} class="cursor-pointer">Check URL</div>
                               <div class="cursor-pointer">Sort</div>
                               <div class="cursor-pointer">Delete</div>
                             </div>

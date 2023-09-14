@@ -7,6 +7,7 @@ export default async function checkForGlobalLinkResolver(
   context: any,
 ) {
   const email = await validUserEmailFromToken(context)
+  console.log("ran?")
   if (email) {
     // TODO: mocking for now, update with real db call
     return {
