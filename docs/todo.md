@@ -73,7 +73,7 @@ Date in [] is approximate hard deadline.
 
 - hit Grafbase cache for most things where it makes sense
     - global guides, more?
-- official topics should verified badge
+- official topics should have verified badge
 
 ## GlobalLink improvements
 
