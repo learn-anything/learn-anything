@@ -1,13 +1,6 @@
-Assumes you read [contribute section](../readme.md#contribute).
-
-Below list consists of all issues that need to be done, sorted by ones that are most urgent to do.
-
-If interested in helping, join [Discord](https://discord.com/invite/bxtD8x6aNF).
-
-Date in [] is approximate hard deadline.
-
 ## Public website release [september 19]
 
+- do call to hanko on token validate to get email from token
 - global edit of guide working
     - works well with global stores
     - mutations work

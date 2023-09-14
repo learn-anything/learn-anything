@@ -1,55 +1,12 @@
-import { Show, onMount } from "solid-js"
-import { signedIn } from "../../../lib/auth"
+import { Show } from "solid-js"
 import Card from "../../components/Topic/Card"
 import GuideEdit from "../../components/Topic/GuideEdit"
 import TitlePill from "../../components/Topic/TitlePill"
 import TopicNav from "../../components/Topic/TopicNav"
-import { useMobius } from "../../root"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 
 export default function EditGuide() {
   const topic = useGlobalTopic()
-  const mobius = useMobius()
-
-  onMount(async () => {
-    if (signedIn()) {
-      const globalTopic = await mobius.query({
-        getGlobalTopic: {
-          where: {
-            topicName: "3d-printing",
-          },
-          select: {
-            prettyName: true,
-            topicSummary: true,
-            // learningStatus: true,
-          },
-        },
-      })
-      console.log(globalTopic, "global topic (signed in)")
-      if (globalTopic !== null) {
-        // @ts-ignore
-        topic.set(globalTopic.data.getGlobalTopic)
-      }
-    } else {
-      const globalTopicPublic = await mobius.query({
-        publicGetGlobalTopic: {
-          where: {
-            topicName: "3d-printing",
-          },
-          select: {
-            name: true,
-            prettyName: true,
-            topicSummary: true,
-          },
-        },
-      })
-      console.log(topic, "global topic (not signed in)")
-      if (globalTopicPublic !== null) {
-        // @ts-ignore
-        topic.set(globalTopic.data.getGlobalTopic)
-      }
-    }
-  })
 
   return (
     <>
@@ -165,8 +122,3 @@ export default function EditGuide() {
     </>
   )
 }
-
-// TODO: for some reason when you first run `pnpm dev`
-// nothing shows
-// you have to add a div below and save then things show..
-// doesn't happen all the time..

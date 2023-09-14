@@ -18,7 +18,7 @@ export type Section = {
   summary?: string
 }
 
-type Guide = {
+export type Guide = {
   summary: string
   sections: Section[]
 }
@@ -37,7 +37,37 @@ export default function createEditGuide() {
     guide,
     set: (state: Guide) => {
       setGuide(state)
-    }
+    },
+    addSection: (section: Section) => {
+      const newSections = [...guide.sections, section]
+      setGuide({
+        ...guide,
+        sections: newSections
+      })
+    },
+    addLinkToSection: (sectionOrder: number, link: Link) => {
+      // Find the index of the section to modify
+      const sectionIndex = guide.sections.findIndex(section => section.order === sectionOrder);
+
+      // If the section is found
+      if (sectionIndex !== -1) {
+        // Copy the current sections
+        const newSections = [...guide.sections];
+
+        // Copy the links array of the specific section and add the new link
+        newSections[sectionIndex] = {
+          ...newSections[sectionIndex],
+          links: [...newSections[sectionIndex].links, link]
+        };
+
+        setGuide({
+          ...guide,
+          sections: newSections
+        });
+      } else {
+        console.error(`Section with order ${sectionOrder} not found.`);
+      }
+    },
   }
 }
 

@@ -13,6 +13,9 @@ export default function GlobalTopic() {
   const topic = useGlobalTopic()
   const mobius = useMobius()
 
+  // TODO: avoid this as there is same onMount in [topic]/edit.tsx
+  // there should be only one in theory
+  // if you go from /index to /edit, get the data from global store, don't do another request for data already there
   onMount(async () => {
     if (signedIn()) {
       const globalTopic = await mobius.query({

@@ -23,7 +23,8 @@ export async function validUserEmailFromToken(context: any) {
   }
   console.log(verifiedJWT, "verified JWT")
   return "nikita@nikiv.dev"
+  // process.env.PUBLIC_HANKO_API_URL
 
-  // const email = await fetch("https://e879ccc9-285e-49d3-b37e-b569f0db4035.hanko.io/users/")
+  // const email = await fetch(`${process.env.PUBLIC_HANKO_API_URL}/users/`)
   // return email
 }
