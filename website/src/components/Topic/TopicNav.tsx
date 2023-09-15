@@ -3,12 +3,9 @@ import { A, useNavigate } from "solid-start"
 import { createShortcut } from "@solid-primitives/keyboard"
 import { useUser } from "../../GlobalContext/user"
 import Icon from "../Icon"
-<<<<<<< Updated upstream
+import Search from "../Search"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import { useGlobalState } from "../../GlobalContext/global"
-=======
-import Search from "../Search"
->>>>>>> Stashed changes
 
 // TODO: add fuzzy searching for topics. also consider lower case inputs matching results too
 export default function TopicNav() {

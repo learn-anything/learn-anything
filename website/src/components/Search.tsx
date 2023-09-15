@@ -1,21 +1,12 @@
 import { autofocus } from "@solid-primitives/autofocus"
-<<<<<<< Updated upstream
-import type { JSX } from "solid-js"
-=======
 import clsx from "clsx"
 import { div } from "edgedb/dist/primitives/bigint"
->>>>>>> Stashed changes
 import Fuse from "fuse.js"
 import { For, Show, batch, createMemo, createSignal } from "solid-js"
 
 type SearchResult = {
   name: string
-<<<<<<< Updated upstream
-  action: () => void
-  icon?: JSX.Element
-=======
   action?: () => void
->>>>>>> Stashed changes
 }
 
 type Props = {

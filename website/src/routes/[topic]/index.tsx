@@ -1,28 +1,13 @@
 import { Match, Show, Switch, onMount } from "solid-js"
-<<<<<<< Updated upstream:website/src/routes/[topic]/index.tsx
 import { signedIn } from "../../../lib/auth"
+import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import Card from "../../components/Topic/Card"
+import GlobalGuide from "../../components/Topic/GlobalGuide"
 import GuideLinks from "../../components/Topic/GuideLinks"
 import GuideNotes from "../../components/Topic/GuideNotes"
 import TitlePill from "../../components/Topic/TitlePill"
 import TopicNav from "../../components/Topic/TopicNav"
 import { useMobius } from "../../root"
-import GlobalGuide from "../../components/Topic/GlobalGuide"
-import { useGlobalTopic } from "../../GlobalContext/global-topic"
-=======
-import { signedIn } from "../../lib/auth"
-import { useTopic } from "../GlobalContext/topic"
-import Card from "../components/Topic/Card"
-import Guide from "../components/Topic/Guide"
-import GuideEdit from "../components/Topic/GuideEdit"
-import GuideLinks from "../components/Topic/GuideLinks"
-import GuideNotes from "../components/Topic/GuideNotes"
-import TitlePill from "../components/Topic/TitlePill"
-import TopicNav from "../components/Topic/TopicNav"
-import { useMobius } from "../root"
-import Modal from "../components/Modal"
-import Create from "../components/Create"
->>>>>>> Stashed changes:website/src/routes/[topic].tsx
 
 export default function GlobalTopic() {
   const topic = useGlobalTopic()
@@ -202,12 +187,3 @@ export default function GlobalTopic() {
     </>
   )
 }
-
-<<<<<<< Updated upstream:website/src/routes/[topic]/index.tsx
-// TODO: for some reason when you first run `bun dev`
-=======
-// TODO: for some reason when you first run `pnpm dev`
->>>>>>> Stashed changes:website/src/routes/[topic].tsx
-// nothing shows
-// you have to add a div below and save then things show..
-// doesn't happen all the time..

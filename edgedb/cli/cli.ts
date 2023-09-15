@@ -12,9 +12,7 @@ import * as prettier from "prettier"
 
 dotenv.config()
 
-async function main() {
-
-}
+async function main() {}
 
 main()
 
