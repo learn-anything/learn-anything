@@ -3,8 +3,12 @@ import { A, useNavigate } from "solid-start"
 import { createShortcut } from "@solid-primitives/keyboard"
 import { useUser } from "../../GlobalContext/user"
 import Icon from "../Icon"
+<<<<<<< Updated upstream
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import { useGlobalState } from "../../GlobalContext/global"
+=======
+import Search from "../Search"
+>>>>>>> Stashed changes
 
 // TODO: add fuzzy searching for topics. also consider lower case inputs matching results too
 export default function TopicNav() {
@@ -97,58 +101,16 @@ export default function TopicNav() {
                 <img src="/logo.jpg" alt="" />
               </div>
             </div>
-            <div
-              onClick={() => {
-                setShowInput(true)
-              }}
-              id={showInput() ? "InputExpanded" : "InputMinimised"}
-              class="rounded-[4px] transition-all h-full flex items-center text-[#696969] font-light border border-slate-400 drop-shadow-lg"
-            >
-              <Show
-                when={showInput()}
-                fallback={<div class="p-[12px]">Search Topic</div>}
-              >
-                <div class="relative w-full p-[12px]">
-                  <div class="flex items-center">
-                    <input
-                      type="text"
-                      class="w-full bg-transparent outline-none"
-                      placeholder="Search Topic"
-                      onInput={(e) => {
-                        setTopicSearchInput(e.target.value)
-                      }}
-                    />
-                  </div>
-                  <Show
-                    when={
-                      topicSearchInput() !== "" &&
-                      topicSearchResults().length !== 0
-                    }
-                  >
-                    <div class=" absolute top-[54px] bg-neutral-200 left-0 text-black font-semibold text-opacity-40 flex flex-col rounded w-full">
-                      <For each={topicSearchResults()}>
-                        {(topic) => (
-                          <div
-                            id={
-                              focusedTodoTitle() === topic
-                                ? "Focused"
-                                : "UnFocused"
-                            }
-                            onClick={() => {
-                              setFocusedTopic(
-                                topicSearchResults().indexOf(topic),
-                              )
-                            }}
-                            class="px-4 overflow-auto py-2"
-                          >
-                            <div>{topic}</div>
-                          </div>
-                        )}
-                      </For>
-                    </div>
-                  </Show>
-                </div>
-              </Show>
+
+            <div class="w-[500px] h-full">
+              <Search
+                placeholder="Search Topic"
+                searchResults={[
+                  { name: "hi" },
+                  { name: "bye" },
+                  { name: "physics" },
+                ]}
+              ></Search>
             </div>
           </div>
           <div id="NavMenu">Burger</div>

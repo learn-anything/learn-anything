@@ -1,12 +1,21 @@
 import { autofocus } from "@solid-primitives/autofocus"
+<<<<<<< Updated upstream
 import type { JSX } from "solid-js"
+=======
+import clsx from "clsx"
+import { div } from "edgedb/dist/primitives/bigint"
+>>>>>>> Stashed changes
 import Fuse from "fuse.js"
-import { batch, createMemo, createSignal } from "solid-js"
+import { For, Show, batch, createMemo, createSignal } from "solid-js"
 
 type SearchResult = {
   name: string
+<<<<<<< Updated upstream
   action: () => void
   icon?: JSX.Element
+=======
+  action?: () => void
+>>>>>>> Stashed changes
 }
 
 type Props = {
@@ -72,28 +81,57 @@ export default function Search(props: Props) {
 
   // TODO: show results too, not just input
   return (
-    <input
-      style={{ outline: "none", height: "44px" }}
-      class="w-full bg-transparent pl-2"
-      onKeyPress={(e) => {
-        const selected = results().selected()
-        if (e.key === "Enter" && selected) {
-          batch(() => {
-            {
-              /* TODO: not sure what should go here */
-            }
-            {
-              /* todoList.setFocusedTodoKey(selected)
+    <>
+      <style>
+        {`
+
+      `}
+      </style>
+      <div class="relative w-full h-full">
+        <div class="absolute w-full top-0 h-full left-0 z-10">
+          <div class=" bg-white border border-slate-400 flex-col flex items-center justify-center rounded-[4px] min-h-full w-full">
+            <input
+              style={{ outline: "none" }}
+              class={clsx(
+                "w-full bg-transparent p-4  h-full",
+                query() !== undefined && "border-b border-slate-400",
+              )}
+              onKeyPress={(e) => {
+                const selected = results().selected()
+                if (e.key === "Enter" && selected) {
+                  batch(() => {
+                    {
+                      /* TODO: not sure what should go here */
+                    }
+                    {
+                      /* todoList.setFocusedTodoKey(selected)
             todoList.setMode(TodoListMode.Default) */
-            }
-          })
-        }
-      }}
-      oninput={(e) => setQuery(e.target.value)}
-      autofocus
-      ref={(el) => autofocus(el)}
-      type="text"
-      placeholder={props.placeholder}
-    />
+                    }
+                  })
+                }
+              }}
+              oninput={(e) => setQuery(e.target.value)}
+              autofocus
+              ref={(el) => autofocus(el)}
+              type="text"
+              placeholder={props.placeholder}
+            />
+            <Show when={query() !== ""}>
+              <div class="flex flex-col w-full p-1">
+                <For each={searchResults()}>
+                  {(topic) => {
+                    return (
+                      <div class="w-full px-3 p-2 rounded-[6px] hover:bg-neutral-100">
+                        {topic.name}
+                      </div>
+                    )
+                  }}
+                </For>
+              </div>
+            </Show>
+          </div>
+        </div>
+      </div>
+    </>
   )
 }

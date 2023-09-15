@@ -1,15 +1,22 @@
+<<<<<<< Updated upstream
 import { For, Match, Show, Switch, createSignal } from "solid-js"
 import TopicNav from "../../components/Topic/TopicNav"
 import TitlePill from "../../components/Topic/TitlePill"
 // import Card from "../../components/Topic/Card"
 import { useTopic } from "../../GlobalContext/topic"
+=======
+>>>>>>> Stashed changes
 import clsx from "clsx"
-import Modal from "../../components/Modal"
+import { Match, Show, Switch, createSignal } from "solid-js"
+import { useTopic } from "../../GlobalContext/topic"
+import Card from "../../components/Topic/Card"
+import TopicNav from "../../components/Topic/TopicNav"
 // import ProfilePage from "../../components/ProfilePage"
 
 export default function UserProfile() {
   const [currentTab, setCurrentTab] = createSignal("All")
   const topic = useTopic()
+
   return (
     <>
       <style>{`
