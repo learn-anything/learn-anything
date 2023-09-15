@@ -13,7 +13,7 @@
     "db:watch": "cd edgedb && edgedb watch",
     "db:migrate": "cd edgedb && edgedb migration create && edgedb migrate && bunx @edgedb/generate edgeql-js --target ts",
     "db:ts-generate": "cd edgedb && bunx @edgedb/generate edgeql-js --target ts",
-    "db:cli": "cd edgedb && bun --watch cli/cli.ts",
+    "db:cli": "cd edgedb && tput reset && bun --watch cli/cli.ts",
     "grafbase": "bunx grafbase@latest dev",
     "grafbase:codegen": "graphql-codegen",
     "ts": "bun run.ts",
