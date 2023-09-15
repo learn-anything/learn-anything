@@ -12,7 +12,6 @@
   "devDependencies": {
     "@tauri-apps/cli": "^1.4.0",
     "autoprefixer": "^10.4.14",
-    "grafbase": "^0.22.0",
     "postcss": "^8.4.24",
     "prettier": "^2.8.8",
     "solid-devtools": "^0.27.3",
