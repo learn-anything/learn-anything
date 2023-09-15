@@ -51,6 +51,7 @@
     "dotenv": "^16.3.1",
     "edgedb": "^1.3.6",
     "fava": "^0.3.1",
+    "grafbase": "^0.34.0",
     "graphql": "^16.8.0",
     "graphql-codegen": "^0.4.0",
     "graphql-request": "^6.1.0",
@@ -79,8 +80,11 @@
     "node": ">=18"
   },
   "workspaces": [
-    "app/*",
-    "website/*",
-    "api/stripe/*"
+    "app",
+    "website",
+    "api/stripe"
+  ],
+  "trustedDependencies": [
+    "grafbase"
   ]
 }
