@@ -1,7 +1,6 @@
 {
   "name": "learn-anything",
   "scripts": {
-    "dev": "bun run.ts",
     "seed-clone": "git clone https://github.com/learn-anything/seed",
     "seed-update": "cd seed && git pull",
     "dev-setup": "bun seed-clone",
@@ -15,11 +14,10 @@
     "db:watch": "cd edgedb && edgedb watch",
     "db:migrate": "cd edgedb && edgedb migration create && edgedb migrate && bunx @edgedb/generate edgeql-js --target ts",
     "db:ts-generate": "cd edgedb && bunx @edgedb/generate edgeql-js --target ts",
-    "db:cli": "cd edgedb && watchexec --no-vcs-ignore --restart --exts ts \"tput reset && tsx cli/cli.ts\" --project-origin .",
+    "db:cli": "cd edgedb && bun --watch cli/cli.ts",
     "grafbase": "bunx grafbase@latest dev",
     "grafbase:codegen": "graphql-codegen",
-    "ts-run": "tsx run.ts",
-    "test": "vitest",
+    "ts": "bun run.ts",
     "test-rust-wiki": "cd app/src-tauri/crates/wiki/ && cargo watch -q -- sh -c \"tput reset && cargo test -q --lib\""
   },
   "devDependencies": {
