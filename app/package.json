@@ -1,5 +1,5 @@
 {
-  "name": "learn-anything",
+  "name": "@la/app",
   "scripts": {
     "dev": "solid-start dev --https",
     "build": "solid-start build",

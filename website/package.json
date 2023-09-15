@@ -1,5 +1,5 @@
 {
-  "name": "@nikita/website",
+  "name": "@la/website",
   "scripts": {
     "dev": "solid-start dev",
     "build": "solid-start build"

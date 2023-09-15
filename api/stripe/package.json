@@ -1,5 +1,5 @@
 {
-  "name": "@nikita/stripe",
+  "name": "@la/stripe",
   "scripts": {
     "dev": "wrangler dev src/index.ts",
     "deploy": "wrangler deploy src/index.ts"
