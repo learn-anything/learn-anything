@@ -16,7 +16,7 @@
     "db:cli": "cd edgedb && tput reset && bun --watch cli/cli.ts",
     "grafbase": "bunx grafbase@latest dev",
     "grafbase:codegen": "graphql-codegen",
-    "ts": "bun run.ts",
+    "ts": "tput reset && bun --watch run.ts",
     "test-rust-wiki": "cd app/src-tauri/crates/wiki/ && cargo watch -q -- sh -c \"tput reset && cargo test -q --lib\""
   },
   "devDependencies": {
