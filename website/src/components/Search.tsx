@@ -74,7 +74,6 @@ export default function Search(props: Props) {
     <>
       <style>
         {`
-
       `}
       </style>
       <div class="relative w-full h-full">

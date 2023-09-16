@@ -57,7 +57,7 @@ bun dev-setup
 ### Setup EdgeDB
 
 > **Warning**
-> instructions might break, will be reviewed before first LA public release
+> Instructions might break, will be reviewed before first LA public release
 
 Install EdgeDB by running `curl ..` command from [EdgeDB](https://www.edgedb.com) website. It is used as main server database.
 
@@ -69,15 +69,15 @@ bun db:init
 
 Follow instructions, name EdgeDB instance `learn-anything`.
 
-Run `edgedb ui`. This will open EdgeDB graphical interface where you can run queries or explore the schema.
+Run `bun db:ui`. This will open EdgeDB graphical interface where you can run queries or explore the schema.
 
-Run below command to apply the schema defined in [default.esdl](db/dbschema/default.esdl) on your local DB:
+Run below command to apply the schema defined in [default.esdl](edgedb/dbschema/default.esdl) on your local DB:
 
 ```
 bun db:watch
 ```
 
-Then, generate [EdgeDB TS](https://github.com/edgedb/edgedb-js) bindings with:
+Then, generate [EdgeDB-TS](https://github.com/edgedb/edgedb-js) bindings with:
 
 ```
 bun db:ts-generate
@@ -115,7 +115,7 @@ Read [api/edgedb/sync/sync.ts](api/edgedb/sync/sync.ts) and [api/edgedb/sync/wik
 ## Run GraphQL server (Grafbase)
 
 > **Warning**
-> instructions might break, will be reviewed before first LA public release
+> Instructions might break, will be reviewed before first LA public release
 
 Before running [Grafbase](https://grafbase.com) server, create file at `grafbase/.env` with this content:
 
@@ -135,7 +135,7 @@ npx grafbase@latest dev
 ```
 
 > **Warning**
-> Ideally [bunx](https://bun.sh/docs/cli/bunx) is used but `bun grafbase` fails to run. Not sure why. If you know the solution, please share it.
+> Ideally [bunx](https://bun.sh/docs/cli/bunx) is used but `bun api` fails to run. Not sure why. If you know the solution, please share it.
 
 Will start Grafbase locally and give you GraphQL access.
 
@@ -144,7 +144,7 @@ Visit http://localhost:4000/ to see [Grafbase pathfinder](https://grafbase.com/d
 ## Run website (Solid)
 
 > **Warning**
-> instructions might break, will be reviewed before first LA public release
+> Instructions might break, will be reviewed before first LA public release
 
 <!-- TODO: automate creating of `.env` file with default content as part of `bun setup` command -->
 <!-- TODO: do same for API .env too -->
@@ -169,7 +169,7 @@ Open http://localhost:3000
 ## Run desktop app (Tauri/Rust)
 
 > **Warning**
-> instructions might break, will be reviewed before first LA public release
+> Instructions might break, will be reviewed before first LA public release
 
 ```
 bun app
