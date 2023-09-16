@@ -160,8 +160,10 @@ module default {
     required title: str;
     # title as grabbed from url
     urlTitle: str;
-    # unique url of the link
+    # unique url of the link (without protocol)
     url: str;
+    # http / https
+    protocol: str;
     # TODO: should be exclusive but that was giving issues in migration of wiki
     # required url: str {
     #   constraint exclusive;

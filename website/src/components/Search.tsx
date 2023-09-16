@@ -33,13 +33,6 @@ export default function Search(props: Props) {
     }, { passive: true });
   });
 
-  // const [isFocused, setIsFocused] = createSignal(false);
-  // const clear = makeFocusListener(ref => setIsFocused(focused));
-  // const [inputRef, setInputRef] = createSignal<Element>(el);
-  // const isInputFocused = createFocusSignal(ref);
-  // let ref
-  // createFocusSignal(() => ref);
-
   const fuse = createMemo(
     () => {
       return new Fuse(props.searchResults, {
