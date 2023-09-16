@@ -1,7 +1,7 @@
 import { autofocus } from "@solid-primitives/autofocus"
 import clsx from "clsx"
 import Fuse from "fuse.js"
-import { untrack } from "solid-js"
+import { createEffect, untrack } from "solid-js"
 import { For, Show, batch, createMemo, createSignal, onMount } from "solid-js"
 
 type SearchResult = {
@@ -26,8 +26,7 @@ export default function Search(props: Props) {
 
   const fuse = createMemo(
     () => {
-      console.log(searchResults(), "test")
-      return new Fuse(searchResults(), {
+      return new Fuse(props.searchResults, {
         keys: ["name"],
         shouldSort: false,
       })
@@ -41,9 +40,7 @@ export default function Search(props: Props) {
     const [selected, setSelected] = createSignal<string>(results[0])
 
     const objResults = results.map(res => ({ name: res }))
-    // untrack(() => {
-    //   setSearchResults(objResults)
-    // })
+    setSearchResults(objResults)
 
     return {
       results,

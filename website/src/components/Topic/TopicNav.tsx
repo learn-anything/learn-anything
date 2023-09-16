@@ -107,7 +107,7 @@ export default function TopicNav() {
                   { name: "Math" },
                   { name: "Karabiner" },
                 ]}
-              ></Search>
+              />
             </div>
           </div>
           <div id="NavMenu">Burger</div>
