@@ -1,4 +1,5 @@
 dist
+run.ts
 .solid
 .env
 node_modules

@@ -1,7 +1,6 @@
 {
   "name": "learn-anything",
   "scripts": {
-    "dev": "bun run.ts",
     "seed-clone": "git clone https://github.com/learn-anything/seed",
     "seed-update": "cd seed && git pull",
     "dev-setup": "bun seed-clone",
@@ -11,65 +10,39 @@
     "web:start": "cd website && solid-start start",
     "db:init": "cd edgedb && edgedb project init",
     "db:ui": "cd edgedb && edgedb ui",
-    "db:sync": "cd edgedb/sync && tsx sync.ts",
     "db:watch": "cd edgedb && edgedb watch",
     "db:migrate": "cd edgedb && edgedb migration create && edgedb migrate && bunx @edgedb/generate edgeql-js --target ts",
     "db:ts-generate": "cd edgedb && bunx @edgedb/generate edgeql-js --target ts",
-    "db:cli": "cd edgedb && watchexec --no-vcs-ignore --restart --exts ts \"tput reset && tsx cli/cli.ts\" --project-origin .",
+    "db:cli": "cd edgedb && tput reset && bun --watch cli/cli.ts",
     "grafbase": "bunx grafbase@latest dev",
     "grafbase:codegen": "graphql-codegen",
-    "ts-run": "tsx run.ts",
-    "test": "vitest",
+    "ts": "tput reset && bun --watch run.ts",
     "test-rust-wiki": "cd app/src-tauri/crates/wiki/ && cargo watch -q -- sh -c \"tput reset && cargo test -q --lib\""
   },
   "devDependencies": {
     "bun-types": "^1.0.1",
     "@edgedb/generate": "^0.3.3",
     "@grafbase/sdk": "~0.6.1",
-    "autoprefixer": "^10.4.15",
     "mdast-util-from-markdown": "^2.0.0",
     "mdast-util-to-markdown": "^2.1.0",
     "mdast-util-to-string": "^4.0.0",
-    "postcss": "^8.4.29",
-    "solid-start-node": "^0.3.5",
-    "tailwindcss": "^3.3.3",
-    "tsx": "^3.12.10",
-    "typescript": "^5.2.2",
-    "vite": "^4.4.9"
+    "typescript": "^5.2.2"
   },
   "dependencies": {
     "@codemirror/view": "^6.19.0",
     "@graphql-codegen/cli": "^5.0.0",
     "@graphql-codegen/typescript-resolvers": "^4.0.1",
-    "@hono/node-server": "^1.1.1",
-    "@solid-primitives/event-listener": "^2.3.0",
-    "@solid-primitives/keyboard": "^1.2.5",
-    "@solidjs/meta": "^0.28.6",
-    "@solidjs/router": "^0.8.3",
     "clipboardy": "^3.0.0",
-    "clsx": "^2.0.0",
     "dotenv": "^16.3.1",
     "edgedb": "^1.3.6",
-    "fava": "^0.3.1",
+    "grafbase": "^0.34.0",
     "graphql": "^16.8.0",
     "graphql-codegen": "^0.4.0",
     "graphql-request": "^6.1.0",
-    "hono": "^3.6.0",
     "jose": "^4.14.6",
     "micromark": "^4.0.0",
     "mri": "^1.2.0",
     "prettier": "^3.0.3",
-    "solid-codemirror": "^2.3.0",
-    "solid-js": "^1.7.11",
-    "solid-markdown": "^1.2.2",
-    "solid-start": "^0.3.5",
-    "solid-start-cloudflare-pages": "^0.3.5",
-    "stripe": "^13.5.0",
-    "tinybase": "^4.2.2",
-    "undici": "^5.24.0",
-    "vite-tsconfig-paths": "^4.2.1",
-    "vitest": "0.34.4",
-    "watcher": "^2.3.0",
     "zod": "^3.22.2"
   },
   "prettier": {
@@ -79,8 +52,11 @@
     "node": ">=18"
   },
   "workspaces": [
-    "app/*",
-    "website/*",
-    "api/stripe/*"
+    "app",
+    "website",
+    "api/stripe"
+  ],
+  "trustedDependencies": [
+    "grafbase"
   ]
 }

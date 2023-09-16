@@ -1,5 +1,5 @@
 {
-  "name": "website",
+  "name": "@la/website",
   "scripts": {
     "dev": "solid-start dev",
     "build": "solid-start build"
@@ -15,8 +15,6 @@
     "vite": "^4.4.9"
   },
   "dependencies": {
-    "@codemirror/view": "^6.18.1",
-    "@hono/node-server": "^1.1.1",
     "@nothing-but/force-graph": "^0.2.1",
     "@nothing-but/utils": "^0.8.0",
     "@solid-primitives/autofocus": "^0.0.108",
@@ -26,16 +24,13 @@
     "@solidjs/router": "^0.8.3",
     "@teamhanko/hanko-elements": "0.8.3",
     "@teamhanko/hanko-frontend-sdk": "0.8.3",
-    "clipboardy": "^3.0.0",
     "clsx": "^2.0.0",
     "dotenv": "^16.3.1",
     "edgedb": "^1.3.5",
     "fuse.js": "^6.6.2",
     "graphql-mobius": "^0.1.13",
     "graphql-request": "^6.1.0",
-    "hono": "^3.6.0",
     "mri": "^1.2.0",
-    "solid-codemirror": "^2.3.0",
     "solid-js": "^1.7.11",
     "solid-markdown": "^1.2.2",
     "solid-start": "^0.3.5",
