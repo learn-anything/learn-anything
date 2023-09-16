@@ -103,9 +103,9 @@ export default function TopicNav() {
               <Search
                 placeholder="Search Topic"
                 searchResults={[
-                  { name: "hi" },
-                  { name: "bye" },
-                  { name: "physics" },
+                  { name: "Physics" },
+                  { name: "Math" },
+                  { name: "Karabiner" },
                 ]}
               ></Search>
             </div>
