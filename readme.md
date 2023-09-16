@@ -14,6 +14,7 @@
 - [Run desktop app (Tauri/Rust)](#run-desktop-app-taurirust)
 - [Contribute](#contribute) - contribute to project effectively
 - [Docs](#docs)
+- [Commands](#commands)
 
 Current tasks to do are in [todo.md](todo.md) (sorted by priority).
 
@@ -160,7 +161,7 @@ API_OF_GRAFBASE=http://127.0.0.1:4000/graphql
 Run:
 
 ```
-bun web:dev
+bun web
 ```
 
 Open http://localhost:3000
@@ -171,12 +172,12 @@ Open http://localhost:3000
 > instructions might break, will be reviewed before first LA public release
 
 ```
-bun app:dev
+bun app
 ```
 
 <!-- ### Useful DevTools panel
 
-In the app you get after running `bun app:dev`, you will see DevTools panel in bottom right corner. It contains a list of useful actions you can run to aid you.
+In the app you get after running `bun app`, you will see DevTools panel in bottom right corner. It contains a list of useful actions you can run to aid you.
 
 One of the actions is `Seed TinyBase`. This will seed your local TinyBase store/sqlite with [one of the wikis](https://github.com/learn-anything/seed/tree/main/wiki/nikita) in seed folder.
 
@@ -221,6 +222,30 @@ It is advisable you read them, before you start developing anything as they try 
 There is big focus on documentation and clarity in the project. All code should be clear and understandable and well documented.
 
 Check [docs/dev-tips.md](docs/dev-tips.md) for some advice on development.
+
+## Commands
+
+Ran with `bun <Name>`
+
+| Name            | Command                                                                                      |
+|-----------------|----------------------------------------------------------------------------------------------|
+| seed-clone      | git clone https://github.com/learn-anything/seed                                             |
+| seed-update     | cd seed && git pull                                                                          |
+| dev-setup       | bun seed-clone                                                                               |
+| app             | cd app && bun tauri:dev                                                                      |
+| web             | cd website && bun dev                                                                        |
+| web:build       | cd website && solid-start build                                                              |
+| web:start       | cd website && solid-start start                                                              |
+| db              | cd edgedb && tput reset && bun --watch cli/cli.ts                                            |
+| db:init         | cd edgedb && edgedb project init                                                             |
+| db:ui           | cd edgedb && edgedb ui                                                                       |
+| db:watch        | cd edgedb && edgedb watch                                                                    |
+| db:migrate      | cd edgedb && edgedb migration create && edgedb migrate && bunx @edgedb/generate edgeql-js --target ts |
+| db:ts-generate  | cd edgedb && bunx @edgedb/generate edgeql-js --target ts                                     |
+| api             | bunx grafbase@latest dev                                                                     |
+| api:codegen     | graphql-codegen                                                                              |
+| ts              | tput reset && bun --watch run.ts                                                             |
+| test-rust-wiki  | cd app/src-tauri/crates/wiki/ && cargo watch -q -- sh -c "tput reset && cargo test -q --lib" |
 
 ### ♥️
 

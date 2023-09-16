@@ -1,6 +1,5 @@
 import { autofocus } from "@solid-primitives/autofocus"
 import clsx from "clsx"
-import { div } from "edgedb/dist/primitives/bigint"
 import Fuse from "fuse.js"
 import { For, Show, batch, createMemo, createSignal } from "solid-js"
 
