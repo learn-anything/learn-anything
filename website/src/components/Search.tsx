@@ -21,7 +21,6 @@ type Props = {
 // search should be fuzzy too + case insensitive, but I think fuse lib takes care of that
 // you should be able to click on the results too to trigger the action
 export default function Search(props: Props) {
-  const [searchResults, setSearchResults] = createSignal(props.searchResults)
   const [query, setQuery] = createSignal("")
 
   const fuse = createMemo(
@@ -38,9 +37,6 @@ export default function Search(props: Props) {
       .map((r) => r.item.name)
 
     const [selected, setSelected] = createSignal<string>(results[0])
-
-    const objResults = results.map(res => ({ name: res }))
-    setSearchResults(objResults)
 
     return {
       results,
@@ -112,11 +108,11 @@ export default function Search(props: Props) {
             />
             <Show when={query() !== ""}>
               <div class="flex flex-col w-full p-1">
-                <For each={searchResults()}>
+                <For each={results().results}>
                   {(topic) => {
                     return (
                       <div class="w-full px-3 p-2 rounded-[6px] hover:bg-neutral-100">
-                        {topic.name}
+                        {topic}
                       </div>
                     )
                   }}
