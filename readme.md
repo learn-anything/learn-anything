@@ -130,8 +130,11 @@ In terminal after running above command you will see url like `http://localhost:
 Then run:
 
 ```
-bun grafbase
+npx grafbase@latest dev
 ```
+
+> **Warning**
+> Ideally [bunx](https://bun.sh/docs/cli/bunx) is used but `bun grafbase` fails to run. Not sure why. If you know the solution, please share it.
 
 Will start Grafbase locally and give you GraphQL access.
 
