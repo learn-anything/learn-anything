@@ -1,6 +1,6 @@
 # CLI
 
-Purpose of CLI is to quickly iterate on EdgeDB contents. Easily call edge-js query builder functions from [crud](../crud) folder and run them on local/production database.
+Purpose of CLI is to quickly iterate on EdgeDB contents. Easily call [edgedb-js](https://github.com/edgedb/edgedb-js) query builder functions from [crud](../crud) folder and run them on local/production database.
 
 ## Setup
 

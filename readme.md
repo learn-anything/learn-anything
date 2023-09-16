@@ -15,7 +15,7 @@
 - [Contribute](#contribute) - contribute to project effectively
 - [Docs](#docs)
 
-Current tasks to do are in [docs/todo.md](docs/todo.md) (sorted by priority).
+Current tasks to do are in [todo.md](todo.md) (sorted by priority).
 
 Ask questions on [Discord](https://discord.com/invite/bxtD8x6aNF) if interested in developing the project or you get issues with setup.
 
@@ -201,7 +201,7 @@ You can point the tests at your own wiki/notes folder too. Put the folder with f
 
 ## Contribute
 
-Current tasks to do are in [docs/todo.md](docs/todo.md) (sorted by priority).
+Current tasks to do are in [todo.md](todo.md) (sorted by priority).
 
 If task/bug is not mentioned there, open a GitHub issue or start a discussion.
 
