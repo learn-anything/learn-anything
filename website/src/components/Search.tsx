@@ -1,8 +1,7 @@
-import { autofocus } from "@solid-primitives/autofocus"
 import clsx from "clsx"
 import Fuse from "fuse.js"
-import { createEffect, untrack } from "solid-js"
-import { For, Show, batch, createMemo, createSignal, onMount } from "solid-js"
+import { For, Show, createEffect, createMemo, createSignal } from "solid-js"
+import { createFocusSignal } from "@solid-primitives/active-element";
 
 type SearchResult = {
   name: string
@@ -22,6 +21,11 @@ type Props = {
 // you should be able to click on the results too to trigger the action
 export default function Search(props: Props) {
   const [query, setQuery] = createSignal("")
+  const [inputRef, setInputRef] = createSignal<Element>(el);
+  const isInputFocused = createFocusSignal(ref);
+
+  let ref
+  createFocusSignal(() => ref);
 
   const fuse = createMemo(
     () => {
@@ -32,7 +36,17 @@ export default function Search(props: Props) {
     })
 
   const results = createMemo(() => {
-    const results = fuse()
+    let results
+    if (query() === "") {
+      results = props.searchResults.map(res => res.name)
+      const [selected, setSelected] = createSignal<string>(results[0])
+      return {
+        results,
+        selected,
+        setSelected
+      }
+    }
+    results = fuse()
       .search(query())
       .map((r) => r.item.name)
 
@@ -45,7 +59,8 @@ export default function Search(props: Props) {
     }
   })
 
-  // TODO: uncommented because wrapIndex was not defined, get it from kuskus
+  // TODO: make up/down work
+  // make pressing return on item works too
   // function selectNext(n: -1 | 1) {
   //   untrack(() => {
   //     const list = results().results
@@ -57,7 +72,6 @@ export default function Search(props: Props) {
   //     }
   //   })
   // }
-
   // createShortcuts({
   //   // Focus on todo up from search results
   //   ArrowUp() {
@@ -69,7 +83,6 @@ export default function Search(props: Props) {
   //   },
   // })
 
-  // TODO: show results too, not just input
   return (
     <>
       <style>
@@ -86,27 +99,17 @@ export default function Search(props: Props) {
                 query() !== undefined && "border-b border-slate-400",
               )}
               onKeyPress={(e) => {
-                console.log(results())
                 const selected = results().selected()
                 if (e.key === "Enter" && selected) {
-                  batch(() => {
-                    {
-                      /* TODO: not sure what should go here */
-                    }
-                    {
-                      /* todoList.setFocusedTodoKey(selected)
-            todoList.setMode(TodoListMode.Default) */
-                    }
-                  })
+                  console.log("selected result: ")
                 }
               }}
               oninput={(e) => setQuery(e.target.value)}
-              autofocus
-              ref={(el) => autofocus(el)}
+              ref={ref}
               type="text"
               placeholder={props.placeholder}
             />
-            <Show when={query() !== ""}>
+            <Show when={isInputFocused()}>
               <div class="flex flex-col w-full p-1">
                 <For each={results().results}>
                   {(topic) => {

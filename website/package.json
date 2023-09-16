@@ -17,6 +17,7 @@
   "dependencies": {
     "@nothing-but/force-graph": "^0.2.1",
     "@nothing-but/utils": "^0.8.0",
+    "@solid-primitives/active-element": "^2.0.17",
     "@solid-primitives/autofocus": "^0.0.108",
     "@solid-primitives/event-listener": "^2.3.0",
     "@solid-primitives/keyboard": "^1.2.5",
