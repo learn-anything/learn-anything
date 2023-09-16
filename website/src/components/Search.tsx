@@ -1,7 +1,7 @@
 import clsx from "clsx"
 import Fuse from "fuse.js"
-import { For, Show, createEffect, createMemo, createSignal } from "solid-js"
-import { createFocusSignal } from "@solid-primitives/active-element";
+import { For, Show, createMemo, createSignal, onMount } from "solid-js"
+import { makeEventListener } from "@solid-primitives/event-listener"
 
 type SearchResult = {
   name: string
@@ -21,11 +21,24 @@ type Props = {
 // you should be able to click on the results too to trigger the action
 export default function Search(props: Props) {
   const [query, setQuery] = createSignal("")
-  const [inputRef, setInputRef] = createSignal<Element>(el);
-  const isInputFocused = createFocusSignal(ref);
+  const [inputFocused, setInputFocused] = createSignal(false)
 
-  let ref
-  createFocusSignal(() => ref);
+  let ref!: HTMLInputElement
+  onMount(() => {
+    makeEventListener(ref, "focus", () => {
+      setInputFocused(true)
+    }, { passive: true });
+    makeEventListener(ref, "blur", () => {
+      setInputFocused(false)
+    }, { passive: true });
+  });
+
+  // const [isFocused, setIsFocused] = createSignal(false);
+  // const clear = makeFocusListener(ref => setIsFocused(focused));
+  // const [inputRef, setInputRef] = createSignal<Element>(el);
+  // const isInputFocused = createFocusSignal(ref);
+  // let ref
+  // createFocusSignal(() => ref);
 
   const fuse = createMemo(
     () => {
@@ -105,11 +118,11 @@ export default function Search(props: Props) {
                 }
               }}
               oninput={(e) => setQuery(e.target.value)}
-              ref={ref}
               type="text"
+              ref={ref}
               placeholder={props.placeholder}
             />
-            <Show when={isInputFocused()}>
+            <Show when={inputFocused()}>
               <div class="flex flex-col w-full p-1">
                 <For each={results().results}>
                   {(topic) => {

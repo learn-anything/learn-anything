@@ -134,8 +134,8 @@ Then run:
 npx grafbase@latest dev
 ```
 
-> **Warning**
-> Ideally [bunx](https://bun.sh/docs/cli/bunx) is used but `bun api` fails to run. Not sure why. If you know the solution, please share it.
+> **Note**
+> Ideally [bunx](https://bun.sh/docs/cli/bunx) is used but `bun api` [fails to run](https://github.com/oven-sh/bun/issues/5552)
 
 Will start Grafbase locally and give you GraphQL access.
 
