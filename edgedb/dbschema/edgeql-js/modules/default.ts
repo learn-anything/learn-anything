@@ -225,7 +225,7 @@ export type $UserλShape = $.typeutil.flatten<_std.$Object_6b06be9b27fe11ee83ff1
   "proMemberUntil": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "profileImage": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, true, false, false, false>;
-  "hankoUuid": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, true, false, false, false>;
+  "hankoId": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, true, false, false, false>;
   "<user[is UserGuide]": $.LinkDesc<$UserGuide, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user[is Wiki]": $.LinkDesc<$Wiki, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
@@ -234,7 +234,7 @@ type $User = $.ObjectType<"default::User", $UserλShape, null, [
   ..._std.$Object_6b06be9b27fe11ee83ff159af7e1bb81['__exclusives__'],
   {name: {__element__: _std.$str, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
   {email: {__element__: _std.$str, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
-  {hankoUuid: {__element__: _std.$str, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
+  {hankoId: {__element__: _std.$str, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
 ]>;
 const $User = $.makeType<$User>(_.spec, "f8096267-45e2-11ee-b9c2-8f965de693db", _.syntax.literal);
 

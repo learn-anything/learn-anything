@@ -10,7 +10,7 @@ module default {
       constraint exclusive;
     };
     # uniquie UUID for user, created on signup
-    hankoUuid: str {
+    hankoId: str {
         constraint exclusive;
     };
     # unique username
