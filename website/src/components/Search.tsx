@@ -1,18 +1,7 @@
-import { autofocus } from "@solid-primitives/autofocus"
-
-import { div } from "edgedb/dist/primitives/bigint"
-import Fuse from "fuse.js"
-import {
-  For,
-  Show,
-  batch,
-  createEffect,
-  createMemo,
-  createSignal,
-} from "solid-js"
 import clsx from "clsx"
-import { createShortcut, useKeyDownList } from "@solid-primitives/keyboard"
-import { Navigate, useNavigate } from "solid-start"
+import Fuse from "fuse.js"
+import { For, Show, createMemo, createSignal, onMount } from "solid-js"
+import { makeEventListener } from "@solid-primitives/event-listener"
 
 type SearchResult = {
   name: string
@@ -31,46 +20,52 @@ type Props = {
 // search should be fuzzy too + case insensitive, but I think fuse lib takes care of that
 // you should be able to click on the results too to trigger the action
 export default function Search(props: Props) {
-  const [searchResults, setSearchResults] = createSignal(props.searchResults)
   const [query, setQuery] = createSignal("")
-  const [focusedTopic, setFocusedTopic] = createSignal(0)
-  const [focusedTopicTitle, setFocusedTopicTitle] = createSignal("")
-  const navigate = useNavigate()
-  const [toggleSearch, setToggleSearch] = createSignal(false)
+  const [inputFocused, setInputFocused] = createSignal(false)
 
-  createShortcut(["ARROWDOWN"], () => {
-    if (focusedTopic() === searchResults().length - 1) {
-      setFocusedTopic(0)
-      return
-    }
-    setFocusedTopic(focusedTopic() + 1)
-  })
-  createShortcut(["ARROWUP"], () => {
-    if (focusedTopic() === 0) {
-      setFocusedTopic(searchResults.length - 1)
-      return
-    }
-    setFocusedTopic(focusedTopic() - 1)
-  })
-  createShortcut(["ENTER"], () => {
-    navigate(`/${searchResults()[focusedTopic()].name}`)
+  let ref!: HTMLInputElement
+  onMount(() => {
+    makeEventListener(
+      ref,
+      "focus",
+      () => {
+        setInputFocused(true)
+      },
+      { passive: true },
+    )
+    makeEventListener(
+      ref,
+      "blur",
+      () => {
+        setInputFocused(false)
+      },
+      { passive: true },
+    )
   })
 
-  const fuse = createMemo(
-    () =>
-      new Fuse(searchResults(), {
-        keys: ["name"],
-        shouldSort: false,
-      }),
-  )
+  const fuse = createMemo(() => {
+    return new Fuse(props.searchResults, {
+      keys: ["name"],
+      shouldSort: false,
+    })
+  })
 
   const results = createMemo(() => {
-    const results = fuse()
+    let results
+    if (query() === "") {
+      results = props.searchResults.map((res) => res.name)
+      const [selected, setSelected] = createSignal<string>(results[0])
+      return {
+        results,
+        selected,
+        setSelected,
+      }
+    }
+    results = fuse()
       .search(query())
       .map((r) => r.item.name)
 
     const [selected, setSelected] = createSignal<string>(results[0])
-    setFocusedTopicTitle(searchResults()[focusedTopic()].name)
 
     return {
       results,
@@ -79,7 +74,8 @@ export default function Search(props: Props) {
     }
   })
 
-  // TODO: uncommented because wrapIndex was not defined, get it from kuskus
+  // TODO: make up/down work
+  // make pressing return on item works too
   // function selectNext(n: -1 | 1) {
   //   untrack(() => {
   //     const list = results().results
@@ -91,7 +87,6 @@ export default function Search(props: Props) {
   //     }
   //   })
   // }
-
   // createShortcuts({
   //   // Focus on todo up from search results
   //   ArrowUp() {
@@ -103,88 +98,45 @@ export default function Search(props: Props) {
   //   },
   // })
 
-  // TODO: show results too, not just input
   return (
     <>
       <style>
         {`
-
       `}
       </style>
-      <div>
-        <div
-          class={clsx(
-            "relative w-[200px] h-full",
-            toggleSearch() && "w-[500px]",
-          )}
-        >
-          <div class="absolute w-full top-0 h-full left-0 z-10">
-            <div
+      <div class="relative w-full h-full">
+        <div class="absolute w-full top-0 h-full left-0 z-10">
+          <div class=" bg-white border border-slate-400 flex-col flex items-center justify-center rounded-[4px] min-h-full w-full">
+            <input
+              style={{ outline: "none" }}
               class={clsx(
-                " bg-white border border-slate-400 flex-col flex items-center justify-center rounded-[4px] min-h-full w-full",
-                toggleSearch() && "",
+                "w-full bg-transparent p-4  h-full",
+                query() !== undefined && "border-b border-slate-400",
               )}
-            >
-              <Show
-                when={toggleSearch()}
-                fallback={
-                  <div
-                    class="h-full p-4 w-full"
-                    onClick={() => {
-                      setToggleSearch(true)
-                    }}
-                  >
-                    Search Topic
-                  </div>
+              onKeyPress={(e) => {
+                const selected = results().selected()
+                if (e.key === "Enter" && selected) {
+                  console.log("selected result: ")
                 }
-              >
-                <input
-                  style={{ outline: "none" }}
-                  class={clsx(
-                    "w-full bg-transparent p-4  h-full",
-                    query() !== undefined && "border-b border-slate-400",
-                  )}
-                  onKeyPress={(e) => {
-                    const selected = results().selected()
-                    if (e.key === "Enter" && selected) {
-                      batch(() => {
-                        {
-                          /* TODO: not sure what should go here */
-                        }
-                        {
-                          /* todoList.setFocusedTodoKey(selected)
-              todoList.setMode(TodoListMode.Default) */
-                        }
-                      })
-                    }
+              }}
+              oninput={(e) => setQuery(e.target.value)}
+              type="text"
+              ref={ref}
+              placeholder={props.placeholder}
+            />
+            <Show when={inputFocused()}>
+              <div class="flex flex-col w-full p-1">
+                <For each={results().results}>
+                  {(topic) => {
+                    return (
+                      <div class="w-full px-3 p-2 rounded-[6px] hover:bg-neutral-100">
+                        {topic}
+                      </div>
+                    )
                   }}
-                  oninput={(e) => setQuery(e.target.value)}
-                  autofocus
-                  ref={(el) => autofocus(el)}
-                  type="text"
-                  placeholder={props.placeholder}
-                />
-              </Show>
-              <Show when={query() !== ""}>
-                <div class="flex flex-col w-full p-1">
-                  <For each={searchResults()}>
-                    {(topic) => {
-                      return (
-                        <div
-                          class={clsx(
-                            "w-full px-3 p-2 rounded-[6px] hover:bg-neutral-100",
-                            focusedTopicTitle() === topic.name &&
-                              "bg-neutral-100",
-                          )}
-                        >
-                          {topic.name}
-                        </div>
-                      )
-                    }}
-                  </For>
-                </div>
-              </Show>
-            </div>
+                </For>
+              </div>
+            </Show>
           </div>
         </div>
       </div>

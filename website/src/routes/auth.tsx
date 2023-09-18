@@ -1,6 +1,7 @@
 import { makeEventListener } from "@solid-primitives/event-listener"
 import { onMount } from "solid-js"
 import { register } from "@teamhanko/hanko-elements"
+// @ts-ignore
 import { UserClient } from "@teamhanko/hanko-frontend-sdk"
 import { useNavigate } from "solid-start"
 import { getHankoCookie } from "../../lib/auth"
@@ -50,9 +51,9 @@ export default function SignInPage() {
         localStorageKey: "hanko",
       })
       const user = await userClient.getCurrent()
+      console.log(user, "user")
+      const hankoId = user.id
       const email = user.email
-
-      localStorage.setItem("email", email)
 
       const allCookies = document.cookie
       const hankoCookie = allCookies
@@ -67,11 +68,12 @@ export default function SignInPage() {
         createUser: {
           where: {
             email: email,
+            hankoId: hankoId,
           },
           select: true,
         },
       })
-      navigate("/")
+      // navigate("/")
     },
     { passive: true },
   )

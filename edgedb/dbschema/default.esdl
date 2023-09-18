@@ -9,6 +9,10 @@ module default {
     required email: str {
       constraint exclusive;
     };
+    # uniquie UUID for user, created on signup
+    hankoUuid: str {
+        constraint exclusive;
+    };
     # unique username
     name: str {
       constraint exclusive;

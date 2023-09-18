@@ -5,9 +5,9 @@ import { GraphQLError } from "graphql"
 // if it is valid, returns email of the user (passed in as separate header)
 export async function validUserEmailFromToken(context: any) {
   // when run locally, don't validate the token, return local user email
-  if (process.env.LOCAL_USE) {
-    return process.env.LOCAL_USER_EMAIL
-  }
+  // if (process.env.LOCAL_USE) {
+  //   return process.env.LOCAL_USER_EMAIL
+  // }
   const authHeader = context.request.headers["authorization"]
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     throw new GraphQLError("Missing or invalid Authorization header")
