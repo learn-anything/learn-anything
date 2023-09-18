@@ -99,7 +99,7 @@ export default function TopicNav() {
               </div>
             </div>
 
-            <div class="w-[500px] h-full">
+            <div class="w-full h-full">
               <Search
                 placeholder="Search Topic"
                 searchResults={[
