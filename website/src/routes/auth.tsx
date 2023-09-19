@@ -8,50 +8,45 @@ import { getHankoCookie } from "../../lib/auth"
 import { useMobius, useSignIn } from "../root"
 
 // uses https://hanko.io authentication
-// https://github.com/teamhanko/hanko/blob/main/frontend/elements/README.md
+// it renders hanko web components: https://github.com/teamhanko/hanko/blob/main/frontend/elements/README.md
+// on sign up, creates a user in DB or logs in if user already exists
 export default function SignInPage() {
   const navigate = useNavigate()
   const signIn = useSignIn()
   const mobius = useMobius()
 
   onMount(async () => {
-    console.log(import.meta.env.VITE_HANKO_API, "hanko api")
-
     // checks if user is already logged in with valid token
-    // TODO: perhaps there is better way to do this?
     const res = await fetch(`${import.meta.env.VITE_HANKO_API}/me`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${getHankoCookie()}`,
       },
     })
-    // if status 200, means user is logged in
-    // navigate to using the app
+    // if status 200, means user is logged in, navigate to using the app
     if (res.status === 200) {
-      // navigate("/")
+      navigate("/")
     }
 
     // register hanko component
     register(import.meta.env.VITE_HANKO_API, {
-      shadow: true, // can use https://github.com/teamhanko/hanko/blob/main/frontend/elements/README.md#css-shadow-parts
+      shadow: true, // if true, can use this for styling: https://github.com/teamhanko/hanko/blob/main/frontend/elements/README.md#css-shadow-parts
       injectStyles: true,
     }).catch(async (error) => {
-      // TODO: log with Tinybird
-      console.log(error, "error")
+      console.error(error, "error")
     })
   })
 
   makeEventListener(
     document,
     "hankoAuthSuccess",
-    async (e) => {
+    async () => {
       const userClient = new UserClient(import.meta.env.VITE_HANKO_API, {
         timeout: 0,
         cookieName: "hanko",
         localStorageKey: "hanko",
       })
       const user = await userClient.getCurrent()
-      console.log(user, "user")
       const hankoId = user.id
       const email = user.email
 
@@ -62,6 +57,7 @@ export default function SignInPage() {
           return cookie
         })
         ?.split("=")[1]
+      // doing this so that below GraphQL query can work, it supplies `mobius` client with the hanko token
       signIn(hankoCookie!)
 
       await mobius.mutate({
@@ -150,22 +146,9 @@ export default function SignInPage() {
               }}
               class="flex flex-col items-center p-10 rounded-lg border-2 border-neutral-900"
             >
-              {/* TODO: make logo look good in dark theme */}
-              {/* <img
-                style={{
-                  "border-radius": "25px",
-                  border: "2.5px solid black",
-                  width: "90px",
-                  height: "90px",
-                }}
-                src="./logo.jpg"
-              /> */}
               <div id="text" class="text-2xl mt-3 mb-2">
                 Sign in/up with
               </div>
-              {/* TODO: types.d.ts not helping solve type error, maybe wrong place for the file? */}
-              {/* TODO: there is also CORS issue */}
-              {/* hanko-auth element does not render */}
               {/* @ts-ignore */}
               <hanko-auth />
             </div>

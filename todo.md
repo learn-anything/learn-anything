@@ -82,3 +82,4 @@
 - if not editing guide sections inline, can highlight the section being edited when `section edit` slide window shows
 - better web search using https://github.com/oramasearch/orama
 - do proper observability and logging, especially on edgedb CRUD queries, make sure it can't fail for bad reasons, and if error happens, surface it to grafbase/users
+- log all `console.error` with [TinyBird](https://www.tinybird.co) or [HyperDX](https://github.com/hyperdxio/hyperdx)
