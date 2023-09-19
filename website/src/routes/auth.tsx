@@ -17,6 +17,26 @@ export default function SignInPage() {
   onMount(async () => {
     console.log(import.meta.env.VITE_HANKO_API, "hanko api")
 
+    const userClient = new UserClient(import.meta.env.VITE_HANKO_API, {
+      timeout: 0,
+      cookieName: "hanko",
+      localStorageKey: "hanko",
+    })
+    const user = await userClient.getCurrent()
+    console.log(user, "user")
+    const hankoId = user.id
+    const email = user.email
+
+    await mobius.mutate({
+      createUser: {
+        where: {
+          email: email,
+          hankoId: hankoId,
+        },
+        select: true,
+      },
+    })
+
     // checks if user is already logged in with valid token
     // TODO: perhaps there is better way to do this?
     const res = await fetch(`${import.meta.env.VITE_HANKO_API}/me`, {

@@ -26,6 +26,19 @@ import createEditGuide, { EditGuideProvider } from "./GlobalContext/edit-guide"
 
 // TODO: https://github.com/nikitavoloboev/la-issues/issues/54 (should stop having to manually update this schema )
 const typeDefs = `
+  """
+  De-prioritizes a fragment, causing the fragment to be omitted in the initial response and delivered as a subsequent response afterward.
+  """
+  directive @defer(
+    """When true fragment may be deferred"""
+    if: Boolean! = true
+
+    """
+    This label should be used by GraphQL clients to identify the data from patch responses and associate it with the correct fragment.
+    """
+    label: String
+  ) on INLINE_FRAGMENT | FRAGMENT_SPREAD
+
   """Directs the executor to return values as a Streaming response."""
   directive @live on QUERY
 
@@ -33,7 +46,7 @@ const typeDefs = `
   directive @oneOf on INPUT_OBJECT
 
   type Mutation {
-    createUser(email: String!): String!
+    createUser(email: String!, hankoId: String!): String!
     updateGlobalTopic(input: inputToUpdateGlobalTopic!): String!
   }
 

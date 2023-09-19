@@ -20,7 +20,6 @@ export async function getAllGlobalLinks() {
 }
 
 export async function removeProtocolFromUrlOfGlobalLinks() {
-  console.log("running")
   const globalLinks = await e
     .select(e.GlobalLink, () => ({
       id: true,
@@ -46,15 +45,17 @@ export async function removeProtocolFromUrlOfGlobalLinks() {
   }
 }
 
-function splitUrlByProtocol(url: string) {
+export function splitUrlByProtocol(url: string) {
   let parsedUrl = parseURL(url)
-  let urlWithoutProtocol = parsedUrl.host + parsedUrl.pathname
-  let protocol = parsedUrl.protocol
-  if (urlWithoutProtocol?.includes("www")) {
-    // @ts-ignore
-    urlWithoutProtocol = parsedUrl.host?.replace("www.", "")
+  let host = parsedUrl.host
+  if (host?.includes("www")) {
+    host = host?.replace("www.", "")
   }
-  // @ts-ignore
-  protocol = protocol.replace(":", "")
+  let urlWithoutProtocol = host + parsedUrl.pathname + parsedUrl.search
+
+  let protocol = parsedUrl.protocol
+  if (protocol) {
+    protocol = protocol.replace(":", "")
+  }
   return [urlWithoutProtocol, protocol]
 }

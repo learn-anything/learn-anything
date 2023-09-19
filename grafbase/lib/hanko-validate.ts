@@ -2,11 +2,11 @@ import { jwtVerify, createRemoteJWKSet } from "jose"
 import { GraphQLError } from "graphql"
 
 // validates that the token in `authorization` header is correct
-// if it is valid, returns email of the user (passed in as separate header)
-export async function validUserEmailFromToken(context: any) {
-  // when run locally, don't validate the token, return local user email
+// if it is valid, returns hanko id of the user
+export async function hankoIdFromToken(context: any) {
+  // when run locally, don't validate the token, return local admin user hanko id
   // if (process.env.LOCAL_USE) {
-  //   return process.env.LOCAL_USER_EMAIL
+  //   return process.env.LOCAL_USER_HANKO_ID
   // }
   const authHeader = context.request.headers["authorization"]
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -21,12 +21,6 @@ export async function validUserEmailFromToken(context: any) {
   if (!verifiedJWT) {
     throw new GraphQLError("Verification failed")
   }
-  console.log(verifiedJWT, "verified JWT")
-  console.log(JSON.stringify(verifiedJWT), "verified JWT")
-
-  // const email = await fetch(`${process.env.PUBLIC_HANKO_API_URL}/users/`)
-
-  // return email
-  return "nikita@nikiv.dev"
-  // process.env.PUBLIC_HANKO_API_URL
+  const hankoId = verifiedJWT.payload.sub
+  return hankoId
 }

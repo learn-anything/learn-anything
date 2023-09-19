@@ -46,7 +46,7 @@ const section = g.input("section", {
 
 const outputOfPublicGetGlobalTopics = g.type("outputOfPublicGetGlobalTopics", {
   prettyName: g.string(),
-  name: g.string()
+  name: g.string(),
 })
 g.query("publicGetGlobalTopics", {
   args: {},
@@ -72,7 +72,7 @@ const outputOfCheckForGlobalLink = g.type("outputOfCheckForGlobalLink", {
   url: g.string(),
   title: g.string(),
   year: g.int().optional(),
-  description: g.string().optional()
+  description: g.string().optional(),
 })
 g.query("checkForGlobalLink", {
   args: { linkUrl: g.string() },
@@ -89,7 +89,7 @@ g.query("stripe", {
 // auth'd mutations
 
 g.mutation("createUser", {
-  args: { email: g.string() },
+  args: { email: g.string(), hankoId: g.string() },
   returns: g.string(),
   resolver: "createUser",
 })
