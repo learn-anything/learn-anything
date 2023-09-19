@@ -1,12 +1,12 @@
-import { hankoIdFromToken } from "../../lib/grafbase/hanko-validate"
+import { hankoIdFromToken } from "../lib/hanko-validate"
 
 export default async function updateGlobalTopic(
   root: any,
   args: { topicName: string },
   context: any,
 ) {
-  const email = await hankoIdFromToken(context)
-  if (email) {
+  const hankoId = await hankoIdFromToken(context)
+  if (hankoId) {
     console.log("run!!")
   }
 }

@@ -1,5 +1,5 @@
 import { GraphQLError } from "graphql"
-import { publicGetGlobalTopic } from "../../../edgedb/crud/global-topic"
+import { publicGetGlobalTopic } from "../../edgedb/crud/global-topic"
 
 export default async function publicGetGlobalTopicResolver(
   root: any,

@@ -1,4 +1,4 @@
-import { publicGetGlobalTopics } from "../../../edgedb/crud/global-topic";
+import { publicGetGlobalTopics } from "../../edgedb/crud/global-topic"
 
 export default async function getGlobalTopicsResolver(
   root: any,

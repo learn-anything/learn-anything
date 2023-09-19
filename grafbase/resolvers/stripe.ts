@@ -1,5 +1,5 @@
 import Stripe from "stripe"
-import { hankoIdFromToken } from "../../lib/grafbase/hanko-validate"
+import { hankoIdFromToken } from "../lib/hanko-validate"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-08-16",
@@ -13,8 +13,8 @@ export default async function StripeResolver(
   args: { plan: StripePlan },
   context: any,
 ) {
-  const email = await hankoIdFromToken(context)
-  if (email) {
+  const hankoId = await hankoIdFromToken(context)
+  if (hankoId) {
     try {
       console.log("trying to do stripe checkout session")
       switch (args.plan) {
