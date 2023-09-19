@@ -22,7 +22,7 @@ export default function SignInPage() {
     const res = await fetch(`${import.meta.env.VITE_HANKO_API}/me`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${await getHankoCookie()}`,
+        Authorization: `Bearer ${getHankoCookie()}`,
       },
     })
     // if status 200, means user is logged in
