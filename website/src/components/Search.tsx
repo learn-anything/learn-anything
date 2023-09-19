@@ -142,7 +142,7 @@ export default function Search(props: Props) {
       <div
         class={clsx(
           "relative w-[50%] h-full flex items-center transition-all duration-150",
-          toggleSearch() && "w-full",
+          inputFocused() && "w-full",
         )}
       >
         <div class="bg-white absolute top-0 right-0 w-full flex flex-col border-slate-400 border rounded-[4px]">
