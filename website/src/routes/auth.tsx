@@ -97,7 +97,7 @@ export default function SignInPage() {
           --brand-color: #AEDFFF;
           --brand-color-shade-1: #A1C9E7;
           --brand-contrast-color: #0B0D0E;
-          --background-color: transparent;
+          --background-color: #070c19;
           --error-color: #FF2E4C;
           --link-color: #AEDFFF;
           --font-family: "IBM Plex Sans";
