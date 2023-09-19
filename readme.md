@@ -8,7 +8,7 @@
 
 - [File structure](#file-structure) - make sense of how code is laid out in the repo
 - [Setup](#setup) - get started with development
-    - [Setup EdgeDB](#setup-edgedb)
+  - [Setup EdgeDB](#setup-edgedb)
 - [Run GraphQL server (Grafbase)](#run-graphql-server-grafbase)
 - [Run website (Solid)](#run-website-solid)
 - [Run desktop app (Tauri/Rust)](#run-desktop-app-taurirust)
@@ -26,17 +26,16 @@ Tech stack is described in [docs/tech-stack.md](docs/tech-stack.md).
 
 - [app](app) - desktop app in Tauri/Solid
 - [docs](docs) - all the docs
-- [edgedb](edgedb) - [EdgeDB](https://www.edgedb.com/) used as main server database
-  - [dbschema](edgedb/dbschema)
-    - [default.esdl](edgedb/dbschema/default.esdl) - [EdgeDB schema](https://www.edgedb.com/docs/intro/schema) definining all the models and relations
-    - [migrations](edgedb/dbschema/migrations) - migration files get generated after running `bun db:migrate`
-  - [client.ts](edgedb/client.ts) - exports client to connect with EdgeDB
-  - [topic.ts](edgedb/topic.ts) / [user.ts](api/edgedb/user.ts) - CRUD functions on models
 - [grafbase](grafbase) - [Grafbase](https://grafbase.com/) provides GraphQL API layer for all server functions like talking with DB
+  - [edgedb](grafbase/edgedb) - [EdgeDB](https://www.edgedb.com/) used as main server database
+    - [dbschema](grafbase/edgedb/dbschema)
+      - [default.esdl](grafbase/edgedb/dbschema/default.esdl) - [EdgeDB schema](https://www.edgedb.com/docs/intro/schema) definining all the models and relations
+      - [migrations](grafbase/edgedb/dbschema/migrations) - migration files get generated after running `bun db:migrate`
+    - [client.ts](grafbase/edgedb/client.ts) - exports client to connect with EdgeDB
+    - [topic.ts](grafbase/edgedb/topic.ts) / [user.ts](api/edgedb/user.ts) - CRUD functions on models
   - [resolvers](grafbase/resolvers) - [edge resolvers](https://grafbase.com/docs/edge-gateway/resolvers) are server functions exposed with GraphQL
   - [grafbase.config.ts](grafbase/grafbase.config.ts) - [Grafbase's config](https://grafbase.com/docs/config)
-- [lib](lib) - shared utility functions
-- [test](test) - test cases (useful for itereating quickly)
+- [packages](packages) - shared TS packages
 - [website](website) - learn-anything.xyz website code in Solid
   - [components](website/components) - solid components
   - [routes](website/src/routes) - routes defined using file system
@@ -71,7 +70,7 @@ Follow instructions, name EdgeDB instance `learn-anything`.
 
 Run `bun db:ui`. This will open EdgeDB graphical interface where you can run queries or explore the schema.
 
-Run below command to apply the schema defined in [default.esdl](edgedb/dbschema/default.esdl) on your local DB:
+Run below command to apply the schema defined in [default.esdl](grafbase/edgedb/dbschema/default.esdl) on your local DB:
 
 ```
 bun db:watch
@@ -227,25 +226,25 @@ Check [docs/dev-tips.md](docs/dev-tips.md) for some advice on development.
 
 Ran with `bun <Name>`
 
-| Name            | Command                                                                                      |
-|-----------------|----------------------------------------------------------------------------------------------|
-| seed-clone      | git clone https://github.com/learn-anything/seed                                             |
-| seed-update     | cd seed && git pull                                                                          |
-| dev-setup       | bun seed-clone                                                                               |
-| app             | cd app && bun tauri:dev                                                                      |
-| web             | cd website && bun dev                                                                        |
-| web:build       | cd website && solid-start build                                                              |
-| web:start       | cd website && solid-start start                                                              |
-| db              | cd edgedb && tput reset && bun --watch cli/cli.ts                                            |
-| db:init         | cd edgedb && edgedb project init                                                             |
-| db:ui           | cd edgedb && edgedb ui                                                                       |
-| db:watch        | cd edgedb && edgedb watch                                                                    |
-| db:migrate      | cd edgedb && edgedb migration create && edgedb migrate && bunx @edgedb/generate edgeql-js --target ts |
-| db:ts-generate  | cd edgedb && bunx @edgedb/generate edgeql-js --target ts                                     |
-| api             | bunx grafbase@latest dev                                                                     |
-| api:codegen     | graphql-codegen                                                                              |
-| ts              | tput reset && bun --watch run.ts                                                             |
-| test-rust-wiki  | cd app/src-tauri/crates/wiki/ && cargo watch -q -- sh -c "tput reset && cargo test -q --lib" |
+| Name           | Command                                                                                               |
+| -------------- | ----------------------------------------------------------------------------------------------------- |
+| seed-clone     | git clone https://github.com/learn-anything/seed                                                      |
+| seed-update    | cd seed && git pull                                                                                   |
+| dev-setup      | bun seed-clone                                                                                        |
+| app            | cd app && bun tauri:dev                                                                               |
+| web            | cd website && bun dev                                                                                 |
+| web:build      | cd website && solid-start build                                                                       |
+| web:start      | cd website && solid-start start                                                                       |
+| db             | cd edgedb && tput reset && bun --watch cli/cli.ts                                                     |
+| db:init        | cd edgedb && edgedb project init                                                                      |
+| db:ui          | cd edgedb && edgedb ui                                                                                |
+| db:watch       | cd edgedb && edgedb watch                                                                             |
+| db:migrate     | cd edgedb && edgedb migration create && edgedb migrate && bunx @edgedb/generate edgeql-js --target ts |
+| db:ts-generate | cd edgedb && bunx @edgedb/generate edgeql-js --target ts                                              |
+| api            | bunx grafbase@latest dev                                                                              |
+| api:codegen    | graphql-codegen                                                                                       |
+| ts             | tput reset && bun --watch run.ts                                                                      |
+| test-rust-wiki | cd app/src-tauri/crates/wiki/ && cargo watch -q -- sh -c "tput reset && cargo test -q --lib"          |
 
 ### ♥️
 
