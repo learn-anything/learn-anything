@@ -75,6 +75,9 @@ export default function TopicNav() {
     #NavButtons {
       display: none;
     }
+    #NavBarSide {
+      width: 100%
+    }
     @media (min-width: 700px) {
       #NavMenu {
         display: none;
@@ -82,12 +85,15 @@ export default function TopicNav() {
       #NavButtons {
         display: flex;
       }
+      #NavBarSide {
+        width: 50%
+      }
     }
       `}
       </style>
       <div class="flex flex-col">
-        <div class="h-[80px] w-full p-4 flex items-center justify-between border-b border-[#69696951]">
-          <div class="flex gap-4 w-1/2 h-full items-center">
+        <div class="h-[80px] w-full p-4 gap-4 flex items-center justify-between border-b border-[#69696951]">
+          <div id="NavBarSide" class="flex gap-4 w-1/2 h-full items-center">
             <div class="w-[40px] h-[40px] bg-neutral-200 rounded-full">
               <div
                 class="cursor-pointer h-[40px] w-[40px] rounded-full"

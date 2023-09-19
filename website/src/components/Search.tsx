@@ -139,48 +139,52 @@ export default function Search(props: Props) {
         {`
       `}
       </style>
-      <div class="relative w-[500px] h-full">
-        <div class="absolute w-full top-0 h-full left-0 z-10">
-          <div class=" bg-white border border-slate-400 flex-col flex items-center justify-center rounded-[4px] min-h-full w-full">
-            <input
-              style={{ outline: "none" }}
-              class={clsx(
-                "w-full bg-transparent p-4  h-full",
-                query() !== undefined && "border-b border-slate-400",
-              )}
-              onKeyPress={(e) => {
-                const selected = results().selected()
-                if (e.key === "Enter" && selected) {
-                  console.log("selected result: ")
-                }
-              }}
-              oninput={(e) => setQuery(e.target.value)}
-              type="text"
-              ref={ref}
-              placeholder={props.placeholder}
-            />
-            <Show when={inputFocused()}>
-              <div class="flex flex-col w-full">
-                <For each={results().results}>
-                  {(topic) => {
-                    return (
-                      <div
-                        class={clsx(
-                          "w-full px-3 p-2 rounded-[6px] hover:bg-neutral-100",
-                          focusedTopicTitle() === topic && "bg-neutral-100",
-                        )}
-                        onClick={() => {
-                          navigate(`/${topic}`)
-                        }}
-                      >
-                        {topic}
-                      </div>
-                    )
-                  }}
-                </For>
-              </div>
-            </Show>
-          </div>
+      <div
+        class={clsx(
+          "relative w-full h-full flex items-center transition-all duration-150",
+          toggleSearch() && "w-full",
+        )}
+      >
+        <div class="bg-white absolute top-0 right-0 w-full flex flex-col border-slate-400 border rounded-[4px]">
+          <input
+            style={{ outline: "none" }}
+            class={clsx(
+              "w-full bg-transparent p-3 px-4 text-black text-opacity-70 h-full",
+              inputFocused() && "border-b h-full border-slate-400",
+            )}
+            onKeyPress={(e) => {
+              const selected = results().selected()
+              if (e.key === "Enter" && selected) {
+                console.log("selected result: ")
+              }
+            }}
+            oninput={(e) => setQuery(e.target.value)}
+            type="text"
+            ref={ref}
+            placeholder={props.placeholder}
+          />
+          <Show when={inputFocused()}>
+            <div class="">
+              <For each={results().results}>
+                {(topic) => {
+                  return (
+                    <div
+                      class={clsx(
+                        "w-full px-3 p-2 hover:bg-neutral-100",
+                        focusedTopicTitle() === topic &&
+                          "bg-gray-100 border-y border-slate-400 drop-shadow-md",
+                      )}
+                      onClick={() => {
+                        navigate(`/${topic}`)
+                      }}
+                    >
+                      {topic}
+                    </div>
+                  )
+                }}
+              </For>
+            </div>
+          </Show>
         </div>
       </div>
     </>
