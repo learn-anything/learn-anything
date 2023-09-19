@@ -93,7 +93,7 @@ export default function SignInPage() {
           select: true,
         },
       })
-      // navigate("/")
+      navigate("/")
     },
     { passive: true },
   )
