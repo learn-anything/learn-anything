@@ -141,7 +141,7 @@ export default function Search(props: Props) {
       </style>
       <div
         class={clsx(
-          "relative w-full h-full flex items-center transition-all duration-150",
+          "relative w-[50%] h-full flex items-center transition-all duration-150",
           toggleSearch() && "w-full",
         )}
       >
@@ -157,6 +157,9 @@ export default function Search(props: Props) {
               if (e.key === "Enter" && selected) {
                 console.log("selected result: ")
               }
+            }}
+            onClick={() => {
+              setToggleSearch(true)
             }}
             oninput={(e) => setQuery(e.target.value)}
             type="text"
