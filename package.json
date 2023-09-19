@@ -43,6 +43,7 @@
     "micromark": "^4.0.0",
     "mri": "^1.2.0",
     "prettier": "^3.0.3",
+    "stripe": "^13.6.0",
     "zod": "^3.22.2"
   },
   "prettier": {
