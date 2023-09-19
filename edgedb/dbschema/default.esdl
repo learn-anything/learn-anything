@@ -165,7 +165,7 @@ module default {
     # title as grabbed from url
     urlTitle: str;
     # unique url of the link (without protocol)
-    url: str;
+    required url: str;
     # http / https
     protocol: str;
     # TODO: should be exclusive but that was giving issues in migration of wiki

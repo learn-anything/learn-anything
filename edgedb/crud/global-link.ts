@@ -1,6 +1,6 @@
 import { client } from "../client"
 import e from "../dbschema/edgeql-js"
-import { parseURL } from 'ufo'
+import { parseURL } from "ufo"
 // import { writeContentToSrcData } from "@nikitavoloboev/ts/files"
 
 // export async function checkForGlobalLink(url: string) {
@@ -10,27 +10,51 @@ import { parseURL } from 'ufo'
 // }
 
 export async function getAllGlobalLinks() {
-  const links = await e.select(e.GlobalLink, () => ({
-    title: true,
-    url: true
-  })).run(client)
+  const links = await e
+    .select(e.GlobalLink, () => ({
+      title: true,
+      url: true,
+    }))
+    .run(client)
   return links
 }
 
 export async function removeProtocolFromUrlOfGlobalLinks() {
-  console.log("run")
-  // const res = e.update(e.GlobalLink, (gl) => ({
-  //   set: {
-  //     url:
-  //   }
-  // }))
+  console.log("running")
+  const globalLinks = await e
+    .select(e.GlobalLink, () => ({
+      id: true,
+      url: true,
+    }))
+    .run(client)
+
+  for (const globalLink of globalLinks) {
+    console.log(globalLink.url, "url")
+    console.log(globalLink.id, "id")
+    let [newUrl, protocol] = splitUrlByProtocol(globalLink.url)
+    console.log(newUrl, "new url")
+    console.log(protocol, "protocol")
+    await e
+      .update(e.GlobalLink, () => ({
+        filter_single: { id: globalLink.id },
+        set: {
+          url: newUrl,
+          protocol: protocol,
+        },
+      }))
+      .run(client)
+  }
 }
 
-function getURLWithoutProtocol(url: string) {
+function splitUrlByProtocol(url: string) {
   let parsedUrl = parseURL(url)
-  let urlWithoutProtocol = parsedUrl.host
+  let urlWithoutProtocol = parsedUrl.host + parsedUrl.pathname
+  let protocol = parsedUrl.protocol
   if (urlWithoutProtocol?.includes("www")) {
+    // @ts-ignore
     urlWithoutProtocol = parsedUrl.host?.replace("www.", "")
   }
-  return urlWithoutProtocol
+  // @ts-ignore
+  protocol = protocol.replace(":", "")
+  return [urlWithoutProtocol, protocol]
 }
