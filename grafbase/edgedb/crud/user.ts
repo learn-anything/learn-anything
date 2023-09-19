@@ -11,6 +11,7 @@ export async function addUser(user: User) {
   const res = await e
     .insert(e.User, {
       email: user.email,
+      hankoId: user.hankoId,
     })
     .run(client)
   console.log(res, "user added")
@@ -23,7 +24,6 @@ export async function deleteUser(id: string) {
       filter: e.op(user.id, "=", id),
     }))
     .run(client)
-  console.log(res)
   return res
 }
 
@@ -35,7 +35,6 @@ export async function getUsers() {
       id: true,
     }))
     .run(client)
-  console.log(res)
   return res
 }
 
