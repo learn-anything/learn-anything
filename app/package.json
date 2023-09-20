@@ -65,8 +65,5 @@
   },
   "prettier": {
     "semi": false
-  },
-  "engines": {
-    "node": ">=16"
   }
 }

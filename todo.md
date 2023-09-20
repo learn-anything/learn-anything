@@ -1,9 +1,13 @@
 ## Public website release [september 19]
 
-- make sure all urls have good url + protocol split
-  - do if check and run script again for all urls (check whether they have protocol or not)
 - setup aws account for LA so you can upload images to S3 and retrieve
   - https://docs.sst.dev/file-uploads#add-an-s3-bucket
+  - https://github.com/mhart/aws4fetch
+  - https://github.com/yusukebe/cf-s3-uploader
+  - https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/s3-example-photo-album.html
+  - https://docs.aws.amazon.com/AmazonS3/latest/userguide/example_s3_PutObject_section.html
+  - https://github.com/aws/aws-sdk-js-v3
+  - https://messaismael.com/2022-03-29-how-to-Implement-an-uploading-service-to-s3-using-nodejs-and-typescript/
 - stripe works, updates `memberUntil` status of users when payment is succesful
   - test it works locally, memberUntil is updated properly
     - https://stripe.com/docs/api/subscriptions/object how to convert from unix number to edgedb datetime

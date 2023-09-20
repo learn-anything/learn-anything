@@ -38,8 +38,5 @@
     "solid-start-cloudflare-pages": "^0.3.5",
     "undici": "^5.24.0",
     "zod": "^3.22.2"
-  },
-  "engines": {
-    "node": ">=18"
   }
 }

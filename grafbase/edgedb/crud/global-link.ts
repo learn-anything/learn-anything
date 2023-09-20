@@ -19,20 +19,22 @@ export async function getAllGlobalLinks() {
   return links
 }
 
+// was used as a one off script to strip protocol from the urls
 export async function removeProtocolFromUrlOfGlobalLinks() {
   const globalLinks = await e
     .select(e.GlobalLink, () => ({
       id: true,
       url: true,
+      fullUrl: true,
+      protocol: true,
     }))
     .run(client)
 
   for (const globalLink of globalLinks) {
-    console.log(globalLink.url, "url")
-    console.log(globalLink.id, "id")
+    if (globalLink.protocol) {
+      continue
+    }
     let [newUrl, protocol] = splitUrlByProtocol(globalLink.url)
-    console.log(newUrl, "new url")
-    console.log(protocol, "protocol")
     await e
       .update(e.GlobalLink, () => ({
         filter_single: { id: globalLink.id },
