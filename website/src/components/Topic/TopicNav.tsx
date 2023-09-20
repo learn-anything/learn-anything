@@ -101,7 +101,7 @@ export default function TopicNav() {
                   navigate("/")
                 }}
               >
-                <img src="/logo.jpg" alt="" />
+                <img class="rounded-full" src="/logo.jpg" alt="" />
               </div>
             </div>
 
@@ -113,6 +113,7 @@ export default function TopicNav() {
                   { name: "Math" },
                   { name: "Karabiner" },
                 ]}
+                expandable={true}
               />
             </div>
           </div>
@@ -148,12 +149,12 @@ export default function TopicNav() {
                 </A>
               }
             >
-              <A class="text-black font-medium" href="/auth">
+              <A class="text-black font-medium dark:text-white" href="/auth">
                 Sign In
               </A>
               <A
                 href="/auth"
-                class="bg-black hover:scale-[1.1] leading-[23.48px] w-fit text-white h-[39px] flex items-center justify-center font-medium text-[17px] px-4 p-2 rounded-full cursor-pointer"
+                class="bg-black hover:scale-[1.1] no-underline leading-[23.48px] w-fit text-white h-[39px] flex items-center justify-center font-medium text-[17px] px-4 p-2 rounded-full cursor-pointer"
               >
                 Sign Up
               </A>

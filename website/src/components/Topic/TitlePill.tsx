@@ -7,7 +7,7 @@ export default function TitlePill() {
 
   return (
     <div
-      class="w-full flex items-center justify-between rounded-[8px] border border-slate-400 border-opacity-50"
+      class="w-full flex items-center justify-between rounded-[8px] border border-slate-400 dark:border-opacity-30 border-opacity-50"
       style={{ padding: "8px 16px 8px 16px" }}
     >
       <div class="font-bold text-[20px] text-[#131313]">
@@ -18,12 +18,12 @@ export default function TitlePill() {
         {/* TODO: should come from server */}
         <div
           onClick={() => {
-            // topic.setLearningStatus("to learn")
+            topic.setUserLearningStatus("to learn")
           }}
           class={clsx(
-            "px-[10px] p-[6px] pl-[4.5px] active:scale-[1.03] cursor-pointer text-[#696969] flex items-center justify-center gap-1 text-[16px] leading-[18.78px] border-[#CCCCCC] border-[1px] rounded-[6px] hover:bg-blue-500 hover:text-white transition-all",
+            "px-[10px] p-[6px] pl-[4.5px] active:scale-[1.03] cursor-pointer text-[#696969] dark:border-opacity-30 flex items-center justify-center gap-1 text-[16px] leading-[18.78px] border-[#CCCCCC] border-[1px] rounded-[6px] hover:bg-black hover:text-white transition-all",
             topic.globalTopic.userLearningStatus === "to learn" &&
-            "text-white border-none bg-blue-500",
+              "text-white border-none bg-black",
           )}
         >
           <Icon name="Learn" />
@@ -34,9 +34,9 @@ export default function TitlePill() {
             topic.setUserLearningStatus("learning")
           }}
           class={clsx(
-            "px-[10px] p-[6px] pl-[4.5px] active:scale-[1.03] cursor-pointer text-[#696969] flex items-center justify-center gap-1 text-[16px] leading-[18.78px] border-[#CCCCCC] border-[1px] rounded-[6px]  hover:bg-blue-500 hover:text-white transition-all",
+            "px-[10px] p-[6px] pl-[4.5px] active:scale-[1.03] cursor-pointer text-[#696969] dark:border-opacity-30 flex items-center justify-center gap-1 text-[16px] leading-[18.78px] border-[#CCCCCC] border-[1px] rounded-[6px]  hover:bg-black hover:text-white transition-all",
             topic.globalTopic.userLearningStatus === "learning" &&
-            "bg-blue-500 text-white border-none",
+              "bg-black text-white border-none",
           )}
         >
           <Icon name="Learn" />
@@ -47,9 +47,9 @@ export default function TitlePill() {
             topic.setUserLearningStatus("learned")
           }}
           class={clsx(
-            "px-[10px] p-[6px] pl-[4.5px] active:scale-[1.03] cursor-pointer text-[#696969] flex items-center justify-center gap-1 text-[16px] leading-[18.78px] border-[#CCCCCC] border-[1px] rounded-[6px]  hover:bg-blue-500 hover:text-white transition-all",
+            "px-[10px] p-[6px] pl-[4.5px] active:scale-[1.03] cursor-pointer text-[#696969] dark:border-opacity-30 flex items-center justify-center gap-1 text-[16px] leading-[18.78px] border-[#CCCCCC] border-[1px] rounded-[6px]  hover:bg-black hover:text-white transition-all",
             topic.globalTopic.userLearningStatus === "learned" &&
-            "bg-blue-500 text-white border-none",
+              "bg-black text-white border-none",
           )}
         >
           <Icon name="Learn" />

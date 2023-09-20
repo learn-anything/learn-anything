@@ -33,7 +33,7 @@ export default function GuideSummary(props: any) {
         </div>
         <div
           id={showSummary() ? "GuideSummaryExpanded" : "GuideSummaryMinimised"}
-          class="bg-[#FAFAFA] flex flex-col gap-2 rounded-[2px] p-4 w-full"
+          class="bg-[#FAFAFA] dark:bg-[#141414] flex flex-col gap-2 rounded-[2px] p-4 w-full"
         >
           <div class="flex justify-between items-center">
             <div class="text-[#696969] ">Summary</div>

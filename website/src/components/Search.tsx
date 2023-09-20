@@ -2,7 +2,9 @@ import clsx from "clsx"
 import Fuse from "fuse.js"
 import {
   For,
+  Match,
   Show,
+  Switch,
   createEffect,
   createMemo,
   createSignal,
@@ -18,6 +20,7 @@ type SearchResult = {
 }
 
 type Props = {
+  expandable: boolean
   placeholder: string
   searchResults: SearchResult[]
 }
@@ -139,57 +142,114 @@ export default function Search(props: Props) {
         {`
       `}
       </style>
-      <div
-        class={clsx(
-          "relative w-[50%] h-full flex items-center transition-all duration-150",
-          inputFocused() && "w-full",
-        )}
-      >
-        <div class="bg-white absolute top-0 right-0 w-full flex flex-col border-slate-400 border rounded-[4px]">
-          <input
-            style={{ outline: "none" }}
+      <Switch>
+        <Match when={props.expandable}>
+          <div
             class={clsx(
-              "w-full bg-transparent p-3 px-4 text-black text-opacity-70 h-full",
-              inputFocused() && "border-b h-full border-slate-400",
+              "relative w-[50%] h-full flex items-center transition-all duration-150",
+              inputFocused() && "w-full",
             )}
-            onKeyPress={(e) => {
-              const selected = results().selected()
-              if (e.key === "Enter" && selected) {
-                console.log("selected result: ")
-              }
-            }}
-            onClick={() => {
-              setToggleSearch(true)
-            }}
-            oninput={(e) => setQuery(e.target.value)}
-            type="text"
-            ref={ref}
-            placeholder={props.placeholder}
-          />
-          <Show when={inputFocused()}>
-            <div class="">
-              <For each={results().results}>
-                {(topic) => {
-                  return (
-                    <div
-                      class={clsx(
-                        "w-full px-3 p-2 hover:bg-neutral-100",
-                        focusedTopicTitle() === topic &&
-                          "bg-gray-100 border-y border-slate-400 drop-shadow-md",
-                      )}
-                      onClick={() => {
-                        navigate(`/${topic}`)
-                      }}
-                    >
-                      {topic}
-                    </div>
-                  )
+          >
+            <div class="bg-white dark:bg-neutral-900 absolute top-0 right-0 w-full flex flex-col border-slate-400 dark:border-opacity-30 border rounded-[4px]">
+              <input
+                style={{ outline: "none" }}
+                class={clsx(
+                  "w-full bg-transparent p-3 px-4 text-black text-opacity-70 h-full",
+                  inputFocused() &&
+                    "border-b h-full border-slate-400 dark:border-opacity-30",
+                )}
+                onKeyPress={(e) => {
+                  const selected = results().selected()
+                  if (e.key === "Enter" && selected) {
+                    console.log("selected result: ")
+                  }
                 }}
-              </For>
+                onClick={() => {
+                  setToggleSearch(true)
+                }}
+                oninput={(e) => setQuery(e.target.value)}
+                type="text"
+                ref={ref}
+                placeholder={props.placeholder}
+              />
+              <Show when={inputFocused()}>
+                <div class="">
+                  <For each={results().results}>
+                    {(topic) => {
+                      return (
+                        <div
+                          class={clsx(
+                            "w-full px-3 p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:text-white text-black",
+                            focusedTopicTitle() === topic &&
+                              "bg-gray-100 border-y border-slate-400 dark:bg-neutral-800 dark:border-opacity-30 drop-shadow-md",
+                          )}
+                          onClick={() => {
+                            navigate(`/${topic}`)
+                          }}
+                        >
+                          {topic}
+                        </div>
+                      )
+                    }}
+                  </For>
+                </div>
+              </Show>
             </div>
-          </Show>
-        </div>
-      </div>
+          </div>
+        </Match>
+        <Match when={!props.expandable}>
+          <div class="relative dark:text-white text-black w-full h-full flex items-center transition-all duration-150">
+            <div class="bg-white dark:bg-neutral-900 absolute top-0 right-0 w-full flex flex-col border-slate-400 dark:border-opacity-30 border rounded-[4px]">
+              <input
+                style={{ outline: "none" }}
+                class={clsx(
+                  "w-full bg-transparent p-3 px-4 text-black text-opacity-70 h-full",
+                  inputFocused() &&
+                    "border-b dark:border-opacity-30 h-full border-slate-400",
+                )}
+                onKeyPress={(e) => {
+                  const selected = results().selected()
+                  if (e.key === "Enter" && selected) {
+                    console.log("selected result: ")
+                  }
+                }}
+                onClick={() => {
+                  setToggleSearch(true)
+                }}
+                oninput={(e) => setQuery(e.target.value)}
+                type="text"
+                ref={ref}
+                placeholder={props.placeholder}
+              />
+              <Show when={inputFocused()}>
+                <div class="text-black dark:text-white">
+                  <For each={results().results}>
+                    {(topic, id) => {
+                      return (
+                        <div
+                          class={clsx(
+                            "w-full px-3 p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800",
+                            focusedTopicTitle() === topic &&
+                              "bg-gray-100 dark:bg-neutral-800 border-y dark:border-opacity-30 border-slate-400 drop-shadow-md",
+                            id() === 0 && "border-t-0",
+                            id() === results().results.length - 1 &&
+                              "border-b-0",
+                          )}
+                          onClick={() => {
+                            navigate(`/${topic}`)
+                          }}
+                        >
+                          {topic}
+                        </div>
+                      )
+                    }}
+                  </For>
+                </div>
+              </Show>
+            </div>
+          </div>
+        </Match>
+      </Switch>
     </>
   )
 }

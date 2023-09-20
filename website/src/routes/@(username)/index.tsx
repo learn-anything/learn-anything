@@ -44,13 +44,13 @@ export default function UserProfile() {
 
     }
     `}</style>
-      <div class="w-screen h-full text-black bg-white">
+      <div class="w-screen h-full text-black bg-white dark:bg-neutral-900 dark:text-white">
         <TopicNav />
 
         <div id="ProfileMain" class="h-full w-full flex justify-center">
           <div
             id="ProfileSidebar"
-            class="p-[40px] min-w-[250px] h-screen w-[30%] flex flex-col gap-6 overflow-auto bg-[#F6F6F7]"
+            class="p-[40px] min-w-[250px] h-screen w-[30%] flex flex-col gap-6 overflow-auto bg-[#F6F6F7] dark:bg-neutral-900"
           >
             <div class="flex justify-between items-center">
               <div class="font-bold gap-2 flex items-center">

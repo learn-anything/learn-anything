@@ -82,7 +82,7 @@ export default function GlobalTopic() {
         }
       }
       `}</style>
-      <div class="w-screen h-full text-black bg-white">
+      <div class="w-screen h-full text-black bg-white dark:bg-neutral-900">
         <TopicNav />
         {/* <Modal>
           <Create></Create>
@@ -92,14 +92,14 @@ export default function GlobalTopic() {
         </div>
         <div
           id="InfoOptions"
-          class="w-full flex gap-8 text-lg font-light"
+          class="w-full flex gap-8 text-lg text-black dark:text-white dark:text-opacity-40 font-light"
           style={{ padding: "24px 40px 0 40px" }}
         >
           <div
             onClick={() => {
               topic.setShowPage("Global Guide")
             }}
-            class="border-b-2 border-black cursor-pointer"
+            class="border-b-2 border-black dark:border-white dark:border-opacity-40 cursor-pointer"
           >
             Global Guide
           </div>
@@ -131,7 +131,7 @@ export default function GlobalTopic() {
         <div class="h-fit w-full flex justify-center">
           <div
             id="InfoMain"
-            class="h-full min-h-screen flex gap-6 flex-col"
+            class="h-full min-h-screen flex  gap-6 flex-col"
             style={{ padding: "24px 40px 24px 40px" }}
           >
             {/* <Show when={false} fallback={<GuideEdit topics={topics()} />}>

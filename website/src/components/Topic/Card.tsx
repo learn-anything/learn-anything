@@ -24,7 +24,7 @@ export default function Card(props: Props) {
   return (
     <>
       <div
-        class="w-full relative flex flex-col gap-2 border border-[#EAEAEA] rounded-[4px] overflow-auto"
+        class="w-full relative flex flex-col gap-2 border dark:text-white text-black border-slate-400 dark:border-opacity-30 rounded-[4px] overflow-auto"
         style={{
           "max-height": "280px",
         }}
@@ -35,7 +35,7 @@ export default function Card(props: Props) {
               <div class="flex items-center">
                 <div class="font-semibold p-2 px-2 pl-4">{props.name}</div>
                 {/* TODO: have the 1 come from the server */}
-                <div class="px-1 mt-[0.8px] p-[1px] h-fit text-[12px] font-light bg-neutral-200 flex items-center justify-center rounded-full w-fit">
+                <div class="px-1 mt-[0.8px] p-[1px] h-fit text-[12px] font-light bg-neutral-200 dark:bg-[#141414] flex items-center justify-center rounded-full w-fit">
                   1
                 </div>
               </div>

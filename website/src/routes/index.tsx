@@ -232,51 +232,15 @@ export default function Home() {
                 }
               },
             ]}  /> */}
-            <div class="w-full relative flex flex-col gap-3">
-              <input
-                type="text"
-                placeholder="Search"
-                onInput={(e) => {
-                  setTopicSearchInput(e.target.value)
-                }}
-                onKeyPress={(e) => {
-                  if (e.key === "Enter") {
-                    // console.log(e.target.value)
-                    console.log(focusedTodoTitle())
-                    if (focusedTodoTitle()) {
-                      navigate(
-                        focusedTodoTitle().toLowerCase().replace(/ /g, "-"),
-                      )
-                    }
-                  }
-                }}
-                class=" rounded text-lg font-semibold py-2 px-4 outline-none text-black"
-                style={{ width: "100%" }}
-              />
-              <Show
-                when={
-                  topicSearchInput() !== "" && topicSearchResults().length !== 0
-                }
-              >
-                <div class="bg-white p-2 absolute top-12 left-0 text-black font-semibold text-opacity-40 flex flex-col rounded w-full">
-                  <For each={topicSearchResults()}>
-                    {(topic) => (
-                      <div
-                        id={
-                          focusedTodoTitle() === topic ? "Focused" : "UnFocused"
-                        }
-                        onClick={() => {
-                          setFocusedTopic(topicSearchResults().indexOf(topic))
-                        }}
-                        class="px-4 overflow-auto py-2 rounded-lg"
-                      >
-                        <div>{topic}</div>
-                      </div>
-                    )}
-                  </For>
-                </div>
-              </Show>
-            </div>
+            <Search
+              expandable={false}
+              placeholder="Search Topic"
+              searchResults={[
+                { name: "Physics" },
+                { name: "Math" },
+                { name: "Karabiner" },
+              ]}
+            />
           </div>
           <div class="w-[80%] flex justify-center">{el}</div>
           <Show when={!hankoCookie}>
