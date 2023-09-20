@@ -674,8 +674,8 @@ export type $ObjectTypeλShape = $.typeutil.flatten<$SourceλShape & Omit<$Consi
   "<__type__[is schema::Extension]": $.LinkDesc<$Extension, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is GlobalGraph]": $.LinkDesc<_default.$GlobalGraph, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is GlobalGuide]": $.LinkDesc<_default.$GlobalGuide, $.Cardinality.Many, {}, false, false,  false, false>;
-  "<__type__[is GlobalTopic]": $.LinkDesc<_default.$GlobalTopic, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is GlobalGuideSection]": $.LinkDesc<_default.$GlobalGuideSection, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<__type__[is GlobalTopic]": $.LinkDesc<_default.$GlobalTopic, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is RelatedLink]": $.LinkDesc<_default.$RelatedLink, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is GlobalLink]": $.LinkDesc<_default.$GlobalLink, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is Link]": $.LinkDesc<_default.$Link, $.Cardinality.Many, {}, false, false,  false, false>;

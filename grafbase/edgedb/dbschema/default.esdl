@@ -168,6 +168,8 @@ module default {
     required url: str;
     # http / https
     protocol: str;
+    # full url of the link as saved initially by user
+    fullUrl: str;
     # TODO: should be exclusive but that was giving issues in migration of wiki
     # required url: str {
     #   constraint exclusive;

@@ -16,8 +16,8 @@ const GlobalGraph: $.$expr_PathNode<$.TypeSet<$GlobalGraph, $.Cardinality.Many>,
 export type $GlobalGuideλShape = $.typeutil.flatten<_std.$Object_6b06be9b27fe11ee83ff159af7e1bb81λShape & {
   "sections": $.LinkDesc<$GlobalGuideSection, $.Cardinality.Many, {}, false, false,  false, false>;
   "created_at": $.PropertyDesc<_std.$datetime, $.Cardinality.One, false, false, true, true>;
-  "<globalGuides[is GlobalTopic]": $.LinkDesc<$GlobalTopic, $.Cardinality.Many, {}, false, false,  false, false>;
   "<latestGlobalGuide[is GlobalTopic]": $.LinkDesc<$GlobalTopic, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<globalGuides[is GlobalTopic]": $.LinkDesc<$GlobalTopic, $.Cardinality.Many, {}, false, false,  false, false>;
   "<globalGuides": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<latestGlobalGuide": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
@@ -47,12 +47,13 @@ export type $GlobalLinkλShape = $.typeutil.flatten<_std.$Object_6b06be9b27fe11e
   "relatedLinks": $.LinkDesc<$RelatedLink, $.Cardinality.Many, {}, false, false,  false, false>;
   "links": $.LinkDesc<$Link, $.Cardinality.Many, {}, false, true,  false, false>;
   "description": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "protocol": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "public": $.PropertyDesc<_std.$bool, $.Cardinality.One, false, false, false, false>;
   "title": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
+  "url": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
   "urlTitle": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "year": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
-  "url": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
-  "protocol": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "fullUrl": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "<links[is GlobalGuideSection]": $.LinkDesc<$GlobalGuideSection, $.Cardinality.Many, {}, false, false,  false, false>;
   "<globalLink[is Link]": $.LinkDesc<$Link, $.Cardinality.Many, {}, false, false,  false, false>;
   "<completedLinks[is User]": $.LinkDesc<$User, $.Cardinality.Many, {}, false, false,  false, false>;
@@ -75,11 +76,11 @@ const $GlobalLink = $.makeType<$GlobalLink>(_.spec, "f8021211-45e2-11ee-9396-9f9
 const GlobalLink: $.$expr_PathNode<$.TypeSet<$GlobalLink, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($GlobalLink, $.Cardinality.Many), null);
 
 export type $GlobalTopicλShape = $.typeutil.flatten<_std.$Object_6b06be9b27fe11ee83ff159af7e1bb81λShape & {
-  "globalGuides": $.LinkDesc<$GlobalGuide, $.Cardinality.Many, {}, false, false,  false, false>;
+  "latestGlobalGuide": $.LinkDesc<$GlobalGuide, $.Cardinality.One, {}, false, false,  false, false>;
   "relatedTopics": $.LinkDesc<$GlobalTopic, $.Cardinality.Many, {}, false, false,  false, false>;
+  "globalGuides": $.LinkDesc<$GlobalGuide, $.Cardinality.Many, {}, false, false,  false, false>;
   "relatedLinks": $.LinkDesc<$GlobalLink, $.Cardinality.Many, {}, false, false,  false, false>;
   "relatedNotes": $.LinkDesc<$Note, $.Cardinality.Many, {}, false, false,  false, false>;
-  "latestGlobalGuide": $.LinkDesc<$GlobalGuide, $.Cardinality.One, {}, false, false,  false, false>;
   "name": $.PropertyDesc<_std.$str, $.Cardinality.One, true, false, false, false>;
   "prettyName": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
   "public": $.PropertyDesc<_std.$bool, $.Cardinality.One, false, false, false, false>;
@@ -115,15 +116,15 @@ export type $LinkλShape = $.typeutil.flatten<_std.$Object_6b06be9b27fe11ee83ff1
   "globalLink": $.LinkDesc<$GlobalLink, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
   "relatedLinks": $.LinkDesc<$RelatedLink, $.Cardinality.Many, {}, false, false,  false, false>;
   "topic": $.LinkDesc<$Topic, $.Cardinality.One, {}, false, false,  false, false>;
-  "urlTitle": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
-  "year": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "type": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "url": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
   "author": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "description": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "public": $.PropertyDesc<_std.$bool, $.Cardinality.One, false, false, false, false>;
   "timeEstimate": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "title": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
-  "type": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
-  "url": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
+  "urlTitle": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "year": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "<links[is GlobalLink]": $.LinkDesc<$GlobalLink, $.Cardinality.Many, {}, false, false,  false, false>;
   "<links[is Topic]": $.LinkDesc<$Topic, $.Cardinality.Many, {}, false, false,  false, false>;
   "<links": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
@@ -222,10 +223,10 @@ export type $UserλShape = $.typeutil.flatten<_std.$Object_6b06be9b27fe11ee83ff1
   "wiki": $.LinkDesc<$Wiki, $.Cardinality.Many, {}, false, true,  false, false>;
   "displayName": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "email": $.PropertyDesc<_std.$str, $.Cardinality.One, true, false, false, false>;
+  "hankoId": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, true, false, false, false>;
+  "name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, true, false, false, false>;
   "proMemberUntil": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "profileImage": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
-  "name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, true, false, false, false>;
-  "hankoId": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, true, false, false, false>;
   "<user[is UserGuide]": $.LinkDesc<$UserGuide, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user[is Wiki]": $.LinkDesc<$Wiki, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;

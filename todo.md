@@ -58,9 +58,12 @@
 
 ## Mobile app release [october 8]
 
-- use tamagui starter
+- use [ignite](https://github.com/infinitered/ignite) starter
+  - ignite [seems best](https://www.youtube.com/watch?v=KOSvDlFyg20)
+  - join their slack community too
 - make sure hanko auth works well
 - allow searching for topics
+- take inspiration from [tamagui starters](https://github.com/tamagui/tamagui/tree/master/starters)
 
 ## Public website improvements
 

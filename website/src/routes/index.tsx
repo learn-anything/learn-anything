@@ -62,8 +62,8 @@ export default function Home() {
       const res = await mobius.query({
         publicGetGlobalTopics: {
           prettyName: true,
-          name: true
-        }
+          name: true,
+        },
       })
       console.log(res, "res")
       if (res) {
@@ -160,7 +160,9 @@ export default function Home() {
   createEffect(() => {
     if (topicSearchInput()) {
       untrack(() => {
-        setTopicSearchResults(global.state.globalTopicsSearchList.map(topic => topic.prettyName))
+        setTopicSearchResults(
+          global.state.globalTopicsSearchList.map((topic) => topic.prettyName),
+        )
         setTopicSearchResults(
           topicSearchResults().filter((word: any) =>
             topicSearchInput()

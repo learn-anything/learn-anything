@@ -2,6 +2,9 @@ import { Hono } from "hono"
 import Stripe from "stripe"
 import type { Context } from "hono"
 import { cors } from "hono/cors"
+// import * as edgedb from "edgedb"
+
+// const client = edgedb.createHttpClient()
 
 const app = new Hono()
 app.use("*", cors())
@@ -53,6 +56,7 @@ app.post("/learn-anything-bought", async (c: Context) => {
           checkoutSessionCompleted.subscription,
         )
         const endDateInUnix = subscription.current_period_end
+        console.log(endDateInUnix, "end date in unix!")
 
         let date = new Date(endDateInUnix * 1000)
         let year = date.getFullYear()
