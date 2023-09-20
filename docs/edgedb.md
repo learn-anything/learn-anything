@@ -27,3 +27,11 @@ edgedb restore la.db
 ```
 
 Where `la.db` is the file you get after running [edgedb dump](https://www.edgedb.com/docs/cli/edgedb_dump). Basically you can't restore into existing db.
+
+## Tips
+
+```
+set -x RUST_LOG=debug
+```
+
+Setting above flag will give better error messages on CLI outputs.
