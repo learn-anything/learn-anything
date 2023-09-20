@@ -1,6 +1,16 @@
 ## Public website release [september 19]
 
-- do call to hanko on token validate to get email from token
+- make sure all urls have good url + protocol split
+  - do if check and run script again for all urls (check whether they have protocol or not)
+- setup aws account for LA so you can upload images to S3 and retrieve
+  - https://docs.sst.dev/file-uploads#add-an-s3-bucket
+- stripe works, updates `memberUntil` status of users when payment is succesful
+  - test it works locally, memberUntil is updated properly
+    - https://stripe.com/docs/api/subscriptions/object how to convert from unix number to edgedb datetime
+    - https://dashboard.stripe.com/test/apikeys keys
+    - https://stripe.com/docs/webhooks#test-webhook
+  - deploy hono server
+  - test it works in prod
 - global edit of guide working
   - works well with global stores
   - mutations work
@@ -33,7 +43,6 @@
     - this sync is important to have discussions available. still, everything is serialisable into this markdown `docs/todo.md` file, updated on CI
   - grab a list of all `todo: ` comments in code and show it as a generated list in `code-todo.md` too
   - embedding images should work too, inline links to images (probably uploaded to GitHub inline in todo.md) (once KusKus works with GitHub)
-- stripe works, updates `memberUntil` status of users when payment is succesful
 - design UI for when users hit a /<topic> that is not yet in LA db
   - show empty state, users can still mark progress on the topic and request to be moderator of it to create a guide for it
 
@@ -79,6 +88,14 @@
 ## Analytics
 
 - [Pirsch](https://github.com/pirsch-analytics/pirsch) is interesting
+
+## Uses
+
+- ability for users to share their stack of tools they use
+
+## API access
+
+- add API access to read/write to LA, guarded with [Unkey](https://github.com/unkeyed/unkey) potentially
 
 ## Other
 

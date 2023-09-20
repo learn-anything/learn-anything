@@ -94,6 +94,12 @@ g.mutation("createUser", {
   resolver: "createUser",
 })
 
+g.mutation("uploadProfilePhoto", {
+  args: { image: g.string() },
+  returns: g.string(),
+  resolver: "uploadProfilePhoto",
+})
+
 const inputToUpdateGlobalTopic = g.input("inputToUpdateGlobalTopic", {
   topicSummary: g.string(),
   sections: g.inputRef(section).list(),

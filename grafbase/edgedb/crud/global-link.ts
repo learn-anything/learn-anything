@@ -39,6 +39,7 @@ export async function removeProtocolFromUrlOfGlobalLinks() {
         set: {
           url: newUrl,
           protocol: protocol,
+          fullUrl: globalLink.url,
         },
       }))
       .run(client)
