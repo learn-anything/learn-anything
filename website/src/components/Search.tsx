@@ -11,12 +11,12 @@ import {
   onMount,
 } from "solid-js"
 import { makeEventListener } from "@solid-primitives/event-listener"
-import { createShortcut, useKeyDownList } from "@solid-primitives/keyboard"
+import { createShortcut } from "@solid-primitives/keyboard"
 import { useNavigate } from "solid-start"
 
 type SearchResult = {
   name: string
-  action?: () => void
+  action: () => void
 }
 
 type Props = {
@@ -34,29 +34,42 @@ type Props = {
 export default function Search(props: Props) {
   const [query, setQuery] = createSignal("")
   const [inputFocused, setInputFocused] = createSignal(false)
+  const [focusedItemIndex, setFocusedItemIndex] = createSignal(0)
+  const [focusedItem, setFocusedItem] = createSignal("")
 
-  const [focusedTopic, setFocusedTopic] = createSignal(0)
-  const [focusedTopicTitle, setFocusedTopicTitle] = createSignal("")
+  onMount(() => {
+    console.log(props.searchResults[0])
+  })
+
+  // const [focusedItem, setFocusedItem] = createSignal<{
+  //   name: string
+  //   index: number
+  // }>({
+  //   name: "",
+  //   index: 0,
+  // })
+
   const navigate = useNavigate()
-  const [toggleSearch, setToggleSearch] = createSignal(false)
 
   createShortcut(["ARROWDOWN"], () => {
-    if (focusedTopic() === results().results.length - 1) {
-      setFocusedTopic(0)
+    if (focusedItemIndex() === results().results.length - 1) {
+      setFocusedItemIndex(0)
       return
     }
-    setFocusedTopic(focusedTopic() + 1)
+    setFocusedItemIndex(focusedItemIndex() + 1)
   })
   createShortcut(["ARROWUP"], () => {
-    if (focusedTopic() === 0) {
-      setFocusedTopic(results().results.length - 1)
+    if (focusedItemIndex() === 0) {
+      setFocusedItemIndex(results().results.length - 1)
       return
     }
 
-    setFocusedTopic(focusedTopic() - 1)
+    setFocusedItemIndex(focusedItemIndex() - 1)
   })
   createShortcut(["ENTER"], () => {
-    navigate(`/${results().results[focusedTopic()]}`)
+    console.log(focusedItem())
+    // console.log(focusedTopic(), "focused topic")
+    // navigate(`/${results().results[focusedTopic()]}`)
   })
 
   let ref!: HTMLInputElement
@@ -110,7 +123,7 @@ export default function Search(props: Props) {
     }
   })
   createEffect(() => {
-    setFocusedTopicTitle(results().results[focusedTopic()])
+    setFocusedItem(results().results[focusedItemIndex()])
   })
   // TODO: make up/down work
   // make pressing return on item works too
@@ -164,9 +177,6 @@ export default function Search(props: Props) {
                     console.log("selected result: ")
                   }
                 }}
-                onClick={() => {
-                  setToggleSearch(true)
-                }}
                 oninput={(e) => setQuery(e.target.value)}
                 type="text"
                 ref={ref}
@@ -180,7 +190,7 @@ export default function Search(props: Props) {
                         <div
                           class={clsx(
                             "w-full px-3 p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:text-white text-black",
-                            focusedTopicTitle() === topic &&
+                            focusedItem() === topic &&
                               "bg-gray-100 border-y border-slate-400 dark:bg-neutral-800 dark:border-opacity-30 drop-shadow-md",
                           )}
                           onClick={() => {
@@ -214,7 +224,9 @@ export default function Search(props: Props) {
                   }
                 }}
                 onClick={() => {
-                  setToggleSearch(true)
+                  {
+                    /* setToggleSearch(true) */
+                  }
                 }}
                 oninput={(e) => setQuery(e.target.value)}
                 type="text"
@@ -224,22 +236,27 @@ export default function Search(props: Props) {
               <Show when={inputFocused()}>
                 <div class="text-black dark:text-white">
                   <For each={results().results}>
-                    {(topic, id) => {
+                    {(result, id) => {
                       return (
                         <div
                           class={clsx(
                             "w-full px-3 p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800",
-                            focusedTopicTitle() === topic &&
+                            focusedItem() === result &&
                               "bg-gray-100 dark:bg-neutral-800 border-y dark:border-opacity-30 border-slate-400 drop-shadow-md",
                             id() === 0 && "border-t-0",
                             id() === results().results.length - 1 &&
                               "border-b-0",
                           )}
                           onClick={() => {
-                            navigate(`/${topic}`)
+                            console.log(result, "result")
+                            if (result === focusedItem()) {
+                              {
+                                /* focusedItem().action() */
+                              }
+                            }
                           }}
                         >
-                          {topic}
+                          {result}
                         </div>
                       )
                     }}

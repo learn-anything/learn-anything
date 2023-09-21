@@ -220,7 +220,7 @@ export default function Home() {
                   return {
                     name: topic.prettyName,
                     action: () => {
-                      navigate("3d")
+                      navigate(`/${topic.name}`)
                     },
                   }
                 },
