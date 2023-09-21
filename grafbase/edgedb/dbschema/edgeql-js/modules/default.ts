@@ -54,6 +54,7 @@ export type $GlobalLinkλShape = $.typeutil.flatten<_std.$Object_6b06be9b27fe11e
   "urlTitle": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "year": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "fullUrl": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "verified": $.PropertyDesc<_std.$bool, $.Cardinality.One, false, false, false, false>;
   "<links[is GlobalGuideSection]": $.LinkDesc<$GlobalGuideSection, $.Cardinality.Many, {}, false, false,  false, false>;
   "<globalLink[is Link]": $.LinkDesc<$Link, $.Cardinality.Many, {}, false, false,  false, false>;
   "<completedLinks[is User]": $.LinkDesc<$User, $.Cardinality.Many, {}, false, false,  false, false>;
@@ -225,8 +226,8 @@ export type $UserλShape = $.typeutil.flatten<_std.$Object_6b06be9b27fe11ee83ff1
   "email": $.PropertyDesc<_std.$str, $.Cardinality.One, true, false, false, false>;
   "hankoId": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, true, false, false, false>;
   "name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, true, false, false, false>;
-  "proMemberUntil": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "profileImage": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "memberUntil": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "<user[is UserGuide]": $.LinkDesc<$UserGuide, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user[is Wiki]": $.LinkDesc<$Wiki, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;

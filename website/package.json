@@ -17,6 +17,7 @@
   "dependencies": {
     "@nothing-but/force-graph": "^0.2.2",
     "@nothing-but/utils": "^0.9.0",
+    "@orama/orama": "^1.2.6",
     "@solid-primitives/active-element": "^2.0.17",
     "@solid-primitives/autofocus": "^0.0.108",
     "@solid-primitives/event-listener": "^2.3.0",
@@ -36,6 +37,7 @@
     "solid-markdown": "^1.2.2",
     "solid-start": "^0.3.5",
     "solid-start-cloudflare-pages": "^0.3.5",
+    "tinybase": "^4.3.1",
     "undici": "^5.24.0",
     "zod": "^3.22.2"
   }

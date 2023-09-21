@@ -42,8 +42,7 @@ module default {
     # list of topics user is moderating
     multi topicsModerated: GlobalTopic;
     # date until user has paid membership for
-    # TODO: not sure if type should be datetime
-    proMemberUntil: datetime;
+    memberUntil: datetime;
   }
   type Wiki {
     # owner of this wiki
@@ -174,6 +173,8 @@ module default {
     # required url: str {
     #   constraint exclusive;
     # };
+    # true = link was verified, its valid URL, good metadata was added etc.
+    required verified: bool;
     # true = link is available for all to see/search. false = link is private
     required public: bool;
     # link description

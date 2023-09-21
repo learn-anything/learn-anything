@@ -1,11 +1,29 @@
 ## Public website release [sept 29]
 
+- load all global links into local storage with [tinybase](https://github.com/tinyplex/tinybase)
+  - use [orama](https://github.com/oramasearch/orama) to search over `.title` of it
+    - https://oramasearch.com/blog/optimizing-orama-schema-optimization useful
+    - read docs: https://github.com/oramasearch/orama | https://docs.oramasearch.com
+- allow searching all global links in landing page
+  - have a way to switch between looking for topics and looking for a link to open
+  - non member feature, for non members, load in 1,000 top links, then on using result go to /pricing
 - update UI of topic page for editing
   - https://lunarui.dev/components
+  - https://www.ormanclark.com/
+  - https://github.com/raidendotai/openv0
+  - https://github.com/emilkowalski/vaul
+  - https://github.com/emilkowalski/sonner
+    https://github.com/radix-vue/radix-vue
+  - https://github.com/huntabyte/formsnap intersting for forms (adapt to solid?)
+  - has great ui code: https://github.com/huntabyte
+  - https://github.com/huntabyte/shadcn-svelte https://www.shadcn-svelte.com
+  - https://reshaped.so
+  - https://github.com/hope-ui/hope-ui
 - update UI of topic page for viewing
 - use R2 (https://developers.cloudflare.com/r2/) to store user profile images
   - use fetch api directly https://developers.cloudflare.com/r2/api/workers/
 - stripe works, updates `memberUntil` status of users when payment is succesful
+  - check https://www.edgedb.com/docs/stdlib/datetime#type::std::datetime | should cover unix time stamp to datetime
   - test it works locally, memberUntil is updated properly
     - https://stripe.com/docs/api/subscriptions/object how to convert from unix number to edgedb datetime
     - https://dashboard.stripe.com/test/apikeys keys
@@ -105,3 +123,5 @@
 - better web search using https://github.com/oramasearch/orama
 - do proper observability and logging, especially on edgedb CRUD queries, make sure it can't fail for bad reasons, and if error happens, surface it to grafbase/users
 - log all `console.error` with [TinyBird](https://www.tinybird.co) or [HyperDX](https://github.com/hyperdxio/hyperdx)
+- add multiplayer support using [tinybase/partykit](https://twitter.com/threepointone/status/1704879501232980298)
+  - [many great tweets on it](https://twitter.com/jamespearce)
