@@ -25,7 +25,7 @@ import { getHankoCookie } from "../lib/auth"
 import createEditGuide, { EditGuideProvider } from "./GlobalContext/edit-guide"
 
 // TODO: https://github.com/nikitavoloboev/la-issues/issues/54 (should stop having to manually update this schema )
-const typeDefs = `
+export const typeDefs = `
   """
   De-prioritizes a fragment, causing the fragment to be omitted in the initial response and delivered as a subsequent response afterward.
   """
@@ -100,7 +100,7 @@ const typeDefs = `
   }
 `
 
-function createMobius(options: { hankoCookie: () => string }) {
+export function createMobius(options: { hankoCookie: () => string }) {
   const { hankoCookie } = options
 
   const mobius = new Mobius<typeof typeDefs>({
@@ -121,6 +121,8 @@ function createMobius(options: { hankoCookie: () => string }) {
   return mobius
 }
 
+export type MobiusType = ReturnType<typeof createMobius>
+
 const MobiusCtx = createContext({} as ReturnType<typeof createMobius>)
 
 export function useMobius() {
@@ -135,7 +137,6 @@ export function useSignIn() {
 
 export default function Root() {
   const user = createUserState()
-  const global = createGlobalState()
   const globalTopic = createGlobalTopic()
   const editGuide = createEditGuide()
 
@@ -148,6 +149,7 @@ export default function Root() {
   const mobius = createMobius({
     hankoCookie,
   })
+  const global = createGlobalState(mobius)
 
   return (
     <Html lang="en">

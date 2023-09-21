@@ -54,33 +54,28 @@ export function generateInitialGraph(length: number = 256): Graph.Graph {
 // TODO: load the graph with graph data from server (no undefined flying around)
 export default function Home() {
   const navigate = useNavigate()
-  const mobius = useMobius()
   const global = useGlobalState()
 
-  // onMount(async () => {
-  //   if (global.state.globalTopicsSearchList.length < 1) {
-  //     const res = await mobius.query({
-  //       publicGetGlobalTopics: {
-  //         prettyName: true,
-  //         name: true,
-  //       },
-  //     })
-  //     console.log(res, "res")
-  //     if (res) {
-  //       // @ts-ignore
-  //       global.setGlobalTopicsSearchList(res.data?.publicGetGlobalTopics)
-  //     }
-  //   }
-  // })
-
   const [topicSearchResults, setTopicSearchResults] = createSignal<string[]>([])
-  const [topicSearchInput, setTopicSearchInput] = createSignal("")
   const [focusedTopic, setFocusedTopic] = createSignal(0)
   const [focusedTodoTitle, setFocusedTodoTitle] = createSignal("")
+  const [topicSearchInput, setTopicSearchInput] = createSignal("")
 
   const [hankoCookie] = createResource(() => {
     const hankoCookie = getHankoCookie()
     return hankoCookie
+  })
+
+  createEffect(() => {
+    const searchResults = global.state.globalTopicsSearchList.map((topic) => {
+      return {
+        name: topic.prettyName,
+        action: () => {
+          navigate("3d-printing")
+        },
+      }
+    })
+    console.log(searchResults, "results")
   })
 
   const graph = generateInitialGraph()
@@ -217,29 +212,19 @@ export default function Home() {
             >
               I want to learn
             </div>
-            {/* TODO: make this work using <Search /> instead of mess that is currently here */}
-            {/* <Search placeholder="Physics" searchResults={[
-              {
-                name: "Math",
-                action: () => {
-                  navigate("math")
-                }
-              },
-              {
-                name: "Physics",
-                action: () => {
-                  navigate("physics")
-                }
-              },
-            ]}  /> */}
             <Search
               expandable={false}
               placeholder="Search Topic"
-              searchResults={[
-                { name: "Physics" },
-                { name: "Math" },
-                { name: "Karabiner" },
-              ]}
+              searchResults={global.state.globalTopicsSearchList.map(
+                (topic) => {
+                  return {
+                    name: topic.prettyName,
+                    action: () => {
+                      navigate("3d")
+                    },
+                  }
+                },
+              )}
             />
           </div>
           <div class="w-[80%] flex justify-center">{el}</div>
