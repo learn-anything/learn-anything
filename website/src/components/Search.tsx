@@ -154,7 +154,7 @@ export default function Search(props: Props) {
               <input
                 style={{ outline: "none" }}
                 class={clsx(
-                  "w-full bg-transparent p-3 px-4 text-black text-opacity-70 h-full",
+                  "w-full bg-transparent p-3 px-4 text-black dark:text-white text-opacity-70 h-full",
                   inputFocused() &&
                     "border-b h-full border-slate-400 dark:border-opacity-30",
                 )}
@@ -203,7 +203,7 @@ export default function Search(props: Props) {
               <input
                 style={{ outline: "none" }}
                 class={clsx(
-                  "w-full bg-transparent p-3 px-4 text-black text-opacity-70 h-full",
+                  "w-full bg-transparent p-3 px-4 text-black text-opacity-70 h-full dark:text-white",
                   inputFocused() &&
                     "border-b dark:border-opacity-30 h-full border-slate-400",
                 )}

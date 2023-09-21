@@ -95,7 +95,7 @@ export default function EditGuide() {
               <div class="flex justify-between">
                 <div
                   class="flex items-center gap-1 text-[#3B5CCC] font-light"
-                // onClick={}
+                  // onClick={}
                 >
                   {/* <Icon name="Plus"></Icon>Add Section */}
                 </div>

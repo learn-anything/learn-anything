@@ -103,7 +103,6 @@ const typeDefs = `
 function createMobius(options: { hankoCookie: () => string }) {
   const { hankoCookie } = options
 
-  console.log(import.meta.env.VITE_GRAFBASE_API_URL, "grafbase api url")
   const mobius = new Mobius<typeof typeDefs>({
     fetch: (query) =>
       fetch(import.meta.env.VITE_GRAFBASE_API_URL, {

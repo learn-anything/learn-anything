@@ -57,21 +57,21 @@ export default function Home() {
   const mobius = useMobius()
   const global = useGlobalState()
 
-  onMount(async () => {
-    if (global.state.globalTopicsSearchList.length < 1) {
-      const res = await mobius.query({
-        publicGetGlobalTopics: {
-          prettyName: true,
-          name: true,
-        },
-      })
-      console.log(res, "res")
-      if (res) {
-        // @ts-ignore
-        global.setGlobalTopicsSearchList(res.data?.publicGetGlobalTopics)
-      }
-    }
-  })
+  // onMount(async () => {
+  //   if (global.state.globalTopicsSearchList.length < 1) {
+  //     const res = await mobius.query({
+  //       publicGetGlobalTopics: {
+  //         prettyName: true,
+  //         name: true,
+  //       },
+  //     })
+  //     console.log(res, "res")
+  //     if (res) {
+  //       // @ts-ignore
+  //       global.setGlobalTopicsSearchList(res.data?.publicGetGlobalTopics)
+  //     }
+  //   }
+  // })
 
   const [topicSearchResults, setTopicSearchResults] = createSignal<string[]>([])
   const [topicSearchInput, setTopicSearchInput] = createSignal("")

@@ -1,5 +1,8 @@
-## Public website release [september 19]
+## Public website release [sept 29]
 
+- update UI of topic page for editing
+  - https://lunarui.dev/components
+- update UI of topic page for viewing
 - use R2 (https://developers.cloudflare.com/r2/) to store user profile images
   - use fetch api directly https://developers.cloudflare.com/r2/api/workers/
 - stripe works, updates `memberUntil` status of users when payment is succesful
@@ -9,6 +12,7 @@
     - https://stripe.com/docs/webhooks#test-webhook
   - deploy hono server
   - test it works in prod
+- blur 50 % of guide for non members
 - global edit of guide working
   - works well with global stores
   - mutations work
@@ -44,7 +48,7 @@
 - design UI for when users hit a /<topic> that is not yet in LA db
   - show empty state, users can still mark progress on the topic and request to be moderator of it to create a guide for it
 
-## Public desktop app release [september 24]
+## Public desktop app release [oct 2]
 
 - let users choose a folder of existing markdown files to sync with
 - or allow choosing a folder where markdown files will be synced to
@@ -59,11 +63,11 @@
 - public content
 - move all useful code that existed in previous [Electron version](https://github.com/learn-anything/electron-version)
 
-## Public user wikis [september 30]
+## Public user wikis [oct 5]
 
 - all content published via desktop app, rendered as in [wiki.nikiv.dev](https://wiki.nikiv.dev)
 
-## Mobile app release [october 8]
+## Mobile app release [oct 15]
 
 - use [ignite](https://github.com/infinitered/ignite) starter
   - ignite [seems best](https://www.youtube.com/watch?v=KOSvDlFyg20)

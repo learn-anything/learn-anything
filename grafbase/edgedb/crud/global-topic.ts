@@ -5,32 +5,39 @@ import e from "../dbschema/edgeql-js"
 // its public because in future for auth'd users, we can show more custom results
 // based of user preference etc.
 export async function publicGetGlobalTopics() {
-  const globalTopics = await e.select(e.GlobalTopic, () => ({
-    prettyName: true,
-    name: true
-  })).run(client)
+  const globalTopics = await e
+    .select(e.GlobalTopic, () => ({
+      prettyName: true,
+      name: true,
+    }))
+    .run(client)
   return globalTopics
 }
 
 // for use in global topic page (i.e. learn-anything.xyz/physics) for non authenticated users
 export async function publicGetGlobalTopic(topicName: string) {
-  const globalTopic = await e.assert_single(e.select(e.GlobalTopic, (globalTopic) => ({
-    prettyName: true,
-    topicSummary: true,
-    filter: e.op(globalTopic.name, "=", topicName)
-  })))
+  const globalTopic = await e
+    .assert_single(
+      e.select(e.GlobalTopic, (globalTopic) => ({
+        prettyName: true,
+        topicSummary: true,
+        filter: e.op(globalTopic.name, "=", topicName),
+      })),
+    )
     .run(client)
   return globalTopic
 }
 
 // for use in global topic page (i.e. learn-anything.xyz/physics) for authenticated users
 export async function getGlobalTopic(topicName: string) {
-  const globalTopic = await e.select(e.GlobalTopic, (globalTopic) => ({
-    prettyName: true,
-    topicSummary: true,
-    // TODO: return learning status of topic for user
-    filter: e.op(globalTopic.name, "=", topicName)
-  })).run(client)
+  const globalTopic = await e
+    .select(e.GlobalTopic, (globalTopic) => ({
+      prettyName: true,
+      topicSummary: true,
+      // TODO: return learning status of topic for user
+      filter: e.op(globalTopic.name, "=", topicName),
+    }))
+    .run(client)
   return globalTopic[0]
 }
 
