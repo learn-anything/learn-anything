@@ -215,16 +215,26 @@ export default function Home() {
             <Search
               expandable={false}
               placeholder="Search Topic"
-              searchResults={global.state.globalTopicsSearchList.map(
-                (topic) => {
-                  return {
-                    name: topic.prettyName,
-                    action: () => {
-                      navigate(`/${topic.name}`)
-                    },
-                  }
+              searchResults={[
+                {
+                  name: "3d printing",
+                  action: () => {
+                    navigate(`/3d-printing`)
+                  },
                 },
-              )}
+                {
+                  name: "Physics",
+                  action: () => {
+                    navigate(`/Physics`)
+                  },
+                },
+                {
+                  name: "Math",
+                  action: () => {
+                    navigate(`/Math`)
+                  },
+                },
+              ]}
             />
           </div>
           <div class="w-[80%] flex justify-center">{el}</div>

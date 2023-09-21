@@ -9,10 +9,12 @@ import {
   createMemo,
   createSignal,
   onMount,
+  untrack,
 } from "solid-js"
 import { makeEventListener } from "@solid-primitives/event-listener"
 import { createShortcut } from "@solid-primitives/keyboard"
 import { useNavigate } from "solid-start"
+import { input } from "edgedb/dist/adapter.node"
 
 type SearchResult = {
   name: string
@@ -67,9 +69,9 @@ export default function Search(props: Props) {
     setFocusedItemIndex(focusedItemIndex() - 1)
   })
   createShortcut(["ENTER"], () => {
-    console.log(focusedItem())
-    // console.log(focusedTopic(), "focused topic")
-    // navigate(`/${results().results[focusedTopic()]}`)
+    if (inputFocused()) {
+      props.searchResults[focusedItemIndex()].action()
+    }
   })
 
   let ref!: HTMLInputElement
@@ -85,7 +87,8 @@ export default function Search(props: Props) {
     makeEventListener(
       ref,
       "blur",
-      () => {
+      (e) => {
+        console.log(e, "e")
         setInputFocused(false)
       },
       { passive: true },
@@ -148,7 +151,7 @@ export default function Search(props: Props) {
   //     selectNext(1)
   //   },
   // })
-
+  onMount(() => {})
   return (
     <>
       <style>
@@ -240,7 +243,7 @@ export default function Search(props: Props) {
                       return (
                         <div
                           class={clsx(
-                            "w-full px-3 p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800",
+                            "w-full px-3 p-2 cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-800",
                             focusedItem() === result &&
                               "bg-gray-100 dark:bg-neutral-800 border-y dark:border-opacity-30 border-slate-400 drop-shadow-md",
                             id() === 0 && "border-t-0",
@@ -248,12 +251,8 @@ export default function Search(props: Props) {
                               "border-b-0",
                           )}
                           onClick={() => {
-                            console.log(result, "result")
-                            if (result === focusedItem()) {
-                              {
-                                /* focusedItem().action() */
-                              }
-                            }
+                            setFocusedItemIndex(id())
+                            props.searchResults[focusedItemIndex()].action()
                           }}
                         >
                           {result}
