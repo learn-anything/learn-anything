@@ -1,11 +1,12 @@
-import { For, Show, createEffect, createSignal, untrack } from "solid-js"
+import { Show, createEffect, createSignal, untrack } from "solid-js"
 import { A, useNavigate } from "solid-start"
 import { createShortcut } from "@solid-primitives/keyboard"
 import { useUser } from "../../GlobalContext/user"
 import Icon from "../Icon"
-import Search from "../Search"
+import { Search, SearchResult, createSearchState } from "../Search"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import { useGlobalState } from "../../GlobalContext/global"
+import clsx from "clsx"
 
 // TODO: add fuzzy searching for topics. also consider lower case inputs matching results too
 export default function TopicNav() {
@@ -53,6 +54,14 @@ export default function TopicNav() {
       setFocusedTodoTitle(topicSearchResults()[focusedTopic()])
     }
   })
+
+  const searchResults: SearchResult[] = [
+    { name: "Physics", action: () => console.log("Physics") },
+    { name: "Math", action: () => console.log("Math") },
+    { name: "Karabiner", action: () => console.log("Karabiner") },
+  ]
+  const search_state = createSearchState(() => searchResults)
+
   return (
     <>
       <style>
@@ -106,15 +115,14 @@ export default function TopicNav() {
             </div>
 
             <div class="w-full h-full">
-              <Search
-                placeholder="Search Topic"
-                searchResults={[
-                  { name: "Physics" },
-                  { name: "Math" },
-                  { name: "Karabiner" },
-                ]}
-                expandable={true}
-              />
+              <div
+                class={clsx(
+                  "relative w-[50%] h-full flex items-center transition-all duration-150",
+                  search_state.searchOpen && "w-full",
+                )}
+              >
+                <Search placeholder="Search Topic" state={search_state} />
+              </div>
             </div>
           </div>
           <div id="NavMenu">Burger</div>

@@ -1,6 +1,5 @@
 import { createShortcut } from "@solid-primitives/keyboard"
 import {
-  For,
   Show,
   createEffect,
   createResource,
@@ -13,7 +12,7 @@ import { Canvas, Graph, Anim } from "@nothing-but/force-graph"
 import { Num } from "@nothing-but/utils"
 import { getHankoCookie } from "../../lib/auth"
 import { useGlobalState } from "../GlobalContext/global"
-import Search from "../components/Search"
+import { Search, SearchResult, createSearchState } from "../components/Search"
 
 export const graph_options = Graph.graphOptions({
   inertia_strength: 0.3,
@@ -168,6 +167,28 @@ export default function Home() {
     }
   })
 
+  const searchResults: SearchResult[] = [
+    {
+      name: "3d printing",
+      action: () => {
+        navigate(`/3d-printing`)
+      },
+    },
+    {
+      name: "Physics",
+      action: () => {
+        navigate(`/Physics`)
+      },
+    },
+    {
+      name: "Math",
+      action: () => {
+        navigate(`/Math`)
+      },
+    },
+  ]
+  const search_state = createSearchState(() => searchResults)
+
   return (
     <>
       <style>
@@ -207,30 +228,9 @@ export default function Home() {
             >
               I want to learn
             </div>
-            <Search
-              expandable={false}
-              placeholder="Search Topic"
-              searchResults={[
-                {
-                  name: "3d printing",
-                  action: () => {
-                    navigate(`/3d-printing`)
-                  },
-                },
-                {
-                  name: "Physics",
-                  action: () => {
-                    navigate(`/Physics`)
-                  },
-                },
-                {
-                  name: "Math",
-                  action: () => {
-                    navigate(`/Math`)
-                  },
-                },
-              ]}
-            />
+            <div class="relative w-[50%] h-full flex items-center transition-all duration-150">
+              <Search placeholder="Search Topic" state={search_state} />
+            </div>
           </div>
           <div class="w-[80%] flex justify-center">{el}</div>
           <Show when={!hankoCookie}>
