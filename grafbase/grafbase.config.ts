@@ -100,7 +100,7 @@ g.query("stripe", {
 // auth'd mutations
 
 g.mutation("createUser", {
-  args: { email: g.string(), hankoId: g.string() },
+  args: { email: g.string() },
   returns: g.string(),
   resolver: "createUser",
 })

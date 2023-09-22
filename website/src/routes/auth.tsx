@@ -47,7 +47,6 @@ export default function SignInPage() {
         localStorageKey: "hanko",
       })
       const user = await userClient.getCurrent()
-      const hankoId = user.id
       const email = user.email
 
       const allCookies = document.cookie
@@ -64,7 +63,6 @@ export default function SignInPage() {
         createUser: {
           where: {
             email: email,
-            hankoId: hankoId,
           },
           select: true,
         },

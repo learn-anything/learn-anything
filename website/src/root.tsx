@@ -46,7 +46,7 @@ export const typeDefs = `
   directive @oneOf on INPUT_OBJECT
 
   type Mutation {
-    createUser(email: String!, hankoId: String!): String!
+    createUser(email: String!): String!
     uploadProfilePhoto(image: String!): String!
     updateGlobalTopic(input: inputToUpdateGlobalTopic!): String!
   }
@@ -87,7 +87,7 @@ export const typeDefs = `
   }
 
   type outputOfGetGlobalLinks {
-    id: Int!
+    id: String!
     title: String!
     url: String!
   }
