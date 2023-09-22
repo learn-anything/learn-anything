@@ -41,6 +41,7 @@ export function createGlobalState(mobius: MobiusType) {
       globalLinks: {
         title: { type: "string" },
         url: { type: "string" },
+        id: { type: "string" },
       },
     }
 
@@ -55,24 +56,26 @@ export function createGlobalState(mobius: MobiusType) {
     const globalLinks = store.getTable("globalLinks")
     // check if global links are empty in store
     if (Object.keys(globalLinks).length === 0) {
-      // if there are no existing links, load them from the server
-      store.addRow("globalLinks", {
-        title: "Learn Anything",
-        url: "https://learn-anything.xyz",
+      const links = await mobius.query({
+        getGlobalLinks: {
+          id: true,
+          url: true,
+          title: true,
+        },
       })
-      store.addRow("globalLinks", {
-        title: "TinyBase",
-        url: "https://tinybase.org",
+
+      links.data.getGlobalLinks.map((link) => {
+        store.addRow("globalLinks", {
+          title: link.title,
+          url: link.url,
+          id: link.id,
+        })
       })
-      store.addRow("globalLinks", {
-        title: "TinyBase GitHub",
-        url: "https://github.com/tinyplex/tinybase",
-      })
-      console.log("saving links to store")
+      console.log("saved")
       await persister.save()
     }
 
-    console.log(globalLinks, "global links!")
+    console.log(globalLinks, "global links")
   })
 
   return {

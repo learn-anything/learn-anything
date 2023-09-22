@@ -47,6 +47,7 @@ export const typeDefs = `
 
   type Mutation {
     createUser(email: String!, hankoId: String!): String!
+    uploadProfilePhoto(image: String!): String!
     updateGlobalTopic(input: inputToUpdateGlobalTopic!): String!
   }
 
@@ -54,6 +55,7 @@ export const typeDefs = `
     publicGetGlobalTopics: [outputOfPublicGetGlobalTopics!]!
     publicGetGlobalTopic(topicName: String!): publicGlobalTopic!
     getGlobalTopic(topicName: String!): globalTopic!
+    getGlobalLinks: [outputOfGetGlobalLinks!]!
     checkForGlobalLink(linkUrl: String!): outputOfCheckForGlobalLink!
     stripe(plan: String!): String!
   }
@@ -82,6 +84,12 @@ export const typeDefs = `
     title: String!
     year: Int
     description: String
+  }
+
+  type outputOfGetGlobalLinks {
+    id: Int!
+    title: String!
+    url: String!
   }
 
   type outputOfPublicGetGlobalTopics {

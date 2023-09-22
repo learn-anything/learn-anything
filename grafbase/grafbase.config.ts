@@ -68,6 +68,17 @@ g.query("getGlobalTopic", {
   resolver: "getGlobalTopic",
 })
 
+const outputOfGetGlobalLinks = g.type("outputOfGetGlobalLinks", {
+  id: g.string(),
+  title: g.string(),
+  url: g.string(),
+})
+g.query("getGlobalLinks", {
+  args: {},
+  returns: g.ref(outputOfGetGlobalLinks).list(),
+  resolver: "getGlobalLinks",
+})
+
 const outputOfCheckForGlobalLink = g.type("outputOfCheckForGlobalLink", {
   url: g.string(),
   title: g.string(),

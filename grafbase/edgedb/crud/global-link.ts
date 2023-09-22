@@ -12,8 +12,10 @@ import { parseURL } from "ufo"
 export async function getAllGlobalLinks() {
   const links = await e
     .select(e.GlobalLink, () => ({
+      id: true,
       title: true,
       url: true,
+      limit: 5,
     }))
     .run(client)
   return links

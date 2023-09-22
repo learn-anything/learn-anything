@@ -19,7 +19,7 @@ module default {
     };
     # custom name user can choose for themselves similar to X
     displayName: str;
-    # aws s3 url with image
+    # aws s3 or cloudflare r2 url with image
     profileImage: str;
     # user owns one wiki
     link wiki := .<user[is Wiki];
