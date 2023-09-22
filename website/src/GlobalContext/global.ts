@@ -1,7 +1,9 @@
 import { onMount } from "solid-js"
 import { createContext, useContext } from "solid-js"
-import { createStore } from "solid-js/store"
 import { MobiusType } from "../root"
+import { createStore } from "solid-js/store"
+import { TablesSchema, createStore as tinybaseCreateStore } from "tinybase"
+import { createIndexedDbPersister } from "tinybase/persisters/persister-indexed-db"
 
 // TODO: persist everything to local storage with tinybase
 // especially the globalTopicsSearchList so search is available instantly + offline
@@ -22,15 +24,55 @@ export function createGlobalState(mobius: MobiusType) {
   })
 
   // TODO: load it from tinybase if it's there
+  // onMount(async () => {
+  //   const res = await mobius.query({
+  //     publicGetGlobalTopics: {
+  //       prettyName: true,
+  //       name: true,
+  //     },
+  //   })
+  //   console.log(res, "res")
+  //   // @ts-ignore
+  //   setState({ globalTopicsSearchList: res.data.publicGetGlobalTopics })
+  // })
+
   onMount(async () => {
-    const res = await mobius.query({
-      publicGetGlobalTopics: {
-        prettyName: true,
-        name: true,
+    const tableSchema: TablesSchema = {
+      globalLinks: {
+        title: { type: "string" },
+        url: { type: "string" },
       },
-    })
-    // @ts-ignore
-    setState({ globalTopicsSearchList: res.data.publicGetGlobalTopics })
+    }
+
+    const store = tinybaseCreateStore()
+    store.setTablesSchema(tableSchema)
+
+    // create indexed db persister
+    const persister = createIndexedDbPersister(store, "global")
+    // load from existing store if it exists
+    await persister.load()
+
+    const globalLinks = store.getTable("globalLinks")
+    // check if global links are empty in store
+    if (Object.keys(globalLinks).length === 0) {
+      // if there are no existing links, load them from the server
+      store.addRow("globalLinks", {
+        title: "Learn Anything",
+        url: "https://learn-anything.xyz",
+      })
+      store.addRow("globalLinks", {
+        title: "TinyBase",
+        url: "https://tinybase.org",
+      })
+      store.addRow("globalLinks", {
+        title: "TinyBase GitHub",
+        url: "https://github.com/tinyplex/tinybase",
+      })
+      console.log("saving links to store")
+      await persister.save()
+    }
+
+    console.log(globalLinks, "global links!")
   })
 
   return {

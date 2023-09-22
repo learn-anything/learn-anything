@@ -6,19 +6,14 @@ import {
   createResource,
   createSignal,
   onCleanup,
-  onMount,
   untrack,
 } from "solid-js"
 import { useNavigate } from "solid-start"
 import { Canvas, Graph, Anim } from "@nothing-but/force-graph"
 import { Num } from "@nothing-but/utils"
 import { getHankoCookie } from "../../lib/auth"
-import { useMobius } from "../root"
 import { useGlobalState } from "../GlobalContext/global"
-import Icon from "../components/Icon"
 import Search from "../components/Search"
-
-// TODO: add fuzzy search of topics, especially consider lower case should also match
 
 export const graph_options = Graph.graphOptions({
   inertia_strength: 0.3,
@@ -75,7 +70,7 @@ export default function Home() {
         },
       }
     })
-    console.log(searchResults, "results")
+    // console.log(searchResults, "results")
   })
 
   const graph = generateInitialGraph()
@@ -167,7 +162,7 @@ export default function Home() {
               }),
           ),
         )
-        console.log(topicSearchResults())
+        // console.log(topicSearchResults())
       })
       setFocusedTodoTitle(topicSearchResults()[focusedTopic()])
     }

@@ -1,5 +1,7 @@
 ## Public website release [sept 29]
 
+- fix Search component, currently if you select the results, it does not work
+  - maybe use https://developer.mozilla.org/en-US/docs/Web/API/Element/focusin_event
 - load all global links into local storage with [tinybase](https://github.com/tinyplex/tinybase)
   - use [orama](https://github.com/oramasearch/orama) to search over `.title` of it
     - https://oramasearch.com/blog/optimizing-orama-schema-optimization useful

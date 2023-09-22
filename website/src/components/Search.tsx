@@ -39,9 +39,9 @@ export default function Search(props: Props) {
   const [focusedItemIndex, setFocusedItemIndex] = createSignal(0)
   const [focusedItem, setFocusedItem] = createSignal("")
 
-  onMount(() => {
-    console.log(props.searchResults[0])
-  })
+  // onMount(() => {
+  //   console.log(props.searchResults[0])
+  // })
 
   // const [focusedItem, setFocusedItem] = createSignal<{
   //   name: string
@@ -177,7 +177,7 @@ export default function Search(props: Props) {
                 onKeyPress={(e) => {
                   const selected = results().selected()
                   if (e.key === "Enter" && selected) {
-                    console.log("selected result: ")
+                    // console.log("selected result: ")
                   }
                 }}
                 oninput={(e) => setQuery(e.target.value)}

@@ -5,8 +5,7 @@ export default async function getGlobalTopicsResolver(
   args: { topicName: string },
   context: any,
 ) {
-  // TODO: can potentially fail?
-  // if fail, send GraphQLError
+  // TODO: do GraphQLError on failures, check
   const topics = await publicGetGlobalTopics()
   return topics
 }
