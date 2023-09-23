@@ -181,7 +181,7 @@ export interface SearchProps {
 export function Search(props: SearchProps): solid.JSX.Element {
   return (
     <div
-      class="bg-white dark:bg-neutral-900 absolute top-0 right-0 w-full flex flex-col border-slate-400 dark:border-opacity-30 border rounded-[4px]"
+      class="h-10 w-full"
       ref={(container) => {
         /*
           if the click is outside the container, close the search
@@ -193,38 +193,45 @@ export function Search(props: SearchProps): solid.JSX.Element {
         })
       }}
     >
-      <input
-        type="text"
-        placeholder={props.placeholder}
-        class={clsx(
-          "w-full bg-transparent p-3 px-4 text-black dark:text-white text-opacity-70 h-full outline-none",
-          props.state.searchOpen &&
-            "border-b h-full border-slate-400 dark:border-opacity-30",
-        )}
-        on:keydown={(e) => handleInputKeydown(e, e.currentTarget, props.state)}
-        value={props.state.query}
-        onInput={(e) => updateQuery(props.state, e.currentTarget.value)}
-        onPaste={(e) => updateQuery(props.state, e.currentTarget.value)}
-        onClick={() => props.state.setSearchOpen(true)}
-      />
-      <solid.Show when={props.state.searchOpen}>
-        <div>
-          <solid.For each={props.state.results}>
-            {(topic) => (
-              <div
-                class={clsx(
-                  "w-full px-3 p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:text-white text-black border-y border-slate-300 dark:border-neutral-800",
-                  props.state.focused === topic &&
-                    "bg-neutral-200 dark:bg-neutral-800 dark:border-opacity-30 drop-shadow-md",
-                )}
-                onClick={() => selectSearchResult(props.state, topic)}
-              >
-                {topic.name}
-              </div>
-            )}
-          </solid.For>
-        </div>
-      </solid.Show>
+      <div
+        class="relative w-full flex flex-col
+        bg-white dark:bg-neutral-900 border-slate-400 dark:border-opacity-30 border rounded-[4px]"
+      >
+        <input
+          type="text"
+          placeholder={props.placeholder}
+          class={clsx(
+            "w-full h-10 bg-transparent p-3 px-4 text-black dark:text-white text-opacity-70 outline-none",
+            props.state.searchOpen &&
+              "border-b border-slate-400 dark:border-opacity-30",
+          )}
+          on:keydown={(e) =>
+            handleInputKeydown(e, e.currentTarget, props.state)
+          }
+          value={props.state.query}
+          onInput={(e) => updateQuery(props.state, e.currentTarget.value)}
+          onPaste={(e) => updateQuery(props.state, e.currentTarget.value)}
+          onClick={() => props.state.setSearchOpen(true)}
+        />
+        <solid.Show when={props.state.searchOpen}>
+          <div>
+            <solid.For each={props.state.results}>
+              {(topic) => (
+                <div
+                  class={clsx(
+                    "w-full h-10 px-3 p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:text-white text-black border-y border-slate-300 dark:border-neutral-800",
+                    props.state.focused === topic &&
+                      "bg-neutral-200 dark:bg-neutral-800 dark:border-opacity-30 drop-shadow-md",
+                  )}
+                  onClick={() => selectSearchResult(props.state, topic)}
+                >
+                  {topic.name}
+                </div>
+              )}
+            </solid.For>
+          </div>
+        </solid.Show>
+      </div>
     </div>
   )
 }
