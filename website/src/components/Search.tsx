@@ -5,12 +5,7 @@ import { createEventListener } from "@solid-primitives/event-listener"
 import { Num } from "@nothing-but/utils"
 
 /*
-TODO: make component work logically
-and make it look as in https://lu.ma/create `Add Event Location` visually
-to be used in landing page and all across LA
-replace the mess search that is inside routes/index (landing page) with this component
-search should be fuzzy too + case insensitive, but I think fuse lib takes care of that
-you should be able to click on the results too to trigger the action
+TODO: make it look as in https://lu.ma/create `Add Event Location` visually
 */
 
 export type SearchResult = {
@@ -54,12 +49,13 @@ export function createSearchState(
           .map((r) => r.item)
       : searchResults()
 
-    let init_focused: SearchResult | undefined
-    if (prev) {
-      const prev_focused = solid.untrack(prev.focused)
-      if (prev_focused && results.includes(prev_focused)) {
-        init_focused = prev_focused
-      }
+    /*
+      try reusing the previously focused item
+      otherwise, focus the first result
+    */
+    let init_focused = prev && solid.untrack(prev.focused)
+    if (!init_focused || !results.includes(init_focused)) {
+      init_focused = results[0]
     }
 
     const [focused, setFocused] = solid.createSignal(init_focused)
@@ -92,6 +88,13 @@ export function createSearchState(
   }
 }
 
+export function closeSearch(search: SearchState): void {
+  solid.batch(() => {
+    search.setFocused(undefined)
+    search.setSearchOpen(false)
+  })
+}
+
 export function selectSearchResult(
   search: SearchState,
   result: SearchResult,
@@ -103,77 +106,105 @@ export function selectSearchResult(
   })
 }
 
+export function updateQuery(search: SearchState, query: string): void {
+  solid.batch(() => {
+    search.setQuery(query)
+    search.setSearchOpen(true)
+  })
+}
+
+function handleInputKeydown(
+  e: KeyboardEvent,
+  input: HTMLInputElement,
+  state: SearchState,
+): void {
+  if (e.isComposing || e.defaultPrevented) return
+
+  switch (e.key) {
+    case "ArrowDown":
+    case "ArrowUp": {
+      e.preventDefault()
+
+      /*
+        move focus up/down
+        or focus the first/last result if there's no focus
+      */
+      const isDown = e.key === "ArrowDown"
+      const d = isDown ? 1 : -1
+      const len = state.results.length
+      const idx = state.focused ? state.results.indexOf(state.focused) : -1
+      const new_idx =
+        idx === -1 ? (isDown ? 0 : len - 1) : Num.wrap(idx + d, 0, len)
+
+      solid.batch(() => {
+        state.setSearchOpen(true)
+        state.setFocused(state.results[new_idx])
+      })
+
+      break
+    }
+    case "Enter":
+    case "Tab": {
+      const focused = state.focused
+      if (!state.searchOpen || !focused) return
+
+      e.preventDefault()
+      selectSearchResult(state, focused)
+
+      break
+    }
+    case "Escape": {
+      /*
+        close results -> clear query -> blur input
+      */
+      if (state.searchOpen) {
+        closeSearch(state)
+      } else if (state.query) {
+        state.setQuery("")
+      } else {
+        input.blur()
+      }
+
+      break
+    }
+    case "Backspace": {
+      state.query || closeSearch(state)
+    }
+  }
+}
+
 export interface SearchProps {
   placeholder: string
   state: SearchState
 }
 
 export function Search(props: SearchProps): solid.JSX.Element {
-  const focusedIndex = solid.createMemo(() =>
-    props.state.focused ? props.state.results.indexOf(props.state.focused) : -1,
-  )
-
   return (
     <div
       class="bg-white dark:bg-neutral-900 absolute top-0 right-0 w-full flex flex-col border-slate-400 dark:border-opacity-30 border rounded-[4px]"
       ref={(container) => {
         /*
-            if the click is outside the container, close the search
-          */
+          if the click is outside the container, close the search
+        */
         createEventListener(document, "click", (e) => {
           if (!(e.target instanceof Node) || !container.contains(e.target)) {
-            solid.batch(() => {
-              props.state.setFocused(undefined)
-              props.state.setSearchOpen(false)
-            })
+            closeSearch(props.state)
           }
         })
       }}
     >
       <input
+        type="text"
+        placeholder={props.placeholder}
         class={clsx(
           "w-full bg-transparent p-3 px-4 text-black dark:text-white text-opacity-70 h-full outline-none",
           props.state.searchOpen &&
             "border-b h-full border-slate-400 dark:border-opacity-30",
         )}
-        on:keydown={(e) => {
-          if (e.isComposing || e.defaultPrevented) return
-
-          switch (e.key) {
-            case "ArrowDown":
-            case "ArrowUp": {
-              e.preventDefault()
-
-              const isDown = e.key === "ArrowDown"
-              const d = isDown ? 1 : -1
-              const len = props.state.results.length
-              const idx = focusedIndex()
-              const new_idx =
-                idx === -1 ? (isDown ? 0 : len - 1) : Num.wrap(idx + d, 0, len)
-
-              solid.batch(() => {
-                props.state.setSearchOpen(true)
-                props.state.setFocused(props.state.results[new_idx])
-              })
-
-              break
-            }
-            case "Enter":
-            case "Tab": {
-              const focused = props.state.focused
-              if (!props.state.searchOpen || !focused) return
-
-              e.preventDefault()
-              selectSearchResult(props.state, focused)
-
-              break
-            }
-          }
-        }}
-        onInput={(e) => props.state.setQuery(e.target.value)}
-        onPaste={(e) => props.state.setQuery(e.currentTarget.value)}
-        type="text"
-        placeholder={props.placeholder}
+        on:keydown={(e) => handleInputKeydown(e, e.currentTarget, props.state)}
+        value={props.state.query}
+        onInput={(e) => updateQuery(props.state, e.currentTarget.value)}
+        onPaste={(e) => updateQuery(props.state, e.currentTarget.value)}
         onClick={() => props.state.setSearchOpen(true)}
       />
       <solid.Show when={props.state.searchOpen}>
@@ -182,9 +213,9 @@ export function Search(props: SearchProps): solid.JSX.Element {
             {(topic) => (
               <div
                 class={clsx(
-                  "w-full px-3 p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:text-white text-black border-y border-slate-400 dark:border-neutral-800",
+                  "w-full px-3 p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:text-white text-black border-y border-slate-300 dark:border-neutral-800",
                   props.state.focused === topic &&
-                    "bg-gray-100 dark:bg-neutral-800 dark:border-opacity-30 drop-shadow-md",
+                    "bg-neutral-200 dark:bg-neutral-800 dark:border-opacity-30 drop-shadow-md",
                 )}
                 onClick={() => selectSearchResult(props.state, topic)}
               >
