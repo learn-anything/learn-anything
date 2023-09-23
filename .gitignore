@@ -16,3 +16,5 @@ internal
 
 # local sqlite dbs
 *.sqlite
+
+tsconfig.tsbuildinfo

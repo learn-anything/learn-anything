@@ -1,5 +1,7 @@
 dist
 node_modules
+
+# generated files
 grafbase/edgedb/dbschema/edgeql-js
-.grafbase
 pnpm-lock.yaml
+.grafbase
