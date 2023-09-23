@@ -67,6 +67,8 @@
   - embedding images should work too, inline links to images (probably uploaded to GitHub inline in todo.md) (once KusKus works with GitHub)
 - design UI for when users hit a /<topic> that is not yet in LA db
   - show empty state, users can still mark progress on the topic and request to be moderator of it to create a guide for it
+- `/links/<url>` to show full url + all the metadata
+  - allow members to make suggestive edits to the link with new metadata
 
 ## Public desktop app release [oct 2]
 

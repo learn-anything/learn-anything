@@ -15,7 +15,7 @@ export async function getAllGlobalLinks() {
       id: true,
       title: true,
       url: true,
-      limit: 5,
+      limit: 100,
     }))
     .run(client)
   return links

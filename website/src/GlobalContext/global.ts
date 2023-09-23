@@ -4,6 +4,7 @@ import { MobiusType } from "../root"
 import { createStore } from "solid-js/store"
 import { TablesSchema, createStore as tinybaseCreateStore } from "tinybase"
 import { createIndexedDbPersister } from "tinybase/persisters/persister-indexed-db"
+import { create, search, insert } from "@orama/orama"
 
 // TODO: persist everything to local storage with tinybase
 // especially the globalTopicsSearchList so search is available instantly + offline
@@ -13,14 +14,24 @@ type GlobalTopicSearchItem = {
   prettyName: string
 }
 
+type Link = {
+  id: string
+  url: string
+  title: string
+}
+
 type GlobalState = {
   globalTopicsSearchList: GlobalTopicSearchItem[]
+  globalLinks: []
+  globalLinkSearch: any
 }
 
 // various global state
 export function createGlobalState(mobius: MobiusType) {
   const [state, setState] = createStore<GlobalState>({
     globalTopicsSearchList: [],
+    globalLinks: [],
+    globalLinkSearch: undefined,
   })
 
   // TODO: load it from tinybase if it's there
@@ -55,6 +66,7 @@ export function createGlobalState(mobius: MobiusType) {
 
     const globalLinks = store.getTable("globalLinks")
     // check if global links are empty in store
+    // TODO: use tinybase .hasTable() instead
     if (Object.keys(globalLinks).length === 0) {
       const links = await mobius.query({
         getGlobalLinks: {
@@ -64,24 +76,57 @@ export function createGlobalState(mobius: MobiusType) {
         },
       })
 
-      links.data.getGlobalLinks.map((link) => {
-        store.addRow("globalLinks", {
-          title: link.title,
-          url: link.url,
-          id: link.id,
+      if (links) {
+        // @ts-ignore
+        links.data.getGlobalLinks.map((link) => {
+          store.addRow("globalLinks", {
+            title: link.title,
+            url: link.url,
+            id: link.id,
+          })
         })
-      })
-      console.log("saved")
-      await persister.save()
+        await persister.save()
+      }
     }
-
     console.log(globalLinks, "global links")
+
+    const db = await create({
+      schema: {
+        id: "string",
+        title: "string",
+        url: "string",
+      },
+    })
+
+    // TODO: there should be a way to do this with tinybase API
+    Object.keys(globalLinks).map(async (key) => {
+      const link = globalLinks[key]
+      console.log(link, "item")
+      await insert(db, {
+        id: link.id,
+        url: link.url,
+        title: link.title,
+      })
+    })
+
+    const searchResult = await search(db, {
+      title:
+        "Collaborative Diffusion for Multi-Modal Face Generation and Editing",
+    })
+
+    console.log(searchResult.hits.map((hit) => hit.document))
+
+    setState({ globalLinks: globalLinks })
   })
 
   return {
     state,
     setGlobalTopicsSearchList: (list: GlobalTopicSearchItem[]) => {
       setState({ globalTopicsSearchList: list })
+    },
+    searchGlobalLinksByTitle: async (title: string) => {
+      console.log(state.globalLinks, "global links")
+      console.log(title, "title")
     },
   } as const
 }

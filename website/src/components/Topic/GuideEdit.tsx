@@ -1,11 +1,12 @@
 import { For, Show, onMount } from "solid-js"
-import { Guide, useEditGuide } from "../../GlobalContext/edit-guide"
+import { useEditGuide } from "../../GlobalContext/edit-guide"
 import { signedIn } from "../../../lib/auth"
 import { useMobius } from "../../root"
-import { createStore } from "solid-js/store"
+import { useGlobalState } from "../../GlobalContext/global"
 
 export default function GuideSummaryEdit() {
   const editedGuide = useEditGuide()
+  const global = useGlobalState()
   const mobius = useMobius()
 
   // const [editedGuideForm, setEditedGuideForm] = createStore<Guide>({
@@ -196,6 +197,11 @@ export default function GuideSummaryEdit() {
                                   id={linkTitleId}
                                   type="text"
                                   placeholder="Title"
+                                  onInput={(e) => {
+                                    global.searchGlobalLinksByTitle(
+                                      e.target.value,
+                                    )
+                                  }}
                                   value={link.title}
                                 />
                               </div>
