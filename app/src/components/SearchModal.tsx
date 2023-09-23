@@ -93,7 +93,7 @@ export default function SearchModal(props: Props) {
                     console.log(item)
                     return (
                       <div
-                        onClick={() => { }}
+                        onClick={() => {}}
                         class="text-black dark:text-white px-6 rounded-lg py-3"
                       >
                         <div>{typeof item === "string" ? item : item.item}</div>

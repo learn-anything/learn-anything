@@ -1,8 +1,6 @@
 {
   "compilerOptions": {
-    "lib": [
-      "ESNext"
-    ],
+    "lib": ["ESNext"],
     "module": "esnext",
     "target": "esnext",
     "moduleResolution": "bundler",
@@ -21,6 +19,6 @@
       "solid-start/env",
       "bun-types" // add Bun global
     ],
-    "jsxImportSource": "solid-js",
+    "jsxImportSource": "solid-js"
   }
 }

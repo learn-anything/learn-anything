@@ -20,7 +20,6 @@ export default function GuideSummaryEdit() {
   //   });
   // };
 
-
   onMount(async () => {
     if (signedIn()) {
       const globalTopic = await mobius.query({
@@ -90,34 +89,38 @@ export default function GuideSummaryEdit() {
         <div class="flex justify-between items-center ">
           <div
             class="border-[#696969] border p-[8px] px-[10px] rounded-[4px] text-[#696969] font-light hover:bg-gray-300 hover:bg-opacity-50 cursor-pointer transition-all"
-            onClick={() => { }}
+            onClick={() => {}}
           >
             Cancel
           </div>
-          <div onClick={() => {
-            console.log("run")
-            console.log(editedGuide.guide.sections)
-            editedGuide.guide.sections.map(section => {
-              section.links.map((link, index) => {
-                console.log(`${section.title}-link-title-${index}`, "id")
-                console.log(document.getElementById(`${section.title}-link-title-${index}`), "link title")
+          <div
+            onClick={() => {
+              console.log("run")
+              console.log(editedGuide.guide.sections)
+              editedGuide.guide.sections.map((section) => {
+                section.links.map((link, index) => {
+                  console.log(`${section.title}-link-title-${index}`, "id")
+                  console.log(
+                    document.getElementById(
+                      `${section.title}-link-title-${index}`,
+                    ),
+                    "link title",
+                  )
+                })
               })
-            })
-          }} class="bg-[#3B5CCC] text-white border-[#3B5CCC] border px-[10px] p-[8px] rounded-[4px] font-light cursor-pointer">
+            }}
+            class="bg-[#3B5CCC] text-white border-[#3B5CCC] border px-[10px] p-[8px] rounded-[4px] font-light cursor-pointer"
+          >
             Submit Changes
           </div>
         </div>
-        <div
-          class="bg-[#FAFAFA] flex flex-col gap-2 rounded-[2px] p-4 w-full"
-        >
+        <div class="bg-[#FAFAFA] flex flex-col gap-2 rounded-[2px] p-4 w-full">
           <div class="flex justify-between items-center">
             <div class="text-[#696969] ">Summary</div>
             <div
               class="text-[#3B5CCC] cursor-pointer select-none"
-              onClick={() => {
-              }}
-            >
-            </div>
+              onClick={() => {}}
+            ></div>
           </div>
           <Show
             when={editedGuide.guide.summary.length > 0}
@@ -125,8 +128,7 @@ export default function GuideSummaryEdit() {
               <div
                 class="text-[#696969] font-light overflow-hidden text-ellipsis outline-none"
                 id="GuideSummary"
-                onClick={() => {
-                }}
+                onClick={() => {}}
               >
                 Add summary
               </div>
@@ -135,8 +137,7 @@ export default function GuideSummaryEdit() {
             <div
               class="text-[#696969] font-light overflow-hidden text-ellipsis outline-none"
               id="GuideSummary"
-              onClick={() => {
-              }}
+              onClick={() => {}}
             >
               {editedGuide.guide.summary}
             </div>
@@ -166,7 +167,7 @@ export default function GuideSummaryEdit() {
                     <div
                       class="text-[#696969] font-light overflow-hidden text-ellipsis outline-none"
                       id={`${section.title}${index()}`}
-                      onClick={() => { }}
+                      onClick={() => {}}
                     >
                       Add section title
                     </div>
@@ -175,7 +176,7 @@ export default function GuideSummaryEdit() {
                   <div
                     class="text-[#696969] font-light overflow-hidden text-ellipsis outline-none"
                     id={`${section.title}${index()}`}
-                    onClick={() => { }}
+                    onClick={() => {}}
                   >
                     {section.title}
                   </div>
@@ -221,22 +222,30 @@ export default function GuideSummaryEdit() {
                               </div>
                             </div>
                             <div class="flex gap-5 text-[14px] opacity-50">
-                              <div onClick={async () => {
-                                {/* @ts-ignore */ }
-                                const linkUrl = document.getElementById(linkUrlId)?.value
-                                const res = await mobius.query({
-                                  checkForGlobalLink: {
-                                    where: {
-                                      linkUrl: linkUrl
-                                    },
-                                    select: {
-                                      url: true,
-                                      title: true
-                                    }
+                              <div
+                                onClick={async () => {
+                                  {
+                                    /* @ts-ignore */
                                   }
-                                })
-                                console.log(res, "res")
-                              }} class="cursor-pointer">Check URL</div>
+                                  const linkUrl =
+                                    document.getElementById(linkUrlId)?.value
+                                  const res = await mobius.query({
+                                    checkForGlobalLink: {
+                                      where: {
+                                        linkUrl: linkUrl,
+                                      },
+                                      select: {
+                                        url: true,
+                                        title: true,
+                                      },
+                                    },
+                                  })
+                                  console.log(res, "res")
+                                }}
+                                class="cursor-pointer"
+                              >
+                                Check URL
+                              </div>
                               <div class="cursor-pointer">Sort</div>
                               <div class="cursor-pointer">Delete</div>
                             </div>

@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo } from 'graphql'
+import { GraphQLResolveInfo } from "graphql"
 
 export type GrafbaseContext = {
   request: {
@@ -8,5 +8,5 @@ export type GrafbaseContext = {
 
 export type GrafbaseInfo = Pick<
   GraphQLResolveInfo,
-  'fieldName' | 'path' | 'variableValues'
+  "fieldName" | "path" | "variableValues"
 >

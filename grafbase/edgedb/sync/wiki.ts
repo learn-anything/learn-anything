@@ -28,7 +28,7 @@ export async function forceWikiSync(userId: string) {
   let fileIgnoreList = ["readme.md", "index.md"]
   const wikiPath = new URL(
     "../../../seed/wiki/" + process.env.SEED_FOLDER_NAME,
-    import.meta.url
+    import.meta.url,
   ).pathname
   // const wikiPath = "/Users/nikiv/src/docs/wiki/docs"
   const files = await markdownFilePaths(wikiPath, fileIgnoreList)
@@ -86,7 +86,7 @@ async function getConnections(filePaths: string[]) {
         const reverseConnections = connections.get(linkName)
         reverseConnections.set(
           fileName,
-          (reverseConnections.get(fileName) || 0) + 1
+          (reverseConnections.get(fileName) || 0) + 1,
         )
       }
     }
@@ -110,7 +110,7 @@ async function getConnections(filePaths: string[]) {
 
 export async function markdownFilePaths(
   directoryPath: string,
-  ignoreList: string[] = []
+  ignoreList: string[] = [],
 ): Promise<string[]> {
   let filesToProcess: string[] = []
   const entries = fs.readdirSync(directoryPath, { withFileTypes: true })
@@ -268,7 +268,7 @@ function extractNotes(markdownContent: string) {
 
 export async function writeToFile(
   filePath: string,
-  content: string
+  content: string,
 ): Promise<void> {
   try {
     await fs.promises.writeFile(filePath, content)
@@ -281,7 +281,7 @@ export async function writeToFile(
 async function mdFileIntoTopic(
   filePath: string,
   userId: string,
-  rootPath: string
+  rootPath: string,
 ) {
   console.log(filePath, "file path")
   console.log(rootPath, "root path")
@@ -298,7 +298,7 @@ async function mdFileIntoTopic(
 
   // Extract title from frontmatter
   const frontmatterMatch = fileContent.match(
-    /^---\n(?:.*\n)*title: (.*)\n(?:.*\n)*---/m
+    /^---\n(?:.*\n)*title: (.*)\n(?:.*\n)*---/m,
   )
   // If title is not found in frontmatter, extract it from first heading
   let title = frontmatterMatch ? frontmatterMatch[1] : ""
@@ -372,11 +372,11 @@ async function mdFileIntoTopic(
   writeToFile(`/Users/nikiv/Desktop/wiki/${topicName}-content.md`, content)
   writeToFile(
     `/Users/nikiv/Desktop/wiki/${topicName}-notes.md`,
-    notes.length + " " + JSON.stringify(notes)
+    notes.length + " " + JSON.stringify(notes),
   )
   writeToFile(
     `/Users/nikiv/Desktop/wiki/${topicName}-links.md`,
-    links.length + " " + JSON.stringify(links)
+    links.length + " " + JSON.stringify(links),
   )
 
   await addTopic(
@@ -389,7 +389,7 @@ async function mdFileIntoTopic(
       links: links.map((link) => ({ ...link, public: false })),
       prettyName,
     },
-    userId
+    userId,
   )
 
   return

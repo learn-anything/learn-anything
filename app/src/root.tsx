@@ -18,10 +18,7 @@ export default function Root() {
     <Html lang="en">
       <Head>
         <Title>Learn Anything</Title>{" "}
-        <meta
-          name="description"
-          content="Learn Anything"
-        />
+        <meta name="description" content="Learn Anything" />
         <Meta charset="utf-8" />
         <Meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
