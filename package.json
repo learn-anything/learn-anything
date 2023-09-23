@@ -18,7 +18,8 @@
     "api:codegen": "graphql-codegen",
     "ts": "tput reset && bun --watch run.ts",
     "test-rust-wiki": "cd app/src-tauri/crates/wiki/ && cargo watch -q -- sh -c \"tput reset && cargo test -q --lib\"",
-    "grafbase": "npx grafbase@latest dev"
+    "grafbase": "npx grafbase@latest dev",
+    "format": "prettier -w ."
   },
   "devDependencies": {
     "@edgedb/generate": "^0.3.3",

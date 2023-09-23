@@ -1,0 +1,5 @@
+dist
+node_modules
+grafbase/edgedb/dbschema/edgeql-js
+.grafbase
+pnpm-lock.yaml
