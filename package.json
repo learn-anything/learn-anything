@@ -17,16 +17,18 @@
     "api": "bunx grafbase@latest dev",
     "api:codegen": "graphql-codegen",
     "ts": "tput reset && bun --watch run.ts",
-    "test-rust-wiki": "cd app/src-tauri/crates/wiki/ && cargo watch -q -- sh -c \"tput reset && cargo test -q --lib\""
+    "test-rust-wiki": "cd app/src-tauri/crates/wiki/ && cargo watch -q -- sh -c \"tput reset && cargo test -q --lib\"",
+    "grafbase": "npx grafbase@latest dev"
   },
   "devDependencies": {
-    "bun-types": "^1.0.1",
     "@edgedb/generate": "^0.3.3",
     "@grafbase/sdk": "~0.6.1",
+    "bun-types": "^1.0.1",
     "mdast-util-from-markdown": "^2.0.0",
     "mdast-util-to-markdown": "^2.1.0",
     "mdast-util-to-string": "^4.0.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "ufo": "^1.3.0"
   },
   "dependencies": {
     "@codemirror/view": "^6.19.0",
