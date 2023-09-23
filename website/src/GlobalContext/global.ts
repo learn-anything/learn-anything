@@ -3,10 +3,9 @@ import { createContext, useContext } from "solid-js"
 import { MobiusType } from "../root"
 import { createStore } from "solid-js/store"
 import {
-  TablesSchema,
   createQueries,
   createStore as tinybaseCreateStore,
-} from "tinybase"
+} from "tinybase/with-schemas"
 import { createIndexedDbPersister } from "tinybase/persisters/persister-indexed-db"
 import { create, search, insert } from "@orama/orama"
 
@@ -52,16 +51,15 @@ export function createGlobalState(mobius: MobiusType) {
   // })
 
   onMount(async () => {
-    const tableSchema: TablesSchema = {
+    const tableSchema = {
       globalLinks: {
         title: { type: "string" },
         url: { type: "string" },
         id: { type: "string" },
       },
-    }
+    } as const
 
-    const store = tinybaseCreateStore()
-    store.setTablesSchema(tableSchema)
+    const store = tinybaseCreateStore().setTablesSchema(tableSchema)
 
     // create indexed db persister
     const persister = createIndexedDbPersister(store, "global")
@@ -103,7 +101,6 @@ export function createGlobalState(mobius: MobiusType) {
         select("url")
       },
     )
-    // const allGlobalLinks = queries.getResultTable("allGlobalLinks")
 
     const db = await create({
       schema: {
@@ -113,19 +110,20 @@ export function createGlobalState(mobius: MobiusType) {
       },
     })
 
-    queries.forEachResultRow("allGlobalLinks", async (rowId) => {
-      const row = queries.getResultRow("allGlobalLinks", rowId)
-      await insert(db, {
-        id: row.id.toString(),
-        url: row.url.toString(),
-        title: row.title.toString(),
-      })
-      // console.log(row.title, "row.title inserted")
+    const promises: Promise<string>[] = []
+    store.forEachRow("globalLinks", (rowId, _) => {
+      const row = store.getRow("globalLinks", rowId)
+      promises.push(
+        insert(db, {
+          id: row.id,
+          url: row.url,
+          title: row.title,
+        }),
+      )
     })
 
-    // console.log(allGlobalLinks)
+    await Promise.all(promises)
 
-    // TODO: does not return the result for `title` matching, always returns []
     const searchResult = await search(db, {
       term: "ARK",
       properties: ["title"],
