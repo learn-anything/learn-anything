@@ -2,7 +2,11 @@ import { onMount } from "solid-js"
 import { createContext, useContext } from "solid-js"
 import { MobiusType } from "../root"
 import { createStore } from "solid-js/store"
-import { TablesSchema, createStore as tinybaseCreateStore } from "tinybase"
+import {
+  TablesSchema,
+  createQueries,
+  createStore as tinybaseCreateStore,
+} from "tinybase"
 import { createIndexedDbPersister } from "tinybase/persisters/persister-indexed-db"
 import { create, search, insert } from "@orama/orama"
 
@@ -66,8 +70,7 @@ export function createGlobalState(mobius: MobiusType) {
 
     const globalLinks = store.getTable("globalLinks")
     // check if global links are empty in store
-    // TODO: use tinybase .hasTable() instead
-    if (Object.keys(globalLinks).length === 0) {
+    if (!store.hasTable("globalLinks")) {
       const links = await mobius.query({
         getGlobalLinks: {
           id: true,
@@ -90,6 +93,18 @@ export function createGlobalState(mobius: MobiusType) {
     }
     console.log(globalLinks, "global links")
 
+    const queries = createQueries(store)
+    queries.setQueryDefinition(
+      "allGlobalLinks",
+      "globalLinks",
+      ({ select }) => {
+        select("id")
+        select("title")
+        select("url")
+      },
+    )
+    // const allGlobalLinks = queries.getResultTable("allGlobalLinks")
+
     const db = await create({
       schema: {
         id: "string",
@@ -98,25 +113,31 @@ export function createGlobalState(mobius: MobiusType) {
       },
     })
 
-    // TODO: there should be a way to do this with tinybase API
-    Object.keys(globalLinks).map(async (key) => {
-      const link = globalLinks[key]
-      console.log(link, "item")
+    queries.forEachResultRow("allGlobalLinks", async (rowId) => {
+      const row = queries.getResultRow("allGlobalLinks", rowId)
       await insert(db, {
-        id: link.id,
-        url: link.url,
-        title: link.title,
+        id: row.id.toString(),
+        url: row.url.toString(),
+        title: row.title.toString(),
       })
+      // console.log(row.title, "row.title inserted")
     })
 
+    // console.log(allGlobalLinks)
+
+    // TODO: does not return the result for `title` matching, always returns []
     const searchResult = await search(db, {
-      title:
-        "Collaborative Diffusion for Multi-Modal Face Generation and Editing",
+      term: "ARK",
+      properties: ["title"],
+      threshold: 0.5,
     })
 
-    console.log(searchResult.hits.map((hit) => hit.document))
+    console.log(
+      searchResult.hits.map((hit) => hit.document),
+      "results",
+    )
 
-    setState({ globalLinks: globalLinks })
+    // setState({ globalLinks: globalLinks })
   })
 
   return {
