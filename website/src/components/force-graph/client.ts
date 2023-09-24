@@ -2,14 +2,14 @@ import * as solid from "solid-js"
 import { Canvas, Graph, Anim } from "@nothing-but/force-graph"
 import { Ease, Num } from "@nothing-but/utils"
 
-export const graph_options = Graph.graphOptions({
+const graph_options = Graph.graphOptions({
   inertia_strength: 0.3,
   origin_strength: 0.01,
   repel_distance: 22,
   repel_strength: 0.5,
 })
 
-export function generateInitialGraph(length: number = 256): Graph.Graph {
+function generateInitialGraph(length: number = 256): Graph.Graph {
   const nodes: Graph.Node[] = Array.from({ length }, Graph.makeNode)
   const edges: Graph.Edge[] = []
 
@@ -33,10 +33,11 @@ export function generateInitialGraph(length: number = 256): Graph.Graph {
   return Graph.makeGraph(graph_options, nodes, edges)
 }
 
-export function ForceGraph(): solid.JSX.Element {
+export function createForceGraph(): HTMLCanvasElement {
   const graph = generateInitialGraph()
 
-  const el = (<canvas class="absolute w-full h-full" />) as HTMLCanvasElement
+  const el = document.createElement("canvas")
+  el.className = "absolute w-full h-full"
 
   const ctx = el.getContext("2d")
   if (!ctx) throw new Error("no context")
@@ -56,7 +57,7 @@ export function ForceGraph(): solid.JSX.Element {
 
       /*
         Push nodes away from the center (the title)
-    */
+      */
       const grid_radius = graph.grid.size / 2
       const origin_x = grid_radius + canvas.translate.x
       const origin_y = grid_radius + canvas.translate.y

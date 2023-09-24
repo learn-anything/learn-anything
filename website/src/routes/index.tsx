@@ -2,7 +2,7 @@ import { Show, createResource } from "solid-js"
 import { useNavigate } from "solid-start"
 import { getHankoCookie } from "../../lib/auth"
 import { Search, SearchResult, createSearchState } from "../components/Search"
-import { ForceGraph } from "../components/force-graph"
+import { ForceGraph } from "../components/force-graph/index.tsx"
 
 // TODO: load the graph with graph data from server (no undefined flying around)
 export default function Home() {
