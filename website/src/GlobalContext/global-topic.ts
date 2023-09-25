@@ -1,5 +1,6 @@
 import { createContext, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
+import { MobiusType } from "../root"
 
 export type Link = {
   title: string
@@ -36,7 +37,7 @@ type GlobalTopic = {
 }
 
 // all state needed to render global topic found in learn-anything.xyz/<topic>
-export default function createGlobalTopic() {
+export default function createGlobalTopic(mobius: MobiusType) {
   const [globalTopic, setGlobalTopic] = createStore<GlobalTopic>({
     prettyName: "",
     globalGuide: {
@@ -55,48 +56,10 @@ export default function createGlobalTopic() {
     setShowPage: (state: PageState) => {
       setGlobalTopic({ showPage: state })
     },
-    // TODO: add effect that will send db query to update learning status of user
-    setUserLearningStatus: (state: LearningStatus) => {
+    // TODO: use solid effect that listens on 'learning status' instead of below
+    setUserLearningStatus: async (state: LearningStatus) => {
       setGlobalTopic({ userLearningStatus: state })
-    },
-    addSection: (state: Section) => {
-      const newSections = [...globalTopic.globalGuide.sections, state]
-      setGlobalTopic({
-        ...globalTopic,
-        globalGuide: {
-          ...globalTopic.globalGuide,
-          sections: newSections,
-        },
-      })
-    },
-    addLinkToSection: (sectionOrder: number, link: Link) => {
-      // Find the index of the section to modify
-      const sectionIndex = globalTopic.globalGuide.sections.findIndex(
-        (section) => section.order === sectionOrder,
-      )
-
-      // If the section is found
-      if (sectionIndex !== -1) {
-        // Copy the current sections
-        const newSections = [...globalTopic.globalGuide.sections]
-
-        // Copy the links array of the specific section and add the new link
-        newSections[sectionIndex] = {
-          ...newSections[sectionIndex],
-          links: [...newSections[sectionIndex].links, link],
-        }
-
-        // Update the globalTopic state with the modified sections
-        setGlobalTopic({
-          ...globalTopic,
-          globalGuide: {
-            ...globalTopic.globalGuide,
-            sections: newSections,
-          },
-        })
-      } else {
-        console.error(`Section with order ${sectionOrder} not found.`)
-      }
+      // await mobius.mutate()
     },
   }
 }

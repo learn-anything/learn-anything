@@ -145,7 +145,6 @@ export function useSignIn() {
 
 export default function Root() {
   const user = createUserState()
-  const globalTopic = createGlobalTopic()
   const editGuide = createEditGuide()
 
   const filters: MatchFilters = {
@@ -158,6 +157,7 @@ export default function Root() {
     hankoCookie,
   })
   const global = createGlobalState(mobius)
+  const globalTopic = createGlobalTopic(mobius)
 
   return (
     <Html lang="en">

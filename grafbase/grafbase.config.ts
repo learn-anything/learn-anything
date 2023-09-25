@@ -11,11 +11,11 @@ export default config({
 
 // definitions
 
-// const learningStatus = g.enum("learningStatus", [
-//   "to_learn",
-//   "learning",
-//   "learning",
-// ])
+const learningStatus = g.enum("learningStatus", [
+  "to_learn",
+  "learning",
+  "learned",
+])
 
 const link = g.input("link", {
   title: g.string(),
@@ -103,6 +103,12 @@ g.mutation("createUser", {
   args: { email: g.string() },
   returns: g.string(),
   resolver: "createUser",
+})
+
+g.mutation("updateTopicLearningStatus", {
+  args: { learningStatus: g.enumRef(learningStatus), topic: g.string() },
+  returns: g.string(),
+  resolver: "updateTopicLearningStatus",
 })
 
 g.mutation("uploadProfilePhoto", {

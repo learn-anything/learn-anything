@@ -230,11 +230,11 @@ export default function GuideSummaryEdit() {
                             <div class="flex gap-5 text-[14px] opacity-50">
                               <div
                                 onClick={async () => {
-                                  {
-                                    /* @ts-ignore */
-                                  }
-                                  const linkUrl =
-                                    document.getElementById(linkUrlId)?.value
+                                  const linkUrlElement =
+                                    document.getElementById(
+                                      linkUrlId,
+                                    ) as HTMLInputElement
+                                  const linkUrl = linkUrlElement?.value
                                   const res = await mobius.query({
                                     checkForGlobalLink: {
                                       where: {

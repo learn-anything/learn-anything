@@ -1,6 +1,28 @@
 import { client } from "../client"
 import e from "../dbschema/edgeql-js"
 
+export async function updateTopicLearningStatus(
+  hankoId: string,
+  topic: string,
+  learningStatus: string,
+) {
+  switch (learningStatus) {
+    case "to learn":
+      break
+
+    default:
+      break
+  }
+
+  // const res = await e.update(e.User, (user) => ({
+  //   filter_single: { hankoId: hankoId },
+  //   filter: e.op(user.memberUntil, ">", e.datetime_current()),
+  //   set: {
+  //     topicsToLearn: e.select(e.GlobalTopic, (gt) => ({ filter_single: foo })),
+  //   },
+  // }))
+}
+
 // for use in landing page (learn-anything.xyz) to get results of topics to search over
 // its public because in future for auth'd users, we can show more custom results
 // based of user preference etc.

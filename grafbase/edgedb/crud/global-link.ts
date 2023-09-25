@@ -1,7 +1,6 @@
 import { client } from "../client"
 import e from "../dbschema/edgeql-js"
 import { parseURL } from "ufo"
-// import { writeContentToSrcData } from "@nikitavoloboev/ts/files"
 
 // export async function checkForGlobalLink(url: string) {
 //   // const link = await e.select(e.GlobalLink, () => ({
