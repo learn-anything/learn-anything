@@ -26,7 +26,7 @@ type Link = {
 type GlobalState = {
   globalTopicsSearchList: GlobalTopicSearchItem[]
   globalLinks: []
-  globalLinkSearch: any
+  globalLinkSearchDb: any
 }
 
 // various global state
@@ -34,7 +34,7 @@ export function createGlobalState(mobius: MobiusType) {
   const [state, setState] = createStore<GlobalState>({
     globalTopicsSearchList: [],
     globalLinks: [],
-    globalLinkSearch: undefined,
+    globalLinkSearchDb: undefined,
   })
 
   onMount(async () => {
@@ -125,18 +125,7 @@ export function createGlobalState(mobius: MobiusType) {
 
     await Promise.all(promises)
 
-    const searchResult = await search(db, {
-      term: "Ask HN",
-      properties: ["title"],
-      threshold: 0.5,
-    })
-
-    console.log(
-      searchResult.hits.map((hit) => hit.document),
-      "results",
-    )
-
-    // setState({ globalLinks: globalLinks })
+    setState({ globalLinkSearchDb: db })
   })
 
   return {
@@ -145,8 +134,19 @@ export function createGlobalState(mobius: MobiusType) {
       setState({ globalTopicsSearchList: list })
     },
     searchGlobalLinksByTitle: async (title: string) => {
-      console.log(state.globalLinks, "global links")
-      console.log(title, "title")
+      // console.log(state.globalLinks, "global links")
+      // console.log(title, "title")
+
+      const searchResult = await search(state.globalLinkSearchDb, {
+        term: title,
+        properties: ["title"],
+        threshold: 0.5,
+      })
+
+      console.log(
+        searchResult.hits.map((hit) => hit.document),
+        "results",
+      )
     },
   } as const
 }
