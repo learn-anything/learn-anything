@@ -37,18 +37,18 @@ export function createGlobalState(mobius: MobiusType) {
     globalLinkSearch: undefined,
   })
 
-  // TODO: load it from tinybase if it's there
-  // onMount(async () => {
-  //   const res = await mobius.query({
-  //     publicGetGlobalTopics: {
-  //       prettyName: true,
-  //       name: true,
-  //     },
-  //   })
-  //   console.log(res, "res")
-  //   // @ts-ignore
-  //   setState({ globalTopicsSearchList: res.data.publicGetGlobalTopics })
-  // })
+  onMount(async () => {
+    const topics = await mobius.query({
+      publicGetGlobalTopics: {
+        name: true,
+        prettyName: true,
+      },
+    })
+    if (topics) {
+      // @ts-ignore
+      setState({ globalTopicsSearchList: topics.data.publicGetGlobalTopics })
+    }
+  })
 
   onMount(async () => {
     const tableSchema = {
@@ -62,6 +62,7 @@ export function createGlobalState(mobius: MobiusType) {
     const store = tinybaseCreateStore().setTablesSchema(tableSchema)
 
     // create indexed db persister
+    // @ts-ignore
     const persister = createIndexedDbPersister(store, "global")
     // load from existing store if it exists
     await persister.load()
@@ -125,7 +126,7 @@ export function createGlobalState(mobius: MobiusType) {
     await Promise.all(promises)
 
     const searchResult = await search(db, {
-      term: "ARK",
+      term: "Ask HN",
       properties: ["title"],
       threshold: 0.5,
     })

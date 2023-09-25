@@ -1,39 +1,37 @@
-import { Show, createResource } from "solid-js"
+import { Show, createMemo, createResource } from "solid-js"
 import { useNavigate } from "solid-start"
 import { getHankoCookie } from "../../lib/auth"
 import { Search, SearchResult, createSearchState } from "../components/Search"
 import { ForceGraph } from "../components/force-graph/index.tsx"
+import { useGlobalState } from "../GlobalContext/global.ts"
+import { getRandomItem } from "../lib/lib.ts"
 
 // TODO: load the graph with graph data from server (no undefined flying around)
 export default function Home() {
   const navigate = useNavigate()
+  const global = useGlobalState()
 
   const [hankoCookie] = createResource(() => {
     const hankoCookie = getHankoCookie()
     return hankoCookie
   })
 
-  const searchResults: SearchResult[] = [
-    {
-      name: "3d printing",
-      action: () => {
-        navigate(`/3d-printing`)
-      },
-    },
-    {
-      name: "Physics",
-      action: () => {
-        navigate(`/Physics`)
-      },
-    },
-    {
-      name: "Math",
-      action: () => {
-        navigate(`/Math`)
-      },
-    },
-  ]
-  const search_state = createSearchState(() => searchResults)
+  const searchPlaceholder = createMemo(() => {
+    return getRandomItem(global.state.globalTopicsSearchList).prettyName
+  })
+
+  const searchResults = createMemo(() => {
+    return global.state.globalTopicsSearchList.map((topic) => {
+      return {
+        name: topic.prettyName,
+        action: () => {
+          navigate(`/${topic.name}`)
+        },
+      }
+    })
+  })
+
+  const search_state = createSearchState(() => searchResults())
 
   return (
     <>
@@ -84,7 +82,7 @@ export default function Home() {
               "w-[70%]": search_state.searchOpen,
             }}
           >
-            <Search placeholder="Search Topic" state={search_state} />
+            <Search placeholder={searchPlaceholder()} state={search_state} />
           </div>
         </div>
         <Show when={!hankoCookie}>
