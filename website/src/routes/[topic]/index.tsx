@@ -5,9 +5,10 @@ import Card from "../../components/Topic/Card"
 import GlobalGuide from "../../components/Topic/GlobalGuide"
 import GuideLinks from "../../components/Topic/GuideLinks"
 import GuideNotes from "../../components/Topic/GuideNotes"
-import TitlePill from "../../components/Topic/TitlePill"
+
 import TopicNav from "../../components/Topic/TopicNav"
 import { useMobius } from "../../root"
+import GuideSidebar from "../../components/Topic/GuideSidebar"
 
 export default function GlobalTopic() {
   const topic = useGlobalTopic()
@@ -75,7 +76,7 @@ export default function GlobalTopic() {
           display: flex;
         }
         #InfoMain {
-          width: 65%;
+          width: 70%;
         }
         #InfoOptions {
           display: flex
@@ -84,104 +85,20 @@ export default function GlobalTopic() {
       `}</style>
       <div class="w-screen h-full text-black bg-white dark:bg-neutral-900">
         <TopicNav />
-        {/* <Modal>
-          <Create></Create>
-        </Modal> */}
-        <div class="w-full" style={{ padding: "24px 24px 0 24px" }}>
-          <TitlePill />
-        </div>
-        <div
-          id="InfoOptions"
-          class="w-full flex gap-8 text-lg text-black dark:text-white dark:text-opacity-40 font-light"
-          style={{ padding: "24px 40px 0 40px" }}
-        >
-          <div
-            onClick={() => {
-              topic.setShowPage("Global Guide")
-            }}
-            class="border-b-2 border-black dark:border-white dark:border-opacity-40 cursor-pointer"
-          >
-            Global Guide
+
+        <div class="h-full w-full flex justify-center">
+          <div id="InfoSidebar" class="h-full w-[30%]">
+            <GuideSidebar></GuideSidebar>
           </div>
-          <div
-            class="cursor-pointer"
-            onClick={() => {
-              topic.setShowPage("Global Guide")
-            }}
-          >
-            Personal Guide
-          </div>
-          <div
-            class="cursor-pointer"
-            onClick={() => {
-              topic.setShowPage("Links")
-            }}
-          >
-            Links
-          </div>
-          <div
-            class="cursor-pointer"
-            onClick={() => {
-              topic.setShowPage("Notes")
-            }}
-          >
-            Notes
-          </div>
-        </div>
-        <div class="h-fit w-full flex justify-center">
           <div
             id="InfoMain"
-            class="h-full min-h-screen flex  gap-6 flex-col"
+            class="h-full bg-gray-50 dark:bg-neutral-800 w-full min-h-screen flex  gap-6 flex-col"
             style={{ padding: "24px 40px 24px 40px" }}
           >
-            {/* <Show when={false} fallback={<GuideEdit topics={topics()} />}>
-              <Guide />
-            </Show> */}
-            <Switch>
-              <Match when={topic.globalTopic.showPage === "Global Guide"}>
-                <GlobalGuide />
-              </Match>
-              <Match when={topic.globalTopic.showPage === "Links"}>
-                <GuideLinks />
-              </Match>
-              <Match when={topic.globalTopic.showPage === "Notes"}>
-                <GuideNotes />
-              </Match>
-            </Switch>
+            <GlobalGuide />
           </div>
           {/* TODO: only here because commenting below block failed.. */}
           {/* add this when we have the data from server for who is learning the topic..  */}
-          <div
-            id="InfoSidebar"
-            class="h-full w-[35%] flex flex-col gap-6 overflow-auto"
-            style={{ padding: "24px 40px 24px 0px" }}
-          >
-            <div class="flex flex-col w-full gap-2 font-light text-[#6B6B70]">
-              <div class="flex justify-between">
-                <div
-                  class="flex items-center gap-1 text-[#3B5CCC] font-light"
-                  // onClick={}
-                >
-                  {/* <Icon name="Plus"></Icon>Add Section */}
-                </div>
-              </div>
-
-              {/* <For each={topic.topic.guideSections}>
-                {(section) => {
-                  // TODO: clicking on ection, should jump to that section in focus
-                  return <div>{section.title}</div>
-                }}
-              </For> */}
-            </div>
-            <div id="Cards" class="flex flex-col gap-2">
-              {/* TODO:  */}
-              {/* <Card name="Interactive Graph" /> */}
-              {/* <Show when={topic.topic.learners.length > 0}> */}
-              <Show when={true}>
-                <Card name="Learners" />
-              </Show>
-            </div>
-          </div>
         </div>
       </div>
     </>
