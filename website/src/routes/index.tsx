@@ -1,9 +1,9 @@
 import { Show, createMemo, createResource } from "solid-js"
 import { useNavigate } from "solid-start"
 import { getHankoCookie } from "../../lib/auth"
-import { Search, SearchResult, createSearchState } from "../components/Search"
-import { ForceGraph } from "../components/force-graph/index.tsx"
 import { useGlobalState } from "../GlobalContext/global.ts"
+import { Search, createSearchState } from "../components/Search"
+import { ForceGraph } from "../components/force-graph/index.tsx"
 import { getRandomItem } from "../lib/lib.ts"
 
 // TODO: load the graph with graph data from server (no undefined flying around)
@@ -17,7 +17,10 @@ export default function Home() {
   })
 
   const searchPlaceholder = createMemo(() => {
-    return getRandomItem(global.state.globalTopicsSearchList).prettyName
+    let item = getRandomItem(global.state.globalTopicsSearchList)
+    if (item) {
+      return item.prettyName
+    }
   })
 
   const searchResults = createMemo(() => {
