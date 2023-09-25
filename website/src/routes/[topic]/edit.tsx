@@ -1,7 +1,7 @@
 import { Show } from "solid-js"
 import Card from "../../components/Topic/Card"
 import GuideEdit from "../../components/Topic/GuideEdit"
-import TitlePill from "../../components/Topic/TitlePill"
+// import TitlePill from "../../components/Topic/TitlePill"
 import TopicNav from "../../components/Topic/TopicNav"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 
@@ -35,9 +35,9 @@ export default function EditGuide() {
       `}</style>
       <div class="w-screen h-full text-black bg-white">
         <TopicNav />
-        <div class="w-full" style={{ padding: "24px 24px 0 24px" }}>
+        {/* <div class="w-full" style={{ padding: "24px 24px 0 24px" }}>
           <TitlePill />
-        </div>
+        </div> */}
         <div
           id="InfoOptions"
           class="w-full flex gap-8 text-lg font-light"

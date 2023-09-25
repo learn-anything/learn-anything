@@ -7,6 +7,20 @@ export interface User {
   name?: string
 }
 
+export async function updateUserMemberUntilDate(hankoId: string, date: Date) {
+  console.log(date)
+  const res = await e
+    .update(e.User, (user) => ({
+      filter_single: { hankoId: hankoId },
+      set: {
+        memberUntil: date,
+      },
+    }))
+    .run(client)
+
+  console.log(res)
+}
+
 export async function addUser(user: User) {
   const res = await e
     .insert(e.User, {

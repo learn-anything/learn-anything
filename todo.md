@@ -71,6 +71,7 @@
 
 ## Public desktop app release [oct 2]
 
+- use https://github.com/alxnddr/solid-monaco for editor
 - let users choose a folder of existing markdown files to sync with
 - or allow choosing a folder where markdown files will be synced to
 - load in all the .md files as topics and show in sidebar

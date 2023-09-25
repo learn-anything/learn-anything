@@ -6,21 +6,54 @@ export async function updateTopicLearningStatus(
   topic: string,
   learningStatus: string,
 ) {
-  switch (learningStatus) {
-    case "to learn":
-      break
+  const userByHankoId = e.select(e.User, (user) => ({
+    filter: e.all(
+      e.set(
+        e.op(user.hankoId, "=", hankoId),
+        e.op("exists", user.memberUntil),
+        e.op(user.memberUntil, ">", e.datetime_current()),
+      ),
+    ),
+  }))
+  const topicByName = e.select(e.GlobalTopic, () => ({
+    filter_single: { name: topic },
+  }))
 
+  switch (learningStatus) {
+    case "to_learn":
+      return e
+        .update(userByHankoId, (user) => ({
+          set: {
+            topicsToLearn: { "+=": topicByName },
+            topicsLearning: { "-=": topicByName },
+            topicsLearned: { "-=": topicByName },
+          },
+        }))
+        .run(client)
+
+    case "learning":
+      return e
+        .update(userByHankoId, (user) => ({
+          set: {
+            topicsToLearn: { "-=": topicByName },
+            topicsLearning: { "+=": topicByName },
+            topicsLearned: { "-=": topicByName },
+          },
+        }))
+        .run(client)
+    case "learned":
+      return e
+        .update(userByHankoId, (user) => ({
+          set: {
+            topicsToLearn: { "-=": topicByName },
+            topicsLearning: { "-=": topicByName },
+            topicsLearned: { "+=": topicByName },
+          },
+        }))
+        .run(client)
     default:
       break
   }
-
-  // const res = await e.update(e.User, (user) => ({
-  //   filter_single: { hankoId: hankoId },
-  //   filter: e.op(user.memberUntil, ">", e.datetime_current()),
-  //   set: {
-  //     topicsToLearn: e.select(e.GlobalTopic, (gt) => ({ filter_single: foo })),
-  //   },
-  // }))
 }
 
 // for use in landing page (learn-anything.xyz) to get results of topics to search over

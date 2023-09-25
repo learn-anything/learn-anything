@@ -1,3 +1,5 @@
+import { GraphQLError } from "graphql"
+import { updateTopicLearningStatus } from "../edgedb/crud/global-topic"
 import { hankoIdFromToken } from "../lib/hanko-validate"
 
 export default async function updateTopicLearningStatusResolver(
@@ -7,6 +9,10 @@ export default async function updateTopicLearningStatusResolver(
 ) {
   const hankoId = await hankoIdFromToken(context)
   if (hankoId) {
-    return "test"
+    const res = await updateTopicLearningStatus(
+      hankoId,
+      args.topic,
+      args.learningStatus,
+    )
   }
 }
