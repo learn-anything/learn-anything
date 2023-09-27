@@ -9,6 +9,7 @@ interface Props {
     | "Learn"
     | "Checkmark"
     | "UserProfile"
+    | "Search"
   width?: string
   height?: string
   color?: string
@@ -49,6 +50,17 @@ export default function Icon(props: Props) {
           </div>
         </Show>
         <Switch>
+          <Match when={props.name === "Search"}>
+            <svg width="28" height="28" fill="none" viewBox="0 0 24 24">
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M19.25 19.25L15.5 15.5M4.75 11C4.75 7.54822 7.54822 4.75 11 4.75C14.4518 4.75 17.25 7.54822 17.25 11C17.25 14.4518 14.4518 17.25 11 17.25C7.54822 17.25 4.75 14.4518 4.75 11Z"
+              ></path>
+            </svg>
+          </Match>
           <Match when={props.name === "Learn"}>
             <svg
               width="24"

@@ -113,8 +113,10 @@ export default function TopicNav() {
                 <img class="rounded-full" src="/logo.jpg" alt="" />
               </div>
             </div>
-
-            <div class="w-full h-full">
+          </div>
+          <div id="NavMenu">Burger</div>
+          <div id="NavButtons" class="flex items-center justify-center gap-4">
+            <Show when={false} fallback={<Icon name="Search" />}>
               <div
                 class={clsx(
                   "relative w-[50%] h-full flex items-center transition-all duration-150",
@@ -123,10 +125,7 @@ export default function TopicNav() {
               >
                 <Search placeholder="Search Topic" state={search_state} />
               </div>
-            </div>
-          </div>
-          <div id="NavMenu">Burger</div>
-          <div id="NavButtons" class="flex items-center justify-center gap-4">
+            </Show>
             {/* TODO:  */}
             {/* <div>Dark/Light switch</div> */}
             {/* <div
@@ -162,7 +161,7 @@ export default function TopicNav() {
               </A>
               <A
                 href="/auth"
-                class="bg-black hover:scale-[1.1] no-underline leading-[23.48px] w-fit text-white h-[39px] flex items-center justify-center font-medium text-[17px] px-4 p-2 rounded-full cursor-pointer"
+                class="bg-[#3B5CCC] hover:scale-[1.1] no-underline leading-[23.48px] w-fit text-white h-[39px] flex items-center justify-center font-medium text-[17px] px-4 p-2 rounded-full cursor-pointer"
               >
                 Sign Up
               </A>
