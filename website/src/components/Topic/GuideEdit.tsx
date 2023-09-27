@@ -1,8 +1,9 @@
-import { For, Show, onMount } from "solid-js"
+import { For, Show, createMemo, onMount } from "solid-js"
 import { useEditGuide } from "../../GlobalContext/edit-guide"
 import { signedIn } from "../../../lib/auth"
 import { useMobius } from "../../root"
 import { useGlobalState } from "../../GlobalContext/global"
+import { Search, createSearchState } from "../Search"
 
 export default function GuideSummaryEdit() {
   const editedGuide = useEditGuide()
@@ -20,6 +21,19 @@ export default function GuideSummaryEdit() {
   //     [fieldName]: inputElement.value
   //   });
   // };
+
+  const searchResults = createMemo(() => {
+    return global.state.globalTopicsSearchList.map((topic) => {
+      return {
+        name: topic.prettyName,
+        action: () => {
+          console.log("action")
+        },
+      }
+    })
+  })
+
+  const search_state = createSearchState(() => searchResults())
 
   onMount(async () => {
     if (signedIn()) {
@@ -149,7 +163,7 @@ export default function GuideSummaryEdit() {
           onClick={() => {
             editedGuide.addSection({
               order: 0,
-              title: "hello",
+              title: "",
               ordered: true,
               links: [],
             })
@@ -192,6 +206,10 @@ export default function GuideSummaryEdit() {
                           <div class="w-full  h-full flex justify-between items-center">
                             <div class="w-fit gap-1 flex flex-col">
                               <div class="font-bold text-[#3B5CCC]">
+                                <Search
+                                  placeholder={"Search title"}
+                                  state={search_state}
+                                />
                                 <input
                                   class="border border-slate-400 border-opacity-30 rounded-[6px] px-2 py-1"
                                   id={linkTitleId}

@@ -1,4 +1,4 @@
-import { onMount } from "solid-js"
+import { createSignal, onMount } from "solid-js"
 import { createContext, useContext } from "solid-js"
 import { MobiusType } from "../root"
 import { createStore } from "solid-js/store"
@@ -6,11 +6,8 @@ import {
   createQueries,
   createStore as tinybaseCreateStore,
 } from "tinybase/with-schemas"
-import { createIndexedDbPersister } from "tinybase/persisters/persister-indexed-db"
+import { createIndexedDbPersister } from "tinybase/persisters/persister-indexed-db/with-schemas"
 import { create, search, insert } from "@orama/orama"
-
-// TODO: persist everything to local storage with tinybase
-// especially the globalTopicsSearchList so search is available instantly + offline
 
 type GlobalTopicSearchItem = {
   name: string
@@ -37,6 +34,9 @@ export function createGlobalState(mobius: MobiusType) {
     globalLinkSearchDb: undefined,
   })
 
+  const [globalLinkSearchDb, setGlobalLinkSearchDb] =
+    createSignal<any>(undefined)
+
   onMount(async () => {
     const topics = await mobius.query({
       publicGetGlobalTopics: {
@@ -62,7 +62,6 @@ export function createGlobalState(mobius: MobiusType) {
     const store = tinybaseCreateStore().setTablesSchema(tableSchema)
 
     // create indexed db persister
-    // @ts-ignore
     const persister = createIndexedDbPersister(store, "global")
     // load from existing store if it exists
     await persister.load()
@@ -125,7 +124,8 @@ export function createGlobalState(mobius: MobiusType) {
 
     await Promise.all(promises)
 
-    setState({ globalLinkSearchDb: db })
+    // setState({ globalLinkSearchDb: db })
+    setGlobalLinkSearchDb(db)
   })
 
   return {
@@ -134,10 +134,7 @@ export function createGlobalState(mobius: MobiusType) {
       setState({ globalTopicsSearchList: list })
     },
     searchGlobalLinksByTitle: async (title: string) => {
-      // console.log(state.globalLinks, "global links")
-      // console.log(title, "title")
-
-      const searchResult = await search(state.globalLinkSearchDb, {
+      const searchResult = await search(globalLinkSearchDb(), {
         term: title,
         properties: ["title"],
         threshold: 0.5,

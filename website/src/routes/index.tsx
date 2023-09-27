@@ -59,7 +59,6 @@ export default function Home() {
         transform: rotate(360deg)
       }
     }
-
     `}
       </style>
       <div

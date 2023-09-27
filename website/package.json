@@ -15,6 +15,7 @@
     "vite": "^4.4.9"
   },
   "dependencies": {
+    "@motionone/solid": "^10.16.4",
     "@nothing-but/force-graph": "^0.2.4",
     "@nothing-but/utils": "^0.10.1",
     "@orama/orama": "^1.2.6",
