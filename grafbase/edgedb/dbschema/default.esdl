@@ -162,7 +162,9 @@ module default {
     # nice title from url
     required title: str;
     # unique url of the link (without protocol) TODO: make it exclusive
-    required url: str;
+    required url: str {
+      constraint exclusive;
+    };
     # http / https
     protocol: str;
     # full url of the link as saved initially by user

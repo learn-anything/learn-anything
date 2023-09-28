@@ -1,7 +1,24 @@
-import { removeEndingSlashFromUrls } from "../crud/global-link"
+import { addGlobalLink, removeDuplicateUrls } from "../crud/global-link"
+import { createGlobalTopicWithGlobalGuide } from "../crud/global-topic"
+import { parseMdFile } from "../sync/markdown"
+import { markdownFilePaths } from "../sync/wiki"
 
 async function main() {
-  await removeEndingSlashFromUrls()
+  await removeDuplicateUrls()
+  return
+  const paths = await markdownFilePaths(process.env.wikiFolderPath!, [])
+  // console.log(paths[0])
+  const filePath = paths[0]!
+  const topic = await parseMdFile(filePath)
+  // console.log(topic.name)
+  topic.links.map(async (link) => {
+    // console.log(link.url, "url")
+    // console.log(link.title, "title")
+    // console.log(link.description, "desc")
+    // console.log(link.year, "year")
+    await addGlobalLink(link.url, link.title, link.year, link.description)
+  })
+  // await createGlobalTopicWithGlobalGuide(topic.name, topic.prettyName, "")
   // const links = await getAllGlobalLinks()
   // console.log(links, "links")
   // await updateTopicLearningStatus(

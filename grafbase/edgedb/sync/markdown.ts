@@ -63,9 +63,9 @@ type SidebarTopic = {
 }
 
 // Get all the markdown files in a directory
-async function markdownFilePaths(
+export async function markdownFilePaths(
   directoryPath: string,
-  ignoreList: string[] = [],
+  ignoreList?: string[],
 ): Promise<string[]> {
   let filesToProcess: string[] = []
   const entries = fs.readdirSync(directoryPath, { withFileTypes: true })
@@ -79,6 +79,7 @@ async function markdownFilePaths(
     } else if (
       entry.isFile() &&
       path.extname(entry.name) === ".md" &&
+      ignoreList &&
       !ignoreList.includes(entry.name.toLowerCase())
     ) {
       filesToProcess.push(fullPath)
@@ -99,7 +100,7 @@ async function markdownFilePaths(
 // everything before either ## Notes or ## Links is content
 // everything inside ## Notes heading is notes
 // everything inside ## Links heading is links
-async function parseMdFile(filePath: string): Promise<Topic> {
+export async function parseMdFile(filePath: string): Promise<Topic> {
   const markdownFileContent = (await readFile(filePath)).toString()
   const tree = fromMarkdown(markdownFileContent)
   // console.log(tree, "tree")

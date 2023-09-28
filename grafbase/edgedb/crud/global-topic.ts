@@ -160,6 +160,12 @@ export async function createGlobalTopicWithGlobalGuide(
   return query.run(client)
 }
 
+// export async function editGlobalGuide(globalTopic: string) {
+//   const query = e.update(e.GlobalGuide, {
+
+//   })
+// }
+
 // export async function getGlobalTopic(topicName: string, email: string) {
 //   const query = e.params(
 //     {

@@ -14,6 +14,7 @@
     "db:watch": "cd grafbase/edgedb && edgedb watch",
     "db:migrate": "cd grafbase/edgedb && edgedb migration create && edgedb migrate && bunx @edgedb/generate edgeql-js --target ts",
     "db:ts-generate": "cd grafbase/edgedb && bunx @edgedb/generate edgeql-js --target ts",
+    "db:dump": "cd private && edgedb dump prod.db",
     "api": "bunx grafbase@latest dev",
     "api:codegen": "graphql-codegen",
     "ts": "tput reset && bun --watch run.ts",
