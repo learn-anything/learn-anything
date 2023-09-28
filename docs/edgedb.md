@@ -4,6 +4,7 @@
 
 - `set -x EDGEDB_INSTANCE ..`
 - `set -x EDGEDB_SECRET_KEY ..`
+- `set -x EDGEDB_DATABASE ..`
 
 ## Reset database
 
@@ -17,6 +18,12 @@ drop database edgedb;
 create database edgedb;
 \c edgedb
 drop database tmp;
+```
+
+## Create dump of database
+
+```
+edgedb dump prod.db
 ```
 
 ## Restoring database from `dump`

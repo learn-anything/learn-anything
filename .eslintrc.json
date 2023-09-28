@@ -20,7 +20,7 @@
     /*
       detect unimplemented/leftover/unnecessary code
     */
-    "no-console": "warn",
+    // "no-console": "warn",
     "no-debugger": "warn",
     "prefer-const": "warn",
     "@typescript-eslint/no-unused-vars": [

@@ -24,6 +24,9 @@ export default function GuideSummaryEdit() {
 
   const searchResults = createMemo(() => {
     return global.state.globalTopicsSearchList.map((topic) => {
+      // global.searchGlobalLinksByTitle(
+      //   e.target.value,
+      // )
       return {
         name: topic.prettyName,
         action: () => {

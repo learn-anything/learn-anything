@@ -1,5 +1,7 @@
 ## Public website release [sept 29]
 
+- load all urls from wiki, not just from ## Links
+- make sure on /auth, account gets created
 - remove `/` from end of `url` in `GlobalLink`
 - load all global links into local storage with [tinybase](https://github.com/tinyplex/tinybase)
   - use [orama](https://github.com/oramasearch/orama) to search over `.title` of it

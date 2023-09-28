@@ -124,8 +124,13 @@ export function createGlobalState(mobius: MobiusType) {
 
     await Promise.all(promises)
 
-    // setState({ globalLinkSearchDb: db })
     setGlobalLinkSearchDb(db)
+
+    const searchResult = await search(globalLinkSearchDb(), {
+      term: "",
+      properties: ["title"],
+    })
+    console.log(searchResult, "res")
   })
 
   return {

@@ -8,7 +8,6 @@ export interface User {
 }
 
 export async function updateUserMemberUntilDate(hankoId: string, date: Date) {
-  console.log(date)
   const res = await e
     .update(e.User, (user) => ({
       filter_single: { hankoId: hankoId },

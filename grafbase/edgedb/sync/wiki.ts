@@ -4,8 +4,6 @@ import * as path from "path"
 import { dirname } from "path"
 import { URL } from "node:url"
 import { exec } from "child_process"
-import { Link, Note, RelatedLink, addTopic } from "../topic"
-import clipboard from "clipboardy"
 
 // TODO: to remove potentially
 // assumes `bun dev-setup` was ran
@@ -104,7 +102,7 @@ async function getConnections(filePaths: string[]) {
 
   const connectionsArray = JSON.stringify(result, null, 2)
   console.log(connectionsArray)
-  clipboard.writeSync(connectionsArray)
+  // clipboard.writeSync(connectionsArray)
   return result
 }
 

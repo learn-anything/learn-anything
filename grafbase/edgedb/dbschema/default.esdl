@@ -161,24 +161,23 @@ module default {
   type GlobalLink {
     # nice title from url
     required title: str;
-    # title as grabbed from url
-    urlTitle: str;
-    # unique url of the link (without protocol)
+    # unique url of the link (without protocol) TODO: make it exclusive
     required url: str;
     # http / https
     protocol: str;
     # full url of the link as saved initially by user
     fullUrl: str;
-    # TODO: should be exclusive but that was giving issues in migration of wiki
-    # required url: str {
-    #   constraint exclusive;
-    # };
+    # temp used to know what is main topic of a link
+    # TODO: will be reaplced with `mainTopic` once it's implemented well
+    mainTopicAsString: str;
     # true = link was verified, its valid URL, good metadata was added etc.
     required verified: bool;
     # true = link is available for all to see/search. false = link is private
     required public: bool;
     # link description
     description: str;
+    # title as grabbed from url
+    urlTitle: str;
     # optionally have a main topic that the link belongs to
     link mainTopic: GlobalTopic;
     # TODO: should probably be int, but keeping it str for now

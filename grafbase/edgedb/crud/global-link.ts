@@ -49,7 +49,37 @@ export async function removeProtocolFromUrlOfGlobalLinks() {
   }
 }
 
-export function splitUrlByProtocol(url: string) {
+export async function removeEndingSlashFromUrls() {
+  const globalLinks = await e
+    .select(e.GlobalLink, () => ({
+      id: true,
+      url: true,
+    }))
+    .run(client)
+
+  for (const globalLink of globalLinks) {
+    if (globalLink.url.endsWith("/")) {
+      const newUrl = removeTrailingSlash(globalLink.url)
+      await e
+        .update(e.GlobalLink, () => ({
+          filter_single: { id: globalLink.id },
+          set: {
+            url: newUrl,
+          },
+        }))
+        .run(client)
+    }
+  }
+}
+
+function removeTrailingSlash(str: string) {
+  if (str.endsWith("/")) {
+    return str.slice(0, -1)
+  }
+  return str
+}
+
+function splitUrlByProtocol(url: string) {
   let parsedUrl = parseURL(url)
   let host = parsedUrl.host
   if (host?.includes("www")) {

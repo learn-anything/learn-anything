@@ -1,5 +1,4 @@
 // markdown parsing
-// TODO: move it to lib/
 
 import * as fs from "fs"
 import { readFile } from "fs/promises"
