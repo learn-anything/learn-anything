@@ -72,6 +72,31 @@ export async function removeEndingSlashFromUrls() {
   }
 }
 
+export async function attachGlobalLinkToGlobalTopic(
+  url: string,
+  globalTopicName: string,
+) {
+  const globalTopic = await e
+    .select(e.GlobalTopic, () => ({
+      prettyName: true,
+      id: true,
+      filter_single: { name: globalTopicName },
+    }))
+    .run(client)
+  console.log(globalTopic, "gt")
+
+  const [urlWithoutProtocol, _] = splitUrlByProtocol(url)
+
+  if (urlWithoutProtocol) {
+    await e.update(e.GlobalLink, () => ({
+      filter_single: { url: urlWithoutProtocol },
+      set: {
+        mainTopic: { "+=": globalTopic },
+      },
+    }))
+  }
+}
+
 export async function addGlobalLink(
   url: string,
   title: string,
