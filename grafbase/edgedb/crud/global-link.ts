@@ -20,6 +20,73 @@ export async function getAllGlobalLinks() {
   return links
 }
 
+export async function getGlobalLink(id: string) {
+  const link = await e
+    .select(e.GlobalLink, () => ({
+      filter_single: { id: id },
+      title: true,
+      url: true,
+      fullUrl: true,
+      mainTopicAsString: true,
+      protocol: true,
+      verified: true,
+      public: true,
+      description: true,
+      urlTitle: true,
+      year: true,
+    }))
+    .run(client)
+  return link
+}
+
+export async function updateAllGlobalLinksToHaveRightUrl() {
+  const links = await e
+    .select(e.GlobalLink, (gl) => ({
+      filter: e.op("not", e.op("exists", gl.protocol)),
+      // e.op()
+      // filter: e.op(gl.protocol, "="),
+      // filter: e.op(gl.url, "ilike", "http://%"),
+      id: true,
+      // title: true,
+      url: true,
+      protocol: true,
+    }))
+    .run(client)
+
+  // return links
+  console.log(links.length, "length")
+  return
+
+  for (const link of links) {
+    const [newUrl, protocol] = splitUrlByProtocol(link.url)
+    console.log(protocol, "protocol")
+    console.log(link.url, "url")
+
+    const existingLink = await e
+      .select(e.GlobalLink, (gl) => ({
+        filter: e.op(gl.url, "=", newUrl),
+      }))
+      .run(client)
+
+    // console.log(existingLink, "existing link")
+
+    if (!(existingLink.length > 0) && !protocol) {
+      const res = await e
+        .update(e.GlobalLink, () => ({
+          filter_single: { id: link.id },
+          set: {
+            url: newUrl,
+            protocol: protocol,
+            fullUrl: link.url,
+          },
+        }))
+        .run(client)
+      console.log(res, "link updated")
+    }
+  }
+  return links
+}
+
 // was used as a one off script to strip protocol from the urls
 export async function removeProtocolFromUrlOfGlobalLinks() {
   const globalLinks = await e

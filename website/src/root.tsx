@@ -26,86 +26,107 @@ import createEditGuide, { EditGuideProvider } from "./GlobalContext/edit-guide"
 
 // TODO: https://github.com/nikitavoloboev/la-issues/issues/54 (should stop having to manually update this schema )
 export const typeDefs = `
+"""
+De-prioritizes a fragment, causing the fragment to be omitted in the initial response and delivered as a subsequent response afterward.
+"""
+directive @defer(
+  """When true fragment may be deferred"""
+  if: Boolean! = true
+
   """
-  De-prioritizes a fragment, causing the fragment to be omitted in the initial response and delivered as a subsequent response afterward.
+  This label should be used by GraphQL clients to identify the data from patch responses and associate it with the correct fragment.
   """
-  directive @defer(
-    """When true fragment may be deferred"""
-    if: Boolean! = true
+  label: String
+) on INLINE_FRAGMENT | FRAGMENT_SPREAD
 
-    """
-    This label should be used by GraphQL clients to identify the data from patch responses and associate it with the correct fragment.
-    """
-    label: String
-  ) on INLINE_FRAGMENT | FRAGMENT_SPREAD
+"""Directs the executor to return values as a Streaming response."""
+directive @live on QUERY
 
-  """Directs the executor to return values as a Streaming response."""
-  directive @live on QUERY
+"""Indicates that an input object is a oneOf input object"""
+directive @oneOf on INPUT_OBJECT
 
-  """Indicates that an input object is a oneOf input object"""
-  directive @oneOf on INPUT_OBJECT
+type Mutation {
+  createUser(email: String!): String!
+  updateTopicLearningStatus(learningStatus: learningStatus!, topic: String!): String!
+  uploadProfilePhoto(image: String!): String!
+  updateGlobalTopic(input: inputToUpdateGlobalTopic!): String!
+}
 
-  type Mutation {
-    createUser(email: String!): String!
-    uploadProfilePhoto(image: String!): String!
-    updateGlobalTopic(input: inputToUpdateGlobalTopic!): String!
-  }
+type Query {
+  publicGetGlobalTopics: [outputOfPublicGetGlobalTopics!]!
+  publicGetGlobalTopic(topicName: String!): publicGlobalTopic!
+  getGlobalLink(linkId: String!): outputOfGetGlobalLink!
+  getGlobalTopic(topicName: String!): globalTopic!
+  getGlobalLinks: [outputOfGetGlobalLinks!]!
+  checkForGlobalLink(linkUrl: String!): outputOfCheckForGlobalLink!
+  stripe(plan: String!): String!
+}
 
-  type Query {
-    publicGetGlobalTopics: [outputOfPublicGetGlobalTopics!]!
-    publicGetGlobalTopic(topicName: String!): publicGlobalTopic!
-    getGlobalTopic(topicName: String!): globalTopic!
-    getGlobalLinks: [outputOfGetGlobalLinks!]!
-    checkForGlobalLink(linkUrl: String!): outputOfCheckForGlobalLink!
-    stripe(plan: String!): String!
-  }
+type globalTopic {
+  prettyName: String!
+  topicSummary: String!
+}
 
-  type globalTopic {
-    prettyName: String!
-    topicSummary: String!
-  }
+input inputToUpdateGlobalTopic {
+  topicSummary: String!
+  sections: [section!]!
+}
 
-  input inputToUpdateGlobalTopic {
-    topicSummary: String!
-    sections: [section!]!
-  }
+enum learningStatus {
+  to_learn
+  learning
+  learned
+}
 
-  input link {
-    title: String!
-    url: String!
-    author: String
-    year: Int
-    completed: Boolean
-    addedByUser: Boolean
-  }
+input link {
+  title: String!
+  url: String!
+  author: String
+  year: Int
+  completed: Boolean
+  addedByUser: Boolean
+}
 
-  type outputOfCheckForGlobalLink {
-    url: String!
-    title: String!
-    year: Int
-    description: String
-  }
+type outputOfCheckForGlobalLink {
+  url: String!
+  title: String!
+  year: Int
+  description: String
+}
 
-  type outputOfGetGlobalLinks {
-    id: String!
-    title: String!
-    url: String!
-  }
+type outputOfGetGlobalLink {
+  title: String!
+  url: String!
+  fullUrl: String!
+  mainTopicAsString: String!
+  protocol: Boolean!
+  verified: Boolean!
+  public: Boolean!
+  description: String!
+  urlTitle: String!
+  year: String!
+}
 
-  type outputOfPublicGetGlobalTopics {
-    prettyName: String!
-    name: String!
-  }
+type outputOfGetGlobalLinks {
+  id: String!
+  title: String!
+  url: String!
+}
 
-  type publicGlobalTopic {
-    prettyName: String!
-    topicSummary: String!
-  }
+type outputOfPublicGetGlobalTopics {
+  prettyName: String!
+  name: String!
+}
 
-  input section {
-    title: String!
-    links: [link!]!
-  }
+type publicGlobalTopic {
+  prettyName: String!
+  topicSummary: String!
+}
+
+input section {
+  title: String!
+  links: [link!]!
+}
 `
 
 export function createMobius(options: { hankoCookie: () => string }) {

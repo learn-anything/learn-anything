@@ -1,18 +1,18 @@
-import {
-  addGlobalLink,
-  attachGlobalLinkToGlobalTopic,
-  removeDuplicateUrls,
-} from "../crud/global-link"
-import { createGlobalTopicWithGlobalGuide } from "../crud/global-topic"
+import { addGlobalLink } from "../crud/global-link"
 import { parseMdFile } from "../sync/markdown"
 import { markdownFilePaths } from "../sync/wiki"
 
 async function main() {
   // await removeDuplicateUrls()
-  await attachGlobalLinkToGlobalTopic(
-    "https://www.mikeash.com/getting_answers.html",
-    "asking-questions",
-  )
+  // await attachGlobalLinkToGlobalTopic(
+  //   "https://www.mikeash.com/getting_answers.html",
+  //   "asking-questions",
+  // )
+  // const links = await updateAllGlobalLinksToHaveRightUrl()
+  // console.log(links, "links")
+  // console.log("done")
+  // const link = await getGlobalLink()
+  // console.log(link)
   return
   const paths = await markdownFilePaths(process.env.wikiFolderPath!, [])
   // console.log(paths[0])

@@ -1,8 +1,39 @@
-## Public website release [sept 29]
+## Public website release
 
+- separate page to edit links
+- in guide edit, search for exsting links by title, add them
+  - on edit, go to separate page to do an edit
+  - allow reordering of links
+  - make endpoints work for all!G
+- check for global links, some start with https: still
+  - i.e. `"https://www.mikeash.com/pyblog/friday-qa-2015-07-31-tagged-pointer-strings.html"`
+  - do select query and check
+  - make `protocol` required
+- put all global links into links.json with all properties shown with id for fast search
+- go through each wiki page
+  - create global topic
+  - scan all the links inside the file
+    - create global links from all files (make sure `description`, related links are there)
+  - calculate graph connections (folder/file or mentions of other topics)
+- `/links/<id>` or `/links/<url>` to make edits to global link data
+- edit guide
+  - add/delete section
+    - section guided/unguided
+  - add link to section
+  - section
+- test stripe works
+  - unicode convert to edgedb
+    - check the object https://stripe.com/docs/api/subscriptions/object
+  - updates `memberUntil` correctly
+  - test things locally and in [dashboard](https://dashboard.stripe.com/dashboard)
+- make graph work
 - load all urls from wiki, not just from ## Links
 - make sure on /auth, account gets created
 - remove `/` from end of `url` in `GlobalLink`
+- integrate search deeply (https://docs.oramasearch.com)
+- design close to Fey.app & Luma (clean UI)
+  - use https://www.rapidpages.io + solid libs available
+    - Zag and Kobalte seem great. Kobalte seems top
 - load all global links into local storage with [tinybase](https://github.com/tinyplex/tinybase)
   - use [orama](https://github.com/oramasearch/orama) to search over `.title` of it
     - https://oramasearch.com/blog/optimizing-orama-schema-optimization useful
@@ -23,6 +54,10 @@
   - https://reshaped.so
   - https://github.com/hope-ui/hope-ui
 - update UI of topic page for viewing
+- make sure hanko auth web component does not freeze on auth in Ubuntu
+  - hanko team is aware of it, ask what is the progress on it
+- update readme.md what happens when `bun web` causes error with crypto not working properly
+  - try make it so error does not happen with bun!
 - use R2 (https://developers.cloudflare.com/r2/) to store user profile images
   - use fetch api directly https://developers.cloudflare.com/r2/api/workers/
 - stripe works, updates `memberUntil` status of users when payment is succesful
@@ -71,7 +106,7 @@
 - `/links/<url>` to show full url + all the metadata
   - allow members to make suggestive edits to the link with new metadata
 
-## Public desktop app release [oct 2]
+## Public desktop app release
 
 - use https://github.com/alxnddr/solid-monaco for editor
 - let users choose a folder of existing markdown files to sync with
@@ -87,11 +122,11 @@
 - public content
 - move all useful code that existed in previous [Electron version](https://github.com/learn-anything/electron-version)
 
-## Public user wikis [oct 5]
+## Public user wikis
 
 - all content published via desktop app, rendered as in [wiki.nikiv.dev](https://wiki.nikiv.dev)
 
-## Mobile app release [oct 15]
+## Mobile app release
 
 - use [ignite](https://github.com/infinitered/ignite) starter
   - ignite [seems best](https://www.youtube.com/watch?v=KOSvDlFyg20)
@@ -131,3 +166,4 @@
 - log all `console.error` with [TinyBird](https://www.tinybird.co) or [HyperDX](https://github.com/hyperdxio/hyperdx)
 - add multiplayer support using [tinybase/partykit](https://twitter.com/threepointone/status/1704879501232980298)
   - [many great tweets on it](https://twitter.com/jamespearce)
+- allow importing of other people's bookmark presets (minus `private` bookmarks)

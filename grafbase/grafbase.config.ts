@@ -62,6 +62,24 @@ g.query("publicGetGlobalTopic", {
 
 // auth'd queries
 
+const outputOfGetGlobalLink = g.type("outputOfGetGlobalLink", {
+  title: g.string(),
+  url: g.string(),
+  verified: g.boolean(),
+  public: g.boolean(),
+  protocol: g.string().optional(),
+  fullUrl: g.string().optional(),
+  mainTopicAsString: g.string().optional(),
+  description: g.string().optional(),
+  urlTitle: g.string().optional(),
+  year: g.string().optional(),
+})
+g.query("getGlobalLink", {
+  args: { linkId: g.string() },
+  returns: g.ref(outputOfGetGlobalLink),
+  resolver: "getGlobalLink",
+})
+
 g.query("getGlobalTopic", {
   args: { topicName: g.string() },
   returns: g.ref(globalTopic),

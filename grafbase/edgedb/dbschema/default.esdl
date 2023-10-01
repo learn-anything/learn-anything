@@ -161,7 +161,7 @@ module default {
   type GlobalLink {
     # nice title from url
     required title: str;
-    # unique url of the link (without protocol) TODO: make it exclusive
+    # unique url of the link (without protocol)
     required url: str {
       constraint exclusive;
     };
