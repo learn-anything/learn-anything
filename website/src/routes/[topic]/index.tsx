@@ -5,6 +5,7 @@ import Card from "../../components/Topic/Card"
 import GlobalGuide from "../../components/Topic/GlobalGuide"
 import GuideLinks from "../../components/Topic/GuideLinks"
 import GuideNotes from "../../components/Topic/GuideNotes"
+import { Motion } from "@motionone/solid"
 
 import TopicNav from "../../components/Topic/TopicNav"
 import { useMobius } from "../../root"
@@ -87,9 +88,9 @@ export default function GlobalTopic() {
         <TopicNav />
 
         <div class="h-full w-full flex justify-center">
-          <div id="InfoSidebar" class="h-full w-[30%]">
+          <Motion.div id="InfoSidebar" class="h-full w-[30%]">
             <GuideSidebar></GuideSidebar>
-          </div>
+          </Motion.div>
           <div
             id="InfoMain"
             class="h-full bg-white border-l-[0.5px] border-[#69696951] dark:bg-neutral-800 w-full min-h-screen flex  gap-6 flex-col"
