@@ -1,9 +1,11 @@
-import { For, Show, createMemo, onMount } from "solid-js"
+import { For, Show, createMemo, createSignal, onMount } from "solid-js"
 import { useEditGuide } from "../../GlobalContext/edit-guide"
 import { signedIn } from "../../../lib/auth"
 import { useMobius } from "../../root"
 import { useGlobalState } from "../../GlobalContext/global"
 import { Search, createSearchState } from "../Search"
+import clsx from "clsx"
+import { Motion } from "@motionone/solid"
 
 export default function GuideSummaryEdit() {
   const editedGuide = useEditGuide()
@@ -178,7 +180,7 @@ export default function GuideSummaryEdit() {
         <For each={editedGuide.guide.sections}>
           {(section, index) => {
             return (
-              <div class="border border-slate-400 border-opacity-30 rounded-lg flex flex-col gap-4 p-4">
+              <Motion.div class="border overflow-hidden border-slate-400 border-opacity-30 rounded-lg flex flex-col gap-4 p-4">
                 <Show
                   when={section.title.length > 0}
                   fallback={
@@ -199,25 +201,46 @@ export default function GuideSummaryEdit() {
                     {section.title}
                   </div>
                 </Show>
-                <div class="flex flex-col">
+                <div class="flex gap-4 flex-col">
                   <For each={section.links}>
                     {(link, index) => {
                       let linkTitleId = `${section.title}-link-title-${index}`
                       let linkUrlId = `${section.title}-link-url-${index}`
                       return (
-                        <div class="flex items-center gap-6 justify-between border-b border-slate-400 border-opacity-30">
+                        <Motion.div
+                          transition={{
+                            duration: Math.min(index() * 0.2 + 0.5, 2),
+                            easing: "ease-out",
+                          }}
+                          animate={{
+                            opacity: [0, 1, 1],
+                            transform: [
+                              "translateX(100px)",
+                              "translateX(-10px)",
+                              "translateX(0px)",
+                            ],
+                          }}
+                          class="flex items-center gap-6 justify-between border p-6 rounded-[6px] border-slate-400 border-opacity-30"
+                        >
                           <div class="w-full  h-full flex justify-between items-center">
                             <div class="w-fit gap-4 flex flex-col py-4">
-                              <div class="font-bold flex flex-col gap-4 text-[#3B5CCC]">
-                                <Search
-                                  placeholder={"Search title"}
-                                  state={search_state}
-                                />
+                              <Search
+                                placeholder={"Search title"}
+                                state={search_state}
+                              />
+                              <div
+                                class={clsx(
+                                  "relative flex flex-col text-[#3B5CCC]",
+                                )}
+                              >
+                                <div class="absolute px-2 font-light transition-all text-opacity-40 text-black h-full flex items-center">
+                                  Title
+                                </div>
                                 <input
-                                  class="border-b border-slate-400 outline-none hover:border-slate-500 focus:border-slate-600 transition-all bg-inherit border-opacity-30 px-2 py-1"
+                                  class="border-b border-slate-400 outline-none hover:border-slate-400 focus:border-slate-600 transition-all bg-inherit border-opacity-30 px-2 py-1"
                                   id={linkTitleId}
                                   type="text"
-                                  placeholder="Title"
+                                  placeholder=""
                                   onInput={(e) => {
                                     global.searchGlobalLinksByTitle(
                                       e.target.value,
@@ -239,7 +262,7 @@ export default function GuideSummaryEdit() {
                                 </Show>
                                 <div class="font-light w-full text-[12px] text-[#696969]">
                                   <input
-                                    class="border-b border-slate-400 hover:border-slate-500 focus:border-slate-600 outline-none transition-all border-opacity-30 bg-inherit px-2 py-1 w-full"
+                                    class="border-b border-slate-400 hover:border-slate-400 focus:border-slate-600 outline-none transition-all border-opacity-30 bg-inherit px-2 py-1 w-full"
                                     type="text"
                                     id={linkUrlId}
                                     placeholder="URL"
@@ -277,7 +300,7 @@ export default function GuideSummaryEdit() {
                               <div class="cursor-pointer">Delete</div>
                             </div>
                           </div>
-                        </div>
+                        </Motion.div>
                       )
                     }}
                   </For>
@@ -296,7 +319,7 @@ export default function GuideSummaryEdit() {
                     Add link
                   </div>
                 </div>
-              </div>
+              </Motion.div>
             )
           }}
         </For>
