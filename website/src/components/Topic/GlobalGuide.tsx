@@ -40,7 +40,7 @@ export default function GlobalGuide() {
                 "translateX(0px)",
               ],
             }}
-            class="bg-gray-100 hover:bg-gray-200 transition-all flex items-center justify-center rounded-[4px] h-[29px] w-[29px] text-[14px]"
+            class="bg-gray-100 dark:bg-neutral-950 hover:bg-gray-200 transition-all flex items-center justify-center rounded-[4px] h-[29px] w-[29px] text-[14px]"
           >
             <Icon name="Options" />
           </Motion.div>
@@ -61,7 +61,7 @@ export default function GlobalGuide() {
         <input
           type="text"
           placeholder="Search"
-          class="px-6 outline-none hover:bg-gray-100 transition-all focus:bg-gray-200 rounded-[4px] bg-gray-50 p-3 w-full"
+          class="px-6 outline-none hover:bg-gray-100 hover:dark:bg-black dark:bg-neutral-950 transition-all focus:bg-gray-200 dark:focus:bg-black rounded-[4px] bg-gray-50 p-3 w-full"
         />
       </Motion.div>
       <Motion.div
@@ -74,7 +74,7 @@ export default function GlobalGuide() {
             "translateX(0px)",
           ],
         }}
-        class="w-full h-full bg-gray-50 rounded-[6px] p-4"
+        class="w-full h-full bg-gray-50 dark:bg-neutral-950 rounded-[6px] p-4"
       >
         <GuideSummary />
         <For each={topic.globalTopic.globalGuide.sections}>

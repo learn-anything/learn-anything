@@ -205,16 +205,16 @@ export default function GuideSummaryEdit() {
                       let linkTitleId = `${section.title}-link-title-${index}`
                       let linkUrlId = `${section.title}-link-url-${index}`
                       return (
-                        <div class="flex items-center gap-6 justify-between border-b border-slate-400 border-opacity-30 p-2">
+                        <div class="flex items-center gap-6 justify-between border-b border-slate-400 border-opacity-30">
                           <div class="w-full  h-full flex justify-between items-center">
-                            <div class="w-fit gap-1 flex flex-col">
-                              <div class="font-bold text-[#3B5CCC]">
+                            <div class="w-fit gap-4 flex flex-col py-4">
+                              <div class="font-bold flex flex-col gap-4 text-[#3B5CCC]">
                                 <Search
                                   placeholder={"Search title"}
                                   state={search_state}
                                 />
                                 <input
-                                  class="border border-slate-400 border-opacity-30 rounded-[6px] px-2 py-1"
+                                  class="border-b border-slate-400 outline-none hover:border-slate-500 focus:border-slate-600 transition-all bg-inherit border-opacity-30 px-2 py-1"
                                   id={linkTitleId}
                                   type="text"
                                   placeholder="Title"
@@ -239,7 +239,7 @@ export default function GuideSummaryEdit() {
                                 </Show>
                                 <div class="font-light w-full text-[12px] text-[#696969]">
                                   <input
-                                    class="border border-slate-400 border-opacity-30 rounded-[6px] px-2 py-1 w-full"
+                                    class="border-b border-slate-400 hover:border-slate-500 focus:border-slate-600 outline-none transition-all border-opacity-30 bg-inherit px-2 py-1 w-full"
                                     type="text"
                                     id={linkUrlId}
                                     placeholder="URL"
@@ -248,7 +248,7 @@ export default function GuideSummaryEdit() {
                                 </div>
                               </div>
                             </div>
-                            <div class="flex gap-5 text-[14px] opacity-50">
+                            <div class="flex gap-5 dark:text-white flex-col items-end text-[14px] opacity-50">
                               <div
                                 onClick={async () => {
                                   const linkUrlElement =
