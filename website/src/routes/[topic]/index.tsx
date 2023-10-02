@@ -92,7 +92,7 @@ export default function GlobalTopic() {
           </div>
           <div
             id="InfoMain"
-            class="h-full bg-gray-50 dark:bg-neutral-800 w-full min-h-screen flex  gap-6 flex-col"
+            class="h-full bg-white border-l-[0.5px] border-[#69696951] dark:bg-neutral-800 w-full min-h-screen flex  gap-6 flex-col"
             style={{ padding: "24px 40px 24px 40px" }}
           >
             <GlobalGuide />

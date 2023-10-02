@@ -75,6 +75,7 @@ export default function GlobalLinkEdit() {
         top: -20px;
       }
       #UnFocused {
+
         left: 0;
         top: 0;
       }
@@ -96,7 +97,7 @@ export default function GlobalLinkEdit() {
             }}
             class="rounded-lg w-1/2 relative bg-white font-light h-1/2 flex flex-col p-6 px-6 gap-4"
           >
-            <div class="flex flex-col gap-4 [&>*]:px-2 [&>*]:transition-all [&>*]:p-1">
+            <div class="flex flex-col gap-5 [&>*]:px-2 [&>*]:transition-all [&>*]:p-1">
               <div class="relative w-full border-b border-slate-200 hover:border-slate-400">
                 <input
                   value={linkData().title}
@@ -104,7 +105,7 @@ export default function GlobalLinkEdit() {
                 ></input>
                 <div
                   id={linkData().title ? "Focused" : "UnFocused"}
-                  class="absolute px-2 font-light text-opacity-40 text-black h-full flex items-center"
+                  class="absolute px-2 font-light transition-all text-opacity-40 text-black h-full flex items-center"
                 >
                   Title
                 </div>
@@ -112,7 +113,7 @@ export default function GlobalLinkEdit() {
               <div class="relative w-full ">
                 <div
                   id={linkData().url ? "Focused" : "UnFocused"}
-                  class="absolute px-2 font-light text-opacity-40 text-black h-full flex items-center"
+                  class="absolute px-2 font-light transition-all text-opacity-40 text-black h-full flex items-center"
                 >
                   Url
                 </div>

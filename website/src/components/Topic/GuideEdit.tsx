@@ -103,10 +103,10 @@ export default function GuideSummaryEdit() {
       height: 97px
     }
   `}</style>
-      <div class="w-full flex flex-col gap-4 text-[16px] leading-[18.78px]">
+      <div class="w-full flex flex-col gap-4 text-[16px] leading-[18.78px] ">
         <div class="flex justify-between items-center ">
           <div
-            class="border-[#696969] border p-[8px] px-[10px] rounded-[4px] text-[#696969] font-light hover:bg-gray-300 hover:bg-opacity-50 cursor-pointer transition-all"
+            class="border-[#696969] dark:border-gray-200 dark:hover:bg-gray-200 dark:hover:text-black border p-[8px] px-[10px] rounded-[4px] text-[#696969] dark:text-white font-light hover:bg-gray-300 hover:bg-opacity-50 cursor-pointer transition-all"
             onClick={() => {}}
           >
             Cancel
@@ -132,7 +132,7 @@ export default function GuideSummaryEdit() {
             Submit Changes
           </div>
         </div>
-        <div class="bg-[#FAFAFA] flex flex-col gap-2 rounded-[2px] p-4 w-full">
+        <div class="bg-[#FAFAFA] dark:bg-neutral-950 flex flex-col gap-2 rounded-[4px] p-4 w-full">
           <div class="flex justify-between items-center">
             <div class="text-[#696969] ">Summary</div>
             <div
