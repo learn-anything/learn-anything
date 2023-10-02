@@ -1,6 +1,6 @@
 import { GraphQLError } from "graphql"
-import { hankoIdFromToken } from "../lib/hanko-validate"
 import { addUser } from "../edgedb/crud/user"
+import { hankoIdFromToken } from "../lib/hanko-validate"
 
 export default async function createUserResolver(
   root: any,

@@ -1,5 +1,11 @@
 ## Public website release
 
+- use `create`, not `add` in edgedb function names
+- use edgeql queries raw for queries that I can't do with edgedb-js
+  - figure out how to use them in nice way
+- on success of global link edit
+  - make sure only admins can do edits of global links
+  - allow main switching topic connected
 - separate page to edit links
 - in guide edit, search for exsting links by title, add them
   - on edit, go to separate page to do an edit
@@ -21,6 +27,7 @@
     - section guided/unguided
   - add link to section
   - section
+- links/new = add new global links
 - test stripe works
   - unicode convert to edgedb
     - check the object https://stripe.com/docs/api/subscriptions/object
@@ -105,10 +112,14 @@
   - show empty state, users can still mark progress on the topic and request to be moderator of it to create a guide for it
 - `/links/<url>` to show full url + all the metadata
   - allow members to make suggestive edits to the link with new metadata
+- update readme to make it work with local edgedb
+  - pre seed it with content so dev ux is amazing
 
 ## Public desktop app release
 
 - use https://github.com/alxnddr/solid-monaco for editor
+  - move all other text editor code to solid-ui repo
+  - keep clean code, work with monaco as much as possible
 - let users choose a folder of existing markdown files to sync with
 - or allow choosing a folder where markdown files will be synced to
 - load in all the .md files as topics and show in sidebar

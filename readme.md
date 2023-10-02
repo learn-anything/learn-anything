@@ -70,46 +70,31 @@ Follow instructions, name EdgeDB instance `learn-anything`.
 
 Run `bun db:ui`. This will open EdgeDB graphical interface where you can run queries or explore the schema.
 
-Run below command to apply the schema defined in [default.esdl](grafbase/edgedb/dbschema/default.esdl) on your local DB:
+Then in `grafbase/.env`, set:
 
 ```
-bun db:watch
+LOCAL=true
+EDGEDB_DSN=
 ```
 
-Then, generate [EdgeDB-TS](https://github.com/edgedb/edgedb-js) bindings with:
+Where `EDGEDB_DSN` value comes from running `bun db:get-dsn`.
+
+#### Generate edgedb-js bindings
 
 ```
 bun db:ts-generate
 ```
 
-<!-- ### Seed DB with content -->
+This gives you type safe access to EdgeDB and lets you use the query builder nicely.
 
-<!-- The goal is to seed EdgeDB with [this content](https://github.com/learn-anything/seed/tree/main/wiki/nikita). Can be seen online [here](https://wiki.nikiv.dev).
+#### Seed EdgeDB with content
 
-However you can try seed it with a wiki / folder of markdown of yourself.
+> **Warning**
+> Instructions need to be added + tested
 
-Just add a folder in `seed/wiki` like `seed/wiki/my-wiki` and put some .md files inside. -->
+Goal is to be able to run something like `bun db:seed` and it will preload local EdgeDB instance will all the necessary data.
 
-<!-- ### Run Sync DB code
-
-The goal of this command:
-
-```
-bun db:sync
-```
-
-Is to sync your local EdgeDB instance with the contents of the `seed` folder you just cloned.
-
-For this, you need to create a file here:`api/edgedb/sync/.env`. With content like this:
-
-```
-SEED_FOLDER_NAME=nikita
-USERNAME=nikita
-```
-
-You can swap the names to your own. The `SEED_FOLDER_NAME` is the folder that is found in `seed/wiki`.
-
-Read [api/edgedb/sync/sync.ts](api/edgedb/sync/sync.ts) and [api/edgedb/sync/wiki.ts](api/edgedb/sync/wiki.ts) for details how sync works. -->
+Coming from [seed repo](https://github.com/learn-anything/seed).
 
 ## Run GraphQL server (Grafbase)
 
@@ -168,7 +153,7 @@ Open http://localhost:3000
 ## Run desktop app (Tauri/Rust)
 
 > **Warning**
-> Instructions might break, will be reviewed before first LA public release
+> Instructions will be added after website works properly
 
 ```
 bun app

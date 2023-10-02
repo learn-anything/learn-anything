@@ -13,6 +13,8 @@ async function main() {
   // console.log("done")
   // const link = await getGlobalLink()
   // console.log(link)
+  // const links = await getAllGlobalLinks()
+  // console.log(links, "links")
   return
   const paths = await markdownFilePaths(process.env.wikiFolderPath!, [])
   // console.log(paths[0])

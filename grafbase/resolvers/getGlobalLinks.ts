@@ -12,10 +12,4 @@ export default async function getGLobalLinksResolver(
     console.log(links, "links")
     return links
   }
-  //   const userId = await addUser({ email: args.email, hankoId: hankoId })
-  //   if (userId) {
-  //     return userId
-  //   }
-  //   throw new GraphQLError("User already exists")
-  // }
 }

@@ -20,7 +20,7 @@
     "@motionone/solid": "^10.16.4",
     "@nothing-but/force-graph": "^0.2.4",
     "@nothing-but/utils": "^0.10.1",
-    "@orama/orama": "^1.2.8",
+    "@orama/orama": "^1.2.9",
     "@solid-primitives/active-element": "^2.0.17",
     "@solid-primitives/autofocus": "^0.0.108",
     "@solid-primitives/event-listener": "^2.3.0",
@@ -43,8 +43,5 @@
     "tinybase": "^4.3.11",
     "undici": "^5.25.3",
     "zod": "^3.22.2"
-  },
-  "resolutions": {
-    "vite-plugin-inspect": "0.7.38"
   }
 }
