@@ -4,6 +4,7 @@ import { useMobius } from "../../root"
 import { Button } from "@kobalte/core"
 import { Checkbox } from "@kobalte/core"
 import Icon from "../../components/Icon"
+import { Motion } from "@motionone/solid"
 
 export default function GlobalLinkEdit() {
   const params = useParams()
@@ -68,32 +69,65 @@ export default function GlobalLinkEdit() {
         font-size: 14px;
         user-select: none;
       }
+      #Focused {
+        font-size: 12px;
+        left: 0;
+        top: -20px;
+      }
+      #UnFocused {
+        left: 0;
+        top: 0;
+      }
       `}
       </style>
       <div class="p-[24px] flex justify-center bg-zinc-100 w-screen h-screen text-black">
         <Show when={linkData()}>
-          <div class="rounded-lg w-1/2 relative bg-white font-light h-1/2 flex flex-col p-6 px-6 gap-4">
+          <Motion.div
+            transition={{ duration: 0.5, easing: "ease-out" }}
+            animate={{
+              transform: "translateY(0)",
+              filter:
+                "blur(0px) drop-shadow(0px 10px 8px rgba(25, 25 ,25, 0.2))",
+            }}
+            initial={{
+              transform: "translateY(500px)",
+              filter:
+                "blur(2px) drop-shadow(0px 10px 8px rgba(25, 25 ,25, 0.5))",
+            }}
+            class="rounded-lg w-1/2 relative bg-white font-light h-1/2 flex flex-col p-6 px-6 gap-4"
+          >
             <div class="flex flex-col gap-4 [&>*]:px-2 [&>*]:transition-all [&>*]:p-1">
               <div class="relative w-full border-b border-slate-200 hover:border-slate-400">
                 <input
                   value={linkData().title}
-                  class="text-[20px] w-full outline-none"
+                  class="text-[20px] font-semibold w-full outline-none"
                 ></input>
-                <div class="absolute right-4 font-light text-opacity-40 text-black top-0 h-full flex items-center">
+                <div
+                  id={linkData().title ? "Focused" : "UnFocused"}
+                  class="absolute px-2 font-light text-opacity-40 text-black h-full flex items-center"
+                >
                   Title
                 </div>
               </div>
-              <input
-                value={linkData().url}
-                class="text-[16px] w-full border-slate-200 focus:border-slate-400 outline-none border-b"
-              >
-                Url
-              </input>
+              <div class="relative w-full ">
+                <div
+                  id={linkData().url ? "Focused" : "UnFocused"}
+                  class="absolute px-2 font-light text-opacity-40 text-black h-full flex items-center"
+                >
+                  Url
+                </div>
+                <input
+                  value={linkData().url}
+                  class="text-[16px] w-full outline-none border-b border-slate-200 hover:border-slate-400 focus:border-slate-600 transition-all"
+                >
+                  Url
+                </input>
+              </div>
             </div>
             <div class="w-full flex gap-6">
               <Checkbox.Root class="checkbox">
                 <Checkbox.Input class="checkbox__input" />
-                <Checkbox.Control class="checkbox__control">
+                <Checkbox.Control class="checkbox__control active:scale-[1.1]">
                   <Checkbox.Indicator>
                     <Icon name="Checkmark"></Icon>
                   </Checkbox.Indicator>
@@ -104,7 +138,7 @@ export default function GlobalLinkEdit() {
               </Checkbox.Root>
               <Checkbox.Root class="checkbox">
                 <Checkbox.Input class="checkbox__input" />
-                <Checkbox.Control class="checkbox__control">
+                <Checkbox.Control class="checkbox__control active:scale-[1.1]">
                   <Checkbox.Indicator>
                     <Icon name="Checkmark"></Icon>
                   </Checkbox.Indicator>
@@ -112,10 +146,10 @@ export default function GlobalLinkEdit() {
                 <Checkbox.Label class="checkbox__label">Public</Checkbox.Label>
               </Checkbox.Root>
             </div>
-            <Button.Root class=" bg-blue-600 absolute bottom-4 right-4 rounded-[4px] text-[24px] px-8 p-2 text-white">
+            <Button.Root class=" bg-blue-500 absolute bottom-4 right-4 active:scale-[1.1] hover:bg-blue-600 rounded-[6px] text-[22px] px-6 p-2 text-white">
               Save
             </Button.Root>
-          </div>
+          </Motion.div>
         </Show>
       </div>
     </>
