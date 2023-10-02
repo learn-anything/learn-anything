@@ -101,16 +101,12 @@ Coming from [seed repo](https://github.com/learn-anything/seed).
 > **Warning**
 > Instructions might break, will be reviewed before first LA public release
 
-Before running [Grafbase](https://grafbase.com) server, create file at `grafbase/.env` with this content:
+Assumes you followed instructions for [Setup EdgeDB](setup-edgedb) and have `grafbase/.env` file with:
 
 ```
-EDGEDB_INSTANCE=learn-anything
-EDGEDB_SECRET_KEY=edbt_ey
+LOCAL=true
+EDGEDB_DSN=edgedb://
 ```
-
-`EDGEDB_SECRET_KEY` can be gotten by running `bun db:ui` which will open the EdgeDB UI.
-
-In terminal after running above command you will see url like `http://localhost:10700/ui?authToken=edbt_ey`. `EDGEDB_SECRET_KEY` is the authToken content.
 
 Then run:
 
@@ -121,9 +117,11 @@ npx grafbase@latest dev
 > **Note**
 > Ideally [bunx](https://bun.sh/docs/cli/bunx) is used but `bun api` [fails to run](https://github.com/oven-sh/bun/issues/5552)
 
-Will start Grafbase locally and give you GraphQL access.
+This starts Grafbase locally and give you GraphQL access.
 
-Visit http://localhost:4000/ to see [Grafbase pathfinder](https://grafbase.com/docs/tools/pathfinder)
+Download [Pathfinder](https://pathfinder.dev/) app and open http://localhost:4000. Can also open it in browser. In there, you can run various queries.
+
+In short, [Grafbase config](https://grafbase.com/docs/config) is set in [grafbase/grafbase.config.ts](grafbase/grafbase.config.ts). You specify what [resolvers](https://grafbase.com/docs/edge-gateway/resolvers) are defined, what inputs/outputs they have. Then you create or edit files in [grafbase/resolvers](grafbase/resolvers). Read existing resolvers to make sense of how it works.
 
 ## Run website (Solid)
 
