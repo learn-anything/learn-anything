@@ -166,7 +166,7 @@ module default {
       constraint exclusive;
     };
     # http / https
-    protocol: str;
+    required protocol: str;
     # full url of the link as saved initially by user
     fullUrl: str;
     # temp used to know what is main topic of a link

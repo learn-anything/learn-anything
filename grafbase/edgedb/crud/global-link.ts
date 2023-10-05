@@ -39,39 +39,30 @@ export async function getGlobalLink(id: string) {
   return link
 }
 
+// one off function to update all global links to have the right url
 export async function updateAllGlobalLinksToHaveRightUrl() {
   const links = await e
     .select(e.GlobalLink, (gl) => ({
       filter: e.op("not", e.op("exists", gl.protocol)),
-      // e.op()
-      // filter: e.op(gl.protocol, "="),
-      // filter: e.op(gl.url, "ilike", "http://%"),
       id: true,
-      // title: true,
+      title: true,
       url: true,
       protocol: true,
     }))
     .run(client)
 
-  // return links
-  console.log(links.length, "length")
-  return
-
   for (const link of links) {
+    console.log(links.length, "length")
     const [newUrl, protocol] = splitUrlByProtocol(link.url)
-    console.log(protocol, "protocol")
-    console.log(link.url, "url")
 
     const existingLink = await e
       .select(e.GlobalLink, (gl) => ({
-        filter: e.op(gl.url, "=", newUrl),
+        filter: e.op(gl.url, "=", newUrl!),
       }))
       .run(client)
 
-    // console.log(existingLink, "existing link")
-
-    if (!(existingLink.length > 0) && !protocol) {
-      const res = await e
+    if (!(existingLink.length > 0) && !link.protocol) {
+      const updatedLink = await e
         .update(e.GlobalLink, () => ({
           filter_single: { id: link.id },
           set: {
@@ -81,7 +72,7 @@ export async function updateAllGlobalLinksToHaveRightUrl() {
           },
         }))
         .run(client)
-      console.log(res, "link updated")
+      console.log(updatedLink, "link updated")
     }
   }
   return links
@@ -155,12 +146,25 @@ export async function attachGlobalLinkToGlobalTopic(
   const [urlWithoutProtocol, _] = splitUrlByProtocol(url)
 
   if (urlWithoutProtocol) {
-    await e.update(e.GlobalLink, () => ({
-      filter_single: { url: urlWithoutProtocol },
-      set: {
-        mainTopic: { "+=": globalTopic },
-      },
-    }))
+    // await e.update(e.GlobalLink, (gl) => ({
+    //   // filter_single: { url: urlWithoutProtocol },
+    //   // filter_single: e.op(gl, "=", urlWithoutProtocol),
+    //   set: {
+    //     mainTopic: { "+=": globalTopic },
+    //   },
+    // }))
+    // await e.update(e.GlobalTopic, )
+    // await e.update(e.GlobalLink, (gl) => ({
+    //   filter_single: e.op(gl.url, "=", urlWithoutProtocol),
+    //   set: {
+    //     mainTopic: {
+    //       "+=": e.select(e.GlobalTopic, (gt) => ({
+    //         filter_single: { id: e.uuid(globalTopic.id) },
+    //       }),
+    //     }
+    //   }
+    // })
+    // .run(client);
   }
 }
 

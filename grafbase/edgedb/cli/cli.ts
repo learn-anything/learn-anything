@@ -1,21 +1,25 @@
-import { addGlobalLink } from "../crud/global-link"
+import {
+  addGlobalLink,
+  updateAllGlobalLinksToHaveRightUrl,
+} from "../crud/global-link"
 import { parseMdFile } from "../sync/markdown"
 import { markdownFilePaths } from "../sync/wiki"
 
 async function main() {
-  // await removeDuplicateUrls()
-  // await attachGlobalLinkToGlobalTopic(
-  //   "https://www.mikeash.com/getting_answers.html",
-  //   "asking-questions",
-  // )
-  // const links = await updateAllGlobalLinksToHaveRightUrl()
-  // console.log(links, "links")
+  const links = await updateAllGlobalLinksToHaveRightUrl()
+  console.log(links, "links")
+  console.log("done")
+  return
   // console.log("done")
   // const link = await getGlobalLink()
   // console.log(link)
   // const links = await getAllGlobalLinks()
   // console.log(links, "links")
-  return
+  // await removeDuplicateUrls()
+  // await attachGlobalLinkToGlobalTopic(
+  //   "https://www.mikeash.com/getting_answers.html",
+  //   "asking-questions",
+  // )
   const paths = await markdownFilePaths(process.env.wikiFolderPath!, [])
   // console.log(paths[0])
   const filePath = paths[0]!

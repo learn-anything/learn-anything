@@ -1,6 +1,10 @@
 ## Public website release
 
+- clear `undefinedundefined` from url in global links
+- remove trailing `/` from `url` in global links
 - use `create`, not `add` in edgedb function names
+- use [modular forms](https://twitter.com/FabianHiller/status/1709753163077591512) for all the forms
+  - validate the FormData
 - use edgeql queries raw for queries that I can't do with edgedb-js
   - figure out how to use them in nice way
 - on success of global link edit
@@ -132,6 +136,8 @@
   - likewise if changes are made to solid store state, it gets persisted to sqlite and also to the file system where needed
 - public content
 - move all useful code that existed in previous [Electron version](https://github.com/learn-anything/electron-version)
+- global hotkey to add current link from safari/chrome using applescript (or some other way)
+- search existing bookmarks with raycast
 
 ## Public user wikis
 
@@ -145,6 +151,10 @@
 - make sure hanko auth works well
 - allow searching for topics
 - take inspiration from [tamagui starters](https://github.com/tamagui/tamagui/tree/master/starters)
+- styling options
+  - https://github.com/jpudysz/react-native-unistyles
+- consider using
+  - https://github.com/peterpme/react-native-fast-text
 
 ## Public website improvements
 
