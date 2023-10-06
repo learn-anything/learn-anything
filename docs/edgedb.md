@@ -6,6 +6,21 @@
 - `set -x EDGEDB_SECRET_KEY ..`
 - `set -x EDGEDB_DATABASE ..`
 
+## Restore local EdgeDB from a dump
+
+Assumes you have a file that is result of running [edgedb dump](https://www.edgedb.com/docs/cli/edgedb_dump).
+
+```
+edgedb project init # name it `edgedb`
+edgedb database wipe -I edgedb
+```
+
+Then run:
+
+```
+edgedb restore edgedb-dump.db
+```
+
 ## Reset database
 
 ```
