@@ -6,6 +6,7 @@ import { UserClient } from "@teamhanko/hanko-frontend-sdk"
 import { useNavigate } from "solid-start"
 import { getHankoCookie } from "../../lib/auth"
 import { useMobius, useSignIn } from "../root"
+import { useUser } from "../GlobalContext/user"
 
 // uses https://hanko.io authentication
 // it renders hanko web components: https://github.com/teamhanko/hanko/blob/main/frontend/elements/README.md
@@ -14,6 +15,7 @@ export default function SignInPage() {
   const navigate = useNavigate()
   const signIn = useSignIn()
   const mobius = useMobius()
+  const userStore = useUser()
 
   onMount(async () => {
     // checks if user is already logged in with valid token
@@ -67,6 +69,7 @@ export default function SignInPage() {
           select: true,
         },
       })
+      userStore.setSignedIn(true)
       navigate("/")
     },
     { passive: true },

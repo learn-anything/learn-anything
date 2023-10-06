@@ -219,7 +219,7 @@ export function Search(props: SearchProps): solid.JSX.Element {
               {(topic) => (
                 <div
                   class={clsx(
-                    "w-full h-10 px-3 p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:text-white text-black border-y border-slate-300 dark:border-neutral-800",
+                    "cursor-pointer w-full h-10 px-3 p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:text-white text-black border-y border-slate-300 dark:border-neutral-800",
                     props.state.focused === topic &&
                       "bg-neutral-200 dark:bg-neutral-800 dark:border-opacity-30 drop-shadow-md",
                   )}

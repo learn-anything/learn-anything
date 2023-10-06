@@ -17,7 +17,7 @@ export default function Home() {
   })
 
   const searchPlaceholder = createMemo(() => {
-    let item = getRandomItem(global.state.globalTopicsSearchList)
+    const item = getRandomItem(global.state.globalTopicsSearchList)
     if (item) {
       return item.prettyName
     }

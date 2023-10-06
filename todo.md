@@ -1,5 +1,8 @@
 ## Public website release
 
+- fix ui glitch on hovering over search results in landing page
+  - part of Search component issue
+- modular forms + valibot
 - clear `undefinedundefined` from url in global links
 - remove trailing `/` from `url` in global links
 - use `create`, not `add` in edgedb function names
@@ -153,6 +156,7 @@
 - take inspiration from [tamagui starters](https://github.com/tamagui/tamagui/tree/master/starters)
 - styling options
   - https://github.com/jpudysz/react-native-unistyles
+  - https://x.com/mark__lawlor/status/1710063049271279917
 - consider using
   - https://github.com/peterpme/react-native-fast-text
 

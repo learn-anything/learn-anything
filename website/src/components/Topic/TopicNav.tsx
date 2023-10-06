@@ -21,6 +21,10 @@ export default function TopicNav() {
   const [focusedTopic, setFocusedTopic] = createSignal(0)
   const [focusedTodoTitle, setFocusedTodoTitle] = createSignal("")
 
+  createEffect(() => {
+    console.log(user.user.signedIn, "signed in")
+  })
+
   createShortcut(["ARROWDOWN"], () => {
     if (focusedTopic() === topicSearchResults().length - 1) {
       setFocusedTopic(0)
