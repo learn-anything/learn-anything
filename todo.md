@@ -17,7 +17,7 @@
 - in guide edit, search for exsting links by title, add them
   - on edit, go to separate page to do an edit
   - allow reordering of links
-  - make endpoints work for all!G
+  - make endpoints work for all!GG
 - check for global links, some start with https: still
   - i.e. `"https://www.mikeash.com/pyblog/friday-qa-2015-07-31-tagged-pointer-strings.html"`
   - do select query and check
@@ -192,3 +192,4 @@
 - add multiplayer support using [tinybase/partykit](https://twitter.com/threepointone/status/1704879501232980298)
   - [many great tweets on it](https://twitter.com/jamespearce)
 - allow importing of other people's bookmark presets (minus `private` bookmarks)
+- get https://github.com/thetarnav/solid-devtools working, specifically ability to select an element in browser and go to the component in code

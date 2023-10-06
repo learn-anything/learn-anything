@@ -30,6 +30,7 @@ type PageState = "Global Guide" | "Links" | "Notes" | "Edit Global Guide"
 type LearningStatus = "to learn" | "learning" | "learned" | null
 
 type GlobalTopic = {
+  name: string
   showPage: PageState
   prettyName: string
   globalGuide: GlobalGuide
@@ -39,6 +40,7 @@ type GlobalTopic = {
 // all state needed to render global topic found in learn-anything.xyz/<topic>
 export default function createGlobalTopic(mobius: MobiusType) {
   const [globalTopic, setGlobalTopic] = createStore<GlobalTopic>({
+    name: "",
     prettyName: "",
     globalGuide: {
       summary: "",

@@ -4,9 +4,11 @@ import GuideSection from "./GuideSection"
 import GuideSummary from "./GuideSummary"
 import Icon from "../Icon"
 import { Motion } from "@motionone/solid"
+import { useNavigate } from "solid-start"
 
 export default function GlobalGuide() {
   const topic = useGlobalTopic()
+  const navigate = useNavigate()
 
   return (
     <>
@@ -17,6 +19,12 @@ export default function GlobalGuide() {
         <div class="text-[22px]">Guide</div>
         <div class="flex h-full gap-4">
           <Motion.div
+            onClick={() => {
+              // TODO: probably unsafe, should be a better way to do this
+              const topicName = window.location.href.split("/")[3]
+              console.log(topicName)
+              navigate(`/${topicName}/edit`)
+            }}
             transition={{ duration: 1, easing: "ease-out" }}
             animate={{
               opacity: [0, 1, 1],
@@ -26,7 +34,7 @@ export default function GlobalGuide() {
                 "translateX(0px)",
               ],
             }}
-            class="bg-blue-600 flex items-center justify-center bg-opacity-40 text-blue-600 hover:text-white hover:bg-blue-600 transition-all px-3 font-light rounded-[4px] text-[14px] p-1"
+            class="bg-blue-600 flex items-center justify-center bg-opacity-40 text-blue-600 hover:text-white hover:bg-blue-600 transition-all px-3 font-light rounded-[4px] text-[14px] p-1 cursor-pointer"
           >
             Improve Guide
           </Motion.div>
@@ -40,7 +48,7 @@ export default function GlobalGuide() {
                 "translateX(0px)",
               ],
             }}
-            class="bg-gray-100 dark:bg-neutral-950 hover:bg-gray-200 transition-all flex items-center justify-center rounded-[4px] h-[29px] w-[29px] text-[14px]"
+            class="bg-gray-100 dark:bg-neutral-950 hover:bg-gray-200 transition-all flex items-center justify-center rounded-[4px] h-[29px] w-[29px] text-[14px] cursor-pointer"
           >
             <Icon name="Options" />
           </Motion.div>

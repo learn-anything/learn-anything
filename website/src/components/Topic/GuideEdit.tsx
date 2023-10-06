@@ -6,11 +6,13 @@ import { useGlobalState } from "../../GlobalContext/global"
 import { Search, createSearchState } from "../Search"
 import clsx from "clsx"
 import { Motion } from "@motionone/solid"
+import { useNavigate } from "solid-start"
 
 export default function GuideSummaryEdit() {
   const editedGuide = useEditGuide()
   const global = useGlobalState()
   const mobius = useMobius()
+  const navigate = useNavigate()
 
   // const [editedGuideForm, setEditedGuideForm] = createStore<Guide>({
   //   summary: "",
@@ -109,7 +111,18 @@ export default function GuideSummaryEdit() {
         <div class="flex justify-between items-center ">
           <div
             class="border-[#696969] dark:border-gray-200 dark:hover:bg-gray-200 dark:hover:text-black border p-[8px] px-[10px] rounded-[4px] text-[#696969] dark:text-white font-light hover:bg-gray-300 hover:bg-opacity-50 cursor-pointer transition-all"
-            onClick={() => {}}
+            onClick={() => {
+              // TODO: show prompt 'are you sure', in case there is something in form data
+
+              // TODO: do it in better, more safe way
+              let url = window.location.href
+              const parts = url.split("/")
+              if (parts.length >= 4) {
+                url = "/" + parts[3]
+              }
+              console.log(url)
+              navigate(url)
+            }}
           >
             Cancel
           </div>
