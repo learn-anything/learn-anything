@@ -3,6 +3,7 @@ import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import GuideSection from "./GuideSection"
 import GuideSummary from "./GuideSummary"
 import Icon from "../Icon"
+// @ts-ignore
 import { Motion } from "@motionone/solid"
 import { useNavigate } from "solid-start"
 

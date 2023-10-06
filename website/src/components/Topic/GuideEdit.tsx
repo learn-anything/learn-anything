@@ -14,6 +14,8 @@ export default function GuideSummaryEdit() {
   const mobius = useMobius()
   const navigate = useNavigate()
 
+  const [currentLinkId, setCurrentLinkId] = createSignal()
+
   // const [editedGuideForm, setEditedGuideForm] = createStore<Guide>({
   //   summary: "",
   //   sections: []
@@ -27,14 +29,12 @@ export default function GuideSummaryEdit() {
   // };
 
   const searchResults = createMemo(() => {
-    return global.state.globalTopicsSearchList.map((topic) => {
-      // global.searchGlobalLinksByTitle(
-      //   e.target.value,
-      // )
+    console.log(global.state.globalLinks, "global links!")
+    return global.state.globalLinks.map((link) => {
       return {
-        name: topic.prettyName,
+        name: link.title,
         action: () => {
-          console.log("action")
+          console.log(link.url, "url")
         },
       }
     })
@@ -238,10 +238,10 @@ export default function GuideSummaryEdit() {
                           <div class="w-full  h-full flex justify-between items-center">
                             <div class="w-fit gap-4 flex flex-col py-4">
                               <Search
-                                placeholder={"Search title"}
+                                placeholder={"Search URL title"}
                                 state={search_state}
                               />
-                              <div
+                              {/* <div
                                 class={clsx(
                                   "relative flex flex-col text-[#3B5CCC]",
                                 )}
@@ -261,8 +261,8 @@ export default function GuideSummaryEdit() {
                                   }}
                                   value={link.title}
                                 />
-                              </div>
-                              <div class="flex w-full">
+                              </div> */}
+                              {/* <div class="flex w-full">
                                 <Show when={link?.year}>
                                   <div class="font-light text-[12px] text-[#696969] border-r border-[#CCCCCC] px-2">
                                     {link?.year}
@@ -282,7 +282,7 @@ export default function GuideSummaryEdit() {
                                     value={link.title}
                                   />
                                 </div>
-                              </div>
+                              </div> */}
                             </div>
                             <div class="flex gap-5 dark:text-white flex-col items-end text-[14px] opacity-50">
                               <div

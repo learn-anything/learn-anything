@@ -8,13 +8,14 @@ import {
 } from "tinybase/with-schemas"
 import { createIndexedDbPersister } from "tinybase/persisters/persister-indexed-db/with-schemas"
 import { create, search, insert } from "@orama/orama"
+import { Links } from "solid-start/root"
 
 type GlobalTopicSearchItem = {
   name: string
   prettyName: string
 }
 
-type Link = {
+type GlobalLink = {
   id: string
   url: string
   title: string
@@ -22,7 +23,7 @@ type Link = {
 
 type GlobalState = {
   globalTopicsSearchList: GlobalTopicSearchItem[]
-  globalLinks: []
+  globalLinks: GlobalLink[]
   globalLinkSearchDb: any
 }
 
@@ -126,11 +127,15 @@ export function createGlobalState(mobius: MobiusType) {
 
     setGlobalLinkSearchDb(db)
 
-    const searchResult = await search(globalLinkSearchDb(), {
+    const allGlobalLinksResult = await search(globalLinkSearchDb(), {
       term: "",
       properties: ["title"],
     })
-    console.log(searchResult, "res")
+    const links = allGlobalLinksResult.hits.map((hit) => {
+      return hit.document
+    })
+    console.log(links, "links")
+    setState({ globalLinks: links })
   })
 
   return {
