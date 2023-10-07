@@ -169,9 +169,6 @@ module default {
     required protocol: str;
     # full url of the link as saved initially by user
     fullUrl: str;
-    # temp used to know what is main topic of a link
-    # TODO: will be reaplced with `mainTopic` once it's implemented well
-    mainTopicAsString: str;
     # true = link was verified, its valid URL, good metadata was added etc.
     required verified: bool;
     # true = link is available for all to see/search. false = link is private

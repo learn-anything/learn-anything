@@ -1,6 +1,6 @@
+import { removeTrailingSlash, splitUrlByProtocol } from "../../lib/util"
 import { client } from "../client"
 import e from "../dbschema/edgeql-js"
-import { parseURL } from "ufo"
 
 // export async function checkForGlobalLink(url: string) {
 //   // const link = await e.select(e.GlobalLink, () => ({
@@ -14,10 +14,35 @@ export async function getAllGlobalLinks() {
       id: true,
       title: true,
       url: true,
-      limit: 100,
+      // limit: 100,
     }))
     .run(client)
   return links
+}
+
+export async function getAllGlobalLinksForTopic(topicName: string) {
+  const topic = await e
+    .select(e.GlobalTopic, () => ({
+      filter_single: { name: topicName },
+      id: true,
+    }))
+    .run(client)
+
+  if (topic) {
+    const links = await e
+      .select(e.GlobalLink, (gl) => ({
+        filter: e.op(gl.mainTopic.id, "=", e.uuid(topic.id)),
+        id: true,
+        title: true,
+        url: true,
+        protocol: true,
+        description: true,
+        year: true,
+      }))
+      .run(client)
+    return links
+  }
+  throw new Error("topic not found")
 }
 
 export async function getGlobalLink(id: string) {
@@ -74,6 +99,43 @@ export async function updateAllGlobalLinksToHaveRightUrl() {
         .run(client)
       console.log(updatedLink, "link updated")
     }
+  }
+  return links
+}
+
+export async function removeTrailingSlashFromGlobalLinks() {
+  const links = await e
+    .select(e.GlobalLink, (gl) => ({
+      id: true,
+      url: true,
+    }))
+    .run(client)
+
+  for (const link of links) {
+    let url = link.url
+    url = url.endsWith("/") ? url.slice(0, -1) : url
+
+    const existingUrl = await e
+      .select(e.GlobalLink, (gl) => ({
+        filter: e.op(gl.url, "=", url),
+      }))
+      .run(client)
+
+    if (existingUrl) {
+      // console.log(link.url, "old url")
+      // console.log(url, "new url")
+      // console.log(existingUrl, "existing url")
+      continue
+    }
+
+    await e
+      .update(e.GlobalLink, (gl) => ({
+        filter_single: { id: link.id },
+        set: {
+          url: url,
+        },
+      }))
+      .run(client)
   }
   return links
 }
@@ -173,11 +235,10 @@ export async function addGlobalLink(
   title: string,
   year?: string,
   description?: string,
+  mainTopic?: string,
 ) {
   const [urlWithoutProtocol, protocol] = splitUrlByProtocol(url)
-  // console.log(urlWithoutProtocol, "url without")
-  // console.log(protocol, "prot")
-  if (urlWithoutProtocol) {
+  if (urlWithoutProtocol && protocol) {
     await e
       .insert(e.GlobalLink, {
         url: urlWithoutProtocol,
@@ -187,7 +248,20 @@ export async function addGlobalLink(
         public: true,
         year: year,
         description: description,
+        mainTopic: e.select(e.GlobalTopic, () => ({
+          filter_single: { name: mainTopic! },
+        })),
       })
+      .unlessConflict((gl) => ({
+        on: gl.url,
+        else: e.update(gl, () => ({
+          set: {
+            mainTopic: e.select(e.GlobalTopic, () => ({
+              filter_single: { name: mainTopic! },
+            })),
+          },
+        })),
+      }))
       .run(client)
   }
 }
@@ -224,26 +298,4 @@ export async function removeDuplicateUrls() {
   //     .run(client)
   //   console.log(res, "res")
   // })
-}
-
-function removeTrailingSlash(str: string) {
-  if (str.endsWith("/")) {
-    return str.slice(0, -1)
-  }
-  return str
-}
-
-function splitUrlByProtocol(url: string) {
-  const parsedUrl = parseURL(url)
-  let host = parsedUrl.host
-  if (host?.includes("www")) {
-    host = host?.replace("www.", "")
-  }
-  let urlWithoutProtocol = host + parsedUrl.pathname + parsedUrl.search
-
-  let protocol = parsedUrl.protocol
-  if (protocol) {
-    protocol = protocol.replace(":", "")
-  }
-  return [urlWithoutProtocol, protocol]
 }

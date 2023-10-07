@@ -88,6 +88,25 @@ export async function markdownFilePaths(
   return filesToProcess
 }
 
+export async function findFilePath(
+  directoryPath: string,
+  fileName: string,
+): Promise<string | null> {
+  const entries = fs.readdirSync(directoryPath, { withFileTypes: true })
+
+  for (let entry of entries) {
+    const fullPath = path.join(directoryPath, entry.name)
+
+    if (entry.isDirectory()) {
+      const result = await findFilePath(fullPath, fileName)
+      if (result) return result
+    } else if (entry.isFile() && entry.name === fileName) {
+      return fullPath
+    }
+  }
+  return null
+}
+
 // Parse markdown file content into a Topic structure
 // assumed structure of most files is:
 // optional front matter

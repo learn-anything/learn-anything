@@ -80,9 +80,31 @@ g.query("getGlobalLink", {
   resolver: "getGlobalLink",
 })
 
+const GlobalLink = g.type("GlobalLink", {
+  id: g.string(),
+  title: g.string(),
+  url: g.string(),
+  year: g.string().optional(),
+})
+
+const globalGuideSection = g.type("globalGuideSection", {
+  title: g.string(),
+  links: g.ref(GlobalLink).list(),
+})
+
+const latestGlobalGuide = g.type("latestGlobalGuide", {
+  sections: g.ref(globalGuideSection).list(),
+})
+
+const outputOfGetGlobalTopic = g.type("outputOfGetGlobalTopic", {
+  prettyName: g.string(),
+  topicSummary: g.string(),
+  topicPath: g.string().optional(),
+  latestGlobalGuide: g.ref(latestGlobalGuide).optional(),
+})
 g.query("getGlobalTopic", {
   args: { topicName: g.string() },
-  returns: g.ref(globalTopic),
+  returns: g.ref(outputOfGetGlobalTopic),
   resolver: "getGlobalTopic",
 })
 

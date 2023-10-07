@@ -51,6 +51,17 @@ export function createGlobalState(mobius: MobiusType) {
     }
   })
 
+  // onMount(async () => {
+  //   const links = await mobius.query({
+  //     getGlobalLinks: {
+  //       id: true,
+  //       url: true,
+  //       title: true,
+  //     },
+  //   })
+  //   console.log(links, "links!")
+  // })
+
   onMount(async () => {
     const tableSchema = {
       globalLinks: {
@@ -70,6 +81,7 @@ export function createGlobalState(mobius: MobiusType) {
     const globalLinks = store.getTable("globalLinks")
     // check if global links are empty in store
     if (!store.hasTable("globalLinks")) {
+      console.log(globalLinks, "links")
       const links = await mobius.query({
         getGlobalLinks: {
           id: true,
@@ -77,6 +89,8 @@ export function createGlobalState(mobius: MobiusType) {
           title: true,
         },
       })
+      console.log(links, "links")
+      return
 
       if (links) {
         // @ts-ignore
@@ -135,6 +149,7 @@ export function createGlobalState(mobius: MobiusType) {
       return hit.document
     })
     console.log(links, "links")
+    console.log(links.length, "links length")
     setState({ globalLinks: links })
   })
 

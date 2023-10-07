@@ -84,16 +84,34 @@ export async function publicGetGlobalTopic(topicName: string) {
 }
 
 // for use in global topic page (i.e. learn-anything.xyz/physics) for authenticated users
+// TODO: if user-id is passed, also get learning status of topic for user
 export async function getGlobalTopic(topicName: string) {
-  const globalTopic = await e
-    .select(e.GlobalTopic, (globalTopic) => ({
+  const topic = await e
+    .select(e.GlobalTopic, () => ({
+      filter_single: { name: topicName },
+      // id: true,
       prettyName: true,
       topicSummary: true,
-      // TODO: return learning status of topic for user
-      filter: e.op(globalTopic.name, "=", topicName),
+      topicPath: true,
+      latestGlobalGuide: {
+        sections: {
+          title: true,
+          links: {
+            id: true,
+            title: true,
+            url: true,
+            year: true,
+          },
+          order: true,
+        },
+      },
     }))
     .run(client)
-  return globalTopic[0]
+
+  if (topic) {
+    return topic
+  }
+  throw new Error("topic not found")
 }
 
 export async function addSectionToGlobalTopic(

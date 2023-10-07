@@ -17,6 +17,7 @@
   "dependencies": {
     "@kobalte/core": "^0.11.0",
     "@kobalte/tailwindcss": "^0.8.0",
+    "@modular-forms/solid": "^0.20.0",
     "@motionone/solid": "^10.16.4",
     "@nothing-but/force-graph": "^0.2.4",
     "@nothing-but/utils": "^0.10.1",

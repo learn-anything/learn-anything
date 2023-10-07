@@ -1,10 +1,26 @@
 ## Public website release
 
+- clean up data model, don't think there is need for `relatedLinks` and `relatedNotes`
+  - global link and global note will have a reference to the topic already so can get this info this way
+- return all the global links as part of query for global topic
+  - use the links returned in search for the guide edit
+- guide edit
+  - do it topic by topic
+    - parse topic links, make each global link have main topic as the topic in wiki
+      - try do a link to global topic (if fails do as string), then fix it later as real link
+  - have separate search for global links that have the topic as main topic
+  - and have another search that searches through all global links
+  - and have a way to add a new global link too by pressing `Add link` button
+    - will go to `/links/new` page
+  - when pressing `return` on one of the global links in search, show all the link details
+  - allow rearranging of links, use https://solid-dnd.com
+    - also allow rearranging of sections
+  - make Search work with orama, no fuse.js
+  - lock guide edit to admins of topic only
 - fix ui glitch on hovering over search results in landing page
   - part of Search component issue
 - modular forms + valibot
 - clear `undefinedundefined` from url in global links
-- remove trailing `/` from `url` in global links
 - use `create`, not `add` in edgedb function names
 - use [modular forms](https://twitter.com/FabianHiller/status/1709753163077591512) for all the forms
   - validate the FormData

@@ -4,7 +4,7 @@ import { signedIn } from "../../../lib/auth"
 import { useMobius } from "../../root"
 import { useGlobalState } from "../../GlobalContext/global"
 import { Search, createSearchState } from "../Search"
-import clsx from "clsx"
+// @ts-ignore
 import { Motion } from "@motionone/solid"
 import { useNavigate } from "solid-start"
 
@@ -28,19 +28,21 @@ export default function GuideSummaryEdit() {
   //   });
   // };
 
-  const searchResults = createMemo(() => {
-    console.log(global.state.globalLinks, "global links!")
-    return global.state.globalLinks.map((link) => {
-      return {
-        name: link.title,
-        action: () => {
-          console.log(link.url, "url")
-        },
-      }
-    })
-  })
+  // const currentTopicSearchResults = createMemo(async () => {
+  //   const links = await mobius.query
+  //   return global.state.globalLinks.map((link) => {
+  //     return {
+  //       name: link.title,
+  //       action: () => {
+  //         console.log(link.url, "url")
+  //       },
+  //     }
+  //   })
+  // })
 
-  const search_state = createSearchState(() => searchResults())
+  // const currentTopicSearchState = createSearchState(() =>
+  //   currentTopicSearchResults(),
+  // )
 
   onMount(async () => {
     if (signedIn()) {
@@ -237,8 +239,14 @@ export default function GuideSummaryEdit() {
                         >
                           <div class="w-full  h-full flex justify-between items-center">
                             <div class="w-fit gap-4 flex flex-col py-4">
+                              {/* <Search
+                                placeholder={"Search URL title from all the global links"}
+                                state={search_state}
+                              /> */}
                               <Search
-                                placeholder={"Search URL title"}
+                                placeholder={
+                                  "Search URL title of global links for the topic"
+                                }
                                 state={search_state}
                               />
                               {/* <div

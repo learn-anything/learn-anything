@@ -1,4 +1,5 @@
 // @refresh reload
+// @ts-ignore
 import { MatchFilters } from "@solidjs/router/dist/types"
 import Mobius from "graphql-mobius"
 import { Suspense, createContext, createSignal, useContext } from "solid-js"
@@ -57,9 +58,19 @@ type Query {
   publicGetGlobalTopic(topicName: String!): publicGlobalTopic!
   getGlobalLink(linkId: String!): outputOfGetGlobalLink!
   getGlobalTopic(topicName: String!): globalTopic!
+  getGlobalLinksForTopic(topic: String!): [getGlobalLinksForTopicOutput!]!
   getGlobalLinks: [outputOfGetGlobalLinks!]!
   checkForGlobalLink(linkUrl: String!): outputOfCheckForGlobalLink!
   stripe(plan: String!): String!
+}
+
+type getGlobalLinksForTopicOutput {
+  id: String!
+  title: String!
+  url: String!
+  protocol: String!
+  description: String
+  year: String
 }
 
 type globalTopic {
@@ -97,14 +108,14 @@ type outputOfCheckForGlobalLink {
 type outputOfGetGlobalLink {
   title: String!
   url: String!
-  fullUrl: String!
-  mainTopicAsString: String!
-  protocol: Boolean!
   verified: Boolean!
   public: Boolean!
-  description: String!
-  urlTitle: String!
-  year: String!
+  protocol: String
+  fullUrl: String
+  mainTopicAsString: String
+  description: String
+  urlTitle: String
+  year: String
 }
 
 type outputOfGetGlobalLinks {
