@@ -1,13 +1,8 @@
-import { Topic } from "../cli/cli"
 import { client } from "../client"
 import e from "../dbschema/edgeql-js"
 
 // Add a topic to a wiki of a user
-export async function addTopic(
-  topic: Topic,
-  wikiId: string,
-  topicPath: string,
-) {
+export async function addTopic(topic: any, wikiId: string, topicPath: string) {
   const query = e.params(
     {
       wikiId: e.uuid,
@@ -27,7 +22,7 @@ export async function addTopic(
           wiki: e.assert_exists(
             e.assert_single(
               e.select(e.Wiki, (wiki) => ({
-                filter: e.op(wiki.id, "=", e.uuid(wikiId)),
+                filter: e.op(wiki.id, "=", e.cast(e.uuid, wikiId)),
               })),
             ),
           ),

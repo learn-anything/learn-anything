@@ -1,5 +1,9 @@
 ## Public website release
 
+- use publicGetGlobalTopic query
+  - load everything into `global-topic` store
+  - change `getGlobalTopic` query, probably remove it and replace it with just a call to get all user info details about what topics user is learning etc. same for links etc.
+    - as separate query
 - clean up data model, don't think there is need for `relatedLinks` and `relatedNotes`
   - global link and global note will have a reference to the topic already so can get this info this way
 - return all the global links as part of query for global topic

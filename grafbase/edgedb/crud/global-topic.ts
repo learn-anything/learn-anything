@@ -69,27 +69,12 @@ export async function publicGetGlobalTopics() {
   return globalTopics
 }
 
-// for use in global topic page (i.e. learn-anything.xyz/physics) for non authenticated users
-export async function publicGetGlobalTopic(topicName: string) {
-  const globalTopic = await e
-    .assert_single(
-      e.select(e.GlobalTopic, (globalTopic) => ({
-        prettyName: true,
-        topicSummary: true,
-        filter: e.op(globalTopic.name, "=", topicName),
-      })),
-    )
-    .run(client)
-  return globalTopic
-}
-
-// for use in global topic page (i.e. learn-anything.xyz/physics) for authenticated users
-// TODO: if user-id is passed, also get learning status of topic for user
+// get all info needed to render global topic page (i.e. learn-anything.xyz/physics)
 export async function getGlobalTopic(topicName: string) {
   const topic = await e
     .select(e.GlobalTopic, () => ({
       filter_single: { name: topicName },
-      // id: true,
+      id: true,
       prettyName: true,
       topicSummary: true,
       topicPath: true,
@@ -101,6 +86,7 @@ export async function getGlobalTopic(topicName: string) {
             title: true,
             url: true,
             year: true,
+            protocol: true,
           },
           order: true,
         },
@@ -109,7 +95,19 @@ export async function getGlobalTopic(topicName: string) {
     .run(client)
 
   if (topic) {
-    return topic
+    const links = await e
+      .select(e.GlobalLink, (gl) => ({
+        filter: e.op(gl.mainTopic.id, "=", e.cast(e.uuid, topic.id)),
+        id: true,
+        title: true,
+        url: true,
+        year: true,
+        protocol: true,
+      }))
+      .run(client)
+
+    const combined = { ...topic, links }
+    return combined
   }
   throw new Error("topic not found")
 }

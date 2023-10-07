@@ -150,7 +150,9 @@ export default function TopicNav() {
                   style={{
                     color: "black",
                   }}
-                  href={`/@${user.user.username}`}
+                  href={`${
+                    user.user.username ? `/@${user.user.username}` : "/profile"
+                  }`}
                 >
                   <Icon name="UserProfile" />
                 </A>

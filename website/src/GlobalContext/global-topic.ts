@@ -1,4 +1,4 @@
-import { createContext, useContext } from "solid-js"
+import { createContext, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 import { MobiusType } from "../root"
 
@@ -48,6 +48,12 @@ export default function createGlobalTopic(mobius: MobiusType) {
     },
     showPage: "Global Guide",
     userLearningStatus: null,
+  })
+
+  onMount(async () => {
+    const topic = await mobius.query({
+      // getglobal
+    })
   })
 
   return {

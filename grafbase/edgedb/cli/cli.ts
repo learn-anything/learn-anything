@@ -1,9 +1,4 @@
-import { splitUrlByProtocol } from "../../lib/util"
-import {
-  addGlobalLink,
-  getAllGlobalLinksForTopic,
-  removeTrailingSlashFromGlobalLinks,
-} from "../crud/global-link"
+import { addGlobalLink } from "../crud/global-link"
 import { getGlobalTopic } from "../crud/global-topic"
 import {
   Topic,
@@ -18,8 +13,9 @@ async function main() {
   // console.log("done")
   // const links = await getAllGlobalLinksForTopic("3d-printing")
   // console.log(links, "links")
-  const topic = await getGlobalTopic("3d-printing")
-  console.log(topic, "topic")
+  const globalTopic = await getGlobalTopic("3d-printing")
+  console.log(globalTopic.links, "links")
+  console.log(globalTopic.prettyName, "pretty name")
 }
 
 await main()

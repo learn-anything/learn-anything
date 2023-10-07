@@ -46,6 +46,13 @@ directive @live on QUERY
 """Indicates that an input object is a oneOf input object"""
 directive @oneOf on INPUT_OBJECT
 
+type GlobalLink {
+  id: String!
+  title: String!
+  url: String!
+  year: String
+}
+
 type Mutation {
   createUser(email: String!): String!
   updateTopicLearningStatus(learningStatus: learningStatus!, topic: String!): String!
@@ -57,30 +64,24 @@ type Query {
   publicGetGlobalTopics: [outputOfPublicGetGlobalTopics!]!
   publicGetGlobalTopic(topicName: String!): publicGlobalTopic!
   getGlobalLink(linkId: String!): outputOfGetGlobalLink!
-  getGlobalTopic(topicName: String!): globalTopic!
-  getGlobalLinksForTopic(topic: String!): [getGlobalLinksForTopicOutput!]!
+  getGlobalTopic(topicName: String!): outputOfGetGlobalTopic!
   getGlobalLinks: [outputOfGetGlobalLinks!]!
   checkForGlobalLink(linkUrl: String!): outputOfCheckForGlobalLink!
   stripe(plan: String!): String!
 }
 
-type getGlobalLinksForTopicOutput {
-  id: String!
+type globalGuideSection {
   title: String!
-  url: String!
-  protocol: String!
-  description: String
-  year: String
-}
-
-type globalTopic {
-  prettyName: String!
-  topicSummary: String!
+  links: [GlobalLink!]!
 }
 
 input inputToUpdateGlobalTopic {
   topicSummary: String!
   sections: [section!]!
+}
+
+type latestGlobalGuide {
+  sections: [globalGuideSection!]!
 }
 
 enum learningStatus {
@@ -122,6 +123,13 @@ type outputOfGetGlobalLinks {
   id: String!
   title: String!
   url: String!
+}
+
+type outputOfGetGlobalTopic {
+  prettyName: String!
+  topicSummary: String!
+  topicPath: String
+  latestGlobalGuide: latestGlobalGuide
 }
 
 type outputOfPublicGetGlobalTopics {

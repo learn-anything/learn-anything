@@ -31,7 +31,7 @@ export async function getAllGlobalLinksForTopic(topicName: string) {
   if (topic) {
     const links = await e
       .select(e.GlobalLink, (gl) => ({
-        filter: e.op(gl.mainTopic.id, "=", e.uuid(topic.id)),
+        filter: e.op(gl.mainTopic.id, "=", e.cast(e.uuid, topic.id)),
         id: true,
         title: true,
         url: true,
