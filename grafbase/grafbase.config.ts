@@ -59,6 +59,7 @@ const globalGuideSection = g.type("globalGuideSection", {
   links: g.ref(GlobalLink).list(),
 })
 const latestGlobalGuide = g.type("latestGlobalGuide", {
+  summary: g.string(),
   sections: g.ref(globalGuideSection).list(),
 })
 const publicGetGlobalTopicOutput = g.type("publicGetGlobalTopicOutput", {
@@ -66,6 +67,7 @@ const publicGetGlobalTopicOutput = g.type("publicGetGlobalTopicOutput", {
   topicSummary: g.string(),
   topicPath: g.string().optional(),
   latestGlobalGuide: g.ref(latestGlobalGuide).optional(),
+  links: g.ref(GlobalLink).list(),
 })
 g.query("publicGetGlobalTopic", {
   args: { topicName: g.string() },

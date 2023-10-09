@@ -79,15 +79,15 @@ export function createGlobalState(mobius: MobiusType) {
     const globalLinks = store.getTable("globalLinks")
     // check if global links are empty in store
     if (!store.hasTable("globalLinks")) {
-      console.log(globalLinks, "links")
-      const links = await mobius.query({
-        getGlobalLinks: {
-          id: true,
-          url: true,
-          title: true,
-        },
-      })
-      console.log(links, "links")
+      // console.log(globalLinks, "links")
+      // const links = await mobius.query({
+      //   getGlobalLinks: {
+      //     id: true,
+      //     url: true,
+      //     title: true,
+      //   },
+      // })
+      // console.log(links, "links")
       return
 
       if (links) {

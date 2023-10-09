@@ -55,7 +55,6 @@ type GlobalLink {
 
 type Mutation {
   createUser(email: String!): String!
-  uploadProfilePhoto(image: String!): String!
 }
 
 type Query {
@@ -73,6 +72,7 @@ type globalGuideSection {
 }
 
 type latestGlobalGuide {
+  summary: String!
   sections: [globalGuideSection!]!
 }
 
@@ -107,6 +107,7 @@ type publicGetGlobalTopicOutput {
   topicSummary: String!
   topicPath: String
   latestGlobalGuide: latestGlobalGuide
+  links: [GlobalLink!]!
 }
 
 type publicGetGlobalTopicsOutput {

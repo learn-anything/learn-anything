@@ -1,41 +1,42 @@
 import { createContext, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 import { MobiusType } from "../root"
-import { useLocation, useNavigate } from "solid-start"
+import { useLocation } from "solid-start"
 
-export type Link = {
+// type PageState = "Global Guide" | "Links" | "Notes" | "Edit Global Guide"
+// type LearningStatus = "to learn" | "learning" | "learned" | null
+// export type Link = {
+//   title: string
+//   url: string
+//   author?: string
+//   year?: number
+//   completed?: boolean
+//   addedByUser?: boolean
+// }
+
+type GlobalLink = {
+  id: string
   title: string
   url: string
-  author?: string
-  year?: number
-  completed?: boolean
-  addedByUser?: boolean
+  year?: string
 }
-
 export type Section = {
-  order: number
   title: string
-  ordered: boolean
-  links: Link[]
-  summary?: string
+  links: GlobalLink[]
+  // order: number
+  // ordered: boolean
+  // summary?: string
 }
-
-// TODO: add sections, do query to edgedb
-type GlobalGuide = {
+type LatestGlobalGuide = {
   summary: string
   sections: Section[]
 }
-
-type PageState = "Global Guide" | "Links" | "Notes" | "Edit Global Guide"
-
-type LearningStatus = "to learn" | "learning" | "learned" | null
-
 type GlobalTopic = {
-  name: string
-  showPage: PageState
   prettyName: string
-  globalGuide: GlobalGuide
-  userLearningStatus: LearningStatus
+  topicSummary?: string
+  topicPath?: string
+  latestGlobalGuide?: LatestGlobalGuide
+  links?: GlobalLink[]
 }
 
 function extractTopicFromPath(inputStr: string) {
@@ -48,17 +49,17 @@ function extractTopicFromPath(inputStr: string) {
 // all state needed to render global topic found in learn-anything.xyz/<topic>
 export default function createGlobalTopic(mobius: MobiusType) {
   const [globalTopic, setGlobalTopic] = createStore<GlobalTopic>({
-    name: "",
     prettyName: "",
-    globalGuide: {
+    topicSummary: "",
+    topicPath: "",
+    latestGlobalGuide: {
       summary: "",
       sections: [],
     },
-    showPage: "Global Guide",
-    userLearningStatus: null,
   })
 
-  const location = useLocation()
+  const [globalTopicLinksSearchDb, setGlobalTopicLinksSearchDb] =
+    createSignal<any>(undefined)
 
   onMount(async () => {
     const location = useLocation()
@@ -73,6 +74,12 @@ export default function createGlobalTopic(mobius: MobiusType) {
               prettyName: true,
               topicSummary: true,
               topicPath: true,
+              links: {
+                id: true,
+                title: true,
+                url: true,
+                year: true,
+              },
               latestGlobalGuide: {
                 sections: {
                   title: true,
@@ -87,7 +94,17 @@ export default function createGlobalTopic(mobius: MobiusType) {
             },
           },
         })
-        console.log(topic, "topic")
+        // @ts-ignore
+        const topicData = topic.data.publicGetGlobalTopic
+        console.log(topicData.links, "links!")
+        setGlobalTopic({
+          prettyName: topicData.prettyName,
+          topicSummary: topicData.topicSummary,
+          topicPath: topicData.topicPath,
+          latestGlobalGuide: topicData.latestGlobalGuide,
+          links: topicData.links,
+        })
+        console.log(globalTopic, "global topic")
       }
     }
   })
@@ -97,14 +114,14 @@ export default function createGlobalTopic(mobius: MobiusType) {
     set: (state: GlobalTopic) => {
       setGlobalTopic(state)
     },
-    setShowPage: (state: PageState) => {
-      setGlobalTopic({ showPage: state })
-    },
+    // setShowPage: (state: PageState) => {
+    //   setGlobalTopic({ showPage: state })
+    // },
     // TODO: use solid effect that listens on 'learning status' instead of below
-    setUserLearningStatus: async (state: LearningStatus) => {
-      setGlobalTopic({ userLearningStatus: state })
-      // await mobius.mutate()
-    },
+    // setUserLearningStatus: async (state: LearningStatus) => {
+    //   setGlobalTopic({ userLearningStatus: state })
+    //   // await mobius.mutate()
+    // },
   }
 }
 

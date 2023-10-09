@@ -44,32 +44,32 @@ export default function GuideSummaryEdit() {
   //   currentTopicSearchResults(),
   // )
 
-  onMount(async () => {
-    if (signedIn()) {
-      const globalTopic = await mobius.query({
-        getGlobalTopic: {
-          where: {
-            // TODO: get topic name from route
-            topicName: "3d-printing",
-          },
-          select: {
-            prettyName: true,
-            topicSummary: true,
-          },
-        },
-      })
-      if (globalTopic !== null) {
-        // @ts-ignore
-        editedGuide.set(globalTopic.data.getGlobalTopic)
-      }
-    } else {
-      // TODO: check that user is signed in admin of topic
-      // in future allow all users to edit guides, for now just admins
-      // if not, navigate back to <topic>
-      // await mobius.
-      // if (!admin) { navigate() }
-    }
-  })
+  // onMount(async () => {
+  //   if (signedIn()) {
+  //     const globalTopic = await mobius.query({
+  //       getGlobalTopic: {
+  //         where: {
+  //           // TODO: get topic name from route
+  //           topicName: "3d-printing",
+  //         },
+  //         select: {
+  //           prettyName: true,
+  //           topicSummary: true,
+  //         },
+  //       },
+  //     })
+  //     if (globalTopic !== null) {
+  //       // @ts-ignore
+  //       editedGuide.set(globalTopic.data.getGlobalTopic)
+  //     }
+  //   } else {
+  //     // TODO: check that user is signed in admin of topic
+  //     // in future allow all users to edit guides, for now just admins
+  //     // if not, navigate back to <topic>
+  //     // await mobius.
+  //     // if (!admin) { navigate() }
+  //   }
+  //})
 
   // createEffect(() => {
   //   const editableDiv = document.getElementById("GuideSummary")!
@@ -199,13 +199,11 @@ export default function GuideSummaryEdit() {
                 <Show
                   when={section.title.length > 0}
                   fallback={
-                    <div
+                    <input
                       class="text-[#696969] font-light overflow-hidden text-ellipsis outline-none"
                       id={`${section.title}${index()}`}
-                      onClick={() => {}}
-                    >
-                      Add section title
-                    </div>
+                      placeholder="Add section title"
+                    />
                   }
                 >
                   <div

@@ -1,14 +1,12 @@
 ## Public website release
 
-- use publicGetGlobalTopic query
-  - load everything into `global-topic` store
-  - change `getGlobalTopic` query, probably remove it and replace it with just a call to get all user info details about what topics user is learning etc. same for links etc.
-    - as separate query
-- clean up data model, don't think there is need for `relatedLinks` and `relatedNotes`
-  - global link and global note will have a reference to the topic already so can get this info this way
-- return all the global links as part of query for global topic
-  - use the links returned in search for the guide edit
 - guide edit
+  - index all global links and put in orama db for search
+  - add input box to search over the titles
+  - allow adding description to section
+  - add a search box for `title` that searches over all the links attached to the current topic
+    - on choosing a link, add a link to a section
+  - allow rearranging links inside a section
   - do it topic by topic
     - parse topic links, make each global link have main topic as the topic in wiki
       - try do a link to global topic (if fails do as string), then fix it later as real link
@@ -21,6 +19,12 @@
     - also allow rearranging of sections
   - make Search work with orama, no fuse.js
   - lock guide edit to admins of topic only
+- change `getGlobalTopic` query, probably remove it and replace it with just a call to get all user info details about what topics user is learning etc. same for links etc.
+  - as separate query
+- clean up data model, don't think there is need for `relatedLinks` and `relatedNotes`
+  - global link and global note will have a reference to the topic already so can get this info this way
+- return all the global links as part of query for global topic
+  - use the links returned in search for the guide edit
 - fix ui glitch on hovering over search results in landing page
   - part of Search component issue
 - modular forms + valibot
@@ -203,6 +207,11 @@
 ## API access
 
 - add API access to read/write to LA, guarded with [Unkey](https://github.com/unkeyed/unkey) potentially
+
+## DX
+
+- annoying how when you do mobius query and then try to access stuff with `.data.publicGetGlobalTopic` for example, it's super unsafe
+  - find a nice way to solve this
 
 ## Other
 
