@@ -24,6 +24,7 @@
     "@orama/orama": "^1.2.9",
     "@solid-primitives/active-element": "^2.0.17",
     "@solid-primitives/autofocus": "^0.0.108",
+    "@solid-primitives/bounds": "^0.0.118",
     "@solid-primitives/event-listener": "^2.3.0",
     "@solid-primitives/keyboard": "^1.2.5",
     "@solidjs/meta": "^0.28.6",
