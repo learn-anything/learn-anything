@@ -1,20 +1,19 @@
-import { For, Show, createMemo, createSignal, onMount } from "solid-js"
+import { For, Show } from "solid-js"
 import { useEditGuide } from "../../GlobalContext/edit-guide"
-import { signedIn } from "../../../lib/auth"
 import { useMobius } from "../../root"
-import { useGlobalState } from "../../GlobalContext/global"
-import { Search, createSearchState } from "../Search"
+import { Search } from "../Search"
 // @ts-ignore
 import { Motion } from "@motionone/solid"
 import { useNavigate } from "solid-start"
+import { useGlobalTopic } from "../../GlobalContext/global-topic"
 
 export default function GuideSummaryEdit() {
   const editedGuide = useEditGuide()
-  const global = useGlobalState()
+  const topic = useGlobalTopic()
   const mobius = useMobius()
   const navigate = useNavigate()
 
-  const [currentLinkId, setCurrentLinkId] = createSignal()
+  // const [currentLinkId, setCurrentLinkId] = createSignal()
 
   // const [editedGuideForm, setEditedGuideForm] = createStore<Guide>({
   //   summary: "",
@@ -245,7 +244,7 @@ export default function GuideSummaryEdit() {
                                 placeholder={
                                   "Search URL title of global links for the topic"
                                 }
-                                state={search_state}
+                                state={topic.topicGlobalLinksSearch}
                               />
                               {/* <div
                                 class={clsx(

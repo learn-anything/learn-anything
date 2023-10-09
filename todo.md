@@ -226,3 +226,4 @@
 - release all Figma to public
   - FigJam + Figma main design files
 - `import { Motion } from "@motionone/solid"` always gives type trouble, don't get why
+- replace fuse.js with orama in Search component. don't use fuse.js any more
