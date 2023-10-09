@@ -1,14 +1,12 @@
-import { createSignal, onMount } from "solid-js"
-import { createContext, useContext } from "solid-js"
-import { MobiusType } from "../root"
+import { create, insert, search } from "@orama/orama"
+import { createContext, createSignal, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
+import { createIndexedDbPersister } from "tinybase/persisters/persister-indexed-db/with-schemas"
 import {
   createQueries,
   createStore as tinybaseCreateStore,
 } from "tinybase/with-schemas"
-import { createIndexedDbPersister } from "tinybase/persisters/persister-indexed-db/with-schemas"
-import { create, search, insert } from "@orama/orama"
-import { Links } from "solid-start/root"
+import { MobiusType } from "../root"
 
 type GlobalTopicSearchItem = {
   name: string

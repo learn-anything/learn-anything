@@ -1,6 +1,7 @@
 import { createContext, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 import { MobiusType } from "../root"
+import { useLocation, useNavigate } from "solid-start"
 
 export type Link = {
   title: string
@@ -37,6 +38,13 @@ type GlobalTopic = {
   userLearningStatus: LearningStatus
 }
 
+function extractTopicFromPath(inputStr: string) {
+  const segments = inputStr
+    .split("/")
+    .filter((segment: string) => segment.trim() !== "")
+  return segments.length > 0 ? segments[0] : null
+}
+
 // all state needed to render global topic found in learn-anything.xyz/<topic>
 export default function createGlobalTopic(mobius: MobiusType) {
   const [globalTopic, setGlobalTopic] = createStore<GlobalTopic>({
@@ -50,10 +58,38 @@ export default function createGlobalTopic(mobius: MobiusType) {
     userLearningStatus: null,
   })
 
+  const location = useLocation()
+
   onMount(async () => {
-    const topic = await mobius.query({
-      // getglobal
-    })
+    const location = useLocation()
+    // TODO: hacky, make it robust, nested ifs, no good either
+    if (!(location.pathname === "/")) {
+      const topicName = extractTopicFromPath(location.pathname)
+      if (topicName) {
+        const topic = await mobius.query({
+          publicGetGlobalTopic: {
+            where: { topicName: topicName },
+            select: {
+              prettyName: true,
+              topicSummary: true,
+              topicPath: true,
+              latestGlobalGuide: {
+                sections: {
+                  title: true,
+                  links: {
+                    id: true,
+                    title: true,
+                    url: true,
+                    year: true,
+                  },
+                },
+              },
+            },
+          },
+        })
+        console.log(topic, "topic")
+      }
+    }
   })
 
   return {

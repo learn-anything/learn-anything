@@ -55,18 +55,15 @@ type GlobalLink {
 
 type Mutation {
   createUser(email: String!): String!
-  updateTopicLearningStatus(learningStatus: learningStatus!, topic: String!): String!
   uploadProfilePhoto(image: String!): String!
-  updateGlobalTopic(input: inputToUpdateGlobalTopic!): String!
 }
 
 type Query {
-  publicGetGlobalTopics: [outputOfPublicGetGlobalTopics!]!
-  publicGetGlobalTopic(topicName: String!): publicGlobalTopic!
-  getGlobalLink(linkId: String!): outputOfGetGlobalLink!
-  getGlobalTopic(topicName: String!): outputOfGetGlobalTopic!
-  getGlobalLinks: [outputOfGetGlobalLinks!]!
-  checkForGlobalLink(linkUrl: String!): outputOfCheckForGlobalLink!
+  publicGetGlobalTopics: [publicGetGlobalTopicsOutput!]!
+  publicGetGlobalTopic(topicName: String!): publicGetGlobalTopicOutput!
+  getGlobalLink(linkId: String!): publicGetGlobalLinkOutput!
+  getGlobalLinks: [publicGetGlobalLinksOutput!]!
+  checkForGlobalLink(linkUrl: String!): publicCheckForGlobalLinkOutput!
   stripe(plan: String!): String!
 }
 
@@ -75,38 +72,18 @@ type globalGuideSection {
   links: [GlobalLink!]!
 }
 
-input inputToUpdateGlobalTopic {
-  topicSummary: String!
-  sections: [section!]!
-}
-
 type latestGlobalGuide {
   sections: [globalGuideSection!]!
 }
 
-enum learningStatus {
-  to_learn
-  learning
-  learned
-}
-
-input link {
-  title: String!
-  url: String!
-  author: String
-  year: Int
-  completed: Boolean
-  addedByUser: Boolean
-}
-
-type outputOfCheckForGlobalLink {
+type publicCheckForGlobalLinkOutput {
   url: String!
   title: String!
   year: Int
   description: String
 }
 
-type outputOfGetGlobalLink {
+type publicGetGlobalLinkOutput {
   title: String!
   url: String!
   verified: Boolean!
@@ -119,32 +96,22 @@ type outputOfGetGlobalLink {
   year: String
 }
 
-type outputOfGetGlobalLinks {
+type publicGetGlobalLinksOutput {
   id: String!
   title: String!
   url: String!
 }
 
-type outputOfGetGlobalTopic {
+type publicGetGlobalTopicOutput {
   prettyName: String!
   topicSummary: String!
   topicPath: String
   latestGlobalGuide: latestGlobalGuide
 }
 
-type outputOfPublicGetGlobalTopics {
+type publicGetGlobalTopicsOutput {
   prettyName: String!
   name: String!
-}
-
-type publicGlobalTopic {
-  prettyName: String!
-  topicSummary: String!
-}
-
-input section {
-  title: String!
-  links: [link!]!
 }
 `
 

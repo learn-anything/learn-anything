@@ -168,6 +168,7 @@
 
 ## Mobile app release
 
+- https://github.com/bndkt/sharemystack is great
 - use [ignite](https://github.com/infinitered/ignite) starter
   - ignite [seems best](https://www.youtube.com/watch?v=KOSvDlFyg20)
   - join their slack community too
@@ -213,3 +214,5 @@
   - [many great tweets on it](https://twitter.com/jamespearce)
 - allow importing of other people's bookmark presets (minus `private` bookmarks)
 - get https://github.com/thetarnav/solid-devtools working, specifically ability to select an element in browser and go to the component in code
+- release all Figma to public
+  - FigJam + Figma main design files

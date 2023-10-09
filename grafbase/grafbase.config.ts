@@ -54,16 +54,13 @@ const GlobalLink = g.type("GlobalLink", {
   url: g.string(),
   year: g.string().optional(),
 })
-
 const globalGuideSection = g.type("globalGuideSection", {
   title: g.string(),
   links: g.ref(GlobalLink).list(),
 })
-
 const latestGlobalGuide = g.type("latestGlobalGuide", {
   sections: g.ref(globalGuideSection).list(),
 })
-
 const publicGetGlobalTopicOutput = g.type("publicGetGlobalTopicOutput", {
   prettyName: g.string(),
   topicSummary: g.string(),
@@ -142,11 +139,11 @@ g.mutation("createUser", {
 //   resolver: "updateTopicLearningStatus",
 // })
 
-g.mutation("uploadProfilePhoto", {
-  args: { image: g.string() },
-  returns: g.string(),
-  resolver: "uploadProfilePhoto",
-})
+// g.mutation("uploadProfilePhoto", {
+//   args: { image: g.string() },
+//   returns: g.string(),
+//   resolver: "uploadProfilePhoto",
+// })
 
 // const inputToUpdateGlobalTopic = g.input("inputToUpdateGlobalTopic", {
 //   topicSummary: g.string(),
