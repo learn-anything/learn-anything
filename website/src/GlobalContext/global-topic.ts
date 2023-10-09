@@ -1,4 +1,4 @@
-import { createContext, onMount, useContext } from "solid-js"
+import { createContext, createSignal, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 import { MobiusType } from "../root"
 import { useLocation } from "solid-start"

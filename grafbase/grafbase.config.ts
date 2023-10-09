@@ -95,14 +95,20 @@ g.query("getGlobalLink", {
   resolver: "getGlobalLink",
 })
 
-const publicGetGlobalLinksOutput = g.type("publicGetGlobalLinksOutput", {
-  id: g.string(),
-  title: g.string(),
-  url: g.string(),
-})
+// const publicGetGlobalLinksOutput = g.type("publicGetGlobalLinksOutput", {
+//   id: g.string(),
+//   title: g.string(),
+//   url: g.string(),
+// })
 g.query("getGlobalLinks", {
   args: {},
-  returns: g.ref(publicGetGlobalLinksOutput).list(),
+  returns: g.ref(
+    g.type("getGlobalLinksOutput", {
+      id: g.string(),
+      title: g.string(),
+      url: g.string(),
+    }),
+  ),
   resolver: "getGlobalLinks",
 })
 
