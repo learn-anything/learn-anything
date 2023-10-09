@@ -1,64 +1,10 @@
-import { Match, Show, Switch, onMount } from "solid-js"
-import { signedIn } from "../../../lib/auth"
-import { useGlobalTopic } from "../../GlobalContext/global-topic"
-import Card from "../../components/Topic/Card"
 import GlobalGuide from "../../components/Topic/GlobalGuide"
-import GuideLinks from "../../components/Topic/GuideLinks"
-import GuideNotes from "../../components/Topic/GuideNotes"
+// @ts-ignore
 import { Motion } from "@motionone/solid"
-
-import TopicNav from "../../components/Topic/TopicNav"
-import { useMobius } from "../../root"
 import GuideSidebar from "../../components/Topic/GuideSidebar"
+import TopicNav from "../../components/Topic/TopicNav"
 
 export default function GlobalTopic() {
-  const topic = useGlobalTopic()
-  const mobius = useMobius()
-
-  // TODO: avoid this as there is same onMount in [topic]/edit.tsx
-  // there should be only one in theory
-  // if you go from /index to /edit, get the data from global store, don't do another request for data already there
-  onMount(async () => {
-    if (signedIn()) {
-      const globalTopic = await mobius.query({
-        getGlobalTopic: {
-          where: {
-            // TODO: get topic name from route
-            topicName: "3d-printing",
-          },
-          select: {
-            prettyName: true,
-            topicSummary: true,
-            // learningStatus: true,
-          },
-        },
-      })
-      console.log(globalTopic, "global topic (signed in)")
-      if (globalTopic !== null) {
-        // @ts-ignore
-        topic.set(globalTopic.data.getGlobalTopic)
-      }
-    } else {
-      const globalTopicPublic = await mobius.query({
-        publicGetGlobalTopic: {
-          where: {
-            topicName: "3d-printing",
-          },
-          select: {
-            name: true,
-            prettyName: true,
-            topicSummary: true,
-          },
-        },
-      })
-      console.log(topic, "global topic (not signed in)")
-      if (globalTopicPublic !== null) {
-        // @ts-ignore
-        topic.set(globalTopic.data.getGlobalTopic)
-      }
-    }
-  })
-
   return (
     <>
       <style>{`

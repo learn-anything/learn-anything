@@ -161,10 +161,10 @@ export default function Card(props: Props) {
                 </div>
               </Show>
               <div class="flex  font-light items-center justify-between gap-4 text-black">
-                <div class="text-blue-400 hover:bg-blue-400 hover:text-white transition-all  border-[1.5px] rounded-[4px] p-1 flex items-center justify-center font-semibold w-full border-blue-400 text-[14px]">
+                <div class="cursor-pointer text-blue-400 hover:bg-blue-400 hover:text-white transition-all  border-[1.5px] rounded-[4px] p-1 flex items-center justify-center font-semibold w-full border-blue-400 text-[14px]">
                   request to Moderate
                 </div>
-                <A href="/asking-questions">go to new topic</A>
+                {/* <A href="/asking-questions">go to new topic</A> */}
               </div>
             </div>
           </Match>

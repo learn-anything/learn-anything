@@ -1,13 +1,15 @@
+import { For, Show } from "solid-js"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import Icon from "../Icon"
 import GuideSummary from "./GuideSummary"
 // @ts-ignore
 import { Motion } from "@motionone/solid"
 import { useNavigate } from "solid-start"
+import GuideSection from "./GuideSection"
 
 export default function GlobalGuide() {
-  const topic = useGlobalTopic()
   const navigate = useNavigate()
+  const topic = useGlobalTopic()
 
   return (
     <>
@@ -100,11 +102,16 @@ export default function GlobalGuide() {
         class="w-full h-full bg-gray-50 dark:bg-neutral-950 rounded-[6px] p-4"
       >
         <GuideSummary />
-        {/* <For each={topic.globalTopic.globalGuide.sections}>
-          {(section) => {
-            return <GuideSection title={section.title} links={section.links} />
-          }}
-        </For> */}
+        <Show when={topic.globalTopic.latestGlobalGuide}>
+          {/* @ts-ignore */}
+          <For each={topic.globalTopic.latestGlobalGuide.sections}>
+            {(section) => {
+              return (
+                <GuideSection title={section.title} links={section.links} />
+              )
+            }}
+          </For>
+        </Show>
       </Motion.div>
     </>
   )

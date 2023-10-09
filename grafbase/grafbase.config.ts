@@ -38,13 +38,16 @@ export default config({
 
 // public queries
 
-const publicGetGlobalTopicsOutput = g.type("publicGetGlobalTopicsOutput", {
-  prettyName: g.string(),
-  name: g.string(),
-})
 g.query("publicGetGlobalTopics", {
   args: {},
-  returns: g.ref(publicGetGlobalTopicsOutput).list(),
+  returns: g
+    .ref(
+      g.type("publicGetGlobalTopicsOutput", {
+        prettyName: g.string(),
+        name: g.string(),
+      }),
+    )
+    .list(),
   resolver: "public/getGlobalTopics",
 })
 
@@ -62,44 +65,41 @@ const latestGlobalGuide = g.type("latestGlobalGuide", {
   summary: g.string(),
   sections: g.ref(globalGuideSection).list(),
 })
-const publicGetGlobalTopicOutput = g.type("publicGetGlobalTopicOutput", {
-  prettyName: g.string(),
-  topicSummary: g.string(),
-  topicPath: g.string().optional(),
-  latestGlobalGuide: g.ref(latestGlobalGuide).optional(),
-  links: g.ref(GlobalLink).list(),
-})
 g.query("publicGetGlobalTopic", {
   args: { topicName: g.string() },
-  returns: g.ref(publicGetGlobalTopicOutput),
+  returns: g.ref(
+    g.type("publicGetGlobalTopicOutput", {
+      prettyName: g.string(),
+      topicSummary: g.string(),
+      topicPath: g.string().optional(),
+      latestGlobalGuide: g.ref(latestGlobalGuide).optional(),
+      links: g.ref(GlobalLink).list(),
+    }),
+  ),
   resolver: "public/getGlobalTopic",
 })
 
 // auth'd queries
 
-const publicGetGlobalLinkOutput = g.type("publicGetGlobalLinkOutput", {
-  title: g.string(),
-  url: g.string(),
-  verified: g.boolean(),
-  public: g.boolean(),
-  protocol: g.string().optional(),
-  fullUrl: g.string().optional(),
-  mainTopicAsString: g.string().optional(),
-  description: g.string().optional(),
-  urlTitle: g.string().optional(),
-  year: g.string().optional(),
-})
 g.query("getGlobalLink", {
   args: { linkId: g.string() },
-  returns: g.ref(publicGetGlobalLinkOutput),
+  returns: g.ref(
+    g.type("publicGetGlobalLinkOutput", {
+      title: g.string(),
+      url: g.string(),
+      verified: g.boolean(),
+      public: g.boolean(),
+      protocol: g.string().optional(),
+      fullUrl: g.string().optional(),
+      mainTopicAsString: g.string().optional(),
+      description: g.string().optional(),
+      urlTitle: g.string().optional(),
+      year: g.string().optional(),
+    }),
+  ),
   resolver: "getGlobalLink",
 })
 
-// const publicGetGlobalLinksOutput = g.type("publicGetGlobalLinksOutput", {
-//   id: g.string(),
-//   title: g.string(),
-//   url: g.string(),
-// })
 g.query("getGlobalLinks", {
   args: {},
   returns: g.ref(
@@ -112,18 +112,16 @@ g.query("getGlobalLinks", {
   resolver: "getGlobalLinks",
 })
 
-const publicCheckForGlobalLinkOutput = g.type(
-  "publicCheckForGlobalLinkOutput",
-  {
-    url: g.string(),
-    title: g.string(),
-    year: g.int().optional(),
-    description: g.string().optional(),
-  },
-)
 g.query("checkForGlobalLink", {
   args: { linkUrl: g.string() },
-  returns: g.ref(publicCheckForGlobalLinkOutput),
+  returns: g.ref(
+    g.type("publicCheckForGlobalLinkOutput", {
+      url: g.string(),
+      title: g.string(),
+      year: g.int().optional(),
+      description: g.string().optional(),
+    }),
+  ),
   resolver: "checkForGlobalLink",
 })
 

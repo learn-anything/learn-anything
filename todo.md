@@ -225,3 +225,4 @@
 - get https://github.com/thetarnav/solid-devtools working, specifically ability to select an element in browser and go to the component in code
 - release all Figma to public
   - FigJam + Figma main design files
+- `import { Motion } from "@motionone/solid"` always gives type trouble, don't get why

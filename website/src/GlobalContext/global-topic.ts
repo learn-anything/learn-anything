@@ -8,6 +8,7 @@ import {
 import { createStore } from "solid-js/store"
 import { MobiusType } from "../root"
 import { useLocation } from "solid-start"
+import { unwrap } from "solid-js/store"
 
 // type PageState = "Global Guide" | "Links" | "Notes" | "Edit Global Guide"
 // type LearningStatus = "to learn" | "learning" | "learned" | null
@@ -66,17 +67,11 @@ export default function createGlobalTopic(mobius: MobiusType) {
   const [globalTopicLinksSearchDb, setGlobalTopicLinksSearchDb] =
     createSignal<any>(undefined)
 
+  // TODO: do other calls for authenticated data
+  // import { signedIn } from "../../../lib/auth" can use this to know if auth'd or not
   const location = useLocation()
-  createEffect(() => {
-    if (location.pathname) {
-      console.log("route changed")
-    }
-  })
-
-  onMount(async () => {
-    const location = useLocation()
-    // TODO: hacky, make it robust, nested ifs, no good either
-    if (!(location.pathname === "/")) {
+  createEffect(async () => {
+    if (location.pathname && !(location.pathname === "/")) {
       const topicName = extractTopicFromPath(location.pathname)
       if (topicName) {
         const topic = await mobius.query({
@@ -115,7 +110,7 @@ export default function createGlobalTopic(mobius: MobiusType) {
           latestGlobalGuide: topicData.latestGlobalGuide,
           links: topicData.links,
         })
-        console.log(globalTopic, "global topic")
+        console.log(unwrap(globalTopic), "global topic")
       }
     }
   })
