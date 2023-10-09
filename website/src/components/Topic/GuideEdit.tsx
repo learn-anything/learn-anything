@@ -282,21 +282,19 @@ export default function GuideSummaryEdit() {
                     "translateX(0px)",
                   ],
                 }}
-                class="border border-slate-400 border-opacity-30 rounded-lg flex flex-col"
+                class="border bg-neutral-900 border-slate-400 border-opacity-30 rounded-lg flex flex-col"
               >
                 <Show
                   when={section.title.length > 0}
                   fallback={
                     <input
-                      class="text-[#696969] p-4 font-light overflow-hidden text-ellipsis outline-none"
-                      id={`${section.title}${index()}`}
+                      class="text-[#696969] bg-transparent p-4 font-light overflow-hidden text-ellipsis outline-none"
                       placeholder="Add section title"
                     />
                   }
                 >
                   <input
-                    class="text-[#696969] p-4 font-light overflow-hidden text-ellipsis outline-none"
-                    id={`${section.title}${index()}`}
+                    class="text-[#696969] bg-transparent p-4 font-light overflow-hidden text-ellipsis outline-none"
                     value={section.title}
                   />
                 </Show>
