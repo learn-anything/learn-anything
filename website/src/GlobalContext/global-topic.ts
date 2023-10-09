@@ -1,4 +1,10 @@
-import { createContext, createSignal, onMount, useContext } from "solid-js"
+import {
+  createContext,
+  createEffect,
+  createSignal,
+  onMount,
+  useContext,
+} from "solid-js"
 import { createStore } from "solid-js/store"
 import { MobiusType } from "../root"
 import { useLocation } from "solid-start"
@@ -18,14 +24,14 @@ type GlobalLink = {
   id: string
   title: string
   url: string
-  year?: string
+  year?: string | null
 }
 export type Section = {
+  summary: string
   title: string
   links: GlobalLink[]
   // order: number
   // ordered: boolean
-  // summary?: string
 }
 type LatestGlobalGuide = {
   summary: string
@@ -33,7 +39,6 @@ type LatestGlobalGuide = {
 }
 type GlobalTopic = {
   prettyName: string
-  topicSummary?: string
   topicPath?: string
   latestGlobalGuide?: LatestGlobalGuide
   links?: GlobalLink[]
@@ -50,16 +55,23 @@ function extractTopicFromPath(inputStr: string) {
 export default function createGlobalTopic(mobius: MobiusType) {
   const [globalTopic, setGlobalTopic] = createStore<GlobalTopic>({
     prettyName: "",
-    topicSummary: "",
     topicPath: "",
     latestGlobalGuide: {
       summary: "",
       sections: [],
     },
+    links: [],
   })
 
   const [globalTopicLinksSearchDb, setGlobalTopicLinksSearchDb] =
     createSignal<any>(undefined)
+
+  const location = useLocation()
+  createEffect(() => {
+    if (location.pathname) {
+      console.log("route changed")
+    }
+  })
 
   onMount(async () => {
     const location = useLocation()
@@ -96,10 +108,9 @@ export default function createGlobalTopic(mobius: MobiusType) {
         })
         // @ts-ignore
         const topicData = topic.data.publicGetGlobalTopic
-        console.log(topicData.links, "links!")
+        console.log(topicData.links, "links")
         setGlobalTopic({
           prettyName: topicData.prettyName,
-          topicSummary: topicData.topicSummary,
           topicPath: topicData.topicPath,
           latestGlobalGuide: topicData.latestGlobalGuide,
           links: topicData.links,

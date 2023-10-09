@@ -1,8 +1,6 @@
-import { For } from "solid-js"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
-import GuideSection from "./GuideSection"
-import GuideSummary from "./GuideSummary"
 import Icon from "../Icon"
+import GuideSummary from "./GuideSummary"
 // @ts-ignore
 import { Motion } from "@motionone/solid"
 import { useNavigate } from "solid-start"
@@ -70,29 +68,44 @@ export default function GlobalGuide() {
             </Motion.div>
           </div>
         </div>
-
-        <Motion.div
-          transition={{ duration: 1, easing: "ease-out" }}
-          animate={{
-            opacity: [0, 1, 1],
-            transform: [
-              "translateX(100px)",
-              "translateX(-10px)",
-              "translateX(0px)",
-            ],
-          }}
-          class="w-full h-full flex flex-col gap-[20px] rounded-[6px]"
-        >
-          <GuideSummary />
-          <For each={topic.globalTopic.latestGlobalGuide?.sections}>
-            {(section) => {
-              return (
-                <GuideSection title={section.title} links={section.links} />
-              )
-            }}
-          </For>
-        </Motion.div>
       </div>
+      <Motion.div
+        transition={{ duration: 0.8, easing: "ease-out" }}
+        animate={{
+          opacity: [0, 1, 1],
+          transform: [
+            "translateX(100px)",
+            "translateX(-10px)",
+            "translateX(0px)",
+          ],
+        }}
+        class="w-full"
+      >
+        <input
+          type="text"
+          placeholder="Search"
+          class="px-6 outline-none hover:bg-gray-100 hover:dark:bg-black dark:bg-neutral-950 transition-all focus:bg-gray-200 dark:focus:bg-black rounded-[4px] bg-gray-50 p-3 w-full"
+        />
+      </Motion.div>
+      <Motion.div
+        transition={{ duration: 1, easing: "ease-out" }}
+        animate={{
+          opacity: [0, 1, 1],
+          transform: [
+            "translateX(100px)",
+            "translateX(-10px)",
+            "translateX(0px)",
+          ],
+        }}
+        class="w-full h-full bg-gray-50 dark:bg-neutral-950 rounded-[6px] p-4"
+      >
+        <GuideSummary />
+        {/* <For each={topic.globalTopic.globalGuide.sections}>
+          {(section) => {
+            return <GuideSection title={section.title} links={section.links} />
+          }}
+        </For> */}
+      </Motion.div>
     </>
   )
 }

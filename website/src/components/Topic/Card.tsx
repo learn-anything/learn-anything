@@ -1,5 +1,6 @@
-import { For, Match, Switch } from "solid-js"
+import { For, Match, Show, Switch } from "solid-js"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
+import { A } from "@solidjs/router"
 
 type Link = {
   title: string
@@ -163,6 +164,7 @@ export default function Card(props: Props) {
                 <div class="text-blue-400 hover:bg-blue-400 hover:text-white transition-all  border-[1.5px] rounded-[4px] p-1 flex items-center justify-center font-semibold w-full border-blue-400 text-[14px]">
                   request to Moderate
                 </div>
+                <A href="/asking-questions">go to new topic</A>
               </div>
             </div>
           </Match>
