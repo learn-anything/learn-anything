@@ -40,8 +40,9 @@ type LatestGlobalGuide = {
   summary: string
   sections: Section[]
 }
-type GlobalTopic = {
+export type GlobalTopic = {
   prettyName: string
+  summary?: string
   topicPath?: string
   latestGlobalGuide?: LatestGlobalGuide
   links?: GlobalLink[]
@@ -59,6 +60,7 @@ export default function createGlobalTopic(mobius: MobiusType) {
   const [globalTopic, setGlobalTopic] = createStore<GlobalTopic>({
     prettyName: "",
     topicPath: "",
+    summary: "",
     latestGlobalGuide: {
       summary: "",
       sections: [],

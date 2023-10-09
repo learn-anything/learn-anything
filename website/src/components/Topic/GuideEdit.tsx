@@ -1,17 +1,40 @@
-import { For, Show } from "solid-js"
+import { For, Show, createEffect, createSignal, untrack } from "solid-js"
 import { useEditGuide } from "../../GlobalContext/edit-guide"
 import { useMobius } from "../../root"
 import { Search } from "../Search"
 // @ts-ignore
 import { Motion } from "@motionone/solid"
 import { useNavigate } from "solid-start"
-import { useGlobalTopic } from "../../GlobalContext/global-topic"
+import { GlobalTopic, useGlobalTopic } from "../../GlobalContext/global-topic"
+import { unwrap } from "solid-js/store"
 
 export default function GuideSummaryEdit() {
   const editedGuide = useEditGuide()
   const topic = useGlobalTopic()
   const mobius = useMobius()
   const navigate = useNavigate()
+
+  const [editedGlobalTopic, setEditedGlobalTopic] = createSignal<GlobalTopic>({
+    prettyName: "",
+    topicPath: "",
+    latestGlobalGuide: {
+      summary: "",
+      sections: [],
+    },
+    summary: "",
+  })
+
+  createEffect(() => {
+    if (topic.globalTopic.latestGlobalGuide) {
+      untrack(() => {
+        setEditedGlobalTopic(topic.globalTopic)
+      })
+    }
+  })
+
+  createEffect(() => {
+    console.log(editedGlobalTopic(), "edited global topic")
+  })
 
   // const [currentLinkId, setCurrentLinkId] = createSignal()
 
@@ -159,13 +182,18 @@ export default function GuideSummaryEdit() {
           <Show
             when={editedGuide.guide.summary.length > 0}
             fallback={
-              <div
+              <input
                 class="text-[#696969] font-light overflow-hidden text-ellipsis outline-none"
                 id="GuideSummary"
-                onClick={() => {}}
-              >
-                Add summary
-              </div>
+                placeholder="Add summary"
+                onInput={(e) => {
+                  const currentGlobalTopic = editedGlobalTopic()
+                  setEditedGlobalTopic({
+                    ...currentGlobalTopic,
+                    summary: e.target.value,
+                  })
+                }}
+              />
             }
           >
             <div
@@ -180,21 +208,33 @@ export default function GuideSummaryEdit() {
         <div
           class="bg-[#3B5CCC] text-white p-3 rounded-[4px] flex justify-center items-center cursor-pointer hover:bg-[#3554b9] transition-all"
           onClick={() => {
-            editedGuide.addSection({
-              order: 0,
-              title: "",
-              ordered: true,
-              links: [],
+            const currentGlobalTopic = editedGlobalTopic()
+            let newSections =
+              currentGlobalTopic.latestGlobalGuide?.sections || []
+            newSections = [
+              ...newSections,
+              {
+                summary: "",
+                title: "",
+                links: [],
+              },
+            ]
+            setEditedGlobalTopic({
+              ...currentGlobalTopic,
+              latestGlobalGuide: {
+                ...currentGlobalTopic.latestGlobalGuide,
+                summary: currentGlobalTopic.latestGlobalGuide?.summary || "",
+                sections: newSections,
+              },
             })
-            console.log(editedGuide.guide.sections, "sections")
           }}
         >
           Add section
         </div>
-        <For each={editedGuide.guide.sections}>
+        <For each={editedGlobalTopic().latestGlobalGuide?.sections}>
           {(section, index) => {
             return (
-              <Motion.div class="border overflow-hidden border-slate-400 border-opacity-30 rounded-lg flex flex-col gap-4 p-4">
+              <Motion.div class="border border-slate-400 border-opacity-30 rounded-lg flex flex-col gap-4 p-4">
                 <Show
                   when={section.title.length > 0}
                   fallback={
@@ -205,13 +245,11 @@ export default function GuideSummaryEdit() {
                     />
                   }
                 >
-                  <div
+                  <input
                     class="text-[#696969] font-light overflow-hidden text-ellipsis outline-none"
                     id={`${section.title}${index()}`}
-                    onClick={() => {}}
-                  >
-                    {section.title}
-                  </div>
+                    value={section.title}
+                  />
                 </Show>
                 <div class="flex gap-4 flex-col">
                   <For each={section.links}>
@@ -324,18 +362,23 @@ export default function GuideSummaryEdit() {
                   </For>
                 </div>
                 <div class="w-full justify-end flex">
-                  <div
+                  <Search
+                    placeholder={
+                      "Search URL title of global links for the topic to add a new link"
+                    }
+                    state={topic.topicGlobalLinksSearch}
+                  />
+                  {/* <div
                     class="bg-[#3B5CCC] text-white text-[14px] p-2 px-4 rounded-[6px] flex justify-center items-center cursor-pointer hover:bg-[#3554b9] transition-all"
                     onClick={() => {
-                      editedGuide.addLinkToSection(0, {
-                        title: "",
-                        url: "",
-                      })
-                      console.log(section.links, "links")
+                      // editedGuide.addLinkToSection(0, {
+                      //   title: "",
+                      //   url: "",
+                      // })
                     }}
                   >
                     Add link
-                  </div>
+                  </div> */}
                 </div>
               </Motion.div>
             )
