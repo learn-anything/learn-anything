@@ -1,12 +1,11 @@
 import { For, Show, createEffect, createSignal, untrack } from "solid-js"
 import { useEditGuide } from "../../GlobalContext/edit-guide"
 import { useMobius } from "../../root"
-import { Search } from "../Search"
+import { Search, createSearchState } from "../Search"
 // @ts-ignore
 import { Motion } from "@motionone/solid"
 import { useNavigate } from "solid-start"
 import { GlobalTopic, useGlobalTopic } from "../../GlobalContext/global-topic"
-import { unwrap } from "solid-js/store"
 
 export default function GuideSummaryEdit() {
   const editedGuide = useEditGuide()
@@ -282,7 +281,7 @@ export default function GuideSummaryEdit() {
                     "translateX(0px)",
                   ],
                 }}
-                class="border bg-neutral-900 border-slate-400 border-opacity-30 rounded-lg flex flex-col"
+                class="border dark:bg-neutral-900 bg-white border-slate-400 border-opacity-30 rounded-lg flex flex-col"
               >
                 <Show
                   when={section.title.length > 0}
@@ -411,12 +410,20 @@ export default function GuideSummaryEdit() {
                 </div>
 
                 <div class="w-full justify-end flex p-4">
-                  <Search
-                    placeholder={
-                      "Search URL title of global links for the topic to add a new link"
-                    }
-                    state={topic.topicGlobalLinksSearch}
-                  />
+                  {(() => {
+                    const search_state = createSearchState(() =>
+                      topic.currentTopicGlobalLinksSearch(),
+                    )
+
+                    return (
+                      <Search
+                        placeholder={
+                          "Search URL title of global links for the topic to add a new link"
+                        }
+                        state={search_state}
+                      />
+                    )
+                  })()}
                   {/* <div
                     class="bg-[#3B5CCC] text-white text-[14px] p-2 px-4 rounded-[6px] flex justify-center items-center cursor-pointer hover:bg-[#3554b9] transition-all"
                     onClick={() => {

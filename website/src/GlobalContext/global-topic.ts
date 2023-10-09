@@ -3,14 +3,13 @@ import {
   createEffect,
   createMemo,
   createSignal,
-  onMount,
   useContext,
 } from "solid-js"
 import { createStore } from "solid-js/store"
 import { MobiusType } from "../root"
 import { useLocation } from "solid-start"
 import { unwrap } from "solid-js/store"
-import { createSearchState } from "../components/Search"
+import { SearchResult } from "../components/Search"
 
 // type PageState = "Global Guide" | "Links" | "Notes" | "Edit Global Guide"
 // type LearningStatus = "to learn" | "learning" | "learned" | null
@@ -72,26 +71,17 @@ export default function createGlobalTopic(mobius: MobiusType) {
     createSignal<any>(undefined)
 
   const currentTopicGlobalLinksSearch = createMemo(() => {
-    console.log("memo runs")
-    // @ts-ignore
-    if (globalTopic.links?.length > 0) {
-      console.log("updating links search state")
-      // @ts-ignore
-      return globalTopic.links.map((link) => {
-        return {
-          name: link.title,
-          action: () => {
-            console.log(link.id, "link id")
-          },
-        }
-      })
-    }
-    return []
-  })
+    if (!globalTopic.links) return []
 
-  const topicGlobalLinksSearch = createSearchState(() =>
-    currentTopicGlobalLinksSearch(),
-  )
+    return globalTopic.links.map(
+      (link): SearchResult => ({
+        name: link.title,
+        action: () => {
+          console.log(link.id, "link id")
+        },
+      }),
+    )
+  })
 
   // TODO: do other calls for authenticated data
   // import { signedIn } from "../../../lib/auth" can use this to know if auth'd or not
@@ -146,7 +136,8 @@ export default function createGlobalTopic(mobius: MobiusType) {
     set: (state: GlobalTopic) => {
       setGlobalTopic(state)
     },
-    topicGlobalLinksSearch,
+    currentTopicGlobalLinksSearch,
+    // topicGlobalLinksSearch,
     // setShowPage: (state: PageState) => {
     //   setGlobalTopic({ showPage: state })
     // },
