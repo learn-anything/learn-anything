@@ -6,7 +6,7 @@ export default function GuideSidebar() {
     <>
       <div
         class="w-full flex flex-col gap-[32px] h-full dark:text-white text-black"
-        style={{ padding: "24px 24px 24px 24px" }}
+        style={{ padding: "24px 20px 24px 20px" }}
       >
         <div id="Title" class="flex items-center gap-3">
           <div class="w-[30px] h-[30px] bg-neutral-200 rounded-full"></div>
