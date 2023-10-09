@@ -133,7 +133,7 @@ export default function GuideSummaryEdit() {
   `}</style>
       <div class="w-full flex flex-col gap-4 text-[16px] leading-[18.78px] ">
         <div class="flex justify-between items-center ">
-          <div
+          <Motion.div
             class="border-[#696969] dark:border-gray-200 dark:hover:bg-gray-200 dark:hover:text-black border p-[8px] px-[10px] rounded-[4px] text-[#696969] dark:text-white font-light hover:bg-gray-300 hover:bg-opacity-50 cursor-pointer transition-all"
             onClick={() => {
               // TODO: show prompt 'are you sure', in case there is something in form data
@@ -147,10 +147,28 @@ export default function GuideSummaryEdit() {
               console.log(url)
               navigate(url)
             }}
+            transition={{ duration: 1, easing: "ease-out" }}
+            animate={{
+              opacity: [0, 1, 1],
+              transform: [
+                "translateX(100px)",
+                "translateX(-10px)",
+                "translateX(0px)",
+              ],
+            }}
           >
             Cancel
-          </div>
-          <div
+          </Motion.div>
+          <Motion.div
+            transition={{ duration: 1, easing: "ease-out", delay: 0.1 }}
+            animate={{
+              opacity: [0, 1, 1],
+              transform: [
+                "translateX(100px)",
+                "translateX(-10px)",
+                "translateX(0px)",
+              ],
+            }}
             onClick={() => {
               console.log("run")
               console.log(editedGuide.guide.sections)
@@ -169,9 +187,20 @@ export default function GuideSummaryEdit() {
             class="bg-[#3B5CCC] text-white border-[#3B5CCC] border px-[10px] p-[8px] rounded-[4px] font-light cursor-pointer"
           >
             Submit Changes
-          </div>
+          </Motion.div>
         </div>
-        <div class="bg-[#FAFAFA] dark:bg-neutral-950 flex flex-col gap-2 rounded-[4px] p-4 w-full">
+        <Motion.div
+          transition={{ duration: 1, easing: "ease-out", delay: 0.2 }}
+          animate={{
+            opacity: [0, 1, 1],
+            transform: [
+              "translateX(100px)",
+              "translateX(-10px)",
+              "translateX(0px)",
+            ],
+          }}
+          class="bg-[#FAFAFA] dark:bg-neutral-950 flex flex-col gap-2 rounded-[4px] p-4 w-full"
+        >
           <div class="flex justify-between items-center">
             <div class="text-[#696969] ">Summary</div>
             <div
@@ -183,7 +212,7 @@ export default function GuideSummaryEdit() {
             when={editedGuide.guide.summary.length > 0}
             fallback={
               <input
-                class="text-[#696969] font-light overflow-hidden text-ellipsis outline-none"
+                class="text-[#696969] bg-inherit font-light overflow-hidden text-ellipsis outline-none"
                 id="GuideSummary"
                 placeholder="Add summary"
                 onInput={(e) => {
@@ -204,8 +233,17 @@ export default function GuideSummaryEdit() {
               {editedGuide.guide.summary}
             </div>
           </Show>
-        </div>
-        <div
+        </Motion.div>
+        <Motion.div
+          transition={{ duration: 1, easing: "ease-out", delay: 0.2 }}
+          animate={{
+            opacity: [0, 1, 1],
+            transform: [
+              "translateX(100px)",
+              "translateX(-10px)",
+              "translateX(0px)",
+            ],
+          }}
           class="bg-[#3B5CCC] text-white p-3 rounded-[4px] flex justify-center items-center cursor-pointer hover:bg-[#3554b9] transition-all"
           onClick={() => {
             const currentGlobalTopic = editedGlobalTopic()
@@ -230,27 +268,39 @@ export default function GuideSummaryEdit() {
           }}
         >
           Add section
-        </div>
+        </Motion.div>
         <For each={editedGlobalTopic().latestGlobalGuide?.sections}>
           {(section, index) => {
             return (
-              <Motion.div class="border border-slate-400 border-opacity-30 rounded-lg flex flex-col gap-4 p-4">
+              <Motion.div
+                transition={{ duration: 1, easing: "ease-out", delay: 0.3 }}
+                animate={{
+                  opacity: [0, 1, 1],
+                  transform: [
+                    "translateX(100px)",
+                    "translateX(-10px)",
+                    "translateX(0px)",
+                  ],
+                }}
+                class="border border-slate-400 border-opacity-30 rounded-lg flex flex-col"
+              >
                 <Show
                   when={section.title.length > 0}
                   fallback={
                     <input
-                      class="text-[#696969] font-light overflow-hidden text-ellipsis outline-none"
+                      class="text-[#696969] p-4 font-light overflow-hidden text-ellipsis outline-none"
                       id={`${section.title}${index()}`}
                       placeholder="Add section title"
                     />
                   }
                 >
                   <input
-                    class="text-[#696969] font-light overflow-hidden text-ellipsis outline-none"
+                    class="text-[#696969] p-4 font-light overflow-hidden text-ellipsis outline-none"
                     id={`${section.title}${index()}`}
                     value={section.title}
                   />
                 </Show>
+
                 <div class="flex gap-4 flex-col">
                   <For each={section.links}>
                     {(link, index) => {
@@ -361,7 +411,8 @@ export default function GuideSummaryEdit() {
                     }}
                   </For>
                 </div>
-                <div class="w-full justify-end flex">
+
+                <div class="w-full justify-end flex p-4">
                   <Search
                     placeholder={
                       "Search URL title of global links for the topic to add a new link"
