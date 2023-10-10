@@ -2,7 +2,7 @@ import { Show, createMemo, createResource } from "solid-js"
 import { useNavigate } from "solid-start"
 import { getHankoCookie } from "../../lib/auth"
 import { useGlobalState } from "../GlobalContext/global.ts"
-import { Search, createSearchState } from "../components/Search"
+import { Search, SearchResult, createSearchState } from "../components/Search"
 import { ForceGraph } from "../components/force-graph/index.tsx"
 import { getRandomItem } from "../lib/lib.ts"
 
@@ -23,18 +23,18 @@ export default function Home() {
     }
   })
 
-  const searchResults = createMemo(() => {
-    return global.state.globalTopicsSearchList.map((topic) => {
-      return {
-        name: topic.prettyName,
-        action: () => {
-          navigate(`/${topic.name}`)
-        },
-      }
-    })
-  })
+  const searchResults = createMemo(() =>
+    global.state.globalTopicsSearchList.map(
+      (topic): SearchResult => ({ name: topic.prettyName }),
+    ),
+  )
 
-  const search_state = createSearchState(() => searchResults())
+  const search_state = createSearchState({
+    searchResults,
+    onSelect: ({ name }) => {
+      navigate(`/${name}`)
+    },
+  })
 
   return (
     <>

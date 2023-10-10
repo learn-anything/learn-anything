@@ -8,9 +8,13 @@ import { Num } from "@nothing-but/utils"
 TODO: make it look as in https://lu.ma/create `Add Event Location` visually
 */
 
-export type SearchResult = {
-  name: string
-  action: () => void
+export type SearchResult = { name: string }
+
+export type OnSearchResultSelect = (result: SearchResult) => void
+
+export type SearchStateOptions = {
+  searchResults: solid.Accessor<SearchResult[]>
+  onSelect: OnSearchResultSelect
 }
 
 export interface SearchState {
@@ -21,6 +25,7 @@ export interface SearchState {
   setSearchOpen: (focused: boolean) => void
   get focused(): SearchResult | undefined
   setFocused: (item: SearchResult | undefined) => void
+  onSelect: OnSearchResultSelect
 }
 
 const FUSE_OPTIONS: Fuse.IFuseOptions<SearchResult> = {
@@ -32,9 +37,10 @@ const FUSE_SEARCH_OPTIONS: Fuse.FuseSearchOptions = {
   limit: SEARCH_RESULTS_LIMIT,
 }
 
-export function createSearchState(
-  searchResults: solid.Accessor<SearchResult[]>,
-): SearchState {
+export function createSearchState({
+  onSelect,
+  searchResults,
+}: SearchStateOptions): SearchState {
   const [query, setQuery] = solid.createSignal("")
   const [searchOpen, setSearchOpen] = solid.createSignal(false)
 
@@ -89,6 +95,7 @@ export function createSearchState(
     setFocused(item) {
       solid.untrack(results).setFocused(item)
     },
+    onSelect,
   }
 }
 
@@ -106,7 +113,7 @@ export function selectSearchResult(
   solid.batch(() => {
     search.setFocused(undefined)
     search.setSearchOpen(false)
-    result.action()
+    search.onSelect(result)
   })
 }
 
