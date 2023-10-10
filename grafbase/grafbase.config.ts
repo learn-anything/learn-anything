@@ -50,7 +50,7 @@ g.query("publicGetGlobalTopic", {
   resolver: "public/getGlobalTopic",
 })
 
-// auth'd queries
+// auth queries
 g.query("getGlobalLink", {
   args: { linkId: g.string() },
   returns: g.ref(
@@ -101,8 +101,15 @@ g.query("stripe", {
   resolver: "stripe",
 })
 
+// TODO: figure out what should be returned from `success` and `error` on mutations (string?)
 // auth mutations
 g.mutation("createUser", {
+  args: { email: g.string() },
+  returns: g.string(),
+  resolver: "createUser",
+})
+
+g.mutation("updateLatestGlobalGuide", {
   args: { email: g.string() },
   returns: g.string(),
   resolver: "createUser",

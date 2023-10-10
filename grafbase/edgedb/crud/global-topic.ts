@@ -1,5 +1,59 @@
+import { GlobalTopic } from "../../types/types"
 import { client } from "../client"
 import e from "../dbschema/edgeql-js"
+
+export async function updateGlobalTopic(
+  hankoId: string,
+  globalTopic: GlobalTopic,
+) {
+  await e
+    .delete(e.GlobalGuideSection, (section) => ({
+      filter: e.op(
+        section["<sections[is GlobalGuide]"][
+          "<latestGlobalGuide[is GlobalTopic]"
+        ].name,
+        "=",
+        globalTopic.name,
+      ),
+    }))
+    .run(client)
+
+  const res = await e
+    .update(e.GlobalTopic, (gl) => ({
+      filter_single: { name: globalTopic.name },
+      set: {
+        prettyName: globalTopic.prettyName,
+        topicSummary: globalTopic.topicSummary,
+      },
+    }))
+    .run(client)
+
+  globalTopic.sections.map(async (section) => {
+    await e.update(e.GlobalGuide, (guide) => ({
+      filter: e.op(
+        guide["<latestGlobalGuide[is GlobalTopic]"].name,
+        "=",
+        globalTopic.name,
+      ),
+      set: {
+        sections: {
+          "+=": e.insert(e.GlobalGuideSection, {
+            title: section.title,
+            links: e.select(e.GlobalLink, (l) => ({
+              filter: e.op(
+                l.id,
+                "in",
+                e.for(e.json_array_unpack(e.json(section.linkIds)), (linkId) =>
+                  e.uuid(linkId),
+                ),
+              ),
+            })),
+          }),
+        },
+      },
+    }))
+  })
+}
 
 export async function updateTopicLearningStatus(
   hankoId: string,

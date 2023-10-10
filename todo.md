@@ -1,6 +1,11 @@
 ## Public website release
 
 - guide edit
+  - grafbase mutate global topic
+    - edgedb mutation
+    - validate inputs on the web page in /edit
+    - all should live update
+    - check in production, it works
   - index all global links and put in orama db for search
   - add input box to search over the titles
   - allow adding description to section

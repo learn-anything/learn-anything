@@ -1,5 +1,6 @@
+import { GlobalTopic } from "../../types/types"
 import { addGlobalLink } from "../crud/global-link"
-import { getGlobalTopic } from "../crud/global-topic"
+import { updateGlobalTopic } from "../crud/global-topic"
 import {
   Topic,
   findFilePath,
@@ -13,9 +14,30 @@ async function main() {
   // console.log("done")
   // const links = await getAllGlobalLinksForTopic("3d-printing")
   // console.log(links, "links")
-  const globalTopic = await getGlobalTopic("3d-printing")
-  console.log(globalTopic.links, "links")
-  console.log(globalTopic.prettyName, "pretty name")
+  // const globalTopic = await getGlobalTopic("3d-printing")
+  // console.log(globalTopic.links, "links")
+  // console.log(globalTopic.prettyName, "pretty name")
+
+  const topic = {
+    name: "3d-printing",
+    prettyName: "3D Printing",
+    topicSummary:
+      "3D printing or additive manufacturing is the construction of a three-dimensional object from a CAD model or a digital 3D model.",
+    sections: [
+      {
+        title: "Intro",
+        summary: "Intro to 3D printing",
+        linkIds: [],
+      },
+      {
+        title: "Other",
+        summary: "Other links",
+        links: [],
+      },
+    ],
+  } as GlobalTopic
+  await updateGlobalTopic(process.env.LOCAL_USER_HANKO_ID!, topic)
+  console.log("done")
 }
 
 await main()

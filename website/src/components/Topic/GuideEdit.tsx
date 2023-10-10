@@ -169,19 +169,23 @@ export default function GuideSummaryEdit() {
               ],
             }}
             onClick={() => {
-              console.log("run")
-              console.log(editedGuide.guide.sections)
-              editedGuide.guide.sections.map((section) => {
-                section.links.map((link, index) => {
-                  console.log(`${section.title}-link-title-${index}`, "id")
-                  console.log(
-                    document.getElementById(
-                      `${section.title}-link-title-${index}`,
-                    ),
-                    "link title",
-                  )
-                })
-              })
+              console.log(
+                editedGlobalTopic(),
+                "edited global topic to send as mutation",
+              )
+              // console.log("run")
+              // console.log(editedGuide.guide.sections)
+              // editedGuide.guide.sections.map((section) => {
+              //   section.links.map((link, index) => {
+              //     console.log(`${section.title}-link-title-${index}`, "id")
+              //     console.log(
+              //       document.getElementById(
+              //         `${section.title}-link-title-${index}`,
+              //       ),
+              //       "link title",
+              //     )
+              //   })
+              // })
             }}
             class="bg-[#3B5CCC] text-white border-[#3B5CCC] border px-[10px] p-[8px] rounded-[4px] font-light cursor-pointer"
           >

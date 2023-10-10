@@ -231,7 +231,9 @@ module default {
       default := datetime_of_statement();
     }
     # guide is split by sections
-    multi sections: GlobalGuideSection;
+    multi sections: GlobalGuideSection {
+      on target delete allow;
+    }
   }
   type GlobalGuideSection {
     # title of section
