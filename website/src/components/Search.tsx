@@ -1,9 +1,7 @@
 import clsx from "clsx"
 import Fuse from "fuse.js"
 import * as solid from "solid-js"
-import * as solid_web from "solid-js/web"
 import { createEventListener } from "@solid-primitives/event-listener"
-import * as bounds from "@solid-primitives/bounds"
 import { Num } from "@nothing-but/utils"
 
 /*
@@ -181,10 +179,9 @@ export interface SearchProps {
 }
 
 export function Search(props: SearchProps): solid.JSX.Element {
-  let input!: HTMLInputElement
   return (
     <div
-      class="h-10 w-full"
+      class="relative h-10 w-full"
       ref={(el) => {
         /*
           if the click is outside the container, close the search
@@ -197,18 +194,13 @@ export function Search(props: SearchProps): solid.JSX.Element {
       }}
     >
       <div
-        class="relative w-full flex flex-col
+        class="w-full
         bg-white dark:bg-neutral-900 border-slate-400 dark:border-opacity-30 border rounded-[4px]"
       >
         <input
           type="text"
-          ref={input}
           placeholder={props.placeholder}
-          class={clsx(
-            "w-full h-10 bg-transparent p-3 px-4 text-black dark:text-white text-opacity-70 outline-none",
-            props.state.searchOpen &&
-              "border-b border-slate-400 dark:border-opacity-30",
-          )}
+          class="w-full h-10 bg-transparent p-3 px-4 text-black dark:text-white text-opacity-70 outline-none"
           on:keydown={(e) =>
             handleInputKeydown(e, e.currentTarget, props.state)
           }
@@ -217,45 +209,27 @@ export function Search(props: SearchProps): solid.JSX.Element {
           onPaste={(e) => updateQuery(props.state, e.currentTarget.value)}
           onClick={() => props.state.setSearchOpen(true)}
         />
-        <solid.Show when={props.state.searchOpen}>
-          {(_) => {
-            const input_rect = bounds.createElementBounds(input)
-
-            return (
-              <solid_web.Portal>
-                <div
-                  class="absolute bg-white dark:bg-neutral-900 border-slate-400 dark:border-opacity-30 border rounded-[4px]"
-                  style={
-                    /* position the portal below the input */
-                    `
-                    top: ${
-                      input_rect.top! + window.scrollY + input_rect.height!
-                    }px;
-                    left: ${input_rect.left! + window.scrollX}px;
-                    width: ${input_rect.width}px;
-                    `
-                  }
-                >
-                  <solid.For each={props.state.results}>
-                    {(topic) => (
-                      <div
-                        class={clsx(
-                          "cursor-pointer w-full h-10 px-3 p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:text-white text-black border-y border-slate-300 dark:border-neutral-800",
-                          props.state.focused === topic &&
-                            "bg-neutral-200 dark:bg-neutral-800 dark:border-opacity-30 drop-shadow-md",
-                        )}
-                        onClick={() => selectSearchResult(props.state, topic)}
-                      >
-                        {topic.name}
-                      </div>
-                    )}
-                  </solid.For>
-                </div>
-              </solid_web.Portal>
-            )
-          }}
-        </solid.Show>
       </div>
+      <solid.Show when={props.state.searchOpen}>
+        {(_) => (
+          <div class="absolute w-full z-50 mt-2 bg-white dark:bg-neutral-900 border-slate-400 dark:border-opacity-30 border rounded-[4px]">
+            <solid.For each={props.state.results}>
+              {(topic) => (
+                <div
+                  class={clsx(
+                    "cursor-pointer w-full h-10 px-3 p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:text-white text-black border-y border-slate-300 dark:border-neutral-800",
+                    props.state.focused === topic &&
+                      "bg-neutral-200 dark:bg-neutral-800 dark:border-opacity-30 drop-shadow-md",
+                  )}
+                  onClick={() => selectSearchResult(props.state, topic)}
+                >
+                  {topic.name}
+                </div>
+              )}
+            </solid.For>
+          </div>
+        )}
+      </solid.Show>
     </div>
   )
 }

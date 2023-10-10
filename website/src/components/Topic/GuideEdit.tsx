@@ -275,11 +275,7 @@ export default function GuideSummaryEdit() {
                 transition={{ duration: 1, easing: "ease-out", delay: 0.3 }}
                 animate={{
                   opacity: [0, 1, 1],
-                  transform: [
-                    "translateX(100px)",
-                    "translateX(-10px)",
-                    "translateX(0px)",
-                  ],
+                  transform: ["translateX(100px)", "translateX(-10px)", ""],
                 }}
                 class="border dark:bg-neutral-900 bg-white border-slate-400 border-opacity-30 rounded-lg flex flex-col"
               >
@@ -314,7 +310,7 @@ export default function GuideSummaryEdit() {
                             transform: [
                               "translateX(100px)",
                               "translateX(-10px)",
-                              "translateX(0px)",
+                              "",
                             ],
                           }}
                           class="flex items-center gap-6 justify-between border p-6 rounded-[6px] border-slate-400 border-opacity-30"
@@ -409,7 +405,7 @@ export default function GuideSummaryEdit() {
                   </For>
                 </div>
 
-                <div class="w-full justify-end flex p-4">
+                <div class="w-full p-4">
                   {(() => {
                     const search_state = createSearchState(() =>
                       topic.currentTopicGlobalLinksSearch(),
