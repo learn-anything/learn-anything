@@ -1,5 +1,4 @@
 import { config, g } from "@grafbase/sdk"
-
 export default config({
   schema: g,
   auth: {
@@ -9,35 +8,7 @@ export default config({
   },
 })
 
-// definitions
-
-// const learningStatus = g.enum("learningStatus", [
-//   "to_learn",
-//   "learning",
-//   "learned",
-// ])
-
-// const link = g.input("link", {
-//   title: g.string(),
-//   url: g.string(),
-//   author: g.string().optional(),
-//   year: g.int().optional(),
-//   completed: g.boolean().optional(),
-//   addedByUser: g.boolean().optional(),
-// })
-
-// const publicGlobalTopic = g.type("publicGlobalTopic", {
-//   prettyName: g.string(),
-//   topicSummary: g.string(),
-// })
-
-// const section = g.input("section", {
-//   title: g.string(),
-//   links: g.inputRef(link).list(),
-// })
-
 // public queries
-
 g.query("publicGetGlobalTopics", {
   args: {},
   returns: g
@@ -80,7 +51,6 @@ g.query("publicGetGlobalTopic", {
 })
 
 // auth'd queries
-
 g.query("getGlobalLink", {
   args: { linkId: g.string() },
   returns: g.ref(
@@ -131,8 +101,7 @@ g.query("stripe", {
   resolver: "stripe",
 })
 
-// auth'd mutations
-
+// auth mutations
 g.mutation("createUser", {
   args: { email: g.string() },
   returns: g.string(),
@@ -159,4 +128,27 @@ g.mutation("createUser", {
 //   args: { input: g.inputRef(inputToUpdateGlobalTopic) },
 //   returns: g.string(),
 //   resolver: "updateGlobalTopic",
+// })
+
+// definitions
+// const learningStatus = g.enum("learningStatus", [
+//   "to_learn",
+//   "learning",
+//   "learned",
+// ])
+// const link = g.input("link", {
+//   title: g.string(),
+//   url: g.string(),
+//   author: g.string().optional(),
+//   year: g.int().optional(),
+//   completed: g.boolean().optional(),
+//   addedByUser: g.boolean().optional(),
+// })
+// const publicGlobalTopic = g.type("publicGlobalTopic", {
+//   prettyName: g.string(),
+//   topicSummary: g.string(),
+// })
+// const section = g.input("section", {
+//   title: g.string(),
+//   links: g.inputRef(link).list(),
 // })
