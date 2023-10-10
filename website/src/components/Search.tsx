@@ -27,6 +27,10 @@ const FUSE_OPTIONS: Fuse.IFuseOptions<SearchResult> = {
   keys: ["name"],
   shouldSort: false,
 }
+const SEARCH_RESULTS_LIMIT = 5
+const FUSE_SEARCH_OPTIONS: Fuse.FuseSearchOptions = {
+  limit: SEARCH_RESULTS_LIMIT,
+}
 
 export function createSearchState(
   searchResults: solid.Accessor<SearchResult[]>,
@@ -45,9 +49,9 @@ export function createSearchState(
   const results = solid.createMemo<ResultsMemo>((prev) => {
     const results = query()
       ? fuse()
-          .search(query())
+          .search(query(), FUSE_SEARCH_OPTIONS)
           .map((r) => r.item)
-      : searchResults()
+      : searchResults().slice(0, SEARCH_RESULTS_LIMIT)
 
     /*
       try reusing the previously focused item
