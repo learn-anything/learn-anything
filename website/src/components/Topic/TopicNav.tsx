@@ -56,11 +56,14 @@ export default function TopicNav() {
   })
 
   const searchResults: SearchResult[] = [
-    { name: "Physics", action: () => console.log("Physics") },
-    { name: "Math", action: () => console.log("Math") },
-    { name: "Karabiner", action: () => console.log("Karabiner") },
+    { name: "Physics" },
+    { name: "Math" },
+    { name: "Karabiner" },
   ]
-  const search_state = createSearchState(() => searchResults)
+  const search_state = createSearchState({
+    searchResults: () => searchResults,
+    onSelect: console.log,
+  })
 
   return (
     <>

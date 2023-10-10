@@ -1,7 +1,7 @@
 import { For, Show, createEffect, createSignal, untrack } from "solid-js"
 import { useEditGuide } from "../../GlobalContext/edit-guide"
 import { useMobius } from "../../root"
-import { Search, SearchResult, createSearchState } from "../Search"
+import { Search, createSearchState } from "../Search"
 // @ts-ignore
 import { Motion } from "@motionone/solid"
 import { useNavigate } from "solid-start"
@@ -416,16 +416,9 @@ export default function GuideSummaryEdit() {
                     //   topic.currentTopicGlobalLinksSearch(),
                     // )
 
-                    // @ts-ignore
-                    const searchResults = topic.globalTopic.links.map(
-                      (link): any => ({
-                        name: link.title,
-                      }),
-                    )
-
                     const search_state = createSearchState({
-                      results: searchResults /* solid.Accessor<string[]> */,
-                      onSelect(name: string) {
+                      searchResults: topic.currentTopicGlobalLinksSearch,
+                      onSelect({ name }) {
                         console.log({
                           result_name: name,
                           section: section, // available in closure from For above
