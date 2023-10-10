@@ -32,7 +32,7 @@ async function main() {
       {
         title: "Other",
         summary: "Other links",
-        links: [],
+        linkIds: [],
       },
     ],
   } as GlobalTopic

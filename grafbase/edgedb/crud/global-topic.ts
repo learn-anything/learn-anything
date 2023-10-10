@@ -18,7 +18,7 @@ export async function updateGlobalTopic(
     }))
     .run(client)
 
-  const res = await e
+  await e
     .update(e.GlobalTopic, (gl) => ({
       filter_single: { name: globalTopic.name },
       set: {
@@ -29,29 +29,31 @@ export async function updateGlobalTopic(
     .run(client)
 
   globalTopic.sections.map(async (section) => {
-    await e.update(e.GlobalGuide, (guide) => ({
-      filter: e.op(
-        guide["<latestGlobalGuide[is GlobalTopic]"].name,
-        "=",
-        globalTopic.name,
-      ),
-      set: {
-        sections: {
-          "+=": e.insert(e.GlobalGuideSection, {
-            title: section.title,
-            links: e.select(e.GlobalLink, (l) => ({
-              filter: e.op(
-                l.id,
-                "in",
-                e.for(e.json_array_unpack(e.json(section.linkIds)), (linkId) =>
-                  e.uuid(linkId),
+    await e
+      .params({ linkIds: e.array(e.uuid) }, (params) => {
+        const linkWithIndex = e.enumerate(e.array_unpack(params.linkIds))
+        return e.update(e.GlobalGuide, (guide) => ({
+          filter: e.op(
+            guide["<latestGlobalGuide[is GlobalTopic]"].name,
+            "=",
+            globalTopic.name,
+          ),
+          set: {
+            sections: {
+              "+=": e.insert(e.GlobalGuideSection, {
+                title: section.title,
+                links: e.for(linkWithIndex, (li) =>
+                  e.select(e.GlobalLink, (l) => ({
+                    filter: e.op(l.id, "=", li[1]),
+                    "@order": e.cast(e.int16, li[0]),
+                  })),
                 ),
-              ),
-            })),
-          }),
-        },
-      },
-    }))
+              }),
+            },
+          },
+        }))
+      })
+      .run(client, { linkIds: section.linkIds })
   })
 }
 

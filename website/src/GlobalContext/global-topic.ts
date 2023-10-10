@@ -67,8 +67,8 @@ export default function createGlobalTopic(mobius: MobiusType) {
     links: [],
   })
 
-  const [globalTopicLinksSearchDb, setGlobalTopicLinksSearchDb] =
-    createSignal<any>(undefined)
+  // const [globalTopicLinksSearchDb, setGlobalTopicLinksSearchDb] =
+  //   createSignal<any>(undefined)
 
   const currentTopicGlobalLinksSearch = createMemo(() => {
     if (!globalTopic.links) return []
@@ -76,9 +76,7 @@ export default function createGlobalTopic(mobius: MobiusType) {
     return globalTopic.links.map(
       (link): SearchResult => ({
         name: link.title,
-        action: () => {
-          console.log(link.id, "link id")
-        },
+        action: () => {},
       }),
     )
   })

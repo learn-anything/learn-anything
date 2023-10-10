@@ -239,7 +239,9 @@ module default {
     # title of section
     required title: str;
     # list of links in a section
-    multi links: GlobalLink;
+    multi links: GlobalLink {
+      order: int16;
+    };
     # position of the section in the guide
     order: int16;
   }

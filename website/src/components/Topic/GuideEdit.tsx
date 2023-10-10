@@ -1,7 +1,7 @@
 import { For, Show, createEffect, createSignal, untrack } from "solid-js"
 import { useEditGuide } from "../../GlobalContext/edit-guide"
 import { useMobius } from "../../root"
-import { Search, createSearchState } from "../Search"
+import { Search, SearchResult, createSearchState } from "../Search"
 // @ts-ignore
 import { Motion } from "@motionone/solid"
 import { useNavigate } from "solid-start"
@@ -325,12 +325,12 @@ export default function GuideSummaryEdit() {
                                 placeholder={"Search URL title from all the global links"}
                                 state={search_state}
                               /> */}
-                              <Search
+                              {/* <Search
                                 placeholder={
                                   "Search URL title of global links for the topic"
                                 }
                                 state={topic.topicGlobalLinksSearch}
-                              />
+                              /> */}
                               {/* <div
                                 class={clsx(
                                   "relative flex flex-col text-[#3B5CCC]",
@@ -411,9 +411,27 @@ export default function GuideSummaryEdit() {
 
                 <div class="w-full p-4">
                   {(() => {
-                    const search_state = createSearchState(() =>
-                      topic.currentTopicGlobalLinksSearch(),
+                    // console.log(section.title, "section title")
+                    // const search_state = createSearchState(() =>
+                    //   topic.currentTopicGlobalLinksSearch(),
+                    // )
+
+                    // @ts-ignore
+                    const searchResults = topic.globalTopic.links.map(
+                      (link): any => ({
+                        name: link.title,
+                      }),
                     )
+
+                    const search_state = createSearchState({
+                      results: searchResults /* solid.Accessor<string[]> */,
+                      onSelect(name: string) {
+                        console.log({
+                          result_name: name,
+                          section: section, // available in closure from For above
+                        })
+                      },
+                    })
 
                     return (
                       <Search

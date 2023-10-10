@@ -31,7 +31,9 @@ const GlobalGuide: $.$expr_PathNode<$.TypeSet<$GlobalGuide, $.Cardinality.Many>,
 export type $GlobalGuideSectionλShape = $.typeutil.flatten<_std.$Object_d29c95e25d6b11eeabaf012dd32b5eadλShape & {
   "order": $.PropertyDesc<_std.$int16, $.Cardinality.AtMostOne, false, false, false, false>;
   "title": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
-  "links": $.LinkDesc<$GlobalLink, $.Cardinality.Many, {}, false, false,  false, false>;
+  "links": $.LinkDesc<$GlobalLink, $.Cardinality.Many, {
+    "@order": $.PropertyDesc<_std.$int16, $.Cardinality.AtMostOne>;
+  }, false, false, false, false>;
   "<sections[is GlobalGuide]": $.LinkDesc<$GlobalGuide, $.Cardinality.Many, {}, false, false,  false, false>;
   "<sections": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
