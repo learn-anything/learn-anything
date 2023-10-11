@@ -6,7 +6,13 @@ import { Search, createSearchState } from "../Search"
 import { Motion } from "@motionone/solid"
 import { useNavigate } from "solid-start"
 import { GlobalTopic, useGlobalTopic } from "../../GlobalContext/global-topic"
-import { unwrap } from "solid-js/store"
+import {
+  DragDropProvider,
+  DragDropSensors,
+  useDragDropContext,
+  createDraggable,
+  createDroppable,
+} from "@thisbeyond/solid-dnd"
 
 export default function GuideSummaryEdit() {
   const editedGuide = useEditGuide()
@@ -286,7 +292,7 @@ export default function GuideSummaryEdit() {
                 class="border dark:bg-neutral-900 bg-white border-slate-400 border-opacity-30 rounded-lg flex flex-col"
               >
                 <Show
-                  when={section.title.length > 0}
+                  when={section.title}
                   fallback={
                     <input
                       class="text-[#696969] bg-transparent p-4 font-light overflow-hidden text-ellipsis outline-none"
@@ -319,10 +325,10 @@ export default function GuideSummaryEdit() {
                               "",
                             ],
                           }}
-                          class="flex items-center gap-6 justify-between border p-6 rounded-[6px] border-slate-400 border-opacity-30"
+                          class="flex items-center gap-6 justify-between border-y p-6 border-slate-400 border-opacity-30"
                         >
                           <div class="w-full  h-full flex justify-between items-center">
-                            <div class="w-fit gap-4 flex flex-col py-4">
+                            <div class="w-[80%] gap-4 flex flex-col py-4">
                               {/* <Search
                                 placeholder={"Search URL title from all the global links"}
                                 state={search_state}
@@ -333,48 +339,34 @@ export default function GuideSummaryEdit() {
                                 }
                                 state={topic.topicGlobalLinksSearch}
                               /> */}
-                              {/* <div
-                                class={clsx(
-                                  "relative flex flex-col text-[#3B5CCC]",
-                                )}
-                              >
-                                <div class="absolute px-2 font-light transition-all text-opacity-40 text-black h-full flex items-center">
+                              <div class="relative flex flex-col text-[#3B5CCC]">
+                                {/* <div class="absolute px-2 font-light transition-all text-opacity-40 text-black h-full flex items-center">
                                   Title
-                                </div>
+                                </div> */}
                                 <input
-                                  class="border-b border-slate-400 outline-none hover:border-slate-400 focus:border-slate-600 transition-all bg-inherit border-opacity-30 px-2 py-1"
-                                  id={linkTitleId}
+                                  class="focus:border-b hover:border-b text-[18px] w-full border-slate-400 outline-none hover:border-slate-400 focus:border-slate-600 transition-all bg-inherit border-opacity-30 px-2 py-1"
                                   type="text"
                                   placeholder=""
-                                  onInput={(e) => {
-                                    global.searchGlobalLinksByTitle(
-                                      e.target.value,
-                                    )
-                                  }}
                                   value={link.title}
                                 />
-                              </div> */}
-                              {/* <div class="flex w-full">
+                              </div>
+                              <div class="flex w-full">
                                 <Show when={link?.year}>
-                                  <div class="font-light text-[12px] text-[#696969] border-r border-[#CCCCCC] px-2">
+                                  <div class="font-light text-[12px] text-[#696969] px-2">
                                     {link?.year}
                                   </div>
                                 </Show>
-                                <Show when={link?.author}>
-                                  <div class="font-light text-[12px] text-[#696969] border-r border-[#CCCCCC] px-2">
-                                    {link?.author}
-                                  </div>
-                                </Show>
+
                                 <div class="font-light w-full text-[12px] text-[#696969]">
                                   <input
-                                    class="border-b border-slate-400 hover:border-slate-400 focus:border-slate-600 outline-none transition-all border-opacity-30 bg-inherit px-2 py-1 w-full"
+                                    class="hover:border-b focus:border-b border-slate-400 hover:border-slate-400 focus:border-slate-600 outline-none transition-all border-opacity-30 bg-inherit px-2 w-full"
                                     type="text"
                                     id={linkUrlId}
                                     placeholder="URL"
-                                    value={link.title}
+                                    value={link.url}
                                   />
                                 </div>
-                              </div> */}
+                              </div>
                             </div>
                             <div class="flex gap-5 dark:text-white flex-col items-end text-[14px] opacity-50">
                               <div
@@ -420,31 +412,44 @@ export default function GuideSummaryEdit() {
                         const linkToAdd = topic.globalTopic.links.find(
                           (link) => link.title === name,
                         )
-                        console.log(linkToAdd, "link")
 
-                        // @ts-ignore
                         const foundSectionIndex =
                           topic.globalTopic.latestGlobalGuide?.sections.findIndex(
-                            (section) => section.title === section.title,
+                            (s) => {
+                              return s.title === section.title
+                            },
                           )
-                        console.log(foundSectionIndex, "index")
-
                         const newSections = [
                           ...(editedGlobalTopic().latestGlobalGuide?.sections ||
                             []),
                         ]
+                        const newLinks = newSections[foundSectionIndex].links
+
                         // @ts-ignore
-                        newSections[foundSectionIndex].links.push(linkToAdd)
-                        console.log(newSections, "new sections")
-                        return
+                        const oldLinks =
+                          editedGlobalTopic().latestGlobalGuide?.sections[
+                            foundSectionIndex
+                          ].links
+
+                        // Modify the specific section at the given index
 
                         setEditedGlobalTopic({
                           ...editedGlobalTopic(),
                           latestGlobalGuide: {
                             summary: "",
-                            sections: [],
+                            sections: [
+                              {
+                                summary: "",
+                                title: "",
+                                links: [...oldLinks, linkToAdd],
+                              },
+                            ],
                           },
                         })
+                        console.log(
+                          editedGlobalTopic(),
+                          "new edited global topic",
+                        )
                       },
                     })
 

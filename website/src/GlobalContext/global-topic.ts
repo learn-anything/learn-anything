@@ -60,7 +60,24 @@ export default function createGlobalTopic(mobius: MobiusType) {
     topicSummary: "",
     latestGlobalGuide: {
       summary: "",
-      sections: [],
+      sections: [
+        {
+          summary: "",
+          title: "Intro",
+          links: [
+            {
+              id: "1",
+              title: "Zine Machine",
+              url: "zine-machine.glitch.me",
+            },
+            {
+              id: "2",
+              title: "CuraEngine",
+              url: "curaengine.com",
+            },
+          ],
+        },
+      ],
     },
     links: [],
   })
