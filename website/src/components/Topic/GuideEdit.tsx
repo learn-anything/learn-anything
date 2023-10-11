@@ -166,28 +166,28 @@ export default function GuideSummaryEdit() {
               console.log(url)
               navigate(url)
             }}
-            transition={{ duration: 1, easing: "ease-out" }}
-            animate={{
-              opacity: [0, 1, 1],
-              transform: [
-                "translateX(100px)",
-                "translateX(-10px)",
-                "translateX(0px)",
-              ],
-            }}
+            // transition={{ duration: 1, easing: "ease-out" }}
+            // animate={{
+            //   opacity: [0, 1, 1],
+            //   transform: [
+            //     "translateX(100px)",
+            //     "translateX(-10px)",
+            //     "translateX(0px)",
+            //   ],
+            // }}
           >
             Cancel
           </Motion.div>
           <Motion.div
-            transition={{ duration: 1, easing: "ease-out", delay: 0.1 }}
-            animate={{
-              opacity: [0, 1, 1],
-              transform: [
-                "translateX(100px)",
-                "translateX(-10px)",
-                "translateX(0px)",
-              ],
-            }}
+            // transition={{ duration: 1, easing: "ease-out", delay: 0.1 }}
+            // animate={{
+            //   opacity: [0, 1, 1],
+            //   transform: [
+            //     "translateX(100px)",
+            //     "translateX(-10px)",
+            //     "translateX(0px)",
+            //   ],
+            // }}
             onClick={() => {
               console.log(
                 editedGlobalTopic(),
@@ -213,15 +213,15 @@ export default function GuideSummaryEdit() {
           </Motion.div>
         </div>
         <Motion.div
-          transition={{ duration: 1, easing: "ease-out", delay: 0.2 }}
-          animate={{
-            opacity: [0, 1, 1],
-            transform: [
-              "translateX(100px)",
-              "translateX(-10px)",
-              "translateX(0px)",
-            ],
-          }}
+          // transition={{ duration: 1, easing: "ease-out", delay: 0.2 }}
+          // animate={{
+          //   opacity: [0, 1, 1],
+          //   transform: [
+          //     "translateX(100px)",
+          //     "translateX(-10px)",
+          //     "translateX(0px)",
+          //   ],
+          // }}
           class="border-[0.5px] dark:border-[#282828] border-[#69696951] flex flex-col gap-2 rounded-[4px] p-4 w-full"
         >
           <div class="flex justify-between items-center">
@@ -259,15 +259,15 @@ export default function GuideSummaryEdit() {
           </Show>
         </Motion.div>
         <Motion.div
-          transition={{ duration: 1, easing: "ease-out", delay: 0.2 }}
-          animate={{
-            opacity: [0, 1, 1],
-            transform: [
-              "translateX(100px)",
-              "translateX(-10px)",
-              "translateX(0px)",
-            ],
-          }}
+          // transition={{ duration: 1, easing: "ease-out", delay: 0.2 }}
+          // animate={{
+          //   opacity: [0, 1, 1],
+          //   transform: [
+          //     "translateX(100px)",
+          //     "translateX(-10px)",
+          //     "translateX(0px)",
+          //   ],
+          // }}
           class="bg-[#3B5CCC] text-white p-3 rounded-[4px] flex justify-center items-center cursor-pointer hover:bg-[#3554b9] transition-all"
           onClick={() => {
             const currentGlobalTopic = editedGlobalTopic()
