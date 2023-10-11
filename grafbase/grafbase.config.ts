@@ -61,7 +61,6 @@ g.query("getGlobalLink", {
       public: g.boolean(),
       protocol: g.string().optional(),
       fullUrl: g.string().optional(),
-      mainTopicAsString: g.string().optional(),
       description: g.string().optional(),
       urlTitle: g.string().optional(),
       year: g.string().optional(),

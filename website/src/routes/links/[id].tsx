@@ -4,6 +4,7 @@ import { useMobius } from "../../root"
 import { Button } from "@kobalte/core"
 import { Checkbox } from "@kobalte/core"
 import Icon from "../../components/Icon"
+// @ts-ignore
 import { Motion } from "@motionone/solid"
 
 export default function GlobalLinkEdit() {
@@ -21,7 +22,6 @@ export default function GlobalLinkEdit() {
           title: true,
           url: true,
           fullUrl: true,
-          mainTopicAsString: true,
           protocol: true,
           verified: true,
           public: true,
@@ -36,8 +36,8 @@ export default function GlobalLinkEdit() {
     // from queries..
     // @ts-ignore
     setLinkData(link.data.getGlobalLink)
-    console.log(linkData(), "link data")
-    console.log(linkData().title, "title")
+    // console.log(linkData(), "link data")
+    // console.log(linkData().title, "title")
   })
 
   return (

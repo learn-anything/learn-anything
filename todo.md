@@ -6,6 +6,10 @@
     - validate inputs on the web page in /edit
     - all should live update
     - check in production, it works
+  - and have a way to add a new global link too by pressing `Add link` button
+    - will go to `/links/new` page
+      - add ability to go to `/links/new` with url as param, to instantly prefill everything
+      - also allow attaching a link to a topic instantly too
   - index all global links and put in orama db for search
   - add input box to search over the titles
   - allow adding description to section
@@ -17,8 +21,6 @@
       - try do a link to global topic (if fails do as string), then fix it later as real link
   - have separate search for global links that have the topic as main topic
   - and have another search that searches through all global links
-  - and have a way to add a new global link too by pressing `Add link` button
-    - will go to `/links/new` page
   - when pressing `return` on one of the global links in search, show all the link details
   - allow rearranging of links, use https://solid-dnd.com
     - also allow rearranging of sections

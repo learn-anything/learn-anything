@@ -7,11 +7,31 @@ import { Motion } from "@motionone/solid"
 import { useNavigate } from "solid-start"
 import { GlobalTopic, useGlobalTopic } from "../../GlobalContext/global-topic"
 
+const Draggable = (props) => {
+  const draggable = createDraggable(props.id)
+  return <div use:draggable>draggable</div>
+}
+
+const Droppable = (props) => {
+  const droppable = createDroppable(props.id)
+  return <div use:droppable>droppable</div>
+}
+
 export default function GuideSummaryEdit() {
   const editedGuide = useEditGuide()
   const topic = useGlobalTopic()
   const mobius = useMobius()
   const navigate = useNavigate()
+
+  // const [, { onDragEnd }] = useDragDropContext()
+
+  // onDragEnd(({ draggable, droppable }) => {
+  //   if (droppable) {
+  //     // Handle the drop. Note that solid-dnd doesn't move a draggable into a
+  //     // droppable on drop. It leaves it up to you how you want to handle the
+  //     // drop.
+  //   }
+  // })
 
   const [editedGlobalTopic, setEditedGlobalTopic] = createSignal<GlobalTopic>({
     prettyName: "",
@@ -364,29 +384,16 @@ export default function GuideSummaryEdit() {
                             <div class="flex gap-5 dark:text-white flex-col items-end text-[14px] opacity-50">
                               <div
                                 onClick={async () => {
-                                  const linkUrlElement =
-                                    document.getElementById(
-                                      linkUrlId,
-                                    ) as HTMLInputElement
-                                  const linkUrl = linkUrlElement.value
-                                  const res = await mobius.query({
-                                    checkForGlobalLink: {
-                                      where: {
-                                        linkUrl: linkUrl,
-                                      },
-                                      select: {
-                                        url: true,
-                                        title: true,
-                                      },
-                                    },
-                                  })
-                                  console.log(res, "res")
+                                  console.log(link, "link")
+                                  navigate(`/links/${link.id}`)
                                 }}
                                 class="cursor-pointer"
                               >
-                                Check URL
+                                Edit
                               </div>
-                              <div class="cursor-pointer">Sort</div>
+                              <div class="cursor-pointer">Drag</div>
+                              {/* <Draggable id="draggable-1" />
+                              <Droppable id="droppable-1" /> */}
                               <div class="cursor-pointer">Delete</div>
                             </div>
                           </div>
@@ -432,8 +439,8 @@ export default function GuideSummaryEdit() {
                             summary: "",
                             sections: [
                               {
-                                summary: "",
                                 title: "",
+                                summary: "",
                                 links: [...oldLinks, linkToAdd],
                               },
                             ],

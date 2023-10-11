@@ -52,7 +52,6 @@ export async function getGlobalLink(id: string) {
       title: true,
       url: true,
       fullUrl: true,
-      mainTopicAsString: true,
       protocol: true,
       verified: true,
       public: true,
