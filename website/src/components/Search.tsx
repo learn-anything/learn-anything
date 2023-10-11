@@ -6,6 +6,7 @@ import { Num } from "@nothing-but/utils"
 
 /*
 TODO: make it look as in https://lu.ma/create `Add Event Location` visually
+TODO: replace fuse.js with https://oramasearch.com as its used already in the app
 */
 
 export type SearchResult = { name: string }

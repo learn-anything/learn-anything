@@ -32,8 +32,6 @@ export type Section = {
   summary: string
   title: string
   links: GlobalLink[]
-  // order: number
-  // ordered: boolean
 }
 type LatestGlobalGuide = {
   summary: string
@@ -41,7 +39,7 @@ type LatestGlobalGuide = {
 }
 export type GlobalTopic = {
   prettyName: string
-  summary?: string
+  topicSummary?: string
   topicPath?: string
   latestGlobalGuide?: LatestGlobalGuide
   links?: GlobalLink[]
@@ -59,7 +57,7 @@ export default function createGlobalTopic(mobius: MobiusType) {
   const [globalTopic, setGlobalTopic] = createStore<GlobalTopic>({
     prettyName: "",
     topicPath: "",
-    summary: "",
+    topicSummary: "",
     latestGlobalGuide: {
       summary: "",
       sections: [],
@@ -76,7 +74,6 @@ export default function createGlobalTopic(mobius: MobiusType) {
     return globalTopic.links.map(
       (link): SearchResult => ({
         name: link.title,
-        action: () => {},
       }),
     )
   })
@@ -117,9 +114,9 @@ export default function createGlobalTopic(mobius: MobiusType) {
         })
         // @ts-ignore
         const topicData = topic.data.publicGetGlobalTopic
-        console.log(topicData.links, "links")
         setGlobalTopic({
           prettyName: topicData.prettyName,
+          topicSummary: topicData.topicSummary,
           topicPath: topicData.topicPath,
           latestGlobalGuide: topicData.latestGlobalGuide,
           links: topicData.links,

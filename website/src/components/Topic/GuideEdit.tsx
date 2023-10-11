@@ -6,6 +6,7 @@ import { Search, createSearchState } from "../Search"
 import { Motion } from "@motionone/solid"
 import { useNavigate } from "solid-start"
 import { GlobalTopic, useGlobalTopic } from "../../GlobalContext/global-topic"
+import { unwrap } from "solid-js/store"
 
 export default function GuideSummaryEdit() {
   const editedGuide = useEditGuide()
@@ -20,7 +21,7 @@ export default function GuideSummaryEdit() {
       summary: "",
       sections: [],
     },
-    summary: "",
+    topicSummary: "",
   })
 
   createEffect(() => {
@@ -208,7 +209,7 @@ export default function GuideSummaryEdit() {
             <div class="text-[#696969] ">Summary</div>
             <div
               class="text-[#3B5CCC] cursor-pointer select-none"
-              onClick={() => {}}
+              // onClick={() => {}}
             ></div>
           </div>
           <Show
@@ -218,11 +219,12 @@ export default function GuideSummaryEdit() {
                 class="text-[#696969] bg-inherit font-light overflow-hidden text-ellipsis outline-none"
                 id="GuideSummary"
                 placeholder="Add summary"
+                value={topic.globalTopic.topicSummary}
                 onInput={(e) => {
                   const currentGlobalTopic = editedGlobalTopic()
                   setEditedGlobalTopic({
                     ...currentGlobalTopic,
-                    summary: e.target.value,
+                    topicSummary: e.target.value,
                   })
                 }}
               />
@@ -231,7 +233,7 @@ export default function GuideSummaryEdit() {
             <div
               class="text-[#696969] font-light overflow-hidden text-ellipsis outline-none"
               id="GuideSummary"
-              onClick={() => {}}
+              // onClick={() => {}}
             >
               {editedGuide.guide.summary}
             </div>
@@ -273,7 +275,7 @@ export default function GuideSummaryEdit() {
           Add section
         </Motion.div>
         <For each={editedGlobalTopic().latestGlobalGuide?.sections}>
-          {(section, index) => {
+          {(section) => {
             return (
               <Motion.div
                 transition={{ duration: 1, easing: "ease-out", delay: 0.3 }}
@@ -301,8 +303,8 @@ export default function GuideSummaryEdit() {
                 <div class="flex gap-4 flex-col">
                   <For each={section.links}>
                     {(link, index) => {
-                      let linkTitleId = `${section.title}-link-title-${index}`
-                      let linkUrlId = `${section.title}-link-url-${index}`
+                      // const linkTitleId = `${section.title}-link-title-${index}`
+                      const linkUrlId = `${section.title}-link-url-${index}`
                       return (
                         <Motion.div
                           transition={{
@@ -381,7 +383,7 @@ export default function GuideSummaryEdit() {
                                     document.getElementById(
                                       linkUrlId,
                                     ) as HTMLInputElement
-                                  const linkUrl = linkUrlElement?.value
+                                  const linkUrl = linkUrlElement.value
                                   const res = await mobius.query({
                                     checkForGlobalLink: {
                                       where: {
@@ -411,17 +413,37 @@ export default function GuideSummaryEdit() {
 
                 <div class="w-full p-4">
                   {(() => {
-                    // console.log(section.title, "section title")
-                    // const search_state = createSearchState(() =>
-                    //   topic.currentTopicGlobalLinksSearch(),
-                    // )
-
                     const search_state = createSearchState({
                       searchResults: topic.currentTopicGlobalLinksSearch,
                       onSelect({ name }) {
-                        console.log({
-                          result_name: name,
-                          section: section, // available in closure from For above
+                        // @ts-ignore
+                        const linkToAdd = topic.globalTopic.links.find(
+                          (link) => link.title === name,
+                        )
+                        console.log(linkToAdd, "link")
+
+                        // @ts-ignore
+                        const foundSectionIndex =
+                          topic.globalTopic.latestGlobalGuide?.sections.findIndex(
+                            (section) => section.title === section.title,
+                          )
+                        console.log(foundSectionIndex, "index")
+
+                        const newSections = [
+                          ...(editedGlobalTopic().latestGlobalGuide?.sections ||
+                            []),
+                        ]
+                        // @ts-ignore
+                        newSections[foundSectionIndex].links.push(linkToAdd)
+                        console.log(newSections, "new sections")
+                        return
+
+                        setEditedGlobalTopic({
+                          ...editedGlobalTopic(),
+                          latestGlobalGuide: {
+                            summary: "",
+                            sections: [],
+                          },
                         })
                       },
                     })
