@@ -2,10 +2,13 @@ import { For, Show, createEffect, createSignal, untrack } from "solid-js"
 import { useEditGuide } from "../../GlobalContext/edit-guide"
 import { useMobius } from "../../root"
 import { Search, createSearchState } from "../Search"
-// @ts-ignore
-import { Motion } from "@motionone/solid"
 import { useNavigate } from "solid-start"
 import { GlobalTopic, useGlobalTopic } from "../../GlobalContext/global-topic"
+import {
+  useDragDropContext,
+  createDraggable,
+  createDroppable,
+} from "@thisbeyond/solid-dnd"
 
 const Draggable = (props) => {
   const draggable = createDraggable(props.id)
@@ -23,15 +26,13 @@ export default function GuideSummaryEdit() {
   const mobius = useMobius()
   const navigate = useNavigate()
 
-  // const [, { onDragEnd }] = useDragDropContext()
+  const [, { onDragEnd }] = useDragDropContext()
 
-  // onDragEnd(({ draggable, droppable }) => {
-  //   if (droppable) {
-  //     // Handle the drop. Note that solid-dnd doesn't move a draggable into a
-  //     // droppable on drop. It leaves it up to you how you want to handle the
-  //     // drop.
-  //   }
-  // })
+  onDragEnd(({ draggable, droppable }) => {
+    if (droppable) {
+      // TODO: rearrange links inside a section, check where drop was happening
+    }
+  })
 
   const [editedGlobalTopic, setEditedGlobalTopic] = createSignal<GlobalTopic>({
     prettyName: "",
@@ -55,91 +56,6 @@ export default function GuideSummaryEdit() {
     console.log(editedGlobalTopic(), "edited global topic")
   })
 
-  // const [currentLinkId, setCurrentLinkId] = createSignal()
-
-  // const [editedGuideForm, setEditedGuideForm] = createStore<Guide>({
-  //   summary: "",
-  //   sections: []
-  // });
-
-  // const updateEditedGuideFormField = (fieldName: string) => (event: Event) => {
-  //   const inputElement = event.currentTarget as HTMLInputElement;
-  //   setEditedGuideForm({
-  //     [fieldName]: inputElement.value
-  //   });
-  // };
-
-  // const currentTopicSearchResults = createMemo(async () => {
-  //   const links = await mobius.query
-  //   return global.state.globalLinks.map((link) => {
-  //     return {
-  //       name: link.title,
-  //       action: () => {
-  //         console.log(link.url, "url")
-  //       },
-  //     }
-  //   })
-  // })
-
-  // const currentTopicSearchState = createSearchState(() =>
-  //   currentTopicSearchResults(),
-  // )
-
-  // onMount(async () => {
-  //   if (signedIn()) {
-  //     const globalTopic = await mobius.query({
-  //       getGlobalTopic: {
-  //         where: {
-  //           // TODO: get topic name from route
-  //           topicName: "3d-printing",
-  //         },
-  //         select: {
-  //           prettyName: true,
-  //           topicSummary: true,
-  //         },
-  //       },
-  //     })
-  //     if (globalTopic !== null) {
-  //       // @ts-ignore
-  //       editedGuide.set(globalTopic.data.getGlobalTopic)
-  //     }
-  //   } else {
-  //     // TODO: check that user is signed in admin of topic
-  //     // in future allow all users to edit guides, for now just admins
-  //     // if not, navigate back to <topic>
-  //     // await mobius.
-  //     // if (!admin) { navigate() }
-  //   }
-  //})
-
-  // createEffect(() => {
-  //   const editableDiv = document.getElementById("GuideSummary")!
-
-  //   editableDiv.addEventListener("click", () => {
-  //     editableDiv.setAttribute("contenteditable", "true")
-  //     editableDiv.focus()
-  //   })
-  //   createShortcut(["ENTER"], () => {
-  //     let summary = document.getElementById("GuideSummary")!.innerHTML
-  //   })
-  // })
-
-  // createEffect(() => {
-  //   editedGuide.globalTopic.globalGuide.sections.map((section, index) => {
-  //     const editableDiv = document.getElementById(`${section.title}${index}`)!
-
-  //     editableDiv.addEventListener("click", () => {
-  //       editableDiv.setAttribute("contenteditable", "true")
-  //       editableDiv.focus()
-  //     })
-  //     createShortcut(["ENTER"], () => {
-  //       let sectionTitle = document.getElementById(
-  //         `${section.title}${index}`,
-  //       )!.innerHTML
-  //     })
-  //   })
-  // })
-
   return (
     <>
       <style>{`
@@ -152,78 +68,36 @@ export default function GuideSummaryEdit() {
   `}</style>
       <div class="w-full flex flex-col gap-4 text-[16px] leading-[18.78px] ">
         <div class="flex justify-between items-center ">
-          <Motion.div
+          <div
             class="border-[#696969] dark:border-gray-200 dark:hover:bg-gray-200 dark:hover:text-black border p-[8px] px-[10px] rounded-[4px] text-[#696969] dark:text-white font-light hover:bg-gray-300 hover:bg-opacity-50 cursor-pointer transition-all"
             onClick={() => {
-              // TODO: show prompt 'are you sure', in case there is something in form data
-
-              // TODO: do it in better, more safe way
+              // TODO: if there is modified data, ask user if it's ok to disregard made changes to go back
               let url = window.location.href
               const parts = url.split("/")
               if (parts.length >= 4) {
                 url = "/" + parts[3]
               }
-              console.log(url)
               navigate(url)
             }}
-            // transition={{ duration: 1, easing: "ease-out" }}
-            // animate={{
-            //   opacity: [0, 1, 1],
-            //   transform: [
-            //     "translateX(100px)",
-            //     "translateX(-10px)",
-            //     "translateX(0px)",
-            //   ],
-            // }}
           >
             Cancel
-          </Motion.div>
-          <Motion.div
-            // transition={{ duration: 1, easing: "ease-out", delay: 0.1 }}
-            // animate={{
-            //   opacity: [0, 1, 1],
-            //   transform: [
-            //     "translateX(100px)",
-            //     "translateX(-10px)",
-            //     "translateX(0px)",
-            //   ],
-            // }}
+          </div>
+          <div
             onClick={() => {
               console.log(
                 editedGlobalTopic(),
                 "edited global topic to send as mutation",
               )
-              // console.log("run")
-              // console.log(editedGuide.guide.sections)
-              // editedGuide.guide.sections.map((section) => {
-              //   section.links.map((link, index) => {
-              //     console.log(`${section.title}-link-title-${index}`, "id")
-              //     console.log(
-              //       document.getElementById(
-              //         `${section.title}-link-title-${index}`,
-              //       ),
-              //       "link title",
-              //     )
-              //   })
-              // })
+              // TODO: check all data is valid, if not, show error with what is the problem
+              // TODO: after data validation, send grafbase mutation to update global topic
+              // await mobius.mutation
             }}
             class="bg-[#3B5CCC] text-white border-[#3B5CCC] border px-[10px] p-[8px] rounded-[4px] font-light cursor-pointer"
           >
             Submit Changes
-          </Motion.div>
+          </div>
         </div>
-        <Motion.div
-          // transition={{ duration: 1, easing: "ease-out", delay: 0.2 }}
-          // animate={{
-          //   opacity: [0, 1, 1],
-          //   transform: [
-          //     "translateX(100px)",
-          //     "translateX(-10px)",
-          //     "translateX(0px)",
-          //   ],
-          // }}
-          class="border-[0.5px] dark:border-[#282828] border-[#69696951] flex flex-col gap-2 rounded-[4px] p-4 w-full"
-        >
+        <div class="border-[0.5px] dark:border-[#282828] border-[#69696951] flex flex-col gap-2 rounded-[4px] p-4 w-full">
           <div class="flex justify-between items-center">
             <div class="text-[#696969] ">Summary</div>
             <div
@@ -257,17 +131,8 @@ export default function GuideSummaryEdit() {
               {editedGuide.guide.summary}
             </div>
           </Show>
-        </Motion.div>
-        <Motion.div
-          // transition={{ duration: 1, easing: "ease-out", delay: 0.2 }}
-          // animate={{
-          //   opacity: [0, 1, 1],
-          //   transform: [
-          //     "translateX(100px)",
-          //     "translateX(-10px)",
-          //     "translateX(0px)",
-          //   ],
-          // }}
+        </div>
+        <div
           class="bg-[#3B5CCC] text-white p-3 rounded-[4px] flex justify-center items-center cursor-pointer hover:bg-[#3554b9] transition-all"
           onClick={() => {
             const currentGlobalTopic = editedGlobalTopic()
@@ -292,18 +157,11 @@ export default function GuideSummaryEdit() {
           }}
         >
           Add section
-        </Motion.div>
+        </div>
         <For each={editedGlobalTopic().latestGlobalGuide?.sections}>
           {(section) => {
             return (
-              <Motion.div
-                // transition={{ duration: 1, easing: "ease-out", delay: 0.3 }}
-                // animate={{
-                //   opacity: [0, 1, 1],
-                //   transform: ["translateX(100px)", "translateX(-10px)", ""],
-                // }}
-                class="border dark:bg-neutral-900 bg-white border-slate-400 border-opacity-30 rounded-lg flex flex-col"
-              >
+              <div class="border dark:bg-neutral-900 bg-white border-slate-400 border-opacity-30 rounded-lg flex flex-col">
                 <Show
                   when={section.title}
                   fallback={
@@ -322,40 +180,12 @@ export default function GuideSummaryEdit() {
                 <div class="flex gap-4 flex-col">
                   <For each={section.links}>
                     {(link, index) => {
-                      // const linkTitleId = `${section.title}-link-title-${index}`
                       const linkUrlId = `${section.title}-link-url-${index}`
                       return (
-                        <Motion.div
-                          // transition={{
-                          //   duration: Math.min(index() * 0.2 + 0.5, 2),
-                          //   easing: "ease-out",
-                          // }}
-                          // animate={{
-                          //   opacity: [0, 1, 1],
-                          //   transform: [
-                          //     "translateX(100px)",
-                          //     "translateX(-10px)",
-                          //     "",
-                          //   ],
-                          // }}
-                          class="flex items-center gap-6 justify-between border-y p-6 border-slate-400 border-opacity-30"
-                        >
+                        <div class="flex items-center gap-6 justify-between border-y p-6 border-slate-400 border-opacity-30">
                           <div class="w-full  h-full flex justify-between items-center">
                             <div class="w-[80%] gap-4 flex flex-col py-4">
-                              {/* <Search
-                                placeholder={"Search URL title from all the global links"}
-                                state={search_state}
-                              /> */}
-                              {/* <Search
-                                placeholder={
-                                  "Search URL title of global links for the topic"
-                                }
-                                state={topic.topicGlobalLinksSearch}
-                              /> */}
                               <div class="relative flex flex-col text-[#3B5CCC]">
-                                {/* <div class="absolute px-2 font-light transition-all text-opacity-40 text-black h-full flex items-center">
-                                  Title
-                                </div> */}
                                 <input
                                   class="focus:border-b hover:border-b text-[18px] w-full border-slate-400 outline-none hover:border-slate-400 focus:border-slate-600 transition-all bg-inherit border-opacity-30 px-2 py-1"
                                   type="text"
@@ -392,12 +222,12 @@ export default function GuideSummaryEdit() {
                                 Edit
                               </div>
                               <div class="cursor-pointer">Drag</div>
-                              {/* <Draggable id="draggable-1" />
-                              <Droppable id="droppable-1" /> */}
+                              <Draggable id="draggable-1" />
+                              <Droppable id="droppable-1" />
                               <div class="cursor-pointer">Delete</div>
                             </div>
                           </div>
-                        </Motion.div>
+                        </div>
                       )
                     }}
                   </For>
@@ -462,19 +292,8 @@ export default function GuideSummaryEdit() {
                       />
                     )
                   })()}
-                  {/* <div
-                    class="bg-[#3B5CCC] text-white text-[14px] p-2 px-4 rounded-[6px] flex justify-center items-center cursor-pointer hover:bg-[#3554b9] transition-all"
-                    onClick={() => {
-                      // editedGuide.addLinkToSection(0, {
-                      //   title: "",
-                      //   url: "",
-                      // })
-                    }}
-                  >
-                    Add link
-                  </div> */}
                 </div>
-              </Motion.div>
+              </div>
             )
           }}
         </For>

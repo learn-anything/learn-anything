@@ -1,6 +1,7 @@
 // @refresh reload
 // @ts-ignore
 import { MatchFilters } from "@solidjs/router/dist/types"
+import { DragDropProvider, DragDropSensors } from "@thisbeyond/solid-dnd"
 import Mobius from "graphql-mobius"
 import { Suspense, createContext, createSignal, useContext } from "solid-js"
 import {
@@ -189,14 +190,19 @@ export default function Root() {
                   <GlobalStateProvider value={global}>
                     <GlobalTopicProvider value={globalTopic}>
                       <EditGuideProvider value={editGuide}>
-                        <Routes>
-                          <Route
-                            path="/:username"
-                            component={UserProfile}
-                            matchFilters={filters}
-                          />
-                          <FileRoutes />
-                        </Routes>
+                        {/* TODO: should probably move it from here as drag/drop is currently only done in /global-topic/edit */}
+                        <DragDropProvider>
+                          <DragDropSensors>
+                            <Routes>
+                              <Route
+                                path="/:username"
+                                component={UserProfile}
+                                matchFilters={filters}
+                              />
+                              <FileRoutes />
+                            </Routes>
+                          </DragDropSensors>
+                        </DragDropProvider>
                       </EditGuideProvider>
                     </GlobalTopicProvider>
                   </GlobalStateProvider>
