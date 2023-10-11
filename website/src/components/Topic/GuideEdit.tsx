@@ -1,4 +1,11 @@
-import { For, Show, createEffect, createSignal, untrack } from "solid-js"
+import {
+  For,
+  Show,
+  createEffect,
+  createSignal,
+  onMount,
+  untrack,
+} from "solid-js"
 import { useEditGuide } from "../../GlobalContext/edit-guide"
 import { useMobius } from "../../root"
 import { Search, createSearchState } from "../Search"
@@ -26,57 +33,56 @@ export default function GuideSummaryEdit() {
     topicSummary: "",
   })
 
-  // @ts-ignore
-  const [, { onDragEnd }] = useDragDropContext()
+  const [, { onDragEnd }] = useDragDropContext()!
 
   onDragEnd(({ draggable, droppable }) => {
-    if (droppable) {
-      let parts = droppable.id.split("-in-section-")
-      const droppedIntoLinkTitle = parts[0]
-      const sectionTitle = parts[1]
-      parts = draggable.id.split("-in-section-")
-      const linkBeingDroppedTitle = parts[0]
+    if (!droppable) return
 
-      // @ts-ignore
-      const linkToAdd = topic.globalTopic.links.find(
-        (link) => link.title === linkBeingDroppedTitle,
+    let parts = (droppable.id as string).split("-in-section-")
+    const droppedIntoLinkTitle = parts[0]
+    const sectionTitle = parts[1]
+    parts = (draggable.id as string).split("-in-section-")
+    const linkBeingDroppedTitle = parts[0]
+
+    // @ts-ignore
+    const linkToAdd = topic.globalTopic.links.find(
+      (link) => link.title === linkBeingDroppedTitle,
+    )
+
+    console.log(linkToAdd, "link to add")
+    // @ts-ignore
+    const foundSectionIndex =
+      topic.globalTopic.latestGlobalGuide?.sections.findIndex((s) => {
+        return s.title === sectionTitle
+      })
+
+    if (foundSectionIndex !== -1 && foundSectionIndex !== undefined) {
+      let copiedTopic: GlobalTopic = JSON.parse(
+        JSON.stringify(editedGlobalTopic()),
       )
 
-      console.log(linkToAdd, "link to add")
-      // @ts-ignore
-      const foundSectionIndex =
-        topic.globalTopic.latestGlobalGuide?.sections.findIndex((s) => {
-          return s.title === sectionTitle
-        })
+      const targetSection =
+        copiedTopic.latestGlobalGuide?.sections[foundSectionIndex]
 
-      if (foundSectionIndex !== -1 && foundSectionIndex !== undefined) {
-        let copiedTopic: GlobalTopic = JSON.parse(
-          JSON.stringify(editedGlobalTopic()),
+      if (targetSection) {
+        // 2. Within this section's links array, find the index of the link corresponding to droppedIntoLinkTitle.
+        const dropPosition = targetSection.links.findIndex(
+          (link) => link.title === droppedIntoLinkTitle,
         )
 
-        const targetSection =
-          copiedTopic.latestGlobalGuide?.sections[foundSectionIndex]
-
-        if (targetSection) {
-          // 2. Within this section's links array, find the index of the link corresponding to droppedIntoLinkTitle.
-          const dropPosition = targetSection.links.findIndex(
-            (link) => link.title === droppedIntoLinkTitle,
-          )
-
-          if (dropPosition !== -1) {
-            // 3. Insert linkToAdd after this index.
-            targetSection.links.splice(dropPosition + 1, 0, linkToAdd)
-          }
+        if (dropPosition !== -1) {
+          // 3. Insert linkToAdd after this index.
+          targetSection.links.splice(dropPosition + 1, 0, linkToAdd)
         }
-
-        // @ts-ignore
-        // copiedTopic.latestGlobalGuide?.sections[
-        //   foundSectionIndex
-        //   // @ts-ignore
-        // ].links.push(linkToAdd)
-
-        setEditedGlobalTopic(copiedTopic)
       }
+
+      // @ts-ignore
+      // copiedTopic.latestGlobalGuide?.sections[
+      //   foundSectionIndex
+      //   // @ts-ignore
+      // ].links.push(linkToAdd)
+
+      setEditedGlobalTopic(copiedTopic)
     }
   })
 
@@ -225,8 +231,12 @@ export default function GuideSummaryEdit() {
                       const linkUrlId = `${section.title}-link-url-${index}`
                       return (
                         <div
-                          use:draggable
-                          use:droppable
+                          ref={(el) => {
+                            onMount(() => {
+                              draggable(el)
+                              droppable(el)
+                            })
+                          }}
                           class="flex items-center gap-6 justify-between border-y p-6 border-slate-400 border-opacity-30"
                         >
                           <div class="w-full  h-full flex justify-between items-center">

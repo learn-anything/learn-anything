@@ -2,7 +2,6 @@ import { createContext, createEffect, createMemo, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 import { MobiusType } from "../root"
 import { useLocation } from "solid-start"
-import { unwrap } from "solid-js/store"
 import { SearchResult } from "../components/Search"
 
 type GlobalLink = {

@@ -6,10 +6,6 @@ declare module "solid-js" {
     */
     interface CustomEvents extends HTMLElementEventMap {}
     interface CustomCaptureEvents extends HTMLElementEventMap {}
-    interface Directives {
-      "use:droppable"?: any
-      "use:draggable"?: any
-    }
   }
 }
 
