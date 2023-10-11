@@ -1,11 +1,4 @@
-import {
-  For,
-  Show,
-  createEffect,
-  createSignal,
-  onMount,
-  untrack,
-} from "solid-js"
+import { For, Show, createEffect, createSignal, untrack } from "solid-js"
 import { useEditGuide } from "../../GlobalContext/edit-guide"
 import { useMobius } from "../../root"
 import { Search, createSearchState } from "../Search"
@@ -17,6 +10,7 @@ import {
   createDroppable,
 } from "@thisbeyond/solid-dnd"
 import { unwrap } from "solid-js/store"
+import Icon from "../Icon"
 
 export default function GuideSummaryEdit() {
   const editedGuide = useEditGuide()
@@ -164,6 +158,8 @@ export default function GuideSummaryEdit() {
             }}
             class="bg-[#3B5CCC] text-white border-[#3B5CCC] border px-[10px] p-[8px] rounded-[4px] font-light cursor-pointer"
           >
+            {/* TODO: do <Icon name="Loading" /> when making a request and waiting for response from grafbase */}
+            {/* how to do it? */}
             Submit Changes
           </div>
         </div>
@@ -229,7 +225,7 @@ export default function GuideSummaryEdit() {
           Add section
         </div>
         <For each={editedGlobalTopic().latestGlobalGuide?.sections}>
-          {(section) => {
+          {(section, index) => {
             return (
               <div class="border dark:bg-neutral-900 bg-white border-slate-400 border-opacity-30 rounded-lg flex flex-col">
                 <Show
@@ -238,6 +234,21 @@ export default function GuideSummaryEdit() {
                     <input
                       class="text-[#696969] bg-transparent p-4 font-light overflow-hidden text-ellipsis outline-none"
                       placeholder="Add section title"
+                      onInput={(e) => {
+                        let copiedTopic: GlobalTopic = JSON.parse(
+                          JSON.stringify(editedGlobalTopic()),
+                        )
+
+                        const newTitle = e.target.value
+
+                        if (copiedTopic.latestGlobalGuide) {
+                          // Use the index to update the specific section's title
+                          copiedTopic.latestGlobalGuide.sections[
+                            index()
+                          ].title = newTitle
+                        }
+                        setEditedGlobalTopic(copiedTopic)
+                      }}
                     />
                   }
                 >
@@ -268,6 +279,22 @@ export default function GuideSummaryEdit() {
                     }}
                     value={section.title}
                   />
+                  <div
+                    onClick={() => {
+                      let copiedTopic: GlobalTopic = JSON.parse(
+                        JSON.stringify(editedGlobalTopic()),
+                      )
+
+                      copiedTopic.latestGlobalGuide.sections =
+                        copiedTopic.latestGlobalGuide.sections.filter(
+                          (s) => s.title !== section.title,
+                        )
+                      setEditedGlobalTopic(copiedTopic)
+                    }}
+                    class="text-white cursor-pointer"
+                  >
+                    Delete section
+                  </div>
                 </Show>
 
                 <div class="flex flex-col">
@@ -322,7 +349,24 @@ export default function GuideSummaryEdit() {
                               >
                                 Edit
                               </div>
-                              <div class="cursor-pointer">Delete</div>
+                              <div
+                                onClick={() => {
+                                  let copiedTopic: GlobalTopic = JSON.parse(
+                                    JSON.stringify(editedGlobalTopic()),
+                                  )
+                                  copiedTopic.latestGlobalGuide.sections.forEach(
+                                    (section) => {
+                                      section.links = section.links.filter(
+                                        (l) => l.id !== link.id,
+                                      )
+                                    },
+                                  )
+                                  setEditedGlobalTopic(copiedTopic)
+                                }}
+                                class="cursor-pointer"
+                              >
+                                Delete
+                              </div>
                             </div>
                           </div>
                         </div>

@@ -1,6 +1,8 @@
 ## Public website release
 
 - guide edit
+  - show toast when succesfully updated the guide
+  - show loading indicator on `submit changes` button as grafbase mutation is processing
   - grafbase mutate global topic
     - edgedb mutation
     - validate inputs on the web page in /edit
