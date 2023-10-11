@@ -16,9 +16,9 @@
 //   sections: Section[]
 // }
 type Section = {
-  summary?: string
   title: string
   linkIds: string[]
+  summary?: string
 }
 export type GlobalTopic = {
   name: string

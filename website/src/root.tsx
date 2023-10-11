@@ -56,15 +56,22 @@ type GlobalLink {
 
 type Mutation {
   createUser(email: String!): String!
+  updateLatestGlobalGuide(topicSummary: String!, sections: [section!]!): String!
 }
 
 type Query {
   publicGetGlobalTopics: [publicGetGlobalTopicsOutput!]!
   publicGetGlobalTopic(topicName: String!): publicGetGlobalTopicOutput!
   getGlobalLink(linkId: String!): publicGetGlobalLinkOutput!
-  getGlobalLinks: [publicGetGlobalLinksOutput!]!
+  getGlobalLinks: getGlobalLinksOutput!
   checkForGlobalLink(linkUrl: String!): publicCheckForGlobalLinkOutput!
   stripe(plan: String!): String!
+}
+
+type getGlobalLinksOutput {
+  id: String!
+  title: String!
+  url: String!
 }
 
 type globalGuideSection {
@@ -91,16 +98,9 @@ type publicGetGlobalLinkOutput {
   public: Boolean!
   protocol: String
   fullUrl: String
-  mainTopicAsString: String
   description: String
   urlTitle: String
   year: String
-}
-
-type publicGetGlobalLinksOutput {
-  id: String!
-  title: String!
-  url: String!
 }
 
 type publicGetGlobalTopicOutput {
@@ -114,6 +114,12 @@ type publicGetGlobalTopicOutput {
 type publicGetGlobalTopicsOutput {
   prettyName: String!
   name: String!
+}
+
+input section {
+  title: String!
+  summary: String
+  linkIds: [String!]!
 }
 `
 

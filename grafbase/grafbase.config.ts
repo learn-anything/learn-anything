@@ -108,7 +108,7 @@ g.mutation("createUser", {
   resolver: "createUser",
 })
 
-const section = g.type("section", {
+const section = g.input("section", {
   title: g.string(),
   summary: g.string().optional(),
   linkIds: g.string().list(),
@@ -116,7 +116,7 @@ const section = g.type("section", {
 g.mutation("updateLatestGlobalGuide", {
   args: {
     topicSummary: g.string(),
-    sections: g.ref(section).list(),
+    sections: g.inputRef(section).list(),
   },
   returns: g.string(),
   resolver: "updateLatestGlobalGuide",

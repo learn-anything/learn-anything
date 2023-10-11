@@ -119,13 +119,48 @@ export default function GuideSummaryEdit() {
             Cancel
           </div>
           <div
-            onClick={() => {
+            onClick={async () => {
               // TODO: check all data is valid, if not, show error with what is the problem
               // TODO: after data validation, send grafbase mutation to update global topic
 
               console.log(unwrap(editedGlobalTopic()))
 
-              // await mobius.mutation
+              const linkIdsMapping =
+                editedGlobalTopic().latestGlobalGuide?.sections.map(
+                  (section) => {
+                    return {
+                      section: section.title,
+                      linkIds: section.links.map((link) => link.id),
+                    }
+                  },
+                )
+
+              console.log(linkIdsMapping, "maps")
+              const transformSection = (originalSection: any): any => {
+                return {
+                  title: originalSection.title,
+                  summary: originalSection.summary,
+                  linkIds: originalSection.links.map((link: any) => link.id),
+                }
+              }
+
+              const sectionsToAdd =
+                editedGlobalTopic().latestGlobalGuide?.sections.map(
+                  transformSection,
+                )
+
+              console.log(sectionsToAdd, "sections to add")
+
+              const res = await mobius.mutate({
+                updateLatestGlobalGuide: {
+                  where: {
+                    topicSummary: editedGlobalTopic().topicSummary!,
+                    sections: sectionsToAdd,
+                  },
+                  select: true,
+                },
+              })
+              console.log(res, "res")
             }}
             class="bg-[#3B5CCC] text-white border-[#3B5CCC] border px-[10px] p-[8px] rounded-[4px] font-light cursor-pointer"
           >
@@ -208,6 +243,29 @@ export default function GuideSummaryEdit() {
                 >
                   <input
                     class="text-[#696969] bg-transparent p-4 font-light overflow-hidden text-ellipsis outline-none"
+                    onInput={(e) => {
+                      let copiedTopic: GlobalTopic = JSON.parse(
+                        JSON.stringify(editedGlobalTopic()),
+                      )
+
+                      const foundSectionIndex =
+                        copiedTopic.latestGlobalGuide?.sections.findIndex(
+                          (s) => {
+                            return s.title === section.title
+                          },
+                        )
+
+                      if (
+                        foundSectionIndex !== undefined &&
+                        foundSectionIndex !== -1
+                      ) {
+                        // @ts-ignore
+                        copiedTopic.latestGlobalGuide!.sections[
+                          foundSectionIndex
+                        ].title = e.target.value
+                        setEditedGlobalTopic(copiedTopic)
+                      }
+                    }}
                     value={section.title}
                   />
                 </Show>
