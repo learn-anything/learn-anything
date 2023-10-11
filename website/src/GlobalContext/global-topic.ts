@@ -123,7 +123,7 @@ export default function createGlobalTopic(mobius: MobiusType) {
           latestGlobalGuide: topicData.latestGlobalGuide,
           links: topicData.links,
         })
-        console.log(unwrap(globalTopic), "global topic")
+        // console.log(unwrap(globalTopic), "global topic")
       }
     }
   })

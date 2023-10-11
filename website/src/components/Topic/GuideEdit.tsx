@@ -31,15 +31,52 @@ export default function GuideSummaryEdit() {
 
   onDragEnd(({ draggable, droppable }) => {
     if (droppable) {
-      // TODO: rearrange links inside a section, check where drop was happening
-      console.log(draggable, "dragging element")
-      console.log(droppable, "dropped into element")
-      console.log(droppable.id, "id")
+      let parts = droppable.id.split("-in-section-")
+      const droppedIntoLinkTitle = parts[0]
+      const sectionTitle = parts[1]
+      parts = draggable.id.split("-in-section-")
+      const linkBeingDroppedTitle = parts[0]
 
-      // TODO: not sure if there is better way, need a copy of the object so i can mutate it
-      let oldTopic = JSON.parse(JSON.stringify(editedGlobalTopic()))
+      // @ts-ignore
+      const linkToAdd = topic.globalTopic.links.find(
+        (link) => link.title === linkBeingDroppedTitle,
+      )
 
-      oldTopic.latestGlobalGuide?.sections.forEach((section) => {})
+      console.log(linkToAdd, "link to add")
+      // @ts-ignore
+      const foundSectionIndex =
+        topic.globalTopic.latestGlobalGuide?.sections.findIndex((s) => {
+          return s.title === sectionTitle
+        })
+
+      if (foundSectionIndex !== -1 && foundSectionIndex !== undefined) {
+        let copiedTopic: GlobalTopic = JSON.parse(
+          JSON.stringify(editedGlobalTopic()),
+        )
+
+        const targetSection =
+          copiedTopic.latestGlobalGuide?.sections[foundSectionIndex]
+
+        if (targetSection) {
+          // 2. Within this section's links array, find the index of the link corresponding to droppedIntoLinkTitle.
+          const dropPosition = targetSection.links.findIndex(
+            (link) => link.title === droppedIntoLinkTitle,
+          )
+
+          if (dropPosition !== -1) {
+            // 3. Insert linkToAdd after this index.
+            targetSection.links.splice(dropPosition + 1, 0, linkToAdd)
+          }
+        }
+
+        // @ts-ignore
+        // copiedTopic.latestGlobalGuide?.sections[
+        //   foundSectionIndex
+        //   // @ts-ignore
+        // ].links.push(linkToAdd)
+
+        setEditedGlobalTopic(copiedTopic)
+      }
     }
   })
 
@@ -51,9 +88,9 @@ export default function GuideSummaryEdit() {
     }
   })
 
-  createEffect(() => {
-    console.log(editedGlobalTopic(), "edited global topic")
-  })
+  // createEffect(() => {
+  //   console.log(editedGlobalTopic(), "edited global topic")
+  // })
 
   return (
     <>
@@ -180,10 +217,10 @@ export default function GuideSummaryEdit() {
                   <For each={section.links}>
                     {(link, index) => {
                       const draggable = createDraggable(
-                        `${link.title}-in-${section.title}`,
+                        `${link.title}-in-section-${section.title}`,
                       )
                       const droppable = createDroppable(
-                        `${link.title}-in-${section.title}`,
+                        `${link.title}-in-section-${section.title}`,
                       )
                       const linkUrlId = `${section.title}-link-url-${index}`
                       return (
@@ -226,7 +263,6 @@ export default function GuideSummaryEdit() {
                               >
                                 Edit
                               </div>
-                              <div class="cursor-pointer">Drag</div>
                               <div class="cursor-pointer">Delete</div>
                             </div>
                           </div>
@@ -245,44 +281,26 @@ export default function GuideSummaryEdit() {
                         const linkToAdd = topic.globalTopic.links.find(
                           (link) => link.title === name,
                         )
-
                         const foundSectionIndex =
                           topic.globalTopic.latestGlobalGuide?.sections.findIndex(
                             (s) => {
                               return s.title === section.title
                             },
                           )
-                        const newSections = [
-                          ...(editedGlobalTopic().latestGlobalGuide?.sections ||
-                            []),
-                        ]
-                        const newLinks = newSections[foundSectionIndex].links
-
-                        // @ts-ignore
-                        const oldLinks =
-                          editedGlobalTopic().latestGlobalGuide?.sections[
+                        if (
+                          foundSectionIndex !== -1 &&
+                          foundSectionIndex !== undefined
+                        ) {
+                          let copiedTopic: GlobalTopic = JSON.parse(
+                            JSON.stringify(editedGlobalTopic()),
+                          )
+                          // @ts-ignore
+                          copiedTopic.latestGlobalGuide?.sections[
                             foundSectionIndex
-                          ].links
-
-                        // Modify the specific section at the given index
-
-                        setEditedGlobalTopic({
-                          ...editedGlobalTopic(),
-                          latestGlobalGuide: {
-                            summary: "",
-                            sections: [
-                              {
-                                title: "",
-                                summary: "",
-                                links: [...oldLinks, linkToAdd],
-                              },
-                            ],
-                          },
-                        })
-                        console.log(
-                          editedGlobalTopic(),
-                          "new edited global topic",
-                        )
+                            // @ts-ignore
+                          ].links.push(linkToAdd)
+                          setEditedGlobalTopic(copiedTopic)
+                        }
                       },
                     })
 
