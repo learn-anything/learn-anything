@@ -16,6 +16,7 @@ import {
   createDraggable,
   createDroppable,
 } from "@thisbeyond/solid-dnd"
+import { unwrap } from "solid-js/store"
 
 export default function GuideSummaryEdit() {
   const editedGuide = useEditGuide()
@@ -119,12 +120,11 @@ export default function GuideSummaryEdit() {
           </div>
           <div
             onClick={() => {
-              console.log(
-                editedGlobalTopic(),
-                "edited global topic to send as mutation",
-              )
               // TODO: check all data is valid, if not, show error with what is the problem
               // TODO: after data validation, send grafbase mutation to update global topic
+
+              console.log(unwrap(editedGlobalTopic()))
+
               // await mobius.mutation
             }}
             class="bg-[#3B5CCC] text-white border-[#3B5CCC] border px-[10px] p-[8px] rounded-[4px] font-light cursor-pointer"
@@ -212,7 +212,7 @@ export default function GuideSummaryEdit() {
                   />
                 </Show>
 
-                <div class="flex gap-4 flex-col">
+                <div class="flex flex-col">
                   <For each={section.links}>
                     {(link, index) => {
                       const draggable = createDraggable(
@@ -228,12 +228,12 @@ export default function GuideSummaryEdit() {
                             draggable(el)
                             droppable(el)
                           }}
-                          class="flex items-center gap-6 justify-between border-y p-6 border-slate-400 border-opacity-30"
+                          class="flex items-center dark:bg-neutral-900 bg-white gap-6 justify-between border-y  p-2 px-4 border-slate-400 border-opacity-30"
                         >
                           <div class="w-full  h-full flex justify-between items-center">
-                            <div class="w-[80%] gap-4 flex flex-col py-4">
+                            <div class="w-[80%] gap-1 flex flex-col ">
                               <div class="relative flex flex-col text-[#3B5CCC]">
-                                <div class="text-[18px] w-full outline-none transition-all bg-inherit px-2 py-1">
+                                <div class="text-[16px] w-full outline-none transition-all bg-inherit px-2 py-1">
                                   {link.title}
                                 </div>
                               </div>
@@ -254,7 +254,7 @@ export default function GuideSummaryEdit() {
                                 </div>
                               </div>
                             </div>
-                            <div class="flex gap-5 dark:text-white flex-col items-end text-[14px] opacity-50">
+                            <div class="flex gap-1 dark:text-white flex-col items-end text-[14px] opacity-50">
                               <div
                                 onClick={async () => {
                                   console.log(link, "link")

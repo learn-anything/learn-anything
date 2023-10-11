@@ -108,11 +108,19 @@ g.mutation("createUser", {
   resolver: "createUser",
 })
 
-// g.mutation("updateLatestGlobalGuide", {
-//   args: { email: g.string() },
-//   returns: g.string(),
-//   resolver: "updateLatestGlobalGuide",
-// })
+const section = g.type("section", {
+  title: g.string(),
+  summary: g.string().optional(),
+  linkIds: g.string().list(),
+})
+g.mutation("updateLatestGlobalGuide", {
+  args: {
+    topicSummary: g.string(),
+    sections: g.ref(section).list(),
+  },
+  returns: g.string(),
+  resolver: "updateLatestGlobalGuide",
+})
 
 // g.mutation("updateTopicLearningStatus", {
 //   args: { learningStatus: g.enumRef(learningStatus), topic: g.string() },
