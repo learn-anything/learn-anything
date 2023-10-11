@@ -16,14 +16,14 @@ export default function GuideSummary(props: any) {
         height: 100%
       }
     `}</style>
-      <div class="w-full flex flex-col gap-3 text-[16px] border-[#69696951] border rounded-[6px] p-3 px-4  leading-[18.78px]">
-        <div class="font-light text-[14px] text-black text-opacity-70 flex w-full justify-between">
+      <div class="w-full flex flex-col gap-3 text-[16px] dark:border-[#282828] border-[#69696951] border-[0.5px] rounded-[6px] p-3 px-4  leading-[18.78px]">
+        <div class=" text-black dark:text-white text-opacity-70 flex w-full justify-between">
           <div>Version</div>
           <div>Contributors</div>
         </div>
         <div
           id={showSummary() ? "GuideSummaryExpanded" : "GuideSummaryMinimised"}
-          class="bg-white dark:bg-[#141414] flex flex-col gap-2 rounded-[2px] w-full"
+          class="bg-white dark:bg-inherit font-light flex flex-col gap-2 rounded-[2px] w-full"
         >
           <div class="flex justify-between items-center">
             <div class="text-[#696969] ">Summary</div>

@@ -13,10 +13,10 @@ export default function GlobalGuide() {
 
   return (
     <>
-      <div class="w-full h-full flex flex-col gap-[20px]">
+      <div class="w-full flex flex-col gap-[20px]">
         <div
           id="Guide"
-          class="font-bold h-full  flex w-full items-center justify-between"
+          class="font-bold  flex w-full items-center justify-between"
         >
           <div class="text-[22px]">Guide</div>
           <div class="flex h-full gap-4">

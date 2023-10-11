@@ -6,13 +6,6 @@ import { Search, createSearchState } from "../Search"
 import { Motion } from "@motionone/solid"
 import { useNavigate } from "solid-start"
 import { GlobalTopic, useGlobalTopic } from "../../GlobalContext/global-topic"
-import {
-  DragDropProvider,
-  DragDropSensors,
-  useDragDropContext,
-  createDraggable,
-  createDroppable,
-} from "@thisbeyond/solid-dnd"
 
 export default function GuideSummaryEdit() {
   const editedGuide = useEditGuide()
@@ -209,7 +202,7 @@ export default function GuideSummaryEdit() {
               "translateX(0px)",
             ],
           }}
-          class="bg-[#FAFAFA] dark:bg-neutral-950 flex flex-col gap-2 rounded-[4px] p-4 w-full"
+          class="border border-[#282828] flex flex-col gap-2 rounded-[4px] p-4 w-full"
         >
           <div class="flex justify-between items-center">
             <div class="text-[#696969] ">Summary</div>

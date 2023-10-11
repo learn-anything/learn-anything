@@ -10,13 +10,13 @@ interface Props {
 
 export default function GlobalLink(props: Props) {
   return (
-    <div class="flex items-center border-b border-[#EAEAEA] p-4 px-4 justify-between">
+    <div class="flex items-center  border-b-[0.5px] dark:border-[#282828] border-[#69696951] p-4 px-4 justify-between">
       {/* <div class="">
       <div class="bg-neutral-400 w-10 h-10 rounded-full"></div>
     </div> */}
       <div class="w-full  h-full flex justify-between items-center">
         <div class="w-fit flex gap-1 flex-col">
-          <div class="font-bold text-[#3B5CCC]">{props.title}</div>
+          <div class="font-bold text-[#3B5CCC] ">{props.title}</div>
           <div class="flex gap-3">
             {/* <Show when={link?.type}>
             <div class="font-light text-[12px] text-[#696969] border-r border-[#CCCCCC] px-2">

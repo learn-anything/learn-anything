@@ -148,6 +148,7 @@ export default function createGlobalTopic(mobius: MobiusType) {
     set: (state: GlobalTopic) => {
       setGlobalTopic(state)
     },
+
     currentTopicGlobalLinksSearch,
     // topicGlobalLinksSearch,
     // setShowPage: (state: PageState) => {

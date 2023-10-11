@@ -1,6 +1,10 @@
+import { useGlobalState } from "../../GlobalContext/global"
+import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import Card from "./Card"
 
 export default function GuideSidebar() {
+  const topic = useGlobalTopic()
+  const global = useGlobalState()
   // Title , Status , Info , Resources , Learners
   return (
     <>
@@ -37,8 +41,21 @@ export default function GuideSidebar() {
         <div id="Resources" class="flex text-[#696969] flex-col gap-3">
           <div class="font-bold">Resources</div>
           <div class="flex flex-col pl-3 text-[14px] gap-[6px]">
-            <div class="flex gap-2">
-              Links <span class="font-bold">10</span>
+            <div
+              class="flex gap-2"
+              onClick={() => {
+                global.setGuidePage("Guide")
+              }}
+            >
+              Guide <span class="font-bold">{}</span>
+            </div>
+            <div
+              class="flex gap-2"
+              onClick={() => {
+                global.setGuidePage("Links")
+              }}
+            >
+              Links <span class="font-bold cursor-pointer">10</span>
             </div>
             <div class="flex gap-2">
               Notes <span class="font-bold">24</span>
