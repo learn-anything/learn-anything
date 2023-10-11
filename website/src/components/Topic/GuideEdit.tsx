@@ -222,7 +222,7 @@ export default function GuideSummaryEdit() {
               "translateX(0px)",
             ],
           }}
-          class="border border-[#282828] flex flex-col gap-2 rounded-[4px] p-4 w-full"
+          class="border-[0.5px] dark:border-[#282828] border-[#69696951] flex flex-col gap-2 rounded-[4px] p-4 w-full"
         >
           <div class="flex justify-between items-center">
             <div class="text-[#696969] ">Summary</div>
@@ -297,11 +297,11 @@ export default function GuideSummaryEdit() {
           {(section) => {
             return (
               <Motion.div
-                transition={{ duration: 1, easing: "ease-out", delay: 0.3 }}
-                animate={{
-                  opacity: [0, 1, 1],
-                  transform: ["translateX(100px)", "translateX(-10px)", ""],
-                }}
+                // transition={{ duration: 1, easing: "ease-out", delay: 0.3 }}
+                // animate={{
+                //   opacity: [0, 1, 1],
+                //   transform: ["translateX(100px)", "translateX(-10px)", ""],
+                // }}
                 class="border dark:bg-neutral-900 bg-white border-slate-400 border-opacity-30 rounded-lg flex flex-col"
               >
                 <Show
@@ -326,18 +326,18 @@ export default function GuideSummaryEdit() {
                       const linkUrlId = `${section.title}-link-url-${index}`
                       return (
                         <Motion.div
-                          transition={{
-                            duration: Math.min(index() * 0.2 + 0.5, 2),
-                            easing: "ease-out",
-                          }}
-                          animate={{
-                            opacity: [0, 1, 1],
-                            transform: [
-                              "translateX(100px)",
-                              "translateX(-10px)",
-                              "",
-                            ],
-                          }}
+                          // transition={{
+                          //   duration: Math.min(index() * 0.2 + 0.5, 2),
+                          //   easing: "ease-out",
+                          // }}
+                          // animate={{
+                          //   opacity: [0, 1, 1],
+                          //   transform: [
+                          //     "translateX(100px)",
+                          //     "translateX(-10px)",
+                          //     "",
+                          //   ],
+                          // }}
                           class="flex items-center gap-6 justify-between border-y p-6 border-slate-400 border-opacity-30"
                         >
                           <div class="w-full  h-full flex justify-between items-center">

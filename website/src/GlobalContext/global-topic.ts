@@ -99,7 +99,6 @@ export default function createGlobalTopic(mobius: MobiusType) {
   // import { signedIn } from "../../../lib/auth" can use this to know if auth'd or not
   const location = useLocation()
   createEffect(async () => {
-    return
     if (location.pathname && !(location.pathname === "/")) {
       const topicName = extractTopicFromPath(location.pathname)
       if (topicName) {
