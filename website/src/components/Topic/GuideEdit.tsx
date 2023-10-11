@@ -10,29 +10,11 @@ import {
   createDroppable,
 } from "@thisbeyond/solid-dnd"
 
-const Draggable = (props) => {
-  const draggable = createDraggable(props.id)
-  return <div use:draggable>draggable</div>
-}
-
-const Droppable = (props) => {
-  const droppable = createDroppable(props.id)
-  return <div use:droppable>droppable</div>
-}
-
 export default function GuideSummaryEdit() {
   const editedGuide = useEditGuide()
   const topic = useGlobalTopic()
   const mobius = useMobius()
   const navigate = useNavigate()
-
-  const [, { onDragEnd }] = useDragDropContext()
-
-  onDragEnd(({ draggable, droppable }) => {
-    if (droppable) {
-      // TODO: rearrange links inside a section, check where drop was happening
-    }
-  })
 
   const [editedGlobalTopic, setEditedGlobalTopic] = createSignal<GlobalTopic>({
     prettyName: "",
@@ -42,6 +24,23 @@ export default function GuideSummaryEdit() {
       sections: [],
     },
     topicSummary: "",
+  })
+
+  // @ts-ignore
+  const [, { onDragEnd }] = useDragDropContext()
+
+  onDragEnd(({ draggable, droppable }) => {
+    if (droppable) {
+      // TODO: rearrange links inside a section, check where drop was happening
+      console.log(draggable, "dragging element")
+      console.log(droppable, "dropped into element")
+      console.log(droppable.id, "id")
+
+      // TODO: not sure if there is better way, need a copy of the object so i can mutate it
+      let oldTopic = JSON.parse(JSON.stringify(editedGlobalTopic()))
+
+      oldTopic.latestGlobalGuide?.sections.forEach((section) => {})
+    }
   })
 
   createEffect(() => {
@@ -180,18 +179,25 @@ export default function GuideSummaryEdit() {
                 <div class="flex gap-4 flex-col">
                   <For each={section.links}>
                     {(link, index) => {
+                      const draggable = createDraggable(
+                        `${link.title}-in-${section.title}`,
+                      )
+                      const droppable = createDroppable(
+                        `${link.title}-in-${section.title}`,
+                      )
                       const linkUrlId = `${section.title}-link-url-${index}`
                       return (
-                        <div class="flex items-center gap-6 justify-between border-y p-6 border-slate-400 border-opacity-30">
+                        <div
+                          use:draggable
+                          use:droppable
+                          class="flex items-center gap-6 justify-between border-y p-6 border-slate-400 border-opacity-30"
+                        >
                           <div class="w-full  h-full flex justify-between items-center">
                             <div class="w-[80%] gap-4 flex flex-col py-4">
                               <div class="relative flex flex-col text-[#3B5CCC]">
-                                <input
-                                  class="focus:border-b hover:border-b text-[18px] w-full border-slate-400 outline-none hover:border-slate-400 focus:border-slate-600 transition-all bg-inherit border-opacity-30 px-2 py-1"
-                                  type="text"
-                                  placeholder=""
-                                  value={link.title}
-                                />
+                                <div class="text-[18px] w-full outline-none transition-all bg-inherit px-2 py-1">
+                                  {link.title}
+                                </div>
                               </div>
                               <div class="flex w-full">
                                 <Show when={link?.year}>
@@ -201,13 +207,12 @@ export default function GuideSummaryEdit() {
                                 </Show>
 
                                 <div class="font-light w-full text-[12px] text-[#696969]">
-                                  <input
-                                    class="hover:border-b focus:border-b border-slate-400 hover:border-slate-400 focus:border-slate-600 outline-none transition-all border-opacity-30 bg-inherit px-2 w-full"
-                                    type="text"
+                                  <div
+                                    class="outline-none transition-all bg-inherit px-2 w-full"
                                     id={linkUrlId}
-                                    placeholder="URL"
-                                    value={link.url}
-                                  />
+                                  >
+                                    {link.url}
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -222,8 +227,6 @@ export default function GuideSummaryEdit() {
                                 Edit
                               </div>
                               <div class="cursor-pointer">Drag</div>
-                              <Draggable id="draggable-1" />
-                              <Droppable id="droppable-1" />
                               <div class="cursor-pointer">Delete</div>
                             </div>
                           </div>

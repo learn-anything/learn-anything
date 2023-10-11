@@ -1,26 +1,9 @@
-import {
-  createContext,
-  createEffect,
-  createMemo,
-  createSignal,
-  useContext,
-} from "solid-js"
+import { createContext, createEffect, createMemo, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 import { MobiusType } from "../root"
 import { useLocation } from "solid-start"
 import { unwrap } from "solid-js/store"
 import { SearchResult } from "../components/Search"
-
-// type PageState = "Global Guide" | "Links" | "Notes" | "Edit Global Guide"
-// type LearningStatus = "to learn" | "learning" | "learned" | null
-// export type Link = {
-//   title: string
-//   url: string
-//   author?: string
-//   year?: number
-//   completed?: boolean
-//   addedByUser?: boolean
-// }
 
 type GlobalLink = {
   id: string
@@ -52,7 +35,7 @@ function extractTopicFromPath(inputStr: string) {
   return segments.length > 0 ? segments[0] : null
 }
 
-// all state needed to render global topic found in learn-anything.xyz/<topic>
+// state for rendering global topic found in learn-anything.xyz/<topic>
 export default function createGlobalTopic(mobius: MobiusType) {
   const [globalTopic, setGlobalTopic] = createStore<GlobalTopic>({
     prettyName: "",
@@ -75,15 +58,17 @@ export default function createGlobalTopic(mobius: MobiusType) {
               title: "CuraEngine",
               url: "curaengine.com",
             },
+            {
+              id: "3",
+              title: "Learn Anything",
+              url: "learn-anything.xyz",
+            },
           ],
         },
       ],
     },
     links: [],
   })
-
-  // const [globalTopicLinksSearchDb, setGlobalTopicLinksSearchDb] =
-  //   createSignal<any>(undefined)
 
   const currentTopicGlobalLinksSearch = createMemo(() => {
     if (!globalTopic.links) return []
@@ -95,8 +80,8 @@ export default function createGlobalTopic(mobius: MobiusType) {
     )
   })
 
-  // TODO: do other calls for authenticated data
-  // import { signedIn } from "../../../lib/auth" can use this to know if auth'd or not
+  // TODO: do grafbase queries to get user learning status
+  // check that user is authed, can use import { signedIn } from "../../../lib/auth" for this
   const location = useLocation()
   createEffect(async () => {
     if (location.pathname && !(location.pathname === "/")) {
