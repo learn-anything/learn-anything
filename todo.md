@@ -1,5 +1,7 @@
 ## Public website release
 
+- order sections
+  - seperate section
 - make `related links` work
   - potentially as an icon on `Link` component to expand to see related links
   - make it work inside edgedb schema well, what is a related link?

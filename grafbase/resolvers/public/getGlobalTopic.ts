@@ -6,11 +6,12 @@ export default async function publicGetGlobalTopicResolver(
   args: { topicName: string },
   context: any,
 ) {
-  const topic = await getGlobalTopic(args.topicName)
-  console.log(topic, "topic")
-  if (topic) {
-    return topic
+  try {
+    const topic = await getGlobalTopic(args.topicName)
+    if (topic) {
+      return topic
+    }
+  } catch (error) {
+    throw new GraphQLError(JSON.stringify(error))
   }
-  // TODO: make edgedb crud functions return better errors
-  throw new GraphQLError("Error")
 }
