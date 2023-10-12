@@ -57,6 +57,43 @@ export async function updateGlobalTopic(
   })
 }
 
+export async function moveAllLinksOfGlobalTopicToSectionOther(
+  globalTopicName: string,
+) {
+  // await e
+  //   .delete(e.GlobalGuideSection, (section) => ({
+  //     filter: e.op(
+  //       section["<sections[is GlobalGuide]"][
+  //         "<latestGlobalGuide[is GlobalTopic]"
+  //       ].name,
+  //       "=",
+  //       globalTopicName,
+  //     ),
+  //   }))
+  //   .run(client)
+
+  // return
+  await e
+    .update(e.GlobalGuide, (guide) => ({
+      filter: e.op(
+        guide["<latestGlobalGuide[is GlobalTopic]"].name,
+        "=",
+        globalTopicName,
+      ),
+      set: {
+        sections: {
+          "+=": e.insert(e.GlobalGuideSection, {
+            title: "Other",
+            links: e.select(e.GlobalLink, (gl) => ({
+              filter: e.op(gl.mainTopic.name, "=", globalTopicName),
+            })),
+          }),
+        },
+      },
+    }))
+    .run(client)
+}
+
 export async function updateTopicLearningStatus(
   hankoId: string,
   topic: string,
@@ -143,6 +180,7 @@ export async function getGlobalTopic(topicName: string) {
             url: true,
             year: true,
             protocol: true,
+            description: true,
           },
           order: true,
         },

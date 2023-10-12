@@ -1,7 +1,17 @@
 ## Public website release
 
+- make `related links` work
+  - potentially as an icon on `Link` component to expand to see related links
+  - make it work inside edgedb schema well, what is a related link?
+  - link to `Wikipedia` in all Intro maybe as special icon on `Intro` section (to the right)
 - guide edit
+  - show all links in the topic in `Other`. move all links to `Other` by default.
+    - links in the sections above should be removed from `Other` on addition
+  - guide edit grafbase, show error in toast, if error happens
   - show toast when succesfully updated the guide
+  - check that user has paid using hanko id
+    - test the stripe thing, make sure it updates user on stripe success with date
+    - test it locally, then in production too
   - show loading indicator on `submit changes` button as grafbase mutation is processing
   - grafbase mutate global topic
     - edgedb mutation

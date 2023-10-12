@@ -7,6 +7,7 @@ export default async function publicGetGlobalTopicResolver(
   context: any,
 ) {
   const topic = await getGlobalTopic(args.topicName)
+  console.log(topic, "topic")
   if (topic) {
     return topic
   }

@@ -10,7 +10,6 @@ import {
   createDroppable,
 } from "@thisbeyond/solid-dnd"
 import { unwrap } from "solid-js/store"
-import Icon from "../Icon"
 
 export default function GuideSummaryEdit() {
   const editedGuide = useEditGuide()
@@ -149,6 +148,7 @@ export default function GuideSummaryEdit() {
                 updateLatestGlobalGuide: {
                   where: {
                     topicSummary: editedGlobalTopic().topicSummary!,
+                    // @ts-ignore
                     sections: sectionsToAdd,
                   },
                   select: true,
@@ -385,11 +385,13 @@ export default function GuideSummaryEdit() {
                           (link) => link.title === name,
                         )
                         const foundSectionIndex =
-                          topic.globalTopic.latestGlobalGuide?.sections.findIndex(
+                          // @ts-ignore
+                          editedGlobalTopic().latestGlobalGuide.sections.findIndex(
                             (s) => {
                               return s.title === section.title
                             },
                           )
+
                         if (
                           foundSectionIndex !== -1 &&
                           foundSectionIndex !== undefined

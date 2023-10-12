@@ -1,6 +1,9 @@
 import { GlobalTopic } from "../../types/types"
-import { addGlobalLink } from "../crud/global-link"
-import { updateGlobalTopic } from "../crud/global-topic"
+import { addGlobalLink, getAllGlobalLinksForTopic } from "../crud/global-link"
+import {
+  moveAllLinksOfGlobalTopicToSectionOther,
+  updateGlobalTopic,
+} from "../crud/global-topic"
 import {
   Topic,
   findFilePath,
@@ -17,26 +20,27 @@ async function main() {
   // const globalTopic = await getGlobalTopic("3d-printing")
   // console.log(globalTopic.links, "links")
   // console.log(globalTopic.prettyName, "pretty name")
-
-  const topic = {
-    name: "3d-printing",
-    prettyName: "3D Printing",
-    topicSummary:
-      "3D printing or additive manufacturing is the construction of a three-dimensional object from a CAD model or a digital 3D model.",
-    sections: [
-      {
-        title: "Intro",
-        summary: "Intro to 3D printing",
-        linkIds: [],
-      },
-      {
-        title: "Other",
-        summary: "Other links",
-        linkIds: [],
-      },
-    ],
-  } as GlobalTopic
-  await updateGlobalTopic(process.env.LOCAL_USER_HANKO_ID!, topic)
+  // const topic = {
+  //   name: "3d-printing",
+  //   prettyName: "3D Printing",
+  //   topicSummary:
+  //     "3D printing or additive manufacturing is the construction of a three-dimensional object from a CAD model or a digital 3D model.",
+  //   sections: [
+  //     {
+  //       title: "Intro",
+  //       summary: "Intro to 3D printing",
+  //       linkIds: [],
+  //     },
+  //     {
+  //       title: "Other",
+  //       summary: "Other links",
+  //       linkIds: [],
+  //     },
+  //   ],
+  // } as GlobalTopic
+  // await updateGlobalTopic(process.env.LOCAL_USER_HANKO_ID!, topic)
+  // await processLinksFromMarkdownFilesAsGlobalLinks("3d-printing")
+  await moveAllLinksOfGlobalTopicToSectionOther("3d-printing")
   console.log("done")
 }
 
@@ -50,10 +54,10 @@ async function getMarkdownPaths(title: string) {
   // console.log(topic, "topic")
 }
 
-async function getTopic(topicName: string) {
+async function processLinksFromMarkdownFilesAsGlobalLinks(fileName: string) {
   const filePath = await findFilePath(
     process.env.wikiFolderPath!,
-    topicName + ".md",
+    fileName + ".md",
   )
   if (filePath) {
     const topic = await parseMdFile(filePath)
