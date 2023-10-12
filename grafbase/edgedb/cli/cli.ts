@@ -40,7 +40,7 @@ async function main() {
   // } as GlobalTopic
   // await updateGlobalTopic(process.env.LOCAL_USER_HANKO_ID!, topic)
   // await processLinksFromMarkdownFilesAsGlobalLinks("3d-printing")
-  await moveAllLinksOfGlobalTopicToSectionOther("3d-printing")
+  // await moveAllLinksOfGlobalTopicToSectionOther("3d-printing")
   console.log("done")
 }
 

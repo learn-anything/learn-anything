@@ -1,5 +1,5 @@
 import { createContext, createEffect, createMemo, useContext } from "solid-js"
-import { createStore, unwrap } from "solid-js/store"
+import { createStore } from "solid-js/store"
 import { MobiusType } from "../root"
 import { useLocation } from "solid-start"
 import { SearchResult } from "../components/Search"
@@ -102,7 +102,7 @@ export default function createGlobalTopic(mobius: MobiusType) {
       latestGlobalGuide: topicData.latestGlobalGuide,
       links: topicData.links,
     })
-    console.log(unwrap(globalTopic), "global topic")
+    // console.log(unwrap(globalTopic), "global topic")
   })
 
   return {

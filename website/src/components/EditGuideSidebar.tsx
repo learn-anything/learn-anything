@@ -1,4 +1,4 @@
-import { For } from "solid-js"
+import { For, createEffect } from "solid-js"
 import { useGlobalTopic } from "../GlobalContext/global-topic"
 import {
   useDragDropContext,
@@ -14,6 +14,8 @@ export default function EditGuideSidebar() {
     if (!droppable) return
 
     const sections = topic.globalTopic.latestGlobalGuide.sections
+
+    console.log(sections, "sections")
 
     const sectionTitleBeingDropped = droppable.id
     const sectionTitleDroppedInto = draggable.id
@@ -47,14 +49,13 @@ export default function EditGuideSidebar() {
       <div class="flex flex-col gap-2 p-5">
         <For each={topic.globalTopic.latestGlobalGuide.sections}>
           {(section) => {
-            const draggable = createDraggable(section.title)
-            const droppable = createDroppable(section.title)
-
             return (
               <div
                 ref={(el) => {
-                  draggable(el)
-                  droppable(el)
+                  createEffect(() => {
+                    createDraggable(section.title)(el)
+                    createDroppable(section.title)(el)
+                  })
                 }}
                 class="cursor-pointer"
               >
