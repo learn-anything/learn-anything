@@ -24,7 +24,6 @@ import { UserProvider, createUserState } from "./GlobalContext/user"
 import "./root.css"
 import UserProfile from "./routes/@(username)"
 import { getHankoCookie } from "../lib/auth"
-import createEditGuide, { EditGuideProvider } from "./GlobalContext/edit-guide"
 
 // TODO: https://github.com/nikitavoloboev/la-issues/issues/54 (should stop having to manually update this schema )
 export const typeDefs = `
@@ -161,7 +160,6 @@ export function useSignIn() {
 
 export default function Root() {
   const user = createUserState()
-  const editGuide = createEditGuide()
 
   const filters: MatchFilters = {
     username: /^@.+/,
@@ -196,21 +194,19 @@ export default function Root() {
                 <UserProvider value={user}>
                   <GlobalStateProvider value={global}>
                     <GlobalTopicProvider value={globalTopic}>
-                      <EditGuideProvider value={editGuide}>
-                        {/* TODO: should probably move it from here as drag/drop is currently only done in /global-topic/edit */}
-                        <DragDropProvider>
-                          <DragDropSensors>
-                            <Routes>
-                              <Route
-                                path="/:username"
-                                component={UserProfile}
-                                matchFilters={filters}
-                              />
-                              <FileRoutes />
-                            </Routes>
-                          </DragDropSensors>
-                        </DragDropProvider>
-                      </EditGuideProvider>
+                      {/* TODO: should probably move it from here as drag/drop is currently only done in /global-topic/edit */}
+                      <DragDropProvider>
+                        <DragDropSensors>
+                          <Routes>
+                            <Route
+                              path="/:username"
+                              component={UserProfile}
+                              matchFilters={filters}
+                            />
+                            <FileRoutes />
+                          </Routes>
+                        </DragDropSensors>
+                      </DragDropProvider>
                     </GlobalTopicProvider>
                   </GlobalStateProvider>
                 </UserProvider>

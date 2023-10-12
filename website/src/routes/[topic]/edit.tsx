@@ -1,13 +1,11 @@
+import EditGuideSidebar from "../../components/EditGuideSidebar"
+import EditSidebar from "../../components/EditSidebar"
 import GuideEdit from "../../components/Topic/GuideEdit"
 import GuideSidebar from "../../components/Topic/GuideSidebar"
 // import TitlePill from "../../components/Topic/TitlePill"
 import TopicNav from "../../components/Topic/TopicNav"
 
-import { useGlobalTopic } from "../../GlobalContext/global-topic"
-
 export default function EditGuide() {
-  const topic = useGlobalTopic()
-
   return (
     <>
       <style>{`
@@ -51,7 +49,8 @@ export default function EditGuide() {
             id="InfoSidebar"
             class="  dark:bg-[#161616] bg-[#F4F4F6] border-l-[0.5px] border-[#69696951] h-full w-[25%] min-w-[250px]"
           >
-            <GuideSidebar></GuideSidebar>
+            {/* <GuideSidebar></GuideSidebar> */}
+            <EditGuideSidebar />
           </div>
           {/* TODO: only here because commenting below block failed.. */}
           {/* add this when we have the data from server for who is learning the topic..  */}

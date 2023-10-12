@@ -50,6 +50,7 @@
     */
     "@typescript-eslint/ban-types": "warn",
     "@typescript-eslint/switch-exhaustiveness-check": "warn",
-    "no-fallthrough": ["warn", { "allowEmptyCase": true }]
+    "no-fallthrough": ["warn", { "allowEmptyCase": true }],
+    "no-shadow": "warn"
   }
 }

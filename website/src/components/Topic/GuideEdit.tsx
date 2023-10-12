@@ -1,39 +1,25 @@
-import { For, Show, createEffect, createSignal, untrack } from "solid-js"
-import { useEditGuide } from "../../GlobalContext/edit-guide"
+import { For, Show } from "solid-js"
 import { useMobius } from "../../root"
 import { Search, createSearchState } from "../Search"
 import { useNavigate } from "solid-start"
-import { GlobalTopic, useGlobalTopic } from "../../GlobalContext/global-topic"
+import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import {
   useDragDropContext,
   createDraggable,
   createDroppable,
 } from "@thisbeyond/solid-dnd"
-import { unwrap } from "solid-js/store"
 
 export default function GuideSummaryEdit() {
-  const editedGuide = useEditGuide()
   const topic = useGlobalTopic()
   const mobius = useMobius()
   const navigate = useNavigate()
 
-  const [editedGlobalTopic, setEditedGlobalTopic] = createSignal<GlobalTopic>({
-    prettyName: "",
-    topicPath: "",
-    latestGlobalGuide: {
-      summary: "",
-      sections: [],
-    },
-    topicSummary: "",
-  })
-
   const [, { onDragEnd }] = useDragDropContext()!
 
   onDragEnd(({ draggable, droppable }) => {
-    const edited_topic = editedGlobalTopic()
-    const sections = edited_topic.latestGlobalGuide?.sections
+    if (!droppable) return
 
-    if (!droppable || !sections) return
+    const sections = topic.globalTopic.latestGlobalGuide.sections
 
     let parts = (droppable.id as string).split("-in-section-")
     const droppedIntoLinkTitle = parts[0]!
@@ -54,36 +40,18 @@ export default function GuideSummaryEdit() {
     )
     if (dragged_idx === -1 || dropped_idx === -1) return
 
-    const links = [...section.links]
-    ;[links[dragged_idx], links[dropped_idx]] = [
-      links[dropped_idx]!,
-      links[dragged_idx]!,
-    ]
-
-    setEditedGlobalTopic((p) => ({
-      ...p,
-      latestGlobalGuide: {
-        ...p.latestGlobalGuide!,
-        sections: [
-          ...p.latestGlobalGuide!.sections.slice(0, section_idx),
-          { ...section, links },
-          ...p.latestGlobalGuide!.sections.slice(section_idx + 1),
-        ],
-      },
-    }))
+    topic.set("latestGlobalGuide", "sections", section_idx, "links", (p) => {
+      const copy = [...p]
+      /*
+        Swap indexes
+      */
+      ;[copy[dragged_idx], copy[dropped_idx]] = [
+        copy[dropped_idx]!,
+        copy[dragged_idx]!,
+      ]
+      return copy
+    })
   })
-
-  createEffect(() => {
-    if (topic.globalTopic.latestGlobalGuide) {
-      untrack(() => {
-        setEditedGlobalTopic(topic.globalTopic)
-      })
-    }
-  })
-
-  // createEffect(() => {
-  //   console.log(editedGlobalTopic(), "edited global topic")
-  // })
 
   return (
     <>
@@ -116,19 +84,6 @@ export default function GuideSummaryEdit() {
               // TODO: check all data is valid, if not, show error with what is the problem
               // TODO: after data validation, send grafbase mutation to update global topic
 
-              console.log(unwrap(editedGlobalTopic()))
-
-              const linkIdsMapping =
-                editedGlobalTopic().latestGlobalGuide?.sections.map(
-                  (section) => {
-                    return {
-                      section: section.title,
-                      linkIds: section.links.map((link) => link.id),
-                    }
-                  },
-                )
-
-              console.log(linkIdsMapping, "maps")
               const transformSection = (originalSection: any): any => {
                 return {
                   title: originalSection.title,
@@ -138,7 +93,7 @@ export default function GuideSummaryEdit() {
               }
 
               const sectionsToAdd =
-                editedGlobalTopic().latestGlobalGuide?.sections.map(
+                topic.globalTopic.latestGlobalGuide.sections.map(
                   transformSection,
                 )
 
@@ -147,7 +102,7 @@ export default function GuideSummaryEdit() {
               const res = await mobius.mutate({
                 updateLatestGlobalGuide: {
                   where: {
-                    topicSummary: editedGlobalTopic().topicSummary!,
+                    topicSummary: topic.globalTopic.topicSummary,
                     // @ts-ignore
                     sections: sectionsToAdd,
                   },
@@ -171,8 +126,8 @@ export default function GuideSummaryEdit() {
               // onClick={() => {}}
             ></div>
           </div>
-          <Show
-            when={editedGuide.guide.summary.length > 0}
+          {/* <Show
+            when={editedGuideOld.guide.summary.length > 0}
             fallback={
               <input
                 class="text-[#696969] bg-inherit font-light overflow-hidden text-ellipsis outline-none"
@@ -180,11 +135,7 @@ export default function GuideSummaryEdit() {
                 placeholder="Add summary"
                 value={topic.globalTopic.topicSummary}
                 onInput={(e) => {
-                  const currentGlobalTopic = editedGlobalTopic()
-                  setEditedGlobalTopic({
-                    ...currentGlobalTopic,
-                    topicSummary: e.target.value,
-                  })
+                  topic.set("topicSummary", e.target.value)
                 }}
               />
             }
@@ -194,236 +145,166 @@ export default function GuideSummaryEdit() {
               id="GuideSummary"
               // onClick={() => {}}
             >
-              {editedGuide.guide.summary}
+              {editedGuideOld.guide.summary}
             </div>
-          </Show>
+          </Show> */}
         </div>
         <div
           class="bg-[#3B5CCC] text-white p-3 rounded-[4px] flex justify-center items-center cursor-pointer hover:bg-[#3554b9] transition-all"
           onClick={() => {
-            const currentGlobalTopic = editedGlobalTopic()
-            let newSections =
-              currentGlobalTopic.latestGlobalGuide?.sections || []
-            newSections = [
-              ...newSections,
+            topic.set("latestGlobalGuide", "sections", (p) => [
+              ...p,
               {
                 summary: "",
                 title: "",
                 links: [],
               },
-            ]
-            setEditedGlobalTopic({
-              ...currentGlobalTopic,
-              latestGlobalGuide: {
-                ...currentGlobalTopic.latestGlobalGuide,
-                summary: currentGlobalTopic.latestGlobalGuide?.summary || "",
-                sections: newSections,
-              },
-            })
+            ])
           }}
         >
           Add section
         </div>
-        <For each={editedGlobalTopic().latestGlobalGuide?.sections}>
-          {(section, index) => {
-            return (
-              <div class="border dark:bg-neutral-900 bg-white border-[#282828] rounded-lg flex flex-col">
-                <Show
-                  when={section.title}
-                  fallback={
-                    <input
-                      class="text-[#696969] bg-transparent p-4 font-light overflow-hidden text-ellipsis outline-none"
-                      placeholder="Add section title"
-                      onInput={(e) => {
-                        let copiedTopic: GlobalTopic = JSON.parse(
-                          JSON.stringify(editedGlobalTopic()),
-                        )
-
-                        const newTitle = e.target.value
-
-                        if (copiedTopic.latestGlobalGuide) {
-                          // Use the index to update the specific section's title
-                          copiedTopic.latestGlobalGuide.sections[
-                            index()
-                          ].title = newTitle
-                        }
-                        setEditedGlobalTopic(copiedTopic)
-                      }}
-                    />
-                  }
+        <For each={topic.globalTopic.latestGlobalGuide.sections}>
+          {(section, sectionIndex) => (
+            <div class="border dark:bg-neutral-900 bg-white border-[#282828] rounded-lg flex flex-col">
+              <div class="flex w-full p-4">
+                <input
+                  class="text-[#696969] w-full bg-transparent  font-light overflow-hidden text-ellipsis outline-none"
+                  onInput={(e) => {
+                    topic.set(
+                      "latestGlobalGuide",
+                      "sections",
+                      sectionIndex(),
+                      "title",
+                      e.target.value,
+                    )
+                  }}
+                  value={section.title}
+                />
+                <div
+                  onClick={() => {
+                    topic.set("latestGlobalGuide", "sections", (p) => {
+                      const copy = [...p]
+                      copy.splice(sectionIndex(), 1)
+                      return copy
+                    })
+                  }}
+                  class="hover:text-white flex items-center justify-center border-red-500 border text-red-500 hover:bg-red-600 border-opacity-50 rounded-[6px] p-2 w-[180px] cursor-pointer"
                 >
-                  <div class="flex w-full p-4">
-                    <input
-                      class="text-[#696969] w-full bg-transparent  font-light overflow-hidden text-ellipsis outline-none"
-                      onInput={(e) => {
-                        let copiedTopic: GlobalTopic = JSON.parse(
-                          JSON.stringify(editedGlobalTopic()),
-                        )
+                  Delete section
+                </div>
+              </div>
 
-                        const foundSectionIndex =
-                          copiedTopic.latestGlobalGuide?.sections.findIndex(
-                            (s) => {
-                              return s.title === section.title
-                            },
-                          )
-
-                        if (
-                          foundSectionIndex !== undefined &&
-                          foundSectionIndex !== -1
-                        ) {
-                          // @ts-ignore
-                          copiedTopic.latestGlobalGuide!.sections[
-                            foundSectionIndex
-                          ].title = e.target.value
-                          setEditedGlobalTopic(copiedTopic)
-                        }
-                      }}
-                      value={section.title}
-                    />
-                    <div
-                      onClick={() => {
-                        let copiedTopic: GlobalTopic = JSON.parse(
-                          JSON.stringify(editedGlobalTopic()),
-                        )
-
-                        copiedTopic.latestGlobalGuide.sections =
-                          copiedTopic.latestGlobalGuide.sections.filter(
-                            (s) => s.title !== section.title,
-                          )
-                        setEditedGlobalTopic(copiedTopic)
-                      }}
-                      class="hover:text-white flex items-center justify-center border-red-500 border text-red-500 hover:bg-red-600 border-opacity-50 rounded-[6px] p-2 w-[180px] cursor-pointer"
-                    >
-                      Delete section
-                    </div>
-                  </div>
-                </Show>
-
-                <div class="flex flex-col">
-                  <For each={section.links}>
-                    {(link, index) => {
-                      const draggable = createDraggable(
-                        `${link.title}-in-section-${section.title}`,
-                      )
-                      const droppable = createDroppable(
-                        `${link.title}-in-section-${section.title}`,
-                      )
-                      const linkUrlId = `${section.title}-link-url-${index}`
-                      return (
-                        <div
-                          ref={(el) => {
-                            draggable(el)
-                            droppable(el)
-                          }}
-                          class="flex items-center dark:bg-neutral-900 bg-white gap-6 justify-between border-y  p-2 px-4 border-[#282828]"
-                        >
-                          <div class="w-full  h-full flex justify-between items-center">
-                            <div class="w-[80%] gap-1 flex flex-col ">
-                              <div class="relative flex flex-col text-[#3B5CCC] dark:text-blue-400">
-                                <div class="text-[16px] w-full outline-none transition-all bg-inherit px-2 py-1">
-                                  {link.title}
-                                </div>
-                              </div>
-                              <div class="flex w-full">
-                                <Show when={link?.year}>
-                                  <div class="font-light text-[12px] text-[#696969] px-2">
-                                    {link?.year}
-                                  </div>
-                                </Show>
-
-                                <div class="font-light w-full text-[12px] text-[#696969]">
-                                  <div
-                                    class="outline-none transition-all bg-inherit px-2 w-full"
-                                    id={linkUrlId}
-                                  >
-                                    {link.url}
-                                  </div>
-                                </div>
+              <div class="flex flex-col">
+                <For each={section.links}>
+                  {(link, linkIndex) => {
+                    const draggable = createDraggable(
+                      `${link.title}-in-section-${section.title}`,
+                    )
+                    const droppable = createDroppable(
+                      `${link.title}-in-section-${section.title}`,
+                    )
+                    const linkUrlId = `${section.title}-link-url-${linkIndex}`
+                    return (
+                      <div
+                        ref={(el) => {
+                          draggable(el)
+                          droppable(el)
+                        }}
+                        class="flex items-center dark:bg-neutral-900 bg-white gap-6 justify-between border-y  p-2 px-4 border-[#282828]"
+                      >
+                        <div class="w-full  h-full flex justify-between items-center">
+                          <div class="w-[80%] gap-1 flex flex-col ">
+                            <div class="relative flex flex-col text-[#3B5CCC] dark:text-blue-400">
+                              <div class="text-[16px] w-full outline-none transition-all bg-inherit px-2 py-1">
+                                {link.title}
                               </div>
                             </div>
-                            <div class="flex gap-1 dark:text-white flex-col items-end text-[14px] opacity-50">
-                              <div
-                                onClick={async () => {
-                                  console.log(link, "link")
-                                  navigate(`/links/${link.id}`)
-                                }}
-                                class="cursor-pointer"
-                              >
-                                Edit
-                              </div>
-                              <div
-                                onClick={() => {
-                                  let copiedTopic: GlobalTopic = JSON.parse(
-                                    JSON.stringify(editedGlobalTopic()),
-                                  )
-                                  copiedTopic.latestGlobalGuide.sections.forEach(
-                                    (section) => {
-                                      section.links = section.links.filter(
-                                        (l) => l.id !== link.id,
-                                      )
-                                    },
-                                  )
-                                  setEditedGlobalTopic(copiedTopic)
-                                }}
-                                class="cursor-pointer"
-                              >
-                                Delete
+                            <div class="flex w-full">
+                              <Show when={link.year}>
+                                <div class="font-light text-[12px] text-[#696969] px-2">
+                                  {link.year}
+                                </div>
+                              </Show>
+
+                              <div class="font-light w-full text-[12px] text-[#696969]">
+                                <div
+                                  class="outline-none transition-all bg-inherit px-2 w-full"
+                                  id={linkUrlId}
+                                >
+                                  {link.url}
+                                </div>
                               </div>
                             </div>
                           </div>
+                          <div class="flex gap-1 dark:text-white flex-col items-end text-[14px] opacity-50">
+                            <div
+                              onClick={async () => {
+                                console.log(link, "link")
+                                navigate(`/links/${link.id}`)
+                              }}
+                              class="cursor-pointer"
+                            >
+                              Edit
+                            </div>
+                            <div
+                              onClick={() => {
+                                topic.set(
+                                  "latestGlobalGuide",
+                                  "sections",
+                                  sectionIndex(),
+                                  "links",
+                                  (p) => {
+                                    const copy = [...p]
+                                    copy.splice(linkIndex(), 1)
+                                    return copy
+                                  },
+                                )
+                              }}
+                              class="cursor-pointer"
+                            >
+                              Delete
+                            </div>
+                          </div>
                         </div>
-                      )
-                    }}
-                  </For>
-                </div>
-
-                <div class="w-full p-4">
-                  {(() => {
-                    const search_state = createSearchState({
-                      searchResults: topic.currentTopicGlobalLinksSearch,
-                      onSelect({ name }) {
-                        // @ts-ignore
-                        const linkToAdd = topic.globalTopic.links.find(
-                          (link) => link.title === name,
-                        )
-                        const foundSectionIndex =
-                          // @ts-ignore
-                          editedGlobalTopic().latestGlobalGuide.sections.findIndex(
-                            (s) => {
-                              return s.title === section.title
-                            },
-                          )
-
-                        if (
-                          foundSectionIndex !== -1 &&
-                          foundSectionIndex !== undefined
-                        ) {
-                          let copiedTopic: GlobalTopic = JSON.parse(
-                            JSON.stringify(editedGlobalTopic()),
-                          )
-                          // @ts-ignore
-                          copiedTopic.latestGlobalGuide?.sections[
-                            foundSectionIndex
-                            // @ts-ignore
-                          ].links.push(linkToAdd)
-                          setEditedGlobalTopic(copiedTopic)
-                        }
-                      },
-                    })
-
-                    return (
-                      <Search
-                        placeholder={
-                          "Search URL title of global links for the topic to add a new link"
-                        }
-                        state={search_state}
-                      />
+                      </div>
                     )
-                  })()}
-                </div>
+                  }}
+                </For>
               </div>
-            )
-          }}
+
+              <div class="w-full p-4">
+                {(() => {
+                  const search_state = createSearchState({
+                    searchResults: topic.currentTopicGlobalLinksSearch,
+                    onSelect({ name }) {
+                      const linkToAdd = topic.globalTopic.links.find(
+                        (link) => link.title === name,
+                      )
+                      if (!linkToAdd) return
+
+                      topic.set(
+                        "latestGlobalGuide",
+                        "sections",
+                        sectionIndex(),
+                        "links",
+                        (p) => [...p, { ...linkToAdd }],
+                      )
+                    },
+                  })
+
+                  return (
+                    <Search
+                      placeholder={
+                        "Search URL title of global links for the topic to add a new link"
+                      }
+                      state={search_state}
+                    />
+                  )
+                })()}
+              </div>
+            </div>
+          )}
         </For>
       </div>
     </>

@@ -1,5 +1,5 @@
 import { createContext, createEffect, createMemo, useContext } from "solid-js"
-import { createStore } from "solid-js/store"
+import { createStore, unwrap } from "solid-js/store"
 import { MobiusType } from "../root"
 import { useLocation } from "solid-start"
 import { SearchResult } from "../components/Search"
@@ -21,10 +21,10 @@ type LatestGlobalGuide = {
 }
 export type GlobalTopic = {
   prettyName: string
-  topicSummary?: string
-  topicPath?: string
-  latestGlobalGuide?: LatestGlobalGuide
-  links?: GlobalLink[]
+  topicSummary: string
+  topicPath: string
+  latestGlobalGuide: LatestGlobalGuide
+  links: GlobalLink[]
 }
 
 function extractTopicFromPath(inputStr: string) {
@@ -48,8 +48,6 @@ export default function createGlobalTopic(mobius: MobiusType) {
   })
 
   const currentTopicGlobalLinksSearch = createMemo(() => {
-    if (!globalTopic.links) return []
-
     return globalTopic.links.map(
       (link): SearchResult => ({
         name: link.title,
@@ -61,56 +59,55 @@ export default function createGlobalTopic(mobius: MobiusType) {
   // check that user is authed, can use import { signedIn } from "../../../lib/auth" for this
   const location = useLocation()
   createEffect(async () => {
-    if (location.pathname && !(location.pathname === "/")) {
-      const topicName = extractTopicFromPath(location.pathname)
-      if (topicName) {
-        const topic = await mobius.query({
-          publicGetGlobalTopic: {
-            where: { topicName: topicName },
-            select: {
-              prettyName: true,
-              topicSummary: true,
-              topicPath: true,
+    if (!location.pathname || location.pathname === "/") return
+
+    const topicName = extractTopicFromPath(location.pathname)
+    if (!topicName) return
+
+    const topic = await mobius.query({
+      publicGetGlobalTopic: {
+        where: { topicName: topicName },
+        select: {
+          prettyName: true,
+          topicSummary: true,
+          topicPath: true,
+          links: {
+            id: true,
+            title: true,
+            url: true,
+            year: true,
+          },
+          latestGlobalGuide: {
+            sections: {
+              title: true,
               links: {
                 id: true,
                 title: true,
                 url: true,
                 year: true,
-              },
-              latestGlobalGuide: {
-                sections: {
-                  title: true,
-                  links: {
-                    id: true,
-                    title: true,
-                    url: true,
-                    year: true,
-                    description: true,
-                  },
-                },
+                description: true,
               },
             },
           },
-        })
-        // @ts-ignore
-        const topicData = topic.data.publicGetGlobalTopic
-        setGlobalTopic({
-          prettyName: topicData.prettyName,
-          topicSummary: topicData.topicSummary,
-          topicPath: topicData.topicPath,
-          latestGlobalGuide: topicData.latestGlobalGuide,
-          links: topicData.links,
-        })
-        // console.log(unwrap(globalTopic), "global topic")
-      }
-    }
+        },
+      },
+    })
+
+    // @ts-ignore
+    const topicData = topic.data.publicGetGlobalTopic
+    setGlobalTopic({
+      prettyName: topicData.prettyName,
+      topicSummary: topicData.topicSummary,
+      topicPath: topicData.topicPath,
+      latestGlobalGuide: topicData.latestGlobalGuide,
+      links: topicData.links,
+    })
+    console.log(unwrap(globalTopic), "global topic")
   })
 
   return {
     globalTopic,
-    set: (state: GlobalTopic) => {
-      setGlobalTopic(state)
-    },
+    set: setGlobalTopic,
 
     currentTopicGlobalLinksSearch,
     // topicGlobalLinksSearch,
