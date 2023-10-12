@@ -12,11 +12,11 @@ type Props = {
 
 export default function GuideSection(props: Props) {
   return (
-    <div class=" flex flex-col leading-[18.78px] dark:border-[#282828] border-[#69696951] border-[0.5px] rounded-[6px]">
+    <div class=" flex flex-col leading-[18.78px] dark:border-[#282828] border-[#69696951] dark:bg-[#282828] border-[0.5px] rounded-[6px]">
       <div
         class={clsx(
-          "p-4 ",
-          props.links.length > 0 && "border-b border-[#282828]",
+          "",
+          props.links.length > 0 && "border-b p-4  border-[#282828]",
         )}
       >
         <div class="text-[#131313] dark:text-white text-opacity-60 font-bold">

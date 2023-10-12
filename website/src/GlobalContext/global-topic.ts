@@ -85,6 +85,7 @@ export default function createGlobalTopic(mobius: MobiusType) {
                     title: true,
                     url: true,
                     year: true,
+                    description: true,
                   },
                 },
               },

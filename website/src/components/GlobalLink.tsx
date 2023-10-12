@@ -10,7 +10,7 @@ interface Props {
 
 export default function GlobalLink(props: Props) {
   return (
-    <div class="flex items-center  border-b-[0.5px] dark:border-[#282828] border-[#69696951] p-4 px-4 justify-between">
+    <div class="flex items-center  border-b-[0.5px] dark:border-[#282828] dark:bg-[#1C1C1C] border-[#69696951] p-4 px-4 justify-between">
       {/* <div class="">
       <div class="bg-neutral-400 w-10 h-10 rounded-full"></div>
     </div> */}

@@ -52,6 +52,7 @@ type GlobalLink {
   title: String!
   url: String!
   year: String
+  description: String
 }
 
 type Mutation {

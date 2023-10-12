@@ -64,7 +64,7 @@ export default function GlobalGuide() {
                   "translateX(0px)",
                 ],
               }}
-              class="bg-gray-100 dark:bg-neutral-950 hover:bg-gray-200 transition-all flex items-center justify-center rounded-[4px] h-[29px] w-[29px] text-[14px] cursor-pointer"
+              class="bg-gray-100 dark:bg-[#161616] hover:bg-gray-200 dark:hover:bg-black transition-all flex items-center justify-center rounded-[4px] h-[29px] w-[29px] text-[14px] cursor-pointer"
             >
               <Icon name="Options" />
             </Motion.div>
