@@ -4,7 +4,7 @@ import { MobiusType } from "../root"
 import { useLocation } from "solid-start"
 import { SearchResult } from "../components/Search"
 
-type GlobalLink = {
+export type GlobalLink = {
   id: string
   title: string
   url: string
