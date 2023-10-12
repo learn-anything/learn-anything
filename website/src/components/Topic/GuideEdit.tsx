@@ -252,48 +252,50 @@ export default function GuideSummaryEdit() {
                     />
                   }
                 >
-                  <input
-                    class="text-[#696969] bg-transparent p-4 font-light overflow-hidden text-ellipsis outline-none"
-                    onInput={(e) => {
-                      let copiedTopic: GlobalTopic = JSON.parse(
-                        JSON.stringify(editedGlobalTopic()),
-                      )
-
-                      const foundSectionIndex =
-                        copiedTopic.latestGlobalGuide?.sections.findIndex(
-                          (s) => {
-                            return s.title === section.title
-                          },
+                  <div class="flex w-full p-4">
+                    <input
+                      class="text-[#696969] w-full bg-transparent  font-light overflow-hidden text-ellipsis outline-none"
+                      onInput={(e) => {
+                        let copiedTopic: GlobalTopic = JSON.parse(
+                          JSON.stringify(editedGlobalTopic()),
                         )
 
-                      if (
-                        foundSectionIndex !== undefined &&
-                        foundSectionIndex !== -1
-                      ) {
-                        // @ts-ignore
-                        copiedTopic.latestGlobalGuide!.sections[
-                          foundSectionIndex
-                        ].title = e.target.value
+                        const foundSectionIndex =
+                          copiedTopic.latestGlobalGuide?.sections.findIndex(
+                            (s) => {
+                              return s.title === section.title
+                            },
+                          )
+
+                        if (
+                          foundSectionIndex !== undefined &&
+                          foundSectionIndex !== -1
+                        ) {
+                          // @ts-ignore
+                          copiedTopic.latestGlobalGuide!.sections[
+                            foundSectionIndex
+                          ].title = e.target.value
+                          setEditedGlobalTopic(copiedTopic)
+                        }
+                      }}
+                      value={section.title}
+                    />
+                    <div
+                      onClick={() => {
+                        let copiedTopic: GlobalTopic = JSON.parse(
+                          JSON.stringify(editedGlobalTopic()),
+                        )
+
+                        copiedTopic.latestGlobalGuide.sections =
+                          copiedTopic.latestGlobalGuide.sections.filter(
+                            (s) => s.title !== section.title,
+                          )
                         setEditedGlobalTopic(copiedTopic)
-                      }
-                    }}
-                    value={section.title}
-                  />
-                  <div
-                    onClick={() => {
-                      let copiedTopic: GlobalTopic = JSON.parse(
-                        JSON.stringify(editedGlobalTopic()),
-                      )
-
-                      copiedTopic.latestGlobalGuide.sections =
-                        copiedTopic.latestGlobalGuide.sections.filter(
-                          (s) => s.title !== section.title,
-                        )
-                      setEditedGlobalTopic(copiedTopic)
-                    }}
-                    class="text-white cursor-pointer"
-                  >
-                    Delete section
+                      }}
+                      class="hover:text-white flex items-center justify-center border-red-500 border text-red-500 hover:bg-red-600 border-opacity-50 rounded-[6px] p-2 w-[150px] cursor-pointer"
+                    >
+                      Delete section
+                    </div>
                   </div>
                 </Show>
 
