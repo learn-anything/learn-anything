@@ -33,7 +33,7 @@ export default function EditGuide() {
   }
 }
       `}</style>
-      <div class="w-screen h-full text-black bg-white dark:bg-neutral-900">
+      <div class="w-screen h-full fixed top-0 left-0 text-black bg-white dark:bg-neutral-900">
         <TopicNav />
         {/* <div class="w-full" style={{ padding: "24px 24px 0 24px" }}>
           <TitlePill />
@@ -42,7 +42,7 @@ export default function EditGuide() {
         <div class="h-full w-full flex justify-center">
           <div
             id="InfoMain"
-            class="h-full bg-white overflow-hidden  dark:bg-[#1C1C1C] w-full min-h-screen flex  gap-6 flex-col"
+            class="h-full bg-white overflow-auto  dark:bg-[#1C1C1C] w-full min-h-screen flex  gap-6 flex-col"
             style={{ padding: "24px 20px 24px 20px" }}
           >
             <GuideEdit />

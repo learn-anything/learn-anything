@@ -319,7 +319,7 @@ export default function GuideSummaryEdit() {
                         >
                           <div class="w-full  h-full flex justify-between items-center">
                             <div class="w-[80%] gap-1 flex flex-col ">
-                              <div class="relative flex flex-col text-[#3B5CCC]">
+                              <div class="relative flex flex-col text-[#3B5CCC] dark:text-blue-400">
                                 <div class="text-[16px] w-full outline-none transition-all bg-inherit px-2 py-1">
                                   {link.title}
                                 </div>
