@@ -227,7 +227,13 @@ export default function GuideSummaryEdit() {
                             sectionOfLinkEdited() === section.title
                           }
                         >
-                          <GlobalLinkEditModal linkId={linkIdToEdit()} />
+                          <GlobalLinkEditModal
+                            linkId={linkIdToEdit()}
+                            onClose={() => {
+                              setLinkToEdit("")
+                              setSectionOfLinkEdited("")
+                            }}
+                          />
                         </Show>
                         <div class="w-full  h-full flex justify-between items-center">
                           <div class="w-[80%] gap-1 flex flex-col ">

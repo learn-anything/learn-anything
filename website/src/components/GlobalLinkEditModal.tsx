@@ -1,43 +1,23 @@
-import { Show, createEffect, createSignal, onMount } from "solid-js"
-import Modal from "./Modal"
-import { GlobalLink, useGlobalTopic } from "../GlobalContext/global-topic"
 import { Button, Checkbox } from "@kobalte/core"
+import { Show, createSignal, onMount } from "solid-js"
+import { GlobalLink, useGlobalTopic } from "../GlobalContext/global-topic"
 import Icon from "./Icon"
-import { createShortcut } from "@solid-primitives/keyboard"
+import Modal from "./Modal"
 
 interface Props {
   linkId: string
+  onClose: () => void
 }
 
 export default function GlobalLinkEditModal(props: Props) {
   const topic = useGlobalTopic()
-
   const [linkToEdit, setLinkToEdit] = createSignal<GlobalLink>()
-  const [editingDescription, setEditingDescription] = createSignal(false)
 
   onMount(() => {
     // find the link by id
     const link = topic.globalTopic.links.find((l) => l.id === props.linkId)
     setLinkToEdit(link)
     console.log(linkToEdit(), "link to edit")
-  })
-
-  createEffect(() => {
-    if (linkToEdit()) {
-      const editableDiv = document.getElementById("Description")!
-      if (editableDiv) {
-        console.log("runs..")
-        editableDiv.addEventListener("click", () => {
-          editableDiv.setAttribute("contenteditable", "true")
-          editableDiv.focus()
-        })
-        createShortcut(["ENTER"], () => {
-          var details = document.getElementById("GuideSummary")!.innerHTML
-          console.log(details, "Details")
-          setEditingDescription(false)
-        })
-      }
-    }
   })
 
   return (
@@ -144,14 +124,24 @@ export default function GlobalLinkEditModal(props: Props) {
                 class="bg-inherit  w-[40px]"
               />
             </div>
-            <div
+            <input
               class="p-1 px-2 border-[0.5px] rounded-[4px] border-slate-400 border-opacity-40 bg-inherit"
-              contentEditable={editingDescription()}
-              id="Description"
+              value={"testing"}
             >
               Description
-            </div>
-            <Button.Root class=" bg-blue-500 absolute bottom-4 right-4 active:scale-[1.1] hover:bg-blue-600 rounded-[6px] text-[22px] px-6 p-2 text-white">
+            </input>
+            <Button.Root
+              class=" bg-blue-500 absolute bottom-4 left-4 active:scale-[1.1] hover:bg-blue-600 rounded-[6px] text-[22px] px-6 p-2 text-white"
+              onClick={() => {
+                props.onClose()
+              }}
+            >
+              Cancel
+            </Button.Root>
+            <Button.Root
+              class=" bg-blue-500 absolute bottom-4 right-4 active:scale-[1.1] hover:bg-blue-600 rounded-[6px] text-[22px] px-6 p-2 text-white"
+              onClick={() => {}}
+            >
               Save
             </Button.Root>
           </div>

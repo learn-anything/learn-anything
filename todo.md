@@ -1,7 +1,48 @@
 ## Public website release
 
-- order sections
-  - seperate section
+- go through each topic in wiki and
+  1. create global topic from the wiki topic
+  2. parse all the links inside in ## Links
+  - those links are `Other` links
+  3. parse all links that are part of subheadings such as in `js-libraries`
+  - the links inside the section are part of the section in the guide
+  4. calculate the references from the topics, update the json file
+  - make it a function that does it for a given file
+- full guide is showing and is pretty
+- user gets created on hanko auth
+- stripe updates and works.
+  - first test locally, make sure edgedb updates the `user` `memberUntil` value correctly
+  - then test in production. with real card. updates and works well
+- allow marking a topic as learning / learned / to learn
+- allow marking links inside sections of a guide as `bookmarks` or `done` (make icons more obvious)
+  - show on hover what actions do
+- use the graph connections from above to render graph in landing page
+- add search in each global topic page
+- profile page shows links added (don't do profile until user paid for MVP as actions are paywalled)
+  - or if do, must look good. choosing username is paywalled too
+- desktop with solid-monaco that publishes the markdown content into a wiki like vitepress
+- editing of files from a connected folder in file system
+- go deep into solana. do https://www.soldev.app/course
+  - setup `buy.` and release with next.js using https://github.com/nightly-labs/solana-web3-template
+    - join discord, ask for help.
+    - need to be able to pay for digital good with solana and unlock the content for the user
+    - need to be aware of their wallet address before purchase is made. check before doing transaction that this user is aware of this solana address?
+    - check and use https://github.com/solana-labs/solana-pay for payments. its robust!
+    - setup stripe checkouts for each digital good sold too!
+    - release gumroad clone
+      - sell course through LA `buy.`. users who bought get access. users who already bought course via email get discount code they can enter in course purchase screen and get access to course for free
+    - talk to Felix from hanko on how to reuse hanko login session from la proper to buy.la ([how to do it](https://discord.com/channels/788396090180894730/788396090180894733/1155077863733735485))
+    - check auth works well with react/next.js (should be even better as hanko has first class support for react). adapt ideas to solid code
+  - use code from https://github.com/nikitavoloboev/sol-pay
+  - try do escrow service for idea marketplace
+    - use https://squads.so. ask for help in their discord and also Mango founder. make it work
+- mobile app start with ignite
+
+  - remove all non useful files etc.
+  - have similar DX to solid website
+  - buy and try out https://tamagui.dev/takeout | take ideas from it
+  - solve hanko auth and ability to do graphql requets
+
 - make `related links` work
   - potentially as an icon on `Link` component to expand to see related links
   - make it work inside edgedb schema well, what is a related link?
@@ -248,3 +289,15 @@
   - FigJam + Figma main design files
 - `import { Motion } from "@motionone/solid"` always gives type trouble, don't get why
 - replace fuse.js with orama in Search component. don't use fuse.js any more
+- setup nice way to do `dump` and `restore` of a database
+  - 2 separate commands
+    - on `dump` will most likely move the `edgedb.db` into `private/` folder? so its git ignored. otherwise can git ignore for `*.db`
+- setup nice way to bootstrap edgedb locally with content
+  - read the seed folder and load things into edgedb
+  - create global topic users can see with a guide editor fully working etc.
+- maybe move to Vercel as there is more features than Pages
+  - also can setup grafbase deploys on each branch with preview websites easily as grafbase natively supports it
+  - otherwise need to use this api https://developers.cloudflare.com/api/operations/pages-project-update-project
+    - and on each branch created, setup preview deployment that will point to grafbase preview deploy URL
+    - look at github webhooks and consume the preview url of Grafbase for each branch for grafbase test deploys
+- have infinite login sessions with hanko ([how you can do it](https://discord.com/channels/788396090180894730/1161620915499565108/1161740380983795904))
