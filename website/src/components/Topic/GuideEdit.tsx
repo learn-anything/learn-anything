@@ -3,15 +3,23 @@ import { useMobius } from "../../root"
 import { Search, createSearchState } from "../Search"
 import { useNavigate } from "solid-start"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
+import { Button } from "@kobalte/core"
+import { Checkbox } from "@kobalte/core"
+// @ts-ignore
+import { Motion } from "@motionone/solid"
 import {
   useDragDropContext,
   createDraggable,
   createDroppable,
 } from "@thisbeyond/solid-dnd"
+import Modal from "../Modal"
+import Icon from "../Icon"
+import { useGlobalState } from "../../GlobalContext/global"
 
 export default function GuideSummaryEdit() {
   const topic = useGlobalTopic()
   const mobius = useMobius()
+  const global = useGlobalState()
   const navigate = useNavigate()
 
   const [, { onDragEnd }] = useDragDropContext()!
@@ -61,6 +69,41 @@ export default function GuideSummaryEdit() {
     }
     #GuideSummaryMinimised {
       height: 97px
+    }
+    .checkbox {
+      display: inline-flex;
+      align-items: center;
+    }
+    .checkbox__control {
+      height: 21px;
+      width: 21px;
+      border-radius: 6px;
+      border: 1px solid hsl(240 5% 84%);
+    }
+    .checkbox__input:focus-visible + .checkbox__control {
+      outline: 2px solid hsl(200 98% 39%);
+      outline-offset: 2px;
+    }
+    .checkbox__control[data-checked] {
+      border-color: hsl(200 98% 39%);
+      background-color: hsl(200 98% 39%);
+      color: white;
+    }
+    .checkbox__label {
+      margin-left: 6px;
+      color: hsl(240 6% 10%);
+      font-size: 14px;
+      user-select: none;
+    }
+    #Focused {
+      font-size: 12px;
+      left: 0;
+      top: -20px;
+    }
+    #UnFocused {
+
+      left: 0;
+      top: 0;
     }
   `}</style>
       <div class="w-full flex flex-col gap-4 text-[16px] leading-[18.78px] ">
@@ -213,6 +256,71 @@ export default function GuideSummaryEdit() {
                         }}
                         class="flex items-center dark:bg-neutral-900 bg-white gap-6 justify-between border-y  p-2 px-4 border-[#282828]"
                       >
+                        <Show
+                          when={
+                            global.state.showModalToEditGlobalLinkById !== ""
+                          }
+                        >
+                          <Modal>
+                            <div class="rounded-lg w-1/2 relative bg-white font-light h-1/2 flex flex-col p-6 px-6 gap-4">
+                              <div class="flex flex-col gap-5 [&>*]:px-2 [&>*]:transition-all [&>*]:p-1">
+                                <div class="relative w-full border-b border-slate-200 hover:border-slate-400">
+                                  <input
+                                    value={link.title}
+                                    class="text-[20px] font-semibold w-full outline-none"
+                                  ></input>
+                                  <div
+                                    id={link.title ? "Focused" : "UnFocused"}
+                                    class="absolute px-2 font-light transition-all text-opacity-40 text-black h-full flex items-center"
+                                  >
+                                    Title
+                                  </div>
+                                </div>
+                                <div class="relative w-full ">
+                                  <div
+                                    id={link.url ? "Focused" : "UnFocused"}
+                                    class="absolute px-2 font-light transition-all text-opacity-40 text-black h-full flex items-center"
+                                  >
+                                    Url
+                                  </div>
+                                  <input
+                                    value={link.url}
+                                    class="text-[16px] w-full outline-none border-b border-slate-200 hover:border-slate-400 focus:border-slate-600 transition-all"
+                                  >
+                                    Url
+                                  </input>
+                                </div>
+                              </div>
+                              <div class="w-full flex gap-6">
+                                <Checkbox.Root class="checkbox">
+                                  <Checkbox.Input class="checkbox__input" />
+                                  <Checkbox.Control class="checkbox__control active:scale-[1.1]">
+                                    <Checkbox.Indicator>
+                                      <Icon name="Checkmark"></Icon>
+                                    </Checkbox.Indicator>
+                                  </Checkbox.Control>
+                                  <Checkbox.Label class="checkbox__label">
+                                    Verified
+                                  </Checkbox.Label>
+                                </Checkbox.Root>
+                                <Checkbox.Root class="checkbox">
+                                  <Checkbox.Input class="checkbox__input" />
+                                  <Checkbox.Control class="checkbox__control active:scale-[1.1]">
+                                    <Checkbox.Indicator>
+                                      <Icon name="Checkmark"></Icon>
+                                    </Checkbox.Indicator>
+                                  </Checkbox.Control>
+                                  <Checkbox.Label class="checkbox__label">
+                                    Public
+                                  </Checkbox.Label>
+                                </Checkbox.Root>
+                              </div>
+                              <Button.Root class=" bg-blue-500 absolute bottom-4 right-4 active:scale-[1.1] hover:bg-blue-600 rounded-[6px] text-[22px] px-6 p-2 text-white">
+                                Save
+                              </Button.Root>
+                            </div>
+                          </Modal>
+                        </Show>
                         <div class="w-full  h-full flex justify-between items-center">
                           <div class="w-[80%] gap-1 flex flex-col ">
                             <div class="relative flex flex-col text-[#3B5CCC] dark:text-blue-400">
@@ -241,7 +349,8 @@ export default function GuideSummaryEdit() {
                             <div
                               onClick={async () => {
                                 console.log(link, "link")
-                                navigate(`/links/${link.id}`)
+                                // navigate(`/links/${link.id}`)
+                                global.setShowModalToEditGlobalLinkById(link.id)
                               }}
                               class="cursor-pointer"
                             >

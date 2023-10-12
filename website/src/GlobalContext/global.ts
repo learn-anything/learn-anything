@@ -24,6 +24,7 @@ type GlobalState = {
   globalLinks: GlobalLink[]
   globalLinkSearchDb: any
   guidePage: string
+  showModalToEditGlobalLinkById: string
 }
 
 // various global state
@@ -33,6 +34,7 @@ export function createGlobalState(mobius: MobiusType) {
     globalLinks: [],
     globalLinkSearchDb: undefined,
     guidePage: "Guide",
+    showModalToEditGlobalLinkById: "",
   })
 
   const [globalLinkSearchDb, setGlobalLinkSearchDb] =
@@ -157,6 +159,9 @@ export function createGlobalState(mobius: MobiusType) {
     state,
     setGuidePage: (page: string) => {
       setState({ guidePage: page })
+    },
+    setShowModalToEditGlobalLinkById: (id: string) => {
+      setState({ showModalToEditGlobalLinkById: id })
     },
     setGlobalTopicsSearchList: (list: GlobalTopicSearchItem[]) => {
       setState({ globalTopicsSearchList: list })
