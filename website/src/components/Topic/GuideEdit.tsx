@@ -163,7 +163,7 @@ export default function GuideSummaryEdit() {
             Submit Changes
           </div>
         </div>
-        <div class="border-[0.5px] dark:border-[#282828] border-[#69696951] flex flex-col gap-2 rounded-[4px] p-4 w-full">
+        <div class="border-[1px] dark:border-[#282828] border-[#69696951] flex flex-col gap-2 rounded-[4px] p-4 w-full">
           <div class="flex justify-between items-center">
             <div class="text-[#696969] ">Summary</div>
             <div
@@ -227,7 +227,7 @@ export default function GuideSummaryEdit() {
         <For each={editedGlobalTopic().latestGlobalGuide?.sections}>
           {(section, index) => {
             return (
-              <div class="border dark:bg-neutral-900 bg-white border-slate-400 border-opacity-30 rounded-lg flex flex-col">
+              <div class="border dark:bg-neutral-900 bg-white border-[#282828] rounded-lg flex flex-col">
                 <Show
                   when={section.title}
                   fallback={
@@ -292,7 +292,7 @@ export default function GuideSummaryEdit() {
                           )
                         setEditedGlobalTopic(copiedTopic)
                       }}
-                      class="hover:text-white flex items-center justify-center border-red-500 border text-red-500 hover:bg-red-600 border-opacity-50 rounded-[6px] p-2 w-[150px] cursor-pointer"
+                      class="hover:text-white flex items-center justify-center border-red-500 border text-red-500 hover:bg-red-600 border-opacity-50 rounded-[6px] p-2 w-[180px] cursor-pointer"
                     >
                       Delete section
                     </div>
@@ -315,7 +315,7 @@ export default function GuideSummaryEdit() {
                             draggable(el)
                             droppable(el)
                           }}
-                          class="flex items-center dark:bg-neutral-900 bg-white gap-6 justify-between border-y  p-2 px-4 border-slate-400 border-opacity-30"
+                          class="flex items-center dark:bg-neutral-900 bg-white gap-6 justify-between border-y  p-2 px-4 border-[#282828]"
                         >
                           <div class="w-full  h-full flex justify-between items-center">
                             <div class="w-[80%] gap-1 flex flex-col ">

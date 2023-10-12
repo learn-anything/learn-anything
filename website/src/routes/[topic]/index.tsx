@@ -41,7 +41,7 @@ export default function GlobalTopic() {
         <div class="h-[90%] w-full flex">
           <div
             id="InfoMain"
-            class="h-full bg-white overflow-hidden dark:bg-[#1C1C1C] flex  gap-6 flex-col"
+            class="h-full bg-white overflow-auto dark:bg-[#1C1C1C] flex  gap-6 flex-col"
             style={{ padding: "24px 20px 24px 20px" }}
           >
             <Switch>

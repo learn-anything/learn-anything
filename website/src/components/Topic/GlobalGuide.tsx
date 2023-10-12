@@ -50,7 +50,7 @@ export default function GlobalGuide() {
                   "translateX(0px)",
                 ],
               }}
-              class="bg-blue-600 flex items-center justify-center bg-opacity-40 text-blue-600 hover:text-white hover:bg-blue-600 transition-all px-3 font-light rounded-[4px] text-[14px] p-1 cursor-pointer"
+              class="bg-blue-600 flex items-center justify-center bg-opacity-60 text-white hover:text-white hover:bg-blue-600 transition-all px-3 font-light rounded-[4px] text-[14px] p-1 cursor-pointer"
             >
               Improve Guide
             </Motion.div>

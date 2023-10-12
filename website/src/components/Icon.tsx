@@ -156,7 +156,7 @@ export default function Icon(props: Props) {
             </svg>
           </Match>
           <Match when={props.name === "Plus"}>
-            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
               <path
                 stroke="currentColor"
                 stroke-linecap="round"

@@ -11,45 +11,45 @@ export default function EditGuide() {
   return (
     <>
       <style>{`
-   #InfoSidebar {
-    display: none;
-  }
-  #InfoMain {
-    width: 100%;
-  }
-  #InfoOptions {
-    display: none;
-  }
+        #InfoSidebar {
+          display: none;
+        }
+        #InfoMain {
+          width: 100%;
+        }
+        #InfoOptions {
+          display: none;
+        }
 
-@media (min-width: 700px) {
-  #InfoSidebar {
-    display: flex;
-  }
-  #InfoMain {
-    width: 70%;
-  }
-  #InfoOptions {
-    display: flex
-  }
-}
+      @media (min-width: 700px) {
+        #InfoSidebar {
+          display: flex;
+        }
+        #InfoMain {
+          width: 75%;
+        }
+        #InfoOptions {
+          display: flex
+        }
+      }
       `}</style>
-      <div class="w-screen h-full fixed top-0 left-0 text-black bg-white dark:bg-neutral-900">
+      <div class="w-screen fixed top-0 right-0 h-screen text-black dark:text-white bg-white dark:bg-[#1C1C1C]">
         <TopicNav />
         {/* <div class="w-full" style={{ padding: "24px 24px 0 24px" }}>
           <TitlePill />
         </div> */}
 
-        <div class="h-full w-full flex justify-center">
+        <div class="h-[90%] w-full flex">
           <div
             id="InfoMain"
-            class="h-full bg-white overflow-auto  dark:bg-[#1C1C1C] w-full min-h-screen flex  gap-6 flex-col"
+            class="h-full bg-white overflow-auto dark:bg-[#1C1C1C] flex  gap-6 flex-col"
             style={{ padding: "24px 20px 24px 20px" }}
           >
             <GuideEdit />
           </div>
           <div
             id="InfoSidebar"
-            class="h-full min-h-screen dark:bg-[#161616]  border-l-[0.5px] border-[#69696951] w-[25%]"
+            class="  dark:bg-[#161616] bg-[#F4F4F6] border-l-[0.5px] border-[#69696951] h-full w-[25%] min-w-[250px]"
           >
             <GuideSidebar></GuideSidebar>
           </div>
