@@ -16,7 +16,8 @@ export default function GuideSection(props: Props) {
       <div
         class={clsx(
           "",
-          props.links.length > 0 && "border-b p-4  border-[#282828]",
+          props.links.length > 0 &&
+            "border-b-[0.5px] p-4 border-[#69696951]  dark:border-[#282828]",
         )}
       >
         <div class="text-[#131313] dark:text-white text-opacity-60 font-bold">
