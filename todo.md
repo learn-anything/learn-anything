@@ -1,5 +1,7 @@
 ## Public website release
 
+- stripe updates and works.
+- user gets created on hanko auth
 - solid tiptap to allow edits to `topic summary` and `section summary`
   - save results into db
 - render the results like markdown in topic page using https://github.com/micromark/micromark
@@ -19,8 +21,6 @@
 - have a count with how many links are inside a section in edit guide at least (maybe useful in global topic sections too)
 - check that non members can't run `edit guide`
   - and members who do `edit guide`. edit their own personal versions of the guide
-- user gets created on hanko auth
-- stripe updates and works.
   - first test locally, make sure edgedb updates the `user` `memberUntil` value correctly
   - then test in production. with real card. updates and works well
 - allow marking a topic as learning / learned / to learn

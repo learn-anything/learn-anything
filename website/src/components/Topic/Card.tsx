@@ -27,13 +27,13 @@ export default function Card(props: Props) {
       <div
         class="w-full relative flex flex-col gap-2 dark:text-white   rounded-[4px] overflow-auto"
         style={{
-          "max-height": "280px",
+          "max-height": "280px"
         }}
       >
         <Switch>
           <Match when={props.name === "Learners"}>
             <div class="flex flex-col gap-3">
-              <div class="font-bold">Learners</div>
+              {/* <div class="font-bold">Learners</div> */}
               <Show when={false}>
                 <div class="w-full">
                   <div class="flex font-light items-center p-1 px-4  gap-4 text-black">
@@ -110,7 +110,7 @@ export default function Card(props: Props) {
                             <div
                               style={{
                                 "z-index": i(),
-                                transform: `translateX(${i() * 30}px)`,
+                                transform: `translateX(${i() * 30}px)`
                               }}
                               class="w-[35px] p-[2px] absolute flex items-center justify-center h-[35px] rounded-full bg-white"
                             >
@@ -160,12 +160,12 @@ export default function Card(props: Props) {
                   </div>
                 </div>
               </Show>
-              <div class="flex  font-light items-center justify-between gap-4 text-black">
+              {/* <div class="flex  font-light items-center justify-between gap-4 text-black">
                 <div class="cursor-pointer text-blue-400 hover:bg-blue-400 hover:text-white transition-all  border-[1.5px] rounded-[4px] p-1 flex items-center justify-center font-semibold w-full border-blue-400 text-[14px]">
                   request to Moderate
                 </div>
-                {/* <A href="/asking-questions">go to new topic</A> */}
-              </div>
+                <A href="/asking-questions">go to new topic</A>
+              </div> */}
             </div>
           </Match>
           <Match when={props.name === "Suggested"}>

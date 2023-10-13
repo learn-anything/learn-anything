@@ -1,4 +1,4 @@
-## Run
+# Run
 
 ```
 bun dev

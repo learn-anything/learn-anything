@@ -18,7 +18,7 @@ export default function GlobalGuide() {
           id="Guide"
           class="font-bold  flex w-full items-center justify-between"
         >
-          <div class="text-[22px]">Guide</div>
+          <div class="text-[22px]">{topic.globalTopic.prettyName}</div>
           <div class="flex h-full gap-4">
             <Motion.div
               transition={{ duration: 1.2, easing: "ease-out" }}
@@ -27,8 +27,8 @@ export default function GlobalGuide() {
                 transform: [
                   "translateX(100px)",
                   "translateX(-10px)",
-                  "translateX(0px)",
-                ],
+                  "translateX(0px)"
+                ]
               }}
               class="border border-[#69696951] flex items-center justify-center bg-opacity-40 text-[#696969]  hover:bg-gray-100 transition-all px-3 font-light rounded-[4px] text-[14px] p-1 cursor-pointer"
             >
@@ -47,8 +47,8 @@ export default function GlobalGuide() {
                 transform: [
                   "translateX(100px)",
                   "translateX(-10px)",
-                  "translateX(0px)",
-                ],
+                  "translateX(0px)"
+                ]
               }}
               class="bg-blue-600 flex items-center justify-center bg-opacity-60 text-white hover:text-white hover:bg-blue-600 transition-all px-3 font-light rounded-[4px] text-[14px] p-1 cursor-pointer"
             >
@@ -61,8 +61,8 @@ export default function GlobalGuide() {
                 transform: [
                   "translateX(100px)",
                   "translateX(-10px)",
-                  "translateX(0px)",
-                ],
+                  "translateX(0px)"
+                ]
               }}
               class="bg-gray-100 dark:bg-[#161616] hover:bg-gray-200 dark:hover:bg-black transition-all flex items-center justify-center rounded-[4px] h-[29px] w-[29px] text-[14px] cursor-pointer"
             >
@@ -79,8 +79,8 @@ export default function GlobalGuide() {
           transform: [
             "translateX(100px)",
             "translateX(-10px)",
-            "translateX(0px)",
-          ],
+            "translateX(0px)"
+          ]
         }}
         class="w-full gap-4 flex flex-col h-full rounded-[6px] p-4"
       >

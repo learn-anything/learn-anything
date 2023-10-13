@@ -12,10 +12,6 @@ export default function GuideSidebar() {
         class="w-full flex flex-col gap-[32px] h-full dark:text-white text-black"
         style={{ padding: "24px 20px 24px 20px" }}
       >
-        <div id="Title" class="flex items-center gap-3">
-          <div class="w-[30px] h-[30px] bg-neutral-200 rounded-full"></div>
-          <div>title</div>
-        </div>
         <div id="Status" class="flex flex-col gap-2">
           <div class="font-bold text-[#696969] text-[14px]">TOPIC STATUS</div>
           <div class="flex gap-2">

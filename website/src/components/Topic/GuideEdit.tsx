@@ -2,6 +2,7 @@ import { For, Show, createSignal } from "solid-js"
 import { useNavigate } from "solid-start"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import { useMobius } from "../../root"
+import { debounce } from "@solid-primitives/scheduled"
 import { createTiptapEditor } from "solid-tiptap"
 import StarterKit from "@tiptap/starter-kit"
 import { Search, createSearchState } from "../Search"
@@ -11,7 +12,6 @@ import {
   createDroppable,
   useDragDropContext
 } from "@thisbeyond/solid-dnd"
-import { useGlobalState } from "../../GlobalContext/global"
 import GlobalLinkEditModal from "../GlobalLinkEditModal"
 
 export default function GuideSummaryEdit() {
@@ -41,7 +41,13 @@ export default function GuideSummaryEdit() {
       // @ts-ignore
       const topicSummary = json.content[0]?.content[0]?.text
       console.log(topicSummary)
-      topic.set("topicSummary", topicSummary!)
+
+      // TODO: breaks focus.. find another way to update
+      // topic.set("topicSummary", topicSummary!)
+      // const triggerUpdate = debounce(() => {
+      //   topic.set("topicSummary", topicSummary!)
+      // }, 3000)
+      // triggerUpdate()
     }
   }))
 

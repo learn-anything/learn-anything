@@ -8,13 +8,13 @@
     "semi": false
   },
   "dependencies": {
-    "@upstash/redis": "^1.22.1",
-    "edgedb": "^1.3.6",
-    "hono": "^3.7.3",
-    "stripe": "^13.8.0"
+    "@upstash/redis": "^1.23.3",
+    "edgedb": "^1.3.7",
+    "hono": "^3.7.6",
+    "stripe": "^13.10.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20230922.0",
-    "wrangler": "^3.10.1"
+    "@cloudflare/workers-types": "^4.20231010.0",
+    "wrangler": "^3.13.1"
   }
 }

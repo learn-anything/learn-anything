@@ -27,6 +27,7 @@
     "@solid-primitives/bounds": "^0.0.118",
     "@solid-primitives/event-listener": "^2.3.0",
     "@solid-primitives/keyboard": "^1.2.5",
+    "@solid-primitives/scheduled": "^1.4.1",
     "@solidjs/meta": "^0.28.6",
     "@solidjs/router": "^0.8.3",
     "@teamhanko/hanko-elements": "0.8.4",

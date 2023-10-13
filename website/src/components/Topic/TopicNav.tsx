@@ -47,8 +47,8 @@ export default function TopicNav() {
               .split("")
               .every((value) => {
                 return word.split("").includes(value)
-              }),
-          ),
+              })
+          )
         )
       })
       setFocusedTodoTitle(topicSearchResults()[focusedTopic()])
@@ -58,11 +58,11 @@ export default function TopicNav() {
   const searchResults: SearchResult[] = [
     { name: "Physics" },
     { name: "Math" },
-    { name: "Karabiner" },
+    { name: "Karabiner" }
   ]
   const search_state = createSearchState({
     searchResults: () => searchResults,
-    onSelect: console.log,
+    onSelect: console.log
   })
 
   return (
@@ -123,7 +123,7 @@ export default function TopicNav() {
               <div
                 class={clsx(
                   "relative w-[50%] h-full flex items-center transition-all duration-150",
-                  search_state.searchOpen && "w-full",
+                  search_state.searchOpen && "w-full"
                 )}
               >
                 <Search placeholder="Search Topic" state={search_state} />
@@ -145,19 +145,20 @@ export default function TopicNav() {
             >
               GitHub
             </a>/ */}
+            {/* TODO: hide it for non members too */}
             <Show
               when={!user.user.signedIn}
               fallback={
                 <A
                   class="cursor-pointer"
                   style={{
-                    color: "black",
+                    color: "black"
                   }}
                   href={`${
                     user.user.username ? `/@${user.user.username}` : "/profile"
                   }`}
                 >
-                  <Icon name="UserProfile" />
+                  {/* <Icon name="UserProfile" /> */}
                 </A>
               }
             >
