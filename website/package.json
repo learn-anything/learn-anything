@@ -32,6 +32,8 @@
     "@teamhanko/hanko-elements": "0.8.4",
     "@teamhanko/hanko-frontend-sdk": "0.8.4",
     "@thisbeyond/solid-dnd": "^0.7.4",
+    "@tiptap/core": "^2.1.12",
+    "@tiptap/pm": "^2.1.12",
     "clsx": "^2.0.0",
     "dotenv": "^16.3.1",
     "edgedb": "^1.3.7",
@@ -43,6 +45,7 @@
     "solid-markdown": "^1.2.2",
     "solid-start": "^0.3.6",
     "solid-start-cloudflare-pages": "^0.3.6",
+    "solid-tiptap": "^0.6.0",
     "tinybase": "^4.3.14",
     "undici": "^5.26.3",
     "zod": "^3.22.4"

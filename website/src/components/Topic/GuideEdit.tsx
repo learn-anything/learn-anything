@@ -2,6 +2,8 @@ import { For, Show, createSignal } from "solid-js"
 import { useNavigate } from "solid-start"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import { useMobius } from "../../root"
+import { createTiptapEditor } from "solid-tiptap"
+import StarterKit from "@tiptap/starter-kit"
 import { Search, createSearchState } from "../Search"
 // @ts-ignore
 import {
@@ -20,6 +22,14 @@ export default function GuideSummaryEdit() {
 
   const [linkIdToEdit, setLinkToEdit] = createSignal("")
   const [sectionOfLinkEdited, setSectionOfLinkEdited] = createSignal("")
+
+  let ref!: HTMLDivElement
+
+  const editor = createTiptapEditor(() => ({
+    element: ref!,
+    extensions: [StarterKit],
+    content: `Summary`
+  }))
 
   const [, { onDragEnd }] = useDragDropContext()!
 
@@ -69,7 +79,10 @@ export default function GuideSummaryEdit() {
     #GuideSummaryMinimised {
       height: 97px
     }
-
+    #editor {
+      outline: 2px solid transparent !important;
+      outline-offset: 2px !important;
+    }
   `}</style>
       <div class="w-full flex flex-col gap-4 text-[16px] leading-[18.78px] ">
         <div class="flex justify-between items-center ">
@@ -125,13 +138,10 @@ export default function GuideSummaryEdit() {
             Submit Changes
           </div>
         </div>
-        <div class="border-[1px] dark:border-[#282828] border-[#69696951] flex flex-col gap-2 rounded-[4px] p-4 w-full">
+        <div class="border-[1px] dark:border-[#282828] border-[#69696951] flex flex-col gap-2 rounded-[4px] w-full">
           <div class="flex justify-between items-center">
-            <div class="text-[#696969] ">Summary</div>
-            <div
-              class="text-[#3B5CCC] cursor-pointer select-none"
-              // onClick={() => {}}
-            ></div>
+            <div class="w-full p-4" id="editor" ref={ref} />
+            <div class="text-[#3B5CCC] cursor-pointer select-none"></div>
           </div>
           {/* <Show
             when={editedGuideOld.guide.summary.length > 0}
@@ -172,161 +182,172 @@ export default function GuideSummaryEdit() {
           Add section
         </div>
         <For each={topic.globalTopic.latestGlobalGuide.sections}>
-          {(section, sectionIndex) => (
-            <div class="border dark:bg-neutral-900 bg-white border-[#282828] rounded-lg flex flex-col">
-              <div class="flex w-full p-4">
-                <input
-                  class="text-[#696969] w-full bg-transparent  font-light overflow-hidden text-ellipsis outline-none"
-                  onInput={(e) => {
-                    topic.set(
-                      "latestGlobalGuide",
-                      "sections",
-                      sectionIndex(),
-                      "title",
-                      e.target.value
-                    )
-                  }}
-                  value={section.title}
-                />
-                <div
-                  onClick={() => {
-                    topic.set("latestGlobalGuide", "sections", (p) => {
-                      const copy = [...p]
-                      copy.splice(sectionIndex(), 1)
-                      return copy
-                    })
-                  }}
-                  class="hover:text-white flex items-center justify-center border-red-500 border text-red-500 hover:bg-red-600 border-opacity-50 rounded-[6px] p-2 w-[180px] cursor-pointer"
-                >
-                  Delete section
-                </div>
-              </div>
+          {(section, sectionIndex) => {
+            let ref!: HTMLDivElement
 
-              <div class="flex flex-col">
-                <For each={section.links}>
-                  {(link, linkIndex) => {
-                    const draggable = createDraggable(
-                      `${link.title}-in-section-${section.title}`
-                    )
-                    const droppable = createDroppable(
-                      `${link.title}-in-section-${section.title}`
-                    )
-                    const linkUrlId = `${section.title}-link-url-${linkIndex}`
-                    return (
-                      <div
-                        ref={(el) => {
-                          draggable(el)
-                          droppable(el)
-                        }}
-                        class="flex items-center dark:bg-neutral-900 bg-white gap-6 justify-between border-y  p-2 px-4 border-[#282828]"
-                      >
-                        <Show
-                          when={
-                            linkIdToEdit() === link.id &&
-                            sectionOfLinkEdited() === section.title
-                          }
-                        >
-                          <GlobalLinkEditModal
-                            linkId={linkIdToEdit()}
-                            onClose={() => {
-                              setLinkToEdit("")
-                              setSectionOfLinkEdited("")
-                            }}
-                          />
-                        </Show>
-                        <div class="w-full  h-full flex justify-between items-center">
-                          <div class="w-[80%] gap-1 flex flex-col ">
-                            <div class="relative flex flex-col text-[#3B5CCC] dark:text-blue-400">
-                              <div class="text-[16px] w-full outline-none transition-all bg-inherit px-2 py-1">
-                                {link.title}
-                              </div>
-                            </div>
-                            <div class="flex w-full">
-                              <Show when={link.year}>
-                                <div class="font-light text-[12px] text-[#696969] px-2">
-                                  {link.year}
-                                </div>
-                              </Show>
+            const editor = createTiptapEditor(() => ({
+              element: ref!,
+              extensions: [StarterKit],
+              content: `Summary`
+            }))
 
-                              <div class="font-light w-full text-[12px] text-[#696969]">
-                                <div
-                                  class="outline-none transition-all bg-inherit px-2 w-full"
-                                  id={linkUrlId}
-                                >
-                                  {link.url}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="flex gap-1 dark:text-white flex-col items-end text-[14px] opacity-50">
-                            <div
-                              onClick={async () => {
-                                // navigate(`/links/${link.id}`)
-                                setLinkToEdit(link.id)
-                                setSectionOfLinkEdited(section.title)
-                              }}
-                              class="cursor-pointer"
-                            >
-                              Edit
-                            </div>
-                            <div
-                              onClick={() => {
-                                topic.set(
-                                  "latestGlobalGuide",
-                                  "sections",
-                                  sectionIndex(),
-                                  "links",
-                                  (p) => {
-                                    const copy = [...p]
-                                    copy.splice(linkIndex(), 1)
-                                    return copy
-                                  }
-                                )
-                              }}
-                              class="cursor-pointer"
-                            >
-                              Delete
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  }}
-                </For>
-              </div>
-
-              <div class="w-full p-4">
-                {(() => {
-                  const search_state = createSearchState({
-                    searchResults: topic.currentTopicGlobalLinksSearch,
-                    onSelect({ name }) {
-                      const linkToAdd = topic.globalTopic.links.find(
-                        (link) => link.title === name
-                      )
-                      if (!linkToAdd) return
-
+            return (
+              <div class="border dark:bg-neutral-900 bg-white border-[#282828] rounded-lg flex flex-col">
+                <div class="flex w-full p-4">
+                  <input
+                    class="text-[#696969] w-full bg-transparent  font-light overflow-hidden text-ellipsis outline-none"
+                    onInput={(e) => {
                       topic.set(
                         "latestGlobalGuide",
                         "sections",
                         sectionIndex(),
-                        "links",
-                        (p) => [...p, { ...linkToAdd }]
+                        "title",
+                        e.target.value
                       )
-                    }
-                  })
+                    }}
+                    value={section.title}
+                  />
+                  <div
+                    onClick={() => {
+                      topic.set("latestGlobalGuide", "sections", (p) => {
+                        const copy = [...p]
+                        copy.splice(sectionIndex(), 1)
+                        return copy
+                      })
+                    }}
+                    class="hover:text-white flex items-center justify-center border-red-500 border text-red-500 hover:bg-red-600 border-opacity-50 rounded-[6px] p-2 w-[180px] cursor-pointer"
+                  >
+                    Delete section
+                  </div>
+                </div>
+                <div class="w-full p-4" id="editor" ref={ref} />
 
-                  return (
-                    <Search
-                      placeholder={
-                        "Search URL title of global links for the topic to add a new link"
+                <div class="flex flex-col">
+                  <For each={section.links}>
+                    {(link, linkIndex) => {
+                      const draggable = createDraggable(
+                        `${link.title}-in-section-${section.title}`
+                      )
+                      const droppable = createDroppable(
+                        `${link.title}-in-section-${section.title}`
+                      )
+                      const linkUrlId = `${section.title}-link-url-${linkIndex}`
+                      return (
+                        <div
+                          ref={(el) => {
+                            draggable(el)
+                            droppable(el)
+                          }}
+                          class="flex items-center dark:bg-neutral-900 bg-white gap-6 justify-between border-y  p-2 px-4 border-[#282828]"
+                        >
+                          <Show
+                            when={
+                              linkIdToEdit() === link.id &&
+                              sectionOfLinkEdited() === section.title
+                            }
+                          >
+                            <GlobalLinkEditModal
+                              linkId={linkIdToEdit()}
+                              onClose={() => {
+                                setLinkToEdit("")
+                                setSectionOfLinkEdited("")
+                              }}
+                            />
+                          </Show>
+                          <div class="w-full  h-full flex justify-between items-center">
+                            <div class="w-[80%] gap-1 flex flex-col ">
+                              <div class="relative flex flex-col text-[#3B5CCC] dark:text-blue-400">
+                                <div class="text-[16px] w-full outline-none transition-all bg-inherit px-2 py-1">
+                                  {link.title}
+                                </div>
+                              </div>
+                              <div class="flex w-full">
+                                <Show when={link.year}>
+                                  <div class="font-light text-[12px] text-[#696969] px-2">
+                                    {link.year}
+                                  </div>
+                                </Show>
+
+                                <div class="font-light w-full text-[12px] text-[#696969]">
+                                  <div
+                                    class="outline-none transition-all bg-inherit px-2 w-full"
+                                    id={linkUrlId}
+                                  >
+                                    {link.url}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="flex gap-1 dark:text-white flex-col items-end text-[14px] opacity-50">
+                              <div
+                                onClick={async () => {
+                                  // navigate(`/links/${link.id}`)
+                                  setLinkToEdit(link.id)
+                                  setSectionOfLinkEdited(section.title)
+                                }}
+                                class="cursor-pointer"
+                              >
+                                Edit
+                              </div>
+                              <div
+                                onClick={() => {
+                                  topic.set(
+                                    "latestGlobalGuide",
+                                    "sections",
+                                    sectionIndex(),
+                                    "links",
+                                    (p) => {
+                                      const copy = [...p]
+                                      copy.splice(linkIndex(), 1)
+                                      return copy
+                                    }
+                                  )
+                                }}
+                                class="cursor-pointer"
+                              >
+                                Delete
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    }}
+                  </For>
+                </div>
+
+                <div class="w-full p-4">
+                  {(() => {
+                    const search_state = createSearchState({
+                      searchResults: topic.currentTopicGlobalLinksSearch,
+                      onSelect({ name }) {
+                        const linkToAdd = topic.globalTopic.links.find(
+                          (link) => link.title === name
+                        )
+                        if (!linkToAdd) return
+
+                        topic.set(
+                          "latestGlobalGuide",
+                          "sections",
+                          sectionIndex(),
+                          "links",
+                          (p) => [...p, { ...linkToAdd }]
+                        )
                       }
-                      state={search_state}
-                    />
-                  )
-                })()}
+                    })
+
+                    return (
+                      <Search
+                        placeholder={
+                          "Search URL title of global links for the topic to add a new link"
+                        }
+                        state={search_state}
+                      />
+                    )
+                  })()}
+                </div>
               </div>
-            </div>
-          )}
+            )
+          }}
         </For>
       </div>
     </>
