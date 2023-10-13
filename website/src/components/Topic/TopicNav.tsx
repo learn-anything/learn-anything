@@ -113,7 +113,7 @@ export default function TopicNav() {
                   navigate("/")
                 }}
               >
-                <img class="rounded-full" src="/logo.jpg" alt="" />
+                <img class="rounded-full" src="/logo.png" alt="" />
               </div>
             </div>
 

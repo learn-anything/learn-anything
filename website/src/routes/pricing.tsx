@@ -49,7 +49,7 @@ export default function Pricing() {
               navigate("/")
             }}
           >
-            <img class="rounded-full" src="/logo.jpg" alt="" />
+            <img class="rounded-full" src="/logo.png" alt="" />
           </div>
           <Show when={!signedInSignal()}>
             <div
@@ -69,7 +69,7 @@ export default function Pricing() {
               <div
                 class={clsx(
                   "p-0.5 px-2 rounded-full cursor-pointer",
-                  planChosen() === "monthly" && "bg-white",
+                  planChosen() === "monthly" && "bg-white"
                 )}
                 onClick={() => {
                   setPlanChosen("monthly")
@@ -80,7 +80,7 @@ export default function Pricing() {
               <div
                 class={clsx(
                   "p-0.5 px-2 cursor-pointer rounded-full",
-                  planChosen() === "yearly" && "bg-white",
+                  planChosen() === "yearly" && "bg-white"
                 )}
                 onClick={() => {
                   setPlanChosen("yearly")
@@ -116,7 +116,7 @@ export default function Pricing() {
               <div
                 class={clsx(
                   "flex items-center justify-center rounded-lg bg-black w-full h-16 opacity-80 text-white",
-                  true && "bg-neutral-800 opacity-80 text-gray-300",
+                  true && "bg-neutral-800 opacity-80 text-gray-300"
                 )}
               >
                 Current plan
@@ -166,19 +166,19 @@ export default function Pricing() {
                       await mobius.query({
                         stripe: {
                           where: {
-                            plan: "month",
+                            plan: "month"
                           },
-                          select: true,
-                        },
+                          select: true
+                        }
                       })
                     } else {
                       await mobius.query({
                         stripe: {
                           where: {
-                            plan: "year",
+                            plan: "year"
                           },
-                          select: true,
-                        },
+                          select: true
+                        }
                       })
                     }
                   } else {

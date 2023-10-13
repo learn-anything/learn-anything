@@ -4,7 +4,9 @@ import type { Context } from "hono"
 import { cors } from "hono/cors"
 import * as edgedb from "edgedb"
 
-const client = edgedb.createHttpClient()
+export const client = edgedb.createHttpClient({
+  tlsSecurity: process.env.LOCAL ? "insecure" : "strict",
+})
 
 const app = new Hono()
 app.use("*", cors())
