@@ -116,19 +116,18 @@ export default function TopicNav() {
                 <img class="rounded-full" src="/logo.jpg" alt="" />
               </div>
             </div>
+
+            <div
+              class={clsx(
+                "relative w-[50%] h-full flex items-center transition-all duration-150",
+                search_state.searchOpen && "w-full"
+              )}
+            >
+              <Search placeholder="Search Topic" state={search_state} />
+            </div>
           </div>
           <div id="NavMenu">Burger</div>
           <div id="NavButtons" class="flex items-center justify-center gap-4">
-            <Show when={false} fallback={<Icon name="Search" />}>
-              <div
-                class={clsx(
-                  "relative w-[50%] h-full flex items-center transition-all duration-150",
-                  search_state.searchOpen && "w-full"
-                )}
-              >
-                <Search placeholder="Search Topic" state={search_state} />
-              </div>
-            </Show>
             {/* TODO:  */}
             {/* <div>Dark/Light switch</div> */}
             {/* <div

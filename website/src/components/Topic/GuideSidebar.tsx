@@ -1,5 +1,7 @@
+import { For } from "solid-js"
 import { useGlobalState } from "../../GlobalContext/global"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
+import FancyButton from "../FancyButton"
 import Card from "./Card"
 
 export default function GuideSidebar() {
@@ -15,23 +17,23 @@ export default function GuideSidebar() {
         <div id="Status" class="flex flex-col gap-2">
           <div class="font-bold text-[#696969] text-[14px]">TOPIC STATUS</div>
           <div class="flex gap-2">
-            <div class="px-[6px] text-[14px] p-[4px] active:scale-[1.03] active:border-none cursor-pointer text-[#696969] dark:border-opacity-30 flex items-center justify-center gap-1 leading-[18.78px] border-[#CCCCCC] border-[1px] rounded-[6px] hover:bg-black hover:text-white transition-all">
-              To Learn
-            </div>
-            <div class="px-[6px] text-[14px] p-[4px] active:scale-[1.03] active:border-none cursor-pointer text-[#696969] dark:border-opacity-30 flex items-center justify-center gap-1 leading-[18.78px] border-[#CCCCCC] border-[1px] rounded-[6px] hover:bg-black hover:text-white transition-all">
-              Learning
-            </div>
-            <div class="px-[6px] text-[14px] p-[4px] active:scale-[1.03] active:border-none cursor-pointer text-[#696969] dark:border-opacity-30 flex items-center justify-center gap-1 leading-[18.78px] border-[#CCCCCC] border-[1px] rounded-[6px] hover:bg-black hover:text-white transition-all">
-              Learned
-            </div>
+            <FancyButton>To Learn</FancyButton>
+            <FancyButton>Learning</FancyButton>
+            <FancyButton>Learned</FancyButton>
           </div>
         </div>
         <div id="Info" class="text-[#696969] flex flex-col gap-3">
-          <div class="font-bold">Topic Title</div>
+          <div class="font-bold">{topic.globalTopic.prettyName}</div>
           <div class="text-[14px] pl-3 flex flex-col gap-2">
-            <div class="">Topic Info</div>
-            <div class="">Topic Info</div>
-            <div class="">Topic Info</div>
+            <For each={topic.globalTopic.latestGlobalGuide.sections}>
+              {(section) => {
+                return (
+                  <>
+                    <div>{section.title}</div>
+                  </>
+                )
+              }}
+            </For>
           </div>
         </div>
         <div id="Resources" class="flex text-[#696969] flex-col gap-3">

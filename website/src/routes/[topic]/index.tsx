@@ -28,7 +28,7 @@ export default function GlobalTopic() {
           display: flex;
         }
         #InfoMain {
-          width: 75%;
+          width: 100%;
         }
         #InfoOptions {
           display: flex
@@ -41,7 +41,7 @@ export default function GlobalTopic() {
         <div class="h-[90%] w-full flex">
           <div
             id="InfoMain"
-            class="h-full bg-white overflow-auto dark:bg-[#1C1C1C] flex  gap-6 flex-col"
+            class="h-full w-full bg-white overflow-auto dark:bg-[#1C1C1C] flex  gap-6 flex-col"
             style={{ padding: "24px 20px 24px 20px" }}
           >
             <Switch>
@@ -55,7 +55,7 @@ export default function GlobalTopic() {
           </div>
           <Motion.div
             id="InfoSidebar"
-            class="  dark:bg-[#161616] bg-[#F4F4F6] border-l-[0.5px] border-[#69696951] h-full w-[25%] min-w-[250px]"
+            class="  dark:bg-[#161616] bg-[#F4F4F6] border-l-[0.5px] border-[#69696951] h-full min-w-[250px]"
           >
             <GuideSidebar></GuideSidebar>
           </Motion.div>
