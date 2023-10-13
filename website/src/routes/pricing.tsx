@@ -3,6 +3,7 @@ import { useNavigate } from "solid-start"
 import clsx from "clsx"
 import { signedIn } from "../../lib/auth"
 import { useMobius } from "../root"
+import Icon from "../components/Icon"
 
 export default function Pricing() {
   const [planChosen, setPlanChosen] = createSignal("monthly")
@@ -49,7 +50,8 @@ export default function Pricing() {
               navigate("/")
             }}
           >
-            <img class="rounded-full" src="/logo.png" alt="" />
+            {/* <img class="rounded-full" src="/logo.png" alt="" /> */}
+            <Icon name="Home" />
           </div>
           <Show when={!signedInSignal()}>
             <div

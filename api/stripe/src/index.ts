@@ -4,10 +4,6 @@ import type { Context } from "hono"
 import { cors } from "hono/cors"
 import * as edgedb from "edgedb"
 
-export const client = edgedb.createHttpClient({
-  tlsSecurity: process.env.LOCAL ? "insecure" : "strict",
-})
-
 const app = new Hono()
 app.use("*", cors())
 
@@ -17,6 +13,10 @@ app.onError((e, c) => {
 })
 
 app.post("/learn-anything-bought", async (c: Context) => {
+  const client = edgedb.createHttpClient({
+    tlsSecurity: c.env.LOCAL ? "insecure" : "strict",
+  })
+
   // console.log(c.env.LA_STRIPE_WEBHOOK_SECRET!, "key..")
   let event = c.req.body
   const stripe = new Stripe(c.env.LA_STRIPE_SECRET_KEY!, {
@@ -64,20 +64,16 @@ app.post("/learn-anything-bought", async (c: Context) => {
         const subscription = await stripe.subscriptions.retrieve(
           checkoutSessionCompleted.subscription,
         )
+        console.log(checkoutSessionCompleted.subscription, "VALUE")
         const endDateInUnix = subscription.current_period_end
         console.log(endDateInUnix, "end date in unix!")
 
-        let date = new Date(endDateInUnix * 1000)
-        let year = date.getFullYear()
-        let month = ("0" + (date.getMonth() + 1)).slice(-2) // JS months start from 0
-        let day = ("0" + date.getDate()).slice(-2)
-        let endDate = `${year}-${month}-${day}`.trim()
-
-        console.log(endDate, "end date")
+        const timestamp = 1699887786
+        const iso8601_format = new Date(timestamp * 1000).toISOString()
 
         const res = await client.querySingle(`
           update User {
-            memberUntil: <datetime>${endDate}
+            memberUntil: <datetime>${iso8601_format}
           } filter .email = ${email}
         `)
         console.log(res, "res")

@@ -106,14 +106,16 @@ export default function TopicNav() {
       <div class="flex flex-col dark:bg-[#161616] h-[10%] dark:bg-opacity-80">
         <div class="h-full w-full p-4 gap-4 flex items-center justify-between border-b-[0.5px] border-[#69696951]">
           <div id="NavBarSide" class="flex gap-4 w-1/2 h-full items-center">
-            <div class="w-[40px] h-[40px] bg-neutral-200 rounded-full">
+            <div class="w-[40px] h-[40px] rounded-full">
               <div
-                class="cursor-pointer h-[40px] w-[40px] rounded-full"
+                class="cursor-pointer h-[40px] w-[40px]"
                 onClick={() => {
                   navigate("/")
                 }}
               >
-                <img class="rounded-full" src="/logo.png" alt="" />
+                {/* add logo only when it looks good and clean. need clean svg */}
+                {/* <img class="rounded-full" src="/logo.png" alt="" /> */}
+                <Icon name="Home" />
               </div>
             </div>
 
