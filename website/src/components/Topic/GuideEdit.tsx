@@ -17,18 +17,32 @@ import GlobalLinkEditModal from "../GlobalLinkEditModal"
 export default function GuideSummaryEdit() {
   const topic = useGlobalTopic()
   const mobius = useMobius()
-  const global = useGlobalState()
   const navigate = useNavigate()
 
   const [linkIdToEdit, setLinkToEdit] = createSignal("")
   const [sectionOfLinkEdited, setSectionOfLinkEdited] = createSignal("")
-
-  let ref!: HTMLDivElement
+  const [container, setContainer] = createSignal<HTMLDivElement>()
 
   const editor = createTiptapEditor(() => ({
-    element: ref!,
+    element: container()!,
     extensions: [StarterKit],
-    content: `Summary`
+    content: topic.globalTopic.topicSummary,
+    editorProps: {
+      attributes: {
+        class: "focus:outline-none prose"
+      }
+    },
+    onUpdate: ({ editor }) => {
+      const json = editor.getJSON()
+      console.log(json)
+
+      // TODO: support multi line. be type safe
+      // for now this only works on one line
+      // @ts-ignore
+      const topicSummary = json.content[0]?.content[0]?.text
+      console.log(topicSummary)
+      topic.set("topicSummary", topicSummary!)
+    }
   }))
 
   const [, { onDragEnd }] = useDragDropContext()!
@@ -78,10 +92,6 @@ export default function GuideSummaryEdit() {
     }
     #GuideSummaryMinimised {
       height: 97px
-    }
-    #editor {
-      outline: 2px solid transparent !important;
-      outline-offset: 2px !important;
     }
   `}</style>
       <div class="w-full flex flex-col gap-4 text-[16px] leading-[18.78px] ">
@@ -140,7 +150,7 @@ export default function GuideSummaryEdit() {
         </div>
         <div class="border-[1px] dark:border-[#282828] border-[#69696951] flex flex-col gap-2 rounded-[4px] w-full">
           <div class="flex justify-between items-center">
-            <div class="w-full p-4" id="editor" ref={ref} />
+            <div class="w-full p-4" ref={setContainer} />
             <div class="text-[#3B5CCC] cursor-pointer select-none"></div>
           </div>
           {/* <Show
@@ -188,7 +198,12 @@ export default function GuideSummaryEdit() {
             const editor = createTiptapEditor(() => ({
               element: ref!,
               extensions: [StarterKit],
-              content: `Summary`
+              content: `Summary`,
+              editorProps: {
+                attributes: {
+                  class: "focus:outline-none prose"
+                }
+              }
             }))
 
             return (

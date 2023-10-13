@@ -1,5 +1,9 @@
 ## Public website release
 
+- solid tiptap to allow edits to `topic summary` and `section summary`
+  - save results into db
+- render the results like markdown in topic page using https://github.com/micromark/micromark
+  - check what syntax internal links need to be to link properly
 - go through each topic in wiki and
   1. create global topic from the wiki topic
   2. parse all the links inside in ## Links
@@ -8,7 +12,7 @@
   - the links inside the section are part of the section in the guide
   4. calculate the references from the topics, update the json file
   - make it a function that does it for a given file
-- use solid-codemirror to edit `topic summary` and `section summary`
+- fix search in landing page
 - use some lib from https://github.com/wooorm to render markdown as html with solid
   - `topic summary`. `section summary` are all markdown. render as markdown strings
 - full guide is showing and is pretty
@@ -315,3 +319,5 @@
 - have infinite login sessions with hanko ([how you can do it](https://discord.com/channels/788396090180894730/1161620915499565108/1161740380983795904))
 - in grafbase, what do I do on success in resolvers?
   - do I return "success"?
+- update tiptap editor in website to allow making links to other topics simiar to markdown links with `../topic.md` syntax. show a popover with search over topics
+  - should be fast to edit topic guides
