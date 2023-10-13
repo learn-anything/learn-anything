@@ -1,4 +1,4 @@
-import { For, Show, createSignal } from "solid-js"
+import { For, Show, createSignal, untrack } from "solid-js"
 import { useNavigate } from "solid-start"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import { useMobius } from "../../root"
@@ -26,7 +26,7 @@ export default function GuideSummaryEdit() {
   const editor = createTiptapEditor(() => ({
     element: container()!,
     extensions: [StarterKit],
-    content: topic.globalTopic.topicSummary,
+    content: untrack(() => topic.globalTopic.topicSummary),
     editorProps: {
       attributes: {
         class: "focus:outline-none prose"
@@ -43,7 +43,8 @@ export default function GuideSummaryEdit() {
       console.log(topicSummary)
 
       // TODO: breaks focus.. find another way to update
-      // topic.set("topicSummary", topicSummary!)
+      topic.set("topicSummary", topicSummary!)
+
       // const triggerUpdate = debounce(() => {
       //   topic.set("topicSummary", topicSummary!)
       // }, 3000)

@@ -2,9 +2,9 @@ import { Hono } from "hono"
 import Stripe from "stripe"
 import type { Context } from "hono"
 import { cors } from "hono/cors"
-// import * as edgedb from "edgedb"
+import * as edgedb from "edgedb"
 
-// const client = edgedb.createHttpClient()
+const client = edgedb.createHttpClient()
 
 const app = new Hono()
 app.use("*", cors())
@@ -15,7 +15,7 @@ app.onError((e, c) => {
 })
 
 app.post("/learn-anything-bought", async (c: Context) => {
-  console.log(c.env.LA_STRIPE_WEBHOOK_SECRET!, "key..")
+  // console.log(c.env.LA_STRIPE_WEBHOOK_SECRET!, "key..")
   let event = c.req.body
   const stripe = new Stripe(c.env.LA_STRIPE_SECRET_KEY!, {
     apiVersion: "2023-08-16",
@@ -48,11 +48,17 @@ app.post("/learn-anything-bought", async (c: Context) => {
       // @ts-ignore
       const checkoutSessionCompleted = event.data.object
 
+      console.log(checkoutSessionCompleted, "completed")
+      console.log(checkoutSessionCompleted.status, "status")
       if (checkoutSessionCompleted.status === "complete") {
         // const subscriptionType =
         //   checkoutSessionCompleted.metadata.subscriptionType.trim()
 
-        const email = checkoutSessionCompleted.metadata.email.trim()
+        console.log(checkoutSessionCompleted.metadata, "metadata")
+        // const email = checkoutSessionCompleted.metadata.userEmail.trim()
+        const email = ""
+        console.log(email, "email")
+
         const subscription = await stripe.subscriptions.retrieve(
           checkoutSessionCompleted.subscription,
         )
@@ -67,9 +73,12 @@ app.post("/learn-anything-bought", async (c: Context) => {
 
         console.log(endDate, "end date")
 
-        // TODO: using email passed in as arg
-        // update User object `proMemberUntil` field with the date from stripe subscription
-
+        const res = await client.querySingle(`
+          update User {
+            memberUntil: <datetime>${endDate}
+          } filter .email = ${email}
+        `)
+        console.log(res, "res")
         return
       }
       break

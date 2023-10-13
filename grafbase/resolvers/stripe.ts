@@ -11,21 +11,19 @@ type StripePlan = "month" | "year"
 
 export default async function StripeResolver(
   root: any,
-  args: { plan: StripePlan },
+  args: { plan: StripePlan; userEmail: string },
   context: Context
 ) {
   const hankoId = await hankoIdFromToken(context)
   if (hankoId) {
     try {
-      console.log("trying to do stripe checkout session")
       switch (args.plan) {
         case "month":
           const monthSubscription = await stripe.checkout.sessions.create({
             success_url: process.env.STRIPE_SUCCESS_URL!,
             mode: "subscription",
             metadata: {
-              // userEmail: id,
-              subscriptionType: "normal"
+              userEmail: args.userEmail
             },
             line_items: [
               {
@@ -43,8 +41,7 @@ export default async function StripeResolver(
             success_url: process.env.STRIPE_SUCCESS_URL!,
             mode: "subscription",
             metadata: {
-              // userId: id,
-              subscriptionType: "normal"
+              userEmail: args.userEmail
             },
             line_items: [
               {
