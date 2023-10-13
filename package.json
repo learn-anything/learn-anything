@@ -59,7 +59,8 @@
     "zod": "^3.22.4"
   },
   "prettier": {
-    "semi": false
+    "semi": false,
+    "trailingComma": "none"
   },
   "workspaces": [
     "app",

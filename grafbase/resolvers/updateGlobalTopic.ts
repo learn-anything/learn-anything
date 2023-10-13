@@ -1,3 +1,4 @@
+import { Context } from "@grafbase/sdk"
 import { updateGlobalTopic } from "../edgedb/crud/global-topic"
 import { hankoIdFromToken } from "../lib/hanko-validate"
 import { GraphQLError } from "graphql"
@@ -5,7 +6,7 @@ import { GraphQLError } from "graphql"
 export default async function updateGlobalTopicResolver(
   root: any,
   args: { topic: any },
-  context: any,
+  context: Context
 ) {
   const hankoId = await hankoIdFromToken(context)
   if (hankoId) {

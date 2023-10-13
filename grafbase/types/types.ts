@@ -15,6 +15,7 @@
 //   summary: string
 //   sections: Section[]
 // }
+
 type Section = {
   title: string
   linkIds: string[]

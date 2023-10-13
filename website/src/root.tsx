@@ -14,11 +14,11 @@ import {
   Route,
   Routes,
   Scripts,
-  Title,
+  Title
 } from "solid-start"
 import { GlobalStateProvider, createGlobalState } from "./GlobalContext/global"
 import createGlobalTopic, {
-  GlobalTopicProvider,
+  GlobalTopicProvider
 } from "./GlobalContext/global-topic"
 import { UserProvider, createUserState } from "./GlobalContext/user"
 import "./root.css"
@@ -56,7 +56,7 @@ type GlobalLink {
 
 type Mutation {
   createUser(email: String!): String!
-  updateLatestGlobalGuide(topicSummary: String!, sections: [section!]!): String!
+  updateLatestGlobalGuide(topicName: String!, topicSummary: String!, sections: [section!]!): String!
 }
 
 type Query {
@@ -104,6 +104,7 @@ type publicGetGlobalLinkOutput {
 }
 
 type publicGetGlobalTopicOutput {
+  name: String!
   prettyName: String!
   topicSummary: String!
   topicPath: String
@@ -132,13 +133,13 @@ export function createMobius(options: { hankoCookie: () => string }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${hankoCookie()}`,
+          Authorization: `Bearer ${hankoCookie()}`
         },
         body: JSON.stringify({
           query,
-          variables: {},
-        }),
-      }).then((res) => res.json()),
+          variables: {}
+        })
+      }).then((res) => res.json())
   })
 
   return mobius
@@ -162,13 +163,13 @@ export default function Root() {
   const user = createUserState()
 
   const filters: MatchFilters = {
-    username: /^@.+/,
+    username: /^@.+/
   }
 
   const [hankoCookie, setHankoCookie] = createSignal(getHankoCookie())
 
   const mobius = createMobius({
-    hankoCookie,
+    hankoCookie
   })
   const global = createGlobalState(mobius)
   const globalTopic = createGlobalTopic(mobius)

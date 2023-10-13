@@ -1,11 +1,12 @@
 import { GraphQLError } from "graphql"
 import { addUser } from "../edgedb/crud/user"
 import { hankoIdFromToken } from "../lib/hanko-validate"
+import { Context } from "@grafbase/sdk"
 
 export default async function createUserResolver(
   root: any,
   args: { email: string },
-  context: any,
+  context: Context
 ) {
   const hankoId = await hankoIdFromToken(context)
   if (hankoId) {

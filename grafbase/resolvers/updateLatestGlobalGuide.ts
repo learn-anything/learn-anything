@@ -1,5 +1,6 @@
 import { GraphQLError } from "graphql"
 import { hankoIdFromToken } from "../lib/hanko-validate"
+import { Context } from "@grafbase/sdk"
 import { updateGlobalTopic } from "../edgedb/crud/global-topic"
 
 type Section = {
@@ -8,21 +9,22 @@ type Section = {
   summary?: string
 }
 
-// TODO: not used now but should be used by admins of the topic
-// to be able to change latest global guide
-export default async function getGlobalTopicResolver(
+export default async function updateLatestGlobalGuideResolver(
   root: any,
-  args: { topicSummary: string; sections: Section[] },
-  context: any,
+  args: { topicSummary: string; sections: Section[]; topicName: string },
+  context: Context
 ) {
-  const hankoId = await hankoIdFromToken(context)
-  if (hankoId) {
-    await updateGlobalTopic(hankoId, {
-      name: "3d-printing",
-      prettyName: "3D Printing",
-      topicSummary: args.topicSummary,
-      sections: args.sections,
-    })
+  try {
+    const hankoId = await hankoIdFromToken(context)
+    if (hankoId) {
+      await updateGlobalTopic(hankoId, {
+        name: args.topicName,
+        topicSummary: args.topicSummary,
+        sections: args.sections
+      })
+      return "success"
+    }
+  } catch (error) {
+    throw new GraphQLError(JSON.stringify(error))
   }
-  throw new GraphQLError("Error")
 }

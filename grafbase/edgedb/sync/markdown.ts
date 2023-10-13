@@ -16,6 +16,7 @@ export type Topic = {
   notes: Note[] // everything inside ## Notes heading
   links: Link[] // everything inside ## Links heading
   topicAsMarkdown: string // everything in the topic as markdown (including front matter)
+  topicsReferenced: string[] // topics referenced from the topic
 }
 
 export type Note = {
@@ -136,9 +137,27 @@ export async function parseMdFile(filePath: string): Promise<Topic> {
   let parsingFrontMatter = false
   let gotTitleFromFrontMatter = false
   let gotTitle = false
+  let topicsReferenced: string[] = []
 
   for (const node of tree.children) {
     // console.log(node, "node")
+
+    // check for internal links in the content
+    if (node.type === "paragraph") {
+      node.children.forEach((child) => {
+        if (child.type === "link") {
+          const url = child.url
+          // check if the link is an internal link
+          if (url.startsWith("../") && url.endsWith("/index.md")) {
+            // extract the topic name from the link and add it to the array
+            const topic = url.split("/")[1]
+            if (topic) {
+              topicsReferenced.push(topic)
+            }
+          }
+        }
+      })
+    }
 
     // if front matter exists, start parsing it
     if (node.type === "thematicBreak") {
@@ -384,14 +403,17 @@ export async function parseMdFile(filePath: string): Promise<Topic> {
 
   // console.log(content, "content")
 
+  // console.log(topicsReferenced, "topics referenced")
+
   return {
     name,
-    prettyName: prettyName!,
+    prettyName: prettyName || "",
     content,
     notes,
     links,
     public: true, // TODO: it should come from front matter `public: true/false`
     topicAsMarkdown: markdownFileContent,
+    topicsReferenced,
   }
 }
 

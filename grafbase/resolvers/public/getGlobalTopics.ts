@@ -1,10 +1,11 @@
+import { Context } from "@grafbase/sdk"
 import { publicGetGlobalTopics } from "../../edgedb/crud/global-topic"
 import { GraphQLError } from "graphql"
 
 export default async function getGlobalTopicsResolver(
   root: any,
   args: { topicName: string },
-  context: any,
+  context: Context
 ) {
   const topics = await publicGetGlobalTopics()
   if (!topics) {

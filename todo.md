@@ -8,7 +8,13 @@
   - the links inside the section are part of the section in the guide
   4. calculate the references from the topics, update the json file
   - make it a function that does it for a given file
+- use solid-codemirror to edit `topic summary` and `section summary`
+- use some lib from https://github.com/wooorm to render markdown as html with solid
+  - `topic summary`. `section summary` are all markdown. render as markdown strings
 - full guide is showing and is pretty
+- have a count with how many links are inside a section in edit guide at least (maybe useful in global topic sections too)
+- check that non members can't run `edit guide`
+  - and members who do `edit guide`. edit their own personal versions of the guide
 - user gets created on hanko auth
 - stripe updates and works.
   - first test locally, make sure edgedb updates the `user` `memberUntil` value correctly
@@ -20,8 +26,14 @@
 - add search in each global topic page
 - profile page shows links added (don't do profile until user paid for MVP as actions are paywalled)
   - or if do, must look good. choosing username is paywalled too
-- desktop with solid-monaco that publishes the markdown content into a wiki like vitepress
-- editing of files from a connected folder in file system
+- do video in https://www.remotion.dev for X post to make it snappy. write nice text (join their discord to get help)
+  - do nice video overview of the tool. add it to X post but also to /pricing to show what the tool is about and what its value is
+- make raycast extension work. so it searches through topics `learned/learning/to-learn` + all the links added to personal collection
+- desktop app with solid-monaco that publishes the markdown content into a wiki like vitepress
+  - editing of files from a connected folder in file system
+  - add `publish` button to each topic. publish (if member) to wiki in similar style as vitepress
+    - support adding of notes
+    - also show in each global topic user published topics. show fragments of the topic in a list (similar to how `links` or `notes` are there) (clicking on the fragment of the topic for the user will go to the topic for the user)
 - go deep into solana. do https://www.soldev.app/course
   - setup `buy.` and release with next.js using https://github.com/nightly-labs/solana-web3-template
     - join discord, ask for help.
@@ -301,3 +313,5 @@
     - and on each branch created, setup preview deployment that will point to grafbase preview deploy URL
     - look at github webhooks and consume the preview url of Grafbase for each branch for grafbase test deploys
 - have infinite login sessions with hanko ([how you can do it](https://discord.com/channels/788396090180894730/1161620915499565108/1161740380983795904))
+- in grafbase, what do I do on success in resolvers?
+  - do I return "success"?

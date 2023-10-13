@@ -1,10 +1,11 @@
+import { Context } from "@grafbase/sdk"
 import { getGlobalLink } from "../edgedb/crud/global-link"
 import { hankoIdFromToken } from "../lib/hanko-validate"
 
 export default async function getGlobalLinkResolver(
   root: any,
   args: { linkId: string },
-  context: any,
+  context: Context
 ) {
   const hankoId = await hankoIdFromToken(context)
   if (hankoId) {

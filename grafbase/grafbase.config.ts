@@ -4,8 +4,8 @@ export default config({
   auth: {
     rules: (rules) => {
       rules.public()
-    },
-  },
+    }
+  }
 })
 
 // public queries
@@ -15,11 +15,11 @@ g.query("publicGetGlobalTopics", {
     .ref(
       g.type("publicGetGlobalTopicsOutput", {
         prettyName: g.string(),
-        name: g.string(),
-      }),
+        name: g.string()
+      })
     )
     .list(),
-  resolver: "public/getGlobalTopics",
+  resolver: "public/getGlobalTopics"
 })
 
 const GlobalLink = g.type("GlobalLink", {
@@ -27,28 +27,29 @@ const GlobalLink = g.type("GlobalLink", {
   title: g.string(),
   url: g.string(),
   year: g.string().optional(),
-  description: g.string().optional(),
+  description: g.string().optional()
 })
 const globalGuideSection = g.type("globalGuideSection", {
   title: g.string(),
-  links: g.ref(GlobalLink).list(),
+  links: g.ref(GlobalLink).list()
 })
 const latestGlobalGuide = g.type("latestGlobalGuide", {
   summary: g.string(),
-  sections: g.ref(globalGuideSection).list(),
+  sections: g.ref(globalGuideSection).list()
 })
 g.query("publicGetGlobalTopic", {
   args: { topicName: g.string() },
   returns: g.ref(
     g.type("publicGetGlobalTopicOutput", {
+      name: g.string(),
       prettyName: g.string(),
       topicSummary: g.string(),
       topicPath: g.string().optional(),
       latestGlobalGuide: g.ref(latestGlobalGuide).optional(),
-      links: g.ref(GlobalLink).list(),
-    }),
+      links: g.ref(GlobalLink).list()
+    })
   ),
-  resolver: "public/getGlobalTopic",
+  resolver: "public/getGlobalTopic"
 })
 
 // auth queries
@@ -64,10 +65,10 @@ g.query("getGlobalLink", {
       fullUrl: g.string().optional(),
       description: g.string().optional(),
       urlTitle: g.string().optional(),
-      year: g.string().optional(),
-    }),
+      year: g.string().optional()
+    })
   ),
-  resolver: "getGlobalLink",
+  resolver: "getGlobalLink"
 })
 
 g.query("getGlobalLinks", {
@@ -76,10 +77,10 @@ g.query("getGlobalLinks", {
     g.type("getGlobalLinksOutput", {
       id: g.string(),
       title: g.string(),
-      url: g.string(),
-    }),
+      url: g.string()
+    })
   ),
-  resolver: "getGlobalLinks",
+  resolver: "getGlobalLinks"
 })
 
 g.query("checkForGlobalLink", {
@@ -89,16 +90,16 @@ g.query("checkForGlobalLink", {
       url: g.string(),
       title: g.string(),
       year: g.int().optional(),
-      description: g.string().optional(),
-    }),
+      description: g.string().optional()
+    })
   ),
-  resolver: "checkForGlobalLink",
+  resolver: "checkForGlobalLink"
 })
 
 g.query("stripe", {
   args: { plan: g.string() },
   returns: g.string(),
-  resolver: "stripe",
+  resolver: "stripe"
 })
 
 // TODO: figure out what should be returned from `success` and `error` on mutations (string?)
@@ -106,21 +107,22 @@ g.query("stripe", {
 g.mutation("createUser", {
   args: { email: g.string() },
   returns: g.string(),
-  resolver: "createUser",
+  resolver: "createUser"
 })
 
 const section = g.input("section", {
   title: g.string(),
   summary: g.string().optional(),
-  linkIds: g.string().list(),
+  linkIds: g.string().list()
 })
 g.mutation("updateLatestGlobalGuide", {
   args: {
+    topicName: g.string(),
     topicSummary: g.string(),
-    sections: g.inputRef(section).list(),
+    sections: g.inputRef(section).list()
   },
   returns: g.string(),
-  resolver: "updateLatestGlobalGuide",
+  resolver: "updateLatestGlobalGuide"
 })
 
 // g.mutation("updateTopicLearningStatus", {

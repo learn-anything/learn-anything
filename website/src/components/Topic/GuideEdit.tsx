@@ -7,7 +7,7 @@ import { Search, createSearchState } from "../Search"
 import {
   createDraggable,
   createDroppable,
-  useDragDropContext,
+  useDragDropContext
 } from "@thisbeyond/solid-dnd"
 import { useGlobalState } from "../../GlobalContext/global"
 import GlobalLinkEditModal from "../GlobalLinkEditModal"
@@ -40,10 +40,10 @@ export default function GuideSummaryEdit() {
     const section = sections[section_idx]!
 
     const dragged_idx = section.links.findIndex(
-      (link) => link.title === linkBeingDroppedTitle,
+      (link) => link.title === linkBeingDroppedTitle
     )
     const dropped_idx = section.links.findIndex(
-      (link) => link.title === droppedIntoLinkTitle,
+      (link) => link.title === droppedIntoLinkTitle
     )
     if (dragged_idx === -1 || dropped_idx === -1) return
 
@@ -54,7 +54,7 @@ export default function GuideSummaryEdit() {
       */
       ;[copy[dragged_idx], copy[dropped_idx]] = [
         copy[dropped_idx]!,
-        copy[dragged_idx]!,
+        copy[dragged_idx]!
       ]
       return copy
     })
@@ -96,26 +96,25 @@ export default function GuideSummaryEdit() {
                 return {
                   title: originalSection.title,
                   summary: originalSection.summary,
-                  linkIds: originalSection.links.map((link: any) => link.id),
+                  linkIds: originalSection.links.map((link: any) => link.id)
                 }
               }
 
               const sectionsToAdd =
                 topic.globalTopic.latestGlobalGuide.sections.map(
-                  transformSection,
+                  transformSection
                 )
-
-              console.log(sectionsToAdd, "sections to add")
+              // console.log(sectionsToAdd, "sections to add")
 
               const res = await mobius.mutate({
                 updateLatestGlobalGuide: {
                   where: {
                     topicSummary: topic.globalTopic.topicSummary,
-                    // @ts-ignore
-                    sections: sectionsToAdd,
+                    topicName: topic.globalTopic.name,
+                    sections: sectionsToAdd
                   },
-                  select: true,
-                },
+                  select: true
+                }
               })
               console.log(res, "res")
             }}
@@ -165,8 +164,8 @@ export default function GuideSummaryEdit() {
               {
                 summary: "",
                 title: "",
-                links: [],
-              },
+                links: []
+              }
             ])
           }}
         >
@@ -184,7 +183,7 @@ export default function GuideSummaryEdit() {
                       "sections",
                       sectionIndex(),
                       "title",
-                      e.target.value,
+                      e.target.value
                     )
                   }}
                   value={section.title}
@@ -207,10 +206,10 @@ export default function GuideSummaryEdit() {
                 <For each={section.links}>
                   {(link, linkIndex) => {
                     const draggable = createDraggable(
-                      `${link.title}-in-section-${section.title}`,
+                      `${link.title}-in-section-${section.title}`
                     )
                     const droppable = createDroppable(
-                      `${link.title}-in-section-${section.title}`,
+                      `${link.title}-in-section-${section.title}`
                     )
                     const linkUrlId = `${section.title}-link-url-${linkIndex}`
                     return (
@@ -281,7 +280,7 @@ export default function GuideSummaryEdit() {
                                     const copy = [...p]
                                     copy.splice(linkIndex(), 1)
                                     return copy
-                                  },
+                                  }
                                 )
                               }}
                               class="cursor-pointer"
@@ -302,7 +301,7 @@ export default function GuideSummaryEdit() {
                     searchResults: topic.currentTopicGlobalLinksSearch,
                     onSelect({ name }) {
                       const linkToAdd = topic.globalTopic.links.find(
-                        (link) => link.title === name,
+                        (link) => link.title === name
                       )
                       if (!linkToAdd) return
 
@@ -311,9 +310,9 @@ export default function GuideSummaryEdit() {
                         "sections",
                         sectionIndex(),
                         "links",
-                        (p) => [...p, { ...linkToAdd }],
+                        (p) => [...p, { ...linkToAdd }]
                       )
-                    },
+                    }
                   })
 
                   return (

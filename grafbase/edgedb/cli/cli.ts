@@ -1,25 +1,22 @@
-import { GlobalTopic } from "../../types/types"
-import { addGlobalLink, getAllGlobalLinksForTopic } from "../crud/global-link"
-import {
-  moveAllLinksOfGlobalTopicToSectionOther,
-  updateGlobalTopic,
-} from "../crud/global-topic"
+import { addGlobalLink } from "../crud/global-link"
+import { moveAllLinksOfGlobalTopicToSectionOther } from "../crud/global-topic"
 import {
   Topic,
   findFilePath,
   markdownFilePaths,
-  parseMdFile,
+  parseMdFile
 } from "../sync/markdown"
 
 async function main() {
-  // await getMarkdownPaths()
-  // const topic = await getTopic("3d-printing")
-  // console.log("done")
-  // const links = await getAllGlobalLinksForTopic("3d-printing")
-  // console.log(links, "links")
-  // const globalTopic = await getGlobalTopic("3d-printing")
-  // console.log(globalTopic.links, "links")
-  // console.log(globalTopic.prettyName, "pretty name")
+  const paths = await getMarkdownPaths()
+  const parts = paths[0]!.split("/")
+  const fileName = parts[parts.length - 1] // Get the last part which is the filename
+  const topicName = fileName!.split(".")[0]
+  console.log(topicName)
+
+  // const topic = await getTopicByFileName("3d-printing")
+  // console.log(topic?.name)
+
   // const topic = {
   //   name: "3d-printing",
   //   prettyName: "3D Printing",
@@ -39,25 +36,38 @@ async function main() {
   //   ],
   // } as GlobalTopic
   // await updateGlobalTopic(process.env.LOCAL_USER_HANKO_ID!, topic)
-  // await processLinksFromMarkdownFilesAsGlobalLinks("3d-printing")
-  // await moveAllLinksOfGlobalTopicToSectionOther("3d-printing")
+
+  // await processLinksFromMarkdownFilesAsGlobalLinks(topic?.name)
+  await moveAllLinksOfGlobalTopicToSectionOther(topicName!)
   console.log("done")
 }
 
 await main()
 
-async function getMarkdownPaths(title: string) {
+async function getMarkdownPaths() {
   const paths = await markdownFilePaths(process.env.wikiFolderPath!, [])
-  console.log(paths[0])
-  const filePath = paths[0]!
-  const topic = await parseMdFile(filePath)
+  return paths
+  // console.log(paths[0])
+  // const filePath = paths[0]!
+  // const topic = await parseMdFile(filePath)
   // console.log(topic, "topic")
+}
+
+async function getTopicByFileName(fileName: string) {
+  const filePath = await findFilePath(
+    process.env.wikiFolderPath!,
+    fileName + ".md"
+  )
+  if (filePath) {
+    const topic = await parseMdFile(filePath)
+    return topic
+  }
 }
 
 async function processLinksFromMarkdownFilesAsGlobalLinks(fileName: string) {
   const filePath = await findFilePath(
     process.env.wikiFolderPath!,
-    fileName + ".md",
+    fileName + ".md"
   )
   if (filePath) {
     const topic = await parseMdFile(filePath)
@@ -72,13 +82,21 @@ async function processLinks(topic: Topic) {
       link.title,
       link.year,
       link.description,
-      topic.name,
+      topic.name
     )
   })
 }
 
 // TODO: move it away after release, is here as reference in trying to get all the topics ported for release
 async function oneOffActions() {
+  // await getMarkdownPaths()
+  // const topic = await getTopic("3d-printing")
+  // console.log("done")
+  // const links = await getAllGlobalLinksForTopic("3d-printing")
+  // console.log(links, "links")
+  // const globalTopic = await getGlobalTopic("3d-printing")
+  // console.log(globalTopic.links, "links")
+  // console.log(globalTopic.prettyName, "pretty name")
   // await removeTrailingSlashFromGlobalLinks()
   // console.log("done")
   // const links = await updateAllGlobalLinksToHaveRightUrl()

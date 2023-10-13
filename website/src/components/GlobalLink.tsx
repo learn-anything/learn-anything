@@ -39,10 +39,12 @@ export default function GlobalLink(props: Props) {
         </div>
         <div class="flex items-center gap-[34px]">
           <div class="gap-4 flex ">
-            <div class="rounded-[2px] flex dark:hover:bg-neutral-950 items-center hover:border-none transition-all justify-center border h-[30px] w-[30px] border-[#69696951] dark:border-[#282828]">
+            {/* TODO: change how icon looks when link is already added. activated state  */}
+            {/* UI of being pressed in */}
+            <div class="cursor-pointer rounded-[2px] flex dark:hover:bg-neutral-950 items-center hover:border-none transition-all justify-center border h-[30px] w-[30px] border-[#69696951] dark:border-[#282828]">
               <Icon name="Plus" />
             </div>
-            <div class="rounded-[2px] dark:hover:bg-neutral-950 hover:border-none border flex items-center transition-all justify-center h-[30px] w-[30px] border-[#69696951] dark:border-[#282828]">
+            <div class="cursor-pointer rounded-[2px] dark:hover:bg-neutral-950 hover:border-none border flex items-center transition-all justify-center h-[30px] w-[30px] border-[#69696951] dark:border-[#282828]">
               <Icon name="Checkmark" />
             </div>
           </div>

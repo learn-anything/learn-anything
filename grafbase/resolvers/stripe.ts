@@ -1,9 +1,10 @@
 import Stripe from "stripe"
 import { hankoIdFromToken } from "../lib/hanko-validate"
+import { Context } from "@grafbase/sdk"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-08-16",
-  typescript: true,
+  typescript: true
 })
 
 type StripePlan = "month" | "year"
@@ -11,7 +12,7 @@ type StripePlan = "month" | "year"
 export default async function StripeResolver(
   root: any,
   args: { plan: StripePlan },
-  context: any,
+  context: Context
 ) {
   const hankoId = await hankoIdFromToken(context)
   if (hankoId) {
@@ -24,18 +25,18 @@ export default async function StripeResolver(
             mode: "subscription",
             metadata: {
               // userEmail: id,
-              subscriptionType: "normal",
+              subscriptionType: "normal"
             },
             line_items: [
               {
                 quantity: 1,
-                price: process.env.STRIPE_MONTH_SUBSCRIPTION!,
-              },
-            ],
+                price: process.env.STRIPE_MONTH_SUBSCRIPTION!
+              }
+            ]
           })
           console.log(monthSubscription.url, "URL")
           return {
-            stripeCheckoutUrl: monthSubscription.url,
+            stripeCheckoutUrl: monthSubscription.url
           }
         case "year":
           const yearSubscription = await stripe.checkout.sessions.create({
@@ -43,21 +44,21 @@ export default async function StripeResolver(
             mode: "subscription",
             metadata: {
               // userId: id,
-              subscriptionType: "normal",
+              subscriptionType: "normal"
             },
             line_items: [
               {
                 quantity: 1,
-                price: process.env.STRIPE_YEAR_SUBSCRIPTION!,
-              },
-            ],
+                price: process.env.STRIPE_YEAR_SUBSCRIPTION!
+              }
+            ]
           })
           return {
-            stripeCheckoutUrl: yearSubscription.url,
+            stripeCheckoutUrl: yearSubscription.url
           }
         default:
           return {
-            stripeCheckoutUrl: null,
+            stripeCheckoutUrl: null
           }
       }
     } catch (error) {

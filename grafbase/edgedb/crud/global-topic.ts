@@ -4,7 +4,7 @@ import e from "../dbschema/edgeql-js"
 
 export async function updateGlobalTopic(
   hankoId: string,
-  globalTopic: GlobalTopic,
+  globalTopic: Omit<GlobalTopic, "prettyName">
 ) {
   await e
     .delete(e.GlobalGuideSection, (section) => ({
@@ -13,18 +13,17 @@ export async function updateGlobalTopic(
           "<latestGlobalGuide[is GlobalTopic]"
         ].name,
         "=",
-        globalTopic.name,
-      ),
+        globalTopic.name
+      )
     }))
     .run(client)
 
   await e
-    .update(e.GlobalTopic, (gl) => ({
+    .update(e.GlobalTopic, () => ({
       filter_single: { name: globalTopic.name },
       set: {
-        prettyName: globalTopic.prettyName,
-        topicSummary: globalTopic.topicSummary,
-      },
+        topicSummary: globalTopic.topicSummary
+      }
     }))
     .run(client)
 
@@ -36,7 +35,7 @@ export async function updateGlobalTopic(
           filter: e.op(
             guide["<latestGlobalGuide[is GlobalTopic]"].name,
             "=",
-            globalTopic.name,
+            globalTopic.name
           ),
           set: {
             sections: {
@@ -45,51 +44,71 @@ export async function updateGlobalTopic(
                 links: e.for(linkWithIndex, (li) =>
                   e.select(e.GlobalLink, (l) => ({
                     filter: e.op(l.id, "=", li[1]),
-                    "@order": e.cast(e.int16, li[0]),
-                  })),
-                ),
-              }),
-            },
-          },
+                    "@order": e.cast(e.int16, li[0])
+                  }))
+                )
+              })
+            }
+          }
         }))
       })
       .run(client, { linkIds: section.linkIds })
   })
 }
 
-export async function moveAllLinksOfGlobalTopicToSectionOther(
-  globalTopicName: string,
-) {
-  // await e
-  //   .delete(e.GlobalGuideSection, (section) => ({
-  //     filter: e.op(
-  //       section["<sections[is GlobalGuide]"][
-  //         "<latestGlobalGuide[is GlobalTopic]"
-  //       ].name,
-  //       "=",
-  //       globalTopicName,
-  //     ),
-  //   }))
-  //   .run(client)
+export async function deleteSectionsInGlobalTopic(globalTopicName: string) {
+  await e
+    .delete(e.GlobalGuideSection, (section) => ({
+      filter: e.op(
+        section["<sections[is GlobalGuide]"][
+          "<latestGlobalGuide[is GlobalTopic]"
+        ].name,
+        "=",
+        globalTopicName
+      )
+    }))
+    .run(client)
+}
 
-  // return
+export async function moveAllLinksOfGlobalTopicToSectionOther(
+  globalTopicName: string
+) {
   await e
     .update(e.GlobalGuide, (guide) => ({
       filter: e.op(
         guide["<latestGlobalGuide[is GlobalTopic]"].name,
         "=",
-        globalTopicName,
+        globalTopicName
       ),
       set: {
         sections: {
           "+=": e.insert(e.GlobalGuideSection, {
             title: "Other",
             links: e.select(e.GlobalLink, (gl) => ({
-              filter: e.op(gl.mainTopic.name, "=", globalTopicName),
-            })),
-          }),
-        },
-      },
+              filter: e.op(gl.mainTopic.name, "=", globalTopicName)
+            }))
+          })
+        }
+      }
+    }))
+    .run(client)
+}
+
+export async function createIntroSectionInGlobalTopic(globalTopicName: string) {
+  await e
+    .update(e.GlobalGuide, (guide) => ({
+      filter: e.op(
+        guide["<latestGlobalGuide[is GlobalTopic]"].name,
+        "=",
+        globalTopicName
+      ),
+      set: {
+        sections: {
+          "+=": e.insert(e.GlobalGuideSection, {
+            title: "Intro"
+          })
+        }
+      }
     }))
     .run(client)
 }
@@ -97,19 +116,19 @@ export async function moveAllLinksOfGlobalTopicToSectionOther(
 export async function updateTopicLearningStatus(
   hankoId: string,
   topic: string,
-  learningStatus: string,
+  learningStatus: string
 ) {
   const userByHankoId = e.select(e.User, (user) => ({
     filter: e.all(
       e.set(
         e.op(user.hankoId, "=", hankoId),
         e.op("exists", user.memberUntil),
-        e.op(user.memberUntil, ">", e.datetime_current()),
-      ),
-    ),
+        e.op(user.memberUntil, ">", e.datetime_current())
+      )
+    )
   }))
   const topicByName = e.select(e.GlobalTopic, () => ({
-    filter_single: { name: topic },
+    filter_single: { name: topic }
   }))
 
   switch (learningStatus) {
@@ -119,8 +138,8 @@ export async function updateTopicLearningStatus(
           set: {
             topicsToLearn: { "+=": topicByName },
             topicsLearning: { "-=": topicByName },
-            topicsLearned: { "-=": topicByName },
-          },
+            topicsLearned: { "-=": topicByName }
+          }
         }))
         .run(client)
 
@@ -130,8 +149,8 @@ export async function updateTopicLearningStatus(
           set: {
             topicsToLearn: { "-=": topicByName },
             topicsLearning: { "+=": topicByName },
-            topicsLearned: { "-=": topicByName },
-          },
+            topicsLearned: { "-=": topicByName }
+          }
         }))
         .run(client)
     case "learned":
@@ -140,8 +159,8 @@ export async function updateTopicLearningStatus(
           set: {
             topicsToLearn: { "-=": topicByName },
             topicsLearning: { "-=": topicByName },
-            topicsLearned: { "+=": topicByName },
-          },
+            topicsLearned: { "+=": topicByName }
+          }
         }))
         .run(client)
     default:
@@ -156,7 +175,7 @@ export async function publicGetGlobalTopics() {
   const globalTopics = await e
     .select(e.GlobalTopic, () => ({
       prettyName: true,
-      name: true,
+      name: true
     }))
     .run(client)
   return globalTopics
@@ -168,6 +187,7 @@ export async function getGlobalTopic(topicName: string) {
     .select(e.GlobalTopic, () => ({
       filter_single: { name: topicName },
       id: true,
+      name: true,
       prettyName: true,
       topicSummary: true,
       topicPath: true,
@@ -180,11 +200,11 @@ export async function getGlobalTopic(topicName: string) {
             url: true,
             year: true,
             protocol: true,
-            description: true,
+            description: true
           },
-          order: true,
-        },
-      },
+          order: true
+        }
+      }
     }))
     .run(client)
 
@@ -196,7 +216,7 @@ export async function getGlobalTopic(topicName: string) {
         title: true,
         url: true,
         year: true,
-        protocol: true,
+        protocol: true
       }))
       .run(client)
 
@@ -209,20 +229,20 @@ export async function getGlobalTopic(topicName: string) {
 export async function addSectionToGlobalTopic(
   topicName: string,
   sectionName: string,
-  order: number,
+  order: number
 ) {
   const topic = await e
     .select(e.GlobalTopic, () => ({
       filter_single: { name: topicName },
       id: true,
-      latestGlobalGuide: true,
+      latestGlobalGuide: true
     }))
     .run(client)
 
   const newSection = await e
     .insert(e.GlobalGuideSection, {
       title: sectionName,
-      order: order,
+      order: order
     })
     .run(client)
 
@@ -234,10 +254,10 @@ export async function addSectionToGlobalTopic(
           set: {
             sections: {
               "+=": e.select(e.GlobalGuideSection, () => ({
-                filter_single: { id: newSection.id },
-              })),
-            },
-          },
+                filter_single: { id: newSection.id }
+              }))
+            }
+          }
         }
       })
       .run(client)
@@ -247,25 +267,25 @@ export async function addSectionToGlobalTopic(
 export async function addNewSectionToGlobalGuide(
   topicName: string,
   sectionTitle: string,
-  order: number,
+  order: number
 ) {
   const query = e.insert(e.GlobalGuideSection, {
     title: sectionTitle,
-    order: order,
+    order: order
   })
 }
 
 export async function createGlobalTopicWithGlobalGuide(
   topicName: string,
   prettyName: string,
-  topicSummary: string,
+  topicSummary: string
 ) {
   const query = e.insert(e.GlobalTopic, {
     name: topicName,
     prettyName: prettyName,
     topicSummary: topicSummary,
     public: true,
-    latestGlobalGuide: e.insert(e.GlobalGuide, {}),
+    latestGlobalGuide: e.insert(e.GlobalGuide, {})
   })
   return query.run(client)
 }

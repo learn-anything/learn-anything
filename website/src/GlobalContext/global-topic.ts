@@ -20,6 +20,7 @@ type LatestGlobalGuide = {
   sections: Section[]
 }
 export type GlobalTopic = {
+  name: string
   prettyName: string
   topicSummary: string
   topicPath: string
@@ -37,21 +38,22 @@ function extractTopicFromPath(inputStr: string) {
 // state for rendering global topic found in learn-anything.xyz/<topic>
 export default function createGlobalTopic(mobius: MobiusType) {
   const [globalTopic, setGlobalTopic] = createStore<GlobalTopic>({
+    name: "",
     prettyName: "",
     topicPath: "",
     topicSummary: "",
     latestGlobalGuide: {
       summary: "",
-      sections: [],
+      sections: []
     },
-    links: [],
+    links: []
   })
 
   const currentTopicGlobalLinksSearch = createMemo(() => {
     return globalTopic.links.map(
       (link): SearchResult => ({
-        name: link.title,
-      }),
+        name: link.title
+      })
     )
   })
 
@@ -68,6 +70,7 @@ export default function createGlobalTopic(mobius: MobiusType) {
       publicGetGlobalTopic: {
         where: { topicName: topicName },
         select: {
+          name: true,
           prettyName: true,
           topicSummary: true,
           topicPath: true,
@@ -75,7 +78,7 @@ export default function createGlobalTopic(mobius: MobiusType) {
             id: true,
             title: true,
             url: true,
-            year: true,
+            year: true
           },
           latestGlobalGuide: {
             sections: {
@@ -85,22 +88,23 @@ export default function createGlobalTopic(mobius: MobiusType) {
                 title: true,
                 url: true,
                 year: true,
-                description: true,
-              },
-            },
-          },
-        },
-      },
+                description: true
+              }
+            }
+          }
+        }
+      }
     })
 
     // @ts-ignore
     const topicData = topic.data.publicGetGlobalTopic
     setGlobalTopic({
+      name: topicData.name,
       prettyName: topicData.prettyName,
       topicSummary: topicData.topicSummary,
       topicPath: topicData.topicPath,
       latestGlobalGuide: topicData.latestGlobalGuide,
-      links: topicData.links,
+      links: topicData.links
     })
     // console.log(unwrap(globalTopic), "global topic")
   })
@@ -109,7 +113,7 @@ export default function createGlobalTopic(mobius: MobiusType) {
     globalTopic,
     set: setGlobalTopic,
 
-    currentTopicGlobalLinksSearch,
+    currentTopicGlobalLinksSearch
     // topicGlobalLinksSearch,
     // setShowPage: (state: PageState) => {
     //   setGlobalTopic({ showPage: state })
