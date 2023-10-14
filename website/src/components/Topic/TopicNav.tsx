@@ -159,7 +159,7 @@ export default function TopicNav() {
                     user.user.username ? `/@${user.user.username}` : "/profile"
                   }`}
                 >
-                  {/* <Icon name="UserProfile" /> */}
+                  <Icon name="UserProfile" />
                 </A>
               }
             >

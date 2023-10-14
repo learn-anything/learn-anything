@@ -42,6 +42,8 @@ export default function createGlobalTopic(mobius: MobiusType) {
     prettyName: "",
     topicPath: "",
     topicSummary: "",
+    // topicSummary:
+    //   "<p>testing wow this works</p><p></p><p>neat [micromark](https://github.com/micromark/micromark)</p> ",
     latestGlobalGuide: {
       summary: "",
       sections: []

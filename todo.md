@@ -1,9 +1,12 @@
 ## Public website release
 
-- stripe updates and works.
+- allow edits of `topic summary` and `section summary` of each section
+  - enter text inside, save it to html and store in db
+  - render the content of the html in topic summary and each of the section summaries correctly
+- stripe updates and works
+  - memberUntil should update with new date, unix to edgedb date, make work
+    - breaks on unix to edgedb time stamp
 - user gets created on hanko auth
-- solid tiptap to allow edits to `topic summary` and `section summary`
-  - save results into db
 - render the results like markdown in topic page using https://github.com/micromark/micromark
   - check what syntax internal links need to be to link properly
 - go through each topic in wiki and
@@ -24,6 +27,9 @@
   - first test locally, make sure edgedb updates the `user` `memberUntil` value correctly
   - then test in production. with real card. updates and works well
 - allow marking a topic as learning / learned / to learn
+- free trial limits set
+- allow users to add unverified links for their own
+  - feature set of https://raindrop.io
 - allow marking links inside sections of a guide as `bookmarks` or `done` (make icons more obvious)
   - show on hover what actions do
 - use the graph connections from above to render graph in landing page
@@ -262,6 +268,7 @@
   - https://x.com/mark__lawlor/status/1710063049271279917
 - consider using
   - https://github.com/peterpme/react-native-fast-text
+- use https://x.com/sanketsahu/status/1712729417309626570?s=20
 
 ## Public website improvements
 
@@ -321,3 +328,4 @@
   - do I return "success"?
 - update tiptap editor in website to allow making links to other topics simiar to markdown links with `../topic.md` syntax. show a popover with search over topics
   - should be fast to edit topic guides
+- remove non used packages in all package.json (there is tool that helps with this)

@@ -195,7 +195,7 @@ module default {
     };
     # pretty version of `name`, uppercased nicely, proper capitalisation i.e. Physics
     required prettyName: str;
-    # detailed summary of the topic
+    # detailed summary of the topic (in html, due to https://github.com/SaltyAom/mobius/issues/4)
     required topicSummary: str;
     # summary of the topic (short version)
     topicSummaryShort: str;
@@ -238,6 +238,8 @@ module default {
   type GlobalGuideSection {
     # title of section
     required title: str;
+    # summary of the section (in html, due to https://github.com/SaltyAom/mobius/issues/4)
+    summary: str;
     # list of links in a section
     multi links: GlobalLink {
       order: int16;

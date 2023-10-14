@@ -43,12 +43,14 @@
     "graphql-mobius": "^0.1.13",
     "graphql-request": "^6.1.0",
     "mri": "^1.2.0",
+    "solid-codemirror": "^2.3.0",
     "solid-js": "^1.8.1",
     "solid-markdown": "^1.2.2",
     "solid-start": "^0.3.6",
     "solid-start-cloudflare-pages": "^0.3.6",
     "solid-tiptap": "^0.6.0",
     "tinybase": "^4.3.14",
+    "tiptap-markdown": "^0.8.2",
     "undici": "^5.26.3",
     "zod": "^3.22.4"
   }

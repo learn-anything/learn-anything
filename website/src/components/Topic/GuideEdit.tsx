@@ -20,6 +20,7 @@ export default function GuideSummaryEdit() {
 
   const [linkIdToEdit, setLinkToEdit] = createSignal("")
   const [sectionOfLinkEdited, setSectionOfLinkEdited] = createSignal("")
+
   const [container, setContainer] = createSignal<HTMLDivElement>()
 
   const editor = createTiptapEditor(() => ({
@@ -28,26 +29,13 @@ export default function GuideSummaryEdit() {
     content: untrack(() => topic.globalTopic.topicSummary),
     editorProps: {
       attributes: {
-        class: "focus:outline-none prose"
+        class: "focus:outline-none"
       }
     },
     onUpdate: ({ editor }) => {
-      const json = editor.getJSON()
-      console.log(json)
-
-      // TODO: support multi line. be type safe
-      // for now this only works on one line
-      // @ts-ignore
-      const topicSummary = json.content[0]?.content[0]?.text
-      console.log(topicSummary)
-
-      // TODO: breaks focus.. find another way to update
-      topic.set("topicSummary", topicSummary!)
-
-      // const triggerUpdate = debounce(() => {
-      //   topic.set("topicSummary", topicSummary!)
-      // }, 3000)
-      // triggerUpdate()
+      const html = editor.getHTML()
+      console.log(html, "html")
+      topic.set("topicSummary", html)
     }
   }))
 
@@ -135,6 +123,26 @@ export default function GuideSummaryEdit() {
                 )
               // console.log(sectionsToAdd, "sections to add")
 
+              console.log(topic.globalTopic.topicSummary, "sending this")
+              console.log(topic, "topic")
+
+              const topicSummaryWithLineBreaks =
+                topic.globalTopic.topicSummary.replace(/\n/g, "newline")
+
+              console.log(topicSummaryWithLineBreaks, "with line breaks")
+
+              // console.log(topicSummaryWithLineBreaks, "with line breaks")
+
+              console.log(
+                JSON.stringify(topic.globalTopic.topicSummary),
+                "summary"
+              )
+
+              console.log(
+                topic.globalTopic.topicSummary.replaceAll("\\n", "\\\\n"),
+                "hey.."
+              )
+
               const res = await mobius.mutate({
                 updateLatestGlobalGuide: {
                   where: {
@@ -199,16 +207,31 @@ export default function GuideSummaryEdit() {
         </div>
         <For each={topic.globalTopic.latestGlobalGuide.sections}>
           {(section, sectionIndex) => {
-            let ref!: HTMLDivElement
+            const [container, setContainer] = createSignal<HTMLDivElement>()
 
             const editor = createTiptapEditor(() => ({
-              element: ref!,
+              element: container()!,
               extensions: [StarterKit],
-              content: `Summary`,
+              content: untrack(
+                () =>
+                  topic.globalTopic.latestGlobalGuide.sections.find(
+                    (s) => s.title === section.title
+                  )!.summary
+              ),
               editorProps: {
                 attributes: {
                   class: "focus:outline-none prose"
                 }
+              },
+              onUpdate: ({ editor }) => {
+                const html = editor.getHTML()
+                topic.set(
+                  "latestGlobalGuide",
+                  "sections",
+                  sectionIndex(),
+                  "summary",
+                  html
+                )
               }
             }))
 
@@ -241,7 +264,7 @@ export default function GuideSummaryEdit() {
                     Delete section
                   </div>
                 </div>
-                <div class="w-full p-4" id="editor" ref={ref} />
+                <div class="w-full p-4" ref={setContainer} />
 
                 <div class="flex flex-col">
                   <For each={section.links}>

@@ -55,9 +55,9 @@ export default function GuideSidebar() {
             >
               Links <span class="font-bold cursor-pointer">10</span>
             </div>
-            <div class="flex gap-2">
+            {/* <div class="flex gap-2">
               Notes <span class="font-bold">24</span>
-            </div>
+            </div> */}
           </div>
         </div>
         <div id="Learners" class="text-[#696969]">
