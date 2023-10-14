@@ -15,24 +15,27 @@ export default async function updateLatestGlobalGuideResolver(
   context: Context
 ) {
   try {
-    // console.log(args.topicSummary, "topic summary!")
-    // console.log(JSON.parse(args.topicSummary), "json parsed")
-
-    const editorHtml = args.topicSummary
-
-    const convertedHtml = editorHtml.replace(
+    const fixedMarkdownLinksInHtml = args.topicSummary.replace(
       /\[(.*?)\]\((.*?)\)/g,
       '<a href="$2">$1</a>'
     )
-
-    console.log(convertedHtml, "converted")
-
+    const sectionsCopy = args.sections.map((section) => {
+      const fixedSummary =
+        section.summary?.replace(
+          /\[(.*?)\]\((.*?)\)/g,
+          '<a href="$2">$1</a>'
+        ) ?? ""
+      return { ...section, summary: fixedSummary }
+    })
+    sectionsCopy.map((s) => {
+      console.log(s.summary, "summary")
+    })
     const hankoId = await hankoIdFromToken(context)
     if (hankoId) {
       await updateGlobalTopic(hankoId, {
         name: args.topicName,
-        topicSummary: args.topicSummary,
-        sections: args.sections
+        topicSummary: fixedMarkdownLinksInHtml,
+        sections: sectionsCopy
       })
       return "success"
     }

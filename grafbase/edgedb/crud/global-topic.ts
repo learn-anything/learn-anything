@@ -41,6 +41,7 @@ export async function updateGlobalTopic(
             sections: {
               "+=": e.insert(e.GlobalGuideSection, {
                 title: section.title,
+                summary: section.summary,
                 links: e.for(linkWithIndex, (li) =>
                   e.select(e.GlobalLink, (l) => ({
                     filter: e.op(l.id, "=", li[1]),
@@ -194,6 +195,7 @@ export async function getGlobalTopic(topicName: string) {
       latestGlobalGuide: {
         sections: {
           title: true,
+          summary: true,
           links: {
             id: true,
             title: true,

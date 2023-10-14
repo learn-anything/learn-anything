@@ -31,6 +31,7 @@ const GlobalLink = g.type("GlobalLink", {
 })
 const globalGuideSection = g.type("globalGuideSection", {
   title: g.string(),
+  summary: g.string().optional(),
   links: g.ref(GlobalLink).list()
 })
 const latestGlobalGuide = g.type("latestGlobalGuide", {

@@ -12,6 +12,8 @@ import {
   useDragDropContext
 } from "@thisbeyond/solid-dnd"
 import GlobalLinkEditModal from "../GlobalLinkEditModal"
+import { updateTopicLearningStatus } from "../../../../grafbase/edgedb/crud/global-topic"
+import { getHankoCookie } from "../../../lib/auth"
 
 export default function GuideSummaryEdit() {
   const topic = useGlobalTopic()
@@ -26,7 +28,13 @@ export default function GuideSummaryEdit() {
   const editor = createTiptapEditor(() => ({
     element: container()!,
     extensions: [StarterKit],
-    content: untrack(() => topic.globalTopic.topicSummary),
+    content: untrack(() => {
+      const cleanHtml = topic.globalTopic.topicSummary.replace(
+        /<a href="(.*?)">(.*?)<\/a>/g,
+        "[$2]($1)"
+      )
+      return cleanHtml
+    }),
     editorProps: {
       attributes: {
         class: "focus:outline-none"
@@ -34,7 +42,6 @@ export default function GuideSummaryEdit() {
     },
     onUpdate: ({ editor }) => {
       const html = editor.getHTML()
-      console.log(html, "html")
       topic.set("topicSummary", html)
     }
   }))
@@ -121,39 +128,48 @@ export default function GuideSummaryEdit() {
                 topic.globalTopic.latestGlobalGuide.sections.map(
                   transformSection
                 )
-              // console.log(sectionsToAdd, "sections to add")
 
-              console.log(topic.globalTopic.topicSummary, "sending this")
-              console.log(topic, "topic")
+              console.log(sectionsToAdd, "sections to add")
+              console.log(topic.globalTopic.topicSummary, "topic summary")
 
-              const topicSummaryWithLineBreaks =
-                topic.globalTopic.topicSummary.replace(/\n/g, "newline")
+              const query = `
+              mutation UpdateLatestGlobalGuide($topicName: String!, $topicSummary: String!, $sections: [section!]!) {
+                updateLatestGlobalGuide(topicName: $topicName, topicSummary: $topicSummary, sections: $sections)
+              }
+              `
 
-              console.log(topicSummaryWithLineBreaks, "with line breaks")
+              const variables = {
+                topicName: topic.globalTopic.name,
+                topicSummary: topic.globalTopic.topicSummary,
+                sections: sectionsToAdd
+              }
 
-              // console.log(topicSummaryWithLineBreaks, "with line breaks")
-
-              console.log(
-                JSON.stringify(topic.globalTopic.topicSummary),
-                "summary"
-              )
-
-              console.log(
-                topic.globalTopic.topicSummary.replaceAll("\\n", "\\\\n"),
-                "hey.."
-              )
-
-              const res = await mobius.mutate({
-                updateLatestGlobalGuide: {
-                  where: {
-                    topicSummary: topic.globalTopic.topicSummary,
-                    topicName: topic.globalTopic.name,
-                    sections: sectionsToAdd
-                  },
-                  select: true
-                }
+              fetch(import.meta.env.VITE_GRAFBASE_API_URL, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${getHankoCookie()}`
+                },
+                body: JSON.stringify({
+                  query,
+                  variables
+                })
               })
-              console.log(res, "res")
+                .then((r) => r.json())
+                .then((data) => console.log("data returned:", data))
+
+              // TODO: issue with mobius, something about it not escaping strings properly
+              // const res = await mobius.mutate({
+              //   updateLatestGlobalGuide: {
+              //     where: {
+              //       topicSummary: topic.globalTopic.topicSummary,
+              //       topicName: topic.globalTopic.name,
+              //       sections: sectionsToAdd
+              //     },
+              //     select: true
+              //   }
+              // })
+              // console.log(res, "res")
             }}
             class="bg-[#3B5CCC] text-white border-[#3B5CCC] border px-[10px] p-[8px] rounded-[4px] font-light cursor-pointer"
           >
@@ -212,12 +228,21 @@ export default function GuideSummaryEdit() {
             const editor = createTiptapEditor(() => ({
               element: container()!,
               extensions: [StarterKit],
-              content: untrack(
-                () =>
-                  topic.globalTopic.latestGlobalGuide.sections.find(
-                    (s) => s.title === section.title
-                  )!.summary
-              ),
+              content: untrack(() => {
+                console.log(
+                  topic.globalTopic.latestGlobalGuide.sections,
+                  "testing"
+                )
+                const cleanHtml =
+                  topic.globalTopic.latestGlobalGuide.sections
+                    .find((s) => s.title === section.title)
+                    ?.summary?.replace(
+                      /<a href="(.*?)">(.*?)<\/a>/g,
+                      "[$2]($1)"
+                    ) ?? ""
+                console.log(cleanHtml)
+                return cleanHtml
+              }),
               editorProps: {
                 attributes: {
                   class: "focus:outline-none prose"
