@@ -18,6 +18,7 @@ export async function updateGlobalTopic(
     }))
     .run(client)
 
+  console.log(globalTopic.topicSummary, "summary")
   await e
     .update(e.GlobalTopic, () => ({
       filter_single: { name: globalTopic.name },

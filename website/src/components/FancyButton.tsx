@@ -96,6 +96,7 @@ button:before{
           display: flex;
           align-items: center;
           gap: 0.5rem;
+          white-space: nowrap;
         }
         @media (prefers-color-scheme: dark) {
           button {
@@ -114,7 +115,7 @@ button:before{
         }
         `}
       </style>
-      <button class="control w-[100px]">
+      <button class="control h-full w-full">
         <span class="backdrop"></span>
         <span class="text">{props.children}</span>
       </button>

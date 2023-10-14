@@ -12,7 +12,6 @@ import {
   useDragDropContext
 } from "@thisbeyond/solid-dnd"
 import GlobalLinkEditModal from "../GlobalLinkEditModal"
-import { updateTopicLearningStatus } from "../../../../grafbase/edgedb/crud/global-topic"
 import { getHankoCookie } from "../../../lib/auth"
 
 export default function GuideSummaryEdit() {
@@ -29,6 +28,7 @@ export default function GuideSummaryEdit() {
     element: container()!,
     extensions: [StarterKit],
     content: untrack(() => {
+      console.log(topic.globalTopic.topicSummary, "summary")
       const cleanHtml = topic.globalTopic.topicSummary.replace(
         /<a href="(.*?)">(.*?)<\/a>/g,
         "[$2]($1)"
@@ -156,7 +156,7 @@ export default function GuideSummaryEdit() {
                 })
               })
                 .then((r) => r.json())
-                .then((data) => console.log("data returned:", data))
+                .then((res) => console.log(res))
 
               // TODO: issue with mobius, something about it not escaping strings properly
               // const res = await mobius.mutate({

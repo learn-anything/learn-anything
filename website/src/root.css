@@ -29,3 +29,9 @@ html {
     background-color: #1e1e20;
   }
 }
+
+br {
+  display: block;
+  content: " ";
+  margin-bottom: 0.5em;
+}

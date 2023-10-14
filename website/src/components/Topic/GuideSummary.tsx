@@ -1,9 +1,13 @@
-import { createSignal } from "solid-js"
+import { Show, createSignal, onMount } from "solid-js"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 
 export default function GuideSummary(props: any) {
   const [showSummary, setShowSummary] = createSignal(false)
   const topic = useGlobalTopic()
+
+  onMount(() => {
+    console.log(topic.globalTopic.topicSummary, "summ")
+  })
 
   return (
     <>
@@ -25,7 +29,12 @@ export default function GuideSummary(props: any) {
           class="bg-white dark:bg-inherit font-light flex flex-col gap-2 rounded-[2px] w-full"
         >
           <div class="flex justify-between items-center">
-            <div class="text-[#696969] ">Summary</div>
+            <Show when={topic.globalTopic.topicSummary}>
+              <div
+                class="text-[#696969]"
+                innerHTML={topic.globalTopic.topicSummary}
+              />
+            </Show>
             <div
               class="text-[#3B5CCC] cursor-pointer select-none"
               onClick={() => {

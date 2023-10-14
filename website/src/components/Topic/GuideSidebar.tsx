@@ -40,7 +40,7 @@ export default function GuideSidebar() {
           <div class="font-bold">Resources</div>
           <div class="flex flex-col pl-3 text-[14px] gap-[6px]">
             <div
-              class="flex gap-2"
+              class="flex gap-2 cursor-pointer"
               onClick={() => {
                 global.setGuidePage("Guide")
               }}
@@ -48,12 +48,13 @@ export default function GuideSidebar() {
               Guide <span class="font-bold">{}</span>
             </div>
             <div
-              class="flex gap-2"
+              class="flex gap-2 cursor-pointer"
               onClick={() => {
                 global.setGuidePage("Links")
               }}
             >
-              Links <span class="font-bold cursor-pointer">10</span>
+              Links{" "}
+              <span class="font-bold">{topic.globalTopic.links.length}</span>
             </div>
             {/* <div class="flex gap-2">
               Notes <span class="font-bold">24</span>

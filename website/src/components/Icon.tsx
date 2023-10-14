@@ -73,7 +73,7 @@ export default function Icon(props: Props) {
             </svg>
           </Match>
           <Match when={props.name === "Options"}>
-            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
               <path
                 fill="currentColor"
                 d="M13 12C13 12.5523 12.5523 13 12 13C11.4477 13 11 12.5523 11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12Z"
