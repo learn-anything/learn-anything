@@ -66,7 +66,7 @@ type SidebarTopic = {
 // Get all the markdown files in a directory
 export async function markdownFilePaths(
   directoryPath: string,
-  ignoreList?: string[],
+  ignoreList?: string[]
 ): Promise<string[]> {
   let filesToProcess: string[] = []
   const entries = fs.readdirSync(directoryPath, { withFileTypes: true })
@@ -91,7 +91,7 @@ export async function markdownFilePaths(
 
 export async function findFilePath(
   directoryPath: string,
-  fileName: string,
+  fileName: string
 ): Promise<string | null> {
   const entries = fs.readdirSync(directoryPath, { withFileTypes: true })
 
@@ -245,6 +245,9 @@ export async function parseMdFile(filePath: string): Promise<Topic> {
             // - [Learn Anything](https://learn-anything.xyz) is great
             // noteAsMarkdown is `[Learn Anything](https://learn-anything.xyz) is great`
             noteAsMarkdown = toMarkdown(node.children[0])
+            if (noteAsMarkdown.startsWith("* ")) {
+              noteAsMarkdown = noteAsMarkdown.slice(2)
+            }
             node.children.forEach((note, i) => {
               if (i > 0) {
                 note.children.forEach((subnote) => {
@@ -252,8 +255,8 @@ export async function parseMdFile(filePath: string): Promise<Topic> {
                     subnotes.push(
                       toMarkdown(subnote.children[0].children[0]).replace(
                         "\n",
-                        "",
-                      ),
+                        ""
+                      )
                     )
                   }
                 })
@@ -263,6 +266,9 @@ export async function parseMdFile(filePath: string): Promise<Topic> {
           // no subnotes
           else {
             noteAsMarkdown = toMarkdown(node.children[0])
+            if (noteAsMarkdown.startsWith("* ")) {
+              noteAsMarkdown = noteAsMarkdown.slice(2)
+            }
           }
 
           // detect that noteAsMarkdown is a link
@@ -281,7 +287,7 @@ export async function parseMdFile(filePath: string): Promise<Topic> {
             content: noteAsMarkdown.replace("\n", ""),
             additionalContent: subnotes.join("\n"), // TODO: maybe need to change
             url: noteUrl,
-            public: true,
+            public: true
           })
         })
       }
@@ -326,7 +332,7 @@ export async function parseMdFile(filePath: string): Promise<Topic> {
                   if (linkDetail.value.length > 5) {
                     linkDescription = linkDetail.value.replace(
                       /^[^a-zA-Z]+|[\s(]+$/g,
-                      "",
+                      ""
                     )
                   }
                 }
@@ -344,7 +350,7 @@ export async function parseMdFile(filePath: string): Promise<Topic> {
                 ) {
                   relatedLinks.push({
                     title: linkDetail.children[0].value,
-                    url: linkDetail.url,
+                    url: linkDetail.url
                   })
                 }
               })
@@ -361,7 +367,7 @@ export async function parseMdFile(filePath: string): Promise<Topic> {
               description: linkDescription,
               relatedLinks,
               public: true,
-              year,
+              year
             })
           })
         })
@@ -397,7 +403,7 @@ export async function parseMdFile(filePath: string): Promise<Topic> {
 
   // prettier format
   content = await prettier.format(content, {
-    parser: "markdown",
+    parser: "markdown"
   })
   content = content.replace("\n", "")
 
@@ -413,7 +419,7 @@ export async function parseMdFile(filePath: string): Promise<Topic> {
     links,
     public: true, // TODO: it should come from front matter `public: true/false`
     topicAsMarkdown: markdownFileContent,
-    topicsReferenced,
+    topicsReferenced
   }
 }
 

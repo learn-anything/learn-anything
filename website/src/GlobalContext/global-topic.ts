@@ -26,6 +26,7 @@ export type GlobalTopic = {
   topicPath: string
   latestGlobalGuide: LatestGlobalGuide
   links: GlobalLink[]
+  learningStatus: "to-learn" | "learning" | "learned" | ""
 }
 
 function extractTopicFromPath(inputStr: string) {
@@ -46,7 +47,12 @@ export default function createGlobalTopic(mobius: MobiusType) {
       summary: "",
       sections: []
     },
-    links: []
+    links: [],
+    learningStatus: ""
+  })
+
+  createEffect(() => {
+    console.log(globalTopic)
   })
 
   const currentTopicGlobalLinksSearch = createMemo(() => {

@@ -34,31 +34,34 @@ export default function GlobalGuide() {
             // class="border border-[#69696951] flex items-center justify-center bg-opacity-40 text-[#696969]  hover:bg-gray-100 transition-all px-3 font-light rounded-[4px] text-[14px] p-1 cursor-pointer"
             >
               {/* Filter */}
-              <FancyButton>Filter</FancyButton>
+              {/* <FancyButton>Filter</FancyButton> */}
             </div>
             <div
-              onClick={() => {
-                // TODO: probably unsafe, should be a better way to do this
-                const topicName = window.location.href.split("/")[3]
-                console.log(topicName)
-                navigate(`/${topicName}/edit`)
-              }}
-              // transition={{ duration: 1, easing: "ease-out", delay: 0.1 }}
-              // animate={{
-              //   opacity: [0, 1, 1],
-              //   transform: [
-              //     "translateX(100px)",
-              //     "translateX(-10px)",
-              //     "translateX(0px)"
-              //   ]
-              // }}
-              // class="bg-blue-600 flex items-center justify-center bg-opacity-60 text-white hover:text-white hover:bg-blue-600 transition-all px-3 font-light rounded-[4px] text-[14px] p-1 cursor-pointer"
+            // transition={{ duration: 1, easing: "ease-out", delay: 0.1 }}
+            // animate={{
+            //   opacity: [0, 1, 1],
+            //   transform: [
+            //     "translateX(100px)",
+            //     "translateX(-10px)",
+            //     "translateX(0px)"
+            //   ]
+            // }}
+            // class="bg-blue-600 flex items-center justify-center bg-opacity-60 text-white hover:text-white hover:bg-blue-600 transition-all px-3 font-light rounded-[4px] text-[14px] p-1 cursor-pointer"
             >
               {/* Improve Guide */}
-              <FancyButton>Improve Guide</FancyButton>
+              <FancyButton
+                onClick={() => {
+                  // TODO: probably unsafe, should be a better way to do this
+                  const topicName = window.location.href.split("/")[3]
+                  console.log(topicName)
+                  navigate(`/${topicName}/edit`)
+                }}
+              >
+                Improve Guide
+              </FancyButton>
             </div>
             {/* <FancyButton>Improve Guide</FancyButton> */}
-            <div
+            {/* <div
             // transition={{ duration: 1, easing: "ease-out", delay: 0.2 }}
             // animate={{
             //   opacity: [0, 1, 1],
@@ -73,7 +76,7 @@ export default function GlobalGuide() {
               <FancyButton>
                 <Icon name="Options" />
               </FancyButton>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

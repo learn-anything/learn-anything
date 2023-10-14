@@ -13,7 +13,7 @@ export async function getAllGlobalLinks() {
     .select(e.GlobalLink, () => ({
       id: true,
       title: true,
-      url: true,
+      url: true
       // limit: 100,
     }))
     .run(client)
@@ -24,7 +24,7 @@ export async function getAllGlobalLinksForTopic(topicName: string) {
   const topic = await e
     .select(e.GlobalTopic, () => ({
       filter_single: { name: topicName },
-      id: true,
+      id: true
     }))
     .run(client)
 
@@ -37,7 +37,7 @@ export async function getAllGlobalLinksForTopic(topicName: string) {
         url: true,
         protocol: true,
         description: true,
-        year: true,
+        year: true
       }))
       .run(client)
     return links
@@ -57,7 +57,7 @@ export async function getGlobalLink(id: string) {
       public: true,
       description: true,
       urlTitle: true,
-      year: true,
+      year: true
     }))
     .run(client)
   return link
@@ -71,7 +71,7 @@ export async function updateAllGlobalLinksToHaveRightUrl() {
       id: true,
       title: true,
       url: true,
-      protocol: true,
+      protocol: true
     }))
     .run(client)
 
@@ -81,7 +81,7 @@ export async function updateAllGlobalLinksToHaveRightUrl() {
 
     const existingLink = await e
       .select(e.GlobalLink, (gl) => ({
-        filter: e.op(gl.url, "=", newUrl!),
+        filter: e.op(gl.url, "=", newUrl!)
       }))
       .run(client)
 
@@ -92,8 +92,8 @@ export async function updateAllGlobalLinksToHaveRightUrl() {
           set: {
             url: newUrl,
             protocol: protocol,
-            fullUrl: link.url,
-          },
+            fullUrl: link.url
+          }
         }))
         .run(client)
       console.log(updatedLink, "link updated")
@@ -106,7 +106,7 @@ export async function removeTrailingSlashFromGlobalLinks() {
   const links = await e
     .select(e.GlobalLink, (gl) => ({
       id: true,
-      url: true,
+      url: true
     }))
     .run(client)
 
@@ -116,7 +116,7 @@ export async function removeTrailingSlashFromGlobalLinks() {
 
     const existingUrl = await e
       .select(e.GlobalLink, (gl) => ({
-        filter: e.op(gl.url, "=", url),
+        filter: e.op(gl.url, "=", url)
       }))
       .run(client)
 
@@ -131,8 +131,8 @@ export async function removeTrailingSlashFromGlobalLinks() {
       .update(e.GlobalLink, (gl) => ({
         filter_single: { id: link.id },
         set: {
-          url: url,
-        },
+          url: url
+        }
       }))
       .run(client)
   }
@@ -146,7 +146,7 @@ export async function removeProtocolFromUrlOfGlobalLinks() {
       id: true,
       url: true,
       fullUrl: true,
-      protocol: true,
+      protocol: true
     }))
     .run(client)
 
@@ -161,8 +161,8 @@ export async function removeProtocolFromUrlOfGlobalLinks() {
         set: {
           url: newUrl,
           protocol: protocol,
-          fullUrl: globalLink.url,
-        },
+          fullUrl: globalLink.url
+        }
       }))
       .run(client)
   }
@@ -172,7 +172,7 @@ export async function removeEndingSlashFromUrls() {
   const globalLinks = await e
     .select(e.GlobalLink, () => ({
       id: true,
-      url: true,
+      url: true
     }))
     .run(client)
 
@@ -183,8 +183,8 @@ export async function removeEndingSlashFromUrls() {
         .update(e.GlobalLink, () => ({
           filter_single: { id: globalLink.id },
           set: {
-            url: newUrl,
-          },
+            url: newUrl
+          }
         }))
         .run(client)
     }
@@ -193,13 +193,13 @@ export async function removeEndingSlashFromUrls() {
 
 export async function attachGlobalLinkToGlobalTopic(
   url: string,
-  globalTopicName: string,
+  globalTopicName: string
 ) {
   const globalTopic = await e
     .select(e.GlobalTopic, () => ({
       prettyName: true,
       id: true,
-      filter_single: { name: globalTopicName },
+      filter_single: { name: globalTopicName }
     }))
     .run(client)
   console.log(globalTopic, "gt")
@@ -234,7 +234,7 @@ export async function addGlobalLink(
   title: string,
   year?: string,
   description?: string,
-  mainTopic?: string,
+  mainTopic?: string
 ) {
   const [urlWithoutProtocol, protocol] = splitUrlByProtocol(url)
   if (urlWithoutProtocol && protocol) {
@@ -248,28 +248,36 @@ export async function addGlobalLink(
         year: year,
         description: description,
         mainTopic: e.select(e.GlobalTopic, () => ({
-          filter_single: { name: mainTopic! },
-        })),
+          filter_single: { name: mainTopic! }
+        }))
       })
       .unlessConflict((gl) => ({
         on: gl.url,
         else: e.update(gl, () => ({
           set: {
             mainTopic: e.select(e.GlobalTopic, () => ({
-              filter_single: { name: mainTopic! },
-            })),
-          },
-        })),
+              filter_single: { name: mainTopic! }
+            }))
+          }
+        }))
       }))
       .run(client)
   }
+}
+
+export async function addGlobalNote(
+  content: string,
+  url: string,
+  mainTopic: string
+) {
+  // TODO:
 }
 
 export async function removeDuplicateUrls() {
   const links = await e
     .select(e.GlobalLink, () => ({
       id: true,
-      url: true,
+      url: true
     }))
     .run(client)
 
@@ -284,7 +292,7 @@ export async function removeDuplicateUrls() {
   })
 
   const duplicateUrls = Array.from(urlMap.entries()).filter(
-    ([_, ids]) => ids.length > 1,
+    ([_, ids]) => ids.length > 1
   )
   console.log(duplicateUrls, "dup")
 

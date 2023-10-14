@@ -1,6 +1,13 @@
 import { createEffect } from "solid-js"
+import clsx from "clsx"
 
-export default function FancyButton(props: any) {
+interface Props {
+  onClick: () => void
+  children: any
+  active?: boolean
+}
+
+export default function FancyButton(props: Props) {
   createEffect(() => {
     const CONTROLS = document.querySelectorAll("button")
     const UPDATE = ({ x, y }) => {
@@ -115,7 +122,10 @@ button:before{
         }
         `}
       </style>
-      <button class="control h-full w-full">
+      <button
+        onClick={props.onClick}
+        class={clsx("control h-full w-full", props.active && "bg-red-700")}
+      >
         <span class="backdrop"></span>
         <span class="text">{props.children}</span>
       </button>

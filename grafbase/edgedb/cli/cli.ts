@@ -1,6 +1,4 @@
-import { client } from "../client"
-import { addGlobalLink } from "../crud/global-link"
-import { moveAllLinksOfGlobalTopicToSectionOther } from "../crud/global-topic"
+import { addGlobalLink, addGlobalNote } from "../crud/global-link"
 import {
   Topic,
   findFilePath,
@@ -11,22 +9,22 @@ import {
 // "2023-10-24T22:00:00+00:00" old
 // 2023-11-13T15:03:06.000Z new
 async function main() {
-  const paths = await getMarkdownPaths()
-  const parts = paths[0]!.split("/")
-  const fileName = parts[parts.length - 1] // Get the last part which is the filename
-  const topicName = fileName!.split(".")[0]
+  // const paths = await getMarkdownPaths()
+  // const parts = paths[0]!.split("/")
+  // const fileName = parts[parts.length - 1] // Get the last part which is the filename
+  // const topicName = fileName!.split(".")[0]
   // console.log(topicName)
 
-  const timestamp = 1699887786
-  const iso8601_format = new Date(timestamp * 1000).toISOString()
-  const email = "nikita@nikiv.dev"
+  // const timestamp = 1699887786
+  // const iso8601_format = new Date(timestamp * 1000).toISOString()
+  // const email = "nikita@nikiv.dev"
 
-  const res = await client.querySingle(`
-    update User {
-      memberUntil: <datetime>${iso8601_format}
-    } filter .email = ${email}
-  `)
-  console.log(res, "res")
+  // const res = await client.querySingle(`
+  //   update User {
+  //     memberUntil: <datetime>${iso8601_format}
+  //   } filter .email = ${email}
+  // `)
+  // console.log(res, "res")
 
   // const topic = await getTopicByFileName("3d-printing")
   // console.log(topic?.name)
@@ -101,8 +99,30 @@ async function processLinks(topic: Topic) {
   })
 }
 
+// async function processNotesFromMarkdownFilesAsGlobalNotes(fileName: string) {
+//   const filePath = await findFilePath(
+//     process.env.wikiFolderPath!,
+//     fileName + ".md"
+//   )
+//   if (filePath) {
+//     const topic = await parseMdFile(filePath)
+//     // console.log(topic.topicAsMarkdown, "topic")
+//     // console.log(topic.notes, "notes")
+//     await processNotes(topic)
+//   }
+// }
+
+// async function processNotes(topic: Topic) {
+//   topic.notes.map(async (note) => {
+//     console.log(note, "note")
+//     // await addGlobalNote(note.content, note.url, topic.name)
+//   })
+// }
+
 // TODO: move it away after release, is here as reference in trying to get all the topics ported for release
 async function oneOffActions() {
+  // TODO: complete moving notes
+  // await processNotesFromMarkdownFilesAsGlobalNotes("asking-questions")
   // await getMarkdownPaths()
   // const topic = await getTopic("3d-printing")
   // console.log("done")

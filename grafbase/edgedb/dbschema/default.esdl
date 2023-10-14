@@ -187,6 +187,12 @@ module default {
     # connected topics for this link
     multi link links := .<globalLink[is Link];
   }
+  type GlobalNote {
+    required content: str;
+    url: str;
+    # optionally have a main topic that the note belongs to
+    link mainTopic: GlobalTopic;
+  }
   type GlobalTopic {
     # url friendly unique name of topic. i.e. 'physics' or 'linear-algebra'
     # lowercase + dash separate words

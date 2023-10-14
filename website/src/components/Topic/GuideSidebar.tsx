@@ -17,9 +17,42 @@ export default function GuideSidebar() {
         <div id="Status" class="flex flex-col gap-2">
           <div class="font-bold text-[#696969] text-[14px]">TOPIC STATUS</div>
           <div class="flex gap-2">
-            <FancyButton>To Learn</FancyButton>
-            <FancyButton>Learning</FancyButton>
-            <FancyButton>Learned</FancyButton>
+            <FancyButton
+              onClick={() => {
+                if (topic.globalTopic.learningStatus === "to-learn") {
+                  topic.set("learningStatus", "")
+                } else {
+                  topic.set("learningStatus", "to-learn")
+                }
+              }}
+              active={topic.globalTopic.learningStatus === "to-learn"}
+            >
+              To Learn
+            </FancyButton>
+            <FancyButton
+              onClick={() => {
+                if (topic.globalTopic.learningStatus === "learning") {
+                  topic.set("learningStatus", "")
+                } else {
+                  topic.set("learningStatus", "learning")
+                }
+              }}
+              active={topic.globalTopic.learningStatus === "learning"}
+            >
+              Learning
+            </FancyButton>
+            <FancyButton
+              onClick={() => {
+                if (topic.globalTopic.learningStatus === "learned") {
+                  topic.set("learningStatus", "")
+                } else {
+                  topic.set("learningStatus", "learned")
+                }
+              }}
+              active={topic.globalTopic.learningStatus === "learned"}
+            >
+              Learned
+            </FancyButton>
           </div>
         </div>
         <div id="Info" class="text-[#696969] flex flex-col gap-3">

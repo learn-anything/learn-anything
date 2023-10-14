@@ -685,6 +685,7 @@ export type $ObjectTypeλShape = $.typeutil.flatten<$SourceλShape & Omit<$Consi
   "<__type__[is Topic]": $.LinkDesc<_default.$Topic, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is UserGuide]": $.LinkDesc<_default.$UserGuide, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is Wiki]": $.LinkDesc<_default.$Wiki, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<__type__[is GlobalNote]": $.LinkDesc<_default.$GlobalNote, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<intersection_of": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<subject": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
