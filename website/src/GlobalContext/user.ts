@@ -5,6 +5,7 @@ type User = {
   username: string
   email: string
   signedIn: boolean
+  member: boolean
 }
 
 // global state of user
@@ -13,6 +14,7 @@ export function createUserState() {
     username: "",
     email: "",
     signedIn: false,
+    member: false
   })
 
   onMount(() => {
@@ -36,7 +38,7 @@ export function createUserState() {
     user,
     setSignedIn: (state: boolean) => {
       return setUser({ signedIn: state })
-    },
+    }
   } as const
 }
 

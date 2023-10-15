@@ -4,15 +4,18 @@ import Icon from "../Icon"
 import GuideSummary from "./GuideSummary"
 // @ts-ignore
 import { Motion } from "@motionone/solid"
-import { useNavigate } from "solid-start"
+import { useLocation, useNavigate } from "solid-start"
 import GuideSection from "./GuideSection"
 import FancyButton from "../FancyButton"
 import Modal from "../Modal"
 import ModalWithMessageAndButton from "../ModalWithMessageAndButton"
+import { useUser } from "../../GlobalContext/user"
 
 export default function GlobalGuide() {
   const navigate = useNavigate()
   const topic = useGlobalTopic()
+  const user = useUser()
+  const location = useLocation()
   const [showModal, setShowModal] = createSignal(false)
 
   return (
@@ -66,8 +69,12 @@ export default function GlobalGuide() {
               {/* Improve Guide */}
               <FancyButton
                 onClick={() => {
-                  const member = true
-                  if (!member) {
+                  if (!user.user.signedIn) {
+                    localStorage.setItem("pageBeforeSignIn", location.pathname)
+                    navigate("/auth")
+                    return
+                  }
+                  if (!user.user.member) {
                     setShowModal(true)
                   } else {
                     // TODO: probably unsafe, should be a better way to do this

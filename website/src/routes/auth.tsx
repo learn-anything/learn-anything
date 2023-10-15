@@ -22,18 +22,24 @@ export default function SignInPage() {
     const res = await fetch(`${import.meta.env.VITE_HANKO_API}/me`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${getHankoCookie()}`,
-      },
+        Authorization: `Bearer ${getHankoCookie()}`
+      }
     })
     // if status 200, means user is logged in, navigate to using the app
     if (res.status === 200) {
-      navigate("/")
+      const route = localStorage.getItem("pageBeforeSignIn")
+      if (route) {
+        localStorage.setItem("pageBeforeSignIn", "")
+        navigate(route)
+      } else {
+        navigate("/")
+      }
     }
 
     // register hanko component
     register(import.meta.env.VITE_HANKO_API, {
       shadow: true, // if true, can use this for styling: https://github.com/teamhanko/hanko/blob/main/frontend/elements/README.md#css-shadow-parts
-      injectStyles: true,
+      injectStyles: true
     }).catch(async (error) => {
       console.error(error, "error")
     })
@@ -46,7 +52,7 @@ export default function SignInPage() {
       const userClient = new UserClient(import.meta.env.VITE_HANKO_API, {
         timeout: 0,
         cookieName: "hanko",
-        localStorageKey: "hanko",
+        localStorageKey: "hanko"
       })
       const user = await userClient.getCurrent()
       const email = user.email
@@ -64,15 +70,21 @@ export default function SignInPage() {
       await mobius.mutate({
         createUser: {
           where: {
-            email: email,
+            email: email
           },
-          select: true,
-        },
+          select: true
+        }
       })
       userStore.setSignedIn(true)
-      navigate("/")
+      const route = localStorage.getItem("pageBeforeSignIn")
+      if (route) {
+        localStorage.setItem("pageBeforeSignIn", "")
+        navigate(route)
+      } else {
+        navigate("/")
+      }
     },
-    { passive: true },
+    { passive: true }
   )
 
   return (
@@ -121,19 +133,19 @@ export default function SignInPage() {
       </style>
       <div
         style={{
-          "background-color": "#02050e",
+          "background-color": "#02050e"
         }}
       >
         <div
           style={{
             "background-image": "url('./blue-left.svg')",
-            "background-size": "cover",
+            "background-size": "cover"
           }}
         >
           <div
             style={{
               "background-image": "url('./blue-right.svg')",
-              "background-size": "cover",
+              "background-size": "cover"
             }}
             class="flex flex-col items-center h-screen justify-center text-white"
           >
@@ -143,7 +155,7 @@ export default function SignInPage() {
                 "background-image": `linear-gradient(
                   34deg in oklab,
                   rgb(1% 2% 5% / 86%) 0%, rgb(7, 12, 25) 50%, rgb(1% 2% 5% / 86%) 100%
-                )`,
+                )`
               }}
               class="flex flex-col items-center p-10 rounded-lg border-2 border-neutral-900"
             >

@@ -4,44 +4,31 @@ import clsx from "clsx"
 import { signedIn } from "../../lib/auth"
 import { useMobius } from "../root"
 import Icon from "../components/Icon"
+import ModalWithMessageAndButton from "../components/ModalWithMessageAndButton"
+import { useUser } from "../GlobalContext/user"
 
 export default function Pricing() {
   const [planChosen, setPlanChosen] = createSignal("monthly")
-  const [showModal, setShowModal] = createSignal(false)
   const navigate = useNavigate()
-  const [signedInSignal, setSignedInSignal] = createSignal(false)
   const mobius = useMobius()
-
-  onMount(() => {
-    if (signedIn()) {
-      setSignedInSignal(true)
-    }
-  })
+  const user = useUser()
+  const [showModalWithSignUpMessage, setShowModalWithSignUpMessage] =
+    createSignal(false)
 
   return (
     <>
-      <style></style>
       <div class="h-full w-screen flex flex-col gap-10 dark:bg-neutral-900 dark:text-white bg-[#fafafa] text-black pb-[50px]">
-        <Show when={showModal()}>
-          <div class="fixed h-screen w-screen flex top-0 right-0 items-center z-10 justify-center">
-            <div
-              class="absolute w-screen h-screen top-0 left-0 backdrop-blur-sm z-20"
-              onClick={() => {
-                setShowModal(false)
-              }}
-            ></div>
-            <div class="h-fit w-[375px] z-30 rounded-lg border dark:bg-neutral-900 bg-white border-slate-400 border-opacity-30 flex flex-col justify-between gap-6 p-6">
-              <div class="text-xl font-light">Create new profile</div>
-              <button
-                class="cursor-pointer bg-black text-white text-sm px-4 p-2 rounded-lg hover:scale-[1.1]"
-                onClick={() => {
-                  navigate("/auth")
-                }}
-              >
-                Sign up / log in with email
-              </button>
-            </div>
-          </div>
+        <Show when={showModalWithSignUpMessage()}>
+          <ModalWithMessageAndButton
+            message="You need to sign up first to become a member"
+            buttonText="Sign Up"
+            buttonAction={() => {
+              navigate("/auth")
+            }}
+            onClose={() => {
+              setShowModalWithSignUpMessage(false)
+            }}
+          />
         </Show>
         <div class="h-[80px] px-[15%] w-full flex items-center justify-between gap-6 font-semibold">
           <div
@@ -53,10 +40,11 @@ export default function Pricing() {
             {/* <img class="rounded-full" src="/logo.png" alt="" /> */}
             <Icon name="Home" />
           </div>
-          <Show when={!signedInSignal()}>
+          <Show when={!user.user.signedIn}>
             <div
               class="cursor-pointer bg-black text-white px-4 p-1 rounded-full hover:scale-[1.1]"
               onClick={() => {
+                localStorage.setItem("pageBeforeSignIn", location.pathname)
                 navigate("/auth")
               }}
             >
@@ -163,7 +151,7 @@ export default function Pricing() {
               <div
                 class="flex items-center justify-center rounded-lg bg-black w-full h-16 opacity-80 text-white cursor-pointer"
                 onClick={async () => {
-                  if (signedInSignal()) {
+                  if (user.user.signedIn) {
                     if (planChosen() === "monthly") {
                       await mobius.query({
                         stripe: {
@@ -184,7 +172,7 @@ export default function Pricing() {
                       })
                     }
                   } else {
-                    setShowModal(true)
+                    setShowModalWithSignUpMessage(true)
                   }
                 }}
               >
@@ -197,6 +185,11 @@ export default function Pricing() {
               <div
                 onClick={() => {
                   // TODO: grafbase call to do stripe checkout
+                  if (!user.user.signedIn) {
+                    localStorage.setItem("pageBeforeSignIn", location.pathname)
+                    navigate("/auth")
+                    return
+                  }
                 }}
               >
                 Become a member
@@ -208,12 +201,7 @@ export default function Pricing() {
             </div>
             <div class="w-full flex flex-col gap-4 text-lg font-light opacity-60 text-[14px]">
               <div>
-                Learn Anything first came to existence in{" "}
-                <a href="https://wiki.nikiv.dev/looking-back/2017">2017</a> to
-                solve the problem of how does knowledge connect.
-              </div>
-              <div>
-                Since day 1 it has been a{" "}
+                Learn Anything is a{" "}
                 <a href="https://github.com/learn-anything/learn-anything.xyz">
                   fully open source project
                 </a>{" "}
@@ -236,19 +224,28 @@ export default function Pricing() {
               </div>
               <div>
                 Each topic has an official guide. This guide is contributed by
-                the community. You. Each change you request is reviewed by
-                experts of the topic and if the change is good it gets merged.
-                You can create your own guides and publish them on your own too.
+                the community. Each change you request is reviewed by experts of
+                the topic and if the change is good, it gets merged. You can
+                create your own guides and publish them on your own too.
               </div>
               <div>
-                Each topic has an official guide. This guide is contributed by
-                the community. You. Each change you request is reviewed by
-                experts of the topic and if the change is good it gets merged.
-                You can create your own guides and publish them on your own too.
+                This is all just the beginning. Learn Anything aims to be the
+                first to create AGI in a fully open way. Not controlled by any
+                entity. No closed code/data.
               </div>
               <div>
-                This is all just the beginning. Learn Anything will be the first
-                to create AGI in a fully open way. Not controlled by any entity.
+                In future, LA will also be a better and open source version of{" "}
+                <a href="https://www.google.com">Google</a> (will create our own
+                crawler and index the web). Better and cheaper version of{" "}
+                <a href="https://gumroad.com">Gumroad</a> (0.5 % comission +{" "}
+                <a href="https://solana.com">Solana</a> support). Open source
+                and better version of <a href="https://obsidian.md">Obsidian</a>{" "}
+                (keep your content in markdown, just have first class sync to
+                LA, automatic indexing of all your notes and creation of{" "}
+                <a href="https://chat.openai.com">ChatGPT</a> like AI interface
+                to all your knowledge with different privacy controls). And a
+                lot lot more. The code is open. The data is open. It's up to you
+                what this project can become.
               </div>
             </div>
           </div>

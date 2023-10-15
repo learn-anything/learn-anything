@@ -7,6 +7,7 @@ import { Search, SearchResult, createSearchState } from "../Search"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import { useGlobalState } from "../../GlobalContext/global"
 import clsx from "clsx"
+import FancyButton from "../FancyButton"
 
 // TODO: add fuzzy searching for topics. also consider lower case inputs matching results too
 export default function TopicNav() {
@@ -166,15 +167,9 @@ export default function TopicNav() {
                 </A>
               }
             >
-              <A class="text-black font-medium dark:text-white" href="/auth">
+              <FancyButton onClick={() => navigate("/auth")}>
                 Sign In
-              </A>
-              <A
-                href="/auth"
-                class="bg-[#3B5CCC] hover:scale-[1.1] no-underline leading-[23.48px] w-fit text-white h-[39px] flex items-center justify-center font-medium text-[17px] px-4 p-2 rounded-full cursor-pointer"
-              >
-                Sign Up
-              </A>
+              </FancyButton>
             </Show>
             {/* <div>Menu</div> */}
           </div>
