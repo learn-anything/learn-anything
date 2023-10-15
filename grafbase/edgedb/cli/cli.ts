@@ -1,3 +1,4 @@
+import { client } from "../client"
 import { addGlobalLink, updateGlobalLinkStatus } from "../crud/global-link"
 import { getGlobalTopic } from "../crud/global-topic"
 import {
@@ -21,8 +22,8 @@ async function main() {
   //   "c29b845c-45ea-11ee-aedd-ffb76be6287b",
   //   "uncomplete"
   // )
-  const res = await getGlobalTopic("asking-questions", hankoId)
-  console.dir(res, { depth: null })
+  // const res = await getGlobalTopic("asking-questions", hankoId)
+  // console.dir(res, { depth: null })
   // console.log(res)
   // const paths = await getMarkdownPaths()
   // const parts = paths[0]!.split("/")
@@ -30,16 +31,22 @@ async function main() {
   // const topicName = fileName!.split(".")[0]
   // console.log(topicName)
 
-  // const timestamp = 1699887786
-  // const iso8601_format = new Date(timestamp * 1000).toISOString()
-  // const email = "nikita@nikiv.dev"
+  const email = "nikita@nikiv.dev"
+  const timestamp = 1734125731
+  const iso8601_format = new Date(timestamp * 1000)
+  console.log(iso8601_format) // just to be sure
 
-  // const res = await client.querySingle(`
-  //   update User {
-  //     memberUntil: <datetime>${iso8601_format}
-  //   } filter .email = ${email}
-  // `)
-  // console.log(res, "res")
+  const res = await client.querySingle(
+    `
+    update User
+    filter .email = <str>$email
+    set {
+      memberUntil:= <datetime>$iso8601_format
+    }
+  `,
+    { email, iso8601_format }
+  )
+  console.log(res, "res")
 
   // const topic = await getTopicByFileName("3d-printing")
   // console.log(topic?.name)

@@ -68,14 +68,18 @@ app.post("/learn-anything-bought", async (c: Context) => {
         const endDateInUnix = subscription.current_period_end
         console.log(endDateInUnix, "end date in unix!")
 
-        const timestamp = 1699887786
-        const iso8601_format = new Date(timestamp * 1000).toISOString()
+        const iso8601_format = new Date(endDateInUnix * 1000)
 
-        const res = await client.querySingle(`
-          update User {
-            memberUntil: <datetime>${iso8601_format}
-          } filter .email = ${email}
-        `)
+        const res = await client.querySingle(
+          `
+          update User
+          filter .email = <str>$email
+          set {
+            memberUntil:= <datetime>$iso8601_format
+          }
+        `,
+          { email, iso8601_format },
+        )
         console.log(res, "res")
         return
       }
