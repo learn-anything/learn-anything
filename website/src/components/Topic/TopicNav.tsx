@@ -115,7 +115,10 @@ export default function TopicNav() {
               >
                 {/* add logo only when it looks good and clean. need clean svg */}
                 {/* <img class="rounded-full" src="/logo.png" alt="" /> */}
-                <img src="" alt="" />
+                <Icon name="Home" />
+                {/* TODO: does not work for now */}
+                {/* <img src="/logo-black.svg" class="h-[50px] w-[50px]" /> */}
+                {/* <img src="/logo-white.svg" class="h-[50px] w-[50px]" /> */}
               </div>
             </div>
 

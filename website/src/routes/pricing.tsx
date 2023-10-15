@@ -21,7 +21,7 @@ export default function Pricing() {
   return (
     <>
       <style></style>
-      <div class="h-full w-screen flex flex-col gap-10 bg-[#fafafa] text-black pb-[50px]">
+      <div class="h-full w-screen flex flex-col gap-10 dark:bg-neutral-900 dark:text-white bg-[#fafafa] text-black pb-[50px]">
         <Show when={showModal()}>
           <div class="fixed h-screen w-screen flex top-0 right-0 items-center z-10 justify-center">
             <div
@@ -30,7 +30,7 @@ export default function Pricing() {
                 setShowModal(false)
               }}
             ></div>
-            <div class="h-fit w-[375px] z-30 rounded-lg border bg-white border-slate-400 border-opacity-30 flex flex-col justify-between gap-6 p-6">
+            <div class="h-fit w-[375px] z-30 rounded-lg border dark:bg-neutral-900 bg-white border-slate-400 border-opacity-30 flex flex-col justify-between gap-6 p-6">
               <div class="text-xl font-light">Create new profile</div>
               <button
                 class="cursor-pointer bg-black text-white text-sm px-4 p-2 rounded-lg hover:scale-[1.1]"
@@ -67,11 +67,11 @@ export default function Pricing() {
         <div class="h-full w-full px-[15%] flex flex-col gap-6">
           <div class="flex items-center justify-between">
             <div class="font-bold text-2xl">Choose a plan</div>
-            <div class="flex bg-[#f2f2f2] p-0.5 rounded-full items-center gap-1 text-sm font-light">
+            <div class="flex dark:bg-neutral-800 bg-[#f2f2f2] p-0.5 rounded-full items-center gap-1 text-sm font-light">
               <div
                 class={clsx(
                   "p-0.5 px-2 rounded-full cursor-pointer",
-                  planChosen() === "monthly" && "bg-white"
+                  planChosen() === "monthly" && "bg-white dark:bg-neutral-900"
                 )}
                 onClick={() => {
                   setPlanChosen("monthly")
@@ -82,7 +82,7 @@ export default function Pricing() {
               <div
                 class={clsx(
                   "p-0.5 px-2 cursor-pointer rounded-full",
-                  planChosen() === "yearly" && "bg-white"
+                  planChosen() === "yearly" && "bg-white dark:bg-neutral-900"
                 )}
                 onClick={() => {
                   setPlanChosen("yearly")
@@ -92,7 +92,7 @@ export default function Pricing() {
               </div>
             </div>
           </div>
-          <div class="w-full h-[500px] border border-slate-400 border-opacity-30 rounded-xl bg-white flex">
+          <div class="w-full h-[500px] border border-slate-400 border-opacity-30 rounded-xl bg-white dark:bg-neutral-900 flex">
             <div class="w-full h-full border-r border-slate-400 border-opacity-30 p-8 flex flex-col gap-6 justify-between">
               <div class="border border-slate-400 border-opacity-30 px-2 p-0.5 w-fit rounded-full font-light text-sm">
                 Free
@@ -188,19 +188,25 @@ export default function Pricing() {
                   }
                 }}
               >
-                Select this plan
+                Become member
               </div>
             </div>
           </div>
           <div class="flex w-full h-full relative">
             <div class="w-full font-light text-3xl sticky">
-              <div>Become a member</div>
+              <div
+                onClick={() => {
+                  // TODO: grafbase call to do stripe checkout
+                }}
+              >
+                Become a member
+              </div>
               <div class="opacity-50 text-xl">
                 Unlock premium features and help us build the future of
                 education together ♥️
               </div>
             </div>
-            <div class="w-full flex flex-col gap-4 text-lg font-light">
+            <div class="w-full flex flex-col gap-4 text-lg font-light opacity-60 text-[14px]">
               <div>
                 Learn Anything first came to existence in{" "}
                 <a href="https://wiki.nikiv.dev/looking-back/2017">2017</a> to

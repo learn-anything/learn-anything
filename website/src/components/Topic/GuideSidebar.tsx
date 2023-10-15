@@ -18,7 +18,7 @@ export default function GuideSidebar() {
       >
         <div id="Status" class="flex flex-col gap-2">
           <div class="font-bold text-[#696969] text-[14px]">TOPIC STATUS</div>
-          <div class="flex gap-2">
+          <div class="flex gap-2 text-[12px]">
             <FancyButton
               onClick={async () => {
                 if (topic.globalTopic.learningStatus === "to_learn") {

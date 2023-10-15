@@ -5,10 +5,6 @@ export default function GuideSummary(props: any) {
   const [showSummary, setShowSummary] = createSignal(false)
   const topic = useGlobalTopic()
 
-  onMount(() => {
-    console.log(topic.globalTopic.topicSummary, "summ")
-  })
-
   return (
     <>
       <style>{`

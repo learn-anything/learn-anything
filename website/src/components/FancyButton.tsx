@@ -41,7 +41,7 @@ button {
     inset 0 -1px 0px 0px hsl(0 0% 0% / 0.5);
 
   font-family: sans-serif, system-ui;
-  font-size: 12px;
+
   font-weight: 300;
   position: relative;
   display: grid;
@@ -124,7 +124,11 @@ button:before{
       </style>
       <button
         onClick={props.onClick}
-        class={clsx("control h-full w-full", props.active && "bg-red-700")}
+        class={clsx(
+          "control h-full w-full",
+          props.active &&
+            "bg-red-800 transition-all text-white hover:text-black dark:hover:text-white"
+        )}
       >
         <span class="backdrop"></span>
         <span class="text">{props.children}</span>

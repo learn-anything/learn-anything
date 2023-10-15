@@ -1,4 +1,4 @@
-import { For, Show } from "solid-js"
+import { For, Show, createSignal } from "solid-js"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import Icon from "../Icon"
 import GuideSummary from "./GuideSummary"
@@ -7,20 +7,35 @@ import { Motion } from "@motionone/solid"
 import { useNavigate } from "solid-start"
 import GuideSection from "./GuideSection"
 import FancyButton from "../FancyButton"
+import Modal from "../Modal"
+import ModalWithMessageAndButton from "../ModalWithMessageAndButton"
 
 export default function GlobalGuide() {
   const navigate = useNavigate()
   const topic = useGlobalTopic()
+  const [showModal, setShowModal] = createSignal(false)
 
   return (
     <>
       <div class="w-full flex flex-col gap-[20px]">
+        <Show when={showModal()}>
+          <ModalWithMessageAndButton
+            message="This is a member only feature"
+            buttonText="Become Member"
+            buttonAction={() => {
+              navigate("/pricing")
+            }}
+            onClose={() => {
+              setShowModal(false)
+            }}
+          />
+        </Show>
         <div
           id="Guide"
           class="font-bold  flex w-full items-center justify-between"
         >
           <div class="text-[22px]">{topic.globalTopic.prettyName}</div>
-          <div class="flex h-full gap-4">
+          <div class="flex h-full text-[12px] gap-4">
             <div
             // transition={{ duration: 1.2, easing: "ease-out" }}
             // animate={{
@@ -51,10 +66,15 @@ export default function GlobalGuide() {
               {/* Improve Guide */}
               <FancyButton
                 onClick={() => {
-                  // TODO: probably unsafe, should be a better way to do this
-                  const topicName = window.location.href.split("/")[3]
-                  console.log(topicName)
-                  navigate(`/${topicName}/edit`)
+                  const member = true
+                  if (!member) {
+                    setShowModal(true)
+                  } else {
+                    // TODO: probably unsafe, should be a better way to do this
+                    const topicName = window.location.href.split("/")[3]
+                    console.log(topicName)
+                    navigate(`/${topicName}/edit`)
+                  }
                 }}
               >
                 Improve Guide
@@ -97,7 +117,13 @@ export default function GlobalGuide() {
 
         <For each={topic.globalTopic.latestGlobalGuide?.sections}>
           {(section) => {
-            return <GuideSection title={section.title} links={section.links} />
+            return (
+              <GuideSection
+                title={section.title}
+                links={section.links}
+                summary="Hey there"
+              />
+            )
           }}
         </For>
       </div>

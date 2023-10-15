@@ -28,7 +28,6 @@ export default function GuideSummaryEdit() {
     element: container()!,
     extensions: [StarterKit],
     content: untrack(() => {
-      console.log(topic.globalTopic.topicSummary, "summary")
       const cleanHtml = topic.globalTopic.topicSummary.replace(
         /<a href="(.*?)">(.*?)<\/a>/g,
         "[$2]($1)"
@@ -129,9 +128,6 @@ export default function GuideSummaryEdit() {
                   transformSection
                 )
 
-              console.log(sectionsToAdd, "sections to add")
-              console.log(topic.globalTopic.topicSummary, "topic summary")
-
               const query = `
               mutation UpdateLatestGlobalGuide($topicName: String!, $topicSummary: String!, $sections: [section!]!) {
                 updateLatestGlobalGuide(topicName: $topicName, topicSummary: $topicSummary, sections: $sections)
@@ -169,7 +165,6 @@ export default function GuideSummaryEdit() {
               //     select: true
               //   }
               // })
-              // console.log(res, "res")
             }}
             class="bg-[#3B5CCC] text-white border-[#3B5CCC] border px-[10px] p-[8px] rounded-[4px] font-light cursor-pointer"
           >
@@ -229,10 +224,6 @@ export default function GuideSummaryEdit() {
               element: container()!,
               extensions: [StarterKit],
               content: untrack(() => {
-                console.log(
-                  topic.globalTopic.latestGlobalGuide.sections,
-                  "testing"
-                )
                 const cleanHtml =
                   topic.globalTopic.latestGlobalGuide.sections
                     .find((s) => s.title === section.title)
@@ -240,7 +231,6 @@ export default function GuideSummaryEdit() {
                       /<a href="(.*?)">(.*?)<\/a>/g,
                       "[$2]($1)"
                     ) ?? ""
-                console.log(cleanHtml)
                 return cleanHtml
               }),
               editorProps: {

@@ -14,6 +14,7 @@ interface Props {
     | "Loading"
     | "Delete"
     | "Home"
+    | "Heart"
   width?: string
   height?: string
   color?: string
@@ -69,6 +70,19 @@ export default function Icon(props: Props) {
                 stroke-linejoin="round"
                 stroke-width="1.5"
                 d="M9.74963 15.7493C9.74963 14.6447 10.6451 13.7493 11.7496 13.7493H12.2496C13.3542 13.7493 14.2496 14.6447 14.2496 15.7493V19.2493H9.74963V15.7493Z"
+              ></path>
+            </svg>
+          </Match>
+          <Match when={props.name === "Heart"}>
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path
+                fill-rule="evenodd"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M11.995 7.23319C10.5455 5.60999 8.12832 5.17335 6.31215 6.65972C4.49599 8.14609 4.2403 10.6312 5.66654 12.3892L11.995 18.25L18.3235 12.3892C19.7498 10.6312 19.5253 8.13046 17.6779 6.65972C15.8305 5.18899 13.4446 5.60999 11.995 7.23319Z"
+                clip-rule="evenodd"
               ></path>
             </svg>
           </Match>

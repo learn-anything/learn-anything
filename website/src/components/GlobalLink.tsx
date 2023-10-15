@@ -8,6 +8,7 @@ interface Props {
   url: string
   year: string
   protocol: string
+  description?: string
 }
 
 export default function GlobalLink(props: Props) {
@@ -24,30 +25,31 @@ export default function GlobalLink(props: Props) {
     </div> */}
       <div class="w-full  h-full flex justify-between items-center">
         <div class="w-fit flex gap-1 flex-col">
-          <a
-            class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer"
-            href={`${props.protocol}://${props.url}`}
-          >
-            {props.title}
-          </a>
           <div class="flex gap-3">
-            {/* <Show when={link?.type}>
-            <div class="font-light text-[12px] text-[#696969] border-r border-[#CCCCCC] px-2">
-              {link?.type}
-            </div>
-          </Show> */}
+            <a
+              class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer"
+              href={`${props.protocol}://${props.url}`}
+            >
+              {props.title}
+            </a>
             <Show when={props.year}>
               <div class="font-light text-[12px] text-[#696969]">
                 {props.year}
               </div>
             </Show>
-
             <a
               class="font-light text-[12px] text-[#696969] text-ellipsis w-[250px] overflow-hidden whitespace-nowrap"
               href={`${props.protocol}://${props.url}`}
             >
               {props.url}
             </a>
+          </div>
+          <div class="flex gap-3">
+            <Show when={props.description}>
+              <div class="font-light text-[14px] text-white text-opacity-50">
+                {props.description}
+              </div>
+            </Show>
           </div>
           {/* <div class="font-light text-[12px] text-[#696969]">PDF</div> */}
         </div>
@@ -69,7 +71,7 @@ export default function GlobalLink(props: Props) {
               }}
               class="cursor-pointer rounded-[2px] flex dark:hover:bg-neutral-950 items-center hover:border-none transition-all justify-center border h-[30px] w-[30px] border-[#69696951] dark:border-[#282828]"
             >
-              <Icon name="Plus" />
+              <Icon name="Heart" />
             </div>
             <div
               onClick={async () => {

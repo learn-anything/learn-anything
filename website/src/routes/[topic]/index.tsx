@@ -19,10 +19,12 @@ export default function GlobalTopic() {
         #InfoMain {
           width: 100%;
         }
+        #InfoMain::-webkit-scrollbar {
+          display: none;
+        }
         #InfoOptions {
           display: none;
         }
-
       @media (min-width: 700px) {
         #InfoSidebar {
           display: flex;

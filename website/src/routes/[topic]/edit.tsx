@@ -1,8 +1,5 @@
 import EditGuideSidebar from "../../components/EditGuideSidebar"
-import EditSidebar from "../../components/EditSidebar"
 import GuideEdit from "../../components/Topic/GuideEdit"
-import GuideSidebar from "../../components/Topic/GuideSidebar"
-// import TitlePill from "../../components/Topic/TitlePill"
 import TopicNav from "../../components/Topic/TopicNav"
 
 export default function EditGuide() {
@@ -14,6 +11,9 @@ export default function EditGuide() {
         }
         #InfoMain {
           width: 100%;
+        }
+        #InfoMain::-webkit-scrollbar {
+          display: none;
         }
         #InfoOptions {
           display: none;

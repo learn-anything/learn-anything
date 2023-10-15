@@ -9,6 +9,7 @@ export type GlobalLink = {
   title: string
   url: string
   protocol: string
+  description?: string
   year?: string | null
   liked?: boolean
   completed?: boolean
@@ -54,10 +55,6 @@ export default function createGlobalTopic(mobius: MobiusType) {
     learningStatus: ""
   })
 
-  createEffect(() => {
-    console.log(globalTopic)
-  })
-
   const currentTopicGlobalLinksSearch = createMemo(() => {
     return globalTopic.links.map(
       (link): SearchResult => ({
@@ -88,7 +85,8 @@ export default function createGlobalTopic(mobius: MobiusType) {
             title: true,
             url: true,
             year: true,
-            protocol: true
+            protocol: true,
+            description: true
           },
           latestGlobalGuide: {
             sections: {
