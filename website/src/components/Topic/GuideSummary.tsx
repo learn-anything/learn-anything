@@ -20,7 +20,7 @@ export default function GuideSummary(props: any) {
         height: 100%
       }
     `}</style>
-      <div class="w-full flex flex-col gap-3 text-[16px] dark:border-[#282828] border-[#69696951] border-[1px] rounded-[6px] p-3 px-4  leading-[18.78px]">
+      <div class="w-full flex flex-col gap-3 text-[16px] bg-white dark:bg-neutral-900 dark:border-[#282828] border-[#69696951] border-[0.5px] rounded-[6px] p-4 px-4  leading-[18.78px]">
         {/* <div class=" text-black dark:text-white text-opacity-70 flex w-full justify-between">
           <div>Version</div>
         </div> */}

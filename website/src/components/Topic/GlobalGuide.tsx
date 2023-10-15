@@ -91,7 +91,7 @@ export default function GlobalGuide() {
         //     "translateX(0px)"
         //   ]
         // }}
-        class="w-full gap-4 flex flex-col h-full rounded-[6px] p-4"
+        class="w-full gap-4 flex flex-col h-full rounded-[6px]"
       >
         <GuideSummary />
 

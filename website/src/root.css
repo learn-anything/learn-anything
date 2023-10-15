@@ -4,7 +4,7 @@
 
 a {
   /* border-bottom: dotted 1.5px #4cd06f; */
-  color: #10b981;
+  color: #3B5CCC;
   font-weight: 550;
 }
 a:hover {
@@ -27,6 +27,9 @@ html {
   }
   .Topbar {
     background-color: #1e1e20;
+  }
+  a {
+    color: rgba(96, 165, 250, 1)
   }
 }
 
