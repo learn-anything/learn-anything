@@ -63,6 +63,63 @@ export async function getGlobalLink(id: string) {
   return link
 }
 
+export async function updateGlobalLinkStatus(
+  hankoId: string,
+  globalLinkId: string,
+  action: "like" | "unlike" | "complete" | "uncomplete"
+) {
+  const userByHankoId = await e.select(e.User, (user) => ({
+    filter: e.all(
+      e.set(
+        e.op(user.hankoId, "=", hankoId),
+        e.op("exists", user.memberUntil),
+        e.op(user.memberUntil, ">", e.datetime_current())
+      )
+    )
+  }))
+
+  const foundLink = e.select(e.GlobalLink, () => ({
+    filter_single: { id: globalLinkId }
+  }))
+
+  switch (action) {
+    case "like":
+      return e
+        .update(userByHankoId, () => ({
+          set: {
+            likedLinks: { "+=": foundLink }
+          }
+        }))
+        .run(client)
+    case "unlike":
+      return e
+        .update(userByHankoId, () => ({
+          set: {
+            likedLinks: { "-=": foundLink }
+          }
+        }))
+        .run(client)
+    case "complete":
+      return e
+        .update(userByHankoId, () => ({
+          set: {
+            completedLinks: { "+=": foundLink }
+          }
+        }))
+        .run(client)
+    case "uncomplete":
+      return e
+        .update(userByHankoId, () => ({
+          set: {
+            completedLinks: { "-=": foundLink }
+          }
+        }))
+        .run(client)
+    default:
+      break
+  }
+}
+
 // one off function to update all global links to have the right url
 export async function updateAllGlobalLinksToHaveRightUrl() {
   const links = await e

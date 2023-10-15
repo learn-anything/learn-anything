@@ -8,6 +8,14 @@ export default config({
   }
 })
 
+// definitions
+const learningStatus = g.enum("learningStatus", [
+  "to_learn",
+  "learning",
+  "learned",
+  "none"
+])
+
 // public queries
 g.query("publicGetGlobalTopics", {
   args: {},
@@ -26,6 +34,7 @@ const GlobalLink = g.type("GlobalLink", {
   id: g.string(),
   title: g.string(),
   url: g.string(),
+  protocol: g.string(),
   year: g.string().optional(),
   description: g.string().optional()
 })
@@ -70,6 +79,16 @@ g.query("getGlobalLink", {
     })
   ),
   resolver: "getGlobalLink"
+})
+
+g.query("getGlobalTopic", {
+  args: { topicName: g.string() },
+  returns: g.ref(
+    g.type("getGlobalTopicOutput", {
+      learningStatus: g.enumRef(learningStatus)
+    })
+  ),
+  resolver: "getGlobalTopic"
 })
 
 g.query("getGlobalLinks", {
@@ -126,18 +145,30 @@ g.mutation("updateLatestGlobalGuide", {
   resolver: "updateLatestGlobalGuide"
 })
 
-// g.mutation("updateTopicLearningStatus", {
-//   args: { learningStatus: g.enumRef(learningStatus), topic: g.string() },
-//   returns: g.string(),
-//   resolver: "updateTopicLearningStatus",
-// })
+g.mutation("updateTopicLearningStatus", {
+  args: { learningStatus: g.enumRef(learningStatus), topicName: g.string() },
+  returns: g.string(),
+  resolver: "updateTopicLearningStatus"
+})
 
+const globalLinkAction = g.enum("globalLinkAction", [
+  "like",
+  "unlike",
+  "complete",
+  "uncomplete"
+])
+g.mutation("updateGlobalLinkStatus", {
+  args: { action: g.enumRef(globalLinkAction), globalLinkId: g.string() },
+  returns: g.string(),
+  resolver: "updateGlobalLinkStatus"
+})
+
+// TODO: cleanup or make into correct resolvers
 // g.mutation("uploadProfilePhoto", {
 //   args: { image: g.string() },
 //   returns: g.string(),
 //   resolver: "uploadProfilePhoto",
 // })
-
 // const inputToUpdateGlobalTopic = g.input("inputToUpdateGlobalTopic", {
 //   topicSummary: g.string(),
 //   sections: g.inputRef(section).list(),
@@ -147,13 +178,6 @@ g.mutation("updateLatestGlobalGuide", {
 //   returns: g.string(),
 //   resolver: "updateGlobalTopic",
 // })
-
-// definitions
-// const learningStatus = g.enum("learningStatus", [
-//   "to_learn",
-//   "learning",
-//   "learned",
-// ])
 // const link = g.input("link", {
 //   title: g.string(),
 //   url: g.string(),

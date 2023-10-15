@@ -4,11 +4,18 @@ import { Context } from "@grafbase/sdk"
 
 export default async function updateTopicLearningStatusResolver(
   root: any,
-  args: { learningStatus: string; topic: string },
+  args: {
+    learningStatus: "to_learn" | "learning" | "learned" | "none"
+    topicName: string
+  },
   context: Context
 ) {
   const hankoId = await hankoIdFromToken(context)
   if (hankoId) {
-    await updateTopicLearningStatus(hankoId, args.topic, args.learningStatus)
+    await updateTopicLearningStatus(
+      hankoId,
+      args.topicName,
+      args.learningStatus
+    )
   }
 }

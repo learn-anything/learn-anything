@@ -1,4 +1,5 @@
-import { addGlobalLink, addGlobalNote } from "../crud/global-link"
+import { addGlobalLink, updateGlobalLinkStatus } from "../crud/global-link"
+import { getGlobalTopic } from "../crud/global-topic"
 import {
   Topic,
   findFilePath,
@@ -9,6 +10,20 @@ import {
 // "2023-10-24T22:00:00+00:00" old
 // 2023-11-13T15:03:06.000Z new
 async function main() {
+  const hankoId = process.env.LOCAL_USER_HANKO_ID!
+  // const res = await updateTopicLearningStatus(
+  //   hankoId,
+  //   "asking-questions",
+  //   "none"
+  // )
+  // const res = await updateGlobalLinkStatus(
+  //   hankoId,
+  //   "c29b845c-45ea-11ee-aedd-ffb76be6287b",
+  //   "uncomplete"
+  // )
+  const res = await getGlobalTopic("asking-questions", hankoId)
+  console.dir(res, { depth: null })
+  // console.log(res)
   // const paths = await getMarkdownPaths()
   // const parts = paths[0]!.split("/")
   // const fileName = parts[parts.length - 1] // Get the last part which is the filename

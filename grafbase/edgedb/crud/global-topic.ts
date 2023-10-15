@@ -115,10 +115,25 @@ export async function createIntroSectionInGlobalTopic(globalTopicName: string) {
     .run(client)
 }
 
+export async function getLearningStatus(hankoId: string, topicName: string) {
+  const userByHankoId = e.select(e.User, (user) => ({
+    filter: e.all(
+      e.set(
+        e.op(user.hankoId, "=", hankoId),
+        e.op("exists", user.memberUntil),
+        e.op(user.memberUntil, ">", e.datetime_current())
+      )
+    )
+  }))
+  const topicByName = e.select(e.GlobalTopic, () => ({
+    filter_single: { name: topicName }
+  }))
+}
+
 export async function updateTopicLearningStatus(
   hankoId: string,
-  topic: string,
-  learningStatus: string
+  topicName: string,
+  learningStatus: "to_learn" | "learning" | "learned" | "none"
 ) {
   const userByHankoId = e.select(e.User, (user) => ({
     filter: e.all(
@@ -130,13 +145,23 @@ export async function updateTopicLearningStatus(
     )
   }))
   const topicByName = e.select(e.GlobalTopic, () => ({
-    filter_single: { name: topic }
+    filter_single: { name: topicName }
   }))
 
   switch (learningStatus) {
+    case "none":
+      return e
+        .update(userByHankoId, () => ({
+          set: {
+            topicsToLearn: { "-=": topicByName },
+            topicsLearning: { "-=": topicByName },
+            topicsLearned: { "-=": topicByName }
+          }
+        }))
+        .run(client)
     case "to_learn":
       return e
-        .update(userByHankoId, (user) => ({
+        .update(userByHankoId, () => ({
           set: {
             topicsToLearn: { "+=": topicByName },
             topicsLearning: { "-=": topicByName },
@@ -147,7 +172,7 @@ export async function updateTopicLearningStatus(
 
     case "learning":
       return e
-        .update(userByHankoId, (user) => ({
+        .update(userByHankoId, () => ({
           set: {
             topicsToLearn: { "-=": topicByName },
             topicsLearning: { "+=": topicByName },
@@ -157,7 +182,7 @@ export async function updateTopicLearningStatus(
         .run(client)
     case "learned":
       return e
-        .update(userByHankoId, (user) => ({
+        .update(userByHankoId, () => ({
           set: {
             topicsToLearn: { "-=": topicByName },
             topicsLearning: { "-=": topicByName },
@@ -183,8 +208,8 @@ export async function publicGetGlobalTopics() {
   return globalTopics
 }
 
-// get all info needed to render global topic page (i.e. learn-anything.xyz/physics)
-export async function getGlobalTopic(topicName: string) {
+// get all info needed to render global topic page (for non auth users) (i.e. learn-anything.xyz/physics)
+export async function getGlobalTopicPublic(topicName: string) {
   const topic = await e
     .select(e.GlobalTopic, () => ({
       filter_single: { name: topicName },
@@ -227,6 +252,28 @@ export async function getGlobalTopic(topicName: string) {
     return combined
   }
   throw new Error("topic not found")
+}
+
+// get details for global topic for auth users
+export async function getGlobalTopic(topicName: string, hankoId: string) {
+  const userData = await e
+    .select(e.User, (user) => ({
+      likedLinks: e.select(e.GlobalLink, (gl) => ({
+        filter: e.op(gl.id, "in", user.likedLinks.id)
+      })),
+      completedLinks: e.select(e.GlobalLink, (gl) => ({
+        filter: e.op(gl.id, "in", user.completedLinks.id)
+      })),
+      filter: e.all(
+        e.set(
+          e.op(user.hankoId, "=", hankoId),
+          e.op("exists", user.memberUntil),
+          e.op(user.memberUntil, ">", e.datetime_current())
+        )
+      )
+    }))
+    .run(client)
+  return userData
 }
 
 export async function addSectionToGlobalTopic(

@@ -1,5 +1,23 @@
 ## Public website release
 
+- ability to add links (unverified)
+  - optionally attach to topic (maybe not for mvp)
+  - links will be shown in user profile
+- blue/unblur guide for members/non-members
+  - show `become member` in top right and `bottom right` on guide
+- improve on pricing page
+- create plan (member only). add ui with modal to show that
+  - show in global topic, button for `Personal Guide`
+- profile page connect
+  - show everything as in design in Figma
+- limit some actions for non member
+  - edgedb query check hanko id and memberUntil value is good
+- 3 free limit on mark topic as learned + 3 of adding adding a link + 3 of bookmarking a link
+  - change icons for those to make it clear what happens
+  - on first time user likes a link or tracks topic as learned or completes a link, show modal saying it can be found in profile page now
+- add footer like https://twitter.com/steveruizok/status/1712487213852749911
+  - link to X, GitHub, Discord
+  - say in pretty letters `Free coode. Build the tool you want.`
 - allow edits of `topic summary` and `section summary` of each section
   - enter text inside, save it to html and store in db
   - render the content of the html in topic summary and each of the section summaries correctly
@@ -329,3 +347,4 @@
 - update tiptap editor in website to allow making links to other topics simiar to markdown links with `../topic.md` syntax. show a popover with search over topics
   - should be fast to edit topic guides
 - remove non used packages in all package.json (there is tool that helps with this)
+- pressing on section in right sidebar of global topic, should jump/scroll to section

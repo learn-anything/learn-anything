@@ -3,11 +3,13 @@ import { useGlobalState } from "../../GlobalContext/global"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import FancyButton from "../FancyButton"
 import Card from "./Card"
+import { useMobius } from "../../root"
 
 export default function GuideSidebar() {
   const topic = useGlobalTopic()
   const global = useGlobalState()
-  // Title , Status , Info , Resources , Learners
+  const mobius = useMobius()
+
   return (
     <>
       <div
@@ -18,23 +20,59 @@ export default function GuideSidebar() {
           <div class="font-bold text-[#696969] text-[14px]">TOPIC STATUS</div>
           <div class="flex gap-2">
             <FancyButton
-              onClick={() => {
-                if (topic.globalTopic.learningStatus === "to-learn") {
+              onClick={async () => {
+                if (topic.globalTopic.learningStatus === "to_learn") {
                   topic.set("learningStatus", "")
+                  await mobius.mutate({
+                    updateTopicLearningStatus: {
+                      where: {
+                        learningStatus: "none",
+                        topicName: topic.globalTopic.name
+                      },
+                      select: true
+                    }
+                  })
                 } else {
-                  topic.set("learningStatus", "to-learn")
+                  topic.set("learningStatus", "to_learn")
+                  await mobius.mutate({
+                    updateTopicLearningStatus: {
+                      where: {
+                        learningStatus: "to_learn",
+                        topicName: topic.globalTopic.name
+                      },
+                      select: true
+                    }
+                  })
                 }
               }}
-              active={topic.globalTopic.learningStatus === "to-learn"}
+              active={topic.globalTopic.learningStatus === "to_learn"}
             >
               To Learn
             </FancyButton>
             <FancyButton
-              onClick={() => {
+              onClick={async () => {
                 if (topic.globalTopic.learningStatus === "learning") {
                   topic.set("learningStatus", "")
+                  await mobius.mutate({
+                    updateTopicLearningStatus: {
+                      where: {
+                        learningStatus: "none",
+                        topicName: topic.globalTopic.name
+                      },
+                      select: true
+                    }
+                  })
                 } else {
                   topic.set("learningStatus", "learning")
+                  await mobius.mutate({
+                    updateTopicLearningStatus: {
+                      where: {
+                        learningStatus: "learning",
+                        topicName: topic.globalTopic.name
+                      },
+                      select: true
+                    }
+                  })
                 }
               }}
               active={topic.globalTopic.learningStatus === "learning"}
@@ -42,11 +80,29 @@ export default function GuideSidebar() {
               Learning
             </FancyButton>
             <FancyButton
-              onClick={() => {
+              onClick={async () => {
                 if (topic.globalTopic.learningStatus === "learned") {
                   topic.set("learningStatus", "")
+                  await mobius.mutate({
+                    updateTopicLearningStatus: {
+                      where: {
+                        learningStatus: "none",
+                        topicName: topic.globalTopic.name
+                      },
+                      select: true
+                    }
+                  })
                 } else {
                   topic.set("learningStatus", "learned")
+                  await mobius.mutate({
+                    updateTopicLearningStatus: {
+                      where: {
+                        learningStatus: "learned",
+                        topicName: topic.globalTopic.name
+                      },
+                      select: true
+                    }
+                  })
                 }
               }}
               active={topic.globalTopic.learningStatus === "learned"}

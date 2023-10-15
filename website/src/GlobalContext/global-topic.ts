@@ -8,7 +8,10 @@ export type GlobalLink = {
   id: string
   title: string
   url: string
+  protocol: string
   year?: string | null
+  liked?: boolean
+  completed?: boolean
 }
 export type Section = {
   summary: string
@@ -26,7 +29,7 @@ export type GlobalTopic = {
   topicPath: string
   latestGlobalGuide: LatestGlobalGuide
   links: GlobalLink[]
-  learningStatus: "to-learn" | "learning" | "learned" | ""
+  learningStatus: "to_learn" | "learning" | "learned" | ""
 }
 
 function extractTopicFromPath(inputStr: string) {
@@ -84,7 +87,8 @@ export default function createGlobalTopic(mobius: MobiusType) {
             id: true,
             title: true,
             url: true,
-            year: true
+            year: true,
+            protocol: true
           },
           latestGlobalGuide: {
             sections: {
@@ -95,6 +99,7 @@ export default function createGlobalTopic(mobius: MobiusType) {
                 title: true,
                 url: true,
                 year: true,
+                protocol: true,
                 description: true
               }
             }

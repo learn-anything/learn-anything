@@ -1,9 +1,14 @@
-import { For } from "solid-js"
-import Icon from "../Icon"
-import { Show } from "solid-js"
-import { Link } from "../../GlobalContext/global-topic"
+import { For, onMount } from "solid-js"
 import GlobalLink from "../GlobalLink"
 import clsx from "clsx"
+
+type Link = {
+  title: string
+  url: string
+  id: string
+  year: string
+  protocol: string
+}
 
 type Props = {
   title: string
@@ -17,7 +22,7 @@ export default function GuideSection(props: Props) {
         class={clsx(
           "",
           props.links.length > 0 &&
-            "border-b-[0.5px] p-4 border-[#69696951]  dark:border-[#282828]",
+            "border-b-[0.5px] p-4 border-[#69696951]  dark:border-[#282828]"
         )}
       >
         <div class="text-[#131313] dark:text-white text-opacity-60 font-bold">
@@ -34,7 +39,8 @@ export default function GuideSection(props: Props) {
                 url={link.url}
                 id={link.id}
                 year={link.year}
-              ></GlobalLink>
+                protocol={link.protocol}
+              />
             )
           }}
         </For>

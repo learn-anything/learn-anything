@@ -50,6 +50,7 @@ type GlobalLink {
   id: String!
   title: String!
   url: String!
+  protocol: String!
   year: String
   description: String
 }
@@ -57,12 +58,15 @@ type GlobalLink {
 type Mutation {
   createUser(email: String!): String!
   updateLatestGlobalGuide(topicName: String!, topicSummary: String!, sections: [section!]!): String!
+  updateTopicLearningStatus(learningStatus: learningStatus!, topicName: String!): String!
+  updateGlobalLinkStatus(action: globalLinkAction!, globalLinkId: String!): String!
 }
 
 type Query {
   publicGetGlobalTopics: [publicGetGlobalTopicsOutput!]!
   publicGetGlobalTopic(topicName: String!): publicGetGlobalTopicOutput!
   getGlobalLink(linkId: String!): publicGetGlobalLinkOutput!
+  getGlobalTopic(topicName: String!): getGlobalTopicOutput!
   getGlobalLinks: getGlobalLinksOutput!
   checkForGlobalLink(linkUrl: String!): publicCheckForGlobalLinkOutput!
   stripe(plan: String!): String!
@@ -74,14 +78,33 @@ type getGlobalLinksOutput {
   url: String!
 }
 
+type getGlobalTopicOutput {
+  learningStatus: learningStatus!
+}
+
 type globalGuideSection {
   title: String!
+  summary: String
   links: [GlobalLink!]!
+}
+
+enum globalLinkAction {
+  like
+  unlike
+  complete
+  uncomplete
 }
 
 type latestGlobalGuide {
   summary: String!
   sections: [globalGuideSection!]!
+}
+
+enum learningStatus {
+  to_learn
+  learning
+  learned
+  none
 }
 
 type publicCheckForGlobalLinkOutput {
