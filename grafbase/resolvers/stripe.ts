@@ -1,6 +1,7 @@
 import Stripe from "stripe"
 import { hankoIdFromToken } from "../lib/hanko-validate"
 import { Context } from "@grafbase/sdk"
+import { GraphQLError } from "graphql"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-08-16",
@@ -32,10 +33,7 @@ export default async function StripeResolver(
               }
             ]
           })
-          console.log(monthSubscription.url, "URL")
-          return {
-            stripeCheckoutUrl: monthSubscription.url
-          }
+          return monthSubscription.url
         case "year":
           const yearSubscription = await stripe.checkout.sessions.create({
             success_url: process.env.STRIPE_SUCCESS_URL!,
@@ -50,19 +48,17 @@ export default async function StripeResolver(
               }
             ]
           })
-          return {
-            stripeCheckoutUrl: yearSubscription.url
-          }
+          return yearSubscription.url
         default:
           return {
             stripeCheckoutUrl: null
           }
       }
     } catch (error) {
-      console.log(error)
+      console.log(error, "error")
+      throw new GraphQLError(JSON.stringify(error))
     }
   } else {
-    console.log("not member")
-    return "not member"
+    throw new GraphQLError("not member")
   }
 }

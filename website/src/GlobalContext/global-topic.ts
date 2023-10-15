@@ -67,7 +67,12 @@ export default function createGlobalTopic(mobius: MobiusType) {
   // check that user is authed, can use import { signedIn } from "../../../lib/auth" for this
   const location = useLocation()
   createEffect(async () => {
-    if (!location.pathname || location.pathname === "/") return
+    if (
+      !location.pathname ||
+      location.pathname === "/" ||
+      location.pathname === "/pricing"
+    )
+      return
 
     const topicName = extractTopicFromPath(location.pathname)
     if (!topicName) return

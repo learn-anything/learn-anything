@@ -60,6 +60,7 @@ type Mutation {
   updateLatestGlobalGuide(topicName: String!, topicSummary: String!, sections: [section!]!): String!
   updateTopicLearningStatus(learningStatus: learningStatus!, topicName: String!): String!
   updateGlobalLinkStatus(action: globalLinkAction!, globalLinkId: String!): String!
+  internalUpdateMemberUntilOfUser(email: String!, memberUntilDateInUnixTime: Int!): String!
 }
 
 type Query {
@@ -69,7 +70,7 @@ type Query {
   getGlobalTopic(topicName: String!): getGlobalTopicOutput!
   getGlobalLinks: getGlobalLinksOutput!
   checkForGlobalLink(linkUrl: String!): publicCheckForGlobalLinkOutput!
-  stripe(plan: String!): String!
+  stripe(plan: String!, userEmail: String!): String!
 }
 
 type getGlobalLinksOutput {

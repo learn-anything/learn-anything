@@ -13,6 +13,6 @@ export default async function updateGlobalLinkStatusResolver(
   const hankoId = await hankoIdFromToken(context)
   if (hankoId) {
     await updateGlobalLinkStatus(hankoId, args.globalLinkId, args.action)
-    return "success"
+    return "ok"
   }
 }

@@ -140,7 +140,7 @@ export default function GuideSummaryEdit() {
                 sections: sectionsToAdd
               }
 
-              fetch(import.meta.env.VITE_GRAFBASE_API_URL, {
+              const res = await fetch(import.meta.env.VITE_GRAFBASE_API_URL, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -151,8 +151,7 @@ export default function GuideSummaryEdit() {
                   variables
                 })
               })
-                .then((r) => r.json())
-                .then((res) => console.log(res))
+              console.log(res, "res")
 
               // TODO: issue with mobius, something about it not escaping strings properly
               // const res = await mobius.mutate({

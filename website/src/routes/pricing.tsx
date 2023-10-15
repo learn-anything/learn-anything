@@ -153,23 +153,32 @@ export default function Pricing() {
                 onClick={async () => {
                   if (user.user.signedIn) {
                     if (planChosen() === "monthly") {
-                      await mobius.query({
+                      const res = await mobius.query({
                         stripe: {
                           where: {
-                            plan: "month"
+                            plan: "month",
+                            userEmail: user.user.email
                           },
                           select: true
                         }
                       })
+                      console.log(res, "res")
+                      // @ts-ignore
+                      const stripeCheckout = res.data.stripe
+                      window.location.href = stripeCheckout
                     } else {
-                      await mobius.query({
+                      const res = await mobius.query({
                         stripe: {
                           where: {
-                            plan: "year"
+                            plan: "year",
+                            userEmail: user.user.email
                           },
                           select: true
                         }
                       })
+                      // @ts-ignore
+                      const stripeCheckout = res.data.stripe
+                      window.location.href = stripeCheckout
                     }
                   } else {
                     setShowModalWithSignUpMessage(true)

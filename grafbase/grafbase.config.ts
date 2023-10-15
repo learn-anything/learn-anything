@@ -63,6 +63,16 @@ g.query("publicGetGlobalTopic", {
 })
 
 // auth queries
+g.query("getUserDetails", {
+  args: {},
+  returns: g.ref(
+    g.type("getUserDetailsOutput", {
+      email: g.string()
+    })
+  ),
+  resolver: "getUserDetails"
+})
+
 g.query("getGlobalLink", {
   args: { linkId: g.string() },
   returns: g.ref(
@@ -117,7 +127,7 @@ g.query("checkForGlobalLink", {
 })
 
 g.query("stripe", {
-  args: { plan: g.string() },
+  args: { plan: g.string(), userEmail: g.string() },
   returns: g.string(),
   resolver: "stripe"
 })
@@ -161,6 +171,16 @@ g.mutation("updateGlobalLinkStatus", {
   args: { action: g.enumRef(globalLinkAction), globalLinkId: g.string() },
   returns: g.string(),
   resolver: "updateGlobalLinkStatus"
+})
+
+// internal
+g.mutation("internalUpdateMemberUntilOfUser", {
+  args: {
+    email: g.string(),
+    memberUntilDateInUnixTime: g.int()
+  },
+  returns: g.string(),
+  resolver: "internal/updateMemberUntilOfUser"
 })
 
 // TODO: cleanup or make into correct resolvers

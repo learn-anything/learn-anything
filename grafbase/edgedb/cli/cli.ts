@@ -1,6 +1,7 @@
 import { client } from "../client"
 import { addGlobalLink, updateGlobalLinkStatus } from "../crud/global-link"
 import { getGlobalTopic } from "../crud/global-topic"
+import { updateMemberUntilOfUser } from "../crud/user"
 import {
   Topic,
   findFilePath,
@@ -32,21 +33,23 @@ async function main() {
   // console.log(topicName)
 
   const email = "nikita@nikiv.dev"
-  const timestamp = 1734125731
-  const iso8601_format = new Date(timestamp * 1000)
-  console.log(iso8601_format) // just to be sure
+  const timestamp = 1923428131
+  // const iso8601_format = new Date(timestamp * 1000)
+  // console.log(iso8601_format)
 
-  const res = await client.querySingle(
-    `
-    update User
-    filter .email = <str>$email
-    set {
-      memberUntil:= <datetime>$iso8601_format
-    }
-  `,
-    { email, iso8601_format }
-  )
-  console.log(res, "res")
+  // const res = await client.querySingle(
+  //   `
+  //   update User
+  //   filter .email = <str>$email
+  //   set {
+  //     memberUntil:= <datetime>$iso8601_format
+  //   }
+  // `,
+  //   { email, iso8601_format }
+  // )
+  // console.log(res, "res")
+
+  await updateMemberUntilOfUser(email, timestamp)
 
   // const topic = await getTopicByFileName("3d-printing")
   // console.log(topic?.name)

@@ -348,3 +348,9 @@
   - should be fast to edit topic guides
 - remove non used packages in all package.json (there is tool that helps with this)
 - pressing on section in right sidebar of global topic, should jump/scroll to section
+- make all resolvers be `try catch (err)`, then show error via GraphQLError(error)
+- all `catch (err)`
+  - should log to baselime
+  - actually log every useful log to baselime!
+- wrap around mobius and show a pill or toast when error happens with any of the grafbase requests
+  - this way you can just do queries to grafbase and error showing is fully abstracted and nice

@@ -76,6 +76,7 @@ export default function SignInPage() {
         }
       })
       userStore.setSignedIn(true)
+      userStore.setEmail(email)
       const route = localStorage.getItem("pageBeforeSignIn")
       if (route) {
         localStorage.setItem("pageBeforeSignIn", "")

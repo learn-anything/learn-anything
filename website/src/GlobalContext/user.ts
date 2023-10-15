@@ -1,3 +1,4 @@
+import { UserClient } from "@teamhanko/hanko-frontend-sdk"
 import { createContext, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 
@@ -17,8 +18,16 @@ export function createUserState() {
     member: false
   })
 
-  onMount(() => {
+  onMount(async () => {
     // TODO: do grafbase call to get user info like username and email from server
+    const userClient = new UserClient(import.meta.env.VITE_HANKO_API, {
+      timeout: 0,
+      cookieName: "hanko",
+      localStorageKey: "hanko"
+    })
+    const hankoUser = await userClient.getCurrent()
+    const email = hankoUser.email
+    setUser({ email, signedIn: true })
 
     // TODO: move this cookie reading into lib function
     // also there has to be better way to do this than this
@@ -36,6 +45,9 @@ export function createUserState() {
 
   return {
     user,
+    setEmail: (state: string) => {
+      return setUser({ email: state })
+    },
     setSignedIn: (state: boolean) => {
       return setUser({ signedIn: state })
     }

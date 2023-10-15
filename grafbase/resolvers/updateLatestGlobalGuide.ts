@@ -35,7 +35,7 @@ export default async function updateLatestGlobalGuideResolver(
         topicSummary: fixedMarkdownLinksInHtml,
         sections: sectionsCopy
       })
-      return "success"
+      return "ok"
     }
   } catch (error) {
     throw new GraphQLError(JSON.stringify(error))

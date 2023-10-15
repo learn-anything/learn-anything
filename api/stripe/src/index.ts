@@ -2,7 +2,6 @@ import { Hono } from "hono"
 import Stripe from "stripe"
 import type { Context } from "hono"
 import { cors } from "hono/cors"
-import * as edgedb from "edgedb"
 
 const app = new Hono()
 app.use("*", cors())
@@ -13,10 +12,6 @@ app.onError((e, c) => {
 })
 
 app.post("/learn-anything-bought", async (c: Context) => {
-  const client = edgedb.createHttpClient({
-    tlsSecurity: c.env.LOCAL ? "insecure" : "strict",
-  })
-
   // console.log(c.env.LA_STRIPE_WEBHOOK_SECRET!, "key..")
   let event = c.req.body
   const stripe = new Stripe(c.env.LA_STRIPE_SECRET_KEY!, {
@@ -49,44 +44,64 @@ app.post("/learn-anything-bought", async (c: Context) => {
     case "checkout.session.completed":
       // @ts-ignore
       const checkoutSessionCompleted = event.data.object
-
-      console.log(checkoutSessionCompleted, "completed")
-      console.log(checkoutSessionCompleted.status, "status")
       if (checkoutSessionCompleted.status === "complete") {
         // const subscriptionType =
         //   checkoutSessionCompleted.metadata.subscriptionType.trim()
-
-        console.log(checkoutSessionCompleted.metadata, "metadata")
-        // const email = checkoutSessionCompleted.metadata.userEmail.trim()
-        const email = ""
-        console.log(email, "email")
-
+        // console.log(checkoutSessionCompleted.metadata, "metadata")
+        const email = checkoutSessionCompleted.metadata.userEmail.trim()
+        // const email = "nikita@nikiv.dev"
+        // console.log(email, "email")
         const subscription = await stripe.subscriptions.retrieve(
           checkoutSessionCompleted.subscription,
         )
-        console.log(checkoutSessionCompleted.subscription, "VALUE")
+        // console.log(checkoutSessionCompleted.subscription, "value")
         const endDateInUnix = subscription.current_period_end
-        console.log(endDateInUnix, "end date in unix!")
+        // console.log(endDateInUnix, "end date in unix!")
+        // const iso8601_format = new Date(endDateInUnix * 1000)
 
-        const iso8601_format = new Date(endDateInUnix * 1000)
+        const query = `
+        mutation InternalUpdateMemberUntilOfUser($email: String!, $memberUntilDateInUnixTime: Int!) {
+          internalUpdateMemberUntilOfUser(email: $email, memberUntilDateInUnixTime: $memberUntilDateInUnixTime)
+        }
+        `
 
-        const res = await client.querySingle(
-          `
-          update User
-          filter .email = <str>$email
-          set {
-            memberUntil:= <datetime>$iso8601_format
-          }
-        `,
-          { email, iso8601_format },
-        )
-        console.log(res, "res")
-        return
+        const variables = {
+          email: email,
+          memberUntilDateInUnixTime: endDateInUnix,
+        }
+
+        // TODO: check for errors, show in ui if error happens
+        await fetch(c.env.GRAFBASE_API_URL!, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${c.env.INTERNAL_SECRET!}`,
+          },
+          body: JSON.stringify({
+            query,
+            variables,
+          }),
+        })
+
+        // const res = await client.querySingle(
+        //   `
+        //   update User
+        //   filter .email = <str>$email
+        //   set {
+        //     memberUntil:= <datetime>$iso8601_format
+        //   }
+        // `,
+        //   { email, iso8601_format },
+        // )
+        // console.log(res, "res")
+        return c.json({ success: `memberUntil value is updated` })
       }
       break
-    case "customer.subscription.updated":
-      // @ts-ignore
-      let customerSubscriptionUpdated = event.data.object
+    // TODO: cover case where users update their subscription
+    // case "customer.subscription.updated":
+    //   // @ts-ignore
+    //   let customerSubscriptionUpdated = event.data.object
+    //   break
 
     // TODO: check if subscription is canceled or something
     // TODO: log it
@@ -97,7 +112,8 @@ app.post("/learn-anything-bought", async (c: Context) => {
       // Unexpected event type
       // TODO: log?
       // @ts-ignore
-      console.log(`Unhandled event type ${event.type}.`)
+      console.log(`Unhandled event type`)
+      return c.json({ error: `Unhandled event type` })
   }
   return c.json({})
 })
