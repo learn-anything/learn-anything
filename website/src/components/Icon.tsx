@@ -15,6 +15,7 @@ interface Props {
     | "Delete"
     | "Home"
     | "Heart"
+    | "Menu"
   width?: string
   height?: string
   fill?: string
@@ -71,6 +72,31 @@ export default function Icon(props: Props) {
                 stroke-linejoin="round"
                 stroke-width="1.5"
                 d="M9.74963 15.7493C9.74963 14.6447 10.6451 13.7493 11.7496 13.7493H12.2496C13.3542 13.7493 14.2496 14.6447 14.2496 15.7493V19.2493H9.74963V15.7493Z"
+              ></path>
+            </svg>
+          </Match>
+          <Match when={props.name === "Menu"}>
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M4.75 5.75H19.25"
+              ></path>
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M4.75 18.25H19.25"
+              ></path>
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M4.75 12H19.25"
               ></path>
             </svg>
           </Match>

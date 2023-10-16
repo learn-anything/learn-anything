@@ -67,7 +67,8 @@ export default function SignInPage() {
       // doing this so that below GraphQL query can work, it supplies `mobius` client with the hanko token
       signIn(hankoCookie!)
 
-      await mobius.mutate({
+      console.log("running mutation")
+      const res = await mobius.mutate({
         createUser: {
           where: {
             email: email
@@ -75,6 +76,8 @@ export default function SignInPage() {
           select: true
         }
       })
+      console.log(res, "res from mutation")
+      return
       userStore.setSignedIn(true)
       userStore.setEmail(email)
       const route = localStorage.getItem("pageBeforeSignIn")

@@ -77,9 +77,19 @@ export async function addLinkToSectionOfGlobalTopic(
   sectionName: string,
   linkUrl: string
 ) {
+  const link = await e
+    .select(e.GlobalLink, (gl) => ({
+      filter_single: { url: linkUrl }
+    }))
+    .run(client)
+
+  // check section exists in topic guide
   const section = await e.select(e.GlobalGuideSection, (section) => ({
-    // filter: e.all()
+    // filter: e.op(
+    //   section["<"]
+    // )
   }))
+
   return
   await e
     .update(e.GlobalGuide, (guide) => ({

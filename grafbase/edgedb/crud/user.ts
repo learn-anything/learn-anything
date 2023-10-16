@@ -39,14 +39,13 @@ export async function updateUserMemberUntilDate(hankoId: string, date: Date) {
   console.log(res)
 }
 
-export async function addUser(user: User) {
+export async function createUser(email: string, hankoId: string) {
   const res = await e
     .insert(e.User, {
-      email: user.email,
-      hankoId: user.hankoId
+      email: email,
+      hankoId: hankoId
     })
     .run(client)
-  console.log(res, "user added")
   return res?.id
 }
 

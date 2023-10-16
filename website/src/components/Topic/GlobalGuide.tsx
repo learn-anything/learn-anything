@@ -71,12 +71,13 @@ export default function GlobalGuide() {
               {/* Improve Guide */}
               <FancyButton
                 onClick={() => {
+                  console.log(user.user.member)
                   if (!user.user.signedIn) {
                     localStorage.setItem("pageBeforeSignIn", location.pathname)
                     navigate("/auth")
                     return
                   }
-                  if (!user.user.member) {
+                  if (user.user.member) {
                     setShowModal(true)
                   } else {
                     // TODO: probably unsafe, should be a better way to do this

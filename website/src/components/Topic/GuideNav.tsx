@@ -146,7 +146,10 @@ export default function GuideNav() {
               <Search placeholder="Search Topic" state={search_state} />
             </div>
           </div>
-          <div id="NavMenu">Burger</div>
+          <div id="NavMenu">
+            {/* <Icon name="Menu" /> */}
+            <Icon name="UserProfile" />
+          </div>
           <div id="NavButtons" class="flex items-center justify-center gap-4">
             {/* TODO:  */}
             {/* <div>Dark/Light switch</div> */}

@@ -1,9 +1,7 @@
 import { splitUrlByProtocol } from "../../lib/util"
 import { addGlobalLink } from "../crud/global-link"
-import {
-  addLinkToSectionOfGlobalTopic,
-  moveAllLinksOfGlobalTopicToSectionOther
-} from "../crud/global-topic"
+import { addLinkToSectionOfGlobalTopic } from "../crud/global-topic"
+import { createUser } from "../crud/user"
 import {
   Topic,
   findFilePath,
@@ -14,6 +12,18 @@ import {
 async function main() {
   // const topic = await getGlobalTopic(hankoId, "3d-printing")
   // console.log(topic)
+  await addLinkToSectionOfGlobalTopic(
+    "blogs",
+    "Favorite blogs",
+    "brandur.org/articles"
+  )
+
+  // const res = await createUser(
+  //   "nikita.voloboev@gmail.com",
+  //   "902875f2-9950-4857-a0c5-df3d3be4a0a0"
+  // )
+  // console.log(res)
+  return
   const paths = await getMarkdownPaths()
   const parts = paths[1]!.split("/")
   const fileName = parts[parts.length - 1] // Get the last part which is the filename

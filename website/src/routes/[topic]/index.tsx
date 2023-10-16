@@ -3,21 +3,29 @@ import GlobalGuide from "../../components/Topic/GlobalGuide"
 import { Motion } from "@motionone/solid"
 import GuideSidebar from "../../components/Topic/GuideSidebar"
 import { useGlobalState } from "../../GlobalContext/global"
-import { Match, Switch, createEffect, createSignal } from "solid-js"
+import { Match, Show, Switch, createEffect, createSignal } from "solid-js"
 import GuideLinks from "../../components/Topic/GuideLinks"
 import GuideNav from "../../components/Topic/GuideNav"
 import clsx from "clsx"
 import FancyButton from "../../components/FancyButton"
 import { useUser } from "../../GlobalContext/user"
+import { useNavigate } from "solid-start"
 
 export default function GlobalTopic() {
   const global = useGlobalState()
   const [blurWidth, setBlurWidth] = createSignal()
   const user = useUser()
+  const navigate = useNavigate()
 
   createEffect(() => {
-    const infoMain = document.getElementById("InfoMain")
-    setBlurWidth(infoMain?.scrollHeight / 2)
+    setTimeout(() => {
+      const infoMain = document.getElementById("InfoMain")
+      setBlurWidth(infoMain?.scrollHeight / 2)
+      window.addEventListener("resize", function () {
+        // console.log("The window has been resized!")
+        setBlurWidth(infoMain?.scrollHeight / 2)
+      })
+    }, 1000)
   })
 
   return (
@@ -68,7 +76,7 @@ export default function GlobalTopic() {
               </Match>
             </Switch>
 
-            <Show when={user.user.member}>
+            <Show when={true && blurWidth()}>
               <div
                 class="absolute flex flex-col right-0 z-50 w-full"
                 style={{
@@ -84,9 +92,15 @@ export default function GlobalTopic() {
 
                 <div class="backdrop-blur-sm bg-opacity-50 bg-gray-200 dark:bg-black w-full h-full">
                   <div class="h-full relative">
-                    <div class="sticky top-0 z-[60] right-0 w-full flex items-center justify-center">
-                      <div class="w-[100px]">
-                        <FancyButton>Buy</FancyButton>
+                    <div class="sticky top-[50%] translate-y-[50%] z-[60] right-0 w-full flex items-center justify-center">
+                      <div class="">
+                        <FancyButton
+                          onClick={() => {
+                            navigate("/pricing")
+                          }}
+                        >
+                          Become member
+                        </FancyButton>
                       </div>
                     </div>
                   </div>

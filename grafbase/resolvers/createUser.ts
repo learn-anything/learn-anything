@@ -1,8 +1,7 @@
-import { GraphQLError } from "graphql"
-import { addUser } from "../edgedb/crud/user"
-import { hankoIdFromToken } from "../lib/hanko-validate"
-import { log, logError } from "../lib/baselime"
 import { Context } from "@grafbase/sdk"
+import { GraphQLError } from "graphql"
+import { createUser } from "../edgedb/crud/user"
+import { hankoIdFromToken } from "../lib/hanko-validate"
 
 export default async function createUserResolver(
   root: any,
@@ -12,16 +11,17 @@ export default async function createUserResolver(
   try {
     const hankoId = await hankoIdFromToken(context)
     if (hankoId) {
-      const userId = await addUser({ email: args.email, hankoId: hankoId })
-      log("user created: ", { userId })
-      log("just a log")
+      console.log(hankoId, "hanko id")
+      const userId = await createUser(args.email, hankoId)
+      console.log("user created: ", userId)
       if (userId) {
         return userId
       }
+      console.log("user already exists?")
       throw new GraphQLError("User already exists")
     }
   } catch (err) {
-    logError("error creating user", { err })
+    console.log(err, "error")
     throw new GraphQLError(JSON.stringify(err))
   }
 }

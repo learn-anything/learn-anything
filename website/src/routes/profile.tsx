@@ -4,6 +4,7 @@ import { Match, Switch, createSignal, onMount } from "solid-js"
 import clsx from "clsx"
 import Icon from "../components/Icon"
 import { Search, SearchResult, createSearchState } from "../components/Search"
+import GuideNav from "../components/Topic/GuideNav"
 
 export default function Profile() {
   const user = useUser()
@@ -66,7 +67,7 @@ export default function Profile() {
   }
   `}</style>
       <div class="w-screen h-full text-black bg-white dark:bg-neutral-900 dark:text-white">
-        <TopicNav />
+        <GuideNav />
 
         <div id="ProfileMain" class="h-full w-full flex justify-center">
           <div
