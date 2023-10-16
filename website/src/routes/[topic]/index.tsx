@@ -53,7 +53,12 @@ export default function GlobalTopic() {
       #divider {
         background: linear-gradient(180deg, rgba(229,9,121,0) 0%, rgba(229,231,235,0.5) 100%);
           backdrop-filter: blur(4px)
-            }
+       }
+      @media (prefers-color-scheme: dark) {
+        #divider {
+          background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 100%);
+        }
+      }
       `}</style>
       <div class="w-screen fixed top-0 right-0 h-screen text-black dark:text-white bg-white dark:bg-[#1C1C1C]">
         <GuideNav />
