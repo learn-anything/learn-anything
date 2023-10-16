@@ -10,6 +10,7 @@ export default async function createUserResolver(
 ) {
   try {
     const hankoId = await hankoIdFromToken(context)
+    console.log(hankoId, "hanko id")
     if (hankoId) {
       console.log(hankoId, "hanko id")
       const userId = await createUser(args.email, hankoId)
