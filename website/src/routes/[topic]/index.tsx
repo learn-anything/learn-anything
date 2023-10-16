@@ -3,12 +3,19 @@ import GlobalGuide from "../../components/Topic/GlobalGuide"
 import { Motion } from "@motionone/solid"
 import GuideSidebar from "../../components/Topic/GuideSidebar"
 import { useGlobalState } from "../../GlobalContext/global"
-import { Match, Switch } from "solid-js"
+import { Match, Switch, createEffect, createSignal } from "solid-js"
 import GuideLinks from "../../components/Topic/GuideLinks"
 import GuideNav from "../../components/Topic/GuideNav"
+import clsx from "clsx"
 
 export default function GlobalTopic() {
   const global = useGlobalState()
+  const [blurWidth, setBlurWidth] = createSignal()
+
+  createEffect(() => {
+    const infoMain = document.getElementById("InfoMain")
+    setBlurWidth(infoMain?.scrollHeight / 2)
+  })
 
   return (
     <>
@@ -32,6 +39,10 @@ export default function GlobalTopic() {
           display: flex
         }
       }
+      #divider {
+        background: linear-gradient(180deg, rgba(229,9,121,0) 0%, rgba(229,231,235,0.5) 100%);
+          backdrop-filter: blur(4px)
+            }
       `}</style>
       <div class="w-screen fixed top-0 right-0 h-screen text-black dark:text-white bg-white dark:bg-[#1C1C1C]">
         <GuideNav />
@@ -39,7 +50,10 @@ export default function GlobalTopic() {
         <div class="h-[90%] w-full flex">
           <div
             id="InfoMain"
-            class="h-full w-full bg-white overflow-auto dark:bg-[#1C1C1C] flex  gap-6 flex-col"
+            class={clsx(
+              " w-full bg-white h-full relative overflow-auto dark:bg-[#1C1C1C] flex gap-6 flex-col",
+              true && ""
+            )}
             style={{ padding: "24px 20px 24px 20px" }}
           >
             <Switch>
@@ -50,6 +64,21 @@ export default function GlobalTopic() {
                 <GuideLinks />
               </Match>
             </Switch>
+
+            <div
+              class="absolute flex flex-col right-0 z-50 w-full"
+              style={{
+                top: `${blurWidth()}px`,
+                "min-height": `${blurWidth()}px`,
+                height: `${blurWidth()}px`
+              }}
+            >
+              <div
+                class="absolute top-[-100px]  right-0 w-full bg-opacity-50 h-[100px]"
+                id="divider"
+              ></div>
+              <div class="backdrop-blur-sm bg-opacity-50 bg-gray-200 dark:bg-black w-full h-full"></div>
+            </div>
           </div>
           <Motion.div
             id="InfoSidebar"

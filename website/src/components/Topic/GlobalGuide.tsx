@@ -10,6 +10,8 @@ import FancyButton from "../FancyButton"
 import Modal from "../Modal"
 import ModalWithMessageAndButton from "../ModalWithMessageAndButton"
 import { useUser } from "../../GlobalContext/user"
+import { div } from "edgedb/dist/primitives/bigint"
+import clsx from "clsx"
 
 export default function GlobalGuide() {
   const navigate = useNavigate()
@@ -20,7 +22,7 @@ export default function GlobalGuide() {
 
   return (
     <>
-      <div class="w-full flex flex-col gap-[20px]">
+      <div class="w-full flex flex-col gap-[20px] relative">
         <Show when={showModal()}>
           <ModalWithMessageAndButton
             message="This is a member only feature"
@@ -118,7 +120,7 @@ export default function GlobalGuide() {
         //     "translateX(0px)"
         //   ]
         // }}
-        class="w-full gap-4 flex flex-col h-full rounded-[6px]"
+        class={clsx("w-full gap-4 flex flex-col  rounded-[6px]", true && "")}
       >
         <GuideSummary />
 
