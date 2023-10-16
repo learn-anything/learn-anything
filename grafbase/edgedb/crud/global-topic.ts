@@ -85,9 +85,12 @@ export async function addLinkToSectionOfGlobalTopic(
 
   // check section exists in topic guide
   const section = await e.select(e.GlobalGuideSection, (section) => ({
-    // filter: e.op(
-    //   section["<"]
-    // )
+    filter: e.op(
+      section["<sections is GlobalGuide"]["<latestGlobalGuide is GlobalTopic"]
+        .name,
+      "=",
+      globalTopicName
+    )
   }))
 
   return

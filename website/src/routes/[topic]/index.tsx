@@ -81,7 +81,8 @@ export default function GlobalTopic() {
               </Match>
             </Switch>
 
-            <Show when={true && blurWidth()}>
+            {/* <Show when={true && blurWidth()}> */}
+            <Show when={!user.user.member && blurWidth()}>
               <div
                 class="absolute flex flex-col right-0 z-50 w-full"
                 style={{
