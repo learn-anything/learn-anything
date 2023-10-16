@@ -40,12 +40,14 @@ export async function updateUserMemberUntilDate(hankoId: string, date: Date) {
 }
 
 export async function createUser(email: string, hankoId: string) {
+  console.log("trying to create user")
   const res = await e
     .insert(e.User, {
       email: email,
       hankoId: hankoId
     })
     .run(client)
+  console.log(res, "res....")
   return res?.id
 }
 
