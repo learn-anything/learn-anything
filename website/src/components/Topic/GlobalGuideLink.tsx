@@ -72,10 +72,14 @@ export default function GlobalGuideLink(props: Props) {
               }}
               class={clsx(
                 "cursor-pointer rounded-[2px] flex dark:hover:bg-neutral-950 items-center hover:border-none transition-all justify-center border h-[26px] w-[26px] border-[#69696951] dark:border-[#282828]",
-                true && "bg-red-500 border-none transition-all"
+                false && "bg-red-500 border-none transition-all"
               )}
             >
-              <Icon name="Heart" fill="white" border={true ? "red" : "black"} />
+              <Icon
+                name="Heart"
+                fill="white"
+                border={false ? "red" : "black"}
+              />
             </div>
             <div
               onClick={async () => {
