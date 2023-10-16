@@ -24,6 +24,7 @@ export default function GuideNav() {
   const [showIcon, setShowIcon] = createSignal("light")
 
   // TODO: make it into effect so it switches when user changes theme whilst site is loaded
+  // https://discord.com/channels/722131463138705510/1163448241577283675/1163453275400585216
   onMount(() => {
     const darkTheme =
       window.matchMedia &&
@@ -125,11 +126,6 @@ export default function GuideNav() {
                   navigate("/")
                 }}
               >
-                {/* add logo only when it looks good and clean. need clean svg */}
-                {/* <img class="rounded-full" src="/logo.png" alt="" /> */}
-                {/* <Icon name="Home" /> */}
-                {/* TODO: does not work for now */}
-
                 <Show
                   when={showIcon() === "light"}
                   fallback={

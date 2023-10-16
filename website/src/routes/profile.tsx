@@ -1,10 +1,9 @@
 import { useNavigate } from "solid-start"
 import { useUser } from "../GlobalContext/user"
 import { Match, Switch, createSignal, onMount } from "solid-js"
-import TopicNav from "../components/Topic/TopicNav"
 import clsx from "clsx"
 import Icon from "../components/Icon"
-import { Search, createSearchState } from "../components/Search"
+import { Search, SearchResult, createSearchState } from "../components/Search"
 
 export default function Profile() {
   const user = useUser()
