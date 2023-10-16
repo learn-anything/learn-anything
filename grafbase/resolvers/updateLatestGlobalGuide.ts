@@ -28,7 +28,6 @@ export default async function updateLatestGlobalGuideResolver(
       return { ...section, summary: fixedSummary }
     })
     const hankoId = await hankoIdFromToken(context)
-    console.log(hankoId, "hanko id")
     if (hankoId) {
       await updateGlobalTopic(hankoId, {
         name: args.topicName,

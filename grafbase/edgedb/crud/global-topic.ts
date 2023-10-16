@@ -77,48 +77,76 @@ export async function addLinkToSectionOfGlobalTopic(
   sectionName: string,
   linkUrl: string
 ) {
-  const link = await e
-    .select(e.GlobalLink, (gl) => ({
-      filter_single: { url: linkUrl }
+  // check section exists in topic guide
+  const section = await e
+    .select(e.GlobalGuideSection, (section) => ({
+      filter: e.all(
+        e.set(
+          e.op(
+            section["<sections[is GlobalGuide]"][
+              "<latestGlobalGuide[is GlobalTopic]"
+            ].name,
+            "=",
+            globalTopicName
+          ),
+          e.op(section.title, "=", sectionName)
+        )
+      )
     }))
     .run(client)
 
-  // check section exists in topic guide
-  const section = await e.select(e.GlobalGuideSection, (section) => ({
-    filter: e.op(
-      section["<sections is GlobalGuide"]["<latestGlobalGuide is GlobalTopic"]
-        .name,
-      "=",
-      globalTopicName
-    )
-  }))
+  if (section.length === 0) {
+    const sectionToAdd = await e
+      .insert(e.GlobalGuideSection, {
+        title: sectionName,
+        links: e.select(e.GlobalLink, (gl) => ({
+          filter: e.op(gl.url, "=", linkUrl)
+        }))
+      })
+      .run(client)
 
-  return
+    await e
+      .update(e.GlobalGuide, (guide) => ({
+        filter: e.op(
+          guide["<latestGlobalGuide[is GlobalTopic]"].name,
+          "=",
+          globalTopicName
+        ),
+        set: {
+          sections: {
+            "+=": e.select(e.GlobalGuideSection, (s) => ({
+              filter: e.op(s.id, "=", e.uuid(sectionToAdd.id))
+            }))
+          }
+        }
+      }))
+      .run(client)
+    return
+  }
+
   await e
-    .update(e.GlobalGuide, (guide) => ({
-      filter: e.op(
-        guide["<latestGlobalGuide[is GlobalTopic]"].name,
-        "=",
-        globalTopicName
+    .update(e.GlobalGuideSection, (section) => ({
+      filter: e.all(
+        e.set(
+          e.op(
+            section["<sections[is GlobalGuide]"][
+              "<latestGlobalGuide[is GlobalTopic]"
+            ].name,
+            "=",
+            globalTopicName
+          ),
+          e.op(section.title, "=", sectionName)
+        )
       ),
       set: {
-        sections: {
-          "+=": e.insert(e.GlobalGuideSection, {
-            title: sectionName
-          })
+        links: {
+          "+=": e.select(e.GlobalLink, (gl) => ({
+            filter: e.op(gl.url, "=", linkUrl)
+          }))
         }
       }
     }))
     .run(client)
-
-  // await e.update(e.GlobalGuideSection, (section) => ({
-  //   filter: e.op(section.title, "=", sectionName),
-  //   links: {
-  //     "+=": e.select(e.GlobalLink, (gl) => ({
-  //       filter: e.op(gl.url, "=", linkUrl)
-  //     }))
-  //   }
-  // }))
 }
 
 export async function moveAllLinksOfGlobalTopicToSectionOther(

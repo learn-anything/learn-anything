@@ -62,7 +62,6 @@ export default function GlobalTopic() {
       `}</style>
       <div class="w-screen fixed top-0 right-0 h-screen text-black dark:text-white bg-white dark:bg-[#1C1C1C]">
         <GuideNav />
-
         <div class="h-[90%] w-full flex">
           <div
             id="InfoMain"

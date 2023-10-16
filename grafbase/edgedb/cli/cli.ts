@@ -1,6 +1,10 @@
 import { splitUrlByProtocol } from "../../lib/util"
 import { addGlobalLink } from "../crud/global-link"
-import { addLinkToSectionOfGlobalTopic } from "../crud/global-topic"
+import {
+  addLinkToSectionOfGlobalTopic,
+  createGlobalTopicWithGlobalGuide,
+  moveAllLinksOfGlobalTopicToSectionOther
+} from "../crud/global-topic"
 import {
   Topic,
   findFilePath,
@@ -11,22 +15,22 @@ import {
 async function main() {
   // const topic = await getGlobalTopic(hankoId, "3d-printing")
   // console.log(topic)
-  await addLinkToSectionOfGlobalTopic(
-    "blogs",
-    "Favorite blogs",
-    "brandur.org/articles"
-  )
-  return
+  // await addLinkToSectionOfGlobalTopic(
+  //   "blogs",
+  //   "Favorite blogs",
+  //   "huyenchip.com/blog"
+  // )
   const paths = await getMarkdownPaths()
-  const parts = paths[1]!.split("/")
+  const parts = paths[2]!.split("/")
   const fileName = parts[parts.length - 1] // Get the last part which is the filename
   const topicName = fileName!.split(".")[0]
-  // console.log(topicName)
+  console.log(topicName)
 
-  // await createGlobalTopicWithGlobalGuide(topicName!, "Blogs", "")
-  // await processLinksFromMarkdownFilesAsGlobalLinks(topicName!)
+  // await deleteSectionsInGlobalTopic(topicName)
+  // await createGlobalTopicWithGlobalGuide(topicName!, "Solving problems", "")
+  await processLinksFromMarkdownFilesAsGlobalLinks(topicName!)
   await moveLinksFromSectionsToGuide(topicName!)
-  // await moveAllLinksOfGlobalTopicToSectionOther(topicName!)
+  await moveAllLinksOfGlobalTopicToSectionOther(topicName!)
   console.log("done")
 }
 
@@ -75,9 +79,8 @@ async function processLinksFromMarkdownFilesAsGlobalLinks(fileName: string) {
 }
 
 async function processLinksBySection(topic: Topic) {
-  topic.links.map(async (link) => {
+  for (const link of topic.links) {
     if (link.section) {
-      console.log(link, "link")
       const [urlWithoutProtocol, protocol] = splitUrlByProtocol(link.url)
       if (urlWithoutProtocol && protocol) {
         await addLinkToSectionOfGlobalTopic(
@@ -87,7 +90,7 @@ async function processLinksBySection(topic: Topic) {
         )
       }
     }
-  })
+  }
 }
 
 async function processLinks(topic: Topic) {

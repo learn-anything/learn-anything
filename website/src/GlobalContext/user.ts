@@ -38,10 +38,10 @@ export function createUserState(mobius: MobiusType) {
       }
     })
     console.log(res)
-    // if (res) {
-    //   // @ts-ignore
-    //   setUser({ member: res?.data?.getUserDetails.isMember })
-    // }
+    if (res) {
+      // @ts-ignore
+      setUser({ member: res?.data?.getUserDetails.isMember })
+    }
 
     // TODO: move this cookie reading into lib function
     // also there has to be better way to do this than this

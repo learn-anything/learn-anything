@@ -17,11 +17,11 @@ export async function hankoIdFromToken(context: Context) {
     new URL(`${process.env.PUBLIC_HANKO_API_URL}/.well-known/jwks.json`)
   )
   const hankoToken = authHeader.split(" ")[1]
-  const verifiedJWT = await jwtVerify(hankoToken ?? "", JWKS)
-
-  if (!verifiedJWT) {
+  try {
+    const verifiedJWT = await jwtVerify(hankoToken ?? "", JWKS)
+    const hankoId = verifiedJWT.payload.sub
+    return hankoId
+  } catch (err) {
     throw new GraphQLError("Verification failed")
   }
-  const hankoId = verifiedJWT.payload.sub
-  return hankoId
 }
