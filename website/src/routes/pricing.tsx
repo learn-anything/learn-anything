@@ -1,7 +1,6 @@
-import { Show, createSignal, onMount } from "solid-js"
+import { Show, createSignal } from "solid-js"
 import { useNavigate } from "solid-start"
 import clsx from "clsx"
-import { signedIn } from "../../lib/auth"
 import { useMobius } from "../root"
 import Icon from "../components/Icon"
 import ModalWithMessageAndButton from "../components/ModalWithMessageAndButton"
@@ -252,9 +251,12 @@ export default function Pricing() {
                 (keep your content in markdown, just have first class sync to
                 LA, automatic indexing of all your notes and creation of{" "}
                 <a href="https://chat.openai.com">ChatGPT</a> like AI interface
-                to all your knowledge with different privacy controls). And a
-                lot lot more. The code is open. The data is open. It's up to you
-                what this project can become.
+                to all your knowledge with different privacy controls). Better
+                version of <a href="https://x.com">X</a> with full control of
+                the algorithm, the client and all the data flowing through the
+                system with payouts to creators done in instant and not monthly.
+                And a lot lot more. The code is open. The data is open. It's up
+                to you what this project can become.
               </div>
             </div>
           </div>

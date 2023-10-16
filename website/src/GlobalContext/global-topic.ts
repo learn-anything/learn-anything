@@ -121,7 +121,17 @@ export default function createGlobalTopic(mobius: MobiusType) {
       latestGlobalGuide: topicData.latestGlobalGuide,
       links: topicData.links
     })
-    // console.log(unwrap(globalTopic), "global topic")
+    const res = await mobius.query({
+      getGlobalTopic: {
+        where: {
+          topicName: topicName
+        },
+        select: {
+          learningStatus: true
+        }
+      }
+    })
+    console.log(res, "res")
   })
 
   return {

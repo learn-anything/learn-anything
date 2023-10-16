@@ -7,6 +7,25 @@ export interface User {
   name?: string
 }
 
+export async function getUserDetails(hankoId: string) {
+  const user = await e
+    .select(e.User, (u) => ({
+      filter_single: e.op(u.hankoId, "=", hankoId),
+      memberUntil: true
+    }))
+    .run(client)
+  const currentDate = new Date()
+  if (user?.memberUntil && user.memberUntil > currentDate) {
+    return {
+      isMember: true
+    }
+  } else {
+    return {
+      isMember: false
+    }
+  }
+}
+
 export async function updateUserMemberUntilDate(hankoId: string, date: Date) {
   const res = await e
     .update(e.User, (user) => ({

@@ -1,21 +1,24 @@
 import { UserClient } from "@teamhanko/hanko-frontend-sdk"
 import { createContext, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
+import { MobiusType } from "../root"
 
 type User = {
   username: string
   email: string
   signedIn: boolean
   member: boolean
+  admin: boolean
 }
 
 // global state of user
-export function createUserState() {
+export function createUserState(mobius: MobiusType) {
   const [user, setUser] = createStore<User>({
     username: "",
     email: "",
     signedIn: false,
-    member: true
+    member: false,
+    admin: true
   })
 
   onMount(async () => {
@@ -28,6 +31,17 @@ export function createUserState() {
     const hankoUser = await userClient.getCurrent()
     const email = hankoUser.email
     setUser({ email, signedIn: true })
+
+    const res = await mobius.query({
+      getUserDetails: {
+        isMember: true
+      }
+    })
+    console.log(res)
+    if (res) {
+      // @ts-ignore
+      setUser({ member: res?.data?.getUserDetails.isMember })
+    }
 
     // TODO: move this cookie reading into lib function
     // also there has to be better way to do this than this

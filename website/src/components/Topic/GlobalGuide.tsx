@@ -127,8 +127,9 @@ export default function GlobalGuide() {
             return (
               <GuideSection
                 title={section.title}
+                // @ts-ignore
                 links={section.links}
-                summary="Hey there"
+                summary={section.summary}
               />
             )
           }}

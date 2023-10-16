@@ -67,7 +67,7 @@ g.query("getUserDetails", {
   args: {},
   returns: g.ref(
     g.type("getUserDetailsOutput", {
-      email: g.string()
+      isMember: g.boolean()
     })
   ),
   resolver: "getUserDetails"

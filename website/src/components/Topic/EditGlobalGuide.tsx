@@ -13,16 +13,20 @@ import {
 } from "@thisbeyond/solid-dnd"
 import GlobalLinkEditModal from "../GlobalLinkEditModal"
 import { getHankoCookie } from "../../../lib/auth"
+import { useUser } from "../../GlobalContext/user"
+import ModalWithMessageAndButton from "../ModalWithMessageAndButton"
 
 export default function EditGlobalGuide() {
   const topic = useGlobalTopic()
-  const mobius = useMobius()
+  const user = useUser()
   const navigate = useNavigate()
 
   const [linkIdToEdit, setLinkToEdit] = createSignal("")
   const [sectionOfLinkEdited, setSectionOfLinkEdited] = createSignal("")
 
   const [container, setContainer] = createSignal<HTMLDivElement>()
+  const [showCantEditGuideModal, setShowCantEditGuideModal] =
+    createSignal(false)
 
   const editor = createTiptapEditor(() => ({
     element: container()!,
@@ -95,6 +99,18 @@ export default function EditGlobalGuide() {
     }
   `}</style>
       <div class="w-full flex flex-col gap-4 text-[16px] leading-[18.78px] ">
+        <Show when={showCantEditGuideModal()}>
+          <ModalWithMessageAndButton
+            message="Ability to edit personal and global guides will be coming soon 😻"
+            buttonText="Join Discord to test beta version out"
+            buttonAction={() => {
+              window.open("https://discord.com/invite/bxtD8x6aNF")
+            }}
+            onClose={() => {
+              setShowCantEditGuideModal(false)
+            }}
+          />
+        </Show>
         <div class="flex justify-between items-center ">
           <div
             class="border-[#696969] dark:border-gray-200 dark:hover:bg-gray-200 dark:hover:text-black border p-[8px] px-[10px] rounded-[4px] text-[#696969] dark:text-white font-light hover:bg-gray-300 hover:bg-opacity-50 cursor-pointer transition-all"
@@ -112,6 +128,10 @@ export default function EditGlobalGuide() {
           </div>
           <div
             onClick={async () => {
+              if (!user.user.admin) {
+                setShowCantEditGuideModal(true)
+                return
+              }
               // TODO: check all data is valid, if not, show error with what is the problem
               // TODO: after data validation, send grafbase mutation to update global topic
 
@@ -151,7 +171,7 @@ export default function EditGlobalGuide() {
                   variables
                 })
               })
-              console.log(res, "res")
+              // console.log(res, "res")
 
               // TODO: issue with mobius, something about it not escaping strings properly
               // const res = await mobius.mutate({

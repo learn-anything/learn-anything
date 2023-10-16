@@ -1,7 +1,9 @@
-import { client } from "../client"
-import { addGlobalLink, updateGlobalLinkStatus } from "../crud/global-link"
-import { getGlobalTopic } from "../crud/global-topic"
-import { updateMemberUntilOfUser } from "../crud/user"
+import { splitUrlByProtocol } from "../../lib/util"
+import { addGlobalLink } from "../crud/global-link"
+import {
+  addLinkToSectionOfGlobalTopic,
+  moveAllLinksOfGlobalTopicToSectionOther
+} from "../crud/global-topic"
 import {
   Topic,
   findFilePath,
@@ -9,72 +11,18 @@ import {
   parseMdFile
 } from "../sync/markdown"
 
-// "2023-10-24T22:00:00+00:00" old
-// 2023-11-13T15:03:06.000Z new
 async function main() {
-  const hankoId = process.env.LOCAL_USER_HANKO_ID!
-  // const res = await updateTopicLearningStatus(
-  //   hankoId,
-  //   "asking-questions",
-  //   "none"
-  // )
-  // const res = await updateGlobalLinkStatus(
-  //   hankoId,
-  //   "c29b845c-45ea-11ee-aedd-ffb76be6287b",
-  //   "uncomplete"
-  // )
-  // const res = await getGlobalTopic("asking-questions", hankoId)
-  // console.dir(res, { depth: null })
-  // console.log(res)
-  // const paths = await getMarkdownPaths()
-  // const parts = paths[0]!.split("/")
-  // const fileName = parts[parts.length - 1] // Get the last part which is the filename
-  // const topicName = fileName!.split(".")[0]
+  // const topic = await getGlobalTopic(hankoId, "3d-printing")
+  // console.log(topic)
+  const paths = await getMarkdownPaths()
+  const parts = paths[1]!.split("/")
+  const fileName = parts[parts.length - 1] // Get the last part which is the filename
+  const topicName = fileName!.split(".")[0]
   // console.log(topicName)
 
-  const email = "nikita@nikiv.dev"
-  const timestamp = 1923428131
-  // const iso8601_format = new Date(timestamp * 1000)
-  // console.log(iso8601_format)
-
-  // const res = await client.querySingle(
-  //   `
-  //   update User
-  //   filter .email = <str>$email
-  //   set {
-  //     memberUntil:= <datetime>$iso8601_format
-  //   }
-  // `,
-  //   { email, iso8601_format }
-  // )
-  // console.log(res, "res")
-
-  await updateMemberUntilOfUser(email, timestamp)
-
-  // const topic = await getTopicByFileName("3d-printing")
-  // console.log(topic?.name)
-
-  // const topic = {
-  //   name: "3d-printing",
-  //   prettyName: "3D Printing",
-  //   topicSummary:
-  //     "3D printing or additive manufacturing is the construction of a three-dimensional object from a CAD model or a digital 3D model.",
-  //   sections: [
-  //     {
-  //       title: "Intro",
-  //       summary: "Intro to 3D printing",
-  //       linkIds: [],
-  //     },
-  //     {
-  //       title: "Other",
-  //       summary: "Other links",
-  //       linkIds: [],
-  //     },
-  //   ],
-  // } as GlobalTopic
-  // await updateGlobalTopic(process.env.LOCAL_USER_HANKO_ID!, topic)
-
-  // await processLinksFromMarkdownFilesAsGlobalLinks(topic?.name)
+  // await createGlobalTopicWithGlobalGuide(topicName!, "Blogs", "")
+  // await processLinksFromMarkdownFilesAsGlobalLinks(topicName!)
+  await moveLinksFromSectionsToGuide(topicName!)
   // await moveAllLinksOfGlobalTopicToSectionOther(topicName!)
   console.log("done")
 }
@@ -101,6 +49,17 @@ async function getTopicByFileName(fileName: string) {
   }
 }
 
+async function moveLinksFromSectionsToGuide(fileName: string) {
+  const filePath = await findFilePath(
+    process.env.wikiFolderPath!,
+    fileName + ".md"
+  )
+  if (filePath) {
+    const topic = await parseMdFile(filePath)
+    await processLinksBySection(topic)
+  }
+}
+
 async function processLinksFromMarkdownFilesAsGlobalLinks(fileName: string) {
   const filePath = await findFilePath(
     process.env.wikiFolderPath!,
@@ -110,6 +69,22 @@ async function processLinksFromMarkdownFilesAsGlobalLinks(fileName: string) {
     const topic = await parseMdFile(filePath)
     await processLinks(topic)
   }
+}
+
+async function processLinksBySection(topic: Topic) {
+  topic.links.map(async (link) => {
+    if (link.section) {
+      console.log(link, "link")
+      const [urlWithoutProtocol, protocol] = splitUrlByProtocol(link.url)
+      if (urlWithoutProtocol && protocol) {
+        await addLinkToSectionOfGlobalTopic(
+          topic.name,
+          link.section,
+          urlWithoutProtocol
+        )
+      }
+    }
+  })
 }
 
 async function processLinks(topic: Topic) {
@@ -146,6 +121,66 @@ async function processLinks(topic: Topic) {
 
 // TODO: move it away after release, is here as reference in trying to get all the topics ported for release
 async function oneOffActions() {
+  // await processLinksFromMarkdownFilesAsGlobalLinks(topicName!)
+  // const hankoId = process.env.LOCAL_USER_HANKO_ID!
+  // const res = await getUserDetails(hankoId)
+  // console.log(res, "res")
+  // const res = await updateTopicLearningStatus(
+  //   hankoId,
+  //   "asking-questions",
+  //   "none"
+  // )
+  // const res = await updateGlobalLinkStatus(
+  //   hankoId,
+  //   "c29b845c-45ea-11ee-aedd-ffb76be6287b",
+  //   "uncomplete"
+  // )
+  // const res = await getGlobalTopic("asking-questions", hankoId)
+  // console.dir(res, { depth: null })
+  // console.log(res)
+  // const paths = await getMarkdownPaths()
+  // const parts = paths[0]!.split("/")
+  // const fileName = parts[parts.length - 1] // Get the last part which is the filename
+  // const topicName = fileName!.split(".")[0]
+  // console.log(topicName)
+  // const email = "nikita@nikiv.dev"
+  // const timestamp = 1923428131
+  // const iso8601_format = new Date(timestamp * 1000)
+  // console.log(iso8601_format)
+  // const res = await client.querySingle(
+  //   `
+  //   update User
+  //   filter .email = <str>$email
+  //   set {
+  //     memberUntil:= <datetime>$iso8601_format
+  //   }
+  // `,
+  //   { email, iso8601_format }
+  // )
+  // console.log(res, "res")
+  // const timestamp = 1684010131
+  // await updateMemberUntilOfUser(email, timestamp)
+  // const topic = await getTopicByFileName("3d-printing")
+  // console.log(topic?.name)
+  // const topic = {
+  //   name: "3d-printing",
+  //   prettyName: "3D Printing",
+  //   topicSummary:
+  //     "3D printing or additive manufacturing is the construction of a three-dimensional object from a CAD model or a digital 3D model.",
+  //   sections: [
+  //     {
+  //       title: "Intro",
+  //       summary: "Intro to 3D printing",
+  //       linkIds: [],
+  //     },
+  //     {
+  //       title: "Other",
+  //       summary: "Other links",
+  //       linkIds: [],
+  //     },
+  //   ],
+  // } as GlobalTopic
+  // await updateGlobalTopic(process.env.LOCAL_USER_HANKO_ID!, topic)
   // TODO: complete moving notes
   // await processNotesFromMarkdownFilesAsGlobalNotes("asking-questions")
   // await getMarkdownPaths()

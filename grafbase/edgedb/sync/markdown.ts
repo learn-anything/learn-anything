@@ -49,6 +49,8 @@ export type Link = {
   relatedLinks: RelatedLink[]
   // year link was created in
   year?: string
+  // for links that are part of a section
+  section?: string
 }
 
 export type RelatedLink = {
@@ -138,6 +140,7 @@ export async function parseMdFile(filePath: string): Promise<Topic> {
   let gotTitleFromFrontMatter = false
   let gotTitle = false
   let topicsReferenced: string[] = []
+  let parsingSection = ""
 
   for (const node of tree.children) {
     // console.log(node, "node")
@@ -157,6 +160,17 @@ export async function parseMdFile(filePath: string): Promise<Topic> {
           }
         }
       })
+    }
+
+    if (
+      node.type === "heading" &&
+      node.depth === 2 &&
+      node.children[0].type === "text" &&
+      node.children[0].value !== "Notes" &&
+      node.children[0].value !== "Links"
+    ) {
+      parsingSection = node.children[0].value
+      continue
     }
 
     // if front matter exists, start parsing it
@@ -288,6 +302,96 @@ export async function parseMdFile(filePath: string): Promise<Topic> {
             additionalContent: subnotes.join("\n"), // TODO: maybe need to change
             url: noteUrl,
             public: true
+          })
+        })
+      }
+      continue
+    }
+
+    if (parsingSection) {
+      if (node.type === "heading") {
+        parsingSection = ""
+        continue
+      }
+      // node.type === "heading" &&
+      // node.depth === 2 &&
+      // node.children[0].type === "text" &&
+      // node.children[0].value !== "Notes" &&
+      // node.children[0].value !== "Links"
+      if (node.type === "list") {
+        node.children.forEach((linkNode) => {
+          let linkTitle = ""
+          let linkUrl = ""
+          let linkDescription = ""
+          let relatedLinks: { title: string; url: string }[] = []
+          let year: string | undefined
+
+          linkNode.children.forEach((link) => {
+            // console.log(link, "link")
+            if (link.type === "paragraph") {
+              link.children.forEach((linkDetail) => {
+                // console.log(linkDetail, "link detail")
+                // example link with related links:
+                // - [Hope UI](https://github.com/fabien-ml/hope-ui) - SolidJS component library you've hoped for. ([Docs](https://hope-ui.com/docs/getting-started))
+                // linkTitle is Hope UI. linkUrl is https://github.com/fabien-ml/hope-ui. linkDescription is SolidJS component library you've hoped for.
+                // relatedLinks is [{title: Docs, url: https://hope-ui.com/docs/getting-started}]
+
+                // get link title and url
+                // it uses position.start.column because without it, it will capture linkDescription I think
+                // TODO: how to improve? it might not even work properly currently
+                if (
+                  linkDetail.type === "link" &&
+                  linkDetail.position &&
+                  linkDetail.position.start.column < 15 &&
+                  linkDetail.children[0].type === "text"
+                ) {
+                  linkTitle = linkDetail.children[0].value
+                  linkUrl = linkDetail.url
+                }
+                // get description
+                // description starts with Capital letter and ends with a .
+                else if (linkDetail.type === "text") {
+                  if (linkDetail.value.length > 5) {
+                    linkDescription = linkDetail.value.replace(
+                      /^[^a-zA-Z]+|[\s(]+$/g,
+                      ""
+                    )
+                  }
+                }
+                // capture related links
+                // in above example, this will be
+                // ([Docs](https://hope-ui.com/docs/getting-started))
+                // where Docs is title
+                // https://hope-ui.com/docs/getting-started is url
+                // there can be more than 1 related link
+                else if (
+                  linkDetail.type === "link" &&
+                  linkDetail.position &&
+                  linkDetail.position.start.column > 15 &&
+                  linkDetail.children[0].type === "text"
+                ) {
+                  relatedLinks.push({
+                    title: linkDetail.children[0].value,
+                    url: linkDetail.url
+                  })
+                }
+              })
+            }
+            const yearRegex = /\((\d{4})\)/
+            const yearMatch = linkTitle.match(yearRegex)
+            if (yearMatch) {
+              year = yearMatch[1]
+              linkTitle = linkTitle.replace(yearRegex, "").trim()
+            }
+            links.push({
+              title: linkTitle,
+              url: linkUrl,
+              description: linkDescription,
+              relatedLinks,
+              public: true,
+              section: parsingSection,
+              year
+            })
           })
         })
       }

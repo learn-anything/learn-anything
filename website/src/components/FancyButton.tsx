@@ -9,15 +9,21 @@ interface Props {
 
 export default function FancyButton(props: Props) {
   createEffect(() => {
-    const CONTROLS = document.querySelectorAll("button")
+    // const CONTROLS = document.querySelectorAll("button")
+    // @ts-ignore
     const UPDATE = ({ x, y }) => {
       const ELEMENT = document.elementFromPoint(x, y)
-      const CONTROL = ELEMENT.closest(".control")
-      if (CONTROL) {
-        const BOUNDS = CONTROL.getBoundingClientRect()
-        CONTROL.style.setProperty("--rx", (x - BOUNDS.x) / BOUNDS.width)
-        CONTROL.style.setProperty("--x", (x - BOUNDS.x) / BOUNDS.width)
-        CONTROL.style.setProperty("--y", (y - BOUNDS.y) / BOUNDS.height)
+      if (ELEMENT) {
+        const CONTROL = ELEMENT.closest(".control")
+        if (CONTROL) {
+          const BOUNDS = CONTROL.getBoundingClientRect()
+          // @ts-ignore
+          CONTROL.style.setProperty("--rx", (x - BOUNDS.x) / BOUNDS.width)
+          // @ts-ignore
+          CONTROL.style.setProperty("--x", (x - BOUNDS.x) / BOUNDS.width)
+          // @ts-ignore
+          CONTROL.style.setProperty("--y", (y - BOUNDS.y) / BOUNDS.height)
+        }
       }
     }
 

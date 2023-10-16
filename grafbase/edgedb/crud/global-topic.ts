@@ -72,6 +72,42 @@ export async function deleteSectionsInGlobalTopic(globalTopicName: string) {
     .run(client)
 }
 
+export async function addLinkToSectionOfGlobalTopic(
+  globalTopicName: string,
+  sectionName: string,
+  linkUrl: string
+) {
+  const section = await e.select(e.GlobalGuideSection, (section) => ({
+    // filter: e.all()
+  }))
+  return
+  await e
+    .update(e.GlobalGuide, (guide) => ({
+      filter: e.op(
+        guide["<latestGlobalGuide[is GlobalTopic]"].name,
+        "=",
+        globalTopicName
+      ),
+      set: {
+        sections: {
+          "+=": e.insert(e.GlobalGuideSection, {
+            title: sectionName
+          })
+        }
+      }
+    }))
+    .run(client)
+
+  // await e.update(e.GlobalGuideSection, (section) => ({
+  //   filter: e.op(section.title, "=", sectionName),
+  //   links: {
+  //     "+=": e.select(e.GlobalLink, (gl) => ({
+  //       filter: e.op(gl.url, "=", linkUrl)
+  //     }))
+  //   }
+  // }))
+}
+
 export async function moveAllLinksOfGlobalTopicToSectionOther(
   globalTopicName: string
 ) {
@@ -259,11 +295,18 @@ export async function getGlobalTopic(topicName: string, hankoId: string) {
   const userData = await e
     .select(e.User, (user) => ({
       likedLinks: e.select(e.GlobalLink, (gl) => ({
-        filter: e.op(gl.id, "in", user.likedLinks.id)
+        filter: e.all(
+          e.op(gl.id, "in", user.likedLinks.id)
+          // e.op(gl.mainTopic.name, "=", topicName)
+        )
       })),
       completedLinks: e.select(e.GlobalLink, (gl) => ({
         filter: e.op(gl.id, "in", user.completedLinks.id)
       })),
+      // TODO: finish. get both learning status and status of links liked/completed
+      // learningStatus: e.select(e.GlobalTopic, gt => ({
+      //   filter_signle
+      // })),
       filter: e.all(
         e.set(
           e.op(user.hankoId, "=", hankoId),

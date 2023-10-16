@@ -27,7 +27,7 @@ import { getHankoCookie } from "../lib/auth"
 
 // TODO: https://github.com/nikitavoloboev/la-issues/issues/54 (should stop having to manually update this schema )
 export const typeDefs = `
-"""
+""""
 De-prioritizes a fragment, causing the fragment to be omitted in the initial response and delivered as a subsequent response afterward.
 """
 directive @defer(
@@ -66,6 +66,7 @@ type Mutation {
 type Query {
   publicGetGlobalTopics: [publicGetGlobalTopicsOutput!]!
   publicGetGlobalTopic(topicName: String!): publicGetGlobalTopicOutput!
+  getUserDetails: getUserDetailsOutput!
   getGlobalLink(linkId: String!): publicGetGlobalLinkOutput!
   getGlobalTopic(topicName: String!): getGlobalTopicOutput!
   getGlobalLinks: getGlobalLinksOutput!
@@ -81,6 +82,10 @@ type getGlobalLinksOutput {
 
 type getGlobalTopicOutput {
   learningStatus: learningStatus!
+}
+
+type getUserDetailsOutput {
+  isMember: Boolean!
 }
 
 type globalGuideSection {
@@ -184,8 +189,6 @@ export function useSignIn() {
 }
 
 export default function Root() {
-  const user = createUserState()
-
   const filters: MatchFilters = {
     username: /^@.+/
   }
@@ -197,6 +200,7 @@ export default function Root() {
   })
   const global = createGlobalState(mobius)
   const globalTopic = createGlobalTopic(mobius)
+  const user = createUserState(mobius)
 
   return (
     <Html lang="en">
