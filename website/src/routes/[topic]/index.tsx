@@ -2,10 +2,10 @@ import GlobalGuide from "../../components/Topic/GlobalGuide"
 // @ts-ignore
 import { Motion } from "@motionone/solid"
 import GuideSidebar from "../../components/Topic/GuideSidebar"
-import TopicNav from "../../components/Topic/TopicNav"
 import { useGlobalState } from "../../GlobalContext/global"
 import { Match, Switch } from "solid-js"
 import GuideLinks from "../../components/Topic/GuideLinks"
+import GuideNav from "../../components/Topic/GuideNav"
 
 export default function GlobalTopic() {
   const global = useGlobalState()
@@ -16,9 +16,7 @@ export default function GlobalTopic() {
         #InfoSidebar {
           display: none;
         }
-        #InfoMain {
-          width: 100%;
-        }
+
         #InfoMain::-webkit-scrollbar {
           display: none;
         }
@@ -29,16 +27,14 @@ export default function GlobalTopic() {
         #InfoSidebar {
           display: flex;
         }
-        #InfoMain {
-          width: 100%;
-        }
+
         #InfoOptions {
           display: flex
         }
       }
       `}</style>
       <div class="w-screen fixed top-0 right-0 h-screen text-black dark:text-white bg-white dark:bg-[#1C1C1C]">
-        <TopicNav />
+        <GuideNav />
 
         <div class="h-[90%] w-full flex">
           <div

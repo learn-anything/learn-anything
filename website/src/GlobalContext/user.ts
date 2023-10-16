@@ -15,7 +15,7 @@ export function createUserState() {
     username: "",
     email: "",
     signedIn: false,
-    member: false
+    member: true
   })
 
   onMount(async () => {

@@ -17,7 +17,8 @@ interface Props {
     | "Heart"
   width?: string
   height?: string
-  color?: string
+  fill?: string
+  border?: string
   tooltip?: {
     content: string
     position: string
@@ -77,7 +78,8 @@ export default function Icon(props: Props) {
             <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
               <path
                 fill-rule="evenodd"
-                stroke="currentColor"
+                fill={props.fill}
+                stroke={props.border}
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="1.5"
@@ -234,15 +236,15 @@ export default function Icon(props: Props) {
           </Match>
           <Match when={props.name === "Checkmark"}>
             <svg
-              width="20"
-              height="20"
+              width={props.width ? props.width : "20"}
+              height={props.height ? props.height : "20"}
               viewBox="0 0 24 24"
-              fill="none"
+              fill={props.fill ? props.fill : "none"}
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
                 d="M7.75 12.75L10 15.25L16.25 8.75"
-                stroke="currentColor"
+                stroke={props.border ? props.border : "currentColor"}
                 stroke-width="1.5"
                 stroke-linecap="round"
                 stroke-linejoin="round"

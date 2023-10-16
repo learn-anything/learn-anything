@@ -1,8 +1,9 @@
 import { Match, Switch, createSignal } from "solid-js"
-import TopicNav from "../../components/Topic/TopicNav"
+
 // import Card from "../../components/Topic/Card"
 import clsx from "clsx"
 import { useTopic } from "../../GlobalContext/topic"
+import GuideNav from "../../components/Topic/GuideNav"
 // import ProfilePage from "../../components/ProfilePage"
 
 export default function UserProfile() {
@@ -45,7 +46,7 @@ export default function UserProfile() {
     }
     `}</style>
       <div class="w-screen h-full text-black bg-white dark:bg-neutral-900 dark:text-white">
-        <TopicNav />
+        <GuideNav />
 
         <div id="ProfileMain" class="h-full w-full flex justify-center">
           <div
@@ -93,7 +94,7 @@ export default function UserProfile() {
                 class={clsx(
                   "p-2 cursor-pointer",
                   currentTab() === "All" &&
-                    "border-b border-black text-black font-bold",
+                    "border-b border-black text-black font-bold"
                 )}
                 onClick={() => {
                   setCurrentTab("All")
@@ -105,7 +106,7 @@ export default function UserProfile() {
                 class={clsx(
                   "p-2 cursor-pointer",
                   currentTab() === "ToLearn" &&
-                    "border-b border-black text-black font-bold",
+                    "border-b border-black text-black font-bold"
                 )}
                 onClick={() => {
                   setCurrentTab("ToLearn")
@@ -117,7 +118,7 @@ export default function UserProfile() {
                 class={clsx(
                   "p-2 cursor-pointer",
                   currentTab() === "Learning" &&
-                    "border-b border-black text-black font-bold",
+                    "border-b border-black text-black font-bold"
                 )}
                 onClick={() => {
                   setCurrentTab("Learning")
@@ -129,7 +130,7 @@ export default function UserProfile() {
                 class={clsx(
                   "p-2 cursor-pointer",
                   currentTab() === "Learned" &&
-                    "border-b border-black text-black font-bold",
+                    "border-b border-black text-black font-bold"
                 )}
                 onClick={() => {
                   setCurrentTab("Learned")

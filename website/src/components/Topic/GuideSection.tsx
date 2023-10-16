@@ -1,6 +1,6 @@
 import { For, Show, onMount } from "solid-js"
-import GlobalLink from "../GlobalLink"
 import clsx from "clsx"
+import GlobalGuideLink from "./GlobalGuideLink"
 
 type Link = {
   title: string
@@ -38,7 +38,7 @@ export default function GuideSection(props: Props) {
         <For each={props.links}>
           {(link) => {
             return (
-              <GlobalLink
+              <GlobalGuideLink
                 title={link.title}
                 url={link.url}
                 id={link.id}

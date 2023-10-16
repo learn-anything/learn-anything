@@ -1,6 +1,7 @@
 import { Show } from "solid-js"
-import Icon from "./Icon"
-import { useMobius } from "../root"
+import Icon from "../Icon"
+import { useMobius } from "../../root"
+import clsx from "clsx"
 
 interface Props {
   title: string
@@ -11,7 +12,7 @@ interface Props {
   description?: string
 }
 
-export default function GlobalLink(props: Props) {
+export default function GlobalGuideLink(props: Props) {
   const mobius = useMobius()
   return (
     <div
@@ -69,9 +70,12 @@ export default function GlobalLink(props: Props) {
                   }
                 })
               }}
-              class="cursor-pointer rounded-[2px] flex dark:hover:bg-neutral-950 items-center hover:border-none transition-all justify-center border h-[30px] w-[30px] border-[#69696951] dark:border-[#282828]"
+              class={clsx(
+                "cursor-pointer rounded-[2px] flex dark:hover:bg-neutral-950 items-center hover:border-none transition-all justify-center border h-[26px] w-[26px] border-[#69696951] dark:border-[#282828]",
+                true && "bg-red-500 border-none transition-all"
+              )}
             >
-              <Icon name="Heart" />
+              <Icon name="Heart" fill="white" border={true ? "red" : "black"} />
             </div>
             <div
               onClick={async () => {
@@ -85,9 +89,17 @@ export default function GlobalLink(props: Props) {
                   }
                 })
               }}
-              class="cursor-pointer rounded-[2px] dark:hover:bg-neutral-950 hover:border-none border flex items-center transition-all justify-center h-[30px] w-[30px] border-[#69696951] dark:border-[#282828]"
+              class={clsx(
+                "cursor-pointer rounded-[2px] dark:hover:bg-neutral-950 hover:border-none border flex items-center transition-all justify-center h-[26px] w-[26px] border-[#69696951] dark:border-[#282828]",
+                true && "bg-blue-500 bg-opacity border-none"
+              )}
             >
-              <Icon name="Checkmark" />
+              <Icon
+                name="Checkmark"
+                border={true ? "white" : "black"}
+                width="24"
+                height="24"
+              />
             </div>
           </div>
         </div>

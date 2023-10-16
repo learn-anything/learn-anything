@@ -2,7 +2,7 @@ import { For } from "solid-js"
 import { useGlobalState } from "../../GlobalContext/global"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import FancyButton from "../FancyButton"
-import Card from "./Card"
+
 import { useMobius } from "../../root"
 
 export default function GuideSidebar() {
@@ -150,9 +150,9 @@ export default function GuideSidebar() {
             </div> */}
           </div>
         </div>
-        <div id="Learners" class="text-[#696969]">
+        {/* <div id="Learners" class="text-[#696969]">
           <Card name="Learners"></Card>
-        </div>
+        </div> */}
       </div>
     </>
   )

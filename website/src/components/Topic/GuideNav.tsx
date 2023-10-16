@@ -10,7 +10,7 @@ import clsx from "clsx"
 import FancyButton from "../FancyButton"
 
 // TODO: add fuzzy searching for topics. also consider lower case inputs matching results too
-export default function TopicNav() {
+export default function GuideNav() {
   const [showInput, setShowInput] = createSignal(false)
   const navigate = useNavigate()
   const topic = useGlobalTopic()

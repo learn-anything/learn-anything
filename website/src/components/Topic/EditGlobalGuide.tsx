@@ -14,7 +14,7 @@ import {
 import GlobalLinkEditModal from "../GlobalLinkEditModal"
 import { getHankoCookie } from "../../../lib/auth"
 
-export default function GuideSummaryEdit() {
+export default function EditGlobalGuide() {
   const topic = useGlobalTopic()
   const mobius = useMobius()
   const navigate = useNavigate()
@@ -172,7 +172,7 @@ export default function GuideSummaryEdit() {
             Submit Changes
           </div>
         </div>
-        <div class="border-[1px] dark:border-[#282828] border-[#69696951] flex flex-col gap-2 rounded-[4px] w-full">
+        <div class="border-[0.5px] dark:border-[#282828] border-[#69696951] flex flex-col gap-2 rounded-[4px] w-full">
           <div class="flex justify-between items-center">
             <div class="w-full p-4" ref={setContainer} />
             <div class="text-[#3B5CCC] cursor-pointer select-none"></div>
@@ -250,7 +250,7 @@ export default function GuideSummaryEdit() {
             }))
 
             return (
-              <div class="border dark:bg-neutral-900 bg-white border-[#282828] rounded-lg flex flex-col">
+              <div class="border-[0.5px] dark:bg-neutral-900 bg-white dark:border-[#282828] border-[#69696951] rounded-lg flex flex-col">
                 <div class="flex w-full p-4">
                   <input
                     class="text-[#696969] w-full bg-transparent  font-light overflow-hidden text-ellipsis outline-none"
@@ -273,7 +273,7 @@ export default function GuideSummaryEdit() {
                         return copy
                       })
                     }}
-                    class="hover:text-white flex items-center justify-center border-red-500 border text-red-500 hover:bg-red-600 border-opacity-50 rounded-[6px] p-2 w-[180px] cursor-pointer"
+                    class="hover:text-white flex items-center justify-center transition-all border-red-500 border text-red-500 hover:bg-red-600 border-opacity-50 rounded-[6px] p-2 w-[180px] cursor-pointer"
                   >
                     Delete section
                   </div>
@@ -296,7 +296,7 @@ export default function GuideSummaryEdit() {
                             draggable(el)
                             droppable(el)
                           }}
-                          class="flex items-center dark:bg-neutral-900 bg-white gap-6 justify-between border-y  p-2 px-4 border-[#282828]"
+                          class="flex items-center dark:bg-neutral-900 bg-white gap-6 justify-between border-y-[0.5px]  p-2 px-4 dark:border-[#282828]"
                         >
                           <Show
                             when={

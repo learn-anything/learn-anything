@@ -55,7 +55,9 @@ button {
 
 button:is(:hover, :focus-visible) {
   --hover: 1;
-
+}
+#activeControl {
+  --hover: 1;
 }
 button:active {
   --active: 1;
@@ -124,10 +126,10 @@ button:before{
       </style>
       <button
         onClick={props.onClick}
+        id={props.active ? "activeControl" : ""}
         class={clsx(
           "control h-full w-full",
-          props.active &&
-            "bg-red-800 transition-all text-white hover:text-black dark:hover:text-white"
+          props.active && "transition-all border-[0.5px] border-black"
         )}
       >
         <span class="backdrop"></span>
