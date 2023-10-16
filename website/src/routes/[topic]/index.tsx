@@ -7,6 +7,7 @@ import { Match, Switch, createEffect, createSignal } from "solid-js"
 import GuideLinks from "../../components/Topic/GuideLinks"
 import GuideNav from "../../components/Topic/GuideNav"
 import clsx from "clsx"
+import FancyButton from "../../components/FancyButton"
 
 export default function GlobalTopic() {
   const global = useGlobalState()
@@ -74,10 +75,19 @@ export default function GlobalTopic() {
               }}
             >
               <div
-                class="absolute top-[-100px]  right-0 w-full bg-opacity-50 h-[100px]"
+                class="absolute top-[-100px] right-0 w-full bg-opacity-50 h-[100px]"
                 id="divider"
               ></div>
-              <div class="backdrop-blur-sm bg-opacity-50 bg-gray-200 dark:bg-black w-full h-full"></div>
+
+              <div class="backdrop-blur-sm bg-opacity-50 bg-gray-200 dark:bg-black w-full h-full">
+                <div class="h-full relative">
+                  <div class="sticky top-0 z-[60] right-0 w-full flex items-center justify-center">
+                    <div class="w-[100px]">
+                      <FancyButton>Buy</FancyButton>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <Motion.div
