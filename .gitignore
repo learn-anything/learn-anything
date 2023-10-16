@@ -12,8 +12,6 @@ app/.electron-vendors.cache.json
 docs/private.md
 docs/private-todo.md
 private
-internal
-
 # local sqlite dbs
 *.sqlite
 
