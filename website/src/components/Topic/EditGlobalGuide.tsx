@@ -113,7 +113,7 @@ export default function EditGlobalGuide() {
         </Show>
         <div class="flex justify-between items-center ">
           <div
-            class="border-[#696969] dark:border-gray-200 dark:hover:bg-gray-200 dark:hover:text-black border p-[8px] px-[10px] rounded-[4px] text-[#696969] dark:text-white font-light hover:bg-gray-300 hover:bg-opacity-50 cursor-pointer transition-all"
+            class="border-[#696969] dark:border-gray-200 dark:hover:bg-gray-200 dark:hover:text-black border p-[4px] px-[8px] text-[12px] rounded-[4px] text-[#696969] dark:text-white font-light hover:bg-gray-300 hover:bg-opacity-50 cursor-pointer transition-all"
             onClick={() => {
               // TODO: if there is modified data, ask user if it's ok to disregard made changes to go back
               let url = window.location.href
@@ -185,7 +185,7 @@ export default function EditGlobalGuide() {
               //   }
               // })
             }}
-            class="bg-[#3B5CCC] text-white border-[#3B5CCC] border px-[10px] p-[8px] rounded-[4px] font-light cursor-pointer"
+            class="bg-[#3B5CCC] text-white border-[#3B5CCC] border px-[8px] p-[4px] text-[12px] rounded-[4px] font-light cursor-pointer"
           >
             {/* TODO: do <Icon name="Loading" /> when making a request and waiting for response from grafbase */}
             {/* how to do it? */}
@@ -221,7 +221,7 @@ export default function EditGlobalGuide() {
           </Show> */}
         </div>
         <div
-          class="bg-[#3B5CCC] text-white p-3 rounded-[4px] flex justify-center items-center cursor-pointer hover:bg-[#3554b9] transition-all"
+          class="bg-[#3B5CCC] text-white p-[10px] rounded-[4px] flex justify-center items-center cursor-pointer hover:bg-[#3554b9] transition-all"
           onClick={() => {
             topic.set("latestGlobalGuide", "sections", (p) => [
               ...p,
@@ -293,7 +293,7 @@ export default function EditGlobalGuide() {
                         return copy
                       })
                     }}
-                    class="hover:text-white flex items-center justify-center transition-all border-red-500 border text-red-500 hover:bg-red-600 border-opacity-50 rounded-[6px] p-2 w-[180px] cursor-pointer"
+                    class="hover:text-white flex items-center justify-center transition-all text-[12px] border-red-500 border text-red-500 hover:bg-red-600 border-opacity-50 rounded-[6px] p-2 w-[120px] cursor-pointer"
                   >
                     Delete section
                   </div>
