@@ -120,7 +120,7 @@ export default function GlobalGuide() {
         //     "translateX(0px)"
         //   ]
         // }}
-        class={clsx("w-full gap-4 flex flex-col  rounded-[6px]", true && "")}
+        class={clsx("w-full gap-4 flex flex-col  rounded-[6px]")}
       >
         <GuideSummary />
 

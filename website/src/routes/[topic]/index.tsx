@@ -8,10 +8,12 @@ import GuideLinks from "../../components/Topic/GuideLinks"
 import GuideNav from "../../components/Topic/GuideNav"
 import clsx from "clsx"
 import FancyButton from "../../components/FancyButton"
+import { useUser } from "../../GlobalContext/user"
 
 export default function GlobalTopic() {
   const global = useGlobalState()
   const [blurWidth, setBlurWidth] = createSignal()
+  const user = useUser()
 
   createEffect(() => {
     const infoMain = document.getElementById("InfoMain")
@@ -66,30 +68,33 @@ export default function GlobalTopic() {
               </Match>
             </Switch>
 
-            <div
-              class="absolute flex flex-col right-0 z-50 w-full"
-              style={{
-                top: `${blurWidth()}px`,
-                "min-height": `${blurWidth()}px`,
-                height: `${blurWidth()}px`
-              }}
-            >
+            <Show when={user.user.member}>
               <div
-                class="absolute top-[-100px] right-0 w-full bg-opacity-50 h-[100px]"
-                id="divider"
-              ></div>
+                class="absolute flex flex-col right-0 z-50 w-full"
+                style={{
+                  top: `${blurWidth()}px`,
+                  "min-height": `${blurWidth()}px`,
+                  height: `${blurWidth()}px`
+                }}
+              >
+                <div
+                  class="absolute top-[-100px] right-0 w-full bg-opacity-50 h-[100px]"
+                  id="divider"
+                ></div>
 
-              <div class="backdrop-blur-sm bg-opacity-50 bg-gray-200 dark:bg-black w-full h-full">
-                <div class="h-full relative">
-                  <div class="sticky top-0 z-[60] right-0 w-full flex items-center justify-center">
-                    <div class="w-[100px]">
-                      <FancyButton>Buy</FancyButton>
+                <div class="backdrop-blur-sm bg-opacity-50 bg-gray-200 dark:bg-black w-full h-full">
+                  <div class="h-full relative">
+                    <div class="sticky top-0 z-[60] right-0 w-full flex items-center justify-center">
+                      <div class="w-[100px]">
+                        <FancyButton>Buy</FancyButton>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </Show>
           </div>
+
           <Motion.div
             id="InfoSidebar"
             class="  dark:bg-[#161616] bg-[#F4F4F6] border-l-[0.5px] border-[#69696951] h-full min-w-[250px]"
