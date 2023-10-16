@@ -1,7 +1,6 @@
 import { splitUrlByProtocol } from "../../lib/util"
 import { addGlobalLink } from "../crud/global-link"
 import { addLinkToSectionOfGlobalTopic } from "../crud/global-topic"
-import { createUser } from "../crud/user"
 import {
   Topic,
   findFilePath,
@@ -17,12 +16,6 @@ async function main() {
     "Favorite blogs",
     "brandur.org/articles"
   )
-
-  // const res = await createUser(
-  //   "nikita.voloboev@gmail.com",
-  //   "902875f2-9950-4857-a0c5-df3d3be4a0a0"
-  // )
-  // console.log(res)
   return
   const paths = await getMarkdownPaths()
   const parts = paths[1]!.split("/")

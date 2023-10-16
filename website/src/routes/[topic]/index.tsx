@@ -90,7 +90,7 @@ export default function GlobalTopic() {
                   id="divider"
                 ></div>
 
-                <div class="backdrop-blur-sm bg-opacity-50 bg-gray-200 dark:bg-black w-full h-full">
+                <div class="backdrop-blur-sm dark:bg-opacity-50 bg-opacity-50 bg-gray-200 dark:bg-black w-full h-full">
                   <div class="h-full relative">
                     <div class="sticky top-[50%] translate-y-[50%] z-[60] right-0 w-full flex items-center justify-center">
                       <div class="">

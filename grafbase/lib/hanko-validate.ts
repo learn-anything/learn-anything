@@ -13,12 +13,10 @@ export async function hankoIdFromToken(context: Context) {
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     throw new GraphQLError("Missing or invalid Authorization header")
   }
-  console.log(process.env.PUBLIC_HANKO_API_URL, "hanko api url...")
   const JWKS = createRemoteJWKSet(
     new URL(`${process.env.PUBLIC_HANKO_API_URL}/.well-known/jwks.json`)
   )
   const hankoToken = authHeader.split(" ")[1]
-  console.log(hankoToken, "hanko token")
   const verifiedJWT = await jwtVerify(hankoToken ?? "", JWKS)
 
   if (!verifiedJWT) {

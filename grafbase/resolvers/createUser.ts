@@ -10,15 +10,12 @@ export default async function createUserResolver(
 ) {
   try {
     const hankoId = await hankoIdFromToken(context)
-    console.log(hankoId, "hanko id")
     if (hankoId) {
-      console.log(hankoId, "hanko id")
       const userId = await createUser(args.email, hankoId)
-      console.log("user created: ", userId)
+      console.log("user with id created: ", userId)
       if (userId) {
         return userId
       }
-      console.log("user already exists?")
       throw new GraphQLError("User already exists")
     }
   } catch (err) {
