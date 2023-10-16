@@ -1,4 +1,4 @@
-import { Show, createEffect, createSignal, untrack } from "solid-js"
+import { Show, createEffect, createSignal, onMount, untrack } from "solid-js"
 import { A, useNavigate } from "solid-start"
 import { createShortcut } from "@solid-primitives/keyboard"
 import { useUser } from "../../GlobalContext/user"
@@ -21,6 +21,17 @@ export default function GuideNav() {
   const [topicSearchInput, setTopicSearchInput] = createSignal("")
   const [focusedTopic, setFocusedTopic] = createSignal(0)
   const [focusedTodoTitle, setFocusedTodoTitle] = createSignal("")
+  const [showIcon, setShowIcon] = createSignal("light")
+
+  // TODO: make it into effect so it switches when user changes theme whilst site is loaded
+  onMount(() => {
+    const darkTheme =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches
+    if (darkTheme) {
+      setShowIcon("dark")
+    }
+  })
 
   createShortcut(["ARROWDOWN"], () => {
     if (focusedTopic() === topicSearchResults().length - 1) {
@@ -116,10 +127,17 @@ export default function GuideNav() {
               >
                 {/* add logo only when it looks good and clean. need clean svg */}
                 {/* <img class="rounded-full" src="/logo.png" alt="" /> */}
-                <Icon name="Home" />
+                {/* <Icon name="Home" /> */}
                 {/* TODO: does not work for now */}
-                {/* <img src="/logo-black.svg" class="h-[50px] w-[50px]" /> */}
-                {/* <img src="/logo-white.svg" class="h-[50px] w-[50px]" /> */}
+
+                <Show
+                  when={showIcon() === "light"}
+                  fallback={
+                    <img src="/logo-white.svg" class="h-[50px] w-[50px]" />
+                  }
+                >
+                  <img src="/logo-black.svg" class="h-[50px] w-[50px]" />
+                </Show>
               </div>
             </div>
 

@@ -1,10 +1,10 @@
 import { For, createEffect } from "solid-js"
-import { useGlobalTopic } from "../GlobalContext/global-topic"
 import {
   useDragDropContext,
   createDraggable,
-  createDroppable,
+  createDroppable
 } from "@thisbeyond/solid-dnd"
+import { useGlobalTopic } from "../../GlobalContext/global-topic"
 
 export default function EditGuideSidebar() {
   const topic = useGlobalTopic()
@@ -21,12 +21,12 @@ export default function EditGuideSidebar() {
     const sectionTitleDroppedInto = draggable.id
 
     const section_idx_being_dragged = sections.findIndex(
-      (s) => s.title === sectionTitleBeingDropped,
+      (s) => s.title === sectionTitleBeingDropped
     )
     if (section_idx_being_dragged === -1) return
 
     const section_idx_being_dropped_into = sections.findIndex(
-      (s) => s.title === sectionTitleDroppedInto,
+      (s) => s.title === sectionTitleDroppedInto
     )
     if (section_idx_being_dropped_into === -1) return
 
@@ -38,7 +38,7 @@ export default function EditGuideSidebar() {
       ;[copy[section_idx_being_dragged], copy[section_idx_being_dropped_into]] =
         [
           copy[section_idx_being_dropped_into]!,
-          copy[section_idx_being_dragged]!,
+          copy[section_idx_being_dragged]!
         ]
       return copy
     })
