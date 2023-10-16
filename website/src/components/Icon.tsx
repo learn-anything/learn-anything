@@ -238,9 +238,9 @@ export default function Icon(props: Props) {
           </Match>
           <Match when={props.name === "Loader"}>
             <svg
-              width="24"
-              height="24"
-              stroke="#000"
+              width={props.width ? props.width : "24"}
+              height={props.height ? props.height : "24"}
+              stroke={props.border ? props.border : "black"}
               viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
             >
