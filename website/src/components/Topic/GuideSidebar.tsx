@@ -5,11 +5,13 @@ import FancyButton from "../FancyButton"
 
 import { useMobius } from "../../root"
 import Icon from "../Icon"
+import { useUser } from "../../GlobalContext/user"
 
 export default function GuideSidebar() {
   const topic = useGlobalTopic()
   const global = useGlobalState()
   const mobius = useMobius()
+  const user = useUser()
 
   return (
     <>
@@ -23,6 +25,10 @@ export default function GuideSidebar() {
             <div class="flex gap-2 text-[12px]">
               <FancyButton
                 onClick={async () => {
+                  if (!user.user.member) {
+                    global.setShowMemberOnlyModal(true)
+                    return
+                  }
                   if (topic.globalTopic.learningStatus === "to_learn") {
                     topic.set("learningStatus", "")
                     await mobius.mutate({
@@ -53,6 +59,10 @@ export default function GuideSidebar() {
               </FancyButton>
               <FancyButton
                 onClick={async () => {
+                  if (!user.user.member) {
+                    global.setShowMemberOnlyModal(true)
+                    return
+                  }
                   if (topic.globalTopic.learningStatus === "learning") {
                     topic.set("learningStatus", "")
                     await mobius.mutate({
@@ -83,6 +93,10 @@ export default function GuideSidebar() {
               </FancyButton>
               <FancyButton
                 onClick={async () => {
+                  if (!user.user.member) {
+                    global.setShowMemberOnlyModal(true)
+                    return
+                  }
                   if (topic.globalTopic.learningStatus === "learned") {
                     topic.set("learningStatus", "")
                     await mobius.mutate({

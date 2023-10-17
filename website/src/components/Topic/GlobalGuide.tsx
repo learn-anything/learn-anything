@@ -1,9 +1,9 @@
-import { For, Show, createSignal } from "solid-js"
+import { For, Show } from "solid-js"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import GuideSummary from "./GuideSummary"
-// @ts-ignore
 import clsx from "clsx"
 import { useLocation, useNavigate } from "solid-start"
+import { useGlobalState } from "../../GlobalContext/global"
 import { useUser } from "../../GlobalContext/user"
 import FancyButton from "../FancyButton"
 import ModalWithMessageAndButton from "../ModalWithMessageAndButton"
@@ -13,13 +13,13 @@ export default function GlobalGuide() {
   const navigate = useNavigate()
   const topic = useGlobalTopic()
   const user = useUser()
+  const global = useGlobalState()
   const location = useLocation()
-  const [showModal, setShowModal] = createSignal(false)
 
   return (
     <>
       <div class="w-full flex flex-col gap-[20px] relative">
-        <Show when={showModal()}>
+        <Show when={global.showMemberOnlyModal()}>
           <ModalWithMessageAndButton
             message="This is a member only feature"
             buttonText="Become Member"
@@ -27,7 +27,7 @@ export default function GlobalGuide() {
               navigate("/pricing")
             }}
             onClose={() => {
-              setShowModal(false)
+              global.setShowMemberOnlyModal(false)
             }}
           />
         </Show>
@@ -47,7 +47,8 @@ export default function GlobalGuide() {
                     return
                   }
                   if (!user.user.member) {
-                    setShowModal(true)
+                    console.log("runs")
+                    global.setShowMemberOnlyModal(true)
                   } else {
                     // TODO: probably unsafe, should be a better way to do this
                     const topicName = window.location.href.split("/")[3]

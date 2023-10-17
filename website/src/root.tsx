@@ -27,7 +27,7 @@ import { getHankoCookie } from "../lib/auth"
 
 // TODO: https://github.com/nikitavoloboev/la-issues/issues/54 (should stop having to manually update this schema )
 export const typeDefs = `
-""""
+"""
 De-prioritizes a fragment, causing the fragment to be omitted in the initial response and delivered as a subsequent response afterward.
 """
 directive @defer(
@@ -39,9 +39,6 @@ directive @defer(
   """
   label: String
 ) on INLINE_FRAGMENT | FRAGMENT_SPREAD
-
-"""Directs the executor to return values as a Streaming response."""
-directive @live on QUERY
 
 """Indicates that an input object is a oneOf input object"""
 directive @oneOf on INPUT_OBJECT
@@ -59,6 +56,7 @@ type Mutation {
   createUser(email: String!): String!
   updateLatestGlobalGuide(topicName: String!, topicSummary: String!, sections: [section!]!): String!
   updateTopicLearningStatus(learningStatus: learningStatus!, topicName: String!): String!
+  updateLinkStatusResolver(linkId: String!, action: linkAction!): String!
   updateGlobalLinkStatus(action: globalLinkAction!, globalLinkId: String!): String!
   internalUpdateMemberUntilOfUser(email: String!, memberUntilDateInUnixTime: Int!): String!
 }
@@ -82,6 +80,8 @@ type getGlobalLinksOutput {
 
 type getGlobalTopicOutput {
   learningStatus: learningStatus!
+  likedLinkIds: [String!]!
+  completedLinkIds: [String!]!
 }
 
 type getUserDetailsOutput {
@@ -111,6 +111,13 @@ enum learningStatus {
   learning
   learned
   none
+}
+
+enum linkAction {
+  like
+  unlike
+  complete
+  uncomplete
 }
 
 type publicCheckForGlobalLinkOutput {
@@ -198,9 +205,9 @@ export default function Root() {
   const mobius = createMobius({
     hankoCookie
   })
-  const global = createGlobalState(mobius)
-  const globalTopic = createGlobalTopic(mobius)
   const user = createUserState(mobius)
+  const global = createGlobalState(mobius)
+  const globalTopic = createGlobalTopic(mobius, user)
 
   return (
     <Html lang="en">

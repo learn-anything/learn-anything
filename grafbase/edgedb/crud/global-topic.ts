@@ -347,7 +347,10 @@ export async function getGlobalTopicPublic(topicName: string) {
 }
 
 // get details for global topic for auth users
-export async function getGlobalTopicQuery(topicName: string, hankoId: string) {
+export async function getGlobalTopicDetails(
+  topicName: string,
+  hankoId: string
+) {
   const res = await queryGetGlobalTopic(client, {
     topicName: topicName,
     hankoId: hankoId

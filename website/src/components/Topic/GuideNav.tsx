@@ -159,22 +159,20 @@ export default function GuideNav() {
               GitHub
             </a>/ */}
             {/* TODO: hide it for non members too */}
-            <Show
-              when={!user.user.signedIn}
-              fallback={
-                <A
-                  class="cursor-pointer"
-                  style={{
-                    color: "black"
-                  }}
-                  href={`${
-                    user.user.username ? `/@${user.user.username}` : "/profile"
-                  }`}
-                >
-                  <Icon name="UserProfile" />
-                </A>
-              }
-            >
+            <Show when={user.user.member}>
+              <A
+                class="cursor-pointer"
+                style={{
+                  color: "black"
+                }}
+                href={`${
+                  user.user.username ? `/@${user.user.username}` : "/profile"
+                }`}
+              >
+                <Icon name="UserProfile" />
+              </A>
+            </Show>
+            <Show when={!user.user.signedIn}>
               <FancyButton onClick={() => navigate("/auth")}>
                 Sign In
               </FancyButton>

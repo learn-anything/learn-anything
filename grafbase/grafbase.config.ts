@@ -95,7 +95,9 @@ g.query("getGlobalTopic", {
   args: { topicName: g.string() },
   returns: g.ref(
     g.type("getGlobalTopicOutput", {
-      learningStatus: g.enumRef(learningStatus)
+      learningStatus: g.enumRef(learningStatus),
+      likedLinkIds: g.string().list(),
+      completedLinkIds: g.string().list()
     })
   ),
   resolver: "getGlobalTopic"
@@ -159,6 +161,18 @@ g.mutation("updateTopicLearningStatus", {
   args: { learningStatus: g.enumRef(learningStatus), topicName: g.string() },
   returns: g.string(),
   resolver: "updateTopicLearningStatus"
+})
+
+const linkAction = g.enum("linkAction", [
+  "like",
+  "unlike",
+  "complete",
+  "uncomplete"
+])
+g.mutation("updateLinkStatusResolver", {
+  args: { linkId: g.string(), action: g.enumRef(linkAction) },
+  returns: g.string(),
+  resolver: "updateLinkStatus"
 })
 
 const globalLinkAction = g.enum("globalLinkAction", [

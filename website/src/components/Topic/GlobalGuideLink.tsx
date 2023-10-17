@@ -2,6 +2,9 @@ import { Show } from "solid-js"
 import Icon from "../Icon"
 import { useMobius } from "../../root"
 import clsx from "clsx"
+import { useGlobalTopic } from "../../GlobalContext/global-topic"
+import { useUser } from "../../GlobalContext/user"
+import { useGlobalState } from "../../GlobalContext/global"
 
 interface Props {
   title: string
@@ -14,6 +17,10 @@ interface Props {
 
 export default function GlobalGuideLink(props: Props) {
   const mobius = useMobius()
+  const topic = useGlobalTopic()
+  const user = useUser()
+  const global = useGlobalState()
+
   return (
     <div
       onClick={() => {
@@ -60,47 +67,109 @@ export default function GlobalGuideLink(props: Props) {
             {/* UI of being pressed in */}
             <div
               onClick={async () => {
-                await mobius.mutate({
-                  updateGlobalLinkStatus: {
-                    where: {
-                      action: "like",
-                      globalLinkId: props.id
-                    },
-                    select: true
-                  }
-                })
+                if (!user.user.member) {
+                  global.setShowMemberOnlyModal(true)
+                  return
+                }
+                if (topic.globalTopic.likedLinkIds.includes(props.id)) {
+                  topic.set(
+                    "likedLinkIds",
+                    topic.globalTopic.likedLinkIds.filter(
+                      (id) => id !== props.id
+                    )
+                  )
+                  await mobius.mutate({
+                    updateGlobalLinkStatus: {
+                      where: {
+                        action: "unlike",
+                        globalLinkId: props.id
+                      },
+                      select: true
+                    }
+                  })
+                } else {
+                  topic.set("likedLinkIds", [
+                    ...topic.globalTopic.likedLinkIds,
+                    props.id
+                  ])
+                  await mobius.mutate({
+                    updateGlobalLinkStatus: {
+                      where: {
+                        action: "like",
+                        globalLinkId: props.id
+                      },
+                      select: true
+                    }
+                  })
+                }
               }}
               class={clsx(
                 "cursor-pointer rounded-[2px] flex dark:hover:bg-neutral-950 items-center hover:border-none transition-all justify-center border h-[26px] w-[26px] border-[#69696951] dark:border-[#282828]",
-                false && "bg-red-500 border-none transition-all"
+                topic.globalTopic.likedLinkIds.includes(props.id) &&
+                  "bg-red-500 border-none transition-all"
               )}
             >
               <Icon
                 name="Heart"
                 fill="white"
-                border={false ? "red" : "black"}
+                border={
+                  topic.globalTopic.likedLinkIds.includes(props.id)
+                    ? "red"
+                    : "black"
+                }
               />
             </div>
             <div
               onClick={async () => {
-                await mobius.mutate({
-                  updateGlobalLinkStatus: {
-                    where: {
-                      action: "complete",
-                      globalLinkId: props.id
-                    },
-                    select: true
-                  }
-                })
+                if (!user.user.member) {
+                  global.setShowMemberOnlyModal(true)
+                  return
+                }
+                if (topic.globalTopic.completedLinkIds.includes(props.id)) {
+                  topic.set(
+                    "completedLinkIds",
+                    topic.globalTopic.completedLinkIds.filter(
+                      (id) => id !== props.id
+                    )
+                  )
+                  await mobius.mutate({
+                    updateGlobalLinkStatus: {
+                      where: {
+                        action: "uncomplete",
+                        globalLinkId: props.id
+                      },
+                      select: true
+                    }
+                  })
+                } else {
+                  topic.set("completedLinkIds", [
+                    ...topic.globalTopic.completedLinkIds,
+                    props.id
+                  ])
+                  await mobius.mutate({
+                    updateGlobalLinkStatus: {
+                      where: {
+                        action: "complete",
+                        globalLinkId: props.id
+                      },
+                      select: true
+                    }
+                  })
+                }
               }}
               class={clsx(
                 "cursor-pointer rounded-[2px] dark:hover:bg-neutral-950 hover:border-none border flex items-center transition-all justify-center h-[26px] w-[26px] border-[#69696951] dark:border-[#282828]",
-                true && "bg-blue-500 bg-opacity border-none"
+                topic.globalTopic.completedLinkIds.includes(props.id) &&
+                  "bg-blue-500 bg-opacity border-none"
               )}
             >
               <Icon
                 name="Checkmark"
-                border={true ? "white" : "black"}
+                border={
+                  topic.globalTopic.completedLinkIds.includes(props.id)
+                    ? "white"
+                    : "black"
+                }
                 width="24"
                 height="24"
               />

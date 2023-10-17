@@ -2,6 +2,7 @@ import { UserClient } from "@teamhanko/hanko-frontend-sdk"
 import { createContext, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 import { MobiusType } from "../root"
+import { getHankoCookie } from "../../lib/auth"
 
 type User = {
   username: string
@@ -17,11 +18,16 @@ export function createUserState(mobius: MobiusType) {
     username: "",
     email: "",
     signedIn: false,
-    member: true,
+    member: false,
     admin: true
   })
 
   onMount(async () => {
+    // TODO: maybe not needed? if only userClient.getCurrent() is there
+    // it flashes sign in button on reloads..
+    if (getHankoCookie()) {
+      setUser({ signedIn: true })
+    }
     // TODO: do grafbase call to get user info like username and email from server
     const userClient = new UserClient(import.meta.env.VITE_HANKO_API, {
       timeout: 0,
@@ -32,15 +38,15 @@ export function createUserState(mobius: MobiusType) {
     const email = hankoUser.email
     setUser({ email, signedIn: true })
 
+    // TODO: check it works well
     const res = await mobius.query({
       getUserDetails: {
         isMember: true
       }
     })
-    console.log(res)
     if (res) {
       // @ts-ignore
-      setUser({ member: res?.data?.getUserDetails.isMember })
+      // setUser({ member: res?.data?.getUserDetails.isMember })
     }
 
     // TODO: move this cookie reading into lib function

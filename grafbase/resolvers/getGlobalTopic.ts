@@ -1,7 +1,7 @@
-import { GraphQLError } from "graphql"
-import { hankoIdFromToken } from "../lib/hanko-validate"
 import { Context } from "@grafbase/sdk"
-import { getGlobalTopicQuery } from "../edgedb/crud/global-topic"
+import { GraphQLError } from "graphql"
+import { getGlobalTopicDetails } from "../edgedb/crud/global-topic"
+import { hankoIdFromToken } from "../lib/hanko-validate"
 
 export default async function getGlobalTopicResolver(
   root: any,
@@ -10,9 +10,9 @@ export default async function getGlobalTopicResolver(
 ) {
   const hankoId = await hankoIdFromToken(context)
   if (hankoId) {
-    const topic = await getGlobalTopicQuery(hankoId, args.topicName)
-    console.log(topic)
-    return topic
+    const topicDetails = await getGlobalTopicDetails(args.topicName, hankoId)
+    console.log(topicDetails, "details")
+    return topicDetails
   }
   // TODO: make edgedb crud functions return better errors
   // it can also be token validation error! track that

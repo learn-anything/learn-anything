@@ -3,7 +3,6 @@ import { addGlobalLink } from "../crud/global-link"
 import {
   addLinkToSectionOfGlobalTopic,
   createGlobalTopicWithGlobalGuide,
-  getGlobalTopicQuery,
   moveAllLinksOfGlobalTopicToSectionOther
 } from "../crud/global-topic"
 import {
@@ -27,15 +26,8 @@ function toTitleCase(inputStr: string) {
 }
 
 async function main() {
-  // const topic = await getGlobalTopic(hankoId, "3d-printing")
-  // console.log(topic)
-  // await updatePrettyNameOfGlobalTopic("music-albums", "Music Albums")
-  const hankoId = process.env.LOCAL_USER_HANKO_ID!
-  const res = await getGlobalTopicQuery("guitar", hankoId)
-  console.dir(res, { depth: null })
-  return
   const paths = await getMarkdownPaths()
-  const parts = paths[15]!.split("/")
+  const parts = paths[14]!.split("/")
   const fileName = parts[parts.length - 1] // Get the last part which is the filename
   const topicName = fileName!.split(".")[0]
   console.log(topicName)
@@ -143,6 +135,12 @@ async function processLinks(topic: Topic) {
 
 // TODO: move it away after release, is here as reference in trying to get all the topics ported for release
 async function oneOffActions() {
+  // const topic = await getGlobalTopic(hankoId, "3d-printing")
+  // console.log(topic)
+  // await updatePrettyNameOfGlobalTopic("music-albums", "Music Albums")
+  // const hankoId = process.env.LOCAL_USER_HANKO_ID!
+  // const res = await getGlobalTopicQuery("guitar", hankoId)
+  // console.dir(res, { depth: null })
   // await processLinksFromMarkdownFilesAsGlobalLinks(topicName!)
   // const res = await getUserDetails(hankoId)
   // console.log(res, "res")

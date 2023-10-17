@@ -1,8 +1,8 @@
 import { createContext, createEffect, createMemo, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
-import { MobiusType } from "../root"
 import { useLocation } from "solid-start"
 import { SearchResult } from "../components/Search"
+import { MobiusType } from "../root"
 
 export type GlobalLink = {
   id: string
@@ -31,6 +31,8 @@ export type GlobalTopic = {
   latestGlobalGuide: LatestGlobalGuide
   links: GlobalLink[]
   learningStatus: "to_learn" | "learning" | "learned" | ""
+  likedLinkIds: string[]
+  completedLinkIds: string[]
 }
 
 function extractTopicFromPath(inputStr: string) {
@@ -41,7 +43,7 @@ function extractTopicFromPath(inputStr: string) {
 }
 
 // state for rendering global topic found in learn-anything.xyz/<topic>
-export default function createGlobalTopic(mobius: MobiusType) {
+export default function createGlobalTopic(mobius: MobiusType, user: any) {
   const [globalTopic, setGlobalTopic] = createStore<GlobalTopic>({
     name: "",
     prettyName: "",
@@ -52,7 +54,9 @@ export default function createGlobalTopic(mobius: MobiusType) {
       sections: []
     },
     links: [],
-    learningStatus: ""
+    learningStatus: "",
+    likedLinkIds: [],
+    completedLinkIds: []
   })
 
   const currentTopicGlobalLinksSearch = createMemo(() => {
@@ -121,23 +125,44 @@ export default function createGlobalTopic(mobius: MobiusType) {
       latestGlobalGuide: topicData.latestGlobalGuide,
       links: topicData.links
     })
+  })
+
+  createEffect(async () => {
+    if (
+      !location.pathname ||
+      location.pathname === "/" ||
+      location.pathname === "/pricing" ||
+      !user.user.member
+    )
+      return
+
+    const topicName = extractTopicFromPath(location.pathname)
+    if (!topicName) return
+
     const res = await mobius.query({
       getGlobalTopic: {
         where: {
           topicName: topicName
         },
         select: {
-          learningStatus: true
+          learningStatus: true,
+          likedLinkIds: true,
+          completedLinkIds: true
         }
       }
     })
-    console.log(res, "res")
+    // @ts-ignore
+    const topicData = res.data.getGlobalTopic
+    setGlobalTopic({
+      learningStatus: topicData.learningStatus,
+      likedLinkIds: topicData.likedLinkIds,
+      completedLinkIds: topicData.completedLinkIds
+    })
   })
 
   return {
     globalTopic,
     set: setGlobalTopic,
-
     currentTopicGlobalLinksSearch
     // topicGlobalLinksSearch,
     // setShowPage: (state: PageState) => {

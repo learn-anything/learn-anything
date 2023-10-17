@@ -42,9 +42,15 @@ export function createGlobalState(mobius: MobiusType) {
     guidePage: "Guide",
     theme: ""
   })
+  const [showMemberOnlyModal, setShowMemberOnlyModal] = createSignal(false)
+
+  createEffect(() => {
+    console.log(showMemberOnlyModal(), "modal show")
+  })
+
   createEffect(() => {
     // Checks if its dark mode or light mode
-    const themeChangeHandler = (e) => {
+    const themeChangeHandler = (e: any) => {
       if (e.matches) {
         setState({ theme: "dark" })
       } else {
@@ -187,6 +193,8 @@ export function createGlobalState(mobius: MobiusType) {
     setGlobalTopicsSearchList: (list: GlobalTopicSearchItem[]) => {
       setState({ globalTopicsSearchList: list })
     },
+    showMemberOnlyModal,
+    setShowMemberOnlyModal,
     searchGlobalLinksByTitle: async (title: string) => {
       const searchResult = await search(globalLinkSearchDb(), {
         term: title,

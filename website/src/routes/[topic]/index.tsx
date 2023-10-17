@@ -1,32 +1,29 @@
 import GlobalGuide from "../../components/Topic/GlobalGuide"
-// @ts-ignore
-import { Motion } from "@motionone/solid"
-import GuideSidebar from "../../components/Topic/GuideSidebar"
-import { useGlobalState } from "../../GlobalContext/global"
+import clsx from "clsx"
 import { Match, Show, Switch, createEffect, createSignal } from "solid-js"
+import { useNavigate } from "solid-start"
+import { useGlobalState } from "../../GlobalContext/global"
+import { useGlobalTopic } from "../../GlobalContext/global-topic"
+import FancyButton from "../../components/FancyButton"
+import Icon from "../../components/Icon"
 import GuideLinks from "../../components/Topic/GuideLinks"
 import GuideNav from "../../components/Topic/GuideNav"
-import clsx from "clsx"
-import FancyButton from "../../components/FancyButton"
-import { useUser } from "../../GlobalContext/user"
-import { useNavigate } from "solid-start"
-import { useGlobalTopic } from "../../GlobalContext/global-topic"
-import Icon from "../../components/Icon"
+import GuideSidebar from "../../components/Topic/GuideSidebar"
 
 export default function GlobalTopic() {
   const global = useGlobalState()
   const topic = useGlobalTopic()
   const [blurWidth, setBlurWidth] = createSignal()
-  const user = useUser()
   const navigate = useNavigate()
 
   createEffect(() => {
-    if (topic.globalTopic.latestGlobalGuide) {
+    if (topic.globalTopic.latestGlobalGuide.summary) {
       setTimeout(() => {
         const infoMain = document.getElementById("InfoMain")
+        // @ts-ignore
         setBlurWidth(infoMain?.scrollHeight / 2)
         window.addEventListener("resize", function () {
-          // console.log("The window has been resized!")
+          // @ts-ignore
           setBlurWidth(infoMain?.scrollHeight / 2)
         })
       }, 1000)
@@ -69,7 +66,7 @@ export default function GlobalTopic() {
         <GuideNav />
         <div class="h-[90%] w-full flex">
           <Show
-            when={topic.globalTopic.latestGlobalGuide.sections}
+            when={topic.globalTopic.latestGlobalGuide.sections.length > 0}
             fallback={
               <div class="w-full h-full flex items-center justify-center">
                 <Icon
