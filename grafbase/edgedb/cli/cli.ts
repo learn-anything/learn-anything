@@ -3,7 +3,9 @@ import { addGlobalLink } from "../crud/global-link"
 import {
   addLinkToSectionOfGlobalTopic,
   createGlobalTopicWithGlobalGuide,
-  moveAllLinksOfGlobalTopicToSectionOther
+  getGlobalTopic,
+  moveAllLinksOfGlobalTopicToSectionOther,
+  updatePrettyNameOfGlobalTopic
 } from "../crud/global-topic"
 import {
   Topic,
@@ -12,22 +14,37 @@ import {
   parseMdFile
 } from "../sync/markdown"
 
+function toTitleCase(inputStr: string) {
+  // Split the string by hyphen and convert each segment to title case
+  const segments = inputStr
+    .split("-")
+    .map(
+      (segment) =>
+        segment.charAt(0).toUpperCase() + segment.slice(1).toLowerCase()
+    )
+
+  // Join the segments with a space
+  return segments.join(" ")
+}
+
 async function main() {
   // const topic = await getGlobalTopic(hankoId, "3d-printing")
   // console.log(topic)
-  // await addLinkToSectionOfGlobalTopic(
-  //   "blogs",
-  //   "Favorite blogs",
-  //   "huyenchip.com/blog"
-  // )
+  // await updatePrettyNameOfGlobalTopic("music-albums", "Music Albums")
+  const hankoId = process.env.LOCAL_USER_HANKO_ID!
+  const res = await getGlobalTopic("guitar", hankoId)
+  console.dir(res, { depth: null })
+  return
   const paths = await getMarkdownPaths()
-  const parts = paths[2]!.split("/")
+  const parts = paths[15]!.split("/")
   const fileName = parts[parts.length - 1] // Get the last part which is the filename
   const topicName = fileName!.split(".")[0]
   console.log(topicName)
+  const prettyName = toTitleCase(topicName!)
+  // const prettyName = ""
+  return
 
-  // await deleteSectionsInGlobalTopic(topicName)
-  // await createGlobalTopicWithGlobalGuide(topicName!, "Solving problems", "")
+  await createGlobalTopicWithGlobalGuide(topicName!, prettyName, "")
   await processLinksFromMarkdownFilesAsGlobalLinks(topicName!)
   await moveLinksFromSectionsToGuide(topicName!)
   await moveAllLinksOfGlobalTopicToSectionOther(topicName!)
@@ -128,7 +145,6 @@ async function processLinks(topic: Topic) {
 // TODO: move it away after release, is here as reference in trying to get all the topics ported for release
 async function oneOffActions() {
   // await processLinksFromMarkdownFilesAsGlobalLinks(topicName!)
-  // const hankoId = process.env.LOCAL_USER_HANKO_ID!
   // const res = await getUserDetails(hankoId)
   // console.log(res, "res")
   // const res = await updateTopicLearningStatus(

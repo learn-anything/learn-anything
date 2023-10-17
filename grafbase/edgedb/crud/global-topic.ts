@@ -192,6 +192,20 @@ export async function createIntroSectionInGlobalTopic(globalTopicName: string) {
     .run(client)
 }
 
+export async function updatePrettyNameOfGlobalTopic(
+  globalTopicName: string,
+  prettyName: string
+) {
+  await e
+    .update(e.GlobalTopic, (gt) => ({
+      filter_single: { name: globalTopicName },
+      set: {
+        prettyName: prettyName
+      }
+    }))
+    .run(client)
+}
+
 export async function getLearningStatus(hankoId: string, topicName: string) {
   const userByHankoId = e.select(e.User, (user) => ({
     filter: e.all(
@@ -335,19 +349,21 @@ export async function getGlobalTopicPublic(topicName: string) {
 export async function getGlobalTopic(topicName: string, hankoId: string) {
   const userData = await e
     .select(e.User, (user) => ({
-      likedLinks: e.select(e.GlobalLink, (gl) => ({
-        filter: e.all(
-          e.op(gl.id, "in", user.likedLinks.id)
-          // e.op(gl.mainTopic.name, "=", topicName)
-        )
-      })),
-      completedLinks: e.select(e.GlobalLink, (gl) => ({
-        filter: e.op(gl.id, "in", user.completedLinks.id)
-      })),
-      // TODO: finish. get both learning status and status of links liked/completed
-      // learningStatus: e.select(e.GlobalTopic, gt => ({
-      //   filter_signle
+      // learningState: e.op(e.str("learned"), "if", e.op(e.str(topicName), "in", user.topicsLearned.name)),
+      // learningState: e.op(e.str("learned"), "if", e.op(e.str(topicName), "in", user.topicsLearned.name), "else", e.str("other"),
+      // topicsLearned: e.op(e.str("learned"), "if", e.op(e.str(topicName), "in", user.topicsLearned.name)), "else"
+      // topicsLearning:
+      // topicsLearned: e.select(user.topicsLearned, (gt) => ({
+      //   filter: e.op(gt.name, "=", topicName)
       // })),
+      // topicsLearning: e.select(user.topicsLearning, (gt) => ({
+      //   filter: e.op(gt.name, "=", topicName)
+      // })),
+      // topicsToLearn: e.select(user.topicsLearning, (gt) => ({
+      //   filter: e.op(gt.name, "=", topicName)
+      // })),
+      // likedLinks: true,
+      // completedLinks: true,
       filter: e.all(
         e.set(
           e.op(user.hankoId, "=", hankoId),

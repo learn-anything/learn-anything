@@ -3,6 +3,14 @@
   // + rendering of markdown in solid with markdown parser
   "3d-printing": ["hardware"],
   "asking-questions": [], // wiki has good summary, move it
-  "blogs": [],
-  "solving-problems": []
+  "blogs": ["rss", "writing"],
+  "solving-problems": ["asking-questions"],
+  "research": ["writing"],
+  "habits": [],
+  "focusing": [],
+  "goals": [],
+  "music-albums": ["music"],
+  "music-playlists": ["music"],
+  "music": [],
+  "song-covers": []
 }
