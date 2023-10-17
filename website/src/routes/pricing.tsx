@@ -16,6 +16,57 @@ export default function Pricing() {
 
   return (
     <>
+      <style>
+        {`
+        #PayCard {
+          flex-direction: column;
+          height: fit-content;
+          border-radius: 0;
+          border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+          border-top: 1px solid rgba(148, 163, 184, 0.3);
+        }
+
+        #PayInfo {
+          flex-direction: column;
+          gap: 24px;
+          padding: 0 10%;
+        }
+        #InfoFree {
+          border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+        }
+        #Plans {
+          flex-direction: column;
+          padding: 0 10%;
+        }
+        #PayMain {
+          padding: 0;
+        }
+        @media (min-width: 700px) {
+          #PayCard {
+            flex-direction: row;
+            height: 100%;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            border-radius: 15px;
+          }
+          #PayInfo {
+            flex-direction: row;
+            gap: 0;
+            padding: 0;
+          }
+          #InfoFree {
+            border-right: 1px solid rgba(148, 163, 184, 0.3);
+            border-bottom: 0px;
+          }
+          #Plans {
+            flex-direction: row;
+            padding: 0px;
+          }
+          #PayMain {
+            padding: 0 15%;
+          }
+        }
+      `}
+      </style>
       <div class="h-full w-screen flex flex-col gap-10 dark:bg-neutral-900 dark:text-white bg-[#fafafa] text-black pb-[50px]">
         <Show when={showModalWithSignUpMessage()}>
           <ModalWithMessageAndButton
@@ -51,10 +102,10 @@ export default function Pricing() {
             </div>
           </Show>
         </div>
-        <div class="h-full w-full px-[15%] flex flex-col gap-6">
-          <div class="flex items-center justify-between">
-            <div class="font-bold text-2xl">Choose a plan</div>
-            <div class="flex dark:bg-neutral-800 bg-[#f2f2f2] p-0.5 rounded-full items-center gap-1 text-sm font-light">
+        <div id="PayMain" class="h-full w-full px-[15%] flex flex-col gap-6">
+          <div id="Plans" class="flex gap-4  justify-between">
+            <div class="font-bold text-2xl px-1">Choose a plan</div>
+            <div class="flex w-fit dark:bg-neutral-800 bg-[#f2f2f2] p-0.5 rounded-full items-center gap-1 text-sm font-light">
               <div
                 class={clsx(
                   "p-0.5 px-2 rounded-full cursor-pointer",
@@ -79,8 +130,14 @@ export default function Pricing() {
               </div>
             </div>
           </div>
-          <div class="w-full h-[500px] border border-slate-400 border-opacity-30 rounded-xl bg-white dark:bg-neutral-900 flex">
-            <div class="w-full h-full border-r border-slate-400 border-opacity-30 p-8 flex flex-col gap-6 justify-between">
+          <div
+            id="PayCard"
+            class="w-full h-full rounded-xl bg-white dark:bg-neutral-900 flex"
+          >
+            <div
+              id="InfoFree"
+              class="w-full min-h-full p-8 flex flex-col gap-6 justify-between"
+            >
               <div class="border border-slate-400 border-opacity-30 px-2 p-0.5 w-fit rounded-full font-light text-sm">
                 Free
               </div>
@@ -89,7 +146,7 @@ export default function Pricing() {
                   $0{" "}
                   <span class="opacity-90 font-light text-sm">per month</span>
                 </div>
-                <div class="font-light opacity-60 flex flex-col gap-3">
+                <div class="font-light h-[280px] opacity-60 flex flex-col gap-3">
                   <div>
                     • Free{" "}
                     <a href="https://github.com/learn-anything/learn-anything.xyz">
@@ -104,14 +161,14 @@ export default function Pricing() {
               </div>
               <div
                 class={clsx(
-                  "flex items-center justify-center rounded-lg bg-black w-full h-16 opacity-80 text-white",
+                  "flex items-center justify-center rounded-lg bg-black w-full p-3 opacity-80 text-white",
                   true && "bg-neutral-800 opacity-80 text-gray-300"
                 )}
               >
                 Current plan
               </div>
             </div>
-            <div class="w-full h-full p-8 flex flex-col gap-6">
+            <div class="w-full h-full p-8 flex flex-col gap-6 justify-between">
               <div class="px-2 p-0.5 w-fit rounded-full font-light text-sm bg-[#E7EBF9] text-[#3B5CCC]">
                 ♥️ Member
               </div>
@@ -130,7 +187,7 @@ export default function Pricing() {
                     </span>
                   </div>
                 </Show>
-                <div class="font-light opacity-60 flex flex-col gap-2 h-[250px] overflow-auto">
+                <div class="font-light h-fit opacity-60 flex flex-col gap-3">
                   <div>
                     • See in full 1,000+ high quality guides on various topics
                   </div>
@@ -148,7 +205,7 @@ export default function Pricing() {
                 </div>
               </div>
               <div
-                class="flex items-center justify-center rounded-lg bg-black w-full h-16 opacity-80 text-white cursor-pointer"
+                class="flex items-center justify-center rounded-lg bg-black w-full p-3 opacity-80 text-white cursor-pointer"
                 onClick={async () => {
                   if (user.user.signedIn) {
                     if (planChosen() === "monthly") {
@@ -188,8 +245,8 @@ export default function Pricing() {
               </div>
             </div>
           </div>
-          <div class="flex w-full h-full relative">
-            <div class="w-full font-light text-3xl sticky">
+          <div id="PayInfo" class="flex w-full h-full relative">
+            <div id="InfoTitle" class="w-full font-light text-3xl sticky">
               <div
                 onClick={() => {
                   // TODO: grafbase call to do stripe checkout
