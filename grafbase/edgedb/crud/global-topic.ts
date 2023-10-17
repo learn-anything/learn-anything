@@ -1,7 +1,7 @@
 import { GlobalTopic } from "../../types/types"
 import { client } from "../client"
 import e from "../dbschema/edgeql-js"
-import { getGlobalTopic } from "../queries/getGlobalTopic.query"
+import { queryGetGlobalTopic } from "../queries/queryGetGlobalTopic.query"
 
 export async function updateGlobalTopic(
   hankoId: string,
@@ -348,41 +348,39 @@ export async function getGlobalTopicPublic(topicName: string) {
 
 // get details for global topic for auth users
 export async function getGlobalTopicQuery(topicName: string, hankoId: string) {
-  const res = await getGlobalTopic(client, {
-    email: "nikita@nikiv.dev",
-    topicName: "guitar"
+  const res = await queryGetGlobalTopic(client, {
+    topicName: topicName,
+    hankoId: hankoId
   })
-  console.log(res)
-  return {
-    learningStatus: "none"
-  }
-  const userData = await e
-    .select(e.User, (user) => ({
-      // learningState: e.op(e.str("learned"), "if", e.op(e.str(topicName), "in", user.topicsLearned.name)),
-      // learningState: e.op(e.str("learned"), "if", e.op(e.str(topicName), "in", user.topicsLearned.name), "else", e.str("other"),
-      // topicsLearned: e.op(e.str("learned"), "if", e.op(e.str(topicName), "in", user.topicsLearned.name)), "else"
-      // topicsLearning:
-      // topicsLearned: e.select(user.topicsLearned, (gt) => ({
-      //   filter: e.op(gt.name, "=", topicName)
-      // })),
-      // topicsLearning: e.select(user.topicsLearning, (gt) => ({
-      //   filter: e.op(gt.name, "=", topicName)
-      // })),
-      // topicsToLearn: e.select(user.topicsLearning, (gt) => ({
-      //   filter: e.op(gt.name, "=", topicName)
-      // })),
-      // likedLinks: true,
-      // completedLinks: true,
-      filter: e.all(
-        e.set(
-          e.op(user.hankoId, "=", hankoId),
-          e.op("exists", user.memberUntil),
-          e.op(user.memberUntil, ">", e.datetime_current())
-        )
-      )
-    }))
-    .run(client)
-  return userData
+  return res
+  // TODO: below is attempt to do it with edgedb-js
+  // const userData = await e
+  //   .select(e.User, (user) => ({
+  //     // learningState: e.op(e.str("learned"), "if", e.op(e.str(topicName), "in", user.topicsLearned.name)),
+  //     // learningState: e.op(e.str("learned"), "if", e.op(e.str(topicName), "in", user.topicsLearned.name), "else", e.str("other"),
+  //     // topicsLearned: e.op(e.str("learned"), "if", e.op(e.str(topicName), "in", user.topicsLearned.name)), "else"
+  //     // topicsLearning:
+  //     // topicsLearned: e.select(user.topicsLearned, (gt) => ({
+  //     //   filter: e.op(gt.name, "=", topicName)
+  //     // })),
+  //     // topicsLearning: e.select(user.topicsLearning, (gt) => ({
+  //     //   filter: e.op(gt.name, "=", topicName)
+  //     // })),
+  //     // topicsToLearn: e.select(user.topicsLearning, (gt) => ({
+  //     //   filter: e.op(gt.name, "=", topicName)
+  //     // })),
+  //     // likedLinks: true,
+  //     // completedLinks: true,
+  //     filter: e.all(
+  //       e.set(
+  //         e.op(user.hankoId, "=", hankoId),
+  //         e.op("exists", user.memberUntil),
+  //         e.op(user.memberUntil, ">", e.datetime_current())
+  //       )
+  //     )
+  //   }))
+  //   .run(client)
+  // return userData
 }
 
 export async function addSectionToGlobalTopic(

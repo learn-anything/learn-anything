@@ -295,8 +295,8 @@ export default function Pricing() {
               </div>
               <div>
                 This is all just the beginning. Learn Anything aims to be the
-                first to create AGI in a fully open way. Not controlled by any
-                entity. No closed code/data.
+                first to create personalised AGI in a fully open way. Not
+                controlled by any entity. No closed code/data.
               </div>
               <div>
                 In future, LA will also be a better and open source version of{" "}

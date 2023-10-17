@@ -1,5 +1,5 @@
 with topicName := <str>$topicName,
-     email := <str>$email
+     hankoId := <str>$hankoId
 select User {
   learningStatus := "to_learn" if topicName in .topicsToLearn.name
   else "learning" if topicName in .topicsLearning.name
@@ -7,4 +7,4 @@ select User {
   else "none",
   likedLinks: { id, url } filter .mainTopic.name = topicName
 }
-filter .email = email
+filter .hankoId = hankoId

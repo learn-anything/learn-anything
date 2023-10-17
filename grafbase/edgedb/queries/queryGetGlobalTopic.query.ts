@@ -2,12 +2,12 @@
 
 import type {Executor} from "edgedb";
 
-export type GetGlobalTopicArgs = {
+export type QueryGetGlobalTopicArgs = {
   "topicName": string;
-  "email": string;
+  "hankoId": string;
 };
 
-export type GetGlobalTopicReturns = {
+export type QueryGetGlobalTopicReturns = {
   "learningStatus": string;
   "likedLinks": {
     "id": string;
@@ -15,10 +15,10 @@ export type GetGlobalTopicReturns = {
   }[];
 } | null;
 
-export async function getGlobalTopic(client: Executor, args: GetGlobalTopicArgs): Promise<GetGlobalTopicReturns> {
+export async function queryGetGlobalTopic(client: Executor, args: QueryGetGlobalTopicArgs): Promise<QueryGetGlobalTopicReturns> {
   return client.querySingle(`\
 with topicName := <str>$topicName,
-     email := <str>$email
+     hankoId := <str>$hankoId
 select User {
   learningStatus := "to_learn" if topicName in .topicsToLearn.name
   else "learning" if topicName in .topicsLearning.name
@@ -26,6 +26,6 @@ select User {
   else "none",
   likedLinks: { id, url } filter .mainTopic.name = topicName
 }
-filter .email = email`, args);
+filter .hankoId = hankoId`, args);
 
 }
