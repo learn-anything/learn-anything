@@ -10,22 +10,27 @@ import clsx from "clsx"
 import FancyButton from "../../components/FancyButton"
 import { useUser } from "../../GlobalContext/user"
 import { useNavigate } from "solid-start"
+import { useGlobalTopic } from "../../GlobalContext/global-topic"
+import Icon from "../../components/Icon"
 
 export default function GlobalTopic() {
   const global = useGlobalState()
+  const topic = useGlobalTopic()
   const [blurWidth, setBlurWidth] = createSignal()
   const user = useUser()
   const navigate = useNavigate()
 
   createEffect(() => {
-    setTimeout(() => {
-      const infoMain = document.getElementById("InfoMain")
-      setBlurWidth(infoMain?.scrollHeight / 2)
-      window.addEventListener("resize", function () {
-        // console.log("The window has been resized!")
+    if (topic.globalTopic.latestGlobalGuide) {
+      setTimeout(() => {
+        const infoMain = document.getElementById("InfoMain")
         setBlurWidth(infoMain?.scrollHeight / 2)
-      })
-    }, 1000)
+        window.addEventListener("resize", function () {
+          // console.log("The window has been resized!")
+          setBlurWidth(infoMain?.scrollHeight / 2)
+        })
+      }, 1000)
+    }
   })
 
   return (
@@ -63,56 +68,69 @@ export default function GlobalTopic() {
       <div class="w-screen fixed top-0 right-0 h-screen text-black dark:text-white bg-white dark:bg-[#1C1C1C]">
         <GuideNav />
         <div class="h-[90%] w-full flex">
-          <div
-            id="InfoMain"
-            class={clsx(
-              " w-full bg-white h-full relative overflow-auto dark:bg-[#1C1C1C] flex gap-6 flex-col",
-              true && ""
-            )}
-            style={{ padding: "24px 20px 24px 20px" }}
+          <Show
+            when={topic.globalTopic.latestGlobalGuide.sections}
+            fallback={
+              <div class="w-full h-full flex items-center justify-center">
+                <Icon
+                  name="Loader"
+                  width="40"
+                  height="40"
+                  border={global.state.theme === "light" ? "Black" : "White"}
+                ></Icon>
+              </div>
+            }
           >
-            <Switch>
-              <Match when={global.state.guidePage === "Guide"}>
-                <GlobalGuide />
-              </Match>
-              <Match when={global.state.guidePage === "Links"}>
-                <GuideLinks />
-              </Match>
-            </Switch>
+            <div
+              id="InfoMain"
+              class={clsx(
+                " w-full bg-white h-full relative overflow-auto dark:bg-[#1C1C1C] flex gap-6 flex-col",
+                true && ""
+              )}
+              style={{ padding: "24px 20px 24px 20px" }}
+            >
+              <Switch>
+                <Match when={global.state.guidePage === "Guide"}>
+                  <GlobalGuide />
+                </Match>
+                <Match when={global.state.guidePage === "Links"}>
+                  <GuideLinks />
+                </Match>
+              </Switch>
 
-            {/* <Show when={true && blurWidth()}> */}
-            <Show when={!user.user.member && blurWidth()}>
-              <div
-                class="absolute flex flex-col right-0 z-50 w-full"
-                style={{
-                  top: `${blurWidth()}px`,
-                  "min-height": `${blurWidth()}px`,
-                  height: `${blurWidth()}px`
-                }}
-              >
+              <Show when={true && blurWidth()}>
                 <div
-                  class="absolute top-[-100px] right-0 w-full bg-opacity-50 h-[100px]"
-                  id="divider"
-                ></div>
+                  class="absolute flex flex-col right-0 z-50 w-full"
+                  style={{
+                    top: `${blurWidth()}px`,
+                    "min-height": `${blurWidth()}px`,
+                    height: `${blurWidth()}px`
+                  }}
+                >
+                  <div
+                    class="absolute top-[-100px] right-0 w-full bg-opacity-50 h-[100px]"
+                    id="divider"
+                  ></div>
 
-                <div class="backdrop-blur-sm dark:bg-opacity-50 bg-opacity-50 bg-gray-200 dark:bg-black w-full h-full">
-                  <div class="h-full relative">
-                    <div class="sticky top-[50%] translate-y-[50%] z-[60] right-0 w-full flex items-center justify-center">
-                      <div class="">
-                        <FancyButton
-                          onClick={() => {
-                            navigate("/pricing")
-                          }}
-                        >
-                          Become member
-                        </FancyButton>
+                  <div class="backdrop-blur-sm dark:bg-opacity-50 bg-opacity-50 bg-gray-200 dark:bg-black w-full h-full">
+                    <div class="h-full relative">
+                      <div class="sticky top-[50%] translate-y-[50%] z-[60] right-0 w-full flex items-center justify-center">
+                        <div class="">
+                          <FancyButton
+                            onClick={() => {
+                              navigate("/pricing")
+                            }}
+                          >
+                            Become member
+                          </FancyButton>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </Show>
-          </div>
+              </Show>
+            </div>
+          </Show>
 
           <Motion.div
             id="InfoSidebar"

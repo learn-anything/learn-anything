@@ -4,6 +4,7 @@ import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import FancyButton from "../FancyButton"
 
 import { useMobius } from "../../root"
+import Icon from "../Icon"
 
 export default function GuideSidebar() {
   const topic = useGlobalTopic()
@@ -14,7 +15,7 @@ export default function GuideSidebar() {
     <>
       <div
         class="justify-between w-full flex flex-col h-full dark:text-white text-black"
-        style={{ padding: "24px 20px 24px 20px" }}
+        style={{ padding: "24px 20px 16px 20px" }}
       >
         <div class="flex gap-[32px] flex-col h-full w-full">
           <div id="Status" class="flex flex-col gap-2">
@@ -155,7 +156,14 @@ export default function GuideSidebar() {
           <Card name="Learners"></Card>
         </div> */}
         </div>
-        <div>X</div>
+        <div class="flex gap-4 [&>*]:opacity-50 justify-end items-center">
+          <div class="hover:opacity-100 transition-all">
+            <Icon name="Discord" />
+          </div>
+          <div class="hover:opacity-100 transition-all">
+            <Icon name="Github" />
+          </div>
+        </div>
       </div>
     </>
   )

@@ -21,18 +21,9 @@ export default function GuideNav() {
   const [topicSearchInput, setTopicSearchInput] = createSignal("")
   const [focusedTopic, setFocusedTopic] = createSignal(0)
   const [focusedTodoTitle, setFocusedTodoTitle] = createSignal("")
-  const [showIcon, setShowIcon] = createSignal("light")
 
   // TODO: make it into effect so it switches when user changes theme whilst site is loaded
   // https://discord.com/channels/722131463138705510/1163448241577283675/1163453275400585216
-  onMount(() => {
-    const darkTheme =
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    if (darkTheme) {
-      setShowIcon("dark")
-    }
-  })
 
   createShortcut(["ARROWDOWN"], () => {
     if (focusedTopic() === topicSearchResults().length - 1) {
@@ -121,13 +112,13 @@ export default function GuideNav() {
           <div id="NavBarSide" class="flex gap-4 w-1/2 h-full items-center">
             <div class="rounded-full">
               <div
-                class="cursor-pointer"
+                class="cursor-pointer min-w-[50px]"
                 onClick={() => {
                   navigate("/")
                 }}
               >
                 <Show
-                  when={showIcon() === "light"}
+                  when={global.state.theme === "light"}
                   fallback={
                     <img src="/logo-white.svg" class="h-[50px] w-[50px]" />
                   }

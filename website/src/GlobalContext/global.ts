@@ -1,10 +1,16 @@
 import { create, insert, search } from "@orama/orama"
-import { createContext, createSignal, onMount, useContext } from "solid-js"
+import {
+  createContext,
+  createEffect,
+  createSignal,
+  onMount,
+  useContext
+} from "solid-js"
 import { createStore } from "solid-js/store"
 import { createIndexedDbPersister } from "tinybase/persisters/persister-indexed-db/with-schemas"
 import {
   createQueries,
-  createStore as tinybaseCreateStore,
+  createStore as tinybaseCreateStore
 } from "tinybase/with-schemas"
 import { MobiusType } from "../root"
 
@@ -24,6 +30,7 @@ type GlobalState = {
   globalLinks: GlobalLink[]
   globalLinkSearchDb: any
   guidePage: string
+  theme: string
 }
 
 // various global state
@@ -33,6 +40,25 @@ export function createGlobalState(mobius: MobiusType) {
     globalLinks: [],
     globalLinkSearchDb: undefined,
     guidePage: "Guide",
+    theme: ""
+  })
+  createEffect(() => {
+    // Checks if its dark mode or light mode
+    const themeChangeHandler = (e) => {
+      if (e.matches) {
+        setState({ theme: "dark" })
+      } else {
+        setState({ theme: "light" })
+      }
+    }
+
+    const themeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
+
+    // Initial check
+    themeChangeHandler(themeMediaQuery)
+
+    // Listen for changes
+    themeMediaQuery.addEventListener("change", themeChangeHandler)
   })
 
   const [globalLinkSearchDb, setGlobalLinkSearchDb] =
@@ -42,8 +68,8 @@ export function createGlobalState(mobius: MobiusType) {
     const topics = await mobius.query({
       publicGetGlobalTopics: {
         name: true,
-        prettyName: true,
-      },
+        prettyName: true
+      }
     })
     if (topics) {
       // @ts-ignore
@@ -67,8 +93,8 @@ export function createGlobalState(mobius: MobiusType) {
       globalLinks: {
         title: { type: "string" },
         url: { type: "string" },
-        id: { type: "string" },
-      },
+        id: { type: "string" }
+      }
     } as const
 
     const store = tinybaseCreateStore().setTablesSchema(tableSchema)
@@ -98,7 +124,7 @@ export function createGlobalState(mobius: MobiusType) {
           store.addRow("globalLinks", {
             title: link.title,
             url: link.url,
-            id: link.id,
+            id: link.id
           })
         })
         await persister.save()
@@ -114,15 +140,15 @@ export function createGlobalState(mobius: MobiusType) {
         select("id")
         select("title")
         select("url")
-      },
+      }
     )
 
     const db = await create({
       schema: {
         id: "string",
         title: "string",
-        url: "string",
-      },
+        url: "string"
+      }
     })
 
     const promises: Promise<string>[] = []
@@ -132,8 +158,8 @@ export function createGlobalState(mobius: MobiusType) {
         insert(db, {
           id: row.id,
           url: row.url,
-          title: row.title,
-        }),
+          title: row.title
+        })
       )
     })
 
@@ -143,7 +169,7 @@ export function createGlobalState(mobius: MobiusType) {
 
     const allGlobalLinksResult = await search(globalLinkSearchDb(), {
       term: "",
-      properties: ["title"],
+      properties: ["title"]
     })
     const links = allGlobalLinksResult.hits.map((hit) => {
       return hit.document
@@ -165,14 +191,14 @@ export function createGlobalState(mobius: MobiusType) {
       const searchResult = await search(globalLinkSearchDb(), {
         term: title,
         properties: ["title"],
-        threshold: 0.5,
+        threshold: 0.5
       })
 
       console.log(
         searchResult.hits.map((hit) => hit.document),
-        "results",
+        "results"
       )
-    },
+    }
   } as const
 }
 
