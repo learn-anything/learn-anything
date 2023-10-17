@@ -1,6 +1,7 @@
 import { GlobalTopic } from "../../types/types"
 import { client } from "../client"
 import e from "../dbschema/edgeql-js"
+import { getGlobalTopic } from "../queries/getGlobalTopic.query"
 
 export async function updateGlobalTopic(
   hankoId: string,
@@ -346,7 +347,15 @@ export async function getGlobalTopicPublic(topicName: string) {
 }
 
 // get details for global topic for auth users
-export async function getGlobalTopic(topicName: string, hankoId: string) {
+export async function getGlobalTopicQuery(topicName: string, hankoId: string) {
+  const res = await getGlobalTopic(client, {
+    email: "nikita@nikiv.dev",
+    topicName: "guitar"
+  })
+  console.log(res)
+  return {
+    learningStatus: "none"
+  }
   const userData = await e
     .select(e.User, (user) => ({
       // learningState: e.op(e.str("learned"), "if", e.op(e.str(topicName), "in", user.topicsLearned.name)),

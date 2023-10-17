@@ -3,9 +3,8 @@ import { addGlobalLink } from "../crud/global-link"
 import {
   addLinkToSectionOfGlobalTopic,
   createGlobalTopicWithGlobalGuide,
-  getGlobalTopic,
-  moveAllLinksOfGlobalTopicToSectionOther,
-  updatePrettyNameOfGlobalTopic
+  getGlobalTopicQuery,
+  moveAllLinksOfGlobalTopicToSectionOther
 } from "../crud/global-topic"
 import {
   Topic,
@@ -32,7 +31,7 @@ async function main() {
   // console.log(topic)
   // await updatePrettyNameOfGlobalTopic("music-albums", "Music Albums")
   const hankoId = process.env.LOCAL_USER_HANKO_ID!
-  const res = await getGlobalTopic("guitar", hankoId)
+  const res = await getGlobalTopicQuery("guitar", hankoId)
   console.dir(res, { depth: null })
   return
   const paths = await getMarkdownPaths()
