@@ -65,6 +65,7 @@ type Query {
   publicGetGlobalTopics: [publicGetGlobalTopicsOutput!]!
   publicGetGlobalTopic(topicName: String!): publicGetGlobalTopicOutput!
   getUserDetails: getUserDetailsOutput!
+  getTopicsLearned: getTopicsLearnedOutput!
   getGlobalLink(linkId: String!): publicGetGlobalLinkOutput!
   getGlobalTopic(topicName: String!): getGlobalTopicOutput!
   getGlobalLinks: getGlobalLinksOutput!
@@ -82,6 +83,12 @@ type getGlobalTopicOutput {
   learningStatus: learningStatus!
   likedLinkIds: [String!]!
   completedLinkIds: [String!]!
+}
+
+type getTopicsLearnedOutput {
+  topicsToLearn: [topicToLearn!]!
+  topicsToLearning: [topicToLearn!]!
+  topicsLearned: [topicToLearn!]!
 }
 
 type getUserDetailsOutput {
@@ -157,6 +164,11 @@ input section {
   title: String!
   summary: String
   linkIds: [String!]!
+}
+
+type topicToLearn {
+  name: String!
+  prettyName: String!
 }
 `
 

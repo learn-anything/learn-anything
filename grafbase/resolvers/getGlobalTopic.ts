@@ -11,7 +11,6 @@ export default async function getGlobalTopicResolver(
   const hankoId = await hankoIdFromToken(context)
   if (hankoId) {
     const topicDetails = await getGlobalTopicDetails(args.topicName, hankoId)
-    console.log(topicDetails, "details")
     return topicDetails
   }
   // TODO: make edgedb crud functions return better errors

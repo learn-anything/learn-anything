@@ -30,7 +30,7 @@ export default function GlobalTopic() {
             // @ts-ignore
             setBlurWidth(infoMain?.scrollHeight / 2)
           })
-          console.log(blurWidth(), "width")
+          // console.log(blurWidth(), "width")
         }, 1000)
       } else {
         const infoMain = document.getElementById("InfoMain")

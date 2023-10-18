@@ -2,46 +2,27 @@ import { splitUrlByProtocol } from "../../lib/util"
 import { addGlobalLink } from "../crud/global-link"
 import {
   addLinkToSectionOfGlobalTopic,
-  moveAllLinksOfGlobalTopicToSectionOther
+  deleteSectionsInGlobalTopic,
+  setPrettyNameOfGlobalTopic
 } from "../crud/global-topic"
-import {
-  Topic,
-  findFilePath,
-  markdownFilePaths,
-  parseMdFile
-} from "../sync/markdown"
+import { getTopicsLearned } from "../crud/user"
+import { Topic, findFilePath, parseMdFile } from "../sync/markdown"
 
 async function main() {
-  const topicName = "music-albums"
+  const topicName = "framer"
+  const hankoId = process.env.LOCAL_USER_HANKO_ID!
+  // await setPrettyNameOfGlobalTopic(topicName, "Music Playlists")
+  // await deleteSectionsInGlobalTopic(topicName)
   // await processLinksFromMarkdownFilesAsGlobalLinks(topicName)
-  await moveLinksFromSectionsToGuide(topicName)
-  await moveAllLinksOfGlobalTopicToSectionOther(topicName)
+  // await moveLinksFromSectionsIncludingLinksToGuide(topicName)
+  const res = await getTopicsLearned(hankoId)
+  console.log(res, "res")
   console.log("done")
 }
 
 await main()
 
-async function getMarkdownPaths() {
-  const paths = await markdownFilePaths(process.env.wikiFolderPath!, [])
-  return paths
-  // console.log(paths[0])
-  // const filePath = paths[0]!
-  // const topic = await parseMdFile(filePath)
-  // console.log(topic, "topic")
-}
-
-async function getTopicByFileName(fileName: string) {
-  const filePath = await findFilePath(
-    process.env.wikiFolderPath!,
-    fileName + ".md"
-  )
-  if (filePath) {
-    const topic = await parseMdFile(filePath)
-    return topic
-  }
-}
-
-async function moveLinksFromSectionsToGuide(fileName: string) {
+async function moveLinksFromSectionsIncludingLinksToGuide(fileName: string) {
   const filePath = await findFilePath(
     process.env.wikiFolderPath!,
     fileName + ".md"
@@ -49,6 +30,22 @@ async function moveLinksFromSectionsToGuide(fileName: string) {
   if (filePath) {
     const topic = await parseMdFile(filePath)
     await processLinksBySection(topic)
+  }
+}
+
+async function processLinksBySection(topic: Topic) {
+  for (const link of topic.links) {
+    // console.log(link.section, "section")
+    if (link.section) {
+      const [urlWithoutProtocol, protocol] = splitUrlByProtocol(link.url)
+      if (urlWithoutProtocol && protocol) {
+        await addLinkToSectionOfGlobalTopic(
+          topic.name,
+          link.section,
+          urlWithoutProtocol
+        )
+      }
+    }
   }
 }
 
@@ -60,21 +57,6 @@ async function processLinksFromMarkdownFilesAsGlobalLinks(fileName: string) {
   if (filePath) {
     const topic = await parseMdFile(filePath)
     await processLinks(topic)
-  }
-}
-
-async function processLinksBySection(topic: Topic) {
-  for (const link of topic.links) {
-    if (link.section) {
-      const [urlWithoutProtocol, protocol] = splitUrlByProtocol(link.url)
-      if (urlWithoutProtocol && protocol) {
-        await addLinkToSectionOfGlobalTopic(
-          topic.name,
-          link.section,
-          urlWithoutProtocol
-        )
-      }
-    }
   }
 }
 
@@ -92,19 +74,18 @@ async function processLinks(topic: Topic) {
   })
 }
 
-function toTitleCase(inputStr: string) {
-  // Split the string by hyphen and convert each segment to title case
-  const segments = inputStr
-    .split("-")
-    .map(
-      (segment) =>
-        segment.charAt(0).toUpperCase() + segment.slice(1).toLowerCase()
-    )
+// function toTitleCase(inputStr: string) {
+//   // Split the string by hyphen and convert each segment to title case
+//   const segments = inputStr
+//     .split("-")
+//     .map(
+//       (segment) =>
+//         segment.charAt(0).toUpperCase() + segment.slice(1).toLowerCase()
+//     )
 
-  // Join the segments with a space
-  return segments.join(" ")
-}
-
+//   // Join the segments with a space
+//   return segments.join(" ")
+// }
 // async function processNotesFromMarkdownFilesAsGlobalNotes(fileName: string) {
 //   const filePath = await findFilePath(
 //     process.env.wikiFolderPath!,
@@ -117,14 +98,30 @@ function toTitleCase(inputStr: string) {
 //     await processNotes(topic)
 //   }
 // }
-
 // async function processNotes(topic: Topic) {
 //   topic.notes.map(async (note) => {
 //     console.log(note, "note")
 //     // await addGlobalNote(note.content, note.url, topic.name)
 //   })
 // }
-
+// async function getMarkdownPaths() {
+//   const paths = await markdownFilePaths(process.env.wikiFolderPath!, [])
+//   return paths
+//   // console.log(paths[0])
+//   // const filePath = paths[0]!
+//   // const topic = await parseMdFile(filePath)
+//   // console.log(topic, "topic")
+// }
+// async function getTopicByFileName(fileName: string) {
+//   const filePath = await findFilePath(
+//     process.env.wikiFolderPath!,
+//     fileName + ".md"
+//   )
+//   if (filePath) {
+//     const topic = await parseMdFile(filePath)
+//     return topic
+//   }
+// }
 // TODO: move it away after release, is here as reference in trying to get all the topics ported for release
 async function oneOffActions() {
   // const topics = await getAllTopicNames()

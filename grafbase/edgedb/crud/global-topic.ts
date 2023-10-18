@@ -365,6 +365,13 @@ export async function getGlobalTopicPublic(topicName: string) {
   throw new Error("topic not found")
 }
 
+// export async function deleteSectionsInGlobalTopic(topicName: string) {
+//   const res = await queryDeleteSectionsInGlobalTopic(client, {
+//     topicName
+//   })
+//   return res
+// }
+
 // get details for global topic for auth users
 export async function getGlobalTopicDetails(
   topicName: string,
@@ -452,6 +459,20 @@ export async function addNewSectionToGlobalGuide(
     title: sectionTitle,
     order: order
   })
+}
+
+export async function setPrettyNameOfGlobalTopic(
+  topicName: string,
+  prettyName: string
+) {
+  await e
+    .update(e.GlobalTopic, (gt) => ({
+      filter: e.op(gt.name, "=", topicName),
+      set: {
+        prettyName: prettyName
+      }
+    }))
+    .run(client)
 }
 
 export async function createGlobalTopicWithGlobalGuide(

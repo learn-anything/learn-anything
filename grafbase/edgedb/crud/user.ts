@@ -26,6 +26,32 @@ export async function getUserDetails(hankoId: string) {
   }
 }
 
+export async function getTopicsLearned(hankoId: string) {
+  return await e
+    .select(e.User, (user) => ({
+      filter_single: e.all(
+        e.set(
+          e.op(user.hankoId, "=", hankoId),
+          e.op("exists", user.memberUntil),
+          e.op(user.memberUntil, ">", e.datetime_current())
+        )
+      ),
+      topicsToLearn: {
+        name: true,
+        prettyName: true
+      },
+      topicsLearning: {
+        name: true,
+        prettyName: true
+      },
+      topicsLearned: {
+        name: true,
+        prettyName: true
+      }
+    }))
+    .run(client)
+}
+
 export async function updateUserMemberUntilDate(hankoId: string, date: Date) {
   const res = await e
     .update(e.User, (user) => ({

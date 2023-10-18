@@ -312,9 +312,9 @@ export default function Pricing() {
                 create your own guides and publish them on your own too.
               </div>
               <div>
-                This is all just the beginning. Learn Anything aims to be the
-                first to create personalised AGI in a fully open way. Not
-                controlled by any entity. No closed code/data.
+                This is all just the beginning. Learn Anything aims to create
+                personalised AGI in a fully open way. Not controlled by any
+                entity. No closed code/data.
               </div>
               <div>
                 In future, LA will also be a better and open source version of{" "}

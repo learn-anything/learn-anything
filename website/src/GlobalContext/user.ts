@@ -1,8 +1,14 @@
 import { UserClient } from "@teamhanko/hanko-frontend-sdk"
-import { createContext, onMount, useContext } from "solid-js"
+import { createContext, createEffect, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 import { MobiusType } from "../root"
 import { getHankoCookie } from "../../lib/auth"
+import { useLocation } from "solid-start"
+
+type Topic = {
+  name: string
+  prettyName: string
+}
 
 type User = {
   username: string
@@ -10,6 +16,9 @@ type User = {
   signedIn: boolean
   member: boolean
   admin: boolean
+  topicsIdsToLearn: Topic[]
+  topicsIdsToLearning: Topic[]
+  topicsIdsLearned: Topic[]
 }
 
 // global state of user
@@ -18,8 +27,11 @@ export function createUserState(mobius: MobiusType) {
     username: "",
     email: "",
     signedIn: false,
-    member: false,
-    admin: true
+    member: true,
+    admin: true,
+    topicsIdsToLearn: [],
+    topicsIdsToLearning: [],
+    topicsIdsLearned: []
   })
 
   onMount(async () => {
@@ -61,6 +73,29 @@ export function createUserState(mobius: MobiusType) {
     if (hankoCookie) {
       setUser({ signedIn: true })
     }
+  })
+
+  const location = useLocation()
+
+  createEffect(async () => {
+    if (!(location.pathname === "/profile")) return
+    const res = await mobius.query({
+      getTopicsLearned: {
+        topicsToLearn: {
+          name: true,
+          prettyName: true
+        },
+        topicsLearning: {
+          name: true,
+          prettyName: true
+        },
+        topicsLearned: {
+          name: true,
+          prettyName: true
+        }
+      }
+    })
+    console.log(res, "res")
   })
 
   return {

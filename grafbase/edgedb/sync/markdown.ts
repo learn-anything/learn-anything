@@ -315,6 +315,7 @@ export async function parseMdFile(filePath: string): Promise<Topic> {
         node.children[0].value === "Links"
       ) {
         parsingLinks = true
+        parsingSection = ""
         continue
       }
       // if (node.type === "heading") {
@@ -479,6 +480,7 @@ export async function parseMdFile(filePath: string): Promise<Topic> {
               description: linkDescription,
               relatedLinks,
               public: true,
+              section: "Other",
               year
             })
           })
@@ -488,15 +490,15 @@ export async function parseMdFile(filePath: string): Promise<Topic> {
     }
 
     // once ## Notes is found, start parsing notes
-    if (
-      node.type === "heading" &&
-      node.depth === 2 &&
-      node.children[0].type === "text" &&
-      node.children[0].value === "Notes"
-    ) {
-      parsingNotes = true
-      continue
-    }
+    // if (
+    //   node.type === "heading" &&
+    //   node.depth === 2 &&
+    //   node.children[0].type === "text" &&
+    //   node.children[0].value === "Notes"
+    // ) {
+    //   parsingNotes = true
+    //   continue
+    // }
 
     // once ## Links is found, start parsing links
     if (

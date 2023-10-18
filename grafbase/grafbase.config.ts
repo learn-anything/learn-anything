@@ -73,6 +73,22 @@ g.query("getUserDetails", {
   resolver: "getUserDetails"
 })
 
+const topicToLearn = g.type("topicToLearn", {
+  name: g.string(),
+  prettyName: g.string()
+})
+g.query("getTopicsLearned", {
+  args: {},
+  returns: g.ref(
+    g.type("getTopicsLearnedOutput", {
+      topicsToLearn: g.ref(topicToLearn).list(),
+      topicsLearning: g.ref(topicToLearn).list(),
+      topicsLearned: g.ref(topicToLearn).list()
+    })
+  ),
+  resolver: "getTopicsLearned"
+})
+
 g.query("getGlobalLink", {
   args: { linkId: g.string() },
   returns: g.ref(

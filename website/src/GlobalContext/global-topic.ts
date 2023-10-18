@@ -74,7 +74,8 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
     if (
       !location.pathname ||
       location.pathname === "/" ||
-      location.pathname === "/pricing"
+      location.pathname === "/pricing" ||
+      location.pathname === "/profile"
     )
       return
 
