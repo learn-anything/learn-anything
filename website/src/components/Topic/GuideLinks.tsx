@@ -17,7 +17,7 @@ export default function GuideLinks() {
         <For each={topic.globalTopic.links}>
           {(link) => {
             return (
-              <div class="[&>*]:border-none [&>*]:bg-neutral-900 border-[0.5px] [&>*]:rounded-[6px] dark:border-[#282828]  border-[#69696951]">
+              <div class="[&>*]:border-none [&>*]:bg-white [&>*]:dark:bg-neutral-900 border-[0.5px] [&>*]:rounded-[6px] dark:border-[#282828]  border-[#69696951]">
                 <GlobalGuideLink
                   title={link.title}
                   url={link.url}
