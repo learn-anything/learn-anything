@@ -17,16 +17,30 @@ export default function GlobalTopic() {
   const navigate = useNavigate()
 
   createEffect(() => {
-    if (topic.globalTopic.latestGlobalGuide.summary) {
-      setTimeout(() => {
+    if (topic.globalTopic.latestGlobalGuide.sections) {
+      setBlurWidth(0)
+      if (global.state.guidePage === "Guide") {
+        setTimeout(() => {
+          const infoMain = document.getElementById("InfoMain")
+
+          // @ts-ignore
+          setBlurWidth(infoMain?.scrollHeight / 2)
+          window.addEventListener("resize", function () {
+            // @ts-ignore
+            setBlurWidth(infoMain?.scrollHeight / 2)
+          })
+          console.log(blurWidth(), "width")
+        }, 1000)
+      } else {
         const infoMain = document.getElementById("InfoMain")
+
         // @ts-ignore
         setBlurWidth(infoMain?.scrollHeight / 2)
         window.addEventListener("resize", function () {
           // @ts-ignore
           setBlurWidth(infoMain?.scrollHeight / 2)
         })
-      }, 1000)
+      }
     }
   })
 

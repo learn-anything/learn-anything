@@ -33,7 +33,7 @@ export default function GlobalGuideLink(props: Props) {
     </div> */}
       <div class="w-full  h-full flex justify-between items-center">
         <div class="w-fit flex gap-1 flex-col">
-          <div class="flex gap-3">
+          <div class="flex gap-3 items-center">
             <a
               class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer"
               href={`${props.protocol}://${props.url}`}
@@ -167,6 +167,10 @@ export default function GlobalGuideLink(props: Props) {
                 name="Checkmark"
                 border={
                   topic.globalTopic.completedLinkIds.includes(props.id)
+                    ? global.state.theme === "light"
+                      ? "black"
+                      : "white"
+                    : global.state.theme === "dark"
                     ? "white"
                     : "black"
                 }
