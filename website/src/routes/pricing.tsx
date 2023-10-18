@@ -5,12 +5,14 @@ import { useMobius } from "../root"
 import Icon from "../components/Icon"
 import ModalWithMessageAndButton from "../components/ModalWithMessageAndButton"
 import { useUser } from "../GlobalContext/user"
+import { useGlobalState } from "../GlobalContext/global"
 
 export default function Pricing() {
   const [planChosen, setPlanChosen] = createSignal("monthly")
   const navigate = useNavigate()
   const mobius = useMobius()
   const user = useUser()
+  const global = useGlobalState()
   const [showModalWithSignUpMessage, setShowModalWithSignUpMessage] =
     createSignal(false)
 
@@ -250,7 +252,12 @@ export default function Pricing() {
                   }
                 }}
               >
-                Become member
+                <Show
+                  when={false}
+                  fallback={<Icon name="Loader" border="white" />}
+                >
+                  Become member
+                </Show>
               </div>
             </div>
           </div>
