@@ -1,6 +1,7 @@
 import { GlobalTopic } from "../../types/types"
 import { client } from "../client"
 import e from "../dbschema/edgeql-js"
+import { GlobalGuideSection } from "../dbschema/edgeql-js/modules/default"
 import { queryGetGlobalTopic } from "../queries/queryGetGlobalTopic.query"
 
 export async function checkGlobalTopicExists(topicName: string) {
@@ -10,6 +11,21 @@ export async function checkGlobalTopicExists(topicName: string) {
     }))
     .run(client)
   return topic
+}
+// select GlobalGuideSection
+// filter .<sections[is GlobalGuide].<latestGlobalGuide[is GlobalTopic].name = "design"
+export async function checkSectionsAreEmpty(topicName: string) {
+  return await e
+    .select(GlobalGuideSection, (section) => ({
+      filter: e.op(
+        section["<sections[is GlobalGuide]"][
+          "<latestGlobalGuide[is GlobalTopic]"
+        ].name,
+        "=",
+        topicName
+      )
+    }))
+    .run(client)
 }
 
 export async function getAllTopicNames() {

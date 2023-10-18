@@ -161,50 +161,50 @@ export async function parseMdFile(filePath: string): Promise<Topic> {
     //   })
     // }
     // if front matter exists, start parsing it
-    // if (node.type === "thematicBreak") {
-    //   parsingFrontMatter = true
-    //   continue
-    // }
+    if (node.type === "thematicBreak") {
+      parsingFrontMatter = true
+      continue
+    }
     // parse `title: ..` from front matter and use it as title
-    // if (parsingFrontMatter && node.type === "heading") {
-    //   prettyName = toString(node).replace(/title: /, "")
-    //   parsingFrontMatter = false
-    //   gotTitleFromFrontMatter = true
-    //   continue
-    // }
+    if (parsingFrontMatter && node.type === "heading") {
+      prettyName = toString(node).replace(/title: /, "")
+      parsingFrontMatter = false
+      gotTitleFromFrontMatter = true
+      continue
+    }
     // // if front matter doesn't exist, take the first heading as title
     // // example heading:
-    // if (
-    //   !gotTitle &&
-    //   !gotTitleFromFrontMatter &&
-    //   node.type === "heading" &&
-    //   node.depth === 1 // we only consider # Heading. not ## Heading
-    // ) {
-    //   // console.log(node, "node")
-    //   // title = node.children[0].children.value
-    //   // content = content + toMarkdown(node)
+    if (
+      !gotTitle &&
+      !gotTitleFromFrontMatter &&
+      node.type === "heading" &&
+      node.depth === 1 // we only consider # Heading. not ## Heading
+    ) {
+      // console.log(node, "node")
+      // title = node.children[0].children.value
+      // content = content + toMarkdown(node)
 
-    //   // if heading has a link like:
-    //   // # [Learn Anything](https://learn-anything.xyz)
-    //   // then title is Learn Anything
-    //   if (
-    //     node.children.length > 0 &&
-    //     node.children[0].type === "link" &&
-    //     node.children[0].children[0].type === "text"
-    //   ) {
-    //     prettyName = node.children[0].children[0].value
-    //     content = content + toMarkdown(node)
-    //   }
-    //   // if its heading without a link like
-    //   // # Learn Anything
-    //   // then title is Learn Anything
-    //   else if (node.children.length > 0 && node.children[0].type === "text") {
-    //     prettyName = node.children[0].value
-    //     content = content + toMarkdown(node)
-    //   }
-    //   gotTitle = true
-    //   continue
-    // }
+      // if heading has a link like:
+      // # [Learn Anything](https://learn-anything.xyz)
+      // then title is Learn Anything
+      if (
+        node.children.length > 0 &&
+        node.children[0].type === "link" &&
+        node.children[0].children[0].type === "text"
+      ) {
+        prettyName = node.children[0].children[0].value
+        content = content + toMarkdown(node)
+      }
+      // if its heading without a link like
+      // # Learn Anything
+      // then title is Learn Anything
+      else if (node.children.length > 0 && node.children[0].type === "text") {
+        prettyName = node.children[0].value
+        content = content + toMarkdown(node)
+      }
+      gotTitle = true
+      continue
+    }
 
     // if reach `## Something` start parsing a section. ## Notes and ## Links are not considered sections
     if (
