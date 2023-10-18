@@ -3,6 +3,25 @@ import { client } from "../client"
 import e from "../dbschema/edgeql-js"
 import { queryGetGlobalTopic } from "../queries/queryGetGlobalTopic.query"
 
+export async function checkGlobalTopicExists(topicName: string) {
+  const topic = await e
+    .select(e.GlobalTopic, (gt) => ({
+      filter: e.op(gt.name, "=", topicName)
+    }))
+    .run(client)
+  return topic
+}
+
+export async function getAllTopicNames() {
+  const topics = e
+    .select(e.GlobalTopic, () => ({
+      name: true,
+      prettyName: true
+    }))
+    .run(client)
+  return topics
+}
+
 export async function updateGlobalTopic(
   hankoId: string,
   globalTopic: Omit<GlobalTopic, "prettyName">

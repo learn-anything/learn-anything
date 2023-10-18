@@ -9,12 +9,14 @@ import Icon from "../../components/Icon"
 import GuideLinks from "../../components/Topic/GuideLinks"
 import GuideNav from "../../components/Topic/GuideNav"
 import GuideSidebar from "../../components/Topic/GuideSidebar"
+import { useUser } from "../../GlobalContext/user"
 
 export default function GlobalTopic() {
   const global = useGlobalState()
   const topic = useGlobalTopic()
   const [blurWidth, setBlurWidth] = createSignal()
   const navigate = useNavigate()
+  const user = useUser()
 
   createEffect(() => {
     if (topic.globalTopic.latestGlobalGuide.sections) {
@@ -22,7 +24,6 @@ export default function GlobalTopic() {
       if (global.state.guidePage === "Guide") {
         setTimeout(() => {
           const infoMain = document.getElementById("InfoMain")
-
           // @ts-ignore
           setBlurWidth(infoMain?.scrollHeight / 2)
           window.addEventListener("resize", function () {
@@ -109,7 +110,7 @@ export default function GlobalTopic() {
                 </Match>
               </Switch>
 
-              <Show when={true && blurWidth()}>
+              <Show when={!user.user.member && blurWidth()}>
                 <div
                   class="absolute flex flex-col right-0 z-50 w-full"
                   style={{

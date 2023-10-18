@@ -14,6 +14,7 @@ docs/private-todo.md
 private
 # local sqlite dbs
 *.sqlite
+package-lock.json
 
 tsconfig.tsbuildinfo
 .cache/

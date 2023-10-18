@@ -45,10 +45,6 @@ export function createGlobalState(mobius: MobiusType) {
   const [showMemberOnlyModal, setShowMemberOnlyModal] = createSignal(false)
 
   createEffect(() => {
-    console.log(showMemberOnlyModal(), "modal show")
-  })
-
-  createEffect(() => {
     // Checks if its dark mode or light mode
     const themeChangeHandler = (e: any) => {
       if (e.matches) {

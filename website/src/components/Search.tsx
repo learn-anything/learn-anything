@@ -33,16 +33,16 @@ export interface SearchState {
 
 const FUSE_OPTIONS: Fuse.IFuseOptions<SearchResult> = {
   keys: ["name"],
-  shouldSort: false,
+  shouldSort: false
 }
-const SEARCH_RESULTS_LIMIT = 5
+const SEARCH_RESULTS_LIMIT = 100
 const FUSE_SEARCH_OPTIONS: Fuse.FuseSearchOptions = {
-  limit: SEARCH_RESULTS_LIMIT,
+  limit: SEARCH_RESULTS_LIMIT
 }
 
 export function createSearchState({
   onSelect,
-  searchResults,
+  searchResults
 }: SearchStateOptions): SearchState {
   const [query, setQuery] = solid.createSignal("")
   const [searchOpen, setSearchOpen] = solid.createSignal(false)
@@ -76,7 +76,7 @@ export function createSearchState({
     return {
       results,
       focused,
-      setFocused,
+      setFocused
     }
   })
 
@@ -98,7 +98,7 @@ export function createSearchState({
     setFocused(item) {
       solid.untrack(results).setFocused(item)
     },
-    onSelect,
+    onSelect
   }
 }
 
@@ -111,7 +111,7 @@ export function closeSearch(search: SearchState): void {
 
 export function selectSearchResult(
   search: SearchState,
-  result: SearchResult,
+  result: SearchResult
 ): void {
   solid.batch(() => {
     search.setFocused(undefined)
@@ -130,7 +130,7 @@ export function updateQuery(search: SearchState, query: string): void {
 function handleInputKeydown(
   e: KeyboardEvent,
   input: HTMLInputElement,
-  state: SearchState,
+  state: SearchState
 ): void {
   if (e.isComposing || e.defaultPrevented) return
 
@@ -233,7 +233,7 @@ export function Search(props: SearchProps): solid.JSX.Element {
                   class={clsx(
                     "cursor-pointer w-full h-10 px-3 p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:text-white text-black border-y border-slate-300 dark:border-neutral-800",
                     props.state.focused === topic &&
-                      "bg-neutral-200 dark:bg-neutral-800 dark:border-opacity-30 drop-shadow-md",
+                      "bg-neutral-200 dark:bg-neutral-800 dark:border-opacity-30 drop-shadow-md"
                   )}
                   onClick={() => selectSearchResult(props.state, topic)}
                 >

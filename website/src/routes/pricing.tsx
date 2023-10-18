@@ -12,6 +12,7 @@ export default function Pricing() {
   const navigate = useNavigate()
   const mobius = useMobius()
   const user = useUser()
+  const [waitingForStripe, setWaitingForStripe] = createSignal(false)
   const global = useGlobalState()
   const [showModalWithSignUpMessage, setShowModalWithSignUpMessage] =
     createSignal(false)
@@ -218,6 +219,7 @@ export default function Pricing() {
               <div
                 class="flex items-center justify-center rounded-lg bg-black w-full p-3 opacity-80 text-white cursor-pointer"
                 onClick={async () => {
+                  setWaitingForStripe(true)
                   if (user.user.signedIn) {
                     if (planChosen() === "monthly") {
                       const res = await mobius.query({
@@ -253,7 +255,7 @@ export default function Pricing() {
                 }}
               >
                 <Show
-                  when={false}
+                  when={!waitingForStripe()}
                   fallback={<Icon name="Loader" border="white" />}
                 >
                   Become member
@@ -262,10 +264,7 @@ export default function Pricing() {
             </div>
           </div>
           <div id="PayInfo" class="flex w-full h-full relative">
-            <div
-              id="InfoTitle"
-              class="w-full self-end font-light text-3xl sticky"
-            >
+            <div id="InfoTitle" class="w-full font-light text-3xl sticky">
               <div
                 onClick={() => {
                   // TODO: grafbase call to do stripe checkout

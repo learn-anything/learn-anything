@@ -2,7 +2,6 @@ import { splitUrlByProtocol } from "../../lib/util"
 import { addGlobalLink } from "../crud/global-link"
 import {
   addLinkToSectionOfGlobalTopic,
-  createGlobalTopicWithGlobalGuide,
   moveAllLinksOfGlobalTopicToSectionOther
 } from "../crud/global-topic"
 import {
@@ -12,33 +11,11 @@ import {
   parseMdFile
 } from "../sync/markdown"
 
-function toTitleCase(inputStr: string) {
-  // Split the string by hyphen and convert each segment to title case
-  const segments = inputStr
-    .split("-")
-    .map(
-      (segment) =>
-        segment.charAt(0).toUpperCase() + segment.slice(1).toLowerCase()
-    )
-
-  // Join the segments with a space
-  return segments.join(" ")
-}
-
 async function main() {
-  const paths = await getMarkdownPaths()
-  const parts = paths[14]!.split("/")
-  const fileName = parts[parts.length - 1] // Get the last part which is the filename
-  const topicName = fileName!.split(".")[0]
-  console.log(topicName)
-  const prettyName = toTitleCase(topicName!)
-  // const prettyName = ""
-  return
-
-  await createGlobalTopicWithGlobalGuide(topicName!, prettyName, "")
-  await processLinksFromMarkdownFilesAsGlobalLinks(topicName!)
-  await moveLinksFromSectionsToGuide(topicName!)
-  await moveAllLinksOfGlobalTopicToSectionOther(topicName!)
+  const topicName = "music-albums"
+  // await processLinksFromMarkdownFilesAsGlobalLinks(topicName)
+  await moveLinksFromSectionsToGuide(topicName)
+  await moveAllLinksOfGlobalTopicToSectionOther(topicName)
   console.log("done")
 }
 
@@ -102,6 +79,8 @@ async function processLinksBySection(topic: Topic) {
 }
 
 async function processLinks(topic: Topic) {
+  // console.log(topic.links, "links")
+  // return
   topic.links.map(async (link) => {
     await addGlobalLink(
       link.url,
@@ -111,6 +90,19 @@ async function processLinks(topic: Topic) {
       topic.name
     )
   })
+}
+
+function toTitleCase(inputStr: string) {
+  // Split the string by hyphen and convert each segment to title case
+  const segments = inputStr
+    .split("-")
+    .map(
+      (segment) =>
+        segment.charAt(0).toUpperCase() + segment.slice(1).toLowerCase()
+    )
+
+  // Join the segments with a space
+  return segments.join(" ")
 }
 
 // async function processNotesFromMarkdownFilesAsGlobalNotes(fileName: string) {
@@ -135,6 +127,37 @@ async function processLinks(topic: Topic) {
 
 // TODO: move it away after release, is here as reference in trying to get all the topics ported for release
 async function oneOffActions() {
+  // const topics = await getAllTopicNames()
+  // const justNames = topics.map((t) => t.name)
+  // const topicObject = topics.reduce((obj, topic) => {
+  //   // @ts-ignore
+  //   obj[topic.name] = {
+  //     prettyName: topic.prettyName,
+  //     connections: []
+  //   }
+  //   return obj
+  // }, {})
+  // console.log(topicObject)
+  // clipboard.writeSync(JSON.stringify(topicObject))
+  // return
+  // const paths = await getMarkdownPaths()
+  // for (const path of paths) {
+  //   const parts = path.split("/")
+  //   const fileName = parts[parts.length - 1] // Get the last part which is the filename
+  //   const topicName = fileName!.split(".")[0]
+  //   console.log(topicName)
+  //   const exists = await checkGlobalTopicExists(topicName!)
+  //   if (exists.length > 0) {
+  //     console.log("topic exists")
+  //     continue
+  //   }
+  //   const prettyName = toTitleCase(topicName!)
+  //   await createGlobalTopicWithGlobalGuide(topicName!, prettyName, "")
+  //   await processLinksFromMarkdownFilesAsGlobalLinks(topicName!)
+  //   await moveLinksFromSectionsToGuide(topicName!)
+  //   await moveAllLinksOfGlobalTopicToSectionOther(topicName!)
+  //   console.log("done")
+  // }
   // const topic = await getGlobalTopic(hankoId, "3d-printing")
   // console.log(topic)
   // await updatePrettyNameOfGlobalTopic("music-albums", "Music Albums")

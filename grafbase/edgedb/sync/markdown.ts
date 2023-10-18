@@ -144,24 +144,69 @@ export async function parseMdFile(filePath: string): Promise<Topic> {
 
   for (const node of tree.children) {
     // console.log(node, "node")
-
     // check for internal links in the content
-    if (node.type === "paragraph") {
-      node.children.forEach((child) => {
-        if (child.type === "link") {
-          const url = child.url
-          // check if the link is an internal link
-          if (url.startsWith("../") && url.endsWith("/index.md")) {
-            // extract the topic name from the link and add it to the array
-            const topic = url.split("/")[1]
-            if (topic) {
-              topicsReferenced.push(topic)
-            }
-          }
-        }
-      })
-    }
+    // if (node.type === "paragraph") {
+    //   node.children.forEach((child) => {
+    //     if (child.type === "link") {
+    //       const url = child.url
+    //       // check if the link is an internal link
+    //       if (url.startsWith("../") && url.endsWith("/index.md")) {
+    //         // extract the topic name from the link and add it to the array
+    //         const topic = url.split("/")[1]
+    //         if (topic) {
+    //           topicsReferenced.push(topic)
+    //         }
+    //       }
+    //     }
+    //   })
+    // }
+    // if front matter exists, start parsing it
+    // if (node.type === "thematicBreak") {
+    //   parsingFrontMatter = true
+    //   continue
+    // }
+    // parse `title: ..` from front matter and use it as title
+    // if (parsingFrontMatter && node.type === "heading") {
+    //   prettyName = toString(node).replace(/title: /, "")
+    //   parsingFrontMatter = false
+    //   gotTitleFromFrontMatter = true
+    //   continue
+    // }
+    // // if front matter doesn't exist, take the first heading as title
+    // // example heading:
+    // if (
+    //   !gotTitle &&
+    //   !gotTitleFromFrontMatter &&
+    //   node.type === "heading" &&
+    //   node.depth === 1 // we only consider # Heading. not ## Heading
+    // ) {
+    //   // console.log(node, "node")
+    //   // title = node.children[0].children.value
+    //   // content = content + toMarkdown(node)
 
+    //   // if heading has a link like:
+    //   // # [Learn Anything](https://learn-anything.xyz)
+    //   // then title is Learn Anything
+    //   if (
+    //     node.children.length > 0 &&
+    //     node.children[0].type === "link" &&
+    //     node.children[0].children[0].type === "text"
+    //   ) {
+    //     prettyName = node.children[0].children[0].value
+    //     content = content + toMarkdown(node)
+    //   }
+    //   // if its heading without a link like
+    //   // # Learn Anything
+    //   // then title is Learn Anything
+    //   else if (node.children.length > 0 && node.children[0].type === "text") {
+    //     prettyName = node.children[0].value
+    //     content = content + toMarkdown(node)
+    //   }
+    //   gotTitle = true
+    //   continue
+    // }
+
+    // if reach `## Something` start parsing a section. ## Notes and ## Links are not considered sections
     if (
       node.type === "heading" &&
       node.depth === 2 &&
@@ -173,146 +218,109 @@ export async function parseMdFile(filePath: string): Promise<Topic> {
       continue
     }
 
-    // if front matter exists, start parsing it
-    if (node.type === "thematicBreak") {
-      parsingFrontMatter = true
-      continue
-    }
-    // parse `title: ..` from front matter and use it as title
-    if (parsingFrontMatter && node.type === "heading") {
-      prettyName = toString(node).replace(/title: /, "")
-      parsingFrontMatter = false
-      gotTitleFromFrontMatter = true
-      continue
-    }
-    // if front matter doesn't exist, take the first heading as title
-    // example heading:
-
-    if (
-      !gotTitle &&
-      !gotTitleFromFrontMatter &&
-      node.type === "heading" &&
-      node.depth === 1 // we only consider # Heading. not ## Heading
-    ) {
-      // console.log(node, "node")
-      // title = node.children[0].children.value
-      // content = content + toMarkdown(node)
-
-      // if heading has a link like:
-      // # [Learn Anything](https://learn-anything.xyz)
-      // then title is Learn Anything
-      if (
-        node.children.length > 0 &&
-        node.children[0].type === "link" &&
-        node.children[0].children[0].type === "text"
-      ) {
-        prettyName = node.children[0].children[0].value
-        content = content + toMarkdown(node)
-      }
-      // if its heading without a link like
-      // # Learn Anything
-      // then title is Learn Anything
-      else if (node.children.length > 0 && node.children[0].type === "text") {
-        prettyName = node.children[0].value
-        content = content + toMarkdown(node)
-      }
-      gotTitle = true
-      continue
-    }
-
     // parsingNotes is true when `## Notes` heading was reached, parse notes until either ## Links or end of file
-    if (parsingNotes) {
-      // console.log(node, "node")
+    // if (parsingNotes) {
+    //   // console.log(node, "node")
 
-      // if ## Links is found, stop processing notes and start processing links
+    //   // if ## Links is found, stop processing notes and start processing links
+    //   if (
+    //     node.type === "heading" &&
+    //     node.depth === 2 &&
+    //     node.children[0].type === "text" &&
+    //     node.children[0].value === "Links"
+    //   ) {
+    //     parsingNotes = false
+    //     parsingLinks = true
+    //     continue
+    //   }
+
+    //   // process all the notes as bullet points
+    //   if (node.type === "list") {
+    //     node.children.forEach(async (note) => {
+    //       let noteAsMarkdown = ""
+    //       // TODO: perhaps make it not `subnotes` but just `additionalNotes`?
+    //       // where `additionalNotes` is just markdown string
+    //       // example of subnotes:
+    //       // - note
+    //       //  - subnote is [markdown](https://en.wikipedia.org/wiki/Markdown)
+    //       //  - another subnote
+    //       let subnotes: string[] = []
+
+    //       // example:
+    //       // - [Acceleration is independent of mass of object.](https://www.reddit.com/r/Physics/comments/iezeqe/gravity/)
+    //       // then noteUrl is https://www.reddit.com/r/Physics/comments/iezeqe/gravity/
+    //       let noteUrl
+
+    //       if (note.children.length > 1) {
+    //         // if there is a note that is not fully wrapped in a link, it's rendered as markdown
+    //         // example:
+    //         // - [Learn Anything](https://learn-anything.xyz) is great
+    //         // noteAsMarkdown is `[Learn Anything](https://learn-anything.xyz) is great`
+    //         noteAsMarkdown = toMarkdown(node.children[0])
+    //         if (noteAsMarkdown.startsWith("* ")) {
+    //           noteAsMarkdown = noteAsMarkdown.slice(2)
+    //         }
+    //         node.children.forEach((note, i) => {
+    //           if (i > 0) {
+    //             note.children.forEach((subnote) => {
+    //               if (subnote.type === "list") {
+    //                 subnotes.push(
+    //                   toMarkdown(subnote.children[0].children[0]).replace(
+    //                     "\n",
+    //                     ""
+    //                   )
+    //                 )
+    //               }
+    //             })
+    //           }
+    //         })
+    //       }
+    //       // no subnotes
+    //       else {
+    //         noteAsMarkdown = toMarkdown(node.children[0])
+    //         if (noteAsMarkdown.startsWith("* ")) {
+    //           noteAsMarkdown = noteAsMarkdown.slice(2)
+    //         }
+    //       }
+
+    //       // detect that noteAsMarkdown is a link
+    //       // so only matches if it is
+    //       // [Link](url)
+    //       // text with [Link](url)
+    //       // won't count
+    //       // TODO: very ugly, ideally it goes away if there is no `subnotes`
+    //       // but just `additionalNotes` as mentioned above
+    //       const markdownLinkRegex = /^\[[^\]]+\]\([^)]+\)$/
+    //       if (markdownLinkRegex.test(noteAsMarkdown.replace("\n", ""))) {
+    //         noteUrl = noteAsMarkdown.split("(")[1].split(")")[0]
+    //         noteAsMarkdown = noteAsMarkdown.split("[")[1].split("]")[0]
+    //       }
+    //       notes.push({
+    //         content: noteAsMarkdown.replace("\n", ""),
+    //         additionalContent: subnotes.join("\n"), // TODO: maybe need to change
+    //         url: noteUrl,
+    //         public: true
+    //       })
+    //     })
+    //   }
+    //   continue
+    // }
+
+    if (parsingSection) {
+      // once ## Links is reached, start processing ## Links
       if (
         node.type === "heading" &&
         node.depth === 2 &&
         node.children[0].type === "text" &&
         node.children[0].value === "Links"
       ) {
-        parsingNotes = false
         parsingLinks = true
         continue
       }
-
-      // process all the notes as bullet points
-      if (node.type === "list") {
-        node.children.forEach(async (note) => {
-          let noteAsMarkdown = ""
-          // TODO: perhaps make it not `subnotes` but just `additionalNotes`?
-          // where `additionalNotes` is just markdown string
-          // example of subnotes:
-          // - note
-          //  - subnote is [markdown](https://en.wikipedia.org/wiki/Markdown)
-          //  - another subnote
-          let subnotes: string[] = []
-
-          // example:
-          // - [Acceleration is independent of mass of object.](https://www.reddit.com/r/Physics/comments/iezeqe/gravity/)
-          // then noteUrl is https://www.reddit.com/r/Physics/comments/iezeqe/gravity/
-          let noteUrl
-
-          if (note.children.length > 1) {
-            // if there is a note that is not fully wrapped in a link, it's rendered as markdown
-            // example:
-            // - [Learn Anything](https://learn-anything.xyz) is great
-            // noteAsMarkdown is `[Learn Anything](https://learn-anything.xyz) is great`
-            noteAsMarkdown = toMarkdown(node.children[0])
-            if (noteAsMarkdown.startsWith("* ")) {
-              noteAsMarkdown = noteAsMarkdown.slice(2)
-            }
-            node.children.forEach((note, i) => {
-              if (i > 0) {
-                note.children.forEach((subnote) => {
-                  if (subnote.type === "list") {
-                    subnotes.push(
-                      toMarkdown(subnote.children[0].children[0]).replace(
-                        "\n",
-                        ""
-                      )
-                    )
-                  }
-                })
-              }
-            })
-          }
-          // no subnotes
-          else {
-            noteAsMarkdown = toMarkdown(node.children[0])
-            if (noteAsMarkdown.startsWith("* ")) {
-              noteAsMarkdown = noteAsMarkdown.slice(2)
-            }
-          }
-
-          // detect that noteAsMarkdown is a link
-          // so only matches if it is
-          // [Link](url)
-          // text with [Link](url)
-          // won't count
-          // TODO: very ugly, ideally it goes away if there is no `subnotes`
-          // but just `additionalNotes` as mentioned above
-          const markdownLinkRegex = /^\[[^\]]+\]\([^)]+\)$/
-          if (markdownLinkRegex.test(noteAsMarkdown.replace("\n", ""))) {
-            noteUrl = noteAsMarkdown.split("(")[1].split(")")[0]
-            noteAsMarkdown = noteAsMarkdown.split("[")[1].split("]")[0]
-          }
-          notes.push({
-            content: noteAsMarkdown.replace("\n", ""),
-            additionalContent: subnotes.join("\n"), // TODO: maybe need to change
-            url: noteUrl,
-            public: true
-          })
-        })
-      }
-      continue
-    }
-
-    if (parsingSection) {
-      if (node.type === "heading") {
-        parsingSection = ""
-        continue
-      }
+      // if (node.type === "heading") {
+      //   parsingSection = ""
+      //   continue
+      // }
       // node.type === "heading" &&
       // node.depth === 2 &&
       // node.children[0].type === "text" &&
