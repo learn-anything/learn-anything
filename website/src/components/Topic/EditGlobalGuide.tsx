@@ -1,7 +1,6 @@
 import { For, Show, createSignal, untrack } from "solid-js"
 import { useNavigate } from "solid-start"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
-import { useMobius } from "../../root"
 import { createTiptapEditor } from "solid-tiptap"
 import StarterKit from "@tiptap/starter-kit"
 import { Search, createSearchState } from "../Search"

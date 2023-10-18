@@ -1,21 +1,25 @@
+import clsx from "clsx"
+import { For, Match, Show, Switch, createSignal, onMount } from "solid-js"
 import { useNavigate } from "solid-start"
 import { useUser } from "../GlobalContext/user"
-import { Match, Switch, createSignal, onMount } from "solid-js"
-import clsx from "clsx"
-import Icon from "../components/Icon"
+import Modal from "../components/Modal"
 import { Search, SearchResult, createSearchState } from "../components/Search"
 import GuideNav from "../components/Topic/GuideNav"
+import FancyButton from "../components/FancyButton"
 
 export default function Profile() {
   const user = useUser()
   const navigate = useNavigate()
-  const [currentTab, setCurrentTab] = createSignal("All")
+  const [currentTab, setCurrentTab] = createSignal("ToLearn")
+  const [showAddLinkModal, setShowAddLinkModal] = createSignal(false)
+  const [showHelpModal, setShowHelpModal] = createSignal(false)
 
   onMount(() => {
     if (!user.user.signedIn) {
       navigate("/auth")
     }
   })
+  // TODO: fill with liked links of user
   const searchResults: SearchResult[] = [
     { name: "Physics" },
     { name: "Math" },
@@ -66,33 +70,93 @@ export default function Profile() {
 
   }
   `}</style>
-      <div class="w-screen h-full text-black bg-white dark:bg-neutral-900 dark:text-white">
+      <div class="w-screen  h-full min-h-screen text-black bg-white dark:bg-neutral-900 dark:text-white">
         <GuideNav />
-
+        <div
+          onClick={() => {
+            setShowAddLinkModal(true)
+          }}
+          class="fixed active:scale-[1.1] bottom-3 right-3 text-white bg-blue-600 px-4 p-2 rounded-full cursor-pointer"
+        >
+          Add Link
+        </div>
+        <Show when={showAddLinkModal()}>
+          {/* @ts-ignore */}
+          <Modal onClose={setShowAddLinkModal}>
+            <div class="w-1/2 relative z-50 h-1/2 rounded-lg dark:border-opacity-50 bg-white border-slate-400 border dark:bg-neutral-900 flex flex-col gap-4 p-[20px] px-[24px]">
+              <input
+                type="text"
+                placeholder="Title"
+                class="border-b bg-inherit outline-none hover:border-opacity-70  focus:border-opacity-100 border-slate-400 border-opacity-50 w-1/2"
+              />
+              <input
+                type="text"
+                placeholder="URL"
+                class="border-b bg-inherit outline-none hover:border-opacity-70 focus:border-opacity-100 border-slate-400 border-opacity-50 w-1/2"
+              />
+              <div class="absolute bottom-2 right-2 bg-blue-600 px-6 hover:bg-blue-700 p-2 text-white rounded-[4px]">
+                Save
+              </div>
+              <div class="absolute bottom-2 left-2  px-4 border border-slate-400 p-2 rounded-[4px]">
+                Cancel
+              </div>
+            </div>
+          </Modal>
+        </Show>
+        <div
+          onClick={() => {
+            setShowHelpModal(true)
+          }}
+          class="fixed active:scale-[1.1] bottom-3 left-3 hover:bg-black hover:border-none hover:text-white transition-all border-slate-400 border px-4 p-2 rounded-full cursor-pointer"
+        >
+          ?
+        </div>
+        <Show when={showHelpModal()}>
+          {/* @ts-ignore */}
+          <Modal onClose={setShowHelpModal}>
+            <div class="w-1/2 relative z-50 h-1/2 rounded-lg bg-white border-slate-400 border dark:bg-neutral-900 flex flex-col gap-4 p-[20px] px-[24px]">
+              <div>This page is being improved rapidly.</div>
+              <div>
+                For now you can see the 1,050 topics available with guides
+              </div>
+              <div>You can also mark any of the guides learning status</div>
+              <div>
+                You can also even mark any of not available topics learning
+                status. For example by going to
+                `learn-anything.xyz/transformer-neural-networks`. It does not
+                yet have a guide but you can still mark it as learning.
+              </div>
+              <div>
+                Work is being done already on the desktop app. To same level of
+                quality as Obsidian/Reflect. If you want to test it, join
+                Discord.
+              </div>
+              <div>
+                Work is also being done on making your markdown or any other
+                kinds of notes publishing to the web. Vectorising it all and
+                providing AI search interface to it.
+              </div>
+              <div class="w-full">
+                <FancyButton
+                  onClick={() => {
+                    window.open("https://discord.com/invite/bxtD8x6aNF")
+                  }}
+                >
+                  Join Discord to get help and beta test out features
+                </FancyButton>
+              </div>
+            </div>
+          </Modal>
+        </Show>
         <div id="ProfileMain" class="h-full w-full flex justify-center">
-          <div
-            id="ProfileInfo"
-            class="h-full min-h-screen flex gap-6 flex-col p-[40px]"
-          >
-            <Search placeholder="Search Topic" state={search_state} />
+          <div id="ProfileInfo" class="h-full flex gap-6 flex-col p-[40px]">
+            <Search placeholder="Search Liked Links" state={search_state} />
             <div class="w-full flex text-[#696969] text-[14px] justify-between">
               <div
                 class={clsx(
                   "p-2 cursor-pointer",
-                  currentTab() === "All" &&
-                    "border-b border-black text-black font-bold"
-                )}
-                onClick={() => {
-                  setCurrentTab("All")
-                }}
-              >
-                ALL
-              </div>
-              <div
-                class={clsx(
-                  "p-2 cursor-pointer",
                   currentTab() === "ToLearn" &&
-                    "border-b border-black text-black font-bold"
+                    "border-b border-black text-black dark:text-white dark:border-white font-bold"
                 )}
                 onClick={() => {
                   setCurrentTab("ToLearn")
@@ -104,7 +168,7 @@ export default function Profile() {
                 class={clsx(
                   "p-2 cursor-pointer",
                   currentTab() === "Learning" &&
-                    "border-b border-black text-black font-bold"
+                    "border-b border-black text-black dark:text-white dark:border-white font-bold"
                 )}
                 onClick={() => {
                   setCurrentTab("Learning")
@@ -116,7 +180,7 @@ export default function Profile() {
                 class={clsx(
                   "p-2 cursor-pointer",
                   currentTab() === "Learned" &&
-                    "border-b border-black text-black font-bold"
+                    "border-b border-black text-black dark:text-white dark:border-white font-bold"
                 )}
                 onClick={() => {
                   setCurrentTab("Learned")
@@ -126,22 +190,86 @@ export default function Profile() {
               </div>
             </div>
             <Switch>
-              <Match when={currentTab() === "All"}>
-                <div>All</div>
-              </Match>
               <Match when={currentTab() === "ToLearn"}>
-                <div>ToLearn</div>
+                <div>
+                  <For each={user.user.topicsToLearn}>
+                    {(topic) => {
+                      return (
+                        <>
+                          <div class="flex items-center overflow-hidden  border-[0.5px] dark:border-[#282828]  border-[#69696951] p-4 px-4 justify-between">
+                            <div class="w-full  h-full flex justify-between items-center">
+                              <div class="w-fit flex gap-1 flex-col">
+                                <div class="flex gap-3 items-center">
+                                  <a class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer">
+                                    {topic.prettyName}
+                                  </a>
+                                </div>
+
+                                {/* <div class="font-light text-[12px] text-[#696969]">PDF</div> */}
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      )
+                    }}
+                  </For>
+                </div>
               </Match>
               <Match when={currentTab() === "Learning"}>
-                <div>Learning</div>
+                <div>
+                  <For each={user.user.topicsToLearning}>
+                    {(topic) => {
+                      return (
+                        <>
+                          <div class="flex items-center overflow-hidden  border-[0.5px] dark:border-[#282828]  border-[#69696951] p-4 px-4 justify-between">
+                            <div class="w-full  h-full flex justify-between items-center">
+                              <div class="w-fit flex gap-1 flex-col">
+                                <div class="flex gap-3 items-center">
+                                  <a class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer">
+                                    {topic.prettyName}
+                                  </a>
+                                </div>
+
+                                {/* <div class="font-light text-[12px] text-[#696969]">PDF</div> */}
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      )
+                    }}
+                  </For>
+                </div>
               </Match>
               <Match when={currentTab() === "Learned"}>
-                <div>Learned</div>
+                <div>
+                  {" "}
+                  <For each={user.user.topicsLearned}>
+                    {(topic) => {
+                      return (
+                        <>
+                          <div class="flex items-center overflow-hidden  border-[0.5px] dark:border-[#282828]  border-[#69696951] p-4 px-4 justify-between">
+                            <div class="w-full  h-full flex justify-between items-center">
+                              <div class="w-fit flex gap-1 flex-col">
+                                <div class="flex gap-3 items-center">
+                                  <a class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer">
+                                    {topic.prettyName}
+                                  </a>
+                                </div>
+
+                                {/* <div class="font-light text-[12px] text-[#696969]">PDF</div> */}
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      )
+                    }}
+                  </For>
+                </div>
               </Match>
             </Switch>
           </div>
 
-          <div
+          {/* <div
             id="ProfileSidebar"
             class="p-[20px] py-[24px] min-w-[250px] h-screen w-[30%] flex flex-col gap-6 overflow-auto bg-[#F6F6F7] dark:bg-neutral-900"
           >
@@ -194,7 +322,7 @@ export default function Profile() {
                 <div>Likes</div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

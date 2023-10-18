@@ -212,6 +212,8 @@ module default {
     # false = not available for all to see
     # global topics are first reviewed by LA before becoming public
     required public: bool;
+    # true = topic was verified
+    required verified: bool;
     # optional path of topic: /physics/quantum-physics where each GlobalTopic name is separated by /
     topicPath: str;
     # used to generate interactive graph of topics for the global topic

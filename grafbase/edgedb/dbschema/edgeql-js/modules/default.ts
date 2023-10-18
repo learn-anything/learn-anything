@@ -105,6 +105,7 @@ export type $GlobalTopicλShape = $.typeutil.flatten<_std.$Object_d29c95e25d6b11
   "topicSummaryShort": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "relatedLinks": $.LinkDesc<$GlobalLink, $.Cardinality.Many, {}, false, false,  false, false>;
   "relatedNotes": $.LinkDesc<$Note, $.Cardinality.Many, {}, false, false,  false, false>;
+  "verified": $.PropertyDesc<_std.$bool, $.Cardinality.One, false, false, false, false>;
   "<relatedTopics[is GlobalTopic]": $.LinkDesc<$GlobalTopic, $.Cardinality.Many, {}, false, false,  false, false>;
   "<mainTopic[is GlobalLink]": $.LinkDesc<$GlobalLink, $.Cardinality.Many, {}, false, false,  false, false>;
   "<topicsLearned[is User]": $.LinkDesc<$User, $.Cardinality.Many, {}, false, false,  false, false>;

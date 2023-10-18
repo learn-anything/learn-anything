@@ -16,9 +16,9 @@ type User = {
   signedIn: boolean
   member: boolean
   admin: boolean
-  topicsIdsToLearn: Topic[]
-  topicsIdsToLearning: Topic[]
-  topicsIdsLearned: Topic[]
+  topicsToLearn: Topic[]
+  topicsToLearning: Topic[]
+  topicsLearned: Topic[]
 }
 
 // global state of user
@@ -28,10 +28,10 @@ export function createUserState(mobius: MobiusType) {
     email: "",
     signedIn: false,
     member: true,
-    admin: true,
-    topicsIdsToLearn: [],
-    topicsIdsToLearning: [],
-    topicsIdsLearned: []
+    admin: false,
+    topicsToLearn: [],
+    topicsToLearning: [],
+    topicsLearned: []
   })
 
   onMount(async () => {
@@ -95,7 +95,14 @@ export function createUserState(mobius: MobiusType) {
         }
       }
     })
-    console.log(res, "res")
+    // @ts-ignore
+    const data = res?.data?.getTopicsLearned
+    setUser({
+      topicsToLearn: data.topicsToLearn,
+      topicsToLearning: data.topicsLearning,
+      topicsLearned: data.topicsLearned
+    })
+    console.log(user, "user")
   })
 
   return {
