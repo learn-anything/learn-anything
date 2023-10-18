@@ -12,6 +12,7 @@
     "grafbase/edgedb/dbschema/edgeql-js"
   ],
   "parserOptions": {
+    "ecmaVersion": "latest",
     "project": ["./tsconfig.json"],
     "tsconfigRootDir": ".",
     "sourceType": "module"
