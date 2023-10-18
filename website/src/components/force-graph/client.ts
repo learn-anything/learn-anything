@@ -1,40 +1,24 @@
 import * as solid from "solid-js"
 import { Canvas, Graph, Anim } from "@nothing-but/force-graph"
-import { Ease, Num } from "@nothing-but/utils"
+import { Ease } from "@nothing-but/utils"
+import { RawData, generateNodesFromData } from "./generate"
 
 const graph_options = Graph.graphOptions({
   inertia_strength: 0.3,
   origin_strength: 0.01,
   repel_distance: 22,
-  repel_strength: 0.5,
+  repel_strength: 0.5
 })
 
-function generateInitialGraph(length: number = 256): Graph.Graph {
-  const nodes: Graph.Node[] = Array.from({ length }, Graph.makeNode)
-  const edges: Graph.Edge[] = []
+export function createForceGraph(
+  raw_data: RawData,
+  onNodeClick: (name: string) => void
+): HTMLCanvasElement {
+  const data = generateNodesFromData(raw_data)
 
-  for (let i = 0; i < length; i++) {
-    const node = nodes[i]!
+  Graph.randomizeNodePositions(data.nodes, graph_options.grid_size)
 
-    if (node.edges.length > 0 && Math.random() < 0.8) continue
-
-    const b_index = Num.random_int(length)
-    let node_b = nodes[b_index]!
-
-    if (node_b === node) {
-      node_b = nodes[(b_index + 1) % length]!
-    }
-
-    edges.push(Graph.connect(node, node_b))
-  }
-
-  Graph.randomizeNodePositions(nodes, graph_options.grid_size)
-
-  return Graph.makeGraph(graph_options, nodes, edges)
-}
-
-export function createForceGraph(): HTMLCanvasElement {
-  const graph = generateInitialGraph()
+  const graph = Graph.makeGraph(graph_options, data.nodes, data.edges)
 
   const el = document.createElement("canvas")
   el.className = "absolute w-full h-full"
@@ -48,6 +32,7 @@ export function createForceGraph(): HTMLCanvasElement {
     ctx,
     graph,
     init_scale: 2,
+    nodeLabel: data.getLabel
   })
 
   const animation = Anim.frameAnimation({
@@ -78,7 +63,7 @@ export function createForceGraph(): HTMLCanvasElement {
     },
     onFrame() {
       Canvas.drawCanvas(canvas)
-    },
+    }
   })
   Anim.bump(animation)
 
@@ -96,7 +81,7 @@ export function createForceGraph(): HTMLCanvasElement {
       Anim.bump(animation)
     },
     onNodeClick(node) {
-      console.log("click", node)
+      onNodeClick(node.key as string)
     },
     onNodeHover(node) {
       canvas.hovered_node = node
@@ -111,7 +96,7 @@ export function createForceGraph(): HTMLCanvasElement {
       } else {
         Anim.pause(animation)
       }
-    },
+    }
   })
   solid.onCleanup(() => Canvas.cleanupCanvasGestures(gestures))
 

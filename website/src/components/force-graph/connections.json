@@ -1,15 +1,27 @@
 {
   "habits": { "prettyName": "Habits", "connections": ["focusing"] },
-  "music-playlists": { "prettyName": "Music playlists", "connections": ["music"] },
+  "music-playlists": {
+    "prettyName": "Music playlists",
+    "connections": ["music"]
+  },
   "zeromq": { "prettyName": "ZeroMQ", "connections": ["networking"] },
   "cockroachdb": { "prettyName": "CockroachDB", "connections": ["databases"] },
   "tezos": { "prettyName": "Tezos", "connections": ["blockchain"] },
   "mongodb": { "prettyName": "MongoDB", "connections": ["databases"] },
-  "duckduckgo": { "prettyName": "DuckDuckGo", "connections": ["search-engines"] },
+  "duckduckgo": {
+    "prettyName": "DuckDuckGo",
+    "connections": ["search-engines"]
+  },
   "xstate": { "prettyName": "XState", "connections": ["js-libraries"] },
-  "elasticsearch": { "prettyName": "Elasticsearch", "connections": ["search-engines"] },
+  "elasticsearch": {
+    "prettyName": "Elasticsearch",
+    "connections": ["search-engines"]
+  },
   "gpu": { "prettyName": "GPU", "connections": ["hardware"] },
-  "github-actions": { "prettyName": "GitHub actions", "connections": ["github"] },
+  "github-actions": {
+    "prettyName": "GitHub actions",
+    "connections": ["github"]
+  },
   "capacitor": { "prettyName": "Capacitor", "connections": ["web"] },
   "wundergraph": { "prettyName": "WunderGraph", "connections": ["graphql"] },
   "linear-algebra": { "prettyName": "Linear algebra", "connections": ["math"] },
@@ -18,19 +30,34 @@
     "connections": ["typescript"]
   },
   "php": { "prettyName": "PHP", "connections": ["programming-languages"] },
-  "unison": { "prettyName": "Unison", "connections": ["programming-languages"] },
+  "unison": {
+    "prettyName": "Unison",
+    "connections": ["programming-languages"]
+  },
   "ember": { "prettyName": "Ember.js", "connections": ["js-libraries"] },
   "shell": { "prettyName": "Unix Shell", "connections": ["unix"] },
-  "programming": { "prettyName": "Programming", "connections": ["computer-science"] },
+  "programming": {
+    "prettyName": "Programming",
+    "connections": ["computer-science"]
+  },
   "linters": { "prettyName": "Linters", "connections": ["compilers"] },
-  "transfer-learning": { "prettyName": "Transfer learning", "connections": ["machine-learning"] },
-  "intellij": { "prettyName": "IntelliJ IDEA", "connections": ["text-editors"] },
+  "transfer-learning": {
+    "prettyName": "Transfer learning",
+    "connections": ["machine-learning"]
+  },
+  "intellij": {
+    "prettyName": "IntelliJ IDEA",
+    "connections": ["text-editors"]
+  },
   "brain-computer-interfaces": {
     "prettyName": "Brain Computer Interfaces",
     "connections": ["neuroscience"]
   },
   "adblocking": { "prettyName": "Ad blocking", "connections": ["privacy"] },
-  "data-processing": { "prettyName": "Data Processing", "connections": ["data-science"] },
+  "data-processing": {
+    "prettyName": "Data Processing",
+    "connections": ["data-science"]
+  },
   "makeup": { "prettyName": "Makeup", "connections": [] },
   "drawing": { "prettyName": "Drawing", "connections": ["art"] },
   "tailscale": { "prettyName": "Tailscale", "connections": ["wireguard"] },
@@ -42,37 +69,61 @@
   },
   "humans": { "prettyName": "Humans", "connections": [] },
   "statistics": { "prettyName": "Statistics", "connections": ["math"] },
-  "python-libraries": { "prettyName": "Python libraries", "connections": ["python"] },
+  "python-libraries": {
+    "prettyName": "Python libraries",
+    "connections": ["python"]
+  },
   "elm-libraries": { "prettyName": "Elm libraries", "connections": ["elm"] },
-  "combine": { "prettyName": "Combine Framework", "connections": ["swift-libraries"] },
+  "combine": {
+    "prettyName": "Combine Framework",
+    "connections": ["swift-libraries"]
+  },
   "c-libraries": { "prettyName": "C libraries", "connections": ["c"] },
   "languages": { "prettyName": "Languages", "connections": [] },
   "reverse-engineering": {
     "prettyName": "Reverse engineering",
     "connections": ["programming"]
   },
-  "stream-processing": { "prettyName": "Stream processing", "connections": ["data-processing"] },
+  "stream-processing": {
+    "prettyName": "Stream processing",
+    "connections": ["data-processing"]
+  },
   "gadts": {
     "prettyName": "Generalized algebraic data type",
     "connections": ["data-structures"]
   },
-  "memory-management": { "prettyName": "Memory management", "connections": ["programming"] },
+  "memory-management": {
+    "prettyName": "Memory management",
+    "connections": ["programming"]
+  },
   "directors": { "prettyName": "Film directors", "connections": ["movies"] },
-  "nuclear-energy": { "prettyName": "Nuclear energy", "connections": ["renewable-energy"] },
-  "home-automation": { "prettyName": "Home automation", "connections": ["automation"] },
+  "nuclear-energy": {
+    "prettyName": "Nuclear energy",
+    "connections": ["renewable-energy"]
+  },
+  "home-automation": {
+    "prettyName": "Home automation",
+    "connections": ["automation"]
+  },
   "black-holes": { "prettyName": "Black holes", "connections": ["space"] },
   "nix-darwin": { "prettyName": "Nix on macOS", "connections": ["nix"] },
   "game-engines": { "prettyName": "Game engines", "connections": ["gamedev"] },
   "finland": { "prettyName": "Finland", "connections": [] },
   "r": { "prettyName": "R language", "connections": ["programming-languages"] },
-  "interior-design": { "prettyName": "Interior Design", "connections": ["architecture"] },
+  "interior-design": {
+    "prettyName": "Interior Design",
+    "connections": ["architecture"]
+  },
   "3d-modeling": { "prettyName": "3D modeling", "connections": [] },
   "spline": { "prettyName": "Spline", "connections": ["3d-modeling"] },
   "design": { "prettyName": "Design", "connections": [] },
   "blender": { "prettyName": "Blender", "connections": ["3d-modeling"] },
   "icons": { "prettyName": "Icons", "connections": ["logos"] },
   "industrial-design": { "prettyName": "Industrial Design", "connections": [] },
-  "rpcs": { "prettyName": "Remote Procedure Calls", "connections": ["distributed-systems"] },
+  "rpcs": {
+    "prettyName": "Remote Procedure Calls",
+    "connections": ["distributed-systems"]
+  },
   "grpc": { "prettyName": "gRPC", "connections": ["encoding"] },
   "asking-questions": { "prettyName": "Asking Questions", "connections": [] },
   "solving-problems": { "prettyName": "Solving problems", "connections": [] },
@@ -82,7 +133,10 @@
   "song-covers": { "prettyName": "Song covers", "connections": [] },
   "guitar": { "prettyName": "Guitar", "connections": ["music"] },
   "synthesizers": { "prettyName": "Synthesizers", "connections": ["music"] },
-  "music-production": { "prettyName": "Music production", "connections": ["music"] },
+  "music-production": {
+    "prettyName": "Music production",
+    "connections": ["music"]
+  },
   "piano": { "prettyName": "Piano", "connections": ["music"] },
   "logic-pro": { "prettyName": "Logic Pro", "connections": ["music"] },
   "ableton": { "prettyName": "Ableton", "connections": ["music"] },
@@ -91,7 +145,10 @@
   "ambient": { "prettyName": "Ambient sounds", "connections": [] },
   "framer": { "prettyName": "Framer", "connections": ["design"] },
   "animation": { "prettyName": "Animation", "connections": ["design"] },
-  "design-systems": { "prettyName": "Design systems", "connections": ["design"] },
+  "design-systems": {
+    "prettyName": "Design systems",
+    "connections": ["design"]
+  },
   "design-inspiration": {
     "prettyName": "Design inspiration",
     "connections": ["design"]
@@ -100,7 +157,10 @@
   "fonts": { "prettyName": "Fonts", "connections": [] },
   "rive": { "prettyName": "Rive", "connections": [] },
   "color": { "prettyName": "Color", "connections": [] },
-  "user-experience": { "prettyName": "User Experience", "connections": ["design"] },
+  "user-experience": {
+    "prettyName": "User Experience",
+    "connections": ["design"]
+  },
   "figma": { "prettyName": "Figma", "connections": ["design"] },
   "figma-plugins": { "prettyName": "Figma plugins", "connections": ["figma"] },
   "distributed-systems": {
@@ -121,12 +181,18 @@
   "music": { "prettyName": "Music", "connections": [] },
   "message-queue": { "prettyName": "Message queue", "connections": [] },
   "mqtt": { "prettyName": "MQTT", "connections": [] },
-  "load-balancing": { "prettyName": "Load balancing", "connections": ["distributed-systems"] },
+  "load-balancing": {
+    "prettyName": "Load balancing",
+    "connections": ["distributed-systems"]
+  },
   "crdt": {
     "prettyName": "Conflict-free replicated data type",
     "connections": ["data-structures"]
   },
-  "cinematography": { "prettyName": "Cinematography", "connections": ["movies"] },
+  "cinematography": {
+    "prettyName": "Cinematography",
+    "connections": ["movies"]
+  },
   "finance": { "prettyName": "Finance", "connections": ["economy"] },
   "high-frequency-trading": {
     "prettyName": "High frequency trading",
@@ -151,7 +217,10 @@
   "uniswap": { "prettyName": "Uniswap", "connections": ["blockchain"] },
   "solana": { "prettyName": "Solana", "connections": ["blockchain"] },
   "clickhouse": { "prettyName": "ClickHouse", "connections": ["databases"] },
-  "foundationdb": { "prettyName": "FoundationDB", "connections": ["databases"] },
+  "foundationdb": {
+    "prettyName": "FoundationDB",
+    "connections": ["databases"]
+  },
   "surrealdb": { "prettyName": "SurrealDB", "connections": ["databases"] },
   "postgresql": { "prettyName": "PostgreSQL", "connections": ["databases"] },
   "memcached": { "prettyName": "Memcached", "connections": ["databases"] },
@@ -171,19 +240,31 @@
     "prettyName": "Sublime Text plugins",
     "connections": ["sublime-text"]
   },
-  "sublime-text": { "prettyName": "Sublime Text", "connections": ["text-editors"] },
+  "sublime-text": {
+    "prettyName": "Sublime Text",
+    "connections": ["text-editors"]
+  },
   "zed": { "prettyName": "Zed", "connections": ["text-editors"] },
   "text-editors": { "prettyName": "Text editors", "connections": [] },
-  "emacs-packages": { "prettyName": "Emacs packages", "connections": ["emacs"] },
+  "emacs-packages": {
+    "prettyName": "Emacs packages",
+    "connections": ["emacs"]
+  },
   "emacs": { "prettyName": "Emacs", "connections": ["text-editors"] },
-  "manaco-editor": { "prettyName": "Monaco Editor", "connections": ["text-editors"] },
+  "manaco-editor": {
+    "prettyName": "Monaco Editor",
+    "connections": ["text-editors"]
+  },
   "vs-code": { "prettyName": "VS Code", "connections": ["text-editors"] },
   "vs-code-extensions": {
     "prettyName": "VS Code extensions",
     "connections": ["vs-code"]
   },
   "codemirror": { "prettyName": "CodeMirror", "connections": ["text-editors"] },
-  "prosemirror": { "prettyName": "ProseMirror", "connections": ["text-editors"] },
+  "prosemirror": {
+    "prettyName": "ProseMirror",
+    "connections": ["text-editors"]
+  },
   "helix": { "prettyName": "Helix", "connections": ["text-editors"] },
   "inngest": { "prettyName": "Inngest", "connections": ["message-queue"] },
   "site-reliability-engineering": {
@@ -229,31 +310,52 @@
   "discord": { "prettyName": "Discord", "connections": ["communication"] },
   "tools": { "prettyName": "Tools", "connections": [] },
   "turso": { "prettyName": "Turso", "connections": ["databases"] },
-  "meilisearch": { "prettyName": "Meilisearch", "connections": ["search-engines"] },
+  "meilisearch": {
+    "prettyName": "Meilisearch",
+    "connections": ["search-engines"]
+  },
   "voice-assistants": { "prettyName": "Voice assistants", "connections": [] },
-  "neuroscience": { "prettyName": "Neuroscience", "connections": ["brain-computer-interfaces"] },
+  "neuroscience": {
+    "prettyName": "Neuroscience",
+    "connections": ["brain-computer-interfaces"]
+  },
   "cognition": { "prettyName": "Cognition", "connections": ["neuroscience"] },
   "hardware": { "prettyName": "Hardware", "connections": ["cpu"] },
-  "circuit-design": { "prettyName": "Circuit design", "connections": ["electrical-engineering"] },
+  "circuit-design": {
+    "prettyName": "Circuit design",
+    "connections": ["electrical-engineering"]
+  },
   "risc-v": { "prettyName": "RISC-V", "connections": [] },
   "amd": { "prettyName": "AMD", "connections": ["cpu"] },
   "cpu": { "prettyName": "CPU", "connections": [] },
-  "displays": { "prettyName": "Displays", "connections": ["computer-graphics"] },
+  "displays": {
+    "prettyName": "Displays",
+    "connections": ["computer-graphics"]
+  },
   "arduino": { "prettyName": "Arduino", "connections": ["embedded-systems"] },
   "raspberry-pi": { "prettyName": "Raspberry Pi", "connections": ["hardware"] },
   "firmware": { "prettyName": "Firmware", "connections": ["hardware"] },
   "verilog": { "prettyName": "Verilog", "connections": ["hardware"] },
-  "fpga": { "prettyName": "Field-programmable gate array", "connections": ["hardware"] },
+  "fpga": {
+    "prettyName": "Field-programmable gate array",
+    "connections": ["hardware"]
+  },
   "neuromorphic-computing": {
     "prettyName": "Neuromorphic Computing",
     "connections": ["hardware"]
   },
-  "jxa": { "prettyName": "JavaScript for Automation", "connections": ["javascript"] },
+  "jxa": {
+    "prettyName": "JavaScript for Automation",
+    "connections": ["javascript"]
+  },
   "macOS": { "prettyName": "macOS", "connections": ["operating-systems"] },
   "applescript": { "prettyName": "AppleScript", "connections": ["macOS"] },
   "tweetbot": { "prettyName": "Tweetbot", "connections": [] },
   "xcode": { "prettyName": "Xcode", "connections": ["macOS"] },
-  "xcode-extensions": { "prettyName": "Xcode Extensions", "connections": ["xcode"] },
+  "xcode-extensions": {
+    "prettyName": "Xcode Extensions",
+    "connections": ["xcode"]
+  },
   "keychain": { "prettyName": "Keychain", "connections": ["macOS"] },
   "macOS-apps": { "prettyName": "macOS apps", "connections": ["macOS"] },
   "typinator": { "prettyName": "Typinator", "connections": [] },
@@ -289,12 +391,27 @@
   "znc": { "prettyName": "ZNC", "connections": ["irc"] },
   "github-bots": { "prettyName": "GitHub bots", "connections": ["github"] },
   "open-source": { "prettyName": "Open Source", "connections": [] },
-  "data-structures": { "prettyName": "Data structures", "connections": ["programming"] },
-  "automata-theory": { "prettyName": "Automata theory", "connections": ["computer-science"] },
-  "algorithms": { "prettyName": "Algorithms", "connections": ["computer-science"] },
-  "compression": { "prettyName": "Compression", "connections": ["computer-science"] },
+  "data-structures": {
+    "prettyName": "Data structures",
+    "connections": ["programming"]
+  },
+  "automata-theory": {
+    "prettyName": "Automata theory",
+    "connections": ["computer-science"]
+  },
+  "algorithms": {
+    "prettyName": "Algorithms",
+    "connections": ["computer-science"]
+  },
+  "compression": {
+    "prettyName": "Compression",
+    "connections": ["computer-science"]
+  },
   "parsing": { "prettyName": "Parsing", "connections": ["compilers"] },
-  "computer-science": { "prettyName": "Computer Science", "connections": ["programming"] },
+  "computer-science": {
+    "prettyName": "Computer Science",
+    "connections": ["programming"]
+  },
   "computer-architecture": {
     "prettyName": "Computer architecture",
     "connections": ["computer-science"]
@@ -304,14 +421,26 @@
     "connections": ["programming"]
   },
   "tla": { "prettyName": "TLA+", "connections": ["formal-verification"] },
-  "kafka": { "prettyName": "Apache Kafka", "connections": ["stream-processing"] },
+  "kafka": {
+    "prettyName": "Apache Kafka",
+    "connections": ["stream-processing"]
+  },
   "data-visualization": {
     "prettyName": "Data Visualization",
     "connections": ["data-science"]
   },
-  "data-science": { "prettyName": "Data Science", "connections": ["computer-science"] },
-  "datasette": { "prettyName": "Datasette", "connections": ["data-processing"] },
-  "cryptography": { "prettyName": "Cryptography", "connections": ["computer-science"] },
+  "data-science": {
+    "prettyName": "Data Science",
+    "connections": ["computer-science"]
+  },
+  "datasette": {
+    "prettyName": "Datasette",
+    "connections": ["data-processing"]
+  },
+  "cryptography": {
+    "prettyName": "Cryptography",
+    "connections": ["computer-science"]
+  },
   "zero-knowledge-proofs": {
     "prettyName": "Zero knowledge proofs",
     "connections": ["encryption"]
@@ -329,11 +458,17 @@
   "cannabis": { "prettyName": "Cannabis", "connections": ["drugs"] },
   "dissociatives": { "prettyName": "Dissociatives", "connections": ["drugs"] },
   "microdosing": { "prettyName": "Microdosing", "connections": ["drugs"] },
-  "phenethylamines": { "prettyName": "Phenethylamines", "connections": ["psychedelics"] },
+  "phenethylamines": {
+    "prettyName": "Phenethylamines",
+    "connections": ["psychedelics"]
+  },
   "salvia": { "prettyName": "Salvia", "connections": ["psychedelics"] },
   "ketamine": { "prettyName": "Ketamine", "connections": ["drugs"] },
   "dmt": { "prettyName": "DMT", "connections": ["psychedelics"] },
-  "tryptamines": { "prettyName": "Tryptamines", "connections": ["psychedelics"] },
+  "tryptamines": {
+    "prettyName": "Tryptamines",
+    "connections": ["psychedelics"]
+  },
   "psychedelics": { "prettyName": "Psychedelics", "connections": ["drugs"] },
   "trippy": { "prettyName": "Trippy things", "connections": [] },
   "lsd": { "prettyName": "LSD", "connections": ["lysergamides"] },
@@ -345,7 +480,10 @@
   "photography": { "prettyName": "Photography", "connections": [] },
   "architecture": { "prettyName": "Architecture", "connections": [] },
   "anime": { "prettyName": "Anime", "connections": [] },
-  "midjourney": { "prettyName": "Midjourney", "connections": ["generative-machine-learning"] },
+  "midjourney": {
+    "prettyName": "Midjourney",
+    "connections": ["generative-machine-learning"]
+  },
   "generative-art": { "prettyName": "Generative art", "connections": ["art"] },
   "dancing": { "prettyName": "Dancing", "connections": [] },
   "furniture": { "prettyName": "Furniture", "connections": [] },
@@ -358,16 +496,28 @@
   "fastify": { "prettyName": "Fastify", "connections": ["js-libraries"] },
   "webassembly": { "prettyName": "WebAssembly", "connections": ["web"] },
   "swc": { "prettyName": "swc", "connections": ["javascript"] },
-  "search-engines": { "prettyName": "Search engines", "connections": ["databases"] },
+  "search-engines": {
+    "prettyName": "Search engines",
+    "connections": ["databases"]
+  },
   "vite": { "prettyName": "Vite", "connections": ["web"] },
   "deno": { "prettyName": "Deno", "connections": ["javascript"] },
   "web-workers": { "prettyName": "Web workers", "connections": ["browsers"] },
   "electron": { "prettyName": "Electron", "connections": ["browsers"] },
-  "web-performance": { "prettyName": "Web performance", "connections": ["web"] },
+  "web-performance": {
+    "prettyName": "Web performance",
+    "connections": ["web"]
+  },
   "spin": { "prettyName": "Spin", "connections": ["webassembly"] },
   "bookmarklets": { "prettyName": "Bookmarklets", "connections": [] },
-  "google-chrome": { "prettyName": "Google Chrome", "connections": ["browsers"] },
-  "chrome-dev-tools": { "prettyName": "Chrome DevTools", "connections": ["google-chrome"] },
+  "google-chrome": {
+    "prettyName": "Google Chrome",
+    "connections": ["browsers"]
+  },
+  "chrome-dev-tools": {
+    "prettyName": "Chrome DevTools",
+    "connections": ["google-chrome"]
+  },
   "stylish-themes": { "prettyName": "Stylish", "connections": [] },
   "browsers": { "prettyName": "Browsers", "connections": [] },
   "safari": { "prettyName": "Safari", "connections": ["browsers"] },
@@ -376,7 +526,10 @@
   "esbuild": { "prettyName": "esbuild", "connections": ["javascript"] },
   "redwood": { "prettyName": "Redwood", "connections": [] },
   "jamstack": { "prettyName": "JAMstack", "connections": [] },
-  "seo": { "prettyName": "Search Engine Optimization", "connections": ["search-engines"] },
+  "seo": {
+    "prettyName": "Search Engine Optimization",
+    "connections": ["search-engines"]
+  },
   "rollup": { "prettyName": "Rollup", "connections": ["web"] },
   "web": { "prettyName": "Web", "connections": [] },
   "rss": { "prettyName": "RSS", "connections": [] },
@@ -405,7 +558,10 @@
   "tcp": { "prettyName": "TCP", "connections": ["networking"] },
   "tls": { "prettyName": "TLS", "connections": ["networking"] },
   "networking": { "prettyName": "Networking", "connections": [] },
-  "mesh-networking": { "prettyName": "Mesh networking", "connections": ["networking"] },
+  "mesh-networking": {
+    "prettyName": "Mesh networking",
+    "connections": ["networking"]
+  },
   "nginx": { "prettyName": "Nginx", "connections": ["networking"] },
   "caddy": { "prettyName": "Caddy", "connections": ["http"] },
   "vpn": { "prettyName": "VPN", "connections": ["networking"] },
@@ -418,10 +574,16 @@
   "iot": { "prettyName": "Internet of things", "connections": [] },
   "ipfs": { "prettyName": "IPFS", "connections": [] },
   "bittorrent": { "prettyName": "BitTorrent", "connections": ["networking"] },
-  "peer-to-peer": { "prettyName": "Peer to peer", "connections": ["decentralization"] },
+  "peer-to-peer": {
+    "prettyName": "Peer to peer",
+    "connections": ["decentralization"]
+  },
   "quic": { "prettyName": "QUIC", "connections": ["networking"] },
   "dns": { "prettyName": "DNS", "connections": ["networking"] },
-  "microservices": { "prettyName": "Microservices", "connections": ["distributed-systems"] },
+  "microservices": {
+    "prettyName": "Microservices",
+    "connections": ["distributed-systems"]
+  },
   "postgraphile": { "prettyName": "PostGraphile", "connections": [] },
   "apollo-graphql": { "prettyName": "Apollo GraphQL", "connections": [] },
   "hasura": { "prettyName": "Hasura", "connections": [] },
@@ -451,7 +613,10 @@
   "fasting": { "prettyName": "Fasting", "connections": [] },
   "health": { "prettyName": "Health", "connections": [] },
   "visionos": { "prettyName": "VisionOS", "connections": [] },
-  "virtual-reality": { "prettyName": "Virtual reality", "connections": ["computer-graphics"] },
+  "virtual-reality": {
+    "prettyName": "Virtual reality",
+    "connections": ["computer-graphics"]
+  },
   "ego": { "prettyName": "Ego", "connections": [] },
   "consciousness": { "prettyName": "Consciousness", "connections": [] },
   "biases": { "prettyName": "Biases", "connections": [] },
@@ -495,7 +660,10 @@
   "monero": { "prettyName": "Monero", "connections": ["blockchain"] },
   "bitcoin": { "prettyName": "Bitcoin", "connections": ["blockchain"] },
   "avalanche": { "prettyName": "Avalanche", "connections": ["blockchain"] },
-  "cryptocurrencies": { "prettyName": "Cryptocurrencies", "connections": ["blockchain"] },
+  "cryptocurrencies": {
+    "prettyName": "Cryptocurrencies",
+    "connections": ["blockchain"]
+  },
   "compassion": { "prettyName": "Compassion", "connections": [] },
   "memories": { "prettyName": "Memories", "connections": [] },
   "parenting": { "prettyName": "Parenting", "connections": ["life"] },
@@ -511,16 +679,28 @@
   "sed": { "prettyName": "Sed", "connections": [] },
   "tmux": { "prettyName": "Tmux", "connections": [] },
   "philanthropy": { "prettyName": "Philanthropy", "connections": [] },
-  "research-papers": { "prettyName": "Research papers", "connections": ["research"] },
+  "research-papers": {
+    "prettyName": "Research papers",
+    "connections": ["research"]
+  },
   "minimalism": { "prettyName": "Minimalism", "connections": [] },
-  "markov-chains": { "prettyName": "Markov chains", "connections": ["statistics"] },
+  "markov-chains": {
+    "prettyName": "Markov chains",
+    "connections": ["statistics"]
+  },
   "geometry": { "prettyName": "Geometry", "connections": ["math"] },
   "group-theory": { "prettyName": "Group theory", "connections": ["math"] },
   "topology": { "prettyName": "Topology", "connections": ["math"] },
-  "lambda-calculus": { "prettyName": "Lambda calculus", "connections": ["functional-programming"] },
+  "lambda-calculus": {
+    "prettyName": "Lambda calculus",
+    "connections": ["functional-programming"]
+  },
   "fractals": { "prettyName": "Fractals", "connections": ["math"] },
   "wolfram-alpha": { "prettyName": "Wolfram Alpha", "connections": ["math"] },
-  "fourier-transform": { "prettyName": "Fourier transform", "connections": ["math"] },
+  "fourier-transform": {
+    "prettyName": "Fourier transform",
+    "connections": ["math"]
+  },
   "lean": { "prettyName": "Lean", "connections": ["formal-verification"] },
   "automated-theorem-proving": {
     "prettyName": "Automated theorem proving",
@@ -531,9 +711,18 @@
     "connections": ["computer-science"]
   },
   "logic": { "prettyName": "Logic", "connections": ["math"] },
-  "combinatory-logic": { "prettyName": "Combinatory logic", "connections": ["math"] },
-  "geometric-algebra": { "prettyName": "Geometric algebra", "connections": ["math"] },
-  "homotopy-theory": { "prettyName": "Homotopy theory", "connections": ["math"] },
+  "combinatory-logic": {
+    "prettyName": "Combinatory logic",
+    "connections": ["math"]
+  },
+  "geometric-algebra": {
+    "prettyName": "Geometric algebra",
+    "connections": ["math"]
+  },
+  "homotopy-theory": {
+    "prettyName": "Homotopy theory",
+    "connections": ["math"]
+  },
   "math": { "prettyName": "Math", "connections": [] },
   "cubical-type-theory": {
     "prettyName": "Cubical type theory",
@@ -543,16 +732,28 @@
     "prettyName": "Computational type theory",
     "connections": ["math"]
   },
-  "type-theory": { "prettyName": "Type Theory", "connections": ["programming-languages"] },
-  "dependent-types": { "prettyName": "Dependent types", "connections": ["programming-languages"] },
+  "type-theory": {
+    "prettyName": "Type Theory",
+    "connections": ["programming-languages"]
+  },
+  "dependent-types": {
+    "prettyName": "Dependent types",
+    "connections": ["programming-languages"]
+  },
   "automatic-differentiation": {
     "prettyName": "Automatic differentiation",
     "connections": ["computer-science"]
   },
   "real-analysis": { "prettyName": "Real analysis", "connections": ["math"] },
-  "queueing-theory": { "prettyName": "Queueing theory", "connections": ["math"] },
+  "queueing-theory": {
+    "prettyName": "Queueing theory",
+    "connections": ["math"]
+  },
   "number-theory": { "prettyName": "Number theory", "connections": ["math"] },
-  "category-theory": { "prettyName": "Category theory", "connections": ["math"] },
+  "category-theory": {
+    "prettyName": "Category theory",
+    "connections": ["math"]
+  },
   "vectors": { "prettyName": "Vectors", "connections": ["linear-algebra"] },
   "calculus": { "prettyName": "Calculus", "connections": ["math"] },
   "differential-equations": {
@@ -571,7 +772,10 @@
     "prettyName": "Combinatorial optimization",
     "connections": ["math"]
   },
-  "gradient-descent": { "prettyName": "Gradient descent", "connections": ["machine-learning"] },
+  "gradient-descent": {
+    "prettyName": "Gradient descent",
+    "connections": ["machine-learning"]
+  },
   "game-theory": { "prettyName": "Game theory", "connections": ["math"] },
   "algebraic-topology": {
     "prettyName": "Algebraic topology",
@@ -581,26 +785,50 @@
   "meditation": { "prettyName": "Meditation", "connections": [] },
   "mindfulness": { "prettyName": "Mindfulness", "connections": [] },
   "tao": { "prettyName": "Tao", "connections": [] },
-  "ocaml-libraries": { "prettyName": "OCaml libraries", "connections": ["ocaml"] },
+  "ocaml-libraries": {
+    "prettyName": "OCaml libraries",
+    "connections": ["ocaml"]
+  },
   "ocaml": { "prettyName": "OCaml", "connections": [] },
   "gleam": { "prettyName": "Gleam", "connections": ["programming-languages"] },
   "programming-languages": {
     "prettyName": "Programming languages",
     "connections": ["computer-science"]
   },
-  "datalog": { "prettyName": "Datalog", "connections": ["programming-languages"] },
-  "prolog": { "prettyName": "Prolog", "connections": ["programming-languages"] },
+  "datalog": {
+    "prettyName": "Datalog",
+    "connections": ["programming-languages"]
+  },
+  "prolog": {
+    "prettyName": "Prolog",
+    "connections": ["programming-languages"]
+  },
   "modal": { "prettyName": "Modal", "connections": [] },
-  "factor": { "prettyName": "Factor", "connections": ["programming-languages"] },
+  "factor": {
+    "prettyName": "Factor",
+    "connections": ["programming-languages"]
+  },
   "zig": { "prettyName": "Zig", "connections": ["programming-languages"] },
   "zig-libraries": { "prettyName": "Zig libraries", "connections": ["zig"] },
   "janet": { "prettyName": "Janet", "connections": ["programming-languages"] },
-  "scheme": { "prettyName": "Scheme", "connections": ["programming-languages"] },
-  "racket": { "prettyName": "Racket", "connections": ["programming-languages"] },
+  "scheme": {
+    "prettyName": "Scheme",
+    "connections": ["programming-languages"]
+  },
+  "racket": {
+    "prettyName": "Racket",
+    "connections": ["programming-languages"]
+  },
   "lisp": { "prettyName": "Lisp", "connections": ["programming-languages"] },
   "carp": { "prettyName": "Carp", "connections": ["programming-languages"] },
-  "common-lisp": { "prettyName": "Common Lisp", "connections": ["programming-languages"] },
-  "pascal": { "prettyName": "Pascal", "connections": ["programming-languages"] },
+  "common-lisp": {
+    "prettyName": "Common Lisp",
+    "connections": ["programming-languages"]
+  },
+  "pascal": {
+    "prettyName": "Pascal",
+    "connections": ["programming-languages"]
+  },
   "forth": { "prettyName": "Forth", "connections": ["programming-languages"] },
   "go": { "prettyName": "Go", "connections": ["programming-languages"] },
   "ent": { "prettyName": "Ent", "connections": [] },
@@ -610,23 +838,44 @@
   "nim": { "prettyName": "Nim", "connections": ["programming-languages"] },
   "nim-libraries": { "prettyName": "Nim libraries", "connections": ["nim"] },
   "self": { "prettyName": "Self", "connections": ["programming-languages"] },
-  "assembly": { "prettyName": "Assembly", "connections": ["programming-languages"] },
+  "assembly": {
+    "prettyName": "Assembly",
+    "connections": ["programming-languages"]
+  },
   "csharp": { "prettyName": "C#", "connections": ["programming-languages"] },
   "tcl": { "prettyName": "Tcl", "connections": ["programming-languages"] },
-  "python": { "prettyName": "Python", "connections": ["programming-languages"] },
+  "python": {
+    "prettyName": "Python",
+    "connections": ["programming-languages"]
+  },
   "dask": { "prettyName": "Dask", "connections": [] },
   "django": { "prettyName": "Django", "connections": [] },
   "numpy": { "prettyName": "NumPy", "connections": ["python-libraries"] },
   "fastapi": { "prettyName": "FastAPI", "connections": [] },
   "babashka": { "prettyName": "Babashka", "connections": ["clojure"] },
-  "clojurescript": { "prettyName": "ClojureScript", "connections": ["clojure"] },
+  "clojurescript": {
+    "prettyName": "ClojureScript",
+    "connections": ["clojure"]
+  },
   "clojure": { "prettyName": "Clojure", "connections": [] },
-  "clojure-libraries": { "prettyName": "Clojure libraries", "connections": ["clojure"] },
+  "clojure-libraries": {
+    "prettyName": "Clojure libraries",
+    "connections": ["clojure"]
+  },
   "vale": { "prettyName": "Vale", "connections": [] },
-  "elixir-libraries": { "prettyName": "Elixir libraries", "connections": ["elixir"] },
-  "elixir": { "prettyName": "Elixir", "connections": ["programming-languages"] },
+  "elixir-libraries": {
+    "prettyName": "Elixir libraries",
+    "connections": ["elixir"]
+  },
+  "elixir": {
+    "prettyName": "Elixir",
+    "connections": ["programming-languages"]
+  },
   "phoenix": { "prettyName": "Phoenix framework", "connections": ["elixir"] },
-  "processing": { "prettyName": "Processing", "connections": ["programming-languages"] },
+  "processing": {
+    "prettyName": "Processing",
+    "connections": ["programming-languages"]
+  },
   "p5js": { "prettyName": "p5.js", "connections": [] },
   "flutter": { "prettyName": "Flutter", "connections": [] },
   "dart": { "prettyName": "Dart", "connections": [] },
@@ -640,64 +889,115 @@
   "rust-libraries": { "prettyName": "Rust libraries", "connections": ["rust"] },
   "axum": { "prettyName": "Axum", "connections": ["rust-libraries"] },
   "tauri": { "prettyName": "Tauri", "connections": ["rust-libraries"] },
-  "purescript": { "prettyName": "PureScript", "connections": ["programming-languages"] },
-  "erlang": { "prettyName": "Erlang", "connections": ["programming-languages"] },
+  "purescript": {
+    "prettyName": "PureScript",
+    "connections": ["programming-languages"]
+  },
+  "erlang": {
+    "prettyName": "Erlang",
+    "connections": ["programming-languages"]
+  },
   "r-packages": { "prettyName": "R packages", "connections": ["r"] },
   "java": { "prettyName": "Java", "connections": ["programming-languages"] },
   "java-libraries": { "prettyName": "Java libraries", "connections": ["java"] },
   "elm": { "prettyName": "Elm", "connections": ["programming-languages"] },
-  "kotlin": { "prettyName": "Kotlin", "connections": ["programming-languages"] },
-  "kotlin-libraries": { "prettyName": "Kotlin libraries", "connections": ["kotlin"] },
-  "fortran": { "prettyName": "Fortran", "connections": ["programming-languages"] },
-  "haskell-libraries": { "prettyName": "Haskell libraries", "connections": ["haskell"] },
-  "haskell": { "prettyName": "Haskell", "connections": ["programming-languages"] },
+  "kotlin": {
+    "prettyName": "Kotlin",
+    "connections": ["programming-languages"]
+  },
+  "kotlin-libraries": {
+    "prettyName": "Kotlin libraries",
+    "connections": ["kotlin"]
+  },
+  "fortran": {
+    "prettyName": "Fortran",
+    "connections": ["programming-languages"]
+  },
+  "haskell-libraries": {
+    "prettyName": "Haskell libraries",
+    "connections": ["haskell"]
+  },
+  "haskell": {
+    "prettyName": "Haskell",
+    "connections": ["programming-languages"]
+  },
   "graph-theory": { "prettyName": "Graph theory", "connections": ["math"] },
   "linear-programming": {
     "prettyName": "Linear programming",
     "connections": ["programming"]
   },
-  "scala-libraries": { "prettyName": "Scala libraries", "connections": ["scala"] },
+  "scala-libraries": {
+    "prettyName": "Scala libraries",
+    "connections": ["scala"]
+  },
   "scala": { "prettyName": "Scala", "connections": ["programming-languages"] },
-  "futhark": { "prettyName": "Futhark", "connections": ["programming-languages"] },
+  "futhark": {
+    "prettyName": "Futhark",
+    "connections": ["programming-languages"]
+  },
   "cpp-libraries": { "prettyName": "C++ libraries", "connections": ["cpp"] },
   "cpp": { "prettyName": "C++", "connections": ["programming-languages"] },
   "qt": { "prettyName": "Qt", "connections": ["cpp"] },
   "swift": { "prettyName": "Swift", "connections": ["programming-languages"] },
   "swiftui": { "prettyName": "SwiftUI", "connections": ["swift"] },
-  "swift-libraries": { "prettyName": "Swift libraries", "connections": ["swift"] },
+  "swift-libraries": {
+    "prettyName": "Swift libraries",
+    "connections": ["swift"]
+  },
   "ada": { "prettyName": "Ada", "connections": ["programming-languages"] },
   "lua": { "prettyName": "Lua", "connections": ["programming-languages"] },
-  "crystal": { "prettyName": "Crystal", "connections": ["programming-languages"] },
+  "crystal": {
+    "prettyName": "Crystal",
+    "connections": ["programming-languages"]
+  },
   "language-server-protocol": {
     "prettyName": "Language Server Protocol",
     "connections": ["programming-languages"]
   },
   "ink": { "prettyName": "Ink", "connections": [] },
   "julia": { "prettyName": "Julia", "connections": ["programming-languages"] },
-  "julia-libraries": { "prettyName": "Julia libraries", "connections": ["julia"] },
+  "julia-libraries": {
+    "prettyName": "Julia libraries",
+    "connections": ["julia"]
+  },
   "odin": { "prettyName": "Odin", "connections": ["programming-languages"] },
-  "standard-ml": { "prettyName": "Standard ML", "connections": ["programming-languages"] },
+  "standard-ml": {
+    "prettyName": "Standard ML",
+    "connections": ["programming-languages"]
+  },
   "pony": { "prettyName": "Pony", "connections": ["programming-languages"] },
   "idris": { "prettyName": "Idris", "connections": ["programming-languages"] },
   "dhall": { "prettyName": "Dhall", "connections": [] },
   "fsharp": { "prettyName": "F#", "connections": ["programming-languages"] },
   "bun": { "prettyName": "Bun", "connections": ["javascript"] },
   "babel": { "prettyName": "Babel", "connections": ["javascript"] },
-  "javascript": { "prettyName": "JavaScript", "connections": ["programming-languages"] },
+  "javascript": {
+    "prettyName": "JavaScript",
+    "connections": ["programming-languages"]
+  },
   "astro": { "prettyName": "Astro", "connections": ["js-libraries"] },
   "svelte": { "prettyName": "Svelte", "connections": ["js-libraries"] },
   "mobx": { "prettyName": "MobX", "connections": ["js-libraries"] },
-  "js-libraries": { "prettyName": "JS libraries", "connections": ["javascript"] },
+  "js-libraries": {
+    "prettyName": "JS libraries",
+    "connections": ["javascript"]
+  },
   "threejs": { "prettyName": "Three.js", "connections": ["js-libraries"] },
   "vue": { "prettyName": "Vue.js", "connections": ["js-libraries"] },
   "rxjs": { "prettyName": "RxJS", "connections": ["js-libraries"] },
-  "d3js": { "prettyName": "Data-Driven Documents", "connections": ["js-libraries"] },
+  "d3js": {
+    "prettyName": "Data-Driven Documents",
+    "connections": ["js-libraries"]
+  },
   "angular": { "prettyName": "Angular", "connections": ["js-libraries"] },
   "solid": { "prettyName": "SolidJS", "connections": ["js-libraries"] },
   "redux": { "prettyName": "Redux", "connections": ["js-libraries"] },
   "jest": { "prettyName": "Jest", "connections": ["js-libraries"] },
   "qwik": { "prettyName": "Qwik", "connections": ["js-libraries"] },
-  "react-native": { "prettyName": "React Native", "connections": ["javascript"] },
+  "react-native": {
+    "prettyName": "React Native",
+    "connections": ["javascript"]
+  },
   "relay": { "prettyName": "Relay", "connections": ["js-libraries"] },
   "gatsby": { "prettyName": "Gatsby JS", "connections": [] },
   "nextjs": { "prettyName": "Next.js", "connections": ["js-libraries"] },
@@ -710,31 +1010,49 @@
     "prettyName": "React Server Side Rendering",
     "connections": ["react"]
   },
-  "react-components": { "prettyName": "React components", "connections": ["react"] },
+  "react-components": {
+    "prettyName": "React components",
+    "connections": ["react"]
+  },
   "remix": { "prettyName": "Remix", "connections": ["react"] },
   "enhance": { "prettyName": "Enhance", "connections": ["html"] },
   "eslint": { "prettyName": "ESLint", "connections": ["javascript"] },
-  "objc": { "prettyName": "Objective C", "connections": ["programming-languages"] },
+  "objc": {
+    "prettyName": "Objective C",
+    "connections": ["programming-languages"]
+  },
   "objc-libraries": { "prettyName": "ObjC libraries", "connections": ["objc"] },
-  "austral": { "prettyName": "Austral", "connections": ["programming-languages"] },
+  "austral": {
+    "prettyName": "Austral",
+    "connections": ["programming-languages"]
+  },
   "perl": { "prettyName": "Perl", "connections": ["programming-languages"] },
   "coq": { "prettyName": "Coq", "connections": ["programming-languages"] },
   "c": { "prettyName": "C", "connections": ["programming-languages"] },
   "val": { "prettyName": "Val", "connections": ["programming-languages"] },
   "d": { "prettyName": "D", "connections": ["programming-languages"] },
-  "smalltalk": { "prettyName": "Smalltalk", "connections": ["programming-languages"] },
+  "smalltalk": {
+    "prettyName": "Smalltalk",
+    "connections": ["programming-languages"]
+  },
   "rails": { "prettyName": "Rails", "connections": ["ruby"] },
   "ruby-libraries": { "prettyName": "Ruby libraries", "connections": ["ruby"] },
   "ruby": { "prettyName": "Ruby", "connections": [] },
   "roc": { "prettyName": "Roc", "connections": ["programming-languages"] },
   "bash": { "prettyName": "Bash", "connections": ["operating-systems"] },
-  "reasonml": { "prettyName": "ReasonML", "connections": ["programming-languages"] },
+  "reasonml": {
+    "prettyName": "ReasonML",
+    "connections": ["programming-languages"]
+  },
   "reasonml-libraries": {
     "prettyName": "ReasonML libraries",
     "connections": ["reasonml"]
   },
   "podcasts": { "prettyName": "Podcasts", "connections": [] },
-  "podcast-recording": { "prettyName": "Podcast recording", "connections": ["podcasts"] },
+  "podcast-recording": {
+    "prettyName": "Podcast recording",
+    "connections": ["podcasts"]
+  },
   "streaming": { "prettyName": "Streaming", "connections": [] },
   "inlang": { "prettyName": "Inlang", "connections": [] },
   "chinese": { "prettyName": "Chinese language", "connections": [] },
@@ -769,14 +1087,29 @@
   "shaders": { "prettyName": "Shaders", "connections": ["computer-graphics"] },
   "metal": { "prettyName": "Metal", "connections": ["swift"] },
   "bezier-curves": { "prettyName": "Bézier curves", "connections": ["math"] },
-  "image-processing": { "prettyName": "Image processing", "connections": ["algorithms"] },
+  "image-processing": {
+    "prettyName": "Image processing",
+    "connections": ["algorithms"]
+  },
   "webgl": { "prettyName": "WebGL", "connections": ["computer-graphics"] },
   "webgpu": { "prettyName": "WebGPU", "connections": ["computer-graphics"] },
-  "rendering": { "prettyName": "Rendering", "connections": ["computer-graphics"] },
-  "ocr": { "prettyName": "Optical character recognition", "connections": ["computer-vision"] },
+  "rendering": {
+    "prettyName": "Rendering",
+    "connections": ["computer-graphics"]
+  },
+  "ocr": {
+    "prettyName": "Optical character recognition",
+    "connections": ["computer-vision"]
+  },
   "computer-vision": { "prettyName": "Computer vision", "connections": [] },
-  "vulkan": { "prettyName": "Vulkan API", "connections": ["computer-graphics"] },
-  "ray-tracing": { "prettyName": "Ray tracing", "connections": ["computer-graphics"] },
+  "vulkan": {
+    "prettyName": "Vulkan API",
+    "connections": ["computer-graphics"]
+  },
+  "ray-tracing": {
+    "prettyName": "Ray tracing",
+    "connections": ["computer-graphics"]
+  },
   "computer-graphics": { "prettyName": "Computer graphics", "connections": [] },
   "fly-io": { "prettyName": "Fly.io", "connections": ["cloud-computing"] },
   "azure": { "prettyName": "Azure", "connections": ["cloud-computing"] },
@@ -793,13 +1126,19 @@
     "prettyName": "Serverless computing",
     "connections": ["cloud-computing"]
   },
-  "knowledge-graphs": { "prettyName": "Knowledge graphs", "connections": ["knowledge"] },
+  "knowledge-graphs": {
+    "prettyName": "Knowledge graphs",
+    "connections": ["knowledge"]
+  },
   "knowledge": { "prettyName": "Knowledge", "connections": [] },
   "knowledge-extraction": {
     "prettyName": "Knowledge extraction",
     "connections": ["knowledge"]
   },
-  "mental-models": { "prettyName": "Mental models", "connections": ["solving-problems"] },
+  "mental-models": {
+    "prettyName": "Mental models",
+    "connections": ["solving-problems"]
+  },
   "relational-programming": {
     "prettyName": "Relational programming",
     "connections": ["programming"]
@@ -809,11 +1148,20 @@
     "connections": ["programming"]
   },
   "agile-development": { "prettyName": "Agile development", "connections": [] },
-  "program-synthesis": { "prettyName": "Program synthesis", "connections": ["programming"] },
-  "software-testing": { "prettyName": "Software testing", "connections": ["programming"] },
+  "program-synthesis": {
+    "prettyName": "Program synthesis",
+    "connections": ["programming"]
+  },
+  "software-testing": {
+    "prettyName": "Software testing",
+    "connections": ["programming"]
+  },
   "cypress": { "prettyName": "Cypress", "connections": [] },
   "fuzzing": { "prettyName": "Fuzzing", "connections": ["software-testing"] },
-  "serialization": { "prettyName": "Serialization", "connections": ["programming"] },
+  "serialization": {
+    "prettyName": "Serialization",
+    "connections": ["programming"]
+  },
   "structured-programming": {
     "prettyName": "Structured programming",
     "connections": ["programming"]
@@ -826,38 +1174,68 @@
     "prettyName": "Semantic versioning",
     "connections": ["version-control"]
   },
-  "protocol-buffers": { "prettyName": "Protocol buffers", "connections": ["encoding"] },
+  "protocol-buffers": {
+    "prettyName": "Protocol buffers",
+    "connections": ["encoding"]
+  },
   "reactive-programming": {
     "prettyName": "Reactive programming",
     "connections": ["programming"]
   },
-  "system-design": { "prettyName": "System Design", "connections": ["software-architecture"] },
+  "system-design": {
+    "prettyName": "System Design",
+    "connections": ["software-architecture"]
+  },
   "regex": { "prettyName": "Regex", "connections": ["programming"] },
-  "logic-programming": { "prettyName": "Logic programming", "connections": ["programming"] },
-  "program-analysis": { "prettyName": "Program analysis", "connections": ["programming"] },
+  "logic-programming": {
+    "prettyName": "Logic programming",
+    "connections": ["programming"]
+  },
+  "program-analysis": {
+    "prettyName": "Program analysis",
+    "connections": ["programming"]
+  },
   "recursion": { "prettyName": "Recursion", "connections": ["programming"] },
   "functional-programming": {
     "prettyName": "Functional programming",
     "connections": ["programming"]
   },
-  "algebraic-effects": { "prettyName": "Algebraic effects", "connections": ["programming"] },
+  "algebraic-effects": {
+    "prettyName": "Algebraic effects",
+    "connections": ["programming"]
+  },
   "object-oriented-programming": {
     "prettyName": "Object-oriented programming",
     "connections": ["programming"]
   },
   "encoding": { "prettyName": "Encoding", "connections": ["programming"] },
-  "embedded-systems": { "prettyName": "Embedded systems", "connections": ["operating-systems"] },
+  "embedded-systems": {
+    "prettyName": "Embedded systems",
+    "connections": ["operating-systems"]
+  },
   "interactive-computing": {
     "prettyName": "Interactive computing",
     "connections": ["computer-science"]
   },
   "google-colab": { "prettyName": "Google Colab", "connections": [] },
   "mathematica": { "prettyName": "Wolfram Mathematica", "connections": [] },
-  "jupyter-notebooks": { "prettyName": "Jupyter Notebooks", "connections": ["python"] },
-  "state-machines": { "prettyName": "State machines", "connections": ["computer-science"] },
+  "jupyter-notebooks": {
+    "prettyName": "Jupyter Notebooks",
+    "connections": ["python"]
+  },
+  "state-machines": {
+    "prettyName": "State machines",
+    "connections": ["computer-science"]
+  },
   "logging": { "prettyName": "Logging", "connections": ["programming"] },
-  "design-patterns": { "prettyName": "Design patterns", "connections": ["programming"] },
-  "array-programming": { "prettyName": "Array programming", "connections": ["programming"] },
+  "design-patterns": {
+    "prettyName": "Design patterns",
+    "connections": ["programming"]
+  },
+  "array-programming": {
+    "prettyName": "Array programming",
+    "connections": ["programming"]
+  },
   "probabilistic-programming": {
     "prettyName": "Probabilistic programming",
     "connections": ["programming"]
@@ -880,8 +1258,14 @@
     "prettyName": "Constraint programming",
     "connections": ["programming"]
   },
-  "concurrency": { "prettyName": "Concurrency", "connections": ["programming-languages"] },
-  "coding-practice": { "prettyName": "Coding practice", "connections": ["programming"] },
+  "concurrency": {
+    "prettyName": "Concurrency",
+    "connections": ["programming-languages"]
+  },
+  "coding-practice": {
+    "prettyName": "Coding practice",
+    "connections": ["programming"]
+  },
   "ethics": { "prettyName": "Ethics", "connections": [] },
   "simulated-reality": { "prettyName": "Simulated reality", "connections": [] },
   "effective-altruism": {
@@ -911,7 +1295,10 @@
   },
   "virtual-assistant": { "prettyName": "Virtual assistant", "connections": [] },
   "nlp": { "prettyName": "Natural language processing", "connections": [] },
-  "speech-synthesis": { "prettyName": "Speech synthesis", "connections": ["nlp"] },
+  "speech-synthesis": {
+    "prettyName": "Speech synthesis",
+    "connections": ["nlp"]
+  },
   "sentiment-analysis": {
     "prettyName": "Sentiment analysis",
     "connections": ["nlp"]
@@ -926,7 +1313,10 @@
   "scuttlebutt": { "prettyName": "Scuttlebutt", "connections": [] },
   "bluesky": { "prettyName": "Bluesky", "connections": ["social-networks"] },
   "social-networks": { "prettyName": "Social networks", "connections": [] },
-  "farcaster": { "prettyName": "Farcaster", "connections": ["social-networks"] },
+  "farcaster": {
+    "prettyName": "Farcaster",
+    "connections": ["social-networks"]
+  },
   "lemmy": { "prettyName": "Lemmy", "connections": ["social-networks"] },
   "nostr": { "prettyName": "Nostr", "connections": [] },
   "mastodon": { "prettyName": "Mastodon", "connections": ["social-networks"] },
@@ -940,24 +1330,45 @@
   "api": { "prettyName": "API", "connections": ["programming"] },
   "trpc": { "prettyName": "tRPC", "connections": ["js-libraries"] },
   "fitness": { "prettyName": "Fitness", "connections": ["health"] },
-  "strength-training": { "prettyName": "Strength training", "connections": ["fitness"] },
+  "strength-training": {
+    "prettyName": "Strength training",
+    "connections": ["fitness"]
+  },
   "running": { "prettyName": "Running", "connections": ["fitness"] },
   "exercises": { "prettyName": "Exercises", "connections": ["fitness"] },
   "yoga": { "prettyName": "Yoga", "connections": ["fitness"] },
   "documentaries": { "prettyName": "Documentaries", "connections": [] },
   "automation": { "prettyName": "Automation", "connections": [] },
   "physics": { "prettyName": "Physics", "connections": [] },
-  "dark-matter": { "prettyName": "Dark matter", "connections": ["psychedelics"] },
-  "quantum-computing": { "prettyName": "Quantum computing", "connections": ["physics"] },
-  "quantum-physics": { "prettyName": "Quantum physics", "connections": ["physics"] },
-  "quantum-gravity": { "prettyName": "Quantum gravity", "connections": ["physics"] },
-  "string-theory": { "prettyName": "String theory", "connections": ["physics"] },
+  "dark-matter": {
+    "prettyName": "Dark matter",
+    "connections": ["psychedelics"]
+  },
+  "quantum-computing": {
+    "prettyName": "Quantum computing",
+    "connections": ["physics"]
+  },
+  "quantum-physics": {
+    "prettyName": "Quantum physics",
+    "connections": ["physics"]
+  },
+  "quantum-gravity": {
+    "prettyName": "Quantum gravity",
+    "connections": ["physics"]
+  },
+  "string-theory": {
+    "prettyName": "String theory",
+    "connections": ["physics"]
+  },
   "antimatter": { "prettyName": "Antimatter", "connections": ["physics"] },
   "electrical-engineering": {
     "prettyName": "Electrical engineering",
     "connections": ["physics"]
   },
-  "signal-processing": { "prettyName": "Signal processing", "connections": ["physics"] },
+  "signal-processing": {
+    "prettyName": "Signal processing",
+    "connections": ["physics"]
+  },
   "classical-mechanics": {
     "prettyName": "Classical mechanics",
     "connections": ["physics"]
@@ -976,7 +1387,10 @@
     "prettyName": "Competitive programming",
     "connections": ["programming"]
   },
-  "build-systems": { "prettyName": "Build systems", "connections": ["programming"] },
+  "build-systems": {
+    "prettyName": "Build systems",
+    "connections": ["programming"]
+  },
   "turbo": { "prettyName": "turbo", "connections": ["devops"] },
   "chatgpt": { "prettyName": "ChatGPT", "connections": ["nlp"] },
   "reinforcement-learning": {
@@ -995,17 +1409,29 @@
     "prettyName": "Graph neural networks",
     "connections": ["neural-networks"]
   },
-  "neural-networks": { "prettyName": "Neural networks", "connections": ["machine-learning"] },
-  "ml-libraries": { "prettyName": "ML Libraries", "connections": ["machine-learning"] },
+  "neural-networks": {
+    "prettyName": "Neural networks",
+    "connections": ["machine-learning"]
+  },
+  "ml-libraries": {
+    "prettyName": "ML Libraries",
+    "connections": ["machine-learning"]
+  },
   "pytorch": { "prettyName": "PyTorch", "connections": ["machine-learning"] },
   "keras": { "prettyName": "Keras", "connections": ["machine-learning"] },
-  "tensorflow": { "prettyName": "TensorFlow", "connections": ["machine-learning"] },
+  "tensorflow": {
+    "prettyName": "TensorFlow",
+    "connections": ["machine-learning"]
+  },
   "jax": { "prettyName": "JAX", "connections": ["machine-learning"] },
   "autonomous-driving": {
     "prettyName": "Autonomous driving",
     "connections": ["machine-learning"]
   },
-  "ml-models": { "prettyName": "ML Models", "connections": ["machine-learning"] },
+  "ml-models": {
+    "prettyName": "ML Models",
+    "connections": ["machine-learning"]
+  },
   "generative-machine-learning": {
     "prettyName": "Generative Machine Learning",
     "connections": ["machine-learning"]
@@ -1015,43 +1441,70 @@
     "connections": ["machine-learning"]
   },
   "datasets": { "prettyName": "Datasets", "connections": ["data-science"] },
-  "machine-learning": { "prettyName": "Machine learning", "connections": ["math"] },
+  "machine-learning": {
+    "prettyName": "Machine learning",
+    "connections": ["math"]
+  },
   "artificial-intelligence": {
     "prettyName": "Artificial intelligence",
     "connections": ["machine-learning"]
   },
-  "mirageos": { "prettyName": "MirageOS", "connections": ["operating-systems"] },
+  "mirageos": {
+    "prettyName": "MirageOS",
+    "connections": ["operating-systems"]
+  },
   "android": { "prettyName": "Android", "connections": ["operating-systems"] },
-  "emulators": { "prettyName": "Emulators", "connections": ["operating-systems"] },
+  "emulators": {
+    "prettyName": "Emulators",
+    "connections": ["operating-systems"]
+  },
   "windows": { "prettyName": "Windows", "connections": ["operating-systems"] },
   "bsd": { "prettyName": "BSD", "connections": ["operating-systems"] },
-  "fuchsia-os": { "prettyName": "Fuchsia OS", "connections": ["operating-systems"] },
+  "fuchsia-os": {
+    "prettyName": "Fuchsia OS",
+    "connections": ["operating-systems"]
+  },
   "coreml": { "prettyName": "CoreML", "connections": ["swift"] },
   "watchos": { "prettyName": "WatchOS", "connections": ["swift"] },
   "tvos": { "prettyName": "tvOS", "connections": ["swift"] },
   "homekit": { "prettyName": "HomeKit", "connections": ["swift"] },
   "ios": { "prettyName": "iOS", "connections": ["macOS"] },
   "ios-shortcuts": { "prettyName": "iOS Shortcuts", "connections": ["ios"] },
-  "file-systems": { "prettyName": "File systems", "connections": ["operating-systems"] },
+  "file-systems": {
+    "prettyName": "File systems",
+    "connections": ["operating-systems"]
+  },
   "nixos": { "prettyName": "NixOS", "connections": ["operating-systems"] },
   "linux": { "prettyName": "Linux", "connections": ["operating-systems"] },
-  "operating-systems": { "prettyName": "Operating systems", "connections": ["computer-science"] },
+  "operating-systems": {
+    "prettyName": "Operating systems",
+    "connections": ["computer-science"]
+  },
   "docker": { "prettyName": "Docker", "connections": ["operating-systems"] },
   "kubernetes": { "prettyName": "Kubernetes", "connections": ["containers"] },
   "kubernetes-plugins": {
     "prettyName": "Kubernetes plugins",
     "connections": ["kubernetes"]
   },
-  "containers": { "prettyName": "Containers", "connections": ["operating-systems"] },
+  "containers": {
+    "prettyName": "Containers",
+    "connections": ["operating-systems"]
+  },
   "nix": { "prettyName": "Nix", "connections": ["package-managers"] },
   "brew": { "prettyName": "Brew", "connections": ["package-managers"] },
-  "package-managers": { "prettyName": "Package managers", "connections": ["operating-systems"] },
+  "package-managers": {
+    "prettyName": "Package managers",
+    "connections": ["operating-systems"]
+  },
   "playstation": { "prettyName": "PlayStation", "connections": ["games"] },
   "minecraft": { "prettyName": "Minecraft", "connections": ["games"] },
   "board-games": { "prettyName": "Board games", "connections": ["games"] },
   "sudoku": { "prettyName": "Sudoku", "connections": ["games"] },
   "gamedev": { "prettyName": "Game development", "connections": ["games"] },
-  "unreal-engine": { "prettyName": "Unreal Engine", "connections": ["game-engines"] },
+  "unreal-engine": {
+    "prettyName": "Unreal Engine",
+    "connections": ["game-engines"]
+  },
   "godot": { "prettyName": "Godot", "connections": ["game-engines"] },
   "unity": { "prettyName": "Unity", "connections": ["game-engines"] },
   "ebiten": { "prettyName": "Ebiten", "connections": ["game-engines"] },
@@ -1113,7 +1566,10 @@
   "backpacks": { "prettyName": "Backpacks", "connections": [] },
   "events": { "prettyName": "Events", "connections": [] },
   "geography": { "prettyName": "Geography", "connections": [] },
-  "spatial-analysis": { "prettyName": "Spatial analysis", "connections": ["data-processing"] },
+  "spatial-analysis": {
+    "prettyName": "Spatial analysis",
+    "connections": ["data-processing"]
+  },
   "tv-series": { "prettyName": "TV series", "connections": [] },
   "analytics": { "prettyName": "Analytics", "connections": ["observability"] },
   "tinybird": { "prettyName": "Tinybird", "connections": ["analytics"] },
@@ -1123,7 +1579,10 @@
   "bionics": { "prettyName": "Bionics", "connections": ["physics"] },
   "viruses": { "prettyName": "Viruses", "connections": ["physics"] },
   "biology": { "prettyName": "Biology", "connections": [] },
-  "immunotherapy": { "prettyName": "Immunotherapy", "connections": ["biology"] },
+  "immunotherapy": {
+    "prettyName": "Immunotherapy",
+    "connections": ["biology"]
+  },
   "immunology": { "prettyName": "Immunology", "connections": ["biology"] },
   "computational-biology": {
     "prettyName": "Computational biology",
@@ -1133,7 +1592,10 @@
     "prettyName": "Regenerative medicine",
     "connections": ["biology"]
   },
-  "bioinformatics": { "prettyName": "Bioinformatics", "connections": ["biology"] },
+  "bioinformatics": {
+    "prettyName": "Bioinformatics",
+    "connections": ["biology"]
+  },
   "evolution": { "prettyName": "Evolution", "connections": ["biology"] },
   "markdown": { "prettyName": "Markdown", "connections": [] },
   "writing-prompts": { "prettyName": "Writing prompts", "connections": [] },

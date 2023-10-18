@@ -15,6 +15,7 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "noUncheckedIndexedAccess": true,
+    "resolveJsonModule": true,
     "allowJs": true,
     "types": [
       "solid-start/env",

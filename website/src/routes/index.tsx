@@ -25,15 +25,15 @@ export default function Home() {
 
   const searchResults = createMemo(() =>
     global.state.globalTopicsSearchList.map(
-      (topic): SearchResult => ({ name: topic.prettyName }),
-    ),
+      (topic): SearchResult => ({ name: topic.prettyName })
+    )
   )
 
   const search_state = createSearchState({
     searchResults,
     onSelect: ({ name }) => {
       navigate(`/${name}`)
-    },
+    }
   })
 
   return (
@@ -66,14 +66,18 @@ export default function Home() {
           flex flex-col items-center justify-center
           bg-neutral-950 text-white"
       >
-        <ForceGraph />
+        <ForceGraph
+          onNodeClick={(name) => {
+            navigate(`/${name}`)
+          }}
+        />
         <div class="flex flex-col gap-1 items-center z-50">
           <div
             class="tracking-wide font-bold bg-clip-text text-transparent"
             style={{
               "background-image":
                 "linear-gradient(145deg, #fff 65%, rgba(255,255,255,.43))",
-              "font-size": "clamp(3rem, 10vw, 5rem)",
+              "font-size": "clamp(3rem, 10vw, 5rem)"
             }}
           >
             I want to learn
@@ -81,7 +85,7 @@ export default function Home() {
           <div
             class="relative w-[50%] h-full flex items-center transition-all duration-150"
             classList={{
-              "w-[70%]": search_state.searchOpen,
+              "w-[70%]": search_state.searchOpen
             }}
           >
             <Search placeholder={searchPlaceholder()} state={search_state} />
