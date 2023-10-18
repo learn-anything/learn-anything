@@ -41,6 +41,9 @@ export default function Pricing() {
         #PayMain {
           padding: 0;
         }
+        #PayNav {
+          padding: 0 10%;
+        }
         @media (min-width: 700px) {
           #PayCard {
             flex-direction: row;
@@ -64,6 +67,9 @@ export default function Pricing() {
           #PayMain {
             padding: 0 15%;
           }
+          #PayNav {
+            padding: 0 15%;
+          }
         }
       `}
       </style>
@@ -80,7 +86,10 @@ export default function Pricing() {
             }}
           />
         </Show>
-        <div class="h-[80px] px-[15%] w-full flex items-center justify-between gap-6 font-semibold">
+        <div
+          id="PayNav"
+          class="h-[80px] px-[15%] w-full flex items-center justify-between gap-6 font-semibold"
+        >
           <div
             class="w-[30px] h-[30px] cursor-pointer"
             onClick={() => {
@@ -132,7 +141,7 @@ export default function Pricing() {
           </div>
           <div
             id="PayCard"
-            class="w-full h-full rounded-xl bg-white dark:bg-neutral-900 flex"
+            class="w-full h-[500px] rounded-xl bg-white dark:bg-neutral-900 flex"
           >
             <div
               id="InfoFree"
@@ -146,7 +155,7 @@ export default function Pricing() {
                   $0{" "}
                   <span class="opacity-90 font-light text-sm">per month</span>
                 </div>
-                <div class="font-light h-[280px] opacity-60 flex flex-col gap-3">
+                <div class="font-light opacity-60 flex flex-col gap-3">
                   <div>
                     • Free{" "}
                     <a href="https://github.com/learn-anything/learn-anything.xyz">
@@ -187,7 +196,7 @@ export default function Pricing() {
                     </span>
                   </div>
                 </Show>
-                <div class="font-light h-fit opacity-60 flex flex-col gap-3">
+                <div class="font-light opacity-60 flex flex-col gap-3">
                   <div>
                     • See in full 1,000+ high quality guides on various topics
                   </div>
@@ -246,7 +255,10 @@ export default function Pricing() {
             </div>
           </div>
           <div id="PayInfo" class="flex w-full h-full relative">
-            <div id="InfoTitle" class="w-full font-light text-3xl sticky">
+            <div
+              id="InfoTitle"
+              class="w-full self-end font-light text-3xl sticky"
+            >
               <div
                 onClick={() => {
                   // TODO: grafbase call to do stripe checkout
