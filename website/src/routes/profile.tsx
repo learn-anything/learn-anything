@@ -146,7 +146,7 @@ export default function Profile() {
                       title: e.target.value
                     })
                   }}
-                  class=" bg-inherit text-[20px] outline-none w-full px-2 font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[8px] p-1 "
+                  class=" bg-inherit pb-3 text-[20px] outline-none w-full px-2 font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[8px] p-1 "
                 />
                 <input
                   type="text"
@@ -268,6 +268,7 @@ export default function Profile() {
             <div class="flex justify-between text-[#696969] ">
               <div class="w-full flex text-[#696969] text-[14px] gap-4">
                 <div
+                  id="ToLearn"
                   class={clsx(
                     "p-2 cursor-pointer",
                     currentTab() === "ToLearn" &&
@@ -280,6 +281,7 @@ export default function Profile() {
                   To Learn
                 </div>
                 <div
+                  id="Learning"
                   class={clsx(
                     "p-2 cursor-pointer",
                     currentTab() === "Learning" &&
@@ -292,6 +294,7 @@ export default function Profile() {
                   Learning
                 </div>
                 <div
+                  id="Learned"
                   class={clsx(
                     "p-2 cursor-pointer",
                     currentTab() === "Learned" &&
@@ -304,6 +307,7 @@ export default function Profile() {
                   Learned
                 </div>
                 <div
+                  id="Links"
                   class={clsx(
                     "p-2 cursor-pointer",
                     currentTab() === "Links" &&

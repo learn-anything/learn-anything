@@ -209,12 +209,12 @@ export function Search(props: SearchProps): solid.JSX.Element {
     >
       <div
         class="w-full
-        bg-white dark:bg-neutral-900 border-slate-400 dark:border-opacity-30 border rounded-[4px]"
+        bg-white dark:bg-neutral-900"
       >
         <input
           type="text"
           placeholder={props.placeholder}
-          class="w-full h-10 bg-transparent p-3 px-4 text-black dark:text-white text-opacity-70 outline-none"
+          class="w-full h-10 bg-transparent p-3 px-4  rounded-[4px] text-black dark:text-white text-opacity-70 outline-none border dark:border-[#323232]  border-[#69696951] hover:border-[#363636] transition-all focus:border-[#505050]"
           on:keydown={(e) =>
             handleInputKeydown(e, e.currentTarget, props.state)
           }
