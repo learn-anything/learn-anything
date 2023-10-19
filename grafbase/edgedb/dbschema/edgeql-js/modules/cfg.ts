@@ -68,8 +68,8 @@ export type $AuthλShape = $.typeutil.flatten<$ConfigObjectλShape & {
 }>;
 type $Auth = $.ObjectType<"cfg::Auth", $AuthλShape, null, [
   ...$ConfigObject['__exclusives__'],
-  {method: {__element__: $AuthMethod, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
   {priority: {__element__: _std.$int64, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
+  {method: {__element__: $AuthMethod, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
 ]>;
 const $Auth = $.makeType<$Auth>(_.spec, "d6afc276-5d6b-11ee-ace5-09cb24e3b5d7", _.syntax.literal);
 

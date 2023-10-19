@@ -1,5 +1,11 @@
 import { UserClient } from "@teamhanko/hanko-frontend-sdk"
-import { createContext, createEffect, onMount, useContext } from "solid-js"
+import {
+  createContext,
+  createEffect,
+  createMemo,
+  onMount,
+  useContext
+} from "solid-js"
 import { createStore } from "solid-js/store"
 import { MobiusType } from "../root"
 import { getHankoCookie } from "../../lib/auth"
@@ -8,6 +14,12 @@ import { useLocation } from "solid-start"
 type Topic = {
   name: string
   prettyName: string
+}
+
+type Link = {
+  id: string
+  title: string
+  url: string
 }
 
 type User = {
@@ -19,6 +31,8 @@ type User = {
   topicsToLearn: Topic[]
   topicsToLearning: Topic[]
   topicsLearned: Topic[]
+  likedLinks: Link[]
+  personalLinks: Link[]
 }
 
 // global state of user
@@ -31,7 +45,9 @@ export function createUserState(mobius: MobiusType) {
     admin: false,
     topicsToLearn: [],
     topicsToLearning: [],
-    topicsLearned: []
+    topicsLearned: [],
+    likedLinks: [],
+    personalLinks: []
   })
 
   onMount(async () => {
@@ -75,8 +91,13 @@ export function createUserState(mobius: MobiusType) {
     }
   })
 
-  const location = useLocation()
+  const likedLinksSearch = createMemo(() => {
+    return user.likedLinks.map((link) => ({
+      name: link.title
+    }))
+  })
 
+  const location = useLocation()
   createEffect(async () => {
     if (!(location.pathname === "/profile")) return
     const res = await mobius.query({
@@ -93,14 +114,35 @@ export function createUserState(mobius: MobiusType) {
           name: true,
           prettyName: true
         }
+      },
+      getLikedLinks: {
+        likedLinks: {
+          id: true,
+          title: true,
+          url: true
+        },
+        personalLinks: {
+          id: true,
+          title: true,
+          url: true
+        }
       }
     })
     // @ts-ignore
-    const data = res?.data?.getTopicsLearned
+    const topicsLearned = res?.data?.getTopicsLearned
+    console.log(topicsLearned, "topics")
+    // @ts-ignore
+    const links = res?.data?.getLikedLinks
+    const likedLinks = links.likedLinks
+    const personalLinks = links.personalLinks
+    console.log(likedLinks, "links")
+    console.log(personalLinks, "links")
     setUser({
-      topicsToLearn: data.topicsToLearn,
-      topicsToLearning: data.topicsLearning,
-      topicsLearned: data.topicsLearned
+      topicsToLearn: topicsLearned.topicsToLearn,
+      topicsToLearning: topicsLearned.topicsLearning,
+      topicsLearned: topicsLearned.topicsLearned,
+      likedLinks: likedLinks,
+      personalLinks: personalLinks
     })
     console.log(user, "user")
   })
@@ -112,7 +154,8 @@ export function createUserState(mobius: MobiusType) {
     },
     setSignedIn: (state: boolean) => {
       return setUser({ signedIn: state })
-    }
+    },
+    likedLinksSearch
   } as const
 }
 

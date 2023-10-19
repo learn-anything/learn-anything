@@ -89,6 +89,33 @@ g.query("getUserDetails", {
   resolver: "getUserDetails"
 })
 
+g.query("getLikedLinks", {
+  args: {},
+  returns: g.ref(
+    g.type("outputOfGetLikedLinks", {
+      likedLinks: g
+        .ref(
+          g.type("LikedLink", {
+            id: g.string(),
+            title: g.string(),
+            url: g.string()
+          })
+        )
+        .list(),
+      personalLinks: g
+        .ref(
+          g.type("PersonalLink", {
+            id: g.string(),
+            title: g.string(),
+            url: g.string()
+          })
+        )
+        .list()
+    })
+  ),
+  resolver: "getLikedLinks"
+})
+
 const topicToLearn = g.type("topicToLearn", {
   name: g.string(),
   prettyName: g.string()
@@ -190,7 +217,11 @@ g.mutation("updateLatestGlobalGuide", {
 })
 
 g.mutation("updateTopicLearningStatus", {
-  args: { learningStatus: g.enumRef(learningStatus), topicName: g.string() },
+  args: {
+    learningStatus: g.enumRef(learningStatus),
+    topicName: g.string(),
+    verifiedTopic: g.boolean()
+  },
   returns: g.string(),
   resolver: "updateTopicLearningStatus"
 })
@@ -219,6 +250,16 @@ g.mutation("updateGlobalLinkStatus", {
   resolver: "updateGlobalLinkStatus"
 })
 
+g.mutation("addPersonalLink", {
+  args: {
+    title: g.string(),
+    url: g.string(),
+    description: g.string().optional()
+  },
+  returns: g.string(),
+  resolver: "addPersonalLink"
+})
+
 // internal
 g.mutation("internalUpdateMemberUntilOfUser", {
   args: {
@@ -232,8 +273,8 @@ g.mutation("internalUpdateMemberUntilOfUser", {
 g.mutation("updateGrafbaseKv", {
   args: {
     topicsWithConnections: g
-      .ref(
-        g.type("updateGrafbaseKvOutput", {
+      .inputRef(
+        g.input("updateGrafbaseKvOutput", {
           name: g.string(),
           prettyName: g.string(),
           connections: g.string().list()

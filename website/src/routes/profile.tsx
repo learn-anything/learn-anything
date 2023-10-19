@@ -1,33 +1,68 @@
 import clsx from "clsx"
-import { For, Match, Show, Switch, createSignal, onMount } from "solid-js"
-import { useNavigate } from "solid-start"
+import {
+  For,
+  Match,
+  Show,
+  Switch,
+  createEffect,
+  createSignal,
+  onMount
+} from "solid-js"
+import { autofocus } from "@solid-primitives/autofocus"
+import { A, useNavigate } from "solid-start"
 import { useUser } from "../GlobalContext/user"
-import Modal from "../components/Modal"
-import { Search, SearchResult, createSearchState } from "../components/Search"
-import GuideNav from "../components/Topic/GuideNav"
 import FancyButton from "../components/FancyButton"
+import Modal from "../components/Modal"
+import { Search, createSearchState } from "../components/Search"
+import GuideNav from "../components/Topic/GuideNav"
+import { useMobius } from "../root"
+
+type NewLink = {
+  url: string
+  title: string
+  description: string
+}
 
 export default function Profile() {
   const user = useUser()
+  const mobius = useMobius()
   const navigate = useNavigate()
   const [currentTab, setCurrentTab] = createSignal("ToLearn")
   const [showAddLinkModal, setShowAddLinkModal] = createSignal(false)
   const [showHelpModal, setShowHelpModal] = createSignal(false)
+  const [newLinkData, setNewLinkData] = createSignal<NewLink>({
+    url: "",
+    title: "",
+    description: ""
+  })
+
+  // TODO: add debounce here
+  createEffect(async () => {
+    if (newLinkData().url) {
+      try {
+        const url = new URL(newLinkData().url)
+        const response = await fetch(
+          `https://corsproxy.io/?${encodeURIComponent(url.toString())}`
+        )
+        const html = await response.text()
+        const parser = new DOMParser()
+        const doc = parser.parseFromString(html, "text/html")
+        // @ts-ignore
+        const title = doc.querySelector("title").innerText
+        setNewLinkData({
+          ...newLinkData(),
+          title
+        })
+      } catch (_) {
+        return
+      }
+    }
+  })
 
   onMount(() => {
     if (!user.user.signedIn) {
       navigate("/auth")
     }
-  })
-  // TODO: fill with liked links of user
-  const searchResults: SearchResult[] = [
-    { name: "Physics" },
-    { name: "Math" },
-    { name: "Karabiner" }
-  ]
-  const search_state = createSearchState({
-    searchResults: () => searchResults,
-    onSelect: console.log
   })
 
   // TODO: add ability to choose username (as member only)
@@ -86,18 +121,61 @@ export default function Profile() {
             <div class="w-1/2 relative z-50 h-1/2 rounded-lg dark:border-opacity-50 bg-white border-slate-400 border dark:bg-neutral-900 flex flex-col gap-4 p-[20px] px-[24px]">
               <input
                 type="text"
+                ref={(el) => autofocus(el)}
+                autofocus
+                placeholder="URL"
+                value={newLinkData().url}
+                onInput={(e) => {
+                  setNewLinkData({
+                    ...newLinkData(),
+                    url: e.target.value
+                  })
+                }}
+                class="border-b bg-inherit outline-none hover:border-opacity-70 focus:border-opacity-100 border-slate-400 border-opacity-50 w-1/2"
+              />
+              <input
+                type="text"
                 placeholder="Title"
+                value={newLinkData().title}
+                onInput={(e) => {
+                  setNewLinkData({
+                    ...newLinkData(),
+                    title: e.target.value
+                  })
+                }}
                 class="border-b bg-inherit outline-none hover:border-opacity-70  focus:border-opacity-100 border-slate-400 border-opacity-50 w-1/2"
               />
               <input
                 type="text"
-                placeholder="URL"
+                placeholder="Description"
+                value={newLinkData().description}
+                onInput={(e) => {
+                  setNewLinkData({
+                    ...newLinkData(),
+                    description: e.target.value
+                  })
+                }}
                 class="border-b bg-inherit outline-none hover:border-opacity-70 focus:border-opacity-100 border-slate-400 border-opacity-50 w-1/2"
               />
-              <div class="absolute bottom-2 right-2 bg-blue-600 px-6 hover:bg-blue-700 p-2 text-white rounded-[4px]">
+              <div
+                onClick={async () => {
+                  const res = await mobius.mutate({
+                    addPersonalLink: {
+                      where: {
+                        title: newLinkData().title,
+                        url: newLinkData().url,
+                        description: newLinkData().description
+                      },
+                      select: true
+                    }
+                  })
+                  console.log(res, "res")
+                }}
+                class="absolute bottom-2 right-2 bg-blue-600 px-6 hover:bg-blue-700 p-2 text-white rounded-[4px] cursor-pointer"
+              >
                 Save
               </div>
-              <div class="absolute bottom-2 left-2  px-4 border border-slate-400 p-2 rounded-[4px]">
+              <div class="absolute bottom-2 left-2  px-4 border border-slate-400 p-2 rounded-[4px] cursor-pointer">
                 Cancel
               </div>
             </div>
@@ -150,7 +228,25 @@ export default function Profile() {
         </Show>
         <div id="ProfileMain" class="h-full w-full flex justify-center">
           <div id="ProfileInfo" class="h-full flex gap-6 flex-col p-[40px]">
-            <Search placeholder="Search Liked Links" state={search_state} />
+            {(() => {
+              const search_state = createSearchState({
+                searchResults: user.likedLinksSearch,
+                onSelect({ name }) {
+                  const foundLink = user.user.likedLinks.find(
+                    (l) => l.title === name
+                  )
+                  // TODO: temp hack, get protocol with all the links and use that (https should work often though for now)
+                  window.location.href = `https://${foundLink?.url}`
+                }
+              })
+
+              return (
+                <Search
+                  placeholder={"Search Liked Links"}
+                  state={search_state}
+                />
+              )
+            })()}
             <div class="w-full flex text-[#696969] text-[14px] justify-between">
               <div
                 class={clsx(
@@ -200,9 +296,12 @@ export default function Profile() {
                             <div class="w-full  h-full flex justify-between items-center">
                               <div class="w-fit flex gap-1 flex-col">
                                 <div class="flex gap-3 items-center">
-                                  <a class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer">
+                                  <A
+                                    class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer"
+                                    href={`/${topic.name}`}
+                                  >
                                     {topic.prettyName}
-                                  </a>
+                                  </A>
                                 </div>
 
                                 {/* <div class="font-light text-[12px] text-[#696969]">PDF</div> */}
@@ -225,9 +324,12 @@ export default function Profile() {
                             <div class="w-full  h-full flex justify-between items-center">
                               <div class="w-fit flex gap-1 flex-col">
                                 <div class="flex gap-3 items-center">
-                                  <a class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer">
+                                  <A
+                                    class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer"
+                                    href={`/${topic.name}`}
+                                  >
                                     {topic.prettyName}
-                                  </a>
+                                  </A>
                                 </div>
 
                                 {/* <div class="font-light text-[12px] text-[#696969]">PDF</div> */}
@@ -251,9 +353,12 @@ export default function Profile() {
                             <div class="w-full  h-full flex justify-between items-center">
                               <div class="w-fit flex gap-1 flex-col">
                                 <div class="flex gap-3 items-center">
-                                  <a class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer">
+                                  <A
+                                    class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer"
+                                    href={`/${topic.name}`}
+                                  >
                                     {topic.prettyName}
-                                  </a>
+                                  </A>
                                 </div>
 
                                 {/* <div class="font-light text-[12px] text-[#696969]">PDF</div> */}

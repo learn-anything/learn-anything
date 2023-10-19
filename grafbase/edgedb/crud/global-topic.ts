@@ -322,6 +322,89 @@ export async function updateTopicLearningStatus(
   }
 }
 
+export async function updateUnverifiedTopicLearningStatus(
+  hankoId: string,
+  topicName: string,
+  learningStatus: "to_learn" | "learning" | "learned" | "none"
+) {
+  const userByHankoId = e.select(e.User, (user) => ({
+    filter: e.all(
+      e.set(
+        e.op(user.hankoId, "=", hankoId),
+        e.op("exists", user.memberUntil),
+        e.op(user.memberUntil, ">", e.datetime_current())
+      )
+    )
+  }))
+  let topic = await e
+    .select(e.GlobalTopic, () => ({
+      filter_single: { name: topicName }
+    }))
+    .run(client)
+
+  console.log(topic, "topic found")
+  if (!topic) {
+    topic = await e
+      .insert(e.GlobalTopic, {
+        name: topicName,
+        prettyName: topicName,
+        topicSummary: "",
+        public: true,
+        verified: false
+      })
+      .run(client)
+  }
+
+  const topicToChangeStatusOf = await e.select(e.GlobalTopic, () => ({
+    filter_single: { name: topicName }
+  }))
+  switch (learningStatus) {
+    case "none":
+      return e
+        .update(userByHankoId, () => ({
+          set: {
+            topicsToLearn: { "-=": topicToChangeStatusOf },
+            topicsLearning: { "-=": topicToChangeStatusOf },
+            topicsLearned: { "-=": topicToChangeStatusOf }
+          }
+        }))
+        .run(client)
+    case "to_learn":
+      return e
+        .update(userByHankoId, () => ({
+          set: {
+            topicsToLearn: { "+=": topicToChangeStatusOf },
+            topicsLearning: { "-=": topicToChangeStatusOf },
+            topicsLearned: { "-=": topicToChangeStatusOf }
+          }
+        }))
+        .run(client)
+
+    case "learning":
+      return e
+        .update(userByHankoId, () => ({
+          set: {
+            topicsToLearn: { "-=": topicToChangeStatusOf },
+            topicsLearning: { "+=": topicToChangeStatusOf },
+            topicsLearned: { "-=": topicToChangeStatusOf }
+          }
+        }))
+        .run(client)
+    case "learned":
+      return e
+        .update(userByHankoId, () => ({
+          set: {
+            topicsToLearn: { "-=": topicToChangeStatusOf },
+            topicsLearning: { "-=": topicToChangeStatusOf },
+            topicsLearned: { "+=": topicToChangeStatusOf }
+          }
+        }))
+        .run(client)
+    default:
+      break
+  }
+}
+
 // for use in landing page (learn-anything.xyz) to get results of topics to search over
 // its public because in future for auth'd users, we can show more custom results
 // based of user preference etc.

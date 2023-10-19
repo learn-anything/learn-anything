@@ -1,52 +1,67 @@
 import { splitUrlByProtocol } from "../../lib/util"
-import { addGlobalLink } from "../crud/global-link"
+import { addGlobalLink, addPersonalLink } from "../crud/global-link"
 import {
   addLinkToSectionOfGlobalTopic,
   checkGlobalTopicExists,
   checkSectionsAreEmpty,
   deleteSectionsInGlobalTopic,
   getAllTopicNames,
-  setPrettyNameOfGlobalTopic
+  setPrettyNameOfGlobalTopic,
+  updateTopicLearningStatus,
+  updateUnverifiedTopicLearningStatus
 } from "../crud/global-topic"
-import { getTopicsLearned } from "../crud/user"
+import { getAllLikedLinks, getTopicsLearned } from "../crud/user"
 import {
   Topic,
   findFilePath,
   markdownFilePaths,
   parseMdFile
 } from "../sync/markdown"
+// @ts-ignore
 import clipboard from "clipboardy"
 
 async function main() {
-  const topics = await getAllTopicNames()
-  const justNames = topics.map((t) => t.name)
-  const topicObject = topics.reduce((obj, topic) => {
-    // @ts-ignore
-    obj[topic.name] = {
-      prettyName: topic.prettyName,
-      connections: []
-    }
-    return obj
-  }, {})
-  console.log(topicObject)
-  clipboard.writeSync(JSON.stringify(topicObject))
+  // const hankoId = process.env.LOCAL_USER_HANKO_ID!
+  // await addPersonalLink("https://news.ycombinator.com", "Hacker News", hankoId!)
+  // await updateUnverifiedTopicLearningStatus(hankoId!, "reactivity", "to_learn")
   return
-  const paths = await getMarkdownPaths()
-  for (const path of paths) {
-    const topic = await parseMdFile(path)
-    const parts = path.split("/")
-    const fileName = parts[parts.length - 1] // Get the last part which is the filename
-    const topicName = fileName!.split(".")[0]
-    if (topicName) {
-      await setPrettyNameOfGlobalTopic(topicName, topic.prettyName)
-      // await processLinksFromMarkdownFilesAsGlobalLinks(topicName)
-      // const sections = await checkSectionsAreEmpty("design")
-      // if (sections.length === 0) {
-      //   await deleteSectionsInGlobalTopic(topicName)
-      //   await moveLinksFromSectionsIncludingLinksToGuide(topicName)
-      // }
-    }
-  }
+  // clipboard.writeSync(JSON.stringify(someJson))
+  // const res = await getAllLikedLinks(hankoId!)
+  // console.log(res?.likedLinks)
+
+  return
+  const topicName = "numpy"
+  await deleteSectionsInGlobalTopic(topicName)
+  await moveLinksFromSectionsIncludingLinksToGuide(topicName)
+  // const topics = await getAllTopicNames()
+  // const justNames = topics.map((t) => t.name)
+  // const topicObject = topics.reduce((obj, topic) => {
+  //   // @ts-ignore
+  //   obj[topic.name] = {
+  //     prettyName: topic.prettyName,
+  //     connections: []
+  //   }
+  //   return obj
+  // }, {})
+  // console.log(topicObject)
+  // clipboard.writeSync(JSON.stringify(topicObject))
+  // return
+  // const paths = await getMarkdownPaths()
+  // for (const path of paths) {
+  //   const topic = await parseMdFile(path)
+  //   const parts = path.split("/")
+  //   const fileName = parts[parts.length - 1] // Get the last part which is the filename
+  //   const topicName = fileName!.split(".")[0]
+  //   if (topicName) {
+  //     await setPrettyNameOfGlobalTopic(topicName, topic.prettyName)
+  //     // await processLinksFromMarkdownFilesAsGlobalLinks(topicName)
+  //     // const sections = await checkSectionsAreEmpty("design")
+  //     // if (sections.length === 0) {
+  //     //   await deleteSectionsInGlobalTopic(topicName)
+  //     //   await moveLinksFromSectionsIncludingLinksToGuide(topicName)
+  //     // }
+  //   }
+  // }
   // const exists = await checkGlobalTopicExists(topicName!)
   // if (exists.length > 0) {
   //   console.log("topic exists")
@@ -173,7 +188,6 @@ async function getMarkdownPaths() {
 // }
 // TODO: move it away after release, is here as reference in trying to get all the topics ported for release
 async function oneOffActions() {
-  // return
   // const paths = await getMarkdownPaths()
   // for (const path of paths) {
   //   const parts = path.split("/")

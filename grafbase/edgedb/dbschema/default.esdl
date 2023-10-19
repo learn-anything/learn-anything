@@ -33,6 +33,8 @@ module default {
     multi completedLinks: GlobalLink;
     # links user has liked
     multi likedLinks: GlobalLink;
+    # personal links user has added
+    multi personalLinks: PersonalLink;
     # links user has disliked
     multi dislikedLinks: GlobalLink;
     # notes user has liked
@@ -187,6 +189,21 @@ module default {
     # connected topics for this link
     multi link links := .<globalLink[is Link];
   }
+  type PersonalLink {
+    # nice title from url
+    required title: str;
+    # unique url of the link (without protocol)
+    required url: str {
+      constraint exclusive;
+    };
+    # http / https
+    required protocol: str;
+    # link description
+    description: str;
+    year: str;
+    # topic associated (TODO: make it a link to actual topic object)
+    # associatedTopic: str;
+  }
   type GlobalNote {
     required content: str;
     url: str;
@@ -231,7 +248,7 @@ module default {
     # past changes to global guide versioned by time
     multi globalGuides: GlobalGuide;
     # there is one global guide attached to each global topic
-    required latestGlobalGuide: GlobalGuide
+    latestGlobalGuide: GlobalGuide
   }
   type GlobalGuide {
     required created_at: datetime {

@@ -322,6 +322,49 @@ export async function addGlobalLink(
   }
 }
 
+export async function addPersonalLink(
+  url: string,
+  title: string,
+  hankoId: string,
+  description?: string
+) {
+  const [urlWithoutProtocol, protocol] = splitUrlByProtocol(url)
+  if (urlWithoutProtocol && protocol) {
+    const link = await e
+      .insert(e.PersonalLink, {
+        url: urlWithoutProtocol,
+        protocol: protocol,
+        title: title,
+        description: description
+      })
+      .unlessConflict((gl) => ({
+        on: gl.url,
+        else: e.update(gl, () => ({
+          set: {
+            url: urlWithoutProtocol,
+            protocol: protocol,
+            title: title,
+            description: description
+          }
+        }))
+      }))
+      .run(client)
+
+    await e
+      .update(e.User, () => ({
+        filter_single: { hankoId },
+        set: {
+          personalLinks: {
+            "+=": e.select(e.PersonalLink, () => ({
+              filter_single: { id: link.id }
+            }))
+          }
+        }
+      }))
+      .run(client)
+  }
+}
+
 export async function addGlobalNote(
   content: string,
   url: string,

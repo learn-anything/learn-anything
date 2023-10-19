@@ -535,8 +535,8 @@ export type $SourceλShape = $.typeutil.flatten<$Object_d2d3fb225d6b11eeb8735fd8
 }>;
 type $Source = $.ObjectType<"schema::Source", $SourceλShape, null, [
   ...$Object_d2d3fb225d6b11eeb8735fd8811702a7['__exclusives__'],
-  {pointers: {__element__: $Pointer, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
   {indexes: {__element__: $Index, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
+  {pointers: {__element__: $Pointer, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
 ]>;
 const $Source = $.makeType<$Source>(_.spec, "d40af568-5d6b-11ee-aad8-5fef6f21bb17", _.syntax.literal);
 
@@ -686,6 +686,7 @@ export type $ObjectTypeλShape = $.typeutil.flatten<$SourceλShape & Omit<$Consi
   "<__type__[is UserGuide]": $.LinkDesc<_default.$UserGuide, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is Wiki]": $.LinkDesc<_default.$Wiki, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is GlobalNote]": $.LinkDesc<_default.$GlobalNote, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<__type__[is PersonalLink]": $.LinkDesc<_default.$PersonalLink, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<intersection_of": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<subject": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
@@ -698,8 +699,8 @@ type $ObjectType = $.ObjectType<"schema::ObjectType", $ObjectTypeλShape, null, 
   ...$InheritingObject['__exclusives__'],
   ...$Type['__exclusives__'],
   ...$AnnotationSubject['__exclusives__'],
-  {triggers: {__element__: $Trigger, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
   {access_policies: {__element__: $AccessPolicy, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
+  {triggers: {__element__: $Trigger, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
 ]>;
 const $ObjectType = $.makeType<$ObjectType>(_.spec, "d4929676-5d6b-11ee-af50-2799d964a61c", _.syntax.literal);
 

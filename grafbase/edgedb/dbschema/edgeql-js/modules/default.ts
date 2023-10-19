@@ -94,7 +94,6 @@ const GlobalNote: $.$expr_PathNode<$.TypeSet<$GlobalNote, $.Cardinality.Many>, n
 
 export type $GlobalTopicλShape = $.typeutil.flatten<_std.$Object_d29c95e25d6b11eeabaf012dd32b5eadλShape & {
   "globalGuides": $.LinkDesc<$GlobalGuide, $.Cardinality.Many, {}, false, false,  false, false>;
-  "latestGlobalGuide": $.LinkDesc<$GlobalGuide, $.Cardinality.One, {}, false, false,  false, false>;
   "relatedTopics": $.LinkDesc<$GlobalTopic, $.Cardinality.Many, {}, false, false,  false, false>;
   "name": $.PropertyDesc<_std.$str, $.Cardinality.One, true, false, false, false>;
   "prettyName": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
@@ -106,6 +105,7 @@ export type $GlobalTopicλShape = $.typeutil.flatten<_std.$Object_d29c95e25d6b11
   "relatedLinks": $.LinkDesc<$GlobalLink, $.Cardinality.Many, {}, false, false,  false, false>;
   "relatedNotes": $.LinkDesc<$Note, $.Cardinality.Many, {}, false, false,  false, false>;
   "verified": $.PropertyDesc<_std.$bool, $.Cardinality.One, false, false, false, false>;
+  "latestGlobalGuide": $.LinkDesc<$GlobalGuide, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
   "<relatedTopics[is GlobalTopic]": $.LinkDesc<$GlobalTopic, $.Cardinality.Many, {}, false, false,  false, false>;
   "<mainTopic[is GlobalLink]": $.LinkDesc<$GlobalLink, $.Cardinality.Many, {}, false, false,  false, false>;
   "<topicsLearned[is User]": $.LinkDesc<$User, $.Cardinality.Many, {}, false, false,  false, false>;
@@ -178,6 +178,23 @@ const $Note = $.makeType<$Note>(_.spec, "f80ed565-45e2-11ee-abb6-39c0845797dd", 
 
 const Note: $.$expr_PathNode<$.TypeSet<$Note, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Note, $.Cardinality.Many), null);
 
+export type $PersonalLinkλShape = $.typeutil.flatten<_std.$Object_d29c95e25d6b11eeabaf012dd32b5eadλShape & {
+  "description": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "protocol": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
+  "title": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
+  "url": $.PropertyDesc<_std.$str, $.Cardinality.One, true, false, false, false>;
+  "year": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "<personalLinks[is User]": $.LinkDesc<$User, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<personalLinks": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
+}>;
+type $PersonalLink = $.ObjectType<"default::PersonalLink", $PersonalLinkλShape, null, [
+  ..._std.$Object_d29c95e25d6b11eeabaf012dd32b5ead['__exclusives__'],
+  {url: {__element__: _std.$str, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
+]>;
+const $PersonalLink = $.makeType<$PersonalLink>(_.spec, "a27a574a-6e8d-11ee-9d60-7dc209ff0ef4", _.syntax.literal);
+
+const PersonalLink: $.$expr_PathNode<$.TypeSet<$PersonalLink, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($PersonalLink, $.Cardinality.Many), null);
+
 export type $RelatedLinkλShape = $.typeutil.flatten<_std.$Object_d29c95e25d6b11eeabaf012dd32b5eadλShape & {
   "title": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "url": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
@@ -246,15 +263,16 @@ export type $UserλShape = $.typeutil.flatten<_std.$Object_d29c95e25d6b11eeabaf0
   "dislikedNotes": $.LinkDesc<$Note, $.Cardinality.Many, {}, false, false,  false, false>;
   "likedNotes": $.LinkDesc<$Note, $.Cardinality.Many, {}, false, false,  false, false>;
   "wiki": $.LinkDesc<$Wiki, $.Cardinality.Many, {}, false, true,  false, false>;
+  "personalLinks": $.LinkDesc<$PersonalLink, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user[is UserGuide]": $.LinkDesc<$UserGuide, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user[is Wiki]": $.LinkDesc<$Wiki, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
 type $User = $.ObjectType<"default::User", $UserλShape, null, [
   ..._std.$Object_d29c95e25d6b11eeabaf012dd32b5ead['__exclusives__'],
-  {name: {__element__: _std.$str, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
-  {email: {__element__: _std.$str, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
   {hankoId: {__element__: _std.$str, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
+  {email: {__element__: _std.$str, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
+  {name: {__element__: _std.$str, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
 ]>;
 const $User = $.makeType<$User>(_.spec, "f8096267-45e2-11ee-b9c2-8f965de693db", _.syntax.literal);
 
@@ -305,7 +323,7 @@ const Wiki: $.$expr_PathNode<$.TypeSet<$Wiki, $.Cardinality.Many>, null> = _.syn
 
 
 
-export { $GlobalGraph, GlobalGraph, $GlobalGuide, GlobalGuide, $GlobalGuideSection, GlobalGuideSection, $GlobalLink, GlobalLink, $GlobalNote, GlobalNote, $GlobalTopic, GlobalTopic, $Link, Link, $Note, Note, $RelatedLink, RelatedLink, $Topic, Topic, $User, User, $UserGuide, UserGuide, $UserGuideSection, UserGuideSection, $Wiki, Wiki };
+export { $GlobalGraph, GlobalGraph, $GlobalGuide, GlobalGuide, $GlobalGuideSection, GlobalGuideSection, $GlobalLink, GlobalLink, $GlobalNote, GlobalNote, $GlobalTopic, GlobalTopic, $Link, Link, $Note, Note, $PersonalLink, PersonalLink, $RelatedLink, RelatedLink, $Topic, Topic, $User, User, $UserGuide, UserGuide, $UserGuideSection, UserGuideSection, $Wiki, Wiki };
 
 type __defaultExports = {
   "GlobalGraph": typeof GlobalGraph;
@@ -316,6 +334,7 @@ type __defaultExports = {
   "GlobalTopic": typeof GlobalTopic;
   "Link": typeof Link;
   "Note": typeof Note;
+  "PersonalLink": typeof PersonalLink;
   "RelatedLink": typeof RelatedLink;
   "Topic": typeof Topic;
   "User": typeof User;
@@ -332,6 +351,7 @@ const __defaultExports: __defaultExports = {
   "GlobalTopic": GlobalTopic,
   "Link": Link,
   "Note": Note,
+  "PersonalLink": PersonalLink,
   "RelatedLink": RelatedLink,
   "Topic": Topic,
   "User": User,

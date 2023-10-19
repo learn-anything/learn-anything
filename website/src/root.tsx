@@ -52,23 +52,35 @@ type GlobalLink {
   description: String
 }
 
-"""A JSON Value"""
-scalar JSON
+type LikedLink {
+  id: String!
+  title: String!
+  url: String!
+}
 
 type Mutation {
   createUser(email: String!): String!
   updateLatestGlobalGuide(topicName: String!, topicSummary: String!, sections: [section!]!): String!
-  updateTopicLearningStatus(learningStatus: learningStatus!, topicName: String!): String!
+  updateTopicLearningStatus(learningStatus: learningStatus!, topicName: String!, verifiedTopic: Boolean!): String!
   updateLinkStatusResolver(linkId: String!, action: linkAction!): String!
   updateGlobalLinkStatus(action: globalLinkAction!, globalLinkId: String!): String!
+  addPersonalLink(title: String!, url: String!, description: String): String!
   internalUpdateMemberUntilOfUser(email: String!, memberUntilDateInUnixTime: Int!): String!
+  updateGrafbaseKv(topicsWithConnections: [updateGrafbaseKvOutput!]!): String!
+}
+
+type PersonalLink {
+  id: String!
+  title: String!
+  url: String!
 }
 
 type Query {
-  publicGetTopicsWithConnections: JSON!
+  publicGetTopicsWithConnections: [publicGetTopicsWithConnectionsOutput!]!
   publicGetGlobalTopics: [publicGetGlobalTopicsOutput!]!
   publicGetGlobalTopic(topicName: String!): publicGetGlobalTopicOutput!
   getUserDetails: getUserDetailsOutput!
+  getLikedLinks: outputOfGetLikedLinks!
   getTopicsLearned: getTopicsLearnedOutput!
   getGlobalLink(linkId: String!): publicGetGlobalLinkOutput!
   getGlobalTopic(topicName: String!): getGlobalTopicOutput!
@@ -131,6 +143,11 @@ enum linkAction {
   uncomplete
 }
 
+type outputOfGetLikedLinks {
+  likedLinks: [LikedLink!]!
+  personalLinks: [PersonalLink!]!
+}
+
 type publicCheckForGlobalLinkOutput {
   url: String!
   title: String!
@@ -164,6 +181,12 @@ type publicGetGlobalTopicsOutput {
   name: String!
 }
 
+type publicGetTopicsWithConnectionsOutput {
+  name: String!
+  prettyName: String!
+  connections: [String!]!
+}
+
 input section {
   title: String!
   summary: String
@@ -173,6 +196,12 @@ input section {
 type topicToLearn {
   name: String!
   prettyName: String!
+}
+
+input updateGrafbaseKvOutput {
+  name: String!
+  prettyName: String!
+  connections: [String!]!
 }
 `
 

@@ -35,7 +35,8 @@ export default function GuideSidebar() {
                       updateTopicLearningStatus: {
                         where: {
                           learningStatus: "none",
-                          topicName: topic.globalTopic.name
+                          topicName: topic.globalTopic.name,
+                          verifiedTopic: true
                         },
                         select: true
                       }
@@ -46,7 +47,8 @@ export default function GuideSidebar() {
                       updateTopicLearningStatus: {
                         where: {
                           learningStatus: "to_learn",
-                          topicName: topic.globalTopic.name
+                          topicName: topic.globalTopic.name,
+                          verifiedTopic: true
                         },
                         select: true
                       }
@@ -69,7 +71,8 @@ export default function GuideSidebar() {
                       updateTopicLearningStatus: {
                         where: {
                           learningStatus: "none",
-                          topicName: topic.globalTopic.name
+                          topicName: topic.globalTopic.name,
+                          verifiedTopic: true
                         },
                         select: true
                       }
@@ -80,7 +83,8 @@ export default function GuideSidebar() {
                       updateTopicLearningStatus: {
                         where: {
                           learningStatus: "learning",
-                          topicName: topic.globalTopic.name
+                          topicName: topic.globalTopic.name,
+                          verifiedTopic: true
                         },
                         select: true
                       }
@@ -103,7 +107,8 @@ export default function GuideSidebar() {
                       updateTopicLearningStatus: {
                         where: {
                           learningStatus: "none",
-                          topicName: topic.globalTopic.name
+                          topicName: topic.globalTopic.name,
+                          verifiedTopic: true
                         },
                         select: true
                       }
@@ -114,7 +119,8 @@ export default function GuideSidebar() {
                       updateTopicLearningStatus: {
                         where: {
                           learningStatus: "learned",
-                          topicName: topic.globalTopic.name
+                          topicName: topic.globalTopic.name,
+                          verifiedTopic: true
                         },
                         select: true
                       }

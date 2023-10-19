@@ -26,6 +26,30 @@ export async function getUserDetails(hankoId: string) {
   }
 }
 
+export async function getAllLikedLinks(hankoId: string) {
+  return await e
+    .select(e.User, (user) => ({
+      filter_single: e.all(
+        e.set(
+          e.op(user.hankoId, "=", hankoId),
+          e.op("exists", user.memberUntil),
+          e.op(user.memberUntil, ">", e.datetime_current())
+        )
+      ),
+      likedLinks: {
+        id: true,
+        title: true,
+        url: true
+      },
+      personalLinks: {
+        id: true,
+        title: true,
+        url: true
+      }
+    }))
+    .run(client)
+}
+
 export async function getTopicsLearned(hankoId: string) {
   return await e
     .select(e.User, (user) => ({
