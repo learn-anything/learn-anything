@@ -1,17 +1,18 @@
-import { For, Show } from "solid-js"
+import { For, Show, onMount } from "solid-js"
 import { useGlobalState } from "../../GlobalContext/global"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import FancyButton from "../FancyButton"
-
 import { useMobius } from "../../root"
 import Icon from "../Icon"
 import { useUser } from "../../GlobalContext/user"
+import { useLocation } from "solid-start"
 
 export default function GuideSidebar() {
   const topic = useGlobalTopic()
   const global = useGlobalState()
   const mobius = useMobius()
   const user = useUser()
+  const location = useLocation()
 
   return (
     <>
@@ -26,7 +27,6 @@ export default function GuideSidebar() {
               <FancyButton
                 onClick={async () => {
                   if (!user.user.member) {
-                    console.log("run..")
                     global.setShowMemberOnlyModal(true)
                     return
                   }
@@ -36,8 +36,10 @@ export default function GuideSidebar() {
                       updateTopicLearningStatus: {
                         where: {
                           learningStatus: "none",
-                          topicName: topic.globalTopic.name,
-                          verifiedTopic: true
+                          topicName: topic.globalTopic.verifiedTopic
+                            ? topic.globalTopic.name
+                            : location.pathname.slice(1),
+                          verifiedTopic: topic.globalTopic.verifiedTopic
                         },
                         select: true
                       }
@@ -48,8 +50,10 @@ export default function GuideSidebar() {
                       updateTopicLearningStatus: {
                         where: {
                           learningStatus: "to_learn",
-                          topicName: topic.globalTopic.name,
-                          verifiedTopic: true
+                          topicName: topic.globalTopic.verifiedTopic
+                            ? topic.globalTopic.name
+                            : location.pathname.slice(1),
+                          verifiedTopic: topic.globalTopic.verifiedTopic
                         },
                         select: true
                       }
@@ -72,8 +76,10 @@ export default function GuideSidebar() {
                       updateTopicLearningStatus: {
                         where: {
                           learningStatus: "none",
-                          topicName: topic.globalTopic.name,
-                          verifiedTopic: true
+                          topicName: topic.globalTopic.verifiedTopic
+                            ? topic.globalTopic.name
+                            : location.pathname.slice(1),
+                          verifiedTopic: topic.globalTopic.verifiedTopic
                         },
                         select: true
                       }
@@ -84,8 +90,10 @@ export default function GuideSidebar() {
                       updateTopicLearningStatus: {
                         where: {
                           learningStatus: "learning",
-                          topicName: topic.globalTopic.name,
-                          verifiedTopic: true
+                          topicName: topic.globalTopic.verifiedTopic
+                            ? topic.globalTopic.name
+                            : location.pathname.slice(1),
+                          verifiedTopic: topic.globalTopic.verifiedTopic
                         },
                         select: true
                       }
@@ -108,8 +116,10 @@ export default function GuideSidebar() {
                       updateTopicLearningStatus: {
                         where: {
                           learningStatus: "none",
-                          topicName: topic.globalTopic.name,
-                          verifiedTopic: true
+                          topicName: topic.globalTopic.verifiedTopic
+                            ? topic.globalTopic.name
+                            : location.pathname.slice(1),
+                          verifiedTopic: topic.globalTopic.verifiedTopic
                         },
                         select: true
                       }
@@ -120,8 +130,10 @@ export default function GuideSidebar() {
                       updateTopicLearningStatus: {
                         where: {
                           learningStatus: "learned",
-                          topicName: topic.globalTopic.name,
-                          verifiedTopic: true
+                          topicName: topic.globalTopic.verifiedTopic
+                            ? topic.globalTopic.name
+                            : location.pathname.slice(1),
+                          verifiedTopic: topic.globalTopic.verifiedTopic
                         },
                         select: true
                       }

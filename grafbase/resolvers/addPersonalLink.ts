@@ -10,6 +10,7 @@ export default async function addPersonalLinkResolver(
 ) {
   try {
     const hankoId = await hankoIdFromToken(context)
+    console.log(args, "args")
     if (hankoId) {
       await addPersonalLink(args.url, args.title, hankoId, args.description)
       return "ok"

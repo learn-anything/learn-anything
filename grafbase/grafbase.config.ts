@@ -162,6 +162,12 @@ g.query("getGlobalTopic", {
   resolver: "getGlobalTopic"
 })
 
+g.query("getGlobalTopicLearningStatus", {
+  args: { topicName: g.string() },
+  returns: g.string(),
+  resolver: "getGlobalTopicLearningStatus"
+})
+
 g.query("getGlobalLinks", {
   args: {},
   returns: g.ref(

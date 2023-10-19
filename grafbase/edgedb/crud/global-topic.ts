@@ -242,20 +242,20 @@ export async function updatePrettyNameOfGlobalTopic(
     .run(client)
 }
 
-export async function getLearningStatus(hankoId: string, topicName: string) {
-  const userByHankoId = e.select(e.User, (user) => ({
-    filter: e.all(
-      e.set(
-        e.op(user.hankoId, "=", hankoId),
-        e.op("exists", user.memberUntil),
-        e.op(user.memberUntil, ">", e.datetime_current())
-      )
-    )
-  }))
-  const topicByName = e.select(e.GlobalTopic, () => ({
-    filter_single: { name: topicName }
-  }))
-}
+// export async function getLearningStatus(hankoId: string, topicName: string) {
+//   const userByHankoId = e.select(e.User, (user) => ({
+//     filter: e.all(
+//       e.set(
+//         e.op(user.hankoId, "=", hankoId),
+//         e.op("exists", user.memberUntil),
+//         e.op(user.memberUntil, ">", e.datetime_current())
+//       )
+//     )
+//   }))
+//   const topicByName = e.select(e.GlobalTopic, () => ({
+//     filter_single: { name: topicName }
+//   }))
+// }
 
 export async function updateTopicLearningStatus(
   hankoId: string,

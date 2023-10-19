@@ -27,7 +27,7 @@ import { getHankoCookie } from "../lib/auth"
 
 // TODO: https://github.com/nikitavoloboev/la-issues/issues/54 (should stop having to manually update this schema )
 export const typeDefs = `
-""""
+"""
 De-prioritizes a fragment, causing the fragment to be omitted in the initial response and delivered as a subsequent response afterward.
 """
 directive @defer(
@@ -84,6 +84,7 @@ type Query {
   getTopicsLearned: getTopicsLearnedOutput!
   getGlobalLink(linkId: String!): publicGetGlobalLinkOutput!
   getGlobalTopic(topicName: String!): getGlobalTopicOutput!
+  getGlobalTopicLearningStatus(topicName: String!): String!
   getGlobalLinks: getGlobalLinksOutput!
   checkForGlobalLink(linkUrl: String!): publicCheckForGlobalLinkOutput!
   stripe(plan: String!, userEmail: String!): String!

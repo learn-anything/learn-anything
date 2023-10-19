@@ -1,5 +1,6 @@
 import { client } from "../client"
 import e from "../dbschema/edgeql-js"
+import { queryGetLearningStatus } from "../queries/queryGetLearningStatus.query"
 
 export interface User {
   email: string
@@ -24,6 +25,14 @@ export async function getUserDetails(hankoId: string) {
       isMember: false
     }
   }
+}
+
+export async function getLearningStatus(topicName: string, hankoId: string) {
+  const res = await queryGetLearningStatus(client, {
+    topicName: topicName,
+    hankoId: hankoId
+  })
+  return res
 }
 
 export async function getAllLikedLinks(hankoId: string) {

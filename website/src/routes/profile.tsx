@@ -164,7 +164,9 @@ export default function Profile() {
               <div class="flex justify-between flex-row-reverse w-full">
                 <div
                   onClick={async () => {
-                    setShowAddLinkModal(false)
+                    // setShowAddLinkModal(false)
+                    console.log(newLinkData().url)
+                    // return
                     await mobius.mutate({
                       addPersonalLink: {
                         where: {
@@ -243,9 +245,14 @@ export default function Profile() {
               const search_state = createSearchState({
                 searchResults: user.likedLinksSearch,
                 onSelect({ name }) {
-                  const foundLink = user.user.likedLinks.find(
+                  let foundLink = user.user.likedLinks.find(
                     (l) => l.title === name
                   )
+                  if (!foundLink) {
+                    foundLink = user.user.personalLinks.find(
+                      (l) => l.title === name
+                    )
+                  }
                   // TODO: temp hack, get protocol with all the links and use that (https should work often though for now)
                   window.location.href = `https://${foundLink?.url}`
                 }

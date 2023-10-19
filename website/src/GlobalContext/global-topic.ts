@@ -181,6 +181,20 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
         likedLinkIds: topicData.likedLinkIds,
         completedLinkIds: topicData.completedLinkIds
       })
+    } else {
+      const learningStatus = await mobius.query({
+        getGlobalTopicLearningStatus: {
+          where: {
+            topicName: location.pathname.slice(1)
+          },
+          select: true
+        }
+      })
+      setGlobalTopic(
+        "learningStatus",
+        // @ts-ignore
+        learningStatus.data.getGlobalTopicLearningStatus
+      )
     }
   })
 

@@ -1,16 +1,10 @@
 import { splitUrlByProtocol } from "../../lib/util"
-import { addGlobalLink, addPersonalLink } from "../crud/global-link"
+import { addGlobalLink } from "../crud/global-link"
 import {
   addLinkToSectionOfGlobalTopic,
-  checkGlobalTopicExists,
-  checkSectionsAreEmpty,
-  deleteSectionsInGlobalTopic,
-  getAllTopicNames,
-  setPrettyNameOfGlobalTopic,
-  updateTopicLearningStatus,
-  updateUnverifiedTopicLearningStatus
+  deleteSectionsInGlobalTopic
 } from "../crud/global-topic"
-import { getAllLikedLinks, getTopicsLearned } from "../crud/user"
+import { getLearningStatus } from "../crud/user"
 import {
   Topic,
   findFilePath,
@@ -18,10 +12,12 @@ import {
   parseMdFile
 } from "../sync/markdown"
 // @ts-ignore
-import clipboard from "clipboardy"
 
 async function main() {
-  // const hankoId = process.env.LOCAL_USER_HANKO_ID!
+  const hankoId = process.env.LOCAL_USER_HANKO_ID!
+  const res = await getLearningStatus("neural-nets", hankoId)
+  console.log(res)
+  // await updateUnverifiedTopicLearningStatus(hankoId, "", "none")
   // await addPersonalLink("https://news.ycombinator.com", "Hacker News", hankoId!)
   // await updateUnverifiedTopicLearningStatus(hankoId!, "reactivity", "to_learn")
   return
