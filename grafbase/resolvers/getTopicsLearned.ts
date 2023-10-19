@@ -9,7 +9,6 @@ export default async function getTopicsLearnedResolver(
   context: Context
 ) {
   try {
-    console.log("runs..")
     const hankoId = await hankoIdFromToken(context)
     if (hankoId) {
       const topics = await getTopicsLearned(hankoId)

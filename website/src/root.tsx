@@ -27,7 +27,7 @@ import { getHankoCookie } from "../lib/auth"
 
 // TODO: https://github.com/nikitavoloboev/la-issues/issues/54 (should stop having to manually update this schema )
 export const typeDefs = `
-"""
+""""
 De-prioritizes a fragment, causing the fragment to be omitted in the initial response and delivered as a subsequent response afterward.
 """
 directive @defer(
@@ -52,6 +52,9 @@ type GlobalLink {
   description: String
 }
 
+"""A JSON Value"""
+scalar JSON
+
 type Mutation {
   createUser(email: String!): String!
   updateLatestGlobalGuide(topicName: String!, topicSummary: String!, sections: [section!]!): String!
@@ -62,6 +65,7 @@ type Mutation {
 }
 
 type Query {
+  publicGetTopicsWithConnections: JSON!
   publicGetGlobalTopics: [publicGetGlobalTopicsOutput!]!
   publicGetGlobalTopic(topicName: String!): publicGetGlobalTopicOutput!
   getUserDetails: getUserDetailsOutput!
@@ -87,7 +91,7 @@ type getGlobalTopicOutput {
 
 type getTopicsLearnedOutput {
   topicsToLearn: [topicToLearn!]!
-  topicsToLearning: [topicToLearn!]!
+  topicsLearning: [topicToLearn!]!
   topicsLearned: [topicToLearn!]!
 }
 

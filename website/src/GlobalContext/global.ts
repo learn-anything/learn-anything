@@ -13,6 +13,7 @@ import {
   createStore as tinybaseCreateStore
 } from "tinybase/with-schemas"
 import { MobiusType } from "../root"
+import { useLocation } from "solid-start"
 
 type GlobalTopicSearchItem = {
   name: string
@@ -25,12 +26,18 @@ type GlobalLink = {
   title: string
 }
 
+type Connection = {
+  prettyName: string
+  connections: string[]
+}
+
 type GlobalState = {
   globalTopicsSearchList: GlobalTopicSearchItem[]
   globalLinks: GlobalLink[]
   globalLinkSearchDb: any
   guidePage: string
   theme: string
+  topicsWithConnections: Record<string, Connection>
 }
 
 // various global state
@@ -40,7 +47,8 @@ export function createGlobalState(mobius: MobiusType) {
     globalLinks: [],
     globalLinkSearchDb: undefined,
     guidePage: "Guide",
-    theme: ""
+    theme: "",
+    topicsWithConnections: {}
   })
   const [showMemberOnlyModal, setShowMemberOnlyModal] = createSignal(false)
 
@@ -77,6 +85,36 @@ export function createGlobalState(mobius: MobiusType) {
       // @ts-ignore
       setState({ globalTopicsSearchList: topics.data.publicGetGlobalTopics })
     }
+  })
+
+  const location = useLocation()
+  onMount(async () => {
+    if (location.pathname !== "/") return
+
+    const query = `
+    query UpdateLatestGlobalGuide($topicName: String!, $topicSummary: String!, $sections: [section!]!)
+    `
+
+    return
+    const variables = {
+      topicName: topic.globalTopic.name,
+      topicSummary: topic.globalTopic.topicSummary,
+      sections: sectionsToAdd
+    }
+
+    const res = await fetch(import.meta.env.VITE_GRAFBASE_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getHankoCookie()}`
+      },
+      body: JSON.stringify({
+        query,
+        variables
+      })
+    })
+
+    console.log("get connections")
   })
 
   // onMount(async () => {

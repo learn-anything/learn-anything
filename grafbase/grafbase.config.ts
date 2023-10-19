@@ -1,6 +1,9 @@
 import { config, g } from "@grafbase/sdk"
 export default config({
   schema: g,
+  experimental: {
+    kv: true
+  },
   auth: {
     rules: (rules) => {
       rules.public()
@@ -17,6 +20,19 @@ const learningStatus = g.enum("learningStatus", [
 ])
 
 // public queries
+g.query("publicGetTopicsWithConnections", {
+  args: {},
+  returns: g
+    .ref(
+      g.type("publicGetTopicsWithConnectionsOutput", {
+        name: g.string(),
+        prettyName: g.string(),
+        connections: g.string().list()
+      })
+    )
+    .list(),
+  resolver: "public/getTopicsWithConnections"
+})
 g.query("publicGetGlobalTopics", {
   args: {},
   returns: g
@@ -211,6 +227,22 @@ g.mutation("internalUpdateMemberUntilOfUser", {
   },
   returns: g.string(),
   resolver: "internal/updateMemberUntilOfUser"
+})
+
+g.mutation("updateGrafbaseKv", {
+  args: {
+    topicsWithConnections: g
+      .ref(
+        g.type("updateGrafbaseKvOutput", {
+          name: g.string(),
+          prettyName: g.string(),
+          connections: g.string().list()
+        })
+      )
+      .list()
+  },
+  returns: g.string(),
+  resolver: "internal/updateGrafbaseKv"
 })
 
 // TODO: cleanup or make into correct resolvers

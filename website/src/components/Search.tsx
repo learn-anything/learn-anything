@@ -35,7 +35,7 @@ const FUSE_OPTIONS: Fuse.IFuseOptions<SearchResult> = {
   keys: ["name"],
   shouldSort: false
 }
-const SEARCH_RESULTS_LIMIT = 100
+const SEARCH_RESULTS_LIMIT = 5
 const FUSE_SEARCH_OPTIONS: Fuse.FuseSearchOptions = {
   limit: SEARCH_RESULTS_LIMIT
 }
