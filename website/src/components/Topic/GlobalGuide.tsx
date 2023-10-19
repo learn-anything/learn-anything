@@ -1,4 +1,4 @@
-import { For, Show } from "solid-js"
+import { For } from "solid-js"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import GuideSummary from "./GuideSummary"
 import clsx from "clsx"
@@ -6,7 +6,6 @@ import { useLocation, useNavigate } from "solid-start"
 import { useGlobalState } from "../../GlobalContext/global"
 import { useUser } from "../../GlobalContext/user"
 import FancyButton from "../FancyButton"
-import ModalWithMessageAndButton from "../ModalWithMessageAndButton"
 import GuideSection from "./GuideSection"
 
 export default function GlobalGuide() {
@@ -19,18 +18,6 @@ export default function GlobalGuide() {
   return (
     <>
       <div class="w-full flex flex-col gap-[20px] relative">
-        <Show when={global.showMemberOnlyModal()}>
-          <ModalWithMessageAndButton
-            message="This is a member only feature"
-            buttonText="Become Member"
-            buttonAction={() => {
-              navigate("/pricing")
-            }}
-            onClose={() => {
-              global.setShowMemberOnlyModal(false)
-            }}
-          />
-        </Show>
         <div
           id="Guide"
           class="font-bold  flex w-full items-center justify-between"

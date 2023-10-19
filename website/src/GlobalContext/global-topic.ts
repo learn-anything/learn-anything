@@ -33,6 +33,7 @@ export type GlobalTopic = {
   learningStatus: "to_learn" | "learning" | "learned" | ""
   likedLinkIds: string[]
   completedLinkIds: string[]
+  verifiedTopic: boolean
 }
 
 function extractTopicFromPath(inputStr: string) {
@@ -56,7 +57,8 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
     links: [],
     learningStatus: "",
     likedLinkIds: [],
-    completedLinkIds: []
+    completedLinkIds: [],
+    verifiedTopic: true
   })
 
   const currentTopicGlobalLinksSearch = createMemo(() => {
@@ -82,50 +84,60 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
     const topicName = extractTopicFromPath(location.pathname)
     if (!topicName) return
 
-    const topic = await mobius.query({
-      publicGetGlobalTopic: {
-        where: { topicName: topicName },
-        select: {
-          name: true,
-          prettyName: true,
-          topicSummary: true,
-          topicPath: true,
-          links: {
-            id: true,
-            title: true,
-            url: true,
-            year: true,
-            protocol: true,
-            description: true
-          },
-          latestGlobalGuide: {
-            sections: {
+    const topicsStored = localStorage.getItem("globalTopics")
+    let actualTopics
+    let verifiedTopic
+    if (topicsStored) {
+      actualTopics = JSON.parse(topicsStored)
+      verifiedTopic = actualTopics.includes(topicName)
+      setGlobalTopic({ verifiedTopic: verifiedTopic })
+    }
+    if (verifiedTopic || !topicsStored) {
+      const topic = await mobius.query({
+        publicGetGlobalTopic: {
+          where: { topicName: topicName },
+          select: {
+            name: true,
+            prettyName: true,
+            topicSummary: true,
+            topicPath: true,
+            links: {
+              id: true,
               title: true,
-              summary: true,
-              links: {
-                id: true,
+              url: true,
+              year: true,
+              protocol: true,
+              description: true
+            },
+            latestGlobalGuide: {
+              sections: {
                 title: true,
-                url: true,
-                year: true,
-                protocol: true,
-                description: true
+                summary: true,
+                links: {
+                  id: true,
+                  title: true,
+                  url: true,
+                  year: true,
+                  protocol: true,
+                  description: true
+                }
               }
             }
           }
         }
-      }
-    })
+      })
 
-    // @ts-ignore
-    const topicData = topic.data.publicGetGlobalTopic
-    setGlobalTopic({
-      name: topicData.name,
-      prettyName: topicData.prettyName,
-      topicSummary: topicData.topicSummary,
-      topicPath: topicData.topicPath,
-      latestGlobalGuide: topicData.latestGlobalGuide,
-      links: topicData.links
-    })
+      // @ts-ignore
+      const topicData = topic.data.publicGetGlobalTopic
+      setGlobalTopic({
+        name: topicData.name,
+        prettyName: topicData.prettyName,
+        topicSummary: topicData.topicSummary,
+        topicPath: topicData.topicPath,
+        latestGlobalGuide: topicData.latestGlobalGuide,
+        links: topicData.links
+      })
+    }
   })
 
   createEffect(async () => {
@@ -133,6 +145,7 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
       !location.pathname ||
       location.pathname === "/" ||
       location.pathname === "/pricing" ||
+      location.pathname === "/profile" ||
       !user.user.member
     )
       return
@@ -140,25 +153,35 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
     const topicName = extractTopicFromPath(location.pathname)
     if (!topicName) return
 
-    const res = await mobius.query({
-      getGlobalTopic: {
-        where: {
-          topicName: topicName
-        },
-        select: {
-          learningStatus: true,
-          likedLinkIds: true,
-          completedLinkIds: true
+    const topicsStored = localStorage.getItem("globalTopics")
+    let actualTopics
+    let verifiedTopic
+    if (topicsStored) {
+      actualTopics = JSON.parse(topicsStored)
+      verifiedTopic = actualTopics.includes(topicName)
+      setGlobalTopic({ verifiedTopic: verifiedTopic })
+    }
+    if (verifiedTopic || !topicsStored) {
+      const res = await mobius.query({
+        getGlobalTopic: {
+          where: {
+            topicName: topicName
+          },
+          select: {
+            learningStatus: true,
+            likedLinkIds: true,
+            completedLinkIds: true
+          }
         }
-      }
-    })
-    // @ts-ignore
-    const topicData = res.data.getGlobalTopic
-    setGlobalTopic({
-      learningStatus: topicData.learningStatus,
-      likedLinkIds: topicData.likedLinkIds,
-      completedLinkIds: topicData.completedLinkIds
-    })
+      })
+      // @ts-ignore
+      const topicData = res.data.getGlobalTopic
+      setGlobalTopic({
+        learningStatus: topicData.learningStatus,
+        likedLinkIds: topicData.likedLinkIds,
+        completedLinkIds: topicData.completedLinkIds
+      })
+    }
   })
 
   return {

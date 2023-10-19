@@ -26,6 +26,7 @@ export default function GuideSidebar() {
               <FancyButton
                 onClick={async () => {
                   if (!user.user.member) {
+                    console.log("run..")
                     global.setShowMemberOnlyModal(true)
                     return
                   }

@@ -77,23 +77,25 @@ export function createGlobalState(mobius: MobiusType) {
     createSignal<any>(undefined)
 
   onMount(async () => {
-    const topics = await mobius.query({
-      publicGetGlobalTopics: {
-        name: true,
-        prettyName: true
+    let topicsStored = localStorage.getItem("globalTopics")
+    if (!topicsStored) {
+      const topics = await mobius.query({
+        publicGetGlobalTopics: {
+          name: true,
+          prettyName: true
+        }
+      })
+      if (topics) {
+        // @ts-ignore
+        const justTopics = topics.data.publicGetGlobalTopics.map(
+          (topic: any) => topic.name
+        )
+        topicsStored = JSON.stringify(justTopics)
+        localStorage.setItem("globalTopics", topicsStored)
+        setState({ globalTopicsSearchList: justTopics })
       }
-    })
-    if (topics) {
-      console.log(topics, "topics")
-      // @ts-ignore
-      const justTopics = topics.data.publicGetGlobalTopics.map(
-        (topic: any) => topic.name
-      )
-      if (!localStorage.getItem("globalTopics")) {
-        localStorage.setItem("globalTopics", JSON.stringify(justTopics))
-      }
-      // @ts-ignore
-      setState({ globalTopicsSearchList: topics.data.publicGetGlobalTopics })
+    } else {
+      setState({ globalTopicsSearchList: JSON.parse(topicsStored) })
     }
   })
 

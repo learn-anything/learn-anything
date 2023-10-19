@@ -1,15 +1,16 @@
-import GlobalGuide from "../../components/Topic/GlobalGuide"
 import clsx from "clsx"
 import { Match, Show, Switch, createEffect, createSignal } from "solid-js"
 import { useNavigate } from "solid-start"
 import { useGlobalState } from "../../GlobalContext/global"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
+import { useUser } from "../../GlobalContext/user"
 import FancyButton from "../../components/FancyButton"
 import Icon from "../../components/Icon"
+import ModalWithMessageAndButton from "../../components/ModalWithMessageAndButton"
+import GlobalGuide from "../../components/Topic/GlobalGuide"
 import GuideLinks from "../../components/Topic/GuideLinks"
 import GuideNav from "../../components/Topic/GuideNav"
 import GuideSidebar from "../../components/Topic/GuideSidebar"
-import { useUser } from "../../GlobalContext/user"
 
 export default function GlobalTopic() {
   const global = useGlobalState()
@@ -79,17 +80,57 @@ export default function GlobalTopic() {
       `}</style>
       <div class="w-screen fixed top-0 right-0 h-screen text-black dark:text-white bg-white dark:bg-[#1C1C1C]">
         <GuideNav />
+        <Show when={global.showMemberOnlyModal()}>
+          <ModalWithMessageAndButton
+            message="This is a member only feature"
+            buttonText="Become Member"
+            buttonAction={() => {
+              navigate("/pricing")
+            }}
+            onClose={() => {
+              global.setShowMemberOnlyModal(false)
+            }}
+          />
+        </Show>
         <div class="h-[90%] w-full flex">
           <Show
             when={topic.globalTopic?.latestGlobalGuide?.sections.length > 0}
             fallback={
               <div class="w-full h-full flex items-center justify-center">
-                <Icon
-                  name="Loader"
-                  width="40"
-                  height="40"
-                  border={global.state.theme === "light" ? "Black" : "White"}
-                ></Icon>
+                <Show
+                  when={!topic.globalTopic.verifiedTopic}
+                  fallback={
+                    <Icon
+                      name="Loader"
+                      width="40"
+                      height="40"
+                      border={
+                        global.state.theme === "light" ? "Black" : "White"
+                      }
+                    ></Icon>
+                  }
+                >
+                  <div class="w-fit">
+                    <Show
+                      when={!user.user.member}
+                      fallback={
+                        <div>
+                          You can track learning state of this topic. Soon will
+                          be able to edit the guide too.
+                        </div>
+                      }
+                    >
+                      <FancyButton
+                        onClick={() => {
+                          navigate("/pricing")
+                        }}
+                      >
+                        Become member to track learning state and make your own
+                        guide for this topic.
+                      </FancyButton>
+                    </Show>
+                  </div>
+                </Show>
               </div>
             }
           >

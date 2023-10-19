@@ -42,7 +42,7 @@ export function createUserState(mobius: MobiusType) {
     username: "",
     email: "",
     signedIn: false,
-    member: true,
+    member: false,
     admin: false,
     topicsToLearn: [],
     topicsToLearning: [],
@@ -132,13 +132,10 @@ export function createUserState(mobius: MobiusType) {
     })
     // @ts-ignore
     const topicsLearned = res?.data?.getTopicsLearned
-    console.log(topicsLearned, "topics")
     // @ts-ignore
     const links = res?.data?.getLikedLinks
     const likedLinks = links.likedLinks
     const personalLinks = links.personalLinks
-    console.log(likedLinks, "links")
-    console.log(personalLinks, "links")
     setUser({
       topicsToLearn: topicsLearned.topicsToLearn,
       topicsToLearning: topicsLearned.topicsLearning,
@@ -146,7 +143,6 @@ export function createUserState(mobius: MobiusType) {
       likedLinks: likedLinks,
       personalLinks: personalLinks
     })
-    console.log(user, "user")
   })
 
   return {
