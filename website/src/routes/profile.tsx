@@ -120,8 +120,8 @@ export default function Profile() {
         <Show when={showAddLinkModal()}>
           {/* @ts-ignore */}
           <Modal onClose={setShowAddLinkModal}>
-            <div class="w-1/2 relative z-50 h-1/2 rounded-lg dark:border-opacity-50 bg-white border-slate-400 border dark:bg-neutral-950 flex flex-col justify-between gap-4 p-[20px] px-[24px]">
-              <div class="flex flex-col gap-3">
+            <div class="w-1/2 relative z-50 h-1/2 rounded-lg dark:border-opacity-50 bg-white dark:border-[#282828]  border-[#69696951] border dark:bg-neutral-900 flex flex-col justify-between gap-1 p-[20px] px-[24px]">
+              <div class="flex flex-col ">
                 <input
                   type="text"
                   ref={(el) => autofocus(el)}
@@ -134,7 +134,7 @@ export default function Profile() {
                       url: e.target.value
                     })
                   }}
-                  class="border bg-neutral-900 bg-inherit outline-none hover:border-opacity-70 focus:border-opacity-100 border-slate-400 border-opacity-50 w-full rounded-[4px] p-1 px-4"
+                  class=" bg-inherit text-[26px] outline-none w-full px-2 font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[4px] p-1 "
                 />
                 <input
                   type="text"
@@ -146,7 +146,7 @@ export default function Profile() {
                       title: e.target.value
                     })
                   }}
-                  class="border bg-neutral-900 bg-inherit outline-none hover:border-opacity-70  focus:border-opacity-100 border-slate-400 border-opacity-50 w-full rounded-[4px] p-1 px-4"
+                  class=" bg-inherit text-[20px] outline-none w-full px-2 font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[8px] p-1 "
                 />
                 <input
                   type="text"
@@ -158,7 +158,7 @@ export default function Profile() {
                       description: e.target.value
                     })
                   }}
-                  class="border bg-neutral-900 bg-inherit outline-none hover:border-opacity-70 focus:border-opacity-100 border-slate-400 border-opacity-50 w-full rounded-[4px] p-1 px-4"
+                  class=" bg-inherit text-[20px] bg-neutral-700 px-2 outline-none w-full font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[8px] p-1 "
                 />
               </div>
               <div class="flex justify-between flex-row-reverse w-full">
@@ -178,12 +178,12 @@ export default function Profile() {
                       }
                     })
                   }}
-                  class=" bg-blue-600 px-6 hover:bg-blue-700 p-2 text-white rounded-[4px] cursor-pointer"
+                  class=" bg-white px-[42px] hover:bg-opacity-90 transition-all p-2 text-black rounded-[8px] cursor-pointer"
                 >
                   Save
                 </div>
                 <div
-                  class=" px-4 border border-slate-400 p-2 rounded-[4px] cursor-pointer"
+                  class=" px-4 border border-slate-400 p-2 rounded-[8px] cursor-pointer"
                   onClick={() => {
                     setShowAddLinkModal(false)
                   }}
