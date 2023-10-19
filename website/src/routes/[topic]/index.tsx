@@ -19,7 +19,7 @@ export default function GlobalTopic() {
   const user = useUser()
 
   createEffect(() => {
-    if (topic.globalTopic.latestGlobalGuide.sections) {
+    if (topic.globalTopic?.latestGlobalGuide?.sections) {
       setBlurWidth(0)
       if (global.state.guidePage === "Guide") {
         setTimeout(() => {
@@ -81,7 +81,7 @@ export default function GlobalTopic() {
         <GuideNav />
         <div class="h-[90%] w-full flex">
           <Show
-            when={topic.globalTopic.latestGlobalGuide.sections.length > 0}
+            when={topic.globalTopic?.latestGlobalGuide?.sections.length > 0}
             fallback={
               <div class="w-full h-full flex items-center justify-center">
                 <Icon

@@ -16,6 +16,8 @@ import Modal from "../components/Modal"
 import { Search, createSearchState } from "../components/Search"
 import GuideNav from "../components/Topic/GuideNav"
 import { useMobius } from "../root"
+import Icon from "../components/Icon"
+import GlobalGuideLink from "../components/Topic/GlobalGuideLink"
 
 type NewLink = {
   url: string
@@ -118,65 +120,74 @@ export default function Profile() {
         <Show when={showAddLinkModal()}>
           {/* @ts-ignore */}
           <Modal onClose={setShowAddLinkModal}>
-            <div class="w-1/2 relative z-50 h-1/2 rounded-lg dark:border-opacity-50 bg-white border-slate-400 border dark:bg-neutral-900 flex flex-col gap-4 p-[20px] px-[24px]">
-              <input
-                type="text"
-                ref={(el) => autofocus(el)}
-                autofocus
-                placeholder="URL"
-                value={newLinkData().url}
-                onInput={(e) => {
-                  setNewLinkData({
-                    ...newLinkData(),
-                    url: e.target.value
-                  })
-                }}
-                class="border-b bg-inherit outline-none hover:border-opacity-70 focus:border-opacity-100 border-slate-400 border-opacity-50 w-1/2"
-              />
-              <input
-                type="text"
-                placeholder="Title"
-                value={newLinkData().title}
-                onInput={(e) => {
-                  setNewLinkData({
-                    ...newLinkData(),
-                    title: e.target.value
-                  })
-                }}
-                class="border-b bg-inherit outline-none hover:border-opacity-70  focus:border-opacity-100 border-slate-400 border-opacity-50 w-1/2"
-              />
-              <input
-                type="text"
-                placeholder="Description"
-                value={newLinkData().description}
-                onInput={(e) => {
-                  setNewLinkData({
-                    ...newLinkData(),
-                    description: e.target.value
-                  })
-                }}
-                class="border-b bg-inherit outline-none hover:border-opacity-70 focus:border-opacity-100 border-slate-400 border-opacity-50 w-1/2"
-              />
-              <div
-                onClick={async () => {
-                  const res = await mobius.mutate({
-                    addPersonalLink: {
-                      where: {
-                        title: newLinkData().title,
-                        url: newLinkData().url,
-                        description: newLinkData().description
-                      },
-                      select: true
-                    }
-                  })
-                  console.log(res, "res")
-                }}
-                class="absolute bottom-2 right-2 bg-blue-600 px-6 hover:bg-blue-700 p-2 text-white rounded-[4px] cursor-pointer"
-              >
-                Save
+            <div class="w-1/2 relative z-50 h-1/2 rounded-lg dark:border-opacity-50 bg-white border-slate-400 border dark:bg-neutral-950 flex flex-col justify-between gap-4 p-[20px] px-[24px]">
+              <div class="flex flex-col gap-3">
+                <input
+                  type="text"
+                  ref={(el) => autofocus(el)}
+                  autofocus
+                  placeholder="URL"
+                  value={newLinkData().url}
+                  onInput={(e) => {
+                    setNewLinkData({
+                      ...newLinkData(),
+                      url: e.target.value
+                    })
+                  }}
+                  class="border bg-neutral-900 bg-inherit outline-none hover:border-opacity-70 focus:border-opacity-100 border-slate-400 border-opacity-50 w-full rounded-[4px] p-1 px-4"
+                />
+                <input
+                  type="text"
+                  placeholder="Title"
+                  value={newLinkData().title}
+                  onInput={(e) => {
+                    setNewLinkData({
+                      ...newLinkData(),
+                      title: e.target.value
+                    })
+                  }}
+                  class="border bg-neutral-900 bg-inherit outline-none hover:border-opacity-70  focus:border-opacity-100 border-slate-400 border-opacity-50 w-full rounded-[4px] p-1 px-4"
+                />
+                <input
+                  type="text"
+                  placeholder="Description"
+                  value={newLinkData().description}
+                  onInput={(e) => {
+                    setNewLinkData({
+                      ...newLinkData(),
+                      description: e.target.value
+                    })
+                  }}
+                  class="border bg-neutral-900 bg-inherit outline-none hover:border-opacity-70 focus:border-opacity-100 border-slate-400 border-opacity-50 w-full rounded-[4px] p-1 px-4"
+                />
               </div>
-              <div class="absolute bottom-2 left-2  px-4 border border-slate-400 p-2 rounded-[4px] cursor-pointer">
-                Cancel
+              <div class="flex justify-between flex-row-reverse w-full">
+                <div
+                  onClick={async () => {
+                    setShowAddLinkModal(false)
+                    await mobius.mutate({
+                      addPersonalLink: {
+                        where: {
+                          title: newLinkData().title,
+                          url: newLinkData().url,
+                          description: newLinkData().description
+                        },
+                        select: true
+                      }
+                    })
+                  }}
+                  class=" bg-blue-600 px-6 hover:bg-blue-700 p-2 text-white rounded-[4px] cursor-pointer"
+                >
+                  Save
+                </div>
+                <div
+                  class=" px-4 border border-slate-400 p-2 rounded-[4px] cursor-pointer"
+                  onClick={() => {
+                    setShowAddLinkModal(false)
+                  }}
+                >
+                  Cancel
+                </div>
               </div>
             </div>
           </Modal>
@@ -242,57 +253,72 @@ export default function Profile() {
 
               return (
                 <Search
-                  placeholder={"Search Liked Links"}
+                  placeholder={"Search liked and added links"}
                   state={search_state}
                 />
               )
             })()}
-            <div class="w-full flex text-[#696969] text-[14px] justify-between">
-              <div
-                class={clsx(
-                  "p-2 cursor-pointer",
-                  currentTab() === "ToLearn" &&
-                    "border-b border-black text-black dark:text-white dark:border-white font-bold"
-                )}
-                onClick={() => {
-                  setCurrentTab("ToLearn")
-                }}
-              >
-                To Learn
+            <div class="flex justify-between text-[#696969] ">
+              <div class="w-full flex text-[#696969] text-[14px] gap-4">
+                <div
+                  class={clsx(
+                    "p-2 cursor-pointer",
+                    currentTab() === "ToLearn" &&
+                      "border-b border-black text-black dark:text-white dark:border-white font-bold"
+                  )}
+                  onClick={() => {
+                    setCurrentTab("ToLearn")
+                  }}
+                >
+                  To Learn
+                </div>
+                <div
+                  class={clsx(
+                    "p-2 cursor-pointer",
+                    currentTab() === "Learning" &&
+                      "border-b border-black text-black dark:text-white dark:border-white font-bold"
+                  )}
+                  onClick={() => {
+                    setCurrentTab("Learning")
+                  }}
+                >
+                  Learning
+                </div>
+                <div
+                  class={clsx(
+                    "p-2 cursor-pointer",
+                    currentTab() === "Learned" &&
+                      "border-b border-black text-black dark:text-white dark:border-white font-bold"
+                  )}
+                  onClick={() => {
+                    setCurrentTab("Learned")
+                  }}
+                >
+                  Learned
+                </div>
+                <div
+                  class={clsx(
+                    "p-2 cursor-pointer",
+                    currentTab() === "Links" &&
+                      "border-b border-black text-black dark:text-white dark:border-white font-bold"
+                  )}
+                  onClick={() => {
+                    setCurrentTab("Links")
+                  }}
+                >
+                  Links
+                </div>
               </div>
-              <div
-                class={clsx(
-                  "p-2 cursor-pointer",
-                  currentTab() === "Learning" &&
-                    "border-b border-black text-black dark:text-white dark:border-white font-bold"
-                )}
-                onClick={() => {
-                  setCurrentTab("Learning")
-                }}
-              >
-                Learning
-              </div>
-              <div
-                class={clsx(
-                  "p-2 cursor-pointer",
-                  currentTab() === "Learned" &&
-                    "border-b border-black text-black dark:text-white dark:border-white font-bold"
-                )}
-                onClick={() => {
-                  setCurrentTab("Learned")
-                }}
-              >
-                Learned
-              </div>
+              <div></div>
             </div>
             <Switch>
               <Match when={currentTab() === "ToLearn"}>
-                <div>
+                <div class="flex gap-3 flex-col">
                   <For each={user.user.topicsToLearn}>
                     {(topic) => {
                       return (
                         <>
-                          <div class="flex items-center overflow-hidden  border-[0.5px] dark:border-[#282828]  border-[#69696951] p-4 px-4 justify-between">
+                          <div class="flex items-center overflow-hidden rounded-[4px]  border-[0.5px] dark:border-[#282828]  border-[#69696951] p-4 px-4 justify-between">
                             <div class="w-full  h-full flex justify-between items-center">
                               <div class="w-fit flex gap-1 flex-col">
                                 <div class="flex gap-3 items-center">
@@ -314,13 +340,57 @@ export default function Profile() {
                   </For>
                 </div>
               </Match>
+              <Match when={currentTab() === "Links"}>
+                <div class="flex gap-3 flex-col">
+                  {/* TODO: finish, some issues with getting like/complete working */}
+                  {/* <For each={user.user.likedLinks}>
+                    {(link) => {
+                      return (
+                        <>
+                          <GlobalGuideLink
+                            id={link.id}
+                            url={link.url}
+                            title={link.title}
+                            protocol="https"
+                          />
+                        </>
+                      )
+                    }}
+                  </For> */}
+                  <For each={user.user.personalLinks}>
+                    {(link) => {
+                      return (
+                        <>
+                          <div class="flex items-center overflow-hidden rounded-[4px]  border-[0.5px] dark:border-[#282828]  border-[#69696951] p-4 px-4 justify-between">
+                            <div class="w-full  h-full flex justify-between items-center">
+                              <div class="w-fit flex gap-2 items-center">
+                                <div class="flex gap-3 items-center">
+                                  <a
+                                    class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer"
+                                    href={`https://${link.url}`}
+                                  >
+                                    {link.title}
+                                  </a>
+                                </div>
+                                <div class="font-light text-[12px] text-[#696969] text-ellipsis w-[250px] overflow-hidden whitespace-nowrap">
+                                  {link.url}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      )
+                    }}
+                  </For>
+                </div>
+              </Match>
               <Match when={currentTab() === "Learning"}>
-                <div>
+                <div class="flex gap-3 flex-col">
                   <For each={user.user.topicsToLearning}>
                     {(topic) => {
                       return (
                         <>
-                          <div class="flex items-center overflow-hidden  border-[0.5px] dark:border-[#282828]  border-[#69696951] p-4 px-4 justify-between">
+                          <div class="flex items-center overflow-hidden rounded-[4px]  border-[0.5px] dark:border-[#282828]  border-[#69696951] p-4 px-4 justify-between">
                             <div class="w-full  h-full flex justify-between items-center">
                               <div class="w-fit flex gap-1 flex-col">
                                 <div class="flex gap-3 items-center">
@@ -343,13 +413,13 @@ export default function Profile() {
                 </div>
               </Match>
               <Match when={currentTab() === "Learned"}>
-                <div>
+                <div class="flex gap-3 flex-col">
                   {" "}
                   <For each={user.user.topicsLearned}>
                     {(topic) => {
                       return (
                         <>
-                          <div class="flex items-center overflow-hidden  border-[0.5px] dark:border-[#282828]  border-[#69696951] p-4 px-4 justify-between">
+                          <div class="flex items-center overflow-hidden rounded-[4px]  border-[0.5px] dark:border-[#282828]  border-[#69696951] p-4 px-4 justify-between">
                             <div class="w-full  h-full flex justify-between items-center">
                               <div class="w-fit flex gap-1 flex-col">
                                 <div class="flex gap-3 items-center">

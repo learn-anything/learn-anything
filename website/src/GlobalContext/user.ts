@@ -32,6 +32,7 @@ type User = {
   topicsToLearning: Topic[]
   topicsLearned: Topic[]
   likedLinks: Link[]
+  completedLinks: Link[]
   personalLinks: Link[]
 }
 
@@ -47,7 +48,8 @@ export function createUserState(mobius: MobiusType) {
     topicsToLearning: [],
     topicsLearned: [],
     likedLinks: [],
-    personalLinks: []
+    personalLinks: [],
+    completedLinks: []
   })
 
   onMount(async () => {
@@ -92,7 +94,7 @@ export function createUserState(mobius: MobiusType) {
   })
 
   const likedLinksSearch = createMemo(() => {
-    return user.likedLinks.map((link) => ({
+    return [...user.likedLinks, ...user.personalLinks].map((link) => ({
       name: link.title
     }))
   })

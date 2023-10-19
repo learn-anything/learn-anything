@@ -38,6 +38,7 @@ type GlobalState = {
   guidePage: string
   theme: string
   topicsWithConnections: Record<string, Connection>
+  onVerifiedTopic: boolean
 }
 
 // various global state
@@ -48,7 +49,8 @@ export function createGlobalState(mobius: MobiusType) {
     globalLinkSearchDb: undefined,
     guidePage: "Guide",
     theme: "",
-    topicsWithConnections: {}
+    topicsWithConnections: {},
+    onVerifiedTopic: false
   })
   const [showMemberOnlyModal, setShowMemberOnlyModal] = createSignal(false)
 
@@ -82,6 +84,14 @@ export function createGlobalState(mobius: MobiusType) {
       }
     })
     if (topics) {
+      console.log(topics, "topics")
+      // @ts-ignore
+      const justTopics = topics.data.publicGetGlobalTopics.map(
+        (topic: any) => topic.name
+      )
+      if (!localStorage.getItem("globalTopics")) {
+        localStorage.setItem("globalTopics", JSON.stringify(justTopics))
+      }
       // @ts-ignore
       setState({ globalTopicsSearchList: topics.data.publicGetGlobalTopics })
     }
@@ -89,7 +99,13 @@ export function createGlobalState(mobius: MobiusType) {
 
   const location = useLocation()
   onMount(async () => {
-    if (location.pathname !== "/") return
+    return
+    console.log("runs..")
+    console.log(!(location.pathname !== "/"), "..")
+    if (!(location.pathname !== "/")) return
+    const topics = localStorage.getItem("globalTopics")
+    // console.log(topics, "TOPICS..")
+    return
 
     const query = `
     query UpdateLatestGlobalGuide($topicName: String!, $topicSummary: String!, $sections: [section!]!)
@@ -129,6 +145,7 @@ export function createGlobalState(mobius: MobiusType) {
   // })
 
   onMount(async () => {
+    return
     const tableSchema = {
       globalLinks: {
         title: { type: "string" },

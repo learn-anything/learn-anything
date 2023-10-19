@@ -1,4 +1,4 @@
-import { For } from "solid-js"
+import { For, Show } from "solid-js"
 import { useGlobalState } from "../../GlobalContext/global"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import FancyButton from "../FancyButton"
@@ -136,7 +136,7 @@ export default function GuideSidebar() {
           <div id="Info" class="text-[#696969] flex flex-col gap-3">
             <div class="font-bold">{topic.globalTopic.prettyName}</div>
             <div class="text-[14px] pl-3 flex flex-col gap-2">
-              <For each={topic.globalTopic.latestGlobalGuide.sections}>
+              <For each={topic.globalTopic?.latestGlobalGuide?.sections}>
                 {(section) => {
                   return (
                     <>

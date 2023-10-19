@@ -171,14 +171,16 @@ export default function Pricing() {
                   </div>
                 </div>
               </div>
-              <div
-                class={clsx(
-                  "flex items-center justify-center rounded-lg bg-black w-full p-3 opacity-80 text-white",
-                  true && "bg-neutral-800 opacity-80 text-gray-300"
-                )}
-              >
-                Current plan
-              </div>
+              <Show when={!user.user.member}>
+                <div
+                  class={clsx(
+                    "flex items-center justify-center rounded-lg bg-black w-full p-3 opacity-80 text-white",
+                    true && "bg-neutral-800 opacity-80 text-gray-300"
+                  )}
+                >
+                  Current plan
+                </div>
+              </Show>
             </div>
             <div class="w-full h-full p-8 flex flex-col gap-6 justify-between">
               <div class="px-2 p-0.5 w-fit rounded-full font-light text-sm bg-[#E7EBF9] text-[#3B5CCC]">
@@ -216,51 +218,65 @@ export default function Pricing() {
                   <div>• AI interface to all your notes (soon) </div>
                 </div>
               </div>
-              <div
-                class="flex items-center justify-center rounded-lg bg-black w-full p-3 opacity-80 text-white cursor-pointer"
-                onClick={async () => {
-                  setWaitingForStripe(true)
-                  if (user.user.signedIn) {
-                    if (planChosen() === "monthly") {
-                      const res = await mobius.query({
-                        stripe: {
-                          where: {
-                            plan: "month",
-                            userEmail: user.user.email
-                          },
-                          select: true
-                        }
-                      })
-                      console.log(res, "res")
-                      // @ts-ignore
-                      const stripeCheckout = res.data.stripe
-                      window.location.href = stripeCheckout
-                    } else {
-                      const res = await mobius.query({
-                        stripe: {
-                          where: {
-                            plan: "year",
-                            userEmail: user.user.email
-                          },
-                          select: true
-                        }
-                      })
-                      // @ts-ignore
-                      const stripeCheckout = res.data.stripe
-                      window.location.href = stripeCheckout
-                    }
-                  } else {
-                    setShowModalWithSignUpMessage(true)
-                  }
-                }}
+              <Show
+                when={!user.user.member}
+                fallback={
+                  <div
+                    class={clsx(
+                      "flex items-center justify-center rounded-lg bg-black w-full p-3 opacity-80 text-white",
+                      true && "bg-neutral-800 opacity-80 text-gray-300"
+                    )}
+                  >
+                    Current plan
+                  </div>
+                }
               >
-                <Show
-                  when={!waitingForStripe()}
-                  fallback={<Icon name="Loader" border="white" />}
+                <div
+                  class="flex items-center justify-center rounded-lg bg-black w-full p-3 opacity-80 text-white cursor-pointer"
+                  onClick={async () => {
+                    setWaitingForStripe(true)
+                    if (user.user.signedIn) {
+                      if (planChosen() === "monthly") {
+                        const res = await mobius.query({
+                          stripe: {
+                            where: {
+                              plan: "month",
+                              userEmail: user.user.email
+                            },
+                            select: true
+                          }
+                        })
+                        console.log(res, "res")
+                        // @ts-ignore
+                        const stripeCheckout = res.data.stripe
+                        window.location.href = stripeCheckout
+                      } else {
+                        const res = await mobius.query({
+                          stripe: {
+                            where: {
+                              plan: "year",
+                              userEmail: user.user.email
+                            },
+                            select: true
+                          }
+                        })
+                        // @ts-ignore
+                        const stripeCheckout = res.data.stripe
+                        window.location.href = stripeCheckout
+                      }
+                    } else {
+                      setShowModalWithSignUpMessage(true)
+                    }
+                  }}
                 >
-                  Become member
-                </Show>
-              </div>
+                  <Show
+                    when={!waitingForStripe()}
+                    fallback={<Icon name="Loader" border="white" />}
+                  >
+                    Become member
+                  </Show>
+                </div>
+              </Show>
             </div>
           </div>
           <div id="PayInfo" class="flex w-full h-full relative">

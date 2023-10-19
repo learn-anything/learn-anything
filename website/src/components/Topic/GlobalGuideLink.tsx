@@ -10,8 +10,8 @@ interface Props {
   title: string
   id: string
   url: string
-  year: string
   protocol: string
+  year?: string
   description?: string
 }
 
