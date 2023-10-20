@@ -153,7 +153,24 @@ export default function GuideSidebar() {
                 {(section) => {
                   return (
                     <>
-                      <div>{section.title}</div>
+                      <div
+                        onClick={() => {
+                          const specificSpot = document.getElementById(
+                            section.title
+                          )
+                          const scrollContainer =
+                            document.getElementById("InfoMain")
+                          if (specificSpot) {
+                            scrollContainer.scrollTo({
+                              top: specificSpot.offsetTop - 20,
+                              behavior: "smooth"
+                            })
+                          }
+                        }}
+                        class="cursor-pointer"
+                      >
+                        {section.title}
+                      </div>
                     </>
                   )
                 }}

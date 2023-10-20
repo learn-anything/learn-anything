@@ -1,4 +1,4 @@
-import { For, Show, createSignal } from "solid-js"
+import { For, Show, createEffect, createSignal } from "solid-js"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import GuideSummary from "./GuideSummary"
 import clsx from "clsx"

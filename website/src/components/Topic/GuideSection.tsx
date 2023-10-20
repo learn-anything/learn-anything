@@ -19,7 +19,10 @@ type Props = {
 
 export default function GuideSection(props: Props) {
   return (
-    <div class=" flex flex-col leading-[18.78px] dark:border-[#282828] border-[#69696951] dark:bg-neutral-900 border-[0.5px] rounded-[6px]">
+    <div
+      id={props.title}
+      class=" flex flex-col leading-[18.78px] dark:border-[#282828] border-[#69696951] dark:bg-neutral-900 border-[0.5px] rounded-[6px]"
+    >
       <div
         class={clsx(
           "flex flex-col gap-1",
