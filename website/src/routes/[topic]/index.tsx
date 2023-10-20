@@ -11,6 +11,7 @@ import GlobalGuide from "../../components/Topic/GlobalGuide"
 import GuideLinks from "../../components/Topic/GuideLinks"
 import GuideNav from "../../components/Topic/GuideNav"
 import GuideSidebar from "../../components/Topic/GuideSidebar"
+import GuideNotes from "../../components/Topic/GuideNotes"
 
 export default function GlobalTopic() {
   const global = useGlobalState()
@@ -136,10 +137,9 @@ export default function GlobalTopic() {
           >
             <div
               id="InfoMain"
-              class={clsx(
-                " w-full bg-white h-full relative overflow-auto dark:bg-[#1C1C1C] flex gap-6 flex-col",
-                true && ""
-              )}
+              class={
+                "w-full bg-white h-full relative overflow-auto dark:bg-[#1C1C1C] flex gap-6 flex-col"
+              }
               style={{ padding: "24px 20px 24px 20px" }}
             >
               <Switch>
@@ -148,6 +148,9 @@ export default function GlobalTopic() {
                 </Match>
                 <Match when={global.state.guidePage === "Links"}>
                   <GuideLinks />
+                </Match>
+                <Match when={global.state.guidePage === "Notes"}>
+                  <GuideNotes />
                 </Match>
               </Switch>
 

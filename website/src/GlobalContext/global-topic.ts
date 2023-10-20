@@ -3,7 +3,6 @@ import { createStore } from "solid-js/store"
 import { useLocation } from "solid-start"
 import { SearchResult } from "../components/Search"
 import { MobiusType } from "../root"
-import { micromark } from "micromark"
 
 export type GlobalLink = {
   id: string
@@ -36,6 +35,7 @@ export type GlobalTopic = {
   latestGlobalGuide: LatestGlobalGuide
   links: GlobalLink[]
   notes: GlobalNote[]
+  notesCount?: number
   // description?: string
   // topicWebsiteLink?: string
   // wikipediaLink?: string
@@ -95,6 +95,7 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
     )
       return
 
+    setGlobalTopic("name", location.pathname.slice(1))
     const topicName = extractTopicFromPath(location.pathname)
     if (!topicName) return
 
@@ -111,24 +112,8 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
         publicGetGlobalTopic: {
           where: { topicName: topicName },
           select: {
-            name: true,
             prettyName: true,
             topicSummary: true,
-            // description: true,
-            // topicWebsiteLink: true,
-            // wikipediaLink: true,
-            // githubLink: true,
-            // xLink: true,
-            // redditLink: true,
-            // aiSummary: true,
-            links: {
-              id: true,
-              title: true,
-              url: true,
-              year: true,
-              protocol: true,
-              description: true
-            },
             latestGlobalGuide: {
               sections: {
                 title: true,
@@ -142,7 +127,16 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
                   description: true
                 }
               }
-            }
+            },
+            links: {
+              id: true,
+              title: true,
+              url: true,
+              year: true,
+              protocol: true,
+              description: true
+            },
+            notesCount: true
           }
         }
       })
@@ -155,19 +149,11 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
       // }
 
       setGlobalTopic({
-        name: topicData.name,
-        // description: topicData.description,
-        // topicWebsiteLink: topicData.topicWebsiteLink,
-        // wikipediaLink: topicData.wikipediaLink,
-        // githubLink: topicData.githubLink,
-        // xLink: topicData.xLink,
-        // redditLink: topicData.redditLink,
-        // aiSummary: aiSummaryAsHtml,
         prettyName: topicData.prettyName,
         topicSummary: topicData.topicSummary,
-        topicPath: topicData.topicPath,
         latestGlobalGuide: topicData.latestGlobalGuide,
-        links: topicData.links
+        links: topicData.links,
+        notesCount: topicData.notesCount
       })
     }
   })
@@ -194,6 +180,8 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
       setGlobalTopic({ verifiedTopic: verifiedTopic })
     }
     if (verifiedTopic || !topicsStored) {
+      // TODO: getNotesForGlobalTopic should be included in getGlobalTopic query
+      // use the free objects syntax https://discord.com/channels/841451783728529451/1165023460863520778/1165024287560826891
       const res = await mobius.query({
         getGlobalTopic: {
           where: {
@@ -204,14 +192,27 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
             likedLinkIds: true,
             completedLinkIds: true
           }
+        },
+        getNotesForGlobalTopic: {
+          where: {
+            topicName: topicName
+          },
+          select: {
+            content: true,
+            url: true
+          }
         }
       })
       // @ts-ignore
       const topicData = res.data.getGlobalTopic
+      // @ts-ignore
+      const notesData = res.data.getNotesForGlobalTopic
+      // console.log(notesData, "notes..")
       setGlobalTopic({
         learningStatus: topicData.learningStatus,
         likedLinkIds: topicData.likedLinkIds,
-        completedLinkIds: topicData.completedLinkIds
+        completedLinkIds: topicData.completedLinkIds,
+        notes: notesData
       })
     } else {
       const learningStatus = await mobius.query({

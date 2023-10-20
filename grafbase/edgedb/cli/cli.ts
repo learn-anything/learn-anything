@@ -4,6 +4,7 @@ import {
   removeTrailingSlashFromGlobalLinks,
   updateTitleOfGlobalLink
 } from "../crud/global-link"
+import { addGlobalNote, getNotesForGlobalTopic } from "../crud/global-note"
 import {
   addLinkToSectionOfGlobalTopic,
   changeGlobalTopicVerifiedstatus,
@@ -14,14 +15,20 @@ import {
 import {
   Topic,
   findFilePath,
+  justParseNotes,
   markdownFilePaths,
   parseMdFile
 } from "../sync/markdown"
 
 async function main() {
-  const topicName = "habits"
-  console.log("done")
+  const notes = await getNotesForGlobalTopic("habits")
+  console.log(notes, "notes")
   return
+  const topicName = "habits"
+  await processNotesFromMarkdownFilesAsGlobalNotes(topicName)
+  return
+  // console.log("done")
+  // return
   // await changeGlobalTopicVerifiedstatus(topicName, false)
   // return
   await deleteSectionsInGlobalTopic(topicName)
@@ -164,24 +171,19 @@ async function processLinks(topic: Topic) {
 //   // Join the segments with a space
 //   return segments.join(" ")
 // }
-// async function processNotesFromMarkdownFilesAsGlobalNotes(fileName: string) {
-//   const filePath = await findFilePath(
-//     process.env.wikiFolderPath!,
-//     fileName + ".md"
-//   )
-//   if (filePath) {
-//     const topic = await parseMdFile(filePath)
-//     // console.log(topic.topicAsMarkdown, "topic")
-//     // console.log(topic.notes, "notes")
-//     await processNotes(topic)
-//   }
-// }
-// async function processNotes(topic: Topic) {
-//   topic.notes.map(async (note) => {
-//     console.log(note, "note")
-//     // await addGlobalNote(note.content, note.url, topic.name)
-//   })
-// }
+async function processNotesFromMarkdownFilesAsGlobalNotes(fileName: string) {
+  const filePath = await findFilePath(
+    process.env.wikiFolderPath!,
+    fileName + ".md"
+  )
+  if (filePath) {
+    const topic = await parseMdFile(filePath)
+    const notes = await justParseNotes(filePath)
+    notes.map(async (note) => {
+      await addGlobalNote(note.content, topic.name, note.url)
+    })
+  }
+}
 async function getMarkdownPaths() {
   const paths = await markdownFilePaths(process.env.wikiFolderPath!, [])
   return paths

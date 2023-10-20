@@ -1,4 +1,4 @@
-import { For, Show } from "solid-js"
+import { For } from "solid-js"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import GlobalGuideLink from "./GlobalGuideLink"
 

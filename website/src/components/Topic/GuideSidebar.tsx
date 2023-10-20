@@ -6,6 +6,7 @@ import { useUser } from "../../GlobalContext/user"
 import { useMobius } from "../../root"
 import FancyButton from "../FancyButton"
 import Icon from "../Icon"
+import clsx from "clsx"
 
 export default function GuideSidebar() {
   const topic = useGlobalTopic()
@@ -45,6 +46,7 @@ export default function GuideSidebar() {
                       }
                     })
                   } else {
+                    console.log("run")
                     topic.set("learningStatus", "to_learn")
                     await mobius.mutate({
                       updateTopicLearningStatus: {
@@ -146,37 +148,45 @@ export default function GuideSidebar() {
               </FancyButton>
             </div>
           </div>
-          <div id="Info" class="text-[#696969] flex flex-col gap-3">
-            <div class="font-bold">Sections</div>
-            <div class="text-[14px] pl-3 flex flex-col gap-2">
-              <For each={topic.globalTopic?.latestGlobalGuide?.sections}>
-                {(section) => {
-                  return (
-                    <>
-                      <div
-                        onClick={() => {
-                          const specificSpot = document.getElementById(
-                            section.title
-                          )
-                          const scrollContainer =
-                            document.getElementById("InfoMain")
-                          if (specificSpot) {
-                            scrollContainer!.scrollTo({
-                              top: specificSpot.offsetTop - 15,
-                              behavior: "smooth"
-                            })
-                          }
-                        }}
-                        class="cursor-pointer"
-                      >
-                        {section.title}
-                      </div>
-                    </>
-                  )
-                }}
-              </For>
+          <Show
+            when={
+              topic.globalTopic.verifiedTopic &&
+              topic.globalTopic.latestGlobalGuide.sections.length > 0 &&
+              global.state.guidePage === "Guide"
+            }
+          >
+            <div id="Info" class="text-[#696969] flex flex-col gap-3">
+              <div class="font-bold">Sections</div>
+              <div class="text-[14px] pl-3 flex flex-col gap-2">
+                <For each={topic.globalTopic?.latestGlobalGuide?.sections}>
+                  {(section) => {
+                    return (
+                      <>
+                        <div
+                          onClick={() => {
+                            const specificSpot = document.getElementById(
+                              section.title
+                            )
+                            const scrollContainer =
+                              document.getElementById("InfoMain")
+                            if (specificSpot) {
+                              scrollContainer!.scrollTo({
+                                top: specificSpot.offsetTop - 15,
+                                behavior: "smooth"
+                              })
+                            }
+                          }}
+                          class="cursor-pointer"
+                        >
+                          {section.title}
+                        </div>
+                      </>
+                    )
+                  }}
+                </For>
+              </div>
             </div>
-          </div>
+          </Show>
           <Show
             when={
               topic.globalTopic.verifiedTopic &&
@@ -187,7 +197,10 @@ export default function GuideSidebar() {
               <div class="font-bold">Resources</div>
               <div class="flex flex-col pl-3 text-[14px] gap-[6px]">
                 <div
-                  class="flex gap-2 cursor-pointer"
+                  class={clsx(
+                    "flex gap-2 cursor-pointer",
+                    global.state.guidePage === "Guide" && "font-bold"
+                  )}
                   onClick={() => {
                     global.setGuidePage("Guide")
                   }}
@@ -195,7 +208,10 @@ export default function GuideSidebar() {
                   Guide <span class="font-bold">{}</span>
                 </div>
                 <div
-                  class="flex gap-2 cursor-pointer"
+                  class={clsx(
+                    "flex gap-2 cursor-pointer",
+                    global.state.guidePage === "Links" && "font-bold"
+                  )}
                   onClick={() => {
                     global.setGuidePage("Links")
                   }}
@@ -205,10 +221,12 @@ export default function GuideSidebar() {
                     {topic.globalTopic.links.length}
                   </span>
                 </div>
-                {/* TODO: show the notes */}
-                <Show when={topic.globalTopic.notes.length > 0}>
+                <Show when={topic.globalTopic.notesCount}>
                   <div
-                    class="flex gap-2 cursor-pointer"
+                    class={clsx(
+                      "flex gap-2 cursor-pointer",
+                      global.state.guidePage === "Notes" && "font-bold"
+                    )}
                     onClick={() => {
                       if (!user.user.member) {
                         global.setShowMemberOnlyModal(true)
@@ -220,7 +238,7 @@ export default function GuideSidebar() {
                   >
                     Notes{" "}
                     <span class="font-bold">
-                      {topic.globalTopic.notes.length}
+                      {topic.globalTopic.notesCount}
                     </span>
                   </div>
                 </Show>

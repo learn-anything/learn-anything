@@ -217,6 +217,18 @@ export async function parseMdFile(filePath: string): Promise<Topic> {
       parsingSection = node.children[0].value
       continue
     }
+    if (parsingNotes) {
+      if (
+        node.type === "heading" &&
+        node.depth === 2 &&
+        node.children[0].type === "text" &&
+        node.children[0].value === "Links"
+      ) {
+        parsingNotes = false
+        parsingLinks = true
+        continue
+      }
+    }
 
     // parsingNotes is true when `## Notes` heading was reached, parse notes until either ## Links or end of file
     // if (parsingNotes) {
@@ -307,6 +319,18 @@ export async function parseMdFile(filePath: string): Promise<Topic> {
     // }
 
     if (parsingSection) {
+      // once ## Notes is found, start parsing notes
+      if (
+        node.type === "heading" &&
+        node.depth === 2 &&
+        node.children[0].type === "text" &&
+        node.children[0].value === "Notes"
+      ) {
+        parsingNotes = true
+        parsingSection = ""
+        continue
+      }
+
       // once ## Links is reached, start processing ## Links
       if (
         node.type === "heading" &&
@@ -489,17 +513,6 @@ export async function parseMdFile(filePath: string): Promise<Topic> {
       continue
     }
 
-    // once ## Notes is found, start parsing notes
-    // if (
-    //   node.type === "heading" &&
-    //   node.depth === 2 &&
-    //   node.children[0].type === "text" &&
-    //   node.children[0].value === "Notes"
-    // ) {
-    //   parsingNotes = true
-    //   continue
-    // }
-
     // once ## Links is found, start parsing links
     if (
       node.type === "heading" &&
@@ -563,4 +576,78 @@ async function getTopicPath(name: string) {
   }
 
   return await searchFile(folder)
+}
+
+type SimpleNote = {
+  content: string
+  url?: string
+}
+
+// because I am too afraid to touch that massive function above
+// this will just return an array of notes inside the file
+export async function justParseNotes(filePath: string) {
+  const markdownFileContent = (await readFile(filePath)).toString()
+  const tree = fromMarkdown(markdownFileContent)
+
+  let parsingNotes = false
+  let notes: SimpleNote[] = []
+
+  for (const node of tree.children) {
+    if (
+      node.type === "heading" &&
+      node.depth === 2 &&
+      node.children[0].type === "text" &&
+      node.children[0].value === "Notes"
+    ) {
+      parsingNotes = true
+      continue
+    }
+
+    if (parsingNotes) {
+      if (
+        node.type === "heading" &&
+        node.depth === 2 &&
+        node.children[0].type === "text" &&
+        node.children[0].value === "Links"
+      ) {
+        return notes
+      }
+
+      if (node.type === "list") {
+        node.children.forEach(async (note) => {
+          let noteAsMarkdown = ""
+          let subnotes: string[] = []
+          let noteUrl
+
+          note.children.forEach((noteChild, i) => {
+            if (noteChild.type === "paragraph") {
+              noteAsMarkdown = toMarkdown(noteChild)
+              if (noteAsMarkdown.startsWith("* ")) {
+                noteAsMarkdown = noteAsMarkdown.slice(2)
+              }
+            } else if (noteChild.type === "list") {
+              noteChild.children.forEach((subnote) => {
+                subnotes.push(toMarkdown(subnote).replace("\n", ""))
+              })
+            }
+          })
+
+          const markdownLinkRegex = /^\[[^\]]+\]\([^)]+\)$/
+          if (markdownLinkRegex.test(noteAsMarkdown.replace("\n", ""))) {
+            noteUrl = noteAsMarkdown.split("(")[1].split(")")[0]
+            noteAsMarkdown = noteAsMarkdown.split("[")[1].split("]")[0]
+          }
+          notes.push({
+            content: `${noteAsMarkdown.replace("\n", "")}\n${subnotes.join(
+              "\n"
+            )}`,
+            url: noteUrl,
+            public: true
+          })
+        })
+      }
+      continue
+    }
+  }
+  return notes
 }

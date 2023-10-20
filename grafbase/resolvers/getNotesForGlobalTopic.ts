@@ -1,21 +1,20 @@
 import { Context } from "@grafbase/sdk"
-import { GraphQLError } from "graphql"
-import { getTopicsLearned } from "../edgedb/crud/user"
 import { hankoIdFromToken } from "../lib/hanko-validate"
+import { GraphQLError } from "graphql"
+import { getNotesForGlobalTopic } from "../edgedb/crud/global-note"
 
-export default async function getTopicsLearnedResolver(
+export default async function getNotesForGlobalTopicResolver(
   root: any,
-  args: {},
+  args: { topicName: string },
   context: Context
 ) {
   try {
     const hankoId = await hankoIdFromToken(context)
     if (hankoId) {
-      const topics = await getTopicsLearned(hankoId)
-      return topics
+      const notes = await getNotesForGlobalTopic(args.topicName)
+      return notes
     }
   } catch (err) {
-    console.log("error?")
     throw new GraphQLError(JSON.stringify(err))
   }
 }

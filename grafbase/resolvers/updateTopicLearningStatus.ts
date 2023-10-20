@@ -14,6 +14,7 @@ export default async function updateTopicLearningStatusResolver(
   },
   context: Context
 ) {
+  console.log(args, "args")
   const hankoId = await hankoIdFromToken(context)
   if (hankoId) {
     if (args.verifiedTopic) {

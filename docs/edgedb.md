@@ -1,3 +1,9 @@
+## Remember
+
+- try to always do everything in one edgedb trip
+  - one `.client()` call, no more
+  - it's ok to have multiple when prototyping but for prod, keep it to one `.client()` call
+
 ## Connecting to live edgedb instance with fish shell
 
 [Setup env vars](https://www.edgedb.com/docs/guides/cloud#deploying-your-application).
@@ -57,3 +63,19 @@ set -x RUST_LOG=debug
 ```
 
 Setting above flag will give better error messages on CLI outputs.
+
+Select all properties of an object:
+
+```
+select GlobalNote {
+  *
+}
+```
+
+Select all properties of an object (including nested things):
+
+```
+select GlobalNote {
+  **
+}
+```

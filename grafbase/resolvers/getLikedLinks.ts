@@ -10,7 +10,6 @@ export default async function getLikedLinksResolver(
   const hankoId = await hankoIdFromToken(context)
   if (hankoId) {
     const links = await getAllLikedLinks(hankoId)
-    console.log(links, "links")
     return links
   }
 }

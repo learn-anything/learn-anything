@@ -385,14 +385,6 @@ export async function addPersonalLink(
   }
 }
 
-export async function addGlobalNote(
-  content: string,
-  url: string,
-  mainTopic: string
-) {
-  // TODO:
-}
-
 export async function removeDuplicateUrls() {
   const links = await e
     .select(e.GlobalLink, () => ({

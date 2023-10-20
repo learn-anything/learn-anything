@@ -10,7 +10,6 @@ export default async function getGLobalLinksResolver(
   const hankoId = await hankoIdFromToken(context)
   if (hankoId) {
     const links = await getAllGlobalLinks()
-    console.log(links, "links")
     return links
   }
 }

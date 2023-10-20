@@ -479,11 +479,9 @@ export async function publicGetGlobalTopics() {
 
 // get all info needed to render global topic page (for non auth users) (i.e. learn-anything.xyz/physics)
 export async function getGlobalTopicPublic(topicName: string) {
-  const topic = await e
-    .select(e.GlobalTopic, () => ({
+  return await e
+    .select(e.GlobalTopic, (t) => ({
       filter_single: { name: topicName },
-      id: true,
-      name: true,
       prettyName: true,
       topicSummary: true,
       // topicPath: true,
@@ -493,7 +491,7 @@ export async function getGlobalTopicPublic(topicName: string) {
       // githubLink: true,
       // xLink: true,
       // aiSummary: true,
-      redditLink: true,
+      // redditLink: true,
       latestGlobalGuide: {
         sections: {
           title: true,
@@ -507,26 +505,22 @@ export async function getGlobalTopicPublic(topicName: string) {
             description: true
           }
         }
-      }
-    }))
-    .run(client)
-
-  if (topic) {
-    const links = await e
-      .select(e.GlobalLink, (gl) => ({
-        filter: e.op(gl.mainTopic.id, "=", e.cast(e.uuid, topic.id)),
+      },
+      links: e.select(e.GlobalLink, (gl) => ({
+        filter: e.op(gl.mainTopic.id, "=", e.cast(e.uuid, t.id)),
         id: true,
         title: true,
         url: true,
         year: true,
         protocol: true
-      }))
-      .run(client)
-
-    const combined = { ...topic, links }
-    return combined
-  }
-  throw new Error("topic not found")
+      })),
+      notesCount: e.count(
+        e.select(e.GlobalNote, (gn) => ({
+          filter: e.op(gn.mainTopic.id, "=", e.cast(e.uuid, t.id))
+        }))
+      )
+    }))
+    .run(client)
 }
 
 // export async function deleteSectionsInGlobalTopic(topicName: string) {

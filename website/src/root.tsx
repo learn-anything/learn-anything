@@ -27,7 +27,7 @@ import { getHankoCookie } from "../lib/auth"
 
 // TODO: https://github.com/nikitavoloboev/la-issues/issues/54 (should stop having to manually update this schema )
 export const typeDefs = `
-"""
+""""
 De-prioritizes a fragment, causing the fragment to be omitted in the initial response and delivered as a subsequent response afterward.
 """
 directive @defer(
@@ -81,6 +81,7 @@ type Query {
   publicGetGlobalTopics: [publicGetGlobalTopicsOutput!]!
   publicGetGlobalTopic(topicName: String!): publicGetGlobalTopicOutput!
   getUserDetails: getUserDetailsOutput!
+  getNotesForGlobalTopic(topicName: String!): [globalNote!]!
   getLikedLinks: outputOfGetLikedLinks!
   getTopicsLearned: getTopicsLearnedOutput!
   getGlobalLink(linkId: String!): publicGetGlobalLinkOutput!
@@ -124,6 +125,11 @@ enum globalLinkAction {
   unlike
   complete
   uncomplete
+}
+
+type globalNote {
+  content: String!
+  url: String
 }
 
 type latestGlobalGuide {
@@ -170,12 +176,11 @@ type publicGetGlobalLinkOutput {
 }
 
 type publicGetGlobalTopicOutput {
-  name: String!
   prettyName: String!
   topicSummary: String!
-  topicPath: String
   latestGlobalGuide: latestGlobalGuide
   links: [GlobalLink!]!
+  notesCount: String!
 }
 
 type publicGetGlobalTopicsOutput {

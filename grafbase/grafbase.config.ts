@@ -67,18 +67,11 @@ g.query("publicGetGlobalTopic", {
   args: { topicName: g.string() },
   returns: g.ref(
     g.type("publicGetGlobalTopicOutput", {
-      name: g.string(),
       prettyName: g.string(),
       topicSummary: g.string(),
-      description: g.string().optional(),
-      topicWebsiteLink: g.string().optional(),
-      wikipediaLink: g.string().optional(),
-      githubLink: g.string().optional(),
-      xLink: g.string().optional(),
-      redditLink: g.string().optional(),
-      // aiSummary: g.string().optional(),
       latestGlobalGuide: g.ref(latestGlobalGuide).optional(),
-      links: g.ref(GlobalLink).list()
+      links: g.ref(GlobalLink).list(),
+      notesCount: g.int()
     })
   ),
   resolver: "public/getGlobalTopic"
@@ -93,6 +86,16 @@ g.query("getUserDetails", {
     })
   ),
   resolver: "getUserDetails"
+})
+
+const globalNote = g.type("globalNote", {
+  content: g.string(),
+  url: g.string().optional()
+})
+g.query("getNotesForGlobalTopic", {
+  args: { topicName: g.string() },
+  returns: g.ref(globalNote).list(),
+  resolver: "getNotesForGlobalTopic"
 })
 
 g.query("getLikedLinks", {
