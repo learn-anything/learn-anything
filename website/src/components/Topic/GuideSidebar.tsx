@@ -161,8 +161,8 @@ export default function GuideSidebar() {
                           const scrollContainer =
                             document.getElementById("InfoMain")
                           if (specificSpot) {
-                            scrollContainer.scrollTo({
-                              top: specificSpot.offsetTop - 20,
+                            scrollContainer!.scrollTo({
+                              top: specificSpot.offsetTop - 15,
                               behavior: "smooth"
                             })
                           }

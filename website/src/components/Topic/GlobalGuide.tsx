@@ -9,6 +9,8 @@ import FancyButton from "../FancyButton"
 import GuideSection from "./GuideSection"
 import Icon from "../Icon"
 import Modal from "../Modal"
+import { Tooltip } from "@kobalte/core"
+import ToolTip from "../tooltip"
 
 export default function GlobalGuide() {
   const navigate = useNavigate()
@@ -57,7 +59,6 @@ export default function GlobalGuide() {
           <div class="flex gap-2 items-center cursor-pointer">
             <div class="text-[22px]">{topic.globalTopic.prettyName}</div>
             <div
-              class="has-tooltip"
               onClick={() => {
                 if (!user.user.member) {
                   global.setShowMemberOnlyModal(true)
@@ -68,23 +69,9 @@ export default function GlobalGuide() {
               }}
             >
               {/* TODO: do <Show here that on hover shows the full AI description of the topic */}
-              <Show
-                // when={!user.user.member}
-                when={true}
-                fallback={
-                  <>
-                    {/* <div
-                    innerHTML={topic.globalTopic.aiSummary}
-                    class="left-[-20px] w-fit text-[12px] tooltip top-[-70%] bg-white dark:bg-neutral-900 rounded-[4px] px-4 p-0.5 dark:text-white text-black text-opacity-70 dark:text-opacity-70 border dark:border-[#282828]  border-[#69696951] "
-                  ></div> */}
-                  </>
-                }
-              >
-                <div class="tooltip top-[-70%] bg-white dark:bg-neutral-900 rounded-[4px] px-4 p-0.5 dark:text-white text-black text-opacity-70 dark:text-opacity-70 border dark:border-[#282828]  border-[#69696951] ">
-                  AI description
-                </div>
-              </Show>
-              <Icon name="Sparkles" />
+              <ToolTip title="Ai Description">
+                <Icon name="Sparkles" />
+              </ToolTip>
             </div>
           </div>
           <div class="flex h-full text-[12px] gap-4">
