@@ -1,3 +1,4 @@
+import { autofocus } from "@solid-primitives/autofocus"
 import clsx from "clsx"
 import {
   For,
@@ -8,7 +9,6 @@ import {
   createSignal,
   onMount
 } from "solid-js"
-import { autofocus } from "@solid-primitives/autofocus"
 import { A, useNavigate } from "solid-start"
 import { useUser } from "../GlobalContext/user"
 import FancyButton from "../components/FancyButton"
@@ -16,8 +16,6 @@ import Modal from "../components/Modal"
 import { Search, createSearchState } from "../components/Search"
 import GuideNav from "../components/Topic/GuideNav"
 import { useMobius } from "../root"
-import Icon from "../components/Icon"
-import GlobalGuideLink from "../components/Topic/GlobalGuideLink"
 
 type NewLink = {
   url: string
@@ -38,11 +36,22 @@ export default function Profile() {
     description: ""
   })
 
+  createEffect(() => {
+    if (!showAddLinkModal()) {
+      setNewLinkData({
+        url: "",
+        title: "",
+        description: ""
+      })
+    }
+  })
+
   // TODO: add debounce here
   createEffect(async () => {
     if (newLinkData().url) {
       try {
         const url = new URL(newLinkData().url)
+        // TODO: replace with our own proxy as this 403 sometimes
         const response = await fetch(
           `https://corsproxy.io/?${encodeURIComponent(url.toString())}`
         )

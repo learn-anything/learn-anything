@@ -4,31 +4,31 @@ import {
   addLinkToSectionOfGlobalTopic,
   deleteSectionsInGlobalTopic
 } from "../crud/global-topic"
-import { getLearningStatus } from "../crud/user"
 import {
   Topic,
   findFilePath,
   markdownFilePaths,
   parseMdFile
 } from "../sync/markdown"
-// @ts-ignore
 
 async function main() {
-  const hankoId = process.env.LOCAL_USER_HANKO_ID!
-  const res = await getLearningStatus("neural-nets", hankoId)
-  console.log(res)
+  return
+  const topicName = "mongodb"
+  await deleteSectionsInGlobalTopic(topicName)
+  await processLinksFromMarkdownFilesAsGlobalLinks(topicName)
+  await moveLinksFromSectionsIncludingLinksToGuide(topicName)
+  // const hankoId = process.env.LOCAL_USER_HANKO_ID!
+  // const res = await getLearningStatus("neural-nets", hankoId)
+  // console.log(res)
   // await updateUnverifiedTopicLearningStatus(hankoId, "", "none")
   // await addPersonalLink("https://news.ycombinator.com", "Hacker News", hankoId!)
   // await updateUnverifiedTopicLearningStatus(hankoId!, "reactivity", "to_learn")
-  return
+  // return
   // clipboard.writeSync(JSON.stringify(someJson))
   // const res = await getAllLikedLinks(hankoId!)
   // console.log(res?.likedLinks)
 
-  return
-  const topicName = "numpy"
-  await deleteSectionsInGlobalTopic(topicName)
-  await moveLinksFromSectionsIncludingLinksToGuide(topicName)
+  // return
   // const topics = await getAllTopicNames()
   // const justNames = topics.map((t) => t.name)
   // const topicObject = topics.reduce((obj, topic) => {
@@ -96,6 +96,7 @@ async function moveLinksFromSectionsIncludingLinksToGuide(fileName: string) {
 
 async function processLinksBySection(topic: Topic) {
   for (const link of topic.links) {
+    // console.log(link, "link")
     if (link.section) {
       const [urlWithoutProtocol, protocol] = splitUrlByProtocol(link.url)
       if (urlWithoutProtocol && protocol) {

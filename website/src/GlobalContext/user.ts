@@ -43,7 +43,7 @@ export function createUserState(mobius: MobiusType) {
     email: "",
     signedIn: false,
     member: true,
-    admin: false,
+    admin: true,
     topicsToLearn: [],
     topicsToLearning: [],
     topicsLearned: [],

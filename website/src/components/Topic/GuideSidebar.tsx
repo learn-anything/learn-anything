@@ -1,11 +1,11 @@
-import { For, Show, onMount } from "solid-js"
+import { For, Show } from "solid-js"
+import { useLocation } from "solid-start"
 import { useGlobalState } from "../../GlobalContext/global"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
-import FancyButton from "../FancyButton"
-import { useMobius } from "../../root"
-import Icon from "../Icon"
 import { useUser } from "../../GlobalContext/user"
-import { useLocation } from "solid-start"
+import { useMobius } from "../../root"
+import FancyButton from "../FancyButton"
+import Icon from "../Icon"
 
 export default function GuideSidebar() {
   const topic = useGlobalTopic()
@@ -160,31 +160,35 @@ export default function GuideSidebar() {
               </For>
             </div>
           </div>
-          <div id="Resources" class="flex text-[#696969] flex-col gap-3">
-            <div class="font-bold">Resources</div>
-            <div class="flex flex-col pl-3 text-[14px] gap-[6px]">
-              <div
-                class="flex gap-2 cursor-pointer"
-                onClick={() => {
-                  global.setGuidePage("Guide")
-                }}
-              >
-                Guide <span class="font-bold">{}</span>
-              </div>
-              <div
-                class="flex gap-2 cursor-pointer"
-                onClick={() => {
-                  global.setGuidePage("Links")
-                }}
-              >
-                Links{" "}
-                <span class="font-bold">{topic.globalTopic.links.length}</span>
-              </div>
-              {/* <div class="flex gap-2">
+          <Show when={topic.globalTopic.verifiedTopic}>
+            <div id="Resources" class="flex text-[#696969] flex-col gap-3">
+              <div class="font-bold">Resources</div>
+              <div class="flex flex-col pl-3 text-[14px] gap-[6px]">
+                <div
+                  class="flex gap-2 cursor-pointer"
+                  onClick={() => {
+                    global.setGuidePage("Guide")
+                  }}
+                >
+                  Guide <span class="font-bold">{}</span>
+                </div>
+                <div
+                  class="flex gap-2 cursor-pointer"
+                  onClick={() => {
+                    global.setGuidePage("Links")
+                  }}
+                >
+                  Links{" "}
+                  <span class="font-bold">
+                    {topic.globalTopic.links.length}
+                  </span>
+                </div>
+                {/* <div class="flex gap-2">
               Notes <span class="font-bold">24</span>
             </div> */}
+              </div>
             </div>
-          </div>
+          </Show>
           {/* <div id="Learners" class="text-[#696969]">
           <Card name="Learners"></Card>
         </div> */}

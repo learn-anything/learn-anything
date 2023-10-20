@@ -1,5 +1,5 @@
-import { For, Show, onMount } from "solid-js"
 import clsx from "clsx"
+import { For, Show } from "solid-js"
 import GlobalGuideLink from "./GlobalGuideLink"
 
 type Link = {
@@ -27,8 +27,11 @@ export default function GuideSection(props: Props) {
             "border-b-[0.5px] p-4 border-[#69696951]  dark:border-[#282828]"
         )}
       >
-        <div class="text-[#131313] dark:text-white text-opacity-60 font-bold">
-          {props.title}
+        <div class="flex justify-between">
+          <div class="text-[#131313] dark:text-white text-opacity-60 font-bold">
+            {props.title}
+          </div>
+          <div>{props.links.length}</div>
         </div>
         <Show when={props.summary}>
           <div class="text-[#696969] text-[14px]" innerHTML={props.summary} />

@@ -330,7 +330,6 @@ export async function addPersonalLink(
 ) {
   const [urlWithoutProtocol, protocol] = splitUrlByProtocol(url)
   if (urlWithoutProtocol && protocol) {
-    console.log(urlWithoutProtocol, "url without protocol")
     const link = await e
       .insert(e.PersonalLink, {
         url: urlWithoutProtocol,

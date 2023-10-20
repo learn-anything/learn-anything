@@ -1,4 +1,5 @@
 import { For, Show, createSignal, untrack } from "solid-js"
+import toast, { Toaster } from "solid-toast"
 import { useNavigate } from "solid-start"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import { createTiptapEditor } from "solid-tiptap"
@@ -14,6 +15,8 @@ import GlobalLinkEditModal from "../GlobalLinkEditModal"
 import { getHankoCookie } from "../../../lib/auth"
 import { useUser } from "../../GlobalContext/user"
 import ModalWithMessageAndButton from "../ModalWithMessageAndButton"
+
+const notify = (message: string) => toast(message)
 
 export default function EditGlobalGuide() {
   const topic = useGlobalTopic()
@@ -170,7 +173,17 @@ export default function EditGlobalGuide() {
                   variables
                 })
               })
-              // console.log(res, "res")
+              console.log(res, "res")
+              if (res.ok) {
+                let url = window.location.href
+                const parts = url.split("/")
+                if (parts.length >= 4) {
+                  url = "/" + parts[3]
+                }
+                navigate(url)
+              } else {
+                notify("Error saving guide")
+              }
 
               // TODO: issue with mobius, something about it not escaping strings properly
               // const res = await mobius.mutate({
@@ -223,12 +236,12 @@ export default function EditGlobalGuide() {
           class="bg-[#3B5CCC] text-white p-[10px] rounded-[4px] flex justify-center items-center cursor-pointer hover:bg-[#3554b9] transition-all"
           onClick={() => {
             topic.set("latestGlobalGuide", "sections", (p) => [
-              ...p,
               {
                 summary: "",
                 title: "",
                 links: []
-              }
+              },
+              ...p
             ])
           }}
         >
@@ -426,6 +439,7 @@ export default function EditGlobalGuide() {
             )
           }}
         </For>
+        <Toaster />
       </div>
     </>
   )

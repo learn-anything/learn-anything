@@ -16,6 +16,7 @@
     "db:queries-generate": "cd grafbase/edgedb && bunx @edgedb/generate edgeql-js --target ts && bunx @edgedb/generate queries --target ts",
     "db:get-dsn": "cd grafbase/edgedb && edgedb instance credentials --insecure-dsn",
     "db:dump": "cd private && edgedb dump prod.db",
+    "db:load-connections": "cd grafbase/edgedb && tput reset && bun cli/loadConnectionsIntoGrafbase.ts",
     "api": "bunx grafbase@latest dev",
     "api:codegen": "graphql-codegen",
     "ts": "tput reset && bun --watch run.ts",

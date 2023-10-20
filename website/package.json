@@ -49,6 +49,7 @@
     "solid-start": "^0.3.6",
     "solid-start-cloudflare-pages": "^0.3.6",
     "solid-tiptap": "^0.6.0",
+    "solid-toast": "^0.5.0",
     "tinybase": "^4.3.14",
     "tiptap-markdown": "^0.8.2",
     "undici": "^5.26.3",

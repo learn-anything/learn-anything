@@ -31,14 +31,20 @@ type Connection = {
   connections: string[]
 }
 
+type TopicWithConnections = {
+  name: string
+  prettyName: string
+  connections: string[]
+}
+
 type GlobalState = {
   globalTopicsSearchList: GlobalTopicSearchItem[]
   globalLinks: GlobalLink[]
   globalLinkSearchDb: any
   guidePage: string
   theme: string
-  topicsWithConnections: Record<string, Connection>
   onVerifiedTopic: boolean
+  topicsWithConnections: TopicWithConnections[]
 }
 
 // various global state
@@ -49,7 +55,7 @@ export function createGlobalState(mobius: MobiusType) {
     globalLinkSearchDb: undefined,
     guidePage: "Guide",
     theme: "",
-    topicsWithConnections: {},
+    topicsWithConnections: [],
     onVerifiedTopic: false
   })
   const [showMemberOnlyModal, setShowMemberOnlyModal] = createSignal(false)
@@ -101,50 +107,18 @@ export function createGlobalState(mobius: MobiusType) {
 
   const location = useLocation()
   onMount(async () => {
-    return
-    console.log("runs..")
-    console.log(!(location.pathname !== "/"), "..")
-    if (!(location.pathname !== "/")) return
-    const topics = localStorage.getItem("globalTopics")
-    // console.log(topics, "TOPICS..")
-    return
-
-    const query = `
-    query UpdateLatestGlobalGuide($topicName: String!, $topicSummary: String!, $sections: [section!]!)
-    `
-
-    return
-    const variables = {
-      topicName: topic.globalTopic.name,
-      topicSummary: topic.globalTopic.topicSummary,
-      sections: sectionsToAdd
-    }
-
-    const res = await fetch(import.meta.env.VITE_GRAFBASE_API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getHankoCookie()}`
-      },
-      body: JSON.stringify({
-        query,
-        variables
-      })
+    if (!(location.pathname === "/")) return
+    const connections = await mobius.query({
+      publicGetTopicsWithConnections: {
+        name: true,
+        prettyName: true,
+        connections: true
+      }
     })
-
-    console.log("get connections")
+    // @ts-ignore
+    const connectionData = connections?.data?.publicGetTopicsWithConnections
+    setState("topicsWithConnections", connectionData)
   })
-
-  // onMount(async () => {
-  //   const links = await mobius.query({
-  //     getGlobalLinks: {
-  //       id: true,
-  //       url: true,
-  //       title: true,
-  //     },
-  //   })
-  //   console.log(links, "links!")
-  // })
 
   onMount(async () => {
     return
