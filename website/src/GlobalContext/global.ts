@@ -26,11 +26,6 @@ type GlobalLink = {
   title: string
 }
 
-type Connection = {
-  prettyName: string
-  connections: string[]
-}
-
 type TopicWithConnections = {
   name: string
   prettyName: string

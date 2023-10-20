@@ -13,11 +13,6 @@
   },
   { "name": "tezos", "prettyName": "Tezos", "connections": ["blockchain"] },
   { "name": "mongodb", "prettyName": "MongoDB", "connections": ["databases"] },
-  {
-    "name": "duckduckgo",
-    "prettyName": "DuckDuckGo",
-    "connections": ["search-engines"]
-  },
   { "name": "xstate", "prettyName": "XState", "connections": ["js-libraries"] },
   {
     "name": "elasticsearch",

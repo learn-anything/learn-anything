@@ -1,10 +1,8 @@
+import { Num } from "@nothing-but/utils"
+import { createEventListener } from "@solid-primitives/event-listener"
 import clsx from "clsx"
 import Fuse from "fuse.js"
 import * as solid from "solid-js"
-import { createEventListener } from "@solid-primitives/event-listener"
-import { Num } from "@nothing-but/utils"
-import { Show } from "solid-js"
-import { createShortcut } from "@solid-primitives/keyboard"
 
 /*
 TODO: make it look as in https://lu.ma/create `Add Event Location` visually

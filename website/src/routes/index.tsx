@@ -23,11 +23,11 @@ export default function Home() {
     }
   })
 
-  const searchResults = createMemo(() =>
-    global.state.globalTopicsSearchList.map(
+  const searchResults = createMemo(() => {
+    return global.state.globalTopicsSearchList.map(
       (topic): SearchResult => ({ name: topic.prettyName })
     )
-  )
+  })
 
   const search_state = createSearchState({
     searchResults,

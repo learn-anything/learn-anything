@@ -147,7 +147,7 @@ export default function GuideSidebar() {
             </div>
           </div>
           <div id="Info" class="text-[#696969] flex flex-col gap-3">
-            <div class="font-bold">{topic.globalTopic.prettyName}</div>
+            <div class="font-bold">Sections</div>
             <div class="text-[14px] pl-3 flex flex-col gap-2">
               <For each={topic.globalTopic?.latestGlobalGuide?.sections}>
                 {(section) => {
@@ -160,7 +160,12 @@ export default function GuideSidebar() {
               </For>
             </div>
           </div>
-          <Show when={topic.globalTopic.verifiedTopic}>
+          <Show
+            when={
+              topic.globalTopic.verifiedTopic &&
+              topic.globalTopic.latestGlobalGuide.sections.length > 0
+            }
+          >
             <div id="Resources" class="flex text-[#696969] flex-col gap-3">
               <div class="font-bold">Resources</div>
               <div class="flex flex-col pl-3 text-[14px] gap-[6px]">

@@ -28,6 +28,20 @@ export async function checkSectionsAreEmpty(topicName: string) {
     .run(client)
 }
 
+export async function changeGlobalTopicVerifiedstatus(
+  topicName: string,
+  verified: boolean
+) {
+  return await e
+    .update(e.GlobalTopic, (gt) => ({
+      filter: e.op(gt.name, "=", topicName),
+      set: {
+        verified: verified
+      }
+    }))
+    .run(client)
+}
+
 export async function getAllTopicNames() {
   const topics = e
     .select(e.GlobalTopic, () => ({

@@ -2,6 +2,7 @@ import { splitUrlByProtocol } from "../../lib/util"
 import { addGlobalLink } from "../crud/global-link"
 import {
   addLinkToSectionOfGlobalTopic,
+  changeGlobalTopicVerifiedstatus,
   deleteSectionsInGlobalTopic
 } from "../crud/global-topic"
 import {
@@ -12,8 +13,9 @@ import {
 } from "../sync/markdown"
 
 async function main() {
-  return
-  const topicName = "mongodb"
+  const topicName = "elasticsearch"
+  // await changeGlobalTopicVerifiedstatus(topicName, false)
+  // return
   await deleteSectionsInGlobalTopic(topicName)
   await processLinksFromMarkdownFilesAsGlobalLinks(topicName)
   await moveLinksFromSectionsIncludingLinksToGuide(topicName)
