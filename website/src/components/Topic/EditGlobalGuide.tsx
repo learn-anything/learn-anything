@@ -1,4 +1,5 @@
 import { For, Show, createSignal, untrack } from "solid-js"
+import { parseURL } from "ufo"
 import toast, { Toaster } from "solid-toast"
 import { useNavigate } from "solid-start"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
@@ -15,17 +16,20 @@ import GlobalLinkEditModal from "../GlobalLinkEditModal"
 import { getHankoCookie } from "../../../lib/auth"
 import { useUser } from "../../GlobalContext/user"
 import ModalWithMessageAndButton from "../ModalWithMessageAndButton"
+import { useMobius } from "../../root"
 
 const notify = (message: string) => toast(message)
 
 export default function EditGlobalGuide() {
   const topic = useGlobalTopic()
   const user = useUser()
+  const mobius = useMobius()
   const navigate = useNavigate()
 
   const [linkIdToEdit, setLinkToEdit] = createSignal("")
   const [sectionOfLinkEdited, setSectionOfLinkEdited] = createSignal("")
 
+  const [urlToAdd, setUrlToAdd] = createSignal("")
   const [container, setContainer] = createSignal<HTMLDivElement>()
   const [showCantEditGuideModal, setShowCantEditGuideModal] =
     createSignal(false)
@@ -151,22 +155,22 @@ export default function EditGlobalGuide() {
                 )
 
               const query = `
-              mutation UpdateLatestGlobalGuide($topicName: String!, $topicSummary: String!, $sections: [section!]!) {
-                updateLatestGlobalGuide(topicName: $topicName, topicSummary: $topicSummary, sections: $sections)
+              mutation InternalUpdateLatestGlobalGuide($topicName: String!, $topicSummary: String!, $sections: [section!]!) {
+                internalUpdateLatestGlobalGuide(topicName: $topicName, topicSummary: $topicSummary, sections: $sections)
               }
               `
-
               const variables = {
                 topicName: topic.globalTopic.name,
                 topicSummary: topic.globalTopic.topicSummary,
                 sections: sectionsToAdd
               }
-
               const res = await fetch(import.meta.env.VITE_GRAFBASE_API_URL, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
-                  Authorization: `Bearer ${getHankoCookie()}`
+                  Authorization: `Bearer ${
+                    import.meta.env.VITE_GRAFBASE_INTERNAL_SECRET
+                  }`
                 },
                 body: JSON.stringify({
                   query,
@@ -405,7 +409,7 @@ export default function EditGlobalGuide() {
                   </For>
                 </div>
 
-                <div class="w-full p-4">
+                <div class="w-full p-4 gap-2 flex flex-col">
                   {(() => {
                     const search_state = createSearchState({
                       searchResults: topic.currentTopicGlobalLinksSearch,
@@ -434,6 +438,50 @@ export default function EditGlobalGuide() {
                       />
                     )
                   })()}
+                  <input
+                    type="text"
+                    placeholder="Enter URL to add directly"
+                    value={urlToAdd()}
+                    onKeyDown={async (e) => {
+                      if (e.key === "Enter") {
+                        const [urlWithoutProtocol, _] = splitUrlByProtocol(
+                          urlToAdd()
+                        )
+
+                        const query = `
+                        mutation InternalAddGlobalLinkToSection($linkUrl: String!, $topicName: String!, $sectionName: String!) {
+                          internalAddGlobalLinkToSection(linkUrl: $linkUrl, topicName: $topicName, sectionName: $sectionName)
+                        }
+                        `
+                        const variables = {
+                          linkUrl: urlWithoutProtocol,
+                          topicName: topic.globalTopic.name,
+                          sectionName: section.title
+                        }
+                        const res = await fetch(
+                          import.meta.env.VITE_GRAFBASE_API_URL,
+                          {
+                            method: "POST",
+                            headers: {
+                              "Content-Type": "application/json",
+                              Authorization: `Bearer ${
+                                import.meta.env.VITE_GRAFBASE_INTERNAL_SECRET
+                              }`
+                            },
+                            body: JSON.stringify({
+                              query,
+                              variables
+                            })
+                          }
+                        )
+                        console.log(res, "res")
+                      }
+                    }}
+                    onInput={(e) => {
+                      setUrlToAdd(e.target.value)
+                    }}
+                    class=" bg-inherit text-[26px] outline-none w-full px-2 font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[4px] p-1 "
+                  />
                 </div>
               </div>
             )
@@ -443,4 +491,31 @@ export default function EditGlobalGuide() {
       </div>
     </>
   )
+}
+
+// TODO: it's same function as in grafbase/lib/util
+// make it shared across the monorepo!
+function splitUrlByProtocol(url: string) {
+  const parsedUrl = parseURL(url)
+  let host = parsedUrl.host
+  if (host?.includes("www")) {
+    host = host?.replace("www.", "")
+  }
+  let urlWithoutProtocol = host + parsedUrl.pathname + parsedUrl.search
+
+  let protocol = parsedUrl.protocol
+  if (protocol) {
+    protocol = protocol.replace(":", "")
+  }
+
+  urlWithoutProtocol = removeTrailingSlash(urlWithoutProtocol)
+  return [urlWithoutProtocol, protocol]
+}
+
+// TODO: same for this function
+function removeTrailingSlash(str: string) {
+  if (str.endsWith("/")) {
+    return str.slice(0, -1)
+  }
+  return str
 }

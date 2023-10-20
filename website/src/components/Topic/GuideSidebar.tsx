@@ -146,20 +146,27 @@ export default function GuideSidebar() {
               </FancyButton>
             </div>
           </div>
-          <div id="Info" class="text-[#696969] flex flex-col gap-3">
-            <div class="font-bold">Sections</div>
-            <div class="text-[14px] pl-3 flex flex-col gap-2">
-              <For each={topic.globalTopic?.latestGlobalGuide?.sections}>
-                {(section) => {
-                  return (
-                    <>
-                      <div>{section.title}</div>
-                    </>
-                  )
-                }}
-              </For>
+          <Show
+            when={
+              topic.globalTopic.verifiedTopic &&
+              topic.globalTopic.latestGlobalGuide.sections.length > 0
+            }
+          >
+            <div id="Info" class="text-[#696969] flex flex-col gap-3">
+              <div class="font-bold">Sections</div>
+              <div class="text-[14px] pl-3 flex flex-col gap-2">
+                <For each={topic.globalTopic?.latestGlobalGuide?.sections}>
+                  {(section) => {
+                    return (
+                      <>
+                        <div>{section.title}</div>
+                      </>
+                    )
+                  }}
+                </For>
+              </div>
             </div>
-          </div>
+          </Show>
           <Show
             when={
               topic.globalTopic.verifiedTopic &&

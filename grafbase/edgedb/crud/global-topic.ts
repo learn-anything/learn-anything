@@ -53,9 +53,21 @@ export async function getAllTopicNames() {
 }
 
 export async function updateGlobalTopic(
-  hankoId: string,
   globalTopic: Omit<GlobalTopic, "prettyName">
 ) {
+  // TODO: this function is secured by resolver itself, this code is useful for reference
+  // as its destructive and wipes the whole global guide
+  // const adminUser = await e
+  //   .select(e.User, (user) => ({
+  //     filter: e.all(
+  //       e.set(e.op(user.hankoId, "=", hankoId), e.op(user.admin, "=", true))
+  //     )
+  //   }))
+  //   .run(client)
+  // if (adminUser.length === 0) {
+  //   return
+  // }
+
   await e
     .delete(e.GlobalGuideSection, (section) => ({
       filter: e.op(

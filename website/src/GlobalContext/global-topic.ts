@@ -62,6 +62,9 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
   })
 
   const currentTopicGlobalLinksSearch = createMemo(() => {
+    console.log(
+      globalTopic.links.find((l) => l.title === "GitHub Actions by Example")
+    )
     return globalTopic.links.map(
       (link): SearchResult => ({
         name: link.title

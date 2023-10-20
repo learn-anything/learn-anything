@@ -17,6 +17,7 @@ module default {
     name: str {
       constraint exclusive;
     };
+    admin: bool;
     # custom name user can choose for themselves similar to X
     displayName: str;
     # aws s3 or cloudflare r2 url with image

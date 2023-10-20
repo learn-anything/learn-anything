@@ -169,29 +169,41 @@ export async function removeTrailingSlashFromGlobalLinks() {
 
   for (const link of links) {
     let url = link.url
+    if (!url.endsWith("/")) {
+      continue
+    }
     url = url.endsWith("/") ? url.slice(0, -1) : url
 
     const existingUrl = await e
       .select(e.GlobalLink, (gl) => ({
-        filter: e.op(gl.url, "=", url)
+        filter: e.op(gl.url, "=", url),
+        id: true,
+        url: true
       }))
       .run(client)
 
-    if (existingUrl) {
-      // console.log(link.url, "old url")
-      // console.log(url, "new url")
-      // console.log(existingUrl, "existing url")
+    if (existingUrl[0] !== undefined) {
+      console.log(link.url, "url")
+      // console.log(existingUrl, "existing")
+      continue
+      await e
+        .delete(e.GlobalLink, (gl) => ({
+          // @ts-ignore
+          filter_single: { id: link.id }
+        }))
+        .run(client)
+      continue
+      await e
+        .update(e.GlobalLink, (gl) => ({
+          filter_single: { id: link.id },
+          set: {
+            url: url
+          }
+        }))
+        .unlessConflict((gl) => ({}))
+        .run(client)
       continue
     }
-
-    await e
-      .update(e.GlobalLink, (gl) => ({
-        filter_single: { id: link.id },
-        set: {
-          url: url
-        }
-      }))
-      .run(client)
   }
   return links
 }

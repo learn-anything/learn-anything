@@ -1,9 +1,13 @@
-import { splitUrlByProtocol } from "../../lib/util"
-import { addGlobalLink } from "../crud/global-link"
+import { removeTrailingSlash, splitUrlByProtocol } from "../../lib/util"
+import {
+  addGlobalLink,
+  removeTrailingSlashFromGlobalLinks
+} from "../crud/global-link"
 import {
   addLinkToSectionOfGlobalTopic,
   changeGlobalTopicVerifiedstatus,
-  deleteSectionsInGlobalTopic
+  deleteSectionsInGlobalTopic,
+  updateGlobalTopic
 } from "../crud/global-topic"
 import {
   Topic,
@@ -13,13 +17,16 @@ import {
 } from "../sync/markdown"
 
 async function main() {
-  const topicName = "elasticsearch"
+  const topicName = "gpu"
   // await changeGlobalTopicVerifiedstatus(topicName, false)
   // return
   await deleteSectionsInGlobalTopic(topicName)
   await processLinksFromMarkdownFilesAsGlobalLinks(topicName)
   await moveLinksFromSectionsIncludingLinksToGuide(topicName)
+  // const links = await removeTrailingSlashFromGlobalLinks()
+  // console.log(links, "links")
   // const hankoId = process.env.LOCAL_USER_HANKO_ID!
+  // await updateGlobalTopic(hankoId!)
   // const res = await getLearningStatus("neural-nets", hankoId)
   // console.log(res)
   // await updateUnverifiedTopicLearningStatus(hankoId, "", "none")

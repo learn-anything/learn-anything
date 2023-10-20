@@ -60,13 +60,14 @@ type LikedLink {
 
 type Mutation {
   createUser(email: String!): String!
-  updateLatestGlobalGuide(topicName: String!, topicSummary: String!, sections: [section!]!): String!
   updateTopicLearningStatus(learningStatus: learningStatus!, topicName: String!, verifiedTopic: Boolean!): String!
   updateLinkStatusResolver(linkId: String!, action: linkAction!): String!
   updateGlobalLinkStatus(action: globalLinkAction!, globalLinkId: String!): String!
   addPersonalLink(title: String!, url: String!, description: String): String!
   internalUpdateMemberUntilOfUser(email: String!, memberUntilDateInUnixTime: Int!): String!
-  updateGrafbaseKv(topicsWithConnections: [updateGrafbaseKvOutput!]!): String!
+  internalUpdateGrafbaseKv(topicsWithConnections: [updateGrafbaseKvOutput!]!): String!
+  internalUpdateLatestGlobalGuide(topicName: String!, topicSummary: String!, sections: [section!]!): String!
+  internalAddGlobalLinkToSection(linkUrl: String!, topicName: String!, sectionName: String!): String!
 }
 
 type PersonalLink {

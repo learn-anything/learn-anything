@@ -212,15 +212,6 @@ const section = g.input("section", {
   summary: g.string().optional(),
   linkIds: g.string().list()
 })
-g.mutation("updateLatestGlobalGuide", {
-  args: {
-    topicName: g.string(),
-    topicSummary: g.string(),
-    sections: g.inputRef(section).list()
-  },
-  returns: g.string(),
-  resolver: "updateLatestGlobalGuide"
-})
 
 g.mutation("updateTopicLearningStatus", {
   args: {
@@ -276,7 +267,7 @@ g.mutation("internalUpdateMemberUntilOfUser", {
   resolver: "internal/updateMemberUntilOfUser"
 })
 
-g.mutation("updateGrafbaseKv", {
+g.mutation("internalUpdateGrafbaseKv", {
   args: {
     topicsWithConnections: g
       .inputRef(
@@ -290,6 +281,26 @@ g.mutation("updateGrafbaseKv", {
   },
   returns: g.string(),
   resolver: "internal/updateGrafbaseKv"
+})
+
+g.mutation("internalUpdateLatestGlobalGuide", {
+  args: {
+    topicName: g.string(),
+    topicSummary: g.string(),
+    sections: g.inputRef(section).list()
+  },
+  returns: g.string(),
+  resolver: "internal/updateLatestGlobalGuide"
+})
+
+g.mutation("internalAddGlobalLinkToSection", {
+  args: {
+    linkUrl: g.string(),
+    topicName: g.string(),
+    sectionName: g.string()
+  },
+  returns: g.string(),
+  resolver: "internal/addGlobalLinkToSection"
 })
 
 // TODO: cleanup or make into correct resolvers
