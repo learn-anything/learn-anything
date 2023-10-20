@@ -2,11 +2,19 @@ import { removeTrailingSlash, splitUrlByProtocol } from "../../lib/util"
 import { client } from "../client"
 import e from "../dbschema/edgeql-js"
 
-// export async function checkForGlobalLink(url: string) {
-//   // const link = await e.select(e.GlobalLink, () => ({
-//   //   filter_single: { url: }
-//   // }))
-// }
+export async function updateTitleOfGlobalLink(url: string, title: string) {
+  const [cleanUrl, _] = splitUrlByProtocol(url)
+  console.log(cleanUrl, "url")
+  // return
+  await e
+    .update(e.GlobalLink, () => ({
+      filter_single: { url: cleanUrl! },
+      set: {
+        title: title
+      }
+    }))
+    .run(client)
+}
 
 export async function getAllGlobalLinks() {
   const links = await e

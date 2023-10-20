@@ -42,6 +42,7 @@
     "fuse.js": "^6.6.2",
     "graphql-mobius": "^0.1.13",
     "graphql-request": "^6.1.0",
+    "micromark": "^4.0.0",
     "mri": "^1.2.0",
     "solid-codemirror": "^2.3.0",
     "solid-js": "^1.8.1",

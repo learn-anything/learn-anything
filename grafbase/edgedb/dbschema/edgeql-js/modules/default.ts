@@ -29,7 +29,6 @@ const $GlobalGuide = $.makeType<$GlobalGuide>(_.spec, "f7d57814-45e2-11ee-bd07-5
 const GlobalGuide: $.$expr_PathNode<$.TypeSet<$GlobalGuide, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($GlobalGuide, $.Cardinality.Many), null);
 
 export type $GlobalGuideSectionλShape = $.typeutil.flatten<_std.$Object_d29c95e25d6b11eeabaf012dd32b5eadλShape & {
-  "order": $.PropertyDesc<_std.$int16, $.Cardinality.AtMostOne, false, false, false, false>;
   "title": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
   "links": $.LinkDesc<$GlobalLink, $.Cardinality.Many, {
     "@order": $.PropertyDesc<_std.$int16, $.Cardinality.AtMostOne>;
@@ -106,6 +105,13 @@ export type $GlobalTopicλShape = $.typeutil.flatten<_std.$Object_d29c95e25d6b11
   "relatedNotes": $.LinkDesc<$Note, $.Cardinality.Many, {}, false, false,  false, false>;
   "verified": $.PropertyDesc<_std.$bool, $.Cardinality.One, false, false, false, false>;
   "latestGlobalGuide": $.LinkDesc<$GlobalGuide, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
+  "aiSummary": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "description": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "githubLink": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "redditLink": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "topicWebsiteLink": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "wikipediaLink": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "xLink": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "<relatedTopics[is GlobalTopic]": $.LinkDesc<$GlobalTopic, $.Cardinality.Many, {}, false, false,  false, false>;
   "<mainTopic[is GlobalLink]": $.LinkDesc<$GlobalLink, $.Cardinality.Many, {}, false, false,  false, false>;
   "<topicsLearned[is User]": $.LinkDesc<$User, $.Cardinality.Many, {}, false, false,  false, false>;
@@ -294,7 +300,6 @@ const UserGuide: $.$expr_PathNode<$.TypeSet<$UserGuide, $.Cardinality.Many>, nul
 
 export type $UserGuideSectionλShape = $.typeutil.flatten<_std.$Object_d29c95e25d6b11eeabaf012dd32b5eadλShape & {
   "links": $.LinkDesc<$GlobalLink, $.Cardinality.Many, {}, false, false,  false, false>;
-  "order": $.PropertyDesc<_std.$int16, $.Cardinality.AtMostOne, false, false, false, false>;
   "title": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
   "<sections[is UserGuide]": $.LinkDesc<$UserGuide, $.Cardinality.Many, {}, false, false,  false, false>;
   "<sections": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;

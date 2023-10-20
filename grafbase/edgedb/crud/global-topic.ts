@@ -4,6 +4,38 @@ import e from "../dbschema/edgeql-js"
 import { GlobalGuideSection } from "../dbschema/edgeql-js/modules/default"
 import { queryGetGlobalTopic } from "../queries/queryGetGlobalTopic.query"
 
+export async function updateGlobalTopic(
+  topicName: string,
+  topic: {
+    description?: string
+    topicWebsiteLink?: string
+    wikipediaLink?: string
+    githubLink?: string
+    xLink?: string
+    redditLink?: string
+    aiSummary?: string
+  }
+) {
+  e.update(e.GlobalTopic, (gt) => ({
+    filter: e.op(gt.name, "=", topicName),
+    set: {
+      ...(topic.description !== undefined && {
+        description: topic.description
+      }),
+      ...(topic.topicWebsiteLink !== undefined && {
+        topicWebsiteLink: topic.topicWebsiteLink
+      }),
+      ...(topic.wikipediaLink !== undefined && {
+        wikipediaLink: topic.wikipediaLink
+      }),
+      ...(topic.githubLink !== undefined && { githubLink: topic.githubLink }),
+      ...(topic.xLink !== undefined && { xLink: topic.xLink }),
+      ...(topic.redditLink !== undefined && { redditLink: topic.redditLink }),
+      ...(topic.aiSummary !== undefined && { aiSummary: topic.aiSummary })
+    }
+  })).run(client)
+}
+
 export async function checkGlobalTopicExists(topicName: string) {
   const topic = await e
     .select(e.GlobalTopic, (gt) => ({
@@ -12,6 +44,7 @@ export async function checkGlobalTopicExists(topicName: string) {
     .run(client)
   return topic
 }
+
 // select GlobalGuideSection
 // filter .<sections[is GlobalGuide].<latestGlobalGuide[is GlobalTopic].name = "design"
 export async function checkSectionsAreEmpty(topicName: string) {
@@ -52,7 +85,7 @@ export async function getAllTopicNames() {
   return topics
 }
 
-export async function updateGlobalTopic(
+export async function resetGlobalTopicSections(
   globalTopic: Omit<GlobalTopic, "prettyName">
 ) {
   // TODO: this function is secured by resolver itself, this code is useful for reference
@@ -453,7 +486,14 @@ export async function getGlobalTopicPublic(topicName: string) {
       name: true,
       prettyName: true,
       topicSummary: true,
-      topicPath: true,
+      // topicPath: true,
+      // description: true,
+      // topicWebsiteLink: true,
+      // wikipediaLink: true,
+      // githubLink: true,
+      // xLink: true,
+      // aiSummary: true,
+      redditLink: true,
       latestGlobalGuide: {
         sections: {
           title: true,
@@ -465,8 +505,7 @@ export async function getGlobalTopicPublic(topicName: string) {
             year: true,
             protocol: true,
             description: true
-          },
-          order: true
+          }
         }
       }
     }))

@@ -249,7 +249,14 @@ module default {
     # past changes to global guide versioned by time
     multi globalGuides: GlobalGuide;
     # there is one global guide attached to each global topic
-    latestGlobalGuide: GlobalGuide
+    latestGlobalGuide: GlobalGuide;
+    description: str;
+    topicWebsiteLink: str;
+    wikipediaLink: str;
+    githubLink: str;
+    xLink: str;
+    redditLink: str;
+    aiSummary: str;
   }
   type GlobalGuide {
     required created_at: datetime {
@@ -270,8 +277,6 @@ module default {
     multi links: GlobalLink {
       order: int16;
     };
-    # position of the section in the guide
-    order: int16;
   }
   type UserGuide {
     # global topic
@@ -290,8 +295,6 @@ module default {
     required title: str;
     # list of links in a section
     multi links: GlobalLink;
-    # position of the section in the guide
-    order: int16;
   }
   type GlobalGraph {
     # JSON graph of all topics and connections

@@ -1,6 +1,6 @@
 import { GraphQLError } from "graphql"
 import { Context } from "@grafbase/sdk"
-import { updateGlobalTopic } from "../../edgedb/crud/global-topic"
+import { resetGlobalTopicSections } from "../../edgedb/crud/global-topic"
 
 type Section = {
   title: string
@@ -33,7 +33,7 @@ export default async function updateLatestGlobalGuideResolver(
           ) ?? ""
         return { ...section, summary: fixedSummary }
       })
-      await updateGlobalTopic({
+      await resetGlobalTopicSections({
         name: args.topicName,
         topicSummary: fixedMarkdownLinksInHtml,
         sections: sectionsCopy

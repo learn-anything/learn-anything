@@ -38,3 +38,11 @@ br {
   content: " ";
   margin-bottom: 0.5em;
 }
+
+.tooltip {
+  @apply invisible absolute;
+}
+
+.has-tooltip:hover .tooltip {
+  @apply visible z-50;
+}

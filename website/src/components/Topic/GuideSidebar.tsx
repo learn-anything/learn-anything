@@ -146,34 +146,27 @@ export default function GuideSidebar() {
               </FancyButton>
             </div>
           </div>
-          <Show
-            when={
-              topic.globalTopic.verifiedTopic &&
-              topic.globalTopic.latestGlobalGuide.sections.length > 0
-            }
-          >
-            <div id="Info" class="text-[#696969] flex flex-col gap-3">
-              <div class="font-bold">Sections</div>
-              <div class="text-[14px] pl-3 flex flex-col gap-2">
-                <For each={topic.globalTopic?.latestGlobalGuide?.sections}>
-                  {(section) => {
-                    return (
-                      <>
-                        <div>{section.title}</div>
-                      </>
-                    )
-                  }}
-                </For>
-              </div>
+          <div id="Info" class="text-[#696969] flex flex-col gap-3">
+            <div class="font-bold">Sections</div>
+            <div class="text-[14px] pl-3 flex flex-col gap-2">
+              <For each={topic.globalTopic?.latestGlobalGuide?.sections}>
+                {(section) => {
+                  return (
+                    <>
+                      <div>{section.title}</div>
+                    </>
+                  )
+                }}
+              </For>
             </div>
-          </Show>
+          </div>
           <Show
             when={
               topic.globalTopic.verifiedTopic &&
               topic.globalTopic.latestGlobalGuide.sections.length > 0
             }
           >
-            <div id="Resources" class="flex text-[#696969] flex-col gap-3">
+            <div class="flex text-[#696969] flex-col gap-3">
               <div class="font-bold">Resources</div>
               <div class="flex flex-col pl-3 text-[14px] gap-[6px]">
                 <div
@@ -195,9 +188,25 @@ export default function GuideSidebar() {
                     {topic.globalTopic.links.length}
                   </span>
                 </div>
-                {/* <div class="flex gap-2">
-              Notes <span class="font-bold">24</span>
-            </div> */}
+                {/* TODO: show the notes */}
+                <Show when={topic.globalTopic.notes.length > 0}>
+                  <div
+                    class="flex gap-2 cursor-pointer"
+                    onClick={() => {
+                      if (!user.user.member) {
+                        global.setShowMemberOnlyModal(true)
+                      } else {
+                        // TODO:
+                        global.setGuidePage("Notes")
+                      }
+                    }}
+                  >
+                    Notes{" "}
+                    <span class="font-bold">
+                      {topic.globalTopic.notes.length}
+                    </span>
+                  </div>
+                </Show>
               </div>
             </div>
           </Show>

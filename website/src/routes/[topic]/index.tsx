@@ -169,13 +169,15 @@ export default function GlobalTopic() {
                     <div class="h-full relative">
                       <div class="sticky top-[50%] translate-y-[50%] z-[60] right-0 w-full flex items-center justify-center">
                         <div class="">
-                          <FancyButton
-                            onClick={() => {
-                              navigate("/pricing")
-                            }}
-                          >
-                            Become member
-                          </FancyButton>
+                          <Show when={!global.showMemberOnlyModal()}>
+                            <FancyButton
+                              onClick={() => {
+                                navigate("/pricing")
+                              }}
+                            >
+                              Become member
+                            </FancyButton>
+                          </Show>
                         </div>
                       </div>
                     </div>

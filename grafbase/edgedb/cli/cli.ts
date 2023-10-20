@@ -1,12 +1,14 @@
 import { removeTrailingSlash, splitUrlByProtocol } from "../../lib/util"
 import {
   addGlobalLink,
-  removeTrailingSlashFromGlobalLinks
+  removeTrailingSlashFromGlobalLinks,
+  updateTitleOfGlobalLink
 } from "../crud/global-link"
 import {
   addLinkToSectionOfGlobalTopic,
   changeGlobalTopicVerifiedstatus,
   deleteSectionsInGlobalTopic,
+  resetGlobalTopicSections,
   updateGlobalTopic
 } from "../crud/global-topic"
 import {
@@ -17,12 +19,18 @@ import {
 } from "../sync/markdown"
 
 async function main() {
-  const topicName = "gpu"
+  const topicName = "habits"
+  console.log("done")
+  return
   // await changeGlobalTopicVerifiedstatus(topicName, false)
   // return
   await deleteSectionsInGlobalTopic(topicName)
   await processLinksFromMarkdownFilesAsGlobalLinks(topicName)
   await moveLinksFromSectionsIncludingLinksToGuide(topicName)
+  // await updateTitleOfGlobalLink(
+  //   "https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab",
+  //   "Essense Of Linear Algebra"
+  // )
   // const links = await removeTrailingSlashFromGlobalLinks()
   // console.log(links, "links")
   // const hankoId = process.env.LOCAL_USER_HANKO_ID!

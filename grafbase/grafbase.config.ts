@@ -70,7 +70,13 @@ g.query("publicGetGlobalTopic", {
       name: g.string(),
       prettyName: g.string(),
       topicSummary: g.string(),
-      topicPath: g.string().optional(),
+      description: g.string().optional(),
+      topicWebsiteLink: g.string().optional(),
+      wikipediaLink: g.string().optional(),
+      githubLink: g.string().optional(),
+      xLink: g.string().optional(),
+      redditLink: g.string().optional(),
+      // aiSummary: g.string().optional(),
       latestGlobalGuide: g.ref(latestGlobalGuide).optional(),
       links: g.ref(GlobalLink).list()
     })

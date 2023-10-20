@@ -3,6 +3,7 @@ import { createStore } from "solid-js/store"
 import { useLocation } from "solid-start"
 import { SearchResult } from "../components/Search"
 import { MobiusType } from "../root"
+import { micromark } from "micromark"
 
 export type GlobalLink = {
   id: string
@@ -23,6 +24,10 @@ type LatestGlobalGuide = {
   summary: string
   sections: Section[]
 }
+type GlobalNote = {
+  content: string
+  url?: string
+}
 export type GlobalTopic = {
   name: string
   prettyName: string
@@ -30,6 +35,14 @@ export type GlobalTopic = {
   topicPath: string
   latestGlobalGuide: LatestGlobalGuide
   links: GlobalLink[]
+  notes: GlobalNote[]
+  // description?: string
+  // topicWebsiteLink?: string
+  // wikipediaLink?: string
+  // githubLink?: string
+  // xLink?: string
+  // redditLink?: string
+  // aiSummary?: string
   learningStatus: "to_learn" | "learning" | "learned" | ""
   likedLinkIds: string[]
   completedLinkIds: string[]
@@ -55,6 +68,7 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
       sections: []
     },
     links: [],
+    notes: [{ content: "test" }],
     learningStatus: "",
     likedLinkIds: [],
     completedLinkIds: [],
@@ -62,9 +76,6 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
   })
 
   const currentTopicGlobalLinksSearch = createMemo(() => {
-    console.log(
-      globalTopic.links.find((l) => l.title === "GitHub Actions by Example")
-    )
     return globalTopic.links.map(
       (link): SearchResult => ({
         name: link.title
@@ -103,7 +114,13 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
             name: true,
             prettyName: true,
             topicSummary: true,
-            topicPath: true,
+            // description: true,
+            // topicWebsiteLink: true,
+            // wikipediaLink: true,
+            // githubLink: true,
+            // xLink: true,
+            // redditLink: true,
+            // aiSummary: true,
             links: {
               id: true,
               title: true,
@@ -132,8 +149,20 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
 
       // @ts-ignore
       const topicData = topic.data.publicGetGlobalTopic
+      // let aiSummaryAsHtml = ""
+      // if (topicData.aiSummary) {
+      //   aiSummaryAsHtml = micromark(topicData.aiSummary)
+      // }
+
       setGlobalTopic({
         name: topicData.name,
+        // description: topicData.description,
+        // topicWebsiteLink: topicData.topicWebsiteLink,
+        // wikipediaLink: topicData.wikipediaLink,
+        // githubLink: topicData.githubLink,
+        // xLink: topicData.xLink,
+        // redditLink: topicData.redditLink,
+        // aiSummary: aiSummaryAsHtml,
         prettyName: topicData.prettyName,
         topicSummary: topicData.topicSummary,
         topicPath: topicData.topicPath,
