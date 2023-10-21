@@ -102,7 +102,7 @@ export function createGlobalState(mobius: MobiusType) {
   })
 
   const location = useLocation()
-  onMount(async () => {
+  createEffect(async () => {
     if (!(location.pathname === "/")) return
 
     const topicsAndConnections = localStorage.getItem("topicsAndConnections")
