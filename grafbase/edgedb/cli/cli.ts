@@ -21,11 +21,9 @@ import {
 } from "../sync/markdown"
 
 async function main() {
-  const notes = await getNotesForGlobalTopic("habits")
-  console.log(notes, "notes")
-  return
-  const topicName = "habits"
+  const topicName = "linear-algebra"
   await processNotesFromMarkdownFilesAsGlobalNotes(topicName)
+  console.log("done")
   return
   // console.log("done")
   // return
@@ -179,9 +177,9 @@ async function processNotesFromMarkdownFilesAsGlobalNotes(fileName: string) {
   if (filePath) {
     const topic = await parseMdFile(filePath)
     const notes = await justParseNotes(filePath)
-    notes.map(async (note) => {
+    for (const note of notes) {
       await addGlobalNote(note.content, topic.name, note.url)
-    })
+    }
   }
 }
 async function getMarkdownPaths() {

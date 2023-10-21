@@ -9,7 +9,6 @@ export default async function publicGetGlobalTopicResolver(
 ) {
   try {
     const topic = await getGlobalTopicPublic(args.topicName)
-    console.log(topic, "topic")
     return topic
   } catch (error) {
     throw new GraphQLError(JSON.stringify(error))

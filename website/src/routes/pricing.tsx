@@ -234,8 +234,8 @@ export default function Pricing() {
                 <div
                   class="flex items-center justify-center rounded-lg bg-black w-full p-3 opacity-80 text-white cursor-pointer"
                   onClick={async () => {
-                    setWaitingForStripe(true)
                     if (user.user.signedIn) {
+                      setWaitingForStripe(true)
                       if (planChosen() === "monthly") {
                         const res = await mobius.query({
                           stripe: {

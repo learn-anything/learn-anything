@@ -1,16 +1,15 @@
-import { For, Show, createEffect, createSignal } from "solid-js"
-import { useGlobalTopic } from "../../GlobalContext/global-topic"
-import GuideSummary from "./GuideSummary"
 import clsx from "clsx"
+import { For, Show, createSignal } from "solid-js"
 import { useLocation, useNavigate } from "solid-start"
 import { useGlobalState } from "../../GlobalContext/global"
+import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import { useUser } from "../../GlobalContext/user"
 import FancyButton from "../FancyButton"
-import GuideSection from "./GuideSection"
 import Icon from "../Icon"
 import Modal from "../Modal"
-import { Tooltip } from "@kobalte/core"
-import ToolTip from "../tooltip"
+import GuideSection from "./GuideSection"
+import GuideSummary from "./GuideSummary"
+import ToolTip from "../ToolTip"
 
 export default function GlobalGuide() {
   const navigate = useNavigate()
@@ -60,6 +59,11 @@ export default function GlobalGuide() {
             <div class="text-[22px]">{topic.globalTopic.prettyName}</div>
             <div
               onClick={() => {
+                if (!user.user.signedIn) {
+                  localStorage.setItem("pageBeforeSignIn", location.pathname)
+                  navigate("/auth")
+                  return
+                }
                 if (!user.user.member) {
                   global.setShowMemberOnlyModal(true)
                 } else {
@@ -89,7 +93,6 @@ export default function GlobalGuide() {
                   } else {
                     // TODO: probably unsafe, should be a better way to do this
                     const topicName = window.location.href.split("/")[3]
-                    console.log(topicName)
                     navigate(`/${topicName}/edit`)
                   }
                 }}

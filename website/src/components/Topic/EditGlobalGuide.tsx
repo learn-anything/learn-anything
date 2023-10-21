@@ -159,8 +159,13 @@ export default function EditGlobalGuide() {
                 internalUpdateLatestGlobalGuide(topicName: $topicName, topicSummary: $topicSummary, sections: $sections)
               }
               `
+              // TODO: hacky but works for now. removes /edit from the end of the url
+              const actualTopicName = topic.globalTopic.name.replace(
+                /\/edit$/,
+                ""
+              )
               const variables = {
-                topicName: topic.globalTopic.name,
+                topicName: actualTopicName,
                 topicSummary: topic.globalTopic.topicSummary,
                 sections: sectionsToAdd
               }
@@ -444,6 +449,10 @@ export default function EditGlobalGuide() {
                     value={urlToAdd()}
                     onKeyDown={async (e) => {
                       if (e.key === "Enter") {
+                        if (!user.user.admin) {
+                          setShowCantEditGuideModal(true)
+                          return
+                        }
                         const [urlWithoutProtocol, _] = splitUrlByProtocol(
                           urlToAdd()
                         )
@@ -453,9 +462,13 @@ export default function EditGlobalGuide() {
                           internalAddGlobalLinkToSection(linkUrl: $linkUrl, topicName: $topicName, sectionName: $sectionName)
                         }
                         `
+                        const actualTopicName = topic.globalTopic.name.replace(
+                          /\/edit$/,
+                          ""
+                        )
                         const variables = {
                           linkUrl: urlWithoutProtocol,
-                          topicName: topic.globalTopic.name,
+                          topicName: actualTopicName,
                           sectionName: section.title
                         }
                         const res = await fetch(

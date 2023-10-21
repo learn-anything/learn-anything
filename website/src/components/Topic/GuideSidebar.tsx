@@ -1,5 +1,5 @@
 import { For, Show } from "solid-js"
-import { useLocation } from "solid-start"
+import { useLocation, useNavigate } from "solid-start"
 import { useGlobalState } from "../../GlobalContext/global"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import { useUser } from "../../GlobalContext/user"
@@ -14,6 +14,7 @@ export default function GuideSidebar() {
   const mobius = useMobius()
   const user = useUser()
   const location = useLocation()
+  const navigate = useNavigate()
 
   return (
     <>
@@ -27,6 +28,11 @@ export default function GuideSidebar() {
             <div class="flex gap-2 text-[12px]">
               <FancyButton
                 onClick={async () => {
+                  if (!user.user.signedIn) {
+                    localStorage.setItem("pageBeforeSignIn", location.pathname)
+                    navigate("/auth")
+                    return
+                  }
                   if (!user.user.member) {
                     global.setShowMemberOnlyModal(true)
                     return
@@ -68,6 +74,11 @@ export default function GuideSidebar() {
               </FancyButton>
               <FancyButton
                 onClick={async () => {
+                  if (!user.user.signedIn) {
+                    localStorage.setItem("pageBeforeSignIn", location.pathname)
+                    navigate("/auth")
+                    return
+                  }
                   if (!user.user.member) {
                     global.setShowMemberOnlyModal(true)
                     return
@@ -108,6 +119,11 @@ export default function GuideSidebar() {
               </FancyButton>
               <FancyButton
                 onClick={async () => {
+                  if (!user.user.signedIn) {
+                    localStorage.setItem("pageBeforeSignIn", location.pathname)
+                    navigate("/auth")
+                    return
+                  }
                   if (!user.user.member) {
                     global.setShowMemberOnlyModal(true)
                     return
@@ -228,6 +244,14 @@ export default function GuideSidebar() {
                       global.state.guidePage === "Notes" && "font-bold"
                     )}
                     onClick={() => {
+                      if (!user.user.signedIn) {
+                        localStorage.setItem(
+                          "pageBeforeSignIn",
+                          location.pathname
+                        )
+                        navigate("/auth")
+                        return
+                      }
                       if (!user.user.member) {
                         global.setShowMemberOnlyModal(true)
                       } else {

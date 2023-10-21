@@ -159,7 +159,13 @@ export default function GuideNav() {
               GitHub
             </a>/ */}
             {/* TODO: hide it for non members too */}
-            <Show when={user.user.member && location.pathname !== "/profile"}>
+            <Show
+              when={
+                user.user.signedIn &&
+                user.user.member &&
+                location.pathname !== "/profile"
+              }
+            >
               <A
                 class="cursor-pointer"
                 style={{

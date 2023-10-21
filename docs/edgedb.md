@@ -79,3 +79,21 @@ select GlobalNote {
   **
 }
 ```
+
+## Reference code
+
+```
+// check that user is admin. there is probably better way to do this, ideally as part of one .client() call
+// also probably no need for this function, just secure the call to function via internal resolver instead
+// this code is just for reference in case there is need for it
+const adminUser = await e
+  .select(e.User, (user) => ({
+    filter: e.all(
+      e.set(e.op(user.hankoId, "=", hankoId), e.op(user.admin, "=", true))
+    )
+  }))
+  .run(client)
+if (adminUser.length === 0) {
+  return
+}
+```

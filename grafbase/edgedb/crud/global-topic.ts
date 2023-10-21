@@ -88,19 +88,6 @@ export async function getAllTopicNames() {
 export async function resetGlobalTopicSections(
   globalTopic: Omit<GlobalTopic, "prettyName">
 ) {
-  // TODO: this function is secured by resolver itself, this code is useful for reference
-  // as its destructive and wipes the whole global guide
-  // const adminUser = await e
-  //   .select(e.User, (user) => ({
-  //     filter: e.all(
-  //       e.set(e.op(user.hankoId, "=", hankoId), e.op(user.admin, "=", true))
-  //     )
-  //   }))
-  //   .run(client)
-  // if (adminUser.length === 0) {
-  //   return
-  // }
-
   await e
     .delete(e.GlobalGuideSection, (section) => ({
       filter: e.op(
@@ -113,8 +100,7 @@ export async function resetGlobalTopicSections(
     }))
     .run(client)
 
-  console.log(globalTopic.topicSummary, "summary")
-  await e
+  const res = await e
     .update(e.GlobalTopic, () => ({
       filter_single: { name: globalTopic.name },
       set: {
@@ -123,7 +109,7 @@ export async function resetGlobalTopicSections(
     }))
     .run(client)
 
-  globalTopic.sections.map(async (section) => {
+  for (const section of globalTopic.sections) {
     await e
       .params({ linkIds: e.array(e.uuid) }, (params) => {
         const linkWithIndex = e.enumerate(e.array_unpack(params.linkIds))
@@ -150,7 +136,7 @@ export async function resetGlobalTopicSections(
         }))
       })
       .run(client, { linkIds: section.linkIds })
-  })
+  }
 }
 
 export async function deleteSectionsInGlobalTopic(globalTopicName: string) {

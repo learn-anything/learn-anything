@@ -1,29 +1,12 @@
 ## Public website release
 
-- ability to add links (unverified)
-  - optionally attach to topic (maybe not for mvp)
-  - links will be shown in user profile
-- blue/unblur guide for members/non-members
-  - show `become member` in top right and `bottom right` on guide
-- improve on pricing page
-- create plan (member only). add ui with modal to show that
-  - show in global topic, button for `Personal Guide`
-- profile page connect
-  - show everything as in design in Figma
-- limit some actions for non member
-  - edgedb query check hanko id and memberUntil value is good
-- 3 free limit on mark topic as learned + 3 of adding adding a link + 3 of bookmarking a link
-  - change icons for those to make it clear what happens
-  - on first time user likes a link or tracks topic as learned or completes a link, show modal saying it can be found in profile page now
-- add footer like https://twitter.com/steveruizok/status/1712487213852749911
-  - link to X, GitHub, Discord
-  - say in pretty letters `Free coode. Build the tool you want.`
+- be able to attach a topic to a link
+- Add `Create Personal Guide` button (maybe next to `Improve Guide`)
 - allow edits of `topic summary` and `section summary` of each section
   - enter text inside, save it to html and store in db
   - render the content of the html in topic summary and each of the section summaries correctly
 - stripe updates and works
   - memberUntil should update with new date, unix to edgedb date, make work
-    - breaks on unix to edgedb time stamp
 - user gets created on hanko auth
 - render the results like markdown in topic page using https://github.com/micromark/micromark
   - check what syntax internal links need to be to link properly
@@ -247,6 +230,9 @@
   - allow members to make suggestive edits to the link with new metadata
 - update readme to make it work with local edgedb
   - pre seed it with content so dev ux is amazing
+- add footer like https://twitter.com/steveruizok/status/1712487213852749911
+  - link to X, GitHub, Discord
+  - say in pretty letters `Free coode. Build the tool you want.`
 
 ## Public desktop app release
 
@@ -264,7 +250,6 @@
   - so if changes are made to files in the connected folder, sqlite db is updated with changes
   - likewise if changes are made to solid store state, it gets persisted to sqlite and also to the file system where needed
 - public content
-- move all useful code that existed in previous [Electron version](https://github.com/learn-anything/electron-version)
 - global hotkey to add current link from safari/chrome using applescript (or some other way)
 - search existing bookmarks with raycast
 

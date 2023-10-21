@@ -5,6 +5,7 @@ import clsx from "clsx"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import { useUser } from "../../GlobalContext/user"
 import { useGlobalState } from "../../GlobalContext/global"
+import { useNavigate } from "solid-start"
 
 interface Props {
   title: string
@@ -20,14 +21,10 @@ export default function GlobalGuideLink(props: Props) {
   const topic = useGlobalTopic()
   const user = useUser()
   const global = useGlobalState()
+  const navigate = useNavigate()
 
   return (
-    <div
-      onClick={() => {
-        console.log(`${props.protocol}://${props.url}`, "test")
-      }}
-      class="flex items-center overflow-hidden  border-b-[0.5px] dark:border-[#282828]  border-[#69696951] p-4 px-4 justify-between"
-    >
+    <div class="flex items-center overflow-hidden  border-b-[0.5px] dark:border-[#282828]  border-[#69696951] p-4 px-4 justify-between">
       {/* <div class="">
       <div class="bg-neutral-400 w-10 h-10 rounded-full"></div>
     </div> */}
@@ -67,6 +64,11 @@ export default function GlobalGuideLink(props: Props) {
             {/* UI of being pressed in */}
             <div
               onClick={async () => {
+                if (!user.user.signedIn) {
+                  localStorage.setItem("pageBeforeSignIn", location.pathname)
+                  navigate("/auth")
+                  return
+                }
                 if (!user.user.member) {
                   global.setShowMemberOnlyModal(true)
                   return
@@ -121,6 +123,11 @@ export default function GlobalGuideLink(props: Props) {
             </div>
             <div
               onClick={async () => {
+                if (!user.user.signedIn) {
+                  localStorage.setItem("pageBeforeSignIn", location.pathname)
+                  navigate("/auth")
+                  return
+                }
                 if (!user.user.member) {
                   global.setShowMemberOnlyModal(true)
                   return
