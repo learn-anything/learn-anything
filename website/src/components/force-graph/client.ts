@@ -11,7 +11,7 @@ const graph_options = Graph.graphOptions({
 })
 
 export function createForceGraph(
-  raw_data: RawData,
+  raw_data: RawData[],
   onNodeClick: (name: string) => void
 ): HTMLCanvasElement {
   const data = generateNodesFromData(raw_data)
