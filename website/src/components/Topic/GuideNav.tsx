@@ -1,5 +1,5 @@
 import { Show, createEffect, createSignal, onMount, untrack } from "solid-js"
-import { A, useNavigate } from "solid-start"
+import { A, useLocation, useNavigate } from "solid-start"
 import { createShortcut } from "@solid-primitives/keyboard"
 import { useUser } from "../../GlobalContext/user"
 import Icon from "../Icon"
@@ -21,6 +21,7 @@ export default function GuideNav() {
   const [topicSearchInput, setTopicSearchInput] = createSignal("")
   const [focusedTopic, setFocusedTopic] = createSignal(0)
   const [focusedTodoTitle, setFocusedTodoTitle] = createSignal("")
+  const location = useLocation()
 
   // TODO: make it into effect so it switches when user changes theme whilst site is loaded
   // https://discord.com/channels/722131463138705510/1163448241577283675/1163453275400585216
@@ -158,7 +159,6 @@ export default function GuideNav() {
             >
               GitHub
             </a>/ */}
-            {/* TODO: hide it for non members too */}
             <Show
               when={
                 user.user.signedIn &&

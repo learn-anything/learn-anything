@@ -29,6 +29,18 @@ export interface SearchState {
   onSelect: OnSearchResultSelect
 }
 
+const defaultSearchResult: SearchResult = { name: "Default" }
+function getRandomSubarray(arr: SearchResult[], size: number): SearchResult[] {
+  const shuffled = arr.slice(0)
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    const itemI = shuffled[i] || defaultSearchResult
+    const itemJ = shuffled[j] || defaultSearchResult
+    ;[shuffled[i], shuffled[j]] = [itemJ, itemI]
+  }
+  return shuffled.slice(0, size)
+}
+
 const FUSE_OPTIONS: Fuse.IFuseOptions<SearchResult> = {
   keys: ["name"]
 }
@@ -57,7 +69,7 @@ export function createSearchState({
       ? fuse()
           .search(query(), FUSE_SEARCH_OPTIONS)
           .map((r) => r.item)
-      : searchResults().slice(0, SEARCH_RESULTS_LIMIT)
+      : getRandomSubarray(searchResults(), SEARCH_RESULTS_LIMIT)
 
     /*
       try reusing the previously focused item

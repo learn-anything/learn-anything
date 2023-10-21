@@ -1,4 +1,4 @@
-import { For, Show } from "solid-js"
+import { For, Show, createEffect } from "solid-js"
 import { useLocation, useNavigate } from "solid-start"
 import { useGlobalState } from "../../GlobalContext/global"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
@@ -15,6 +15,10 @@ export default function GuideSidebar() {
   const user = useUser()
   const location = useLocation()
   const navigate = useNavigate()
+
+  createEffect(() => {
+    console.log(topic.globalTopic.verifiedTopic)
+  })
 
   return (
     <>
@@ -167,7 +171,7 @@ export default function GuideSidebar() {
           <Show
             when={
               topic.globalTopic.verifiedTopic &&
-              topic.globalTopic.latestGlobalGuide.sections.length > 0 &&
+              topic.globalTopic.latestGlobalGuide?.sections.length > 0 &&
               global.state.guidePage === "Guide"
             }
           >
@@ -206,7 +210,7 @@ export default function GuideSidebar() {
           <Show
             when={
               topic.globalTopic.verifiedTopic &&
-              topic.globalTopic.latestGlobalGuide.sections.length > 0
+              topic.globalTopic.latestGlobalGuide?.sections.length > 0
             }
           >
             <div class="flex text-[#696969] flex-col gap-3">

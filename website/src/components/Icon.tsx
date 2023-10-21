@@ -21,6 +21,7 @@ interface Props {
     | "Discord"
     | "Sparkles"
     | "X"
+    | "Verified"
 
   width?: string
   height?: string
@@ -63,6 +64,23 @@ export default function Icon(props: Props) {
           </div>
         </Show>
         <Switch>
+          <Match when={props.name === "Verified"}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="m9.75 12.75 1.5 1.5c.75-2.75 3-4.5 3-4.5m-4.713 8.197c-.986.143-1.967-.124-2.664-.82-.696-.697-.963-1.678-.82-2.664C5.255 13.867 4.75 12.985 4.75 12c0-.985.505-1.867 1.303-2.463-.142-.986.124-1.967.82-2.663.697-.697 1.678-.963 2.664-.82.596-.799 1.478-1.304 2.463-1.304.985 0 1.867.505 2.463 1.304.986-.143 1.967.123 2.664.82.696.696.963 1.677.82 2.663.798.596 1.303 1.478 1.303 2.463 0 .985-.505 1.867-1.303 2.463.143.986-.124 1.967-.82 2.664-.697.696-1.678.963-2.664.82-.596.798-1.478 1.303-2.463 1.303-.985 0-1.867-.505-2.463-1.303Z"
+              ></path>
+            </svg>
+          </Match>
           <Match when={props.name === "Home"}>
             <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
               <path

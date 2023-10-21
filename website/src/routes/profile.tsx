@@ -214,12 +214,12 @@ export default function Profile() {
         <Show when={showHelpModal()}>
           {/* @ts-ignore */}
           <Modal onClose={setShowHelpModal}>
-            <div class="w-1/2 relative z-50 h-[450px] rounded-lg bg-white border-slate-400 border dark:bg-neutral-900 flex flex-col gap-4 p-[20px] px-[24px]">
+            <div class="w-1/2 relative z-50 h-[550px] rounded-lg bg-white border-slate-400 border dark:bg-neutral-900 flex flex-col gap-4 p-[20px] px-[24px]">
               <div>This page is being improved rapidly.</div>
               <div>
-                For now you can see the 1,050 topics available with guides
+                For now you can see 1,050+ topics available with guides.
               </div>
-              <div>You can also mark any of the guides learning status</div>
+              <div>You can also mark any of the guides learning status.</div>
               <div>
                 You can also even mark any of not available topics learning
                 status. For example by going to
@@ -234,11 +234,20 @@ export default function Profile() {
               <div>
                 Work is also being done on making your markdown or any other
                 kinds of notes publishing to the web. Vectorising it all and
-                providing AI search interface to it.
+                providing AI search interface to it. Together with API.
               </div>
               <div>
-                If you wish to unsubscribe and stop being a member, you can do
-                so <A href="/pricing">here</A>. 😿
+                If you don't like something and are thinking of stopping being a
+                member, it would be lovely to{" "}
+                <a href="https://cal.com/nikiv/15min">
+                  talk with you in person
+                </a>
+                .
+              </div>
+              <div>
+                We want to make this tool work exactly how you want it. You can
+                always <A href="/pricing">unsubscribe without a call</A> though.
+                😿
               </div>
               <div class="w-full">
                 <FancyButton

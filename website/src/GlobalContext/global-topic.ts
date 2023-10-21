@@ -105,6 +105,7 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
     if (topicsStored) {
       actualTopics = JSON.parse(topicsStored)
       verifiedTopic = actualTopics.includes(topicName)
+      console.log(verifiedTopic, "true?")
       setGlobalTopic({ verifiedTopic: verifiedTopic })
     }
     if (verifiedTopic || !topicsStored) {

@@ -455,7 +455,8 @@ export async function updateUnverifiedTopicLearningStatus(
 // based of user preference etc.
 export async function publicGetGlobalTopics() {
   const globalTopics = await e
-    .select(e.GlobalTopic, () => ({
+    .select(e.GlobalTopic, (gt) => ({
+      filter: e.op(gt.verified, "=", true),
       prettyName: true,
       name: true
     }))
