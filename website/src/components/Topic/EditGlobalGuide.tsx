@@ -1,10 +1,10 @@
-import { For, Show, createSignal, untrack } from "solid-js"
-import { parseURL } from "ufo"
-import toast, { Toaster } from "solid-toast"
-import { useNavigate } from "solid-start"
-import { useGlobalTopic } from "../../GlobalContext/global-topic"
-import { createTiptapEditor } from "solid-tiptap"
 import StarterKit from "@tiptap/starter-kit"
+import { For, Show, createSignal, untrack } from "solid-js"
+import { useNavigate } from "solid-start"
+import { createTiptapEditor } from "solid-tiptap"
+import toast, { Toaster } from "solid-toast"
+import { parseURL } from "ufo"
+import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import { Search, createSearchState } from "../Search"
 // @ts-ignore
 import {
@@ -12,11 +12,10 @@ import {
   createDroppable,
   useDragDropContext
 } from "@thisbeyond/solid-dnd"
-import GlobalLinkEditModal from "../GlobalLinkEditModal"
-import { getHankoCookie } from "../../../lib/auth"
 import { useUser } from "../../GlobalContext/user"
-import ModalWithMessageAndButton from "../ModalWithMessageAndButton"
 import { useMobius } from "../../root"
+import GlobalLinkEditModal from "../GlobalLinkEditModal"
+import ModalWithMessageAndButton from "../ModalWithMessageAndButton"
 
 const notify = (message: string) => toast(message)
 
