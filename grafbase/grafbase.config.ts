@@ -127,7 +127,8 @@ g.query("getLikedLinks", {
 
 const topicToLearn = g.type("topicToLearn", {
   name: g.string(),
-  prettyName: g.string()
+  prettyName: g.string(),
+  verified: g.boolean()
 })
 g.query("getTopicsLearned", {
   args: {},

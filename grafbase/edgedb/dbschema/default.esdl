@@ -202,8 +202,8 @@ module default {
     # link description
     description: str;
     year: str;
-    # topic associated (TODO: make it a link to actual topic object)
-    # associatedTopic: str;
+    # optionally have a main topic that personal link belongs to
+    link mainTopic: GlobalTopic;
   }
   type GlobalNote {
     required content: str;

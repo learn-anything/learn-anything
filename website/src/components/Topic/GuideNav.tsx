@@ -1,4 +1,11 @@
-import { Show, createEffect, createSignal, onMount, untrack } from "solid-js"
+import {
+  Show,
+  createEffect,
+  createMemo,
+  createSignal,
+  onMount,
+  untrack
+} from "solid-js"
 import { A, useLocation, useNavigate } from "solid-start"
 import { createShortcut } from "@solid-primitives/keyboard"
 import { useUser } from "../../GlobalContext/user"
@@ -41,33 +48,37 @@ export default function GuideNav() {
     setFocusedTopic(focusedTopic() - 1)
   })
 
-  createEffect(() => {
-    if (topicSearchInput()) {
-      untrack(() => {
-        // TODO: breaking.. need custom search component
-        // setTopicSearchResults(global.state.globalTopicsSearchList)
-        setTopicSearchResults(
-          topicSearchResults().filter((word: string) =>
-            topicSearchInput()
-              .split("")
-              .every((value) => {
-                return word.split("").includes(value)
-              })
-          )
-        )
-      })
-      setFocusedTodoTitle(topicSearchResults()[focusedTopic()])
-    }
+  // createEffect(() => {
+  //   if (topicSearchInput()) {
+  //     untrack(() => {
+  //       setTopicSearchResults(
+  //         topicSearchResults().filter((word: string) =>
+  //           topicSearchInput()
+  //             .split("")
+  //             .every((value) => {
+  //               return word.split("").includes(value)
+  //             })
+  //         )
+  //       )
+  //     })
+  //     setFocusedTodoTitle(topicSearchResults()[focusedTopic()])
+  //   }
+  // })
+
+  const searchResults = createMemo(() => {
+    return global.state.topicsWithConnections.map((t) => ({
+      name: t.prettyName
+    }))
   })
 
-  const searchResults: SearchResult[] = [
-    { name: "Physics" },
-    { name: "Math" },
-    { name: "Karabiner" }
-  ]
   const search_state = createSearchState({
-    searchResults: () => searchResults,
-    onSelect: console.log
+    searchResults,
+    onSelect: ({ name }) => {
+      const foundTopic = global.state.topicsWithConnections.find(
+        (t) => t.prettyName === name
+      )!
+      navigate(`/${foundTopic.name}`)
+    }
   })
 
   return (

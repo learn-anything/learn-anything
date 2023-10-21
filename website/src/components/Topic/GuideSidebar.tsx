@@ -1,4 +1,5 @@
-import { For, Show, createEffect } from "solid-js"
+import clsx from "clsx"
+import { For, Show } from "solid-js"
 import { useLocation, useNavigate } from "solid-start"
 import { useGlobalState } from "../../GlobalContext/global"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
@@ -6,7 +7,6 @@ import { useUser } from "../../GlobalContext/user"
 import { useMobius } from "../../root"
 import FancyButton from "../FancyButton"
 import Icon from "../Icon"
-import clsx from "clsx"
 
 export default function GuideSidebar() {
   const topic = useGlobalTopic()
@@ -15,10 +15,6 @@ export default function GuideSidebar() {
   const user = useUser()
   const location = useLocation()
   const navigate = useNavigate()
-
-  createEffect(() => {
-    console.log(topic.globalTopic.verifiedTopic)
-  })
 
   return (
     <>

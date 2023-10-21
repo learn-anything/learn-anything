@@ -121,6 +121,7 @@ export type $GlobalTopicλShape = $.typeutil.flatten<_std.$Object_d29c95e25d6b11
   "<globalTopic[is Topic]": $.LinkDesc<$Topic, $.Cardinality.Many, {}, false, false,  false, false>;
   "<globalTopic[is UserGuide]": $.LinkDesc<$UserGuide, $.Cardinality.Many, {}, false, false,  false, false>;
   "<mainTopic[is GlobalNote]": $.LinkDesc<$GlobalNote, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<mainTopic[is PersonalLink]": $.LinkDesc<$PersonalLink, $.Cardinality.Many, {}, false, false,  false, false>;
   "<globalTopic": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<mainTopic": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<relatedTopics": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
@@ -190,6 +191,7 @@ export type $PersonalLinkλShape = $.typeutil.flatten<_std.$Object_d29c95e25d6b1
   "title": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
   "url": $.PropertyDesc<_std.$str, $.Cardinality.One, true, false, false, false>;
   "year": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "mainTopic": $.LinkDesc<$GlobalTopic, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
   "<personalLinks[is User]": $.LinkDesc<$User, $.Cardinality.Many, {}, false, false,  false, false>;
   "<personalLinks": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;

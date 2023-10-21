@@ -14,6 +14,7 @@ import { useLocation } from "solid-start"
 type Topic = {
   name: string
   prettyName: string
+  verified: boolean
 }
 
 type Link = {
@@ -107,15 +108,18 @@ export function createUserState(mobius: MobiusType) {
       getTopicsLearned: {
         topicsToLearn: {
           name: true,
-          prettyName: true
+          prettyName: true,
+          verified: true
         },
         topicsLearning: {
           name: true,
-          prettyName: true
+          prettyName: true,
+          verified: true
         },
         topicsLearned: {
           name: true,
-          prettyName: true
+          prettyName: true,
+          verified: true
         }
       },
       getLikedLinks: {

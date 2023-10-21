@@ -14,6 +14,7 @@ import {
 } from "tinybase/with-schemas"
 import { MobiusType } from "../root"
 import { useLocation } from "solid-start"
+import { extractTopicFromPath } from "./global-topic"
 
 type GlobalTopicSearchItem = {
   name: string
@@ -33,7 +34,6 @@ type TopicWithConnections = {
 }
 
 type GlobalState = {
-  globalTopicsSearchList: GlobalTopicSearchItem[]
   globalLinks: GlobalLink[]
   globalLinkSearchDb: any
   guidePage: string
@@ -45,7 +45,6 @@ type GlobalState = {
 // various global state
 export function createGlobalState(mobius: MobiusType) {
   const [state, setState] = createStore<GlobalState>({
-    globalTopicsSearchList: [],
     globalLinks: [],
     globalLinkSearchDb: undefined,
     guidePage: "Guide",
@@ -77,37 +76,18 @@ export function createGlobalState(mobius: MobiusType) {
   const [globalLinkSearchDb, setGlobalLinkSearchDb] =
     createSignal<any>(undefined)
 
-  onMount(async () => {
-    if (location.pathname === "/") return
-    let topicsStored = localStorage.getItem("globalTopics")
-    if (!topicsStored) {
-      const topics = await mobius.query({
-        publicGetGlobalTopics: {
-          name: true,
-          prettyName: true
-        }
-      })
-      if (topics) {
-        // @ts-ignore
-        const justTopics = topics.data.publicGetGlobalTopics.map(
-          (topic: any) => topic.name
-        )
-        setState({ globalTopicsSearchList: justTopics })
-        topicsStored = JSON.stringify(justTopics)
-        localStorage.setItem("globalTopics", topicsStored)
-      }
-    } else {
-      setState({ globalTopicsSearchList: JSON.parse(topicsStored) })
-    }
-  })
-
   const location = useLocation()
   createEffect(async () => {
-    if (!(location.pathname === "/")) return
+    if (location.pathname === "/pricing") return
+    const topicName = extractTopicFromPath(location.pathname)
 
     const topicsAndConnections = localStorage.getItem("topicsAndConnections")
     if (topicsAndConnections) {
       setState("topicsWithConnections", JSON.parse(topicsAndConnections))
+      let verifiedTopic = false
+      console.log(topicsAndConnections, "conn dat")
+      // const foundTopic = topicsAndConnections.some(i => i.name === topicName)
+      // setGlobalTopic("verifiedTopic", Boolean(foundTopic))
       return
     }
 
@@ -125,13 +105,12 @@ export function createGlobalState(mobius: MobiusType) {
     setState("topicsWithConnections", connectionData)
 
     localStorage.setItem("topicsAndConnections", JSON.stringify(connectionData))
-
-    let topicsStored = localStorage.getItem("globalTopics")
-    if (!topicsStored) {
-      const justTopics = connectionData.map((topic: any) => topic.name)
-      topicsStored = JSON.stringify(justTopics)
-      localStorage.setItem("globalTopics", topicsStored)
-    }
+    let verifiedTopic = false
+    console.log(connectionData, "conn dat")
+    return
+    const foundTopic = connectionData.some((i: any) => i.name === name)
+    setGlobalTopic("verifiedTopic", Boolean(foundTopic))
+    verifiedTopic = true
   })
 
   onMount(async () => {
@@ -230,9 +209,6 @@ export function createGlobalState(mobius: MobiusType) {
     state,
     setGuidePage: (page: string) => {
       setState({ guidePage: page })
-    },
-    setGlobalTopicsSearchList: (list: GlobalTopicSearchItem[]) => {
-      setState({ globalTopicsSearchList: list })
     },
     showMemberOnlyModal,
     setShowMemberOnlyModal,

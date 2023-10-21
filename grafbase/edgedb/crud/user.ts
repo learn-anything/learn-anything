@@ -48,12 +48,18 @@ export async function getAllLikedLinks(hankoId: string) {
       likedLinks: {
         id: true,
         title: true,
-        url: true
+        url: true,
+        mainTopic: {
+          name: true
+        }
       },
       personalLinks: {
         id: true,
         title: true,
-        url: true
+        url: true,
+        mainTopic: {
+          name: true
+        }
       }
     }))
     .run(client)
@@ -71,15 +77,18 @@ export async function getTopicsLearned(hankoId: string) {
       ),
       topicsToLearn: {
         name: true,
-        prettyName: true
+        prettyName: true,
+        verified: true
       },
       topicsLearning: {
         name: true,
-        prettyName: true
+        prettyName: true,
+        verified: true
       },
       topicsLearned: {
         name: true,
-        prettyName: true
+        prettyName: true,
+        verified: true
       }
     }))
     .run(client)

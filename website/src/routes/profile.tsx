@@ -16,11 +16,13 @@ import Modal from "../components/Modal"
 import { Search, createSearchState } from "../components/Search"
 import GuideNav from "../components/Topic/GuideNav"
 import { useMobius } from "../root"
+import Icon from "../components/Icon"
 
 type NewLink = {
   url: string
   title: string
   description: string
+  mainTopic: string
 }
 
 export default function Profile() {
@@ -33,7 +35,8 @@ export default function Profile() {
   const [newLinkData, setNewLinkData] = createSignal<NewLink>({
     url: "",
     title: "",
-    description: ""
+    description: "",
+    mainTopic: ""
   })
 
   createEffect(() => {
@@ -41,7 +44,8 @@ export default function Profile() {
       setNewLinkData({
         url: "",
         title: "",
-        description: ""
+        description: "",
+        mainTopic: ""
       })
     }
   })
@@ -355,6 +359,9 @@ export default function Profile() {
                             <div class="w-full  h-full flex justify-between items-center">
                               <div class="w-fit flex gap-1 flex-col">
                                 <div class="flex gap-3 items-center">
+                                  <Show when={topic.verified}>
+                                    <Icon name="Verified" />
+                                  </Show>
                                   <A
                                     class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer"
                                     href={`/${topic.name}`}
@@ -375,21 +382,32 @@ export default function Profile() {
               </Match>
               <Match when={currentTab() === "Links"}>
                 <div class="flex gap-3 flex-col">
-                  {/* TODO: finish, some issues with getting like/complete working */}
-                  {/* <For each={user.user.likedLinks}>
+                  <For each={user.user.likedLinks}>
                     {(link) => {
                       return (
                         <>
-                          <GlobalGuideLink
-                            id={link.id}
-                            url={link.url}
-                            title={link.title}
-                            protocol="https"
-                          />
+                          <div class="flex items-center overflow-hidden rounded-[4px]  border-[0.5px] dark:border-[#282828]  border-[#69696951] p-4 px-4 justify-between">
+                            <div class="w-full  h-full flex justify-between items-center">
+                              <div class="w-fit flex gap-2 items-center">
+                                <div class="flex gap-3 items-center">
+                                  <Icon name="Verified" />
+                                  <a
+                                    class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer"
+                                    href={`https://${link.url}`}
+                                  >
+                                    {link.title}
+                                  </a>
+                                </div>
+                                <div class="font-light text-[12px] text-[#696969] text-ellipsis w-[250px] overflow-hidden whitespace-nowrap">
+                                  {link.url}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </>
                       )
                     }}
-                  </For> */}
+                  </For>
                   <For each={user.user.personalLinks}>
                     {(link) => {
                       return (
@@ -398,6 +416,7 @@ export default function Profile() {
                             <div class="w-full  h-full flex justify-between items-center">
                               <div class="w-fit flex gap-2 items-center">
                                 <div class="flex gap-3 items-center">
+                                  <Icon name="UserProfile" />
                                   <a
                                     class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer"
                                     href={`https://${link.url}`}
@@ -427,6 +446,9 @@ export default function Profile() {
                             <div class="w-full  h-full flex justify-between items-center">
                               <div class="w-fit flex gap-1 flex-col">
                                 <div class="flex gap-3 items-center">
+                                  <Show when={topic.verified}>
+                                    <Icon name="Verified" />
+                                  </Show>
                                   <A
                                     class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer"
                                     href={`/${topic.name}`}
@@ -456,6 +478,9 @@ export default function Profile() {
                             <div class="w-full  h-full flex justify-between items-center">
                               <div class="w-fit flex gap-1 flex-col">
                                 <div class="flex gap-3 items-center">
+                                  <Show when={topic.verified}>
+                                    <Icon name="Verified" />
+                                  </Show>
                                   <A
                                     class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer"
                                     href={`/${topic.name}`}

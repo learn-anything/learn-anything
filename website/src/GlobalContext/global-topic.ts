@@ -3,6 +3,7 @@ import { createStore } from "solid-js/store"
 import { useLocation } from "solid-start"
 import { SearchResult } from "../components/Search"
 import { MobiusType } from "../root"
+import { getHankoCookie } from "../../lib/auth"
 
 export type GlobalLink = {
   id: string
@@ -49,7 +50,7 @@ export type GlobalTopic = {
   verifiedTopic: boolean
 }
 
-function extractTopicFromPath(inputStr: string) {
+export function extractTopicFromPath(inputStr: string) {
   const segments = inputStr
     .split("/")
     .filter((segment: string) => segment.trim() !== "")
@@ -87,28 +88,28 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
   // check that user is authed, can use import { signedIn } from "../../../lib/auth" for this
   const location = useLocation()
   createEffect(async () => {
+    // only gets called on /topic pages
     if (
-      !location.pathname ||
       location.pathname === "/" ||
-      location.pathname === "/pricing" ||
-      location.pathname === "/profile"
+      location.pathname === "/profile" ||
+      location.pathname === "/pricing"
     )
       return
-
-    setGlobalTopic("name", location.pathname.slice(1))
     const topicName = extractTopicFromPath(location.pathname)
     if (!topicName) return
+    setGlobalTopic("name", location.pathname.slice(1))
 
-    const topicsStored = localStorage.getItem("globalTopics")
-    let actualTopics
-    let verifiedTopic
-    if (topicsStored) {
-      actualTopics = JSON.parse(topicsStored)
-      verifiedTopic = actualTopics.includes(topicName)
-      console.log(verifiedTopic, "true?")
-      setGlobalTopic({ verifiedTopic: verifiedTopic })
+    let verifiedTopic = false
+    const topicsAndConnections = localStorage.getItem("topicsAndConnections")
+    if (topicsAndConnections) {
+      const foundTopic = JSON.parse(topicsAndConnections).some(
+        (i: any) => i.name === topicName
+      )
+      setGlobalTopic("verifiedTopic", Boolean(foundTopic))
+      verifiedTopic = true
     }
-    if (verifiedTopic || !topicsStored) {
+
+    if (verifiedTopic) {
       const topic = await mobius.query({
         publicGetGlobalTopic: {
           where: { topicName: topicName },
@@ -139,60 +140,6 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
             },
             notesCount: true
           }
-        }
-      })
-
-      // @ts-ignore
-      const topicData = topic.data.publicGetGlobalTopic
-      // let aiSummaryAsHtml = ""
-      // if (topicData.aiSummary) {
-      //   aiSummaryAsHtml = micromark(topicData.aiSummary)
-      // }
-
-      setGlobalTopic({
-        prettyName: topicData.prettyName,
-        topicSummary: topicData.topicSummary,
-        latestGlobalGuide: topicData.latestGlobalGuide,
-        links: topicData.links,
-        notesCount: topicData.notesCount
-      })
-    }
-  })
-
-  createEffect(async () => {
-    if (
-      !location.pathname ||
-      location.pathname === "/" ||
-      location.pathname === "/pricing" ||
-      location.pathname === "/profile" ||
-      !user.user.member
-    )
-      return
-
-    const topicName = extractTopicFromPath(location.pathname)
-    if (!topicName) return
-
-    const topicsStored = localStorage.getItem("globalTopics")
-    let actualTopics
-    let verifiedTopic
-    if (topicsStored) {
-      actualTopics = JSON.parse(topicsStored)
-      verifiedTopic = actualTopics.includes(topicName)
-      setGlobalTopic({ verifiedTopic: verifiedTopic })
-    }
-    if (verifiedTopic || !topicsStored) {
-      // TODO: getNotesForGlobalTopic should be included in getGlobalTopic query
-      // use the free objects syntax https://discord.com/channels/841451783728529451/1165023460863520778/1165024287560826891
-      const res = await mobius.query({
-        getGlobalTopic: {
-          where: {
-            topicName: topicName
-          },
-          select: {
-            learningStatus: true,
-            likedLinkIds: true,
-            completedLinkIds: true
-          }
         },
         getNotesForGlobalTopic: {
           where: {
@@ -204,31 +151,40 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
           }
         }
       })
+
+      // @ts-ignore
+      const topicData = topic.data.publicGetGlobalTopic
+      // @ts-ignore
+      const notesData = topic.data.getNotesForGlobalTopic
+      setGlobalTopic({
+        prettyName: topicData.prettyName,
+        topicSummary: topicData.topicSummary,
+        latestGlobalGuide: topicData.latestGlobalGuide,
+        links: topicData.links,
+        notesCount: topicData.notesCount,
+        notes: notesData
+      })
+    }
+    if (getHankoCookie()) {
+      const res = await mobius.query({
+        getGlobalTopic: {
+          where: {
+            topicName: topicName
+          },
+          select: {
+            learningStatus: true,
+            likedLinkIds: true,
+            completedLinkIds: true
+          }
+        }
+      })
       // @ts-ignore
       const topicData = res.data.getGlobalTopic
-      // @ts-ignore
-      const notesData = res.data.getNotesForGlobalTopic
-      // console.log(notesData, "notes..")
       setGlobalTopic({
         learningStatus: topicData.learningStatus,
         likedLinkIds: topicData.likedLinkIds,
-        completedLinkIds: topicData.completedLinkIds,
-        notes: notesData
+        completedLinkIds: topicData.completedLinkIds
       })
-    } else {
-      const learningStatus = await mobius.query({
-        getGlobalTopicLearningStatus: {
-          where: {
-            topicName: location.pathname.slice(1)
-          },
-          select: true
-        }
-      })
-      setGlobalTopic(
-        "learningStatus",
-        // @ts-ignore
-        learningStatus.data.getGlobalTopicLearningStatus
-      )
     }
   })
 
