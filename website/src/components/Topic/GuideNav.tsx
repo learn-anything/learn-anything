@@ -167,10 +167,7 @@ export default function GuideNav() {
               }
             >
               <A
-                class="cursor-pointer"
-                style={{
-                  color: "black"
-                }}
+                class="cursor-pointer text-black dark:text-white"
                 href={`${
                   user.user.username ? `/@${user.user.username}` : "/profile"
                 }`}
