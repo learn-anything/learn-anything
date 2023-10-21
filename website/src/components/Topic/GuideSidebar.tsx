@@ -277,6 +277,14 @@ export default function GuideSidebar() {
           <div
             class="hover:opacity-100 transition-all cursor-pointer"
             onClick={() => {
+              window.location.href = "https://twitter.com/learnanything_"
+            }}
+          >
+            <Icon name="X" />
+          </div>
+          <div
+            class="hover:opacity-100 transition-all cursor-pointer"
+            onClick={() => {
               window.location.href = "https://discord.com/invite/bxtD8x6aNF"
             }}
           >

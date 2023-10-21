@@ -20,6 +20,7 @@ interface Props {
     | "Github"
     | "Discord"
     | "Sparkles"
+    | "X"
 
   width?: string
   height?: string
@@ -79,6 +80,27 @@ export default function Icon(props: Props) {
                 d="M9.74963 15.7493C9.74963 14.6447 10.6451 13.7493 11.7496 13.7493H12.2496C13.3542 13.7493 14.2496 14.6447 14.2496 15.7493V19.2493H9.74963V15.7493Z"
               ></path>
             </svg>
+          </Match>
+          <Match when={props.name === "X"}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 30 30"
+              width="21px"
+              height="21px"
+            >
+              <path
+                fill="currentColor"
+                d="M26.37,26l-8.795-12.822l0.015,0.012L25.52,4h-2.65l-6.46,7.48L11.28,4H4.33l8.211,11.971L12.54,15.97L3.88,26h2.65 l7.182-8.322L19.42,26H26.37z M10.23,6l12.34,18h-2.1L8.12,6H10.23z"
+              />
+            </svg>
+            {/* <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 30 30"
+              width="30px"
+              height="30px"
+            >
+              <path d="M26.37,26l-8.795-12.822l0.015,0.012L25.52,4h-2.65l-6.46,7.48L11.28,4H4.33l8.211,11.971L12.54,15.97L3.88,26h2.65 l7.182-8.322L19.42,26H26.37z M10.23,6l12.34,18h-2.1L8.12,6H10.23z" />
+            </svg> */}
           </Match>
           <Match when={props.name === "Menu"}>
             <svg width="24" height="24" fill="none" viewBox="0 0 24 24">

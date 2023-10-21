@@ -10,12 +10,14 @@ import {
   FileRoutes,
   Head,
   Html,
+  Link,
   Meta,
   Route,
   Routes,
   Scripts,
   Title
 } from "solid-start"
+import { getHankoCookie } from "../lib/auth"
 import { GlobalStateProvider, createGlobalState } from "./GlobalContext/global"
 import createGlobalTopic, {
   GlobalTopicProvider
@@ -23,7 +25,6 @@ import createGlobalTopic, {
 import { UserProvider, createUserState } from "./GlobalContext/user"
 import "./root.css"
 import UserProfile from "./routes/@(username)"
-import { getHankoCookie } from "../lib/auth"
 
 // TODO: https://github.com/nikitavoloboev/la-issues/issues/54 (should stop having to manually update this schema )
 export const typeDefs = `
@@ -265,8 +266,13 @@ export default function Root() {
     <Html lang="en">
       <Head>
         <Title>Learn Anything</Title>
+        <Meta
+          name="description"
+          content="Organize world's knowledge, explore connections and curate learning paths"
+        />
         <Meta charset="utf-8" />
         <Meta name="viewport" content="width=device-width, initial-scale=1" />
+        <Link rel="icon" href="/favicon.svg" />
       </Head>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" />
