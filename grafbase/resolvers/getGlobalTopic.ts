@@ -8,12 +8,16 @@ export default async function getGlobalTopicResolver(
   args: { topicName: string },
   context: Context
 ) {
-  const hankoId = await hankoIdFromToken(context)
-  if (hankoId) {
-    const topicDetails = await getGlobalTopicDetails(args.topicName, hankoId)
-    return topicDetails
+  try {
+    const hankoId = await hankoIdFromToken(context)
+    if (hankoId) {
+      const topicDetails = await getGlobalTopicDetails(args.topicName, hankoId)
+      return topicDetails
+    }
+  } catch (err) {
+    // TODO: make edgedb crud functions return better errors
+    // it can also be token validation error! track that
+    console.log(err, "err")
+    throw new GraphQLError(JSON.stringify(err))
   }
-  // TODO: make edgedb crud functions return better errors
-  // it can also be token validation error! track that
-  throw new GraphQLError("Error")
 }

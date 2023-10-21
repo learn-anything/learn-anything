@@ -8,7 +8,7 @@ export default async function updateMemberUntilOfUserResolver(
   context: Context
 ) {
   try {
-    const authHeader = context.request.headers["Authorization"]
+    const authHeader = context.request.headers["authorization"]
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       throw new GraphQLError("Missing or invalid Authorization header")
     }
