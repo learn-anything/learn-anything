@@ -22,7 +22,7 @@ export async function addGlobalNote(
     }))
     .run(client)
   if (noteExists.length > 0) {
-    console.log("note exists?")
+    console.log("note exists")
     return
   }
   if (url) {

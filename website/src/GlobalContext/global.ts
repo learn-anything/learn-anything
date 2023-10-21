@@ -78,6 +78,7 @@ export function createGlobalState(mobius: MobiusType) {
     createSignal<any>(undefined)
 
   onMount(async () => {
+    if (location.pathname === "/") return
     let topicsStored = localStorage.getItem("globalTopics")
     if (!topicsStored) {
       const topics = await mobius.query({
@@ -91,9 +92,9 @@ export function createGlobalState(mobius: MobiusType) {
         const justTopics = topics.data.publicGetGlobalTopics.map(
           (topic: any) => topic.name
         )
+        setState({ globalTopicsSearchList: justTopics })
         topicsStored = JSON.stringify(justTopics)
         localStorage.setItem("globalTopics", topicsStored)
-        setState({ globalTopicsSearchList: justTopics })
       }
     } else {
       setState({ globalTopicsSearchList: JSON.parse(topicsStored) })
@@ -103,6 +104,11 @@ export function createGlobalState(mobius: MobiusType) {
   const location = useLocation()
   onMount(async () => {
     if (!(location.pathname === "/")) return
+    let topicsAndConnections = localStorage.getItem("topicsAndConnections")
+    if (topicsAndConnections) {
+      setState("topicsWithConnections", JSON.parse(topicsAndConnections))
+      return
+    }
     const connections = await mobius.query({
       publicGetTopicsWithConnections: {
         name: true,
@@ -113,6 +119,14 @@ export function createGlobalState(mobius: MobiusType) {
     // @ts-ignore
     const connectionData = connections?.data?.publicGetTopicsWithConnections
     setState("topicsWithConnections", connectionData)
+    topicsAndConnections = JSON.stringify(connectionData)
+    localStorage.setItem("topicsAndConnections", topicsAndConnections)
+    let topicsStored = localStorage.getItem("globalTopics")
+    if (!topicsStored) {
+      const justTopics = connectionData.map((topic: any) => topic.name)
+      topicsStored = JSON.stringify(justTopics)
+      localStorage.setItem("globalTopics", topicsStored)
+    }
   })
 
   onMount(async () => {

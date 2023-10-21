@@ -53,6 +53,7 @@ export function createUserState(mobius: MobiusType) {
   })
 
   onMount(async () => {
+    if (location.pathname === "/") return
     // TODO: maybe not needed? if only userClient.getCurrent() is there
     // it flashes sign in button on reloads..
     if (getHankoCookie()) {

@@ -1,17 +1,7 @@
-import { removeTrailingSlash, splitUrlByProtocol } from "../../lib/util"
-import {
-  addGlobalLink,
-  removeTrailingSlashFromGlobalLinks,
-  updateTitleOfGlobalLink
-} from "../crud/global-link"
-import { addGlobalNote, getNotesForGlobalTopic } from "../crud/global-note"
-import {
-  addLinkToSectionOfGlobalTopic,
-  changeGlobalTopicVerifiedstatus,
-  deleteSectionsInGlobalTopic,
-  resetGlobalTopicSections,
-  updateGlobalTopic
-} from "../crud/global-topic"
+import { splitUrlByProtocol } from "../../lib/util"
+import { addGlobalLink } from "../crud/global-link"
+import { addGlobalNote } from "../crud/global-note"
+import { addLinkToSectionOfGlobalTopic } from "../crud/global-topic"
 import {
   Topic,
   findFilePath,
@@ -21,17 +11,13 @@ import {
 } from "../sync/markdown"
 
 async function main() {
-  const topicName = "linear-algebra"
-  await processNotesFromMarkdownFilesAsGlobalNotes(topicName)
-  console.log("done")
   return
+  // const topicName = ""
   // console.log("done")
   // return
   // await changeGlobalTopicVerifiedstatus(topicName, false)
   // return
-  await deleteSectionsInGlobalTopic(topicName)
-  await processLinksFromMarkdownFilesAsGlobalLinks(topicName)
-  await moveLinksFromSectionsIncludingLinksToGuide(topicName)
+  // await deleteSectionsInGlobalTopic(topicName)
   // await updateTitleOfGlobalLink(
   //   "https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab",
   //   "Essense Of Linear Algebra"
@@ -118,7 +104,6 @@ async function moveLinksFromSectionsIncludingLinksToGuide(fileName: string) {
 
 async function processLinksBySection(topic: Topic) {
   for (const link of topic.links) {
-    // console.log(link, "link")
     if (link.section) {
       const [urlWithoutProtocol, protocol] = splitUrlByProtocol(link.url)
       if (urlWithoutProtocol && protocol) {

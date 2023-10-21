@@ -761,3 +761,20 @@ export async function createGlobalTopicWithGlobalGuide(
 //   const result = await query.run(client)
 //   return result
 // }
+
+// export async function checkEmptyTopics(topicName: string) {
+//   return await e
+//     .select(GlobalGuideSection, (section) => ({
+//       filter: e.op(
+//         section["<sections[is GlobalGuide]"][
+//           "<latestGlobalGuide[is GlobalTopic]"
+//         ].name,
+//         "=",
+//         topicName
+//       ),
+//       links: {
+//         url: true
+//       }
+//     }))
+//     .run(client)
+// }

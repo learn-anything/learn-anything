@@ -1,8 +1,8 @@
-import { Show, createMemo, createResource } from "solid-js"
+import { Show, createMemo, createResource, createSignal } from "solid-js"
 import { useNavigate } from "solid-start"
 import { getHankoCookie } from "../../lib/auth"
 import { useGlobalState } from "../GlobalContext/global.ts"
-import { Search, SearchResult, createSearchState } from "../components/Search"
+import { Search, createSearchState } from "../components/Search"
 import { ForceGraph } from "../components/force-graph/index.tsx"
 import { getRandomItem } from "../lib/lib.ts"
 
@@ -10,6 +10,7 @@ import { getRandomItem } from "../lib/lib.ts"
 export default function Home() {
   const navigate = useNavigate()
   const global = useGlobalState()
+  const [suggestedTopicName, setSuggestedTopicName] = createSignal("")
 
   const [hankoCookie] = createResource(() => {
     const hankoCookie = getHankoCookie()
@@ -17,16 +18,17 @@ export default function Home() {
   })
 
   const searchPlaceholder = createMemo(() => {
-    const item = getRandomItem(global.state.globalTopicsSearchList)
+    const item = getRandomItem(global.state.topicsWithConnections)
     if (item) {
+      setSuggestedTopicName(item.name)
       return item.prettyName
     }
   })
 
   const searchResults = createMemo(() => {
-    return global.state.globalTopicsSearchList.map(
-      (topic): SearchResult => ({ name: topic.prettyName })
-    )
+    return global.state.topicsWithConnections.map((t) => ({
+      name: t.prettyName
+    }))
   })
 
   const search_state = createSearchState({
