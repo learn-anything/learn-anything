@@ -11,7 +11,6 @@ export default async function getTopicsWithConnectionsResolver(
     console.log(value, "value")
     if (value) {
       const res = JSON.parse(value)
-      console.log(res, "res")
       return res
     }
   } catch (err) {

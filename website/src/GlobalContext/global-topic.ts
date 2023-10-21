@@ -84,17 +84,9 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
     )
   })
 
-  // TODO: do grafbase queries to get user learning status
-  // check that user is authed, can use import { signedIn } from "../../../lib/auth" for this
   const location = useLocation()
   createEffect(async () => {
-    // only gets called on /topic pages
-    if (
-      location.pathname === "/" ||
-      location.pathname === "/profile" ||
-      location.pathname === "/pricing"
-    )
-      return
+    // only run effect on /topic pages
     const topicName = extractTopicFromPath(location.pathname)
     if (!topicName) return
     setGlobalTopic("name", location.pathname.slice(1))
@@ -106,7 +98,21 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
         (i: any) => i.name === topicName
       )
       setGlobalTopic("verifiedTopic", Boolean(foundTopic))
-      verifiedTopic = true
+      verifiedTopic = Boolean(foundTopic)
+    } else {
+      const connections = await mobius.query({
+        publicGetTopicsWithConnections: {
+          name: true,
+          prettyName: true,
+          connections: true
+        }
+      })
+      console.log(connections, "connections")
+      // @ts-ignore
+      const connectionData = connections?.data?.publicGetTopicsWithConnections
+      const foundTopic = connectionData.some((i: any) => i.name === topicName)
+      setGlobalTopic("verifiedTopic", Boolean(foundTopic))
+      verifiedTopic = Boolean(foundTopic)
     }
 
     if (verifiedTopic) {
@@ -140,29 +146,18 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
             },
             notesCount: true
           }
-        },
-        getNotesForGlobalTopic: {
-          where: {
-            topicName: topicName
-          },
-          select: {
-            content: true,
-            url: true
-          }
         }
       })
 
       // @ts-ignore
       const topicData = topic.data.publicGetGlobalTopic
       // @ts-ignore
-      const notesData = topic.data.getNotesForGlobalTopic
       setGlobalTopic({
         prettyName: topicData.prettyName,
         topicSummary: topicData.topicSummary,
         latestGlobalGuide: topicData.latestGlobalGuide,
         links: topicData.links,
-        notesCount: topicData.notesCount,
-        notes: notesData
+        notesCount: topicData.notesCount
       })
     }
     if (getHankoCookie()) {
@@ -176,14 +171,26 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
             likedLinkIds: true,
             completedLinkIds: true
           }
+        },
+        getNotesForGlobalTopic: {
+          where: {
+            topicName: topicName
+          },
+          select: {
+            content: true,
+            url: true
+          }
         }
       })
       // @ts-ignore
       const topicData = res.data.getGlobalTopic
+      // @ts-ignore
+      const notesData = topic.data.getNotesForGlobalTopic
       setGlobalTopic({
         learningStatus: topicData.learningStatus,
         likedLinkIds: topicData.likedLinkIds,
-        completedLinkIds: topicData.completedLinkIds
+        completedLinkIds: topicData.completedLinkIds,
+        notes: notesData
       })
     }
   })

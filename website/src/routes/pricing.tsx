@@ -246,7 +246,6 @@ export default function Pricing() {
                             select: true
                           }
                         })
-                        console.log(res, "res")
                         // @ts-ignore
                         const stripeCheckout = res.data.stripe
                         window.location.href = stripeCheckout

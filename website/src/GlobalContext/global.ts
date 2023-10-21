@@ -84,10 +84,6 @@ export function createGlobalState(mobius: MobiusType) {
     const topicsAndConnections = localStorage.getItem("topicsAndConnections")
     if (topicsAndConnections) {
       setState("topicsWithConnections", JSON.parse(topicsAndConnections))
-      let verifiedTopic = false
-      console.log(topicsAndConnections, "conn dat")
-      // const foundTopic = topicsAndConnections.some(i => i.name === topicName)
-      // setGlobalTopic("verifiedTopic", Boolean(foundTopic))
       return
     }
 
@@ -99,20 +95,14 @@ export function createGlobalState(mobius: MobiusType) {
       }
     })
 
-    const connectionData: TopicWithConnections[] =
-      // @ts-expect-error
-      connections?.data?.publicGetTopicsWithConnections ?? []
+    // @ts-ignore
+    const connectionData = connections?.data?.publicGetTopicsWithConnections
     setState("topicsWithConnections", connectionData)
-
     localStorage.setItem("topicsAndConnections", JSON.stringify(connectionData))
-    let verifiedTopic = false
-    console.log(connectionData, "conn dat")
-    return
-    const foundTopic = connectionData.some((i: any) => i.name === name)
-    setGlobalTopic("verifiedTopic", Boolean(foundTopic))
-    verifiedTopic = true
   })
 
+  // TODO: was attempt to make global search, probably should be removed
+  // has some useful orama/tinybase reference code
   onMount(async () => {
     return
     const tableSchema = {

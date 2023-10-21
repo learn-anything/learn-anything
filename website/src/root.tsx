@@ -10,7 +10,6 @@ import {
   FileRoutes,
   Head,
   Html,
-  Link,
   Meta,
   Route,
   Routes,
@@ -28,7 +27,7 @@ import UserProfile from "./routes/@(username)"
 
 // TODO: https://github.com/nikitavoloboev/la-issues/issues/54 (should stop having to manually update this schema )
 export const typeDefs = `
-""""
+"""
 De-prioritizes a fragment, causing the fragment to be omitted in the initial response and delivered as a subsequent response afterward.
 """
 directive @defer(
@@ -181,7 +180,7 @@ type publicGetGlobalTopicOutput {
   topicSummary: String!
   latestGlobalGuide: latestGlobalGuide
   links: [GlobalLink!]!
-  notesCount: String!
+  notesCount: Int!
 }
 
 type publicGetGlobalTopicsOutput {
@@ -204,6 +203,7 @@ input section {
 type topicToLearn {
   name: String!
   prettyName: String!
+  verified: Boolean!
 }
 
 input updateGrafbaseKvOutput {
