@@ -29,7 +29,7 @@ Tech stack is described in [docs/tech-stack.md](docs/tech-stack.md).
 - [grafbase](grafbase) - [Grafbase](https://grafbase.com/) provides GraphQL API layer for all server functions like talking with DB
   - [edgedb](grafbase/edgedb) - [EdgeDB](https://www.edgedb.com/) used as main server database
     - [dbschema](grafbase/edgedb/dbschema)
-      - [default.esdl](grafbase/edgedb/dbschema/default.esdl) - [EdgeDB schema](https://www.edgedb.com/docs/intro/schema) definining all the models and relations
+      - [default.esdl](grafbase/edgedb/dbschema/default.esdl) - [EdgeDB schema](https://www.edgedb.com/docs/intro/schema) defining all the models and relations
       - [migrations](grafbase/edgedb/dbschema/migrations) - migration files get generated after running `bun db:migrate`
     - [client.ts](grafbase/edgedb/client.ts) - exports client to connect with EdgeDB
     - [topic.ts](grafbase/edgedb/topic.ts) / [user.ts](api/edgedb/user.ts) - CRUD functions on models
