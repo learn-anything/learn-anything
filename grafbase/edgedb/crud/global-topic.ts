@@ -492,6 +492,10 @@ export async function getGlobalTopicPublic(topicName: string) {
           }
         }
       },
+      // TODO: do it to get rid of graphql call just to get this info
+      // just have publicGetTopic and getTopic
+      // isMember: {
+      // },
       links: e.select(e.GlobalLink, (gl) => ({
         filter: e.op(gl.mainTopic.id, "=", e.cast(e.uuid, t.id)),
         id: true,

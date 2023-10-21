@@ -214,7 +214,7 @@ export default function Profile() {
         <Show when={showHelpModal()}>
           {/* @ts-ignore */}
           <Modal onClose={setShowHelpModal}>
-            <div class="w-1/2 relative z-50 h-1/2 rounded-lg bg-white border-slate-400 border dark:bg-neutral-900 flex flex-col gap-4 p-[20px] px-[24px]">
+            <div class="w-1/2 relative z-50 h-[450px] rounded-lg bg-white border-slate-400 border dark:bg-neutral-900 flex flex-col gap-4 p-[20px] px-[24px]">
               <div>This page is being improved rapidly.</div>
               <div>
                 For now you can see the 1,050 topics available with guides
@@ -235,6 +235,10 @@ export default function Profile() {
                 Work is also being done on making your markdown or any other
                 kinds of notes publishing to the web. Vectorising it all and
                 providing AI search interface to it.
+              </div>
+              <div>
+                If you wish to unsubscribe and stop being a member, you can do
+                so <A href="/pricing">here</A>. 😿
               </div>
               <div class="w-full">
                 <FancyButton
