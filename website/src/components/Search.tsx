@@ -5,8 +5,8 @@ import Fuse from "fuse.js"
 import * as solid from "solid-js"
 
 /*
-TODO: make it look as in https://lu.ma/create `Add Event Location` visually
-TODO: replace fuse.js with https://oramasearch.com as its used already in the app
+TODO: make it look as in https://lu.ma/create `Add Event Location` visually (although it does look nice already)
+TODO: replace fuse.js with https://oramasearch.com (maybe, so far Fuse is doing good job)
 */
 
 export type SearchResult = { name: string }
@@ -30,8 +30,7 @@ export interface SearchState {
 }
 
 const FUSE_OPTIONS: Fuse.IFuseOptions<SearchResult> = {
-  keys: ["name"],
-  shouldSort: false
+  keys: ["name"]
 }
 const SEARCH_RESULTS_LIMIT = 5
 const FUSE_SEARCH_OPTIONS: Fuse.FuseSearchOptions = {

@@ -34,7 +34,7 @@ export default function Home() {
   const search_state = createSearchState({
     searchResults,
     onSelect: ({ name }) => {
-      const foundTopic = global.state.globalTopicsSearchList.find(
+      const foundTopic = global.state.topicsWithConnections.find(
         (t) => t.prettyName === name
       )!
       navigate(`/${foundTopic.name}`)
