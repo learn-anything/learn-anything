@@ -114,6 +114,18 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
       setGlobalTopic("verifiedTopic", Boolean(foundTopic))
       verifiedTopic = Boolean(foundTopic)
     }
+    if (!verifiedTopic) {
+      setGlobalTopic({
+        prettyName: "",
+        topicSummary: "",
+        latestGlobalGuide: {
+          summary: "",
+          sections: []
+        },
+        links: [],
+        notesCount: 0
+      })
+    }
 
     if (verifiedTopic) {
       const topic = await mobius.query({
@@ -185,7 +197,7 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
       // @ts-ignore
       const topicData = res.data.getGlobalTopic
       // @ts-ignore
-      const notesData = topic.data.getNotesForGlobalTopic
+      const notesData = res.data.getNotesForGlobalTopic
       setGlobalTopic({
         learningStatus: topicData.learningStatus,
         likedLinkIds: topicData.likedLinkIds,
