@@ -12,8 +12,8 @@ async function main() {
   topicsWithConnections = topicsWithConnections.replace(/"([^"]+)":/g, "$1:")
 
   const query = `
-  mutation UpdateGrafbaseKv($topicsWithConnections: [updateGrafbaseKvOutput!]!) {
-    updateGrafbaseKv(topicsWithConnections: $topicsWithConnections)
+  mutation InternalUpdateGrafbaseKv($topicsWithConnections: [updateGrafbaseKvOutput!]!) {
+    internalUpdateGrafbaseKv(topicsWithConnections: $topicsWithConnections)
   }
 `
 
@@ -38,7 +38,9 @@ async function main() {
   }).catch((err) => {
     console.log(err, "err")
   })
-  console.log("done")
+  // @ts-ignore
+  const jsonBody = await res.json()
+  console.log(jsonBody)
 }
 
 await main()

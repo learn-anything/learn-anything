@@ -14,7 +14,7 @@ export default async function updateLatestGlobalGuideResolver(
   context: Context
 ) {
   try {
-    const authHeader = context.request.headers["authorization"]
+    const authHeader = context.request.headers["Authorization"]
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       throw new GraphQLError("Missing or invalid Authorization header")
     }

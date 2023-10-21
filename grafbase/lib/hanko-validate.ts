@@ -9,7 +9,7 @@ export async function hankoIdFromToken(context: Context) {
   // if (process.env.LOCAL_USE) {
   //   return process.env.LOCAL_USER_HANKO_ID
   // }
-  const authHeader = context.request.headers["authorization"]
+  const authHeader = context.request.headers["Authorization"]
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     throw new GraphQLError("Missing or invalid Authorization header")
   }
