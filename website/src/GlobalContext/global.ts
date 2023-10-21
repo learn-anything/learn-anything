@@ -38,7 +38,6 @@ type GlobalState = {
   globalLinkSearchDb: any
   guidePage: string
   theme: string
-  onVerifiedTopic: boolean
   topicsWithConnections: TopicWithConnections[]
 }
 
@@ -49,8 +48,7 @@ export function createGlobalState(mobius: MobiusType) {
     globalLinkSearchDb: undefined,
     guidePage: "Guide",
     theme: "",
-    topicsWithConnections: [],
-    onVerifiedTopic: false
+    topicsWithConnections: []
   })
   const [showMemberOnlyModal, setShowMemberOnlyModal] = createSignal(false)
 
@@ -78,8 +76,8 @@ export function createGlobalState(mobius: MobiusType) {
 
   const location = useLocation()
   createEffect(async () => {
+    // in all other pages, there is search bar on top, below is needed to do search + show connections in landing
     if (location.pathname === "/pricing") return
-    const topicName = extractTopicFromPath(location.pathname)
 
     const topicsAndConnections = localStorage.getItem("topicsAndConnections")
     if (topicsAndConnections) {

@@ -260,7 +260,7 @@ export default function Root() {
   })
   const user = createUserState(mobius)
   const global = createGlobalState(mobius)
-  const globalTopic = createGlobalTopic(mobius, user)
+  const globalTopic = createGlobalTopic(mobius, user, global)
 
   return (
     <Html lang="en">

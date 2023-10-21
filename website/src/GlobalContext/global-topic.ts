@@ -58,7 +58,11 @@ export function extractTopicFromPath(inputStr: string) {
 }
 
 // state for rendering global topic found in learn-anything.xyz/<topic>
-export default function createGlobalTopic(mobius: MobiusType, user: any) {
+export default function createGlobalTopic(
+  mobius: MobiusType,
+  user: any,
+  global: any
+) {
   const [globalTopic, setGlobalTopic] = createStore<GlobalTopic>({
     name: "",
     prettyName: "",
@@ -73,7 +77,7 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
     learningStatus: "",
     likedLinkIds: [],
     completedLinkIds: [],
-    verifiedTopic: true
+    verifiedTopic: false
   })
 
   const currentTopicGlobalLinksSearch = createMemo(() => {
@@ -84,50 +88,24 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
     )
   })
 
-  const location = useLocation()
+  createEffect(() => {
+    if (global.state.topicsWithConnections.length > 0) {
+      const topicName = extractTopicFromPath(location.pathname)
+      // @ts-ignore
+      const foundTopic = global.state.topicsWithConnections.some(
+        (i: any) => i.name === topicName
+      )
+      setGlobalTopic("verifiedTopic", Boolean(foundTopic))
+    }
+  })
+
   createEffect(async () => {
     // only run effect on /topic pages
     const topicName = extractTopicFromPath(location.pathname)
     if (!topicName) return
-    setGlobalTopic("name", location.pathname.slice(1))
 
-    let verifiedTopic = false
-    const topicsAndConnections = localStorage.getItem("topicsAndConnections")
-    if (topicsAndConnections) {
-      const foundTopic = JSON.parse(topicsAndConnections).some(
-        (i: any) => i.name === topicName
-      )
-      setGlobalTopic("verifiedTopic", Boolean(foundTopic))
-      verifiedTopic = Boolean(foundTopic)
-    } else {
-      const connections = await mobius.query({
-        publicGetTopicsWithConnections: {
-          name: true,
-          prettyName: true,
-          connections: true
-        }
-      })
-      console.log(connections, "connections")
-      // @ts-ignore
-      const connectionData = connections?.data?.publicGetTopicsWithConnections
-      const foundTopic = connectionData.some((i: any) => i.name === topicName)
-      setGlobalTopic("verifiedTopic", Boolean(foundTopic))
-      verifiedTopic = Boolean(foundTopic)
-    }
-    if (!verifiedTopic) {
-      setGlobalTopic({
-        prettyName: "",
-        topicSummary: "",
-        latestGlobalGuide: {
-          summary: "",
-          sections: []
-        },
-        links: [],
-        notesCount: 0
-      })
-    }
-
-    if (verifiedTopic) {
+    if (globalTopic.verifiedTopic) {
+      console.log(globalTopic.verifiedTopic, "verified?")
       const topic = await mobius.query({
         publicGetGlobalTopic: {
           where: { topicName: topicName },
@@ -172,6 +150,38 @@ export default function createGlobalTopic(mobius: MobiusType, user: any) {
         notesCount: topicData.notesCount
       })
     }
+  })
+
+  const location = useLocation()
+  createEffect(async () => {
+    // only run effect on /topic pages
+    const topicName = extractTopicFromPath(location.pathname)
+    if (!topicName) return
+    setGlobalTopic("name", location.pathname.slice(1))
+
+    let verifiedTopic = false
+    const topicsAndConnections = localStorage.getItem("topicsAndConnections")
+    if (topicsAndConnections) {
+      const foundTopic = JSON.parse(topicsAndConnections).some(
+        (i: any) => i.name === topicName
+      )
+      setGlobalTopic("verifiedTopic", Boolean(foundTopic))
+      verifiedTopic = Boolean(foundTopic)
+    }
+
+    if (!verifiedTopic) {
+      setGlobalTopic({
+        prettyName: "",
+        topicSummary: "",
+        latestGlobalGuide: {
+          summary: "",
+          sections: []
+        },
+        links: [],
+        notesCount: 0
+      })
+    }
+
     if (getHankoCookie()) {
       const res = await mobius.query({
         getGlobalTopic: {
