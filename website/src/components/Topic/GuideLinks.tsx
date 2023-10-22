@@ -13,7 +13,8 @@ export default function GuideLinks() {
       }
       `}
       </style>
-      <div id="GuideLinks" class="h-full flex flex-col gap-4 w-full">
+      <div id="GuideLinks" class="h-full flex flex-col gap-[20px] w-full">
+        <div class="text-[22px] font-bold">{topic.globalTopic.prettyName}</div>
         <For each={topic.globalTopic.links}>
           {(link) => {
             return (

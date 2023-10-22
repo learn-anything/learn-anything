@@ -15,6 +15,7 @@ export default function GuideNotes() {
       `}
       </style>
       <div id="GuideLinks" class="h-full flex flex-col gap-4 w-full">
+        <div class="text-[22px] font-bold">{topic.globalTopic.prettyName}</div>
         <For each={topic.globalTopic.notes}>
           {(note) => {
             console.log(note.url)

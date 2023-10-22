@@ -13,16 +13,12 @@ import {
   useDragDropContext
 } from "@thisbeyond/solid-dnd"
 import { useUser } from "../../GlobalContext/user"
-import { useMobius } from "../../root"
 import GlobalLinkEditModal from "../GlobalLinkEditModal"
 import ModalWithMessageAndButton from "../ModalWithMessageAndButton"
-
-const notify = (message: string) => toast(message)
 
 export default function EditGlobalGuide() {
   const topic = useGlobalTopic()
   const user = useUser()
-  const mobius = useMobius()
   const navigate = useNavigate()
 
   const [linkIdToEdit, setLinkToEdit] = createSignal("")
@@ -190,7 +186,7 @@ export default function EditGlobalGuide() {
                 }
                 navigate(url)
               } else {
-                notify("Error saving guide")
+                toast("Error saving guide")
               }
 
               // TODO: issue with mobius, something about it not escaping strings properly

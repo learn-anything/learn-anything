@@ -22,6 +22,7 @@ type Link = {
   title: string
   description?: string
   url: string
+  year?: string
 }
 
 type User = {

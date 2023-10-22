@@ -14,6 +14,7 @@ interface Props {
   protocol: string
   year?: string
   description?: string
+  showVerifiedBadge?: boolean
 }
 
 export default function GlobalGuideLink(props: Props) {
@@ -29,8 +30,11 @@ export default function GlobalGuideLink(props: Props) {
       <div class="bg-neutral-400 w-10 h-10 rounded-full"></div>
     </div> */}
       <div class="w-full  h-full flex justify-between items-center">
-        <div class="w-fit flex gap-1 flex-col">
+        <div class={clsx("w-fit flex flex-col", props.description && "gap-1")}>
           <div class="flex gap-3 items-center">
+            <Show when={props.showVerifiedBadge}>
+              <Icon name="Verified" />
+            </Show>
             <a
               class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer"
               href={`${props.protocol}://${props.url}`}

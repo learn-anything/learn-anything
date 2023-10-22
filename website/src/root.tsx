@@ -89,7 +89,7 @@ type Query {
   getGlobalTopic(topicName: String!): getGlobalTopicOutput!
   getGlobalTopicLearningStatus(topicName: String!): String!
   getGlobalLinks: getGlobalLinksOutput!
-  checkForGlobalLink(linkUrl: String!): publicCheckForGlobalLinkOutput!
+  checkUrl(linkUrl: String!): String!
   stripe(plan: String!, userEmail: String!): String!
 }
 
@@ -155,13 +155,6 @@ enum linkAction {
 type outputOfGetLikedLinks {
   likedLinks: [LikedLink!]!
   personalLinks: [PersonalLink!]!
-}
-
-type publicCheckForGlobalLinkOutput {
-  url: String!
-  title: String!
-  year: Int
-  description: String
 }
 
 type publicGetGlobalLinkOutput {

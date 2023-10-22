@@ -1,5 +1,4 @@
 import { autofocus } from "@solid-primitives/autofocus"
-import toast, { Toaster } from "solid-toast"
 import clsx from "clsx"
 import {
   For,
@@ -11,13 +10,15 @@ import {
   onMount
 } from "solid-js"
 import { A, useNavigate } from "solid-start"
+import toast, { Toaster } from "solid-toast"
 import { useUser } from "../GlobalContext/user"
 import FancyButton from "../components/FancyButton"
+import Icon from "../components/Icon"
 import Modal from "../components/Modal"
 import { Search, createSearchState } from "../components/Search"
+import GlobalGuideLink from "../components/Topic/GlobalGuideLink"
 import GuideNav from "../components/Topic/GuideNav"
 import { useMobius } from "../root"
-import Icon from "../components/Icon"
 
 type NewLink = {
   url: string
@@ -25,8 +26,6 @@ type NewLink = {
   description: string
   mainTopic: string
 }
-
-const notify = (message: string) => toast(message)
 
 export default function Profile() {
   const user = useUser()
@@ -41,6 +40,11 @@ export default function Profile() {
     description: "",
     mainTopic: ""
   })
+  const [showFilter, setShowFilter] = createSignal(false)
+  const [linkFilter, setLinkFilter] = createSignal("")
+  // const debouncedSetNewLinkData = debounce(setNewLinkData, 1000)
+  // const trigger = debounce((message: string) => console.log(message), 250);
+  // const [t, setT] = createSignal(false)
 
   createEffect(() => {
     if (!showAddLinkModal()) {
@@ -53,29 +57,40 @@ export default function Profile() {
     }
   })
 
-  // TODO: add debounce here
-  createEffect(async () => {
-    if (newLinkData().url) {
-      try {
-        const url = new URL(newLinkData().url)
-        // TODO: replace with our own proxy as this 403 sometimes
-        const response = await fetch(
-          `https://corsproxy.io/?${encodeURIComponent(url.toString())}`
-        )
-        const html = await response.text()
-        const parser = new DOMParser()
-        const doc = parser.parseFromString(html, "text/html")
-        // @ts-ignore
-        const title = doc.querySelector("title").innerText
-        setNewLinkData({
-          ...newLinkData(),
-          title
-        })
-      } catch (_) {
-        return
-      }
-    }
-  })
+  // TODO: make it work
+  // after debounce of 1 second on url input, it makes request to server on valid URL
+  // and after completes the Title automatically
+  // if before 1 second is up, user switches to Title input, it should not make the request
+  // createEffect(async () => {
+  //   untrack(async () => {
+  //     if (newLinkData().url) {
+  //       try {
+  //         // TODO: check this does not get abused? not sure, maybe needs as separate button?
+  //         // newURL() checks its an actual valid url
+  //         new URL(newLinkData().url)
+  //         const res = await mobius.query({
+  //           checkUrl: {
+  //             where: {
+  //               linkUrl: newLinkData().url
+  //             },
+  //             select: true
+  //           }
+  //         })
+  //         // @ts-ignore
+  //         const title = res?.data?.checkUrl
+  //         console.log(title)
+  //         untrack(() => {
+  //           setNewLinkData({
+  //             ...newLinkData(),
+  //             title
+  //           })
+  //         })
+  //       } catch (_) {
+  //         return
+  //       }
+  //     }
+  //   })
+  // })
 
   onMount(() => {
     if (!user.user.signedIn) {
@@ -136,7 +151,7 @@ export default function Profile() {
         <Show when={showAddLinkModal()}>
           {/* @ts-ignore */}
           <Modal onClose={setShowAddLinkModal}>
-            <div class="w-1/2 relative z-50 h-1/2 rounded-lg dark:border-opacity-50 bg-white dark:border-[#282828]  border-[#69696951] border dark:bg-neutral-900 flex flex-col justify-between gap-1 p-[20px] px-[24px]">
+            <div class="w-3/4 relative z-50 h-1/2 rounded-lg dark:border-opacity-50 bg-white dark:border-[#282828]  border-[#69696951] border dark:bg-neutral-900 flex flex-col justify-between gap-1 p-[20px] px-[24px]">
               <div class="flex flex-col ">
                 <input
                   type="text"
@@ -144,11 +159,22 @@ export default function Profile() {
                   autofocus
                   placeholder="URL"
                   value={newLinkData().url}
-                  onInput={(e) => {
+                  onInput={async (e) => {
                     setNewLinkData({
                       ...newLinkData(),
                       url: e.target.value
                     })
+                    // TODO: broken code, some problems with rerunning
+                    // debouncedSetNewLinkData({
+                    //   ...newLinkData(),
+                    //   url: e.target.value
+                    // })
+                    // await new Promise((resolve) => setTimeout(resolve, 1000))
+                    // if (e.target.value) {
+                    //   setT(true)
+                    //   return
+                    // }
+                    // setT(false)
                   }}
                   class=" bg-inherit text-[26px] outline-none w-full px-2 font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[4px] p-1 "
                 />
@@ -315,7 +341,7 @@ export default function Profile() {
                 />
               )
             })()}
-            <div class="flex justify-between text-[#696969] ">
+            <div class="flex justify-between items-center text-[#696969] ">
               <div class="w-full flex text-[#696969] text-[14px] gap-4">
                 <div
                   id="ToLearn"
@@ -370,7 +396,61 @@ export default function Profile() {
                   Links
                 </div>
               </div>
-              <div></div>
+              <Show when={currentTab() === "Links"}>
+                <div class="relative">
+                  <Show when={showFilter()}>
+                    <div class="dark:bg-[#161616] bg-white absolute top-[120%] flex flex-col gap-1 p-1 rounded-[4px] border-[0.5px] dark:border-[#282828]  border-[#69696951] right-[0%] cursor-pointer">
+                      <div
+                        onClick={() => {
+                          if (linkFilter() === "liked") {
+                            setLinkFilter("")
+                          } else {
+                            setLinkFilter("liked")
+                          }
+                          setShowFilter(false)
+                        }}
+                        class="hover:bg-neutral-800 w-full rounded-[4px] px-4 p-2"
+                      >
+                        Liked
+                      </div>
+                      <div
+                        onClick={() => {
+                          if (linkFilter() === "completed") {
+                            setLinkFilter("")
+                          } else {
+                            setLinkFilter("completed")
+                          }
+                          setShowFilter(false)
+                        }}
+                        class="hover:bg-neutral-800 w-full rounded-[4px] px-4 p-2 cursor-pointer"
+                      >
+                        Completed
+                      </div>
+                      <div
+                        onClick={() => {
+                          if (linkFilter() === "personal") {
+                            setLinkFilter("")
+                          } else {
+                            setLinkFilter("personal")
+                          }
+                          setShowFilter(false)
+                        }}
+                        class="hover:bg-neutral-800 w-full rounded-[4px] px-4 p-2 cursor-pointer"
+                      >
+                        Personal
+                      </div>
+                    </div>
+                  </Show>
+                  <div
+                    class="cursor-pointer"
+                    onClick={() => {
+                      setShowFilter(!showFilter())
+                    }}
+                  >
+                    <Icon name="Filter"></Icon>
+                  </div>
+                </div>
+              </Show>
             </div>
             <Switch>
               <Match when={currentTab() === "ToLearn"}>
@@ -409,26 +489,17 @@ export default function Profile() {
                   <For each={user.user.likedLinks}>
                     {(link) => {
                       return (
-                        <>
-                          <div class="flex items-center overflow-hidden rounded-[4px]  border-[0.5px] dark:border-[#282828]  border-[#69696951] p-4 px-4 justify-between">
-                            <div class="w-full  h-full flex justify-between items-center">
-                              <div class="w-fit flex gap-2 items-center">
-                                <div class="flex gap-3 items-center">
-                                  <Icon name="Verified" />
-                                  <a
-                                    class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer"
-                                    href={`https://${link.url}`}
-                                  >
-                                    {link.title}
-                                  </a>
-                                </div>
-                                <div class="font-light text-[12px] text-[#696969] text-ellipsis w-[250px] overflow-hidden whitespace-nowrap">
-                                  {link.url}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </>
+                        <div class="[&>*]:border-none border rounded-[4px] dark:border-[#282828]  border-[#69696951]">
+                          <GlobalGuideLink
+                            title={link.title}
+                            url={link.url}
+                            id={link.id}
+                            year={link.year}
+                            protocol={"https"}
+                            description={link.description}
+                            showVerifiedBadge={true}
+                          />
+                        </div>
                       )
                     }}
                   </For>
@@ -451,28 +522,28 @@ export default function Profile() {
                                 <div class="font-light text-[12px] text-[#696969] text-ellipsis w-[250px] overflow-hidden whitespace-nowrap">
                                   {link.url}
                                 </div>
-                                <div
-                                  onClick={async () => {
-                                    user.set(
-                                      "personalLinks",
-                                      user.user.personalLinks.filter(
-                                        (l) => l.id !== link.id
-                                      )
-                                    )
-                                    await mobius.mutate({
-                                      deletePersonalLink: {
-                                        where: {
-                                          personalLinkId: link.id
-                                        },
-                                        select: true
-                                      }
-                                    })
-                                  }}
-                                  class="cursor-pointer"
-                                >
-                                  <Icon name="Trash" />
-                                </div>
                               </div>
+                            </div>
+                            <div
+                              onClick={async () => {
+                                user.set(
+                                  "personalLinks",
+                                  user.user.personalLinks.filter(
+                                    (l) => l.id !== link.id
+                                  )
+                                )
+                                await mobius.mutate({
+                                  deletePersonalLink: {
+                                    where: {
+                                      personalLinkId: link.id
+                                    },
+                                    select: true
+                                  }
+                                })
+                              }}
+                              class="cursor-pointer"
+                            >
+                              <Icon name="Trash" />
                             </div>
                           </div>
                         </>

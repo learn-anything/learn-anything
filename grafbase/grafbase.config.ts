@@ -190,17 +190,10 @@ g.query("getGlobalLinks", {
   resolver: "getGlobalLinks"
 })
 
-g.query("checkForGlobalLink", {
+g.query("checkUrl", {
   args: { linkUrl: g.string() },
-  returns: g.ref(
-    g.type("publicCheckForGlobalLinkOutput", {
-      url: g.string(),
-      title: g.string(),
-      year: g.int().optional(),
-      description: g.string().optional()
-    })
-  ),
-  resolver: "checkForGlobalLink"
+  returns: g.string(),
+  resolver: "checkUrl"
 })
 
 g.query("stripe", {

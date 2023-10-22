@@ -1,8 +1,8 @@
 export async function log(message: any, data?: Record<string, any>) {
-  // if (process.env.LOCAL) {
-  //   console.log(message)
-  //   return
-  // }
+  if (process.env.LOCAL) {
+    console.log(message)
+    return
+  }
   const url = `https://events.baselime.io/v1/cloudflare-workers/grafbase/logs`
 
   const requestOptions = {
@@ -17,10 +17,10 @@ export async function log(message: any, data?: Record<string, any>) {
 }
 
 export async function logError(error: any, data?: Record<string, any>) {
-  // if (process.env.LOCAL) {
-  //   console.log(error)
-  //   return
-  // }
+  if (process.env.LOCAL) {
+    console.log(error)
+    return
+  }
   if (typeof error === "object") {
     error = Object.assign(
       {
