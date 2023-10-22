@@ -17,8 +17,8 @@ There is more exciting projects planned and under way (like [digital idea/goods 
 - [File structure](#file-structure) - make sense of how code is laid out in the repo
 - [Setup](#setup) - get started with development
   - [Setup EdgeDB](#setup-edgedb)
-    - Generate edgedb-js bindings
-    - Seed EdgeDB with content
+    - [Generate edgedb-js bindings](#generate-edgedb-js-bindings)
+    - [Seed EdgeDB with content](#seed-edgedb-with-content)
 - [Run GraphQL server (Grafbase)](#run-graphql-server-grafbase)
 - [Run website (Solid)](#run-website-solid)
 - [Run desktop app (Tauri/Rust)](#run-desktop-app-taurirust)
@@ -231,6 +231,9 @@ There is big focus on documentation and clarity in the project. All code should 
 Check [docs/dev-tips.md](docs/dev-tips.md) for some advice on development.
 
 ## Commands
+
+> **Warning**
+> Table below may be out of date. We need to write an automated github action or similar to keep it up to date.
 
 Ran with `bun <Name>`
 
