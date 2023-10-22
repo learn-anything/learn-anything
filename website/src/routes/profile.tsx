@@ -1,14 +1,7 @@
 import { autofocus } from "@solid-primitives/autofocus"
+import * as scheduled from "@solid-primitives/scheduled"
 import clsx from "clsx"
-import {
-  For,
-  Match,
-  Show,
-  Switch,
-  createEffect,
-  createSignal,
-  onMount
-} from "solid-js"
+import { For, Match, Show, Switch, createSignal, onMount } from "solid-js"
 import { A, useNavigate } from "solid-start"
 import toast, { Toaster } from "solid-toast"
 import { useUser } from "../GlobalContext/user"
@@ -27,6 +20,151 @@ type NewLink = {
   mainTopic: string
 }
 
+const isUrlValid = (url: string) => {
+  try {
+    new URL(url)
+    return true
+  } catch (_) {
+    return false
+  }
+}
+
+const NewLinkModal = (props: {
+  onClose: () => void
+  onSubmit: (newLink: NewLink) => void
+}) => {
+  const mobius = useMobius()
+  const [title, setTitle] = createSignal("")
+  const [url, setUrl] = createSignal("")
+  const [description, setDescription] = createSignal("")
+
+  const updateProposedTitle = async (url_value: string) => {
+    if (!isUrlValid(url_value)) return
+
+    const res = await mobius.query({
+      checkUrl: {
+        where: { linkUrl: url_value },
+        select: true
+      }
+    })
+    // @ts-ignore
+    const new_title = res?.data?.checkUrl as string | undefined
+    if (new_title) {
+      setTitle(new_title)
+    }
+  }
+
+  const scheduledFetchProposedTitle = scheduled.throttle(
+    updateProposedTitle,
+    1000
+  )
+
+  const updateUrl = (new_url: string) => {
+    setUrl(new_url)
+    if (new_url) {
+      scheduledFetchProposedTitle(new_url)
+    } else {
+      setTitle("")
+    }
+  }
+
+  const submit = () => {
+    const url_value = url()
+    const title_value = title()
+    const description_value = description()
+
+    if (!url_value) {
+      toast("Need to enter URL to save")
+      return
+    }
+    if (!title_value) {
+      toast("Need to enter title to save")
+      return
+    }
+    if (!isUrlValid(url_value)) {
+      toast("Invalid URL")
+      return
+    }
+
+    const newLink: NewLink = {
+      url: url_value,
+      title: title_value,
+      description: description_value,
+      mainTopic: ""
+    }
+
+    props.onSubmit(newLink)
+  }
+
+  return (
+    <Modal onClose={props.onClose}>
+      <div class="w-3/4 relative z-50 h-1/2 rounded-lg dark:border-opacity-50 bg-white dark:border-[#282828]  border-[#69696951] border dark:bg-neutral-900 flex flex-col justify-between gap-1 p-[20px] px-[24px]">
+        <div class="flex flex-col ">
+          <input
+            type="text"
+            ref={(el) => autofocus(el)}
+            autofocus
+            placeholder="URL"
+            onInput={(e) => {
+              const str = e.target.value
+              updateUrl(str)
+            }}
+            onPaste={(e) => {
+              const str = (e.target as HTMLInputElement).value // TODO: make issue to solid
+              updateUrl(str)
+            }}
+            class="bg-inherit text-[26px] outline-none w-full px-2 font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[4px] p-1 "
+          />
+          <input
+            type="text"
+            placeholder="Title"
+            value={title()}
+            onInput={(e) => {
+              const str = e.target.value
+              setTitle(str)
+            }}
+            onPaste={(e) => {
+              const str = (e.target as HTMLInputElement).value // TODO: make issue to solid
+              setTitle(str)
+            }}
+            class="bg-inherit pb-3 text-[20px] outline-none w-full px-2 font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[8px] p-1 "
+          />
+          <input
+            type="text"
+            placeholder="Description"
+            value={description()}
+            onInput={(e) => {
+              const str = e.target.value
+              setDescription(str)
+            }}
+            onPaste={(e) => {
+              const str = (e.target as HTMLInputElement).value // TODO: make issue to solid
+              setDescription(str)
+            }}
+            class="bg-inherit text-[20px] bg-neutral-700 px-2 outline-none w-full font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[8px] p-1 "
+          />
+        </div>
+        <div class="flex justify-between flex-row-reverse w-full">
+          <div
+            onClick={submit}
+            class=" bg-white px-[42px] hover:bg-opacity-90 transition-all p-2 text-black rounded-[8px] cursor-pointer"
+          >
+            Save
+          </div>
+          <div
+            class=" px-4 border border-slate-400 p-2 rounded-[8px] cursor-pointer"
+            onClick={() => {
+              props.onClose()
+            }}
+          >
+            Cancel
+          </div>
+        </div>
+      </div>
+    </Modal>
+  )
+}
+
 export default function Profile() {
   const user = useUser()
   const mobius = useMobius()
@@ -34,63 +172,29 @@ export default function Profile() {
   const [currentTab, setCurrentTab] = createSignal("ToLearn")
   const [showAddLinkModal, setShowAddLinkModal] = createSignal(false)
   const [showHelpModal, setShowHelpModal] = createSignal(false)
-  const [newLinkData, setNewLinkData] = createSignal<NewLink>({
-    url: "",
-    title: "",
-    description: "",
-    mainTopic: ""
-  })
   const [showFilter, setShowFilter] = createSignal(false)
   const [linkFilter, setLinkFilter] = createSignal("")
   // const debouncedSetNewLinkData = debounce(setNewLinkData, 1000)
   // const trigger = debounce((message: string) => console.log(message), 250);
   // const [t, setT] = createSignal(false)
 
-  createEffect(() => {
-    if (!showAddLinkModal()) {
-      setNewLinkData({
-        url: "",
-        title: "",
-        description: "",
-        mainTopic: ""
-      })
-    }
-  })
-
-  // TODO: make it work
-  // after debounce of 1 second on url input, it makes request to server on valid URL
-  // and after completes the Title automatically
-  // if before 1 second is up, user switches to Title input, it should not make the request
-  // createEffect(async () => {
-  //   untrack(async () => {
-  //     if (newLinkData().url) {
-  //       try {
-  //         // TODO: check this does not get abused? not sure, maybe needs as separate button?
-  //         // newURL() checks its an actual valid url
-  //         new URL(newLinkData().url)
-  //         const res = await mobius.query({
-  //           checkUrl: {
-  //             where: {
-  //               linkUrl: newLinkData().url
-  //             },
-  //             select: true
-  //           }
-  //         })
-  //         // @ts-ignore
-  //         const title = res?.data?.checkUrl
-  //         console.log(title)
-  //         untrack(() => {
-  //           setNewLinkData({
-  //             ...newLinkData(),
-  //             title
-  //           })
-  //         })
-  //       } catch (_) {
-  //         return
-  //       }
-  //     }
-  //   })
-  // })
+  const submitNewLink = async (newLink: NewLink) => {
+    user.set(
+      "personalLinks",
+      // @ts-ignore
+      user.user.personalLinks.concat(newLinkData())
+    )
+    await mobius.mutate({
+      addPersonalLink: {
+        where: {
+          title: newLink.title,
+          url: newLink.url,
+          description: newLink.description
+        },
+        select: true
+      }
+    })
+  }
 
   onMount(() => {
     if (!user.user.signedIn) {
@@ -149,113 +253,10 @@ export default function Profile() {
           Add Link
         </div>
         <Show when={showAddLinkModal()}>
-          {/* @ts-ignore */}
-          <Modal onClose={setShowAddLinkModal}>
-            <div class="w-3/4 relative z-50 h-1/2 rounded-lg dark:border-opacity-50 bg-white dark:border-[#282828]  border-[#69696951] border dark:bg-neutral-900 flex flex-col justify-between gap-1 p-[20px] px-[24px]">
-              <div class="flex flex-col ">
-                <input
-                  type="text"
-                  ref={(el) => autofocus(el)}
-                  autofocus
-                  placeholder="URL"
-                  value={newLinkData().url}
-                  onInput={async (e) => {
-                    setNewLinkData({
-                      ...newLinkData(),
-                      url: e.target.value
-                    })
-                    // TODO: broken code, some problems with rerunning
-                    // debouncedSetNewLinkData({
-                    //   ...newLinkData(),
-                    //   url: e.target.value
-                    // })
-                    // await new Promise((resolve) => setTimeout(resolve, 1000))
-                    // if (e.target.value) {
-                    //   setT(true)
-                    //   return
-                    // }
-                    // setT(false)
-                  }}
-                  class=" bg-inherit text-[26px] outline-none w-full px-2 font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[4px] p-1 "
-                />
-                <input
-                  type="text"
-                  placeholder="Title"
-                  value={newLinkData().title}
-                  onInput={(e) => {
-                    setNewLinkData({
-                      ...newLinkData(),
-                      title: e.target.value
-                    })
-                  }}
-                  class=" bg-inherit pb-3 text-[20px] outline-none w-full px-2 font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[8px] p-1 "
-                />
-                <input
-                  type="text"
-                  placeholder="Description"
-                  value={newLinkData().description}
-                  onInput={(e) => {
-                    setNewLinkData({
-                      ...newLinkData(),
-                      description: e.target.value
-                    })
-                  }}
-                  class=" bg-inherit text-[20px] bg-neutral-700 px-2 outline-none w-full font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[8px] p-1 "
-                />
-              </div>
-              <div class="flex justify-between flex-row-reverse w-full">
-                <div
-                  onClick={async () => {
-                    if (!newLinkData().url) {
-                      toast("Need to enter URL to save")
-                      return
-                    }
-                    if (!newLinkData().title) {
-                      toast("Need to enter title to save")
-                      return
-                    }
-                    if (!newLinkData().title) {
-                      toast("Need to enter title to save")
-                      return
-                    }
-                    try {
-                      new URL(newLinkData().url)
-                    } catch (_) {
-                      toast("Invalid URL")
-                      return
-                    }
-                    user.set(
-                      "personalLinks",
-                      // @ts-ignore
-                      user.user.personalLinks.concat(newLinkData())
-                    )
-                    await mobius.mutate({
-                      addPersonalLink: {
-                        where: {
-                          title: newLinkData().title,
-                          url: newLinkData().url,
-                          description: newLinkData().description
-                        },
-                        select: true
-                      }
-                    })
-                    setShowAddLinkModal(false)
-                  }}
-                  class=" bg-white px-[42px] hover:bg-opacity-90 transition-all p-2 text-black rounded-[8px] cursor-pointer"
-                >
-                  Save
-                </div>
-                <div
-                  class=" px-4 border border-slate-400 p-2 rounded-[8px] cursor-pointer"
-                  onClick={() => {
-                    setShowAddLinkModal(false)
-                  }}
-                >
-                  Cancel
-                </div>
-              </div>
-            </div>
-          </Modal>
+          <NewLinkModal
+            onClose={() => setShowAddLinkModal(false)}
+            onSubmit={submitNewLink}
+          />
         </Show>
         <div
           onClick={() => {
