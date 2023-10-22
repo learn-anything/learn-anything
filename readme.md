@@ -4,7 +4,7 @@
 
 The end goal of Learn Anything is to become the best place and tool for keeping track of what you know. What ideas you have. What you want to learn next. What you don't know yet. And how you can learn that in the most optimal way possible given what you know already.
 
-Try the website yourself [here](https://learn-anything.xyz). [Become a member to get full feature set](https://learn-anything.xyz/pricing).
+[Try the website yourself first to get a feel for it](https://learn-anything.xyz).
 
 It is a fully open source project with an active community on [Discord](https://discord.com/invite/bxtD8x6aNF). There is great focus on both DX of developing everything LA and even more, the end user UX.
 

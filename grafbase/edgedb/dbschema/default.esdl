@@ -35,7 +35,9 @@ module default {
     # links user has liked
     multi likedLinks: GlobalLink;
     # personal links user has added
-    multi personalLinks: PersonalLink;
+    multi personalLinks: PersonalLink {
+      on target delete allow;
+    };
     # links user has disliked
     multi dislikedLinks: GlobalLink;
     # notes user has liked

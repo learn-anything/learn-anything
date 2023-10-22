@@ -195,6 +195,7 @@ export function createGlobalState(mobius: MobiusType) {
 
   return {
     state,
+    set: setState,
     setGuidePage: (page: string) => {
       setState({ guidePage: page })
     },

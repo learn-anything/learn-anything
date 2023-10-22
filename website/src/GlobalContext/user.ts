@@ -20,6 +20,7 @@ type Topic = {
 type Link = {
   id: string
   title: string
+  description?: string
   url: string
 }
 
@@ -152,6 +153,7 @@ export function createUserState(mobius: MobiusType) {
 
   return {
     user,
+    set: setUser,
     setEmail: (state: string) => {
       return setUser({ email: state })
     },

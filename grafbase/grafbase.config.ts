@@ -217,6 +217,12 @@ g.mutation("createUser", {
   resolver: "createUser"
 })
 
+g.mutation("deletePersonalLink", {
+  args: { personalLinkId: g.string() },
+  returns: g.string(),
+  resolver: "deletePersonalLink"
+})
+
 const section = g.input("section", {
   title: g.string(),
   summary: g.string().optional(),

@@ -1,4 +1,5 @@
 import { autofocus } from "@solid-primitives/autofocus"
+import toast, { Toaster } from "solid-toast"
 import clsx from "clsx"
 import {
   For,
@@ -24,6 +25,8 @@ type NewLink = {
   description: string
   mainTopic: string
 }
+
+const notify = (message: string) => toast(message)
 
 export default function Profile() {
   const user = useUser()
@@ -177,9 +180,29 @@ export default function Profile() {
               <div class="flex justify-between flex-row-reverse w-full">
                 <div
                   onClick={async () => {
-                    // setShowAddLinkModal(false)
-                    console.log(newLinkData().url)
-                    // return
+                    if (!newLinkData().url) {
+                      toast("Need to enter URL to save")
+                      return
+                    }
+                    if (!newLinkData().title) {
+                      toast("Need to enter title to save")
+                      return
+                    }
+                    if (!newLinkData().title) {
+                      toast("Need to enter title to save")
+                      return
+                    }
+                    try {
+                      new URL(newLinkData().url)
+                    } catch (_) {
+                      toast("Invalid URL")
+                      return
+                    }
+                    user.set(
+                      "personalLinks",
+                      // @ts-ignore
+                      user.user.personalLinks.concat(newLinkData())
+                    )
                     await mobius.mutate({
                       addPersonalLink: {
                         where: {
@@ -190,6 +213,7 @@ export default function Profile() {
                         select: true
                       }
                     })
+                    setShowAddLinkModal(false)
                   }}
                   class=" bg-white px-[42px] hover:bg-opacity-90 transition-all p-2 text-black rounded-[8px] cursor-pointer"
                 >
@@ -427,6 +451,27 @@ export default function Profile() {
                                 <div class="font-light text-[12px] text-[#696969] text-ellipsis w-[250px] overflow-hidden whitespace-nowrap">
                                   {link.url}
                                 </div>
+                                <div
+                                  onClick={async () => {
+                                    user.set(
+                                      "personalLinks",
+                                      user.user.personalLinks.filter(
+                                        (l) => l.id !== link.id
+                                      )
+                                    )
+                                    await mobius.mutate({
+                                      deletePersonalLink: {
+                                        where: {
+                                          personalLinkId: link.id
+                                        },
+                                        select: true
+                                      }
+                                    })
+                                  }}
+                                  class="cursor-pointer"
+                                >
+                                  <Icon name="Trash" />
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -557,6 +602,7 @@ export default function Profile() {
             </div>
           </div> */}
         </div>
+        <Toaster />
       </div>
     </>
   )
