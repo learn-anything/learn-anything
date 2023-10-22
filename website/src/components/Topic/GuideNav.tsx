@@ -1,20 +1,13 @@
-import {
-  Show,
-  createEffect,
-  createMemo,
-  createSignal,
-  onMount,
-  untrack
-} from "solid-js"
-import { A, useLocation, useNavigate } from "solid-start"
 import { createShortcut } from "@solid-primitives/keyboard"
-import { useUser } from "../../GlobalContext/user"
-import Icon from "../Icon"
-import { Search, SearchResult, createSearchState } from "../Search"
-import { useGlobalTopic } from "../../GlobalContext/global-topic"
-import { useGlobalState } from "../../GlobalContext/global"
 import clsx from "clsx"
+import { Show, createMemo, createSignal } from "solid-js"
+import { A, useLocation, useNavigate } from "solid-start"
+import { useGlobalState } from "../../GlobalContext/global"
+import { useGlobalTopic } from "../../GlobalContext/global-topic"
+import { useUser } from "../../GlobalContext/user"
 import FancyButton from "../FancyButton"
+import Icon from "../Icon"
+import { Search, createSearchState } from "../Search"
 
 // TODO: add fuzzy searching for topics. also consider lower case inputs matching results too
 export default function GuideNav() {
@@ -185,6 +178,24 @@ export default function GuideNav() {
               >
                 <Icon name="UserProfile" />
               </A>
+            </Show>
+            <Show
+              when={
+                user.user.signedIn &&
+                !user.user.member &&
+                location.pathname !== "/profile"
+              }
+            >
+              <div
+                class="cursor-pointer text-black dark:text-white"
+                onClick={() => {
+                  global.setShowMemberOnlyModalWithMessage(
+                    "Profile page is available only for members as there are no free trial features yet (except ability to view 50% of topic guides). Lots of work is being done on making profile page and member features great."
+                  )
+                }}
+              >
+                <Icon name="UserProfile" />
+              </div>
             </Show>
             <Show when={!user.user.signedIn}>
               <FancyButton onClick={() => navigate("/auth")}>

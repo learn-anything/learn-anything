@@ -1,11 +1,10 @@
-import { Show, onMount } from "solid-js"
-import Icon from "../Icon"
-import { useMobius } from "../../root"
 import clsx from "clsx"
-import { useGlobalTopic } from "../../GlobalContext/global-topic"
-import { useUser } from "../../GlobalContext/user"
-import { useGlobalState } from "../../GlobalContext/global"
+import { Show } from "solid-js"
 import { useNavigate } from "solid-start"
+import { useGlobalState } from "../../GlobalContext/global"
+import { useUser } from "../../GlobalContext/user"
+import { useMobius } from "../../root"
+import Icon from "../Icon"
 
 interface Props {
   title: string
@@ -16,21 +15,20 @@ interface Props {
   description?: string
 }
 
-export default function GlobalGuideLink(props: Props) {
+// TODO: essentially same as GlobalGuideLink but it was tricky to make it work into one component
+// it should be one component though. big change is that `likedLinkIds` and `completedLinkIds` should not be
+// on global topic..
+export default function ProfileGuideLink(props: Props) {
   const mobius = useMobius()
-  const topic = useGlobalTopic()
   const user = useUser()
   const global = useGlobalState()
-  const navigate = useNavigate()
 
   return (
     <div class="flex items-center overflow-hidden  border-b-[0.5px] dark:border-[#282828]  border-[#69696951] p-4 px-4 justify-between">
-      {/* <div class="">
-      <div class="bg-neutral-400 w-10 h-10 rounded-full"></div>
-    </div> */}
       <div class="w-full  h-full flex justify-between items-center">
         <div class={clsx("w-fit flex flex-col", props.description && "gap-1")}>
           <div class="flex gap-3 items-center">
+            <Icon name="Verified" />
             <a
               class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer"
               href={`${props.protocol}://${props.url}`}
@@ -56,7 +54,6 @@ export default function GlobalGuideLink(props: Props) {
               </div>
             </Show>
           </div>
-          {/* <div class="font-light text-[12px] text-[#696969]">PDF</div> */}
         </div>
         <div class="flex items-center gap-[34px]">
           <div class="gap-4 flex ">
@@ -64,23 +61,12 @@ export default function GlobalGuideLink(props: Props) {
             {/* UI of being pressed in */}
             <div
               onClick={async () => {
-                if (!user.user.signedIn) {
-                  localStorage.setItem("pageBeforeSignIn", location.pathname)
-                  navigate("/auth")
-                  return
-                }
-                if (!user.user.member) {
-                  global.setShowMemberOnlyModal(true)
-                  return
-                }
-                if (topic.globalTopic.likedLinkIds.includes(props.id)) {
-                  topic.set(
-                    "likedLinkIds",
-                    topic.globalTopic.likedLinkIds.filter(
-                      (id) => id !== props.id
-                    )
+                if (user.user.likedLinks.some((link) => link.id === props.id)) {
+                  user.set(
+                    "likedLinks",
+                    user.user.likedLinks.filter((link) => link.id !== props.id)
                   )
-                  await mobius.mutate({
+                  const res = await mobius.mutate({
                     updateGlobalLinkStatus: {
                       where: {
                         action: "unlike",
@@ -89,10 +75,17 @@ export default function GlobalGuideLink(props: Props) {
                       select: true
                     }
                   })
+                  console.log(res, "res")
                 } else {
-                  topic.set("likedLinkIds", [
-                    ...topic.globalTopic.likedLinkIds,
-                    props.id
+                  user.set("likedLinks", [
+                    ...user.user.likedLinks,
+                    {
+                      id: props.id,
+                      title: props.title,
+                      url: props.url,
+                      description: props.description,
+                      year: props.year
+                    }
                   ])
                   await mobius.mutate({
                     updateGlobalLinkStatus: {
@@ -107,7 +100,7 @@ export default function GlobalGuideLink(props: Props) {
               }}
               class={clsx(
                 "cursor-pointer rounded-[2px] flex dark:hover:bg-neutral-950 items-center hover:border-none transition-all justify-center border h-[26px] w-[26px] border-[#69696951] dark:border-[#282828]",
-                topic.globalTopic.likedLinkIds.includes(props.id) &&
+                user.user.likedLinks.some((link) => link.id === props.id) &&
                   "bg-red-500 border-none transition-all"
               )}
             >
@@ -115,7 +108,7 @@ export default function GlobalGuideLink(props: Props) {
                 name="Heart"
                 fill="white"
                 border={
-                  topic.globalTopic.likedLinkIds.includes(props.id)
+                  user.user.likedLinks.some((link) => link.id === props.id)
                     ? "red"
                     : "black"
                 }
@@ -123,20 +116,13 @@ export default function GlobalGuideLink(props: Props) {
             </div>
             <div
               onClick={async () => {
-                if (!user.user.signedIn) {
-                  localStorage.setItem("pageBeforeSignIn", location.pathname)
-                  navigate("/auth")
-                  return
-                }
-                if (!user.user.member) {
-                  global.setShowMemberOnlyModal(true)
-                  return
-                }
-                if (topic.globalTopic.completedLinkIds.includes(props.id)) {
-                  topic.set(
-                    "completedLinkIds",
-                    topic.globalTopic.completedLinkIds.filter(
-                      (id) => id !== props.id
+                if (
+                  user.user.completedLinks.some((link) => link.id === props.id)
+                ) {
+                  user.set(
+                    "completedLinks",
+                    user.user.completedLinks.filter(
+                      (link) => link.id !== props.id
                     )
                   )
                   await mobius.mutate({
@@ -149,9 +135,15 @@ export default function GlobalGuideLink(props: Props) {
                     }
                   })
                 } else {
-                  topic.set("completedLinkIds", [
-                    ...topic.globalTopic.completedLinkIds,
-                    props.id
+                  user.set("completedLinks", [
+                    ...user.user.completedLinks,
+                    {
+                      id: props.id,
+                      title: props.title,
+                      url: props.url,
+                      description: props.description,
+                      year: props.year
+                    }
                   ])
                   await mobius.mutate({
                     updateGlobalLinkStatus: {
@@ -166,14 +158,14 @@ export default function GlobalGuideLink(props: Props) {
               }}
               class={clsx(
                 "cursor-pointer rounded-[2px] dark:hover:bg-neutral-950 hover:border-none border flex items-center transition-all justify-center h-[26px] w-[26px] border-[#69696951] dark:border-[#282828]",
-                topic.globalTopic.completedLinkIds.includes(props.id) &&
+                user.user.completedLinks.some((link) => link.id === props.id) &&
                   "bg-blue-500 bg-opacity border-none"
               )}
             >
               <Icon
                 name="Checkmark"
                 border={
-                  topic.globalTopic.completedLinkIds.includes(props.id)
+                  user.user.completedLinks.some((link) => link.id === props.id)
                     ? global.state.theme === "light"
                       ? "black"
                       : "white"

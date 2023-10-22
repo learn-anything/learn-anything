@@ -104,8 +104,7 @@ export default function createGlobalTopic(
     const topicName = extractTopicFromPath(location.pathname)
     if (!topicName) return
 
-    if (globalTopic.verifiedTopic) {
-      console.log(globalTopic.verifiedTopic, "verified?")
+    if (globalTopic.verifiedTopic && location.pathname !== "/profile") {
       const topic = await mobius.query({
         publicGetGlobalTopic: {
           where: { topicName: topicName },

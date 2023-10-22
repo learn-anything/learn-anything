@@ -51,6 +51,8 @@ export function createGlobalState(mobius: MobiusType) {
     topicsWithConnections: []
   })
   const [showMemberOnlyModal, setShowMemberOnlyModal] = createSignal(false)
+  const [showMemberOnlyModalWithMessage, setShowMemberOnlyModalWithMessage] =
+    createSignal("")
 
   createEffect(() => {
     // Checks if its dark mode or light mode
@@ -201,6 +203,8 @@ export function createGlobalState(mobius: MobiusType) {
     },
     showMemberOnlyModal,
     setShowMemberOnlyModal,
+    showMemberOnlyModalWithMessage,
+    setShowMemberOnlyModalWithMessage,
     searchGlobalLinksByTitle: async (title: string) => {
       const searchResult = await search(globalLinkSearchDb(), {
         term: title,

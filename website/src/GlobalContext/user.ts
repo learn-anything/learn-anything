@@ -28,9 +28,9 @@ type Link = {
 type User = {
   username: string
   email: string
-  signedIn: boolean
-  member: boolean
-  admin: boolean
+  signedIn: boolean | undefined
+  member: boolean | undefined
+  admin: boolean | undefined
   topicsToLearn: Topic[]
   topicsToLearning: Topic[]
   topicsLearned: Topic[]
@@ -44,9 +44,9 @@ export function createUserState(mobius: MobiusType) {
   const [user, setUser] = createStore<User>({
     username: "",
     email: "",
-    signedIn: false,
-    member: true,
-    admin: true,
+    signedIn: undefined,
+    member: undefined,
+    admin: undefined,
     topicsToLearn: [],
     topicsToLearning: [],
     topicsLearned: [],
@@ -56,7 +56,7 @@ export function createUserState(mobius: MobiusType) {
   })
 
   onMount(async () => {
-    if (location.pathname === "/") return
+    // if (location.pathname === "/") return
     // TODO: maybe not needed? if only userClient.getCurrent() is there
     // it flashes sign in button on reloads..
     if (getHankoCookie()) {

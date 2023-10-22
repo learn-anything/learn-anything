@@ -9,8 +9,8 @@ import FancyButton from "../components/FancyButton"
 import Icon from "../components/Icon"
 import Modal from "../components/Modal"
 import { Search, createSearchState } from "../components/Search"
-import GlobalGuideLink from "../components/Topic/GlobalGuideLink"
 import GuideNav from "../components/Topic/GuideNav"
+import ProfileGuideLink from "../components/Topic/ProfileGlobalLink"
 import { useMobius } from "../root"
 
 type NewLink = {
@@ -174,9 +174,6 @@ export default function Profile() {
   const [showHelpModal, setShowHelpModal] = createSignal(false)
   const [showFilter, setShowFilter] = createSignal(false)
   const [linkFilter, setLinkFilter] = createSignal("")
-  // const debouncedSetNewLinkData = debounce(setNewLinkData, 1000)
-  // const trigger = debounce((message: string) => console.log(message), 250);
-  // const [t, setT] = createSignal(false)
 
   const submitNewLink = async (newLink: NewLink) => {
     user.set(
@@ -269,7 +266,7 @@ export default function Profile() {
         <Show when={showHelpModal()}>
           {/* @ts-ignore */}
           <Modal onClose={setShowHelpModal}>
-            <div class="w-1/2 relative z-50 h-[550px] rounded-lg bg-white border-slate-400 border dark:bg-neutral-900 flex flex-col gap-4 p-[20px] px-[24px]">
+            <div class="w-1/2 relative z-50 h-[570px] rounded-lg bg-white border-slate-400 border dark:bg-neutral-900 flex flex-col gap-4 p-[20px] px-[24px]">
               <div>This page is being improved rapidly.</div>
               <div>
                 For now you can see 1,050+ topics available with guides.
@@ -491,14 +488,13 @@ export default function Profile() {
                     {(link) => {
                       return (
                         <div class="[&>*]:border-none border rounded-[4px] dark:border-[#282828]  border-[#69696951]">
-                          <GlobalGuideLink
+                          <ProfileGuideLink
                             title={link.title}
                             url={link.url}
                             id={link.id}
                             year={link.year}
                             protocol={"https"}
                             description={link.description}
-                            showVerifiedBadge={true}
                           />
                         </div>
                       )

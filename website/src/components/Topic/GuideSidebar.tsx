@@ -274,31 +274,24 @@ export default function GuideSidebar() {
         </div> */}
         </div>
         <div class="flex gap-4 [&>*]:opacity-50 justify-end items-center">
-          <div
-            class="hover:opacity-100 transition-all cursor-pointer"
-            onClick={() => {
-              window.location.href = "https://twitter.com/learnanything_"
-            }}
+          <a
+            class="hover:opacity-100 transition-all cursor-pointer text-current"
+            href="https://twitter.com/learnanything_"
           >
             <Icon name="X" />
-          </div>
-          <div
-            class="hover:opacity-100 transition-all cursor-pointer"
-            onClick={() => {
-              window.location.href = "https://discord.com/invite/bxtD8x6aNF"
-            }}
+          </a>
+          <a
+            class="hover:opacity-100 transition-all cursor-pointer text-current"
+            href="https://discord.com/invite/bxtD8x6aNF"
           >
             <Icon name="Discord" />
-          </div>
-          <div
-            class="hover:opacity-100 transition-all cursor-pointer"
-            onClick={() => {
-              window.location.href =
-                "https://github.com/learn-anything/learn-anything.xyz"
-            }}
+          </a>
+          <a
+            class="hover:opacity-100 transition-all cursor-pointer text-current"
+            href="https://github.com/learn-anything/learn-anything.xyz"
           >
             <Icon name="Github" />
-          </div>
+          </a>
         </div>
       </div>
     </>

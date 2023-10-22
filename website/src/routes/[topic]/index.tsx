@@ -93,6 +93,20 @@ export default function GlobalTopic() {
             }}
           />
         </Show>
+        {/* TODO: ugly but need to release */}
+        {/* ideally this is a more generalised component without needed extra global state.. */}
+        <Show when={global.showMemberOnlyModalWithMessage() !== ""}>
+          <ModalWithMessageAndButton
+            message={global.showMemberOnlyModalWithMessage()}
+            buttonText="Become Member"
+            buttonAction={() => {
+              navigate("/pricing")
+            }}
+            onClose={() => {
+              global.setShowMemberOnlyModalWithMessage("")
+            }}
+          />
+        </Show>
         <div class="h-[90%] w-full flex">
           <Show
             when={topic.globalTopic?.latestGlobalGuide?.sections.length > 0}

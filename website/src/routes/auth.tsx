@@ -67,7 +67,7 @@ export default function SignInPage() {
       // doing this so that below GraphQL query can work, it supplies `mobius` client with the hanko token
       signIn(hankoCookie!)
 
-      const res = await mobius.mutate({
+      await mobius.mutate({
         createUser: {
           where: {
             email: email

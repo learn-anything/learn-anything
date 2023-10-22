@@ -122,7 +122,7 @@ Assumes you followed instructions for [Setup EdgeDB](setup-edgedb) and have `gra
 LOCAL=true
 EDGEDB_DSN=edgedb://
 PUBLIC_HANKO_API_URL=https://e879ccc9-285e-49d3-b37e-b569f0db4035.hanko.io
-INTERNAL_SECRET=very-secret-secret
+INTERNAL_SECRET=secret
 ```
 
 Then run:
@@ -150,7 +150,7 @@ Create `.env` file inside [website](app/packages/website) with this content:
 ```
 VITE_HANKO_API=https://e879ccc9-285e-49d3-b37e-b569f0db4035.hanko.io
 VITE_GRAFBASE_API_URL=http://127.0.0.1:4000/graphql
-VITE_GRAFBASE_INTERNAL_SECRET=very-secret-secret
+VITE_GRAFBASE_INTERNAL_SECRET=secret
 ```
 
 [Hanko](https://www.hanko.io/) is used as auth provider. You can swap Hanko API variable content with one from a project you create yourself. Above is project we made for local dev you can use.
