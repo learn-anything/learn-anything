@@ -2,13 +2,23 @@
 
 > Organize world's knowledge, explore connections and curate learning paths
 
-<!-- See [learn-anything.xyz/about](https://learn-anything.xyz/about) for what problems LA is trying to solve. -->
+The end goal of Learn Anything is to become the best place and tool for keeping track of what you know. What ideas you have. What you want to learn next. What you don't know yet. And how you can learn that in the most optimal way possible given what you know already.
+
+Try the website yourself [here](https://learn-anything.xyz). [Become a member to get full feature set](https://learn-anything.xyz/pricing).
+
+It is a fully open source project with an active community on [Discord](https://discord.com/invite/bxtD8x6aNF). There is great focus on both DX of developing everything LA and even more, the end user UX.
+
+Project as it stands is a website and a desktop app. There is also [mobile app](https://github.com/learn-anything/mobile) in works currently in separate repo. We plan to train our own LLMs as we provide AI interfaces to all things knowledge, be it global AGI level queries ala ChatGPT or [querying into any person's knowledge base](https://github.com/learn-anything/ml) with different levels of privacy.
+
+There is more exciting projects planned and under way (like [digital idea/goods marketplace with solana support](https://github.com/learn-anything/buy)). If interested, read on to setup the project and start writing your first code. ♥️
 
 ###### Contents
 
 - [File structure](#file-structure) - make sense of how code is laid out in the repo
 - [Setup](#setup) - get started with development
   - [Setup EdgeDB](#setup-edgedb)
+    - Generate edgedb-js bindings
+    - Seed EdgeDB with content
 - [Run GraphQL server (Grafbase)](#run-graphql-server-grafbase)
 - [Run website (Solid)](#run-website-solid)
 - [Run desktop app (Tauri/Rust)](#run-desktop-app-taurirust)
@@ -16,9 +26,9 @@
 - [Docs](#docs)
 - [Commands](#commands)
 
-Current tasks to do are in [todo.md](todo.md) (sorted by priority).
+Current tasks to do are in [todo.md](todo.md) (sorted by priority). Will be migrated to GitHub issues slowly. As aside there is work being done too to make [KusKus](https://github.com/kuskusapp/kuskus) be the GitHub issues client that will be reccomended to keep track of issues being worked on. Can join development of that too if you like.
 
-Ask questions on [Discord](https://discord.com/invite/bxtD8x6aNF) if interested in developing the project or you get issues with setup.
+Do join [Discord](https://discord.com/invite/bxtD8x6aNF) and ask questions. Any issues with setup or making your first feature or trying to fix a bug will be resolved asap. Same goes for discussing ideas on how to make the tool even better than it is now.
 
 ## File structure
 
@@ -26,15 +36,14 @@ Tech stack is described in [docs/tech-stack.md](docs/tech-stack.md).
 
 - [app](app) - desktop app in Tauri/Solid
 - [docs](docs) - all the docs
-- [grafbase](grafbase) - [Grafbase](https://grafbase.com/) provides GraphQL API layer for all server functions like talking with DB
+- [grafbase](grafbase) - [Grafbase](https://grafbase.com/) provides GraphQL API layer for all server functions like talking with database
   - [edgedb](grafbase/edgedb) - [EdgeDB](https://www.edgedb.com/) used as main server database
     - [dbschema](grafbase/edgedb/dbschema)
       - [default.esdl](grafbase/edgedb/dbschema/default.esdl) - [EdgeDB schema](https://www.edgedb.com/docs/intro/schema) defining all the models and relations
       - [migrations](grafbase/edgedb/dbschema/migrations) - migration files get generated after running `bun db:migrate`
-    - [client.ts](grafbase/edgedb/client.ts) - exports client to connect with EdgeDB
-    - [topic.ts](grafbase/edgedb/topic.ts) / [user.ts](api/edgedb/user.ts) - CRUD functions on models
+    - [crud](grafbase/edgedb/crud) - CRUD functions on models (imported either from grafbase resolvers or from [cli](grafbase/edgedb/cli/))
   - [resolvers](grafbase/resolvers) - [edge resolvers](https://grafbase.com/docs/edge-gateway/resolvers) are server functions exposed with GraphQL
-  - [grafbase.config.ts](grafbase/grafbase.config.ts) - [Grafbase's config](https://grafbase.com/docs/config)
+  - [grafbase.config.ts](grafbase/grafbase.config.ts) - [Grafbase's config](https://grafbase.com/docs/config). You create file in resolvers folder, then extend grafbase.config.ts. Can use [Pathfinder](https://pathfinder.dev) to test query. Then call it from anywhere using some GraphQL client.
 - [packages](packages) - shared TS packages
 - [website](website) - learn-anything.xyz website code in Solid
   - [components](website/components) - solid components
@@ -56,9 +65,13 @@ bun dev-setup
 ### Setup EdgeDB
 
 > **Warning**
-> Instructions might break, will be reviewed before first LA public release
+> Instructions might break, if you get an unexpected error or anything, reach out on [Discord](https://discord.com/invite/bxtD8x6aNF), we will resolve it
 
-Install EdgeDB by running `curl ..` command from [EdgeDB](https://www.edgedb.com) website. It is used as main server database.
+Install EdgeDB by running `curl ..` command from [EdgeDB](https://www.edgedb.com) website. It is used as main server database. Should be below command for Linux/Mac:
+
+```
+curl --proto '=https' --tlsv1.2 -sSf https://sh.edgedb.com | sh
+```
 
 Then run:
 
@@ -82,7 +95,7 @@ Where `EDGEDB_DSN` value comes from running `bun db:get-dsn`.
 #### Generate edgedb-js bindings
 
 ```
-bun db:ts-generate
+bun db:migrate
 ```
 
 This gives you type safe access to EdgeDB and lets you use the query builder nicely.
@@ -90,22 +103,26 @@ This gives you type safe access to EdgeDB and lets you use the query builder nic
 #### Seed EdgeDB with content
 
 > **Warning**
-> Instructions need to be added + tested
+> Below command is incomplete and needs testing, please reach out on [Discord](https://discord.com/invite/bxtD8x6aNF) and we do it together with you
 
-Goal is to be able to run something like `bun db:seed` and it will preload local EdgeDB instance will all the necessary data.
+```
+bun db:seed
+```
 
-Coming from [seed repo](https://github.com/learn-anything/seed).
+Above command is currently breaking. It should take the files you got in [seed folder](https://github.com/learn-anything/seed) (after running `bun dev-setup`) and fill EdgeDB db with content necessary to develop LA very fast.
 
 ## Run GraphQL server (Grafbase)
 
 > **Warning**
-> Instructions might break, will be reviewed before first LA public release
+> If you reach any problems with setup, reach out on [Discord](https://discord.com/invite/bxtD8x6aNF)
 
 Assumes you followed instructions for [Setup EdgeDB](setup-edgedb) and have `grafbase/.env` file with:
 
 ```
 LOCAL=true
 EDGEDB_DSN=edgedb://
+PUBLIC_HANKO_API_URL=https://e879ccc9-285e-49d3-b37e-b569f0db4035.hanko.io
+INTERNAL_SECRET=very-secret-secret
 ```
 
 Then run:
@@ -114,31 +131,29 @@ Then run:
 npx grafbase@latest dev
 ```
 
-> **Note**
-> Ideally [bunx](https://bun.sh/docs/cli/bunx) is used but `bun api` [fails to run](https://github.com/oven-sh/bun/issues/5552)
-
 This starts Grafbase locally and give you GraphQL access.
 
-Download [Pathfinder](https://pathfinder.dev/) app and open http://localhost:4000. Can also open it in browser. In there, you can run various queries.
+Download [Pathfinder](https://pathfinder.dev/) app and open http://localhost:4000 inside. Can also open http://localhost:4000 in browser but Pathfinder is nice app. In there, you can run various queries calling resolvers defined in [grafbase/resolvers](grafbase/resolvers). Grafbase picks up any changes you make to the files in the folder.
 
-In short, [Grafbase config](https://grafbase.com/docs/config) is set in [grafbase/grafbase.config.ts](grafbase/grafbase.config.ts). You specify what [resolvers](https://grafbase.com/docs/edge-gateway/resolvers) are defined, what inputs/outputs they have. Then you create or edit files in [grafbase/resolvers](grafbase/resolvers). Read existing resolvers to make sense of how it works.
+[Grafbase config](https://grafbase.com/docs/config) is set in [grafbase/grafbase.config.ts](grafbase/grafbase.config.ts). You specify what [resolvers](https://grafbase.com/docs/edge-gateway/resolvers) are defined, what inputs/outputs they have. Then you create or edit files in [grafbase/resolvers](grafbase/resolvers). Read existing resolvers to make sense of how it works.
 
 ## Run website (Solid)
 
 > **Warning**
-> Instructions might break, will be reviewed before first LA public release
+> If you reach any problems with setup, reach out on [Discord](https://discord.com/invite/bxtD8x6aNF)
 
-<!-- TODO: automate creating of `.env` file with default content as part of `bun setup` command -->
-<!-- TODO: do same for API .env too -->
+<!-- TODO: automate creating of `.env` file with default content as part of `bun dev-setup` command -->
+<!-- TODO: do same for Grafbase .env too -->
 
 Create `.env` file inside [website](app/packages/website) with this content:
 
 ```
 VITE_HANKO_API=https://e879ccc9-285e-49d3-b37e-b569f0db4035.hanko.io
-API_OF_GRAFBASE=http://127.0.0.1:4000/graphql
+VITE_GRAFBASE_API_URL=http://127.0.0.1:4000/graphql
+VITE_GRAFBASE_INTERNAL_SECRET=very-secret-secret
 ```
 
-[Hanko](https://www.hanko.io/) is used as auth provider. You can swap Hanko API variable content with one from a project you create yourself.
+[Hanko](https://www.hanko.io/) is used as auth provider. You can swap Hanko API variable content with one from a project you create yourself. Above is project we made for local dev you can use.
 
 Run:
 
@@ -148,14 +163,24 @@ bun web
 
 Open http://localhost:3000
 
+> **Warning**
+> You need to make sure you have data in the database to actually develop. So do section `Seed EdgeDB with content`. Reach out on [Discord](https://discord.com/invite/bxtD8x6aNF) for help.
+
 ## Run desktop app (Tauri/Rust)
 
 > **Warning**
-> Instructions will be added after website works properly
+> WIP, massive effort is put here after website is released and is working without issues
+
+Goal of desktop app is to be essentially a clone of [Obsidian](https://obsidian.md/)/[Reflect](https://reflect.app) (working with local markdown files). And with ability to publish the markdown content to LA. All private data and files will be end to end encrypted and synced with [mobile app](https://github.com/learn-anything/mobile).
+
+It will be the best note taking experience you can get. All open source.
 
 ```
 bun app
 ```
+
+> **Warning**
+> WIP, massive effort is put here after website is released and is working without issues
 
 <!-- ### Useful DevTools panel
 
@@ -187,17 +212,17 @@ You can point the tests at your own wiki/notes folder too. Put the folder with f
 
 ## Contribute
 
-Current tasks to do are in [todo.md](todo.md) (sorted by priority).
+Current tasks to do are in [todo.md](todo.md) (sorted by priority). Will be organised much better with GitHub issues very soon.
 
-If task/bug is not mentioned there, open a GitHub issue or start a discussion.
-
-Join [Discord](https://discord.com/invite/bxtD8x6aNF) to get any help you need to make your contribution.
+If task/bug is not mentioned there, open a GitHub issue or start a discussion either [on GitHub](../../discussions) or [Discord](https://discord.com/invite/bxtD8x6aNF).
 
 All PRs with improvements to docs/code or contributions to existing discussions/issues are welcome.
 
+We want this project to have by far the best DX of any open source project on GitHub. We plan to do live streams of developing the code, various educational videos and a lot more in coming time.
+
 ## Docs
 
-All docs can be seen in [docs](docs).
+All docs can be seen in [docs](docs). Will be rendered nicely on website with [VitePress](https://vitepress.dev/) soon.
 
 It is advisable you read them, before you start developing anything as they try give a lot of context and general knowledge.
 

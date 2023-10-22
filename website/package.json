@@ -8,15 +8,15 @@
   "devDependencies": {
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.31",
-    "solid-start-node": "^0.3.6",
+    "solid-start-node": "^0.3.7",
     "tailwindcss": "^3.3.3",
-    "tsx": "^3.13.0",
+    "tsx": "^3.14.0",
     "typescript": "^5.2.2",
-    "vite": "^4.4.11"
+    "vite": "^4.5.0"
   },
   "dependencies": {
-    "@kobalte/core": "^0.11.0",
-    "@kobalte/tailwindcss": "^0.8.0",
+    "@kobalte/core": "^0.11.2",
+    "@kobalte/tailwindcss": "^0.9.0",
     "@modular-forms/solid": "^0.20.0",
     "@motionone/solid": "^10.16.4",
     "@nothing-but/force-graph": "^0.2.4",
@@ -30,8 +30,8 @@
     "@solid-primitives/scheduled": "^1.4.1",
     "@solidjs/meta": "^0.28.6",
     "@solidjs/router": "^0.8.3",
-    "@teamhanko/hanko-elements": "0.8.4",
-    "@teamhanko/hanko-frontend-sdk": "0.8.4",
+    "@teamhanko/hanko-elements": "0.9.0",
+    "@teamhanko/hanko-frontend-sdk": "0.9.0",
     "@thisbeyond/solid-dnd": "^0.7.4",
     "@tiptap/core": "^2.1.12",
     "@tiptap/pm": "^2.1.12",
@@ -45,16 +45,16 @@
     "micromark": "^4.0.0",
     "mri": "^1.2.0",
     "solid-codemirror": "^2.3.0",
-    "solid-js": "^1.8.1",
+    "solid-js": "^1.8.3",
     "solid-markdown": "^1.2.2",
-    "solid-start": "^0.3.6",
-    "solid-start-cloudflare-pages": "^0.3.6",
+    "solid-start": "^0.3.7",
+    "solid-start-cloudflare-pages": "^0.3.7",
     "solid-tiptap": "^0.6.0",
     "solid-toast": "^0.5.0",
-    "tinybase": "^4.3.14",
+    "tinybase": "^4.3.19",
     "tiptap-markdown": "^0.8.2",
     "ufo": "^1.3.1",
-    "undici": "^5.26.3",
+    "undici": "^5.26.4",
     "zod": "^3.22.4"
   }
 }

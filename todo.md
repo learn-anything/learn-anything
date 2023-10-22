@@ -339,3 +339,4 @@
   - actually log every useful log to baselime!
 - wrap around mobius and show a pill or toast when error happens with any of the grafbase requests
   - this way you can just do queries to grafbase and error showing is fully abstracted and nice
+- replace `npx grafbase@latest dev` with `bunx grafbase@latest dev`. [issue with bun](https://github.com/oven-sh/bun/issues/5552). reach out to help resolve it
