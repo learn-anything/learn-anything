@@ -26,7 +26,7 @@ There is more exciting projects planned and under way (like [digital idea/goods 
 - [Docs](#docs)
 - [Commands](#commands)
 
-Current tasks to do are in [todo.md](todo.md) (sorted by priority). Will be migrated to GitHub issues slowly. As aside there is work being done too to make [KusKus](https://github.com/kuskusapp/kuskus) be the GitHub issues client that will be reccomended to keep track of issues being worked on. Can join development of that too if you like.
+Current tasks to do are in [todo.md](todo.md) (sorted by priority). Will be migrated to GitHub issues soon. As aside there is work being done too to make [KusKus](https://github.com/kuskusapp/kuskus) be the GitHub issues client that will be reccomended to keep track of issues being worked on. Can join development of that too if you like.
 
 Do join [Discord](https://discord.com/invite/bxtD8x6aNF) and ask questions. Any issues with setup or making your first feature or trying to fix a bug will be resolved asap. Same goes for discussing ideas on how to make the tool even better than it is now.
 
@@ -180,7 +180,7 @@ bun app
 ```
 
 > **Warning**
-> WIP, massive effort is put here after website is released and is working without issues
+> WIP, Above command will give you issues most likely, reach out on [Discord](https://discord.com/invite/bxtD8x6aNF) and we will help resolve them
 
 <!-- ### Useful DevTools panel
 
@@ -214,7 +214,7 @@ You can point the tests at your own wiki/notes folder too. Put the folder with f
 
 Current tasks to do are in [todo.md](todo.md) (sorted by priority). Will be organised much better with GitHub issues very soon.
 
-If task/bug is not mentioned there, open a GitHub issue or start a discussion either [on GitHub](../../discussions) or [Discord](https://discord.com/invite/bxtD8x6aNF).
+If task/bug is not mentioned there, open a [GitHub issue](../../issues) or [start discussion on GitHub](../../discussions) or [Discord](https://discord.com/invite/bxtD8x6aNF).
 
 All PRs with improvements to docs/code or contributions to existing discussions/issues are welcome.
 
