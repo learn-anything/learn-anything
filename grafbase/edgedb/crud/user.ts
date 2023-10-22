@@ -53,6 +53,14 @@ export async function getAllLikedLinks(hankoId: string) {
           name: true
         }
       },
+      completedLinks: {
+        id: true,
+        title: true,
+        url: true,
+        mainTopic: {
+          name: true
+        }
+      },
       personalLinks: {
         id: true,
         title: true,

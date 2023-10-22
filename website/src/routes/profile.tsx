@@ -400,6 +400,8 @@ export default function Profile() {
                     <div class="dark:bg-[#161616] bg-white absolute top-[120%] flex flex-col gap-1 p-1 rounded-[4px] border-[0.5px] dark:border-[#282828]  border-[#69696951] right-[0%] cursor-pointer">
                       <div
                         onClick={() => {
+                          toast("Coming soon ♥️")
+                          return
                           if (linkFilter() === "liked") {
                             setLinkFilter("")
                           } else {
@@ -413,6 +415,8 @@ export default function Profile() {
                       </div>
                       <div
                         onClick={() => {
+                          toast("Coming soon ♥️")
+                          return
                           if (linkFilter() === "completed") {
                             setLinkFilter("")
                           } else {
@@ -426,6 +430,8 @@ export default function Profile() {
                       </div>
                       <div
                         onClick={() => {
+                          toast("Coming soon ♥️")
+                          return
                           if (linkFilter() === "personal") {
                             setLinkFilter("")
                           } else {
@@ -484,7 +490,7 @@ export default function Profile() {
               </Match>
               <Match when={currentTab() === "Links"}>
                 <div class="flex gap-3 flex-col">
-                  <For each={user.user.likedLinks}>
+                  <For each={user.user.globalLinks}>
                     {(link) => {
                       return (
                         <div class="[&>*]:border-none border rounded-[4px] dark:border-[#282828]  border-[#69696951]">

@@ -111,6 +111,15 @@ g.query("getLikedLinks", {
           })
         )
         .list(),
+      completedLinks: g
+        .ref(
+          g.type("CompletedLink", {
+            id: g.string(),
+            title: g.string(),
+            url: g.string()
+          })
+        )
+        .list(),
       personalLinks: g
         .ref(
           g.type("PersonalLink", {

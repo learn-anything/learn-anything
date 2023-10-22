@@ -37,6 +37,7 @@ type User = {
   likedLinks: Link[]
   completedLinks: Link[]
   personalLinks: Link[]
+  globalLinks: Link[]
 }
 
 // global state of user
@@ -52,7 +53,19 @@ export function createUserState(mobius: MobiusType) {
     topicsLearned: [],
     likedLinks: [],
     personalLinks: [],
-    completedLinks: []
+    completedLinks: [],
+    globalLinks: []
+  })
+
+  createMemo(() => {
+    const combinedLinks = [...user.likedLinks, ...user.completedLinks]
+    const uniqueLinks = Array.from(
+      new Set(combinedLinks.map((link) => link.id))
+    )
+      .map((id) => combinedLinks.find((link) => link.id === id))
+      .filter((link): link is Link => link !== undefined)
+
+    setUser("globalLinks", uniqueLinks)
   })
 
   onMount(async () => {
@@ -80,7 +93,7 @@ export function createUserState(mobius: MobiusType) {
     })
     if (res) {
       // @ts-ignore
-      // setUser({ member: res?.data?.getUserDetails.isMember })
+      setUser({ member: res?.data?.getUserDetails.isMember })
     }
 
     // TODO: move this cookie reading into lib function
@@ -130,6 +143,11 @@ export function createUserState(mobius: MobiusType) {
           title: true,
           url: true
         },
+        completedLinks: {
+          id: true,
+          title: true,
+          url: true
+        },
         personalLinks: {
           id: true,
           title: true,
@@ -142,12 +160,14 @@ export function createUserState(mobius: MobiusType) {
     // @ts-ignore
     const links = res?.data?.getLikedLinks
     const likedLinks = links.likedLinks
+    const completedLinks = links.completedLinks
     const personalLinks = links.personalLinks
     setUser({
       topicsToLearn: topicsLearned.topicsToLearn,
       topicsToLearning: topicsLearned.topicsLearning,
       topicsLearned: topicsLearned.topicsLearned,
       likedLinks: likedLinks,
+      completedLinks: completedLinks,
       personalLinks: personalLinks
     })
   })

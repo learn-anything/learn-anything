@@ -1,11 +1,11 @@
-import { Show, onMount } from "solid-js"
-import Icon from "../Icon"
-import { useMobius } from "../../root"
 import clsx from "clsx"
+import { Show } from "solid-js"
+import { useNavigate } from "solid-start"
+import { useGlobalState } from "../../GlobalContext/global"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import { useUser } from "../../GlobalContext/user"
-import { useGlobalState } from "../../GlobalContext/global"
-import { useNavigate } from "solid-start"
+import { useMobius } from "../../root"
+import Icon from "../Icon"
 
 interface Props {
   title: string
