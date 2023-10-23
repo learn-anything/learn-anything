@@ -172,7 +172,8 @@ export async function addLinkToSectionOfGlobalTopic(
           ),
           e.op(section.title, "=", sectionName)
         )
-      )
+      ),
+      id: true
     }))
     .run(client)
 
@@ -185,8 +186,7 @@ export async function addLinkToSectionOfGlobalTopic(
         }))
       })
       .run(client)
-
-    await e
+    const updated = await e
       .update(e.GlobalGuide, (guide) => ({
         filter: e.op(
           guide["<latestGlobalGuide[is GlobalTopic]"].name,

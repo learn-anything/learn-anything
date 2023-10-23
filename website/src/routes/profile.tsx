@@ -127,7 +127,7 @@ const NewLinkModal = (props: {
               const str = (e.target as HTMLInputElement).value // TODO: make issue to solid
               setTitle(str)
             }}
-            class="bg-inherit pb-3 text-[20px] outline-none w-full px-2 font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[8px] p-1 "
+            class="bg-inherit pb-3 text-[20px] outline-none w-full px-2 font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[8px] p-1"
           />
           <input
             type="text"
@@ -141,13 +141,13 @@ const NewLinkModal = (props: {
               const str = (e.target as HTMLInputElement).value // TODO: make issue to solid
               setDescription(str)
             }}
-            class="bg-inherit text-[20px] bg-neutral-700 px-2 outline-none w-full font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[8px] p-1 "
+            class="text-[20px] bg-gray-200 dark:bg-neutral-700 px-2 outline-none w-full font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[8px] p-1"
           />
         </div>
         <div class="flex justify-between flex-row-reverse w-full">
           <div
             onClick={submit}
-            class=" bg-white px-[42px] hover:bg-opacity-90 transition-all p-2 text-black rounded-[8px] cursor-pointer"
+            class="dark:bg-white bg-gray-200 px-[42px] hover:bg-opacity-90 transition-all p-2 text-black rounded-[8px] cursor-pointer"
           >
             Save
           </div>
@@ -266,7 +266,7 @@ export default function Profile() {
         <Show when={showHelpModal()}>
           {/* @ts-ignore */}
           <Modal onClose={setShowHelpModal}>
-            <div class="w-1/2 relative z-50 h-[570px] rounded-lg bg-white border-slate-400 border dark:bg-neutral-900 flex flex-col gap-4 p-[20px] px-[24px]">
+            <div class="w-1/2 relative z-50 h-[570px] overflow-auto rounded-lg bg-white border-slate-400 border dark:bg-neutral-900 flex flex-col gap-4 p-[20px] px-[24px]">
               <div>This page is being improved rapidly.</div>
               <div>
                 For now you can see 1,050+ topics available with guides.
@@ -294,7 +294,7 @@ export default function Profile() {
                 <a href="https://cal.com/nikiv/15min">
                   talk with you in person
                 </a>
-                .
+                or on <a href="https://discord.com/invite/bxtD8x6aNF"></a>.
               </div>
               <div>
                 We want to make this tool work exactly how you want it. You can

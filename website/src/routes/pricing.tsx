@@ -1,22 +1,31 @@
-import { Show, createSignal } from "solid-js"
-import { useNavigate } from "solid-start"
 import clsx from "clsx"
-import { useMobius } from "../root"
+import { Show, createEffect, createSignal, onMount } from "solid-js"
+import { useNavigate } from "solid-start"
+import { useUser } from "../GlobalContext/user"
 import Icon from "../components/Icon"
 import ModalWithMessageAndButton from "../components/ModalWithMessageAndButton"
-import { useUser } from "../GlobalContext/user"
 import MonthlyPlan from "../components/Pricing/MonthlyPlan"
 import YearlyPlan from "../components/Pricing/YearlyPlan"
+import Modal from "../components/Modal"
+import { useMobius } from "../root"
 
 export default function Pricing() {
   const [planChosen, setPlanChosen] = createSignal("monthly")
   const navigate = useNavigate()
-  const mobius = useMobius()
   const user = useUser()
-  const [waitingForStripe, setWaitingForStripe] = createSignal(false)
+  const mobius = useMobius()
+  const [showLetsTalkModal, setShowLetsTalkModal] = createSignal(false)
+
   const [showModalWithSignUpMessage, setShowModalWithSignUpMessage] =
     createSignal(false)
 
+  createEffect(() => {
+    if (user.user.stripePlan === "year") {
+      setPlanChosen("yearly")
+      return
+    }
+    setPlanChosen("monthly")
+  })
   return (
     <>
       <style>
@@ -124,6 +133,9 @@ export default function Pricing() {
                   planChosen() === "monthly" && "bg-white dark:bg-neutral-900"
                 )}
                 onClick={() => {
+                  if (user.user.stripePlan === "year") {
+                    return
+                  }
                   setPlanChosen("monthly")
                 }}
               >
@@ -182,8 +194,13 @@ export default function Pricing() {
                 </div>
               </Show>
             </div>
-            <Show when={planChosen() === "monthly"} fallback={<YearlyPlan />}>
-              <MonthlyPlan />
+            <Show
+              when={planChosen() === "monthly"}
+              fallback={
+                <YearlyPlan setShowLetsTalkModal={setShowLetsTalkModal} />
+              }
+            >
+              <MonthlyPlan setShowLetsTalkModal={setShowLetsTalkModal} />
             </Show>
           </div>
 
@@ -258,6 +275,36 @@ export default function Pricing() {
                 to you what this project can become.
               </div>
             </div>
+            <Show when={showLetsTalkModal()}>
+              {/* @ts-ignore */}
+              <Modal onClose={setShowLetsTalkModal}>
+                <div class="w-[400px] relative z-50 h-[200px] rounded-lg bg-white border-slate-400 border dark:bg-neutral-900 flex flex-col gap-4 p-[20px] px-[24px]">
+                  <div>
+                    Would love to{" "}
+                    <a href="https://cal.com/nikiv/15min">
+                      talk with you in person
+                    </a>{" "}
+                    or on{" "}
+                    <a href="https://discord.com/invite/bxtD8x6aNF">Discord</a>{" "}
+                    about what you lacked in the tool. We are working hard to
+                    make every use case possible with the tool. ♥️
+                  </div>
+                  <div
+                    onClick={async () => {
+                      await mobius.mutate({
+                        cancelStripe: true
+                      })
+                      user.set("subscriptionStopped", true)
+                      setShowLetsTalkModal(false)
+                    }}
+                    class="cursor-pointer border border-red-600 px-3 p-1 rounded-[4px] text-[14px] text-red-600 opacity-80 hover:bg-red-600 hover:text-white"
+                  >
+                    Cancel my plan
+                  </div>
+                  <div></div>
+                </div>
+              </Modal>
+            </Show>
           </div>
         </div>
       </div>

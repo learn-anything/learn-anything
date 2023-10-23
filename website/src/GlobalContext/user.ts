@@ -58,7 +58,8 @@ export function createUserState(mobius: MobiusType) {
     personalLinks: [],
     completedLinks: [],
     globalLinks: [],
-    stripePlan: "month"
+    stripePlan: "",
+    subscriptionStopped: true
   })
 
   createMemo(() => {
@@ -120,23 +121,22 @@ export function createUserState(mobius: MobiusType) {
   })
 
   const location = useLocation()
-  // createEffect(async () => {
-  //   if (location.pathname === "/pricing" && user.member) {
-  //     const res = await mobius.query({
-  //       getPricingUserDetails: {
-  //         stripePlan: true,
-  //         memberUntil: true,
-  //         subscriptionStopped: true
-  //       }
-  //     })
-  //     // @ts-ignore
-  //     const data = res?.data?.getPricingUserDetails
-  //     setUser("stripePlan", data.stripePlan)
-  //     setUser("memberUntil", data.memberUntil)
-  //     setUser("subscriptionStopped", data.subscriptionStopped)
-  //     console.log(user, "user")
-  //   }
-  // })
+  createEffect(async () => {
+    if (location.pathname === "/pricing" && user.member) {
+      const res = await mobius.query({
+        getPricingUserDetails: {
+          stripePlan: true,
+          memberUntil: true,
+          subscriptionStopped: true
+        }
+      })
+      // @ts-ignore
+      const data = res?.data?.getPricingUserDetails
+      setUser("stripePlan", data.stripePlan)
+      setUser("memberUntil", data.memberUntil)
+      setUser("subscriptionStopped", data.subscriptionStopped)
+    }
+  })
   createEffect(async () => {
     if (!(location.pathname === "/profile")) return
     const res = await mobius.query({

@@ -483,6 +483,7 @@ export default function EditGlobalGuide() {
                           }
                         )
                         console.log(res, "res")
+                        toast("Link added")
                       }
                     }}
                     onInput={(e) => {

@@ -14,7 +14,6 @@ import {
 } from "tinybase/with-schemas"
 import { MobiusType } from "../root"
 import { useLocation } from "solid-start"
-import { extractTopicFromPath } from "./global-topic"
 
 type GlobalTopicSearchItem = {
   name: string

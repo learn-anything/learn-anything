@@ -1046,7 +1046,6 @@
   { "name": "learning", "prettyName": "Learning", "connections": [] },
   { "name": "university", "prettyName": "University", "connections": [] },
   { "name": "education", "prettyName": "Education", "connections": [] },
-  { "name": "pricing", "prettyName": "Pricing", "connections": [] },
   {
     "name": "web-accessibility",
     "prettyName": "Web accessibility",
@@ -1078,10 +1077,8 @@
   { "name": "landing-pages", "prettyName": "Landing pages", "connections": [] },
   { "name": "restaurants", "prettyName": "Restaurants", "connections": [] },
   { "name": "products", "prettyName": "Products", "connections": [] },
-  { "name": "qmk", "prettyName": "", "connections": ["keyboards"] },
   { "name": "keyboards", "prettyName": "Keyboards", "connections": [] },
   { "name": "anki", "prettyName": "Anki", "connections": [] },
-  { "name": "config", "prettyName": "Config", "connections": [] },
   { "name": "management", "prettyName": "Management", "connections": [] },
   { "name": "leadership", "prettyName": "Leadership", "connections": [] },
   { "name": "presentations", "prettyName": "Presentations", "connections": [] },
@@ -1169,11 +1166,6 @@
   },
   { "name": "logic", "prettyName": "Logic", "connections": ["math"] },
   {
-    "name": "combinatory-logic",
-    "prettyName": "Combinatory logic",
-    "connections": ["math"]
-  },
-  {
     "name": "geometric-algebra",
     "prettyName": "Geometric algebra",
     "connections": ["math"]
@@ -1228,11 +1220,6 @@
     "name": "category-theory",
     "prettyName": "Category theory",
     "connections": ["math"]
-  },
-  {
-    "name": "vectors",
-    "prettyName": "Vectors",
-    "connections": ["linear-algebra"]
   },
   { "name": "calculus", "prettyName": "Calculus", "connections": ["math"] },
   {
@@ -2210,7 +2197,6 @@
     "prettyName": "Mastodon",
     "connections": ["social-networks"]
   },
-  { "name": "3dor", "prettyName": "", "connections": [] },
   { "name": "veganism", "prettyName": "Veganism", "connections": [] },
   { "name": "environment", "prettyName": "Environment", "connections": [] },
   { "name": "solar", "prettyName": "Solar", "connections": [] },
@@ -2473,11 +2459,6 @@
     "name": "package-managers",
     "prettyName": "Package managers",
     "connections": ["operating-systems"]
-  },
-  {
-    "name": "playstation",
-    "prettyName": "PlayStation",
-    "connections": ["games"]
   },
   { "name": "minecraft", "prettyName": "Minecraft", "connections": ["games"] },
   {

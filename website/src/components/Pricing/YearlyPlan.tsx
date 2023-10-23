@@ -1,11 +1,15 @@
 import { Show, createSignal } from "solid-js"
-import { useNavigate } from "solid-start"
 import clsx from "clsx"
 import { useUser } from "../../GlobalContext/user"
 import Icon from "../Icon"
 import { useMobius } from "../../root"
+import { toRelativeTime } from "../../lib/lib"
 
-export default function MonthlyPlan() {
+interface Props {
+  setShowLetsTalkModal: (state: boolean) => void
+}
+
+export default function YearlyPlan(props: Props) {
   const [waitingForStripe, setWaitingForStripe] = createSignal(false)
   const mobius = useMobius()
   const user = useUser()
@@ -16,8 +20,23 @@ export default function MonthlyPlan() {
         <div class="px-2 p-0.5 w-fit rounded-full font-light text-sm bg-[#E7EBF9] text-[#3B5CCC]">
           ♥️ Member
         </div>
-        <Show when={user.user.stripePlan === "month"}>
-          <div class="cursor-pointer border border-red-600 px-3 p-1 rounded-[4px] text-[14px] text-red-600 opacity-80 hover:bg-red-600 hover:text-white">
+        <Show
+          when={
+            user.user.stripePlan === "year" &&
+            user.user.subscriptionStopped !== true
+          }
+          fallback={
+            <Show when={user.user.stripePlan === "year"}>
+              <div>plan ends {toRelativeTime(user.user.memberUntil!)}</div>
+            </Show>
+          }
+        >
+          <div
+            onClick={() => {
+              props.setShowLetsTalkModal(true)
+            }}
+            class="cursor-pointer border border-red-600 px-3 p-1 rounded-[4px] text-[14px] text-red-600 opacity-80 hover:bg-red-600 hover:text-white"
+          >
             Cancel plan
           </div>
         </Show>
@@ -83,7 +102,25 @@ export default function MonthlyPlan() {
             when={!waitingForStripe()}
             fallback={<Icon name="Loader" border="white" />}
           >
-            Become member
+            <Show
+              when={user.user.stripePlan !== "month"}
+              fallback={
+                <div
+                  onClick={async () => {
+                    setWaitingForStripe(true)
+                    await mobius.mutate({
+                      updateStripePlan: true
+                    })
+                    user.set("stripePlan", "year")
+                    setWaitingForStripe(false)
+                  }}
+                >
+                  Upgrade
+                </div>
+              }
+            >
+              <div>Become member</div>
+            </Show>
           </Show>
         </div>
       </Show>

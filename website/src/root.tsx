@@ -116,9 +116,9 @@ type getGlobalTopicOutput {
 }
 
 type getPricingUserDetailsOutput {
-  plan: String!
-  memberUntil: String!
-  subscriptionStopped: Boolean!
+  stripePlan: String
+  memberUntil: String
+  subscriptionStopped: Boolean
 }
 
 type getTopicsLearnedOutput {

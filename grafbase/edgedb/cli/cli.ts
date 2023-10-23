@@ -10,84 +10,7 @@ import {
   parseMdFile
 } from "../sync/markdown"
 
-async function main() {
-  return
-  // const topicName = ""
-  // console.log("done")
-  // return
-  // await changeGlobalTopicVerifiedstatus(topicName, false)
-  // return
-  // await deleteSectionsInGlobalTopic(topicName)
-  // await updateTitleOfGlobalLink(
-  //   "https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab",
-  //   "Essense Of Linear Algebra"
-  // )
-  // const links = await removeTrailingSlashFromGlobalLinks()
-  // console.log(links, "links")
-  // const hankoId = process.env.LOCAL_USER_HANKO_ID!
-  // await updateGlobalTopic(hankoId!)
-  // const res = await getLearningStatus("neural-nets", hankoId)
-  // console.log(res)
-  // await updateUnverifiedTopicLearningStatus(hankoId, "", "none")
-  // await addPersonalLink("https://news.ycombinator.com", "Hacker News", hankoId!)
-  // await updateUnverifiedTopicLearningStatus(hankoId!, "reactivity", "to_learn")
-  // return
-  // clipboard.writeSync(JSON.stringify(someJson))
-  // const res = await getAllLikedLinks(hankoId!)
-  // console.log(res?.likedLinks)
-
-  // return
-  // const topics = await getAllTopicNames()
-  // const justNames = topics.map((t) => t.name)
-  // const topicObject = topics.reduce((obj, topic) => {
-  //   // @ts-ignore
-  //   obj[topic.name] = {
-  //     prettyName: topic.prettyName,
-  //     connections: []
-  //   }
-  //   return obj
-  // }, {})
-  // console.log(topicObject)
-  // clipboard.writeSync(JSON.stringify(topicObject))
-  // return
-  // const paths = await getMarkdownPaths()
-  // for (const path of paths) {
-  //   const topic = await parseMdFile(path)
-  //   const parts = path.split("/")
-  //   const fileName = parts[parts.length - 1] // Get the last part which is the filename
-  //   const topicName = fileName!.split(".")[0]
-  //   if (topicName) {
-  //     await setPrettyNameOfGlobalTopic(topicName, topic.prettyName)
-  //     // await processLinksFromMarkdownFilesAsGlobalLinks(topicName)
-  //     // const sections = await checkSectionsAreEmpty("design")
-  //     // if (sections.length === 0) {
-  //     //   await deleteSectionsInGlobalTopic(topicName)
-  //     //   await moveLinksFromSectionsIncludingLinksToGuide(topicName)
-  //     // }
-  //   }
-  // }
-  // const exists = await checkGlobalTopicExists(topicName!)
-  // if (exists.length > 0) {
-  //   console.log("topic exists")
-  //   continue
-  // }
-  // const prettyName = toTitleCase(topicName!)
-  // await createGlobalTopicWithGlobalGuide(topicName!, prettyName, "")
-  // await processLinksFromMarkdownFilesAsGlobalLinks(topicName!)
-  // await moveLinksFromSectionsToGuide(topicName!)
-  // await moveAllLinksOfGlobalTopicToSectionOther(topicName!)
-  // }
-  // const hankoId = process.env.LOCAL_USER_HANKO_ID!
-  // const res = await getTopicsLearned(hankoId)
-  // console.log(res, "res")
-  // const topicName = "edgedb"
-  // console.log("done")
-  // return
-  // await deleteSectionsInGlobalTopic(topicName)
-  // await processLinksFromMarkdownFilesAsGlobalLinks(topicName)
-  // await moveLinksFromSectionsIncludingLinksToGuide(topicName)
-  console.log("done")
-}
+async function main() {}
 
 await main()
 
@@ -107,6 +30,7 @@ async function processLinksBySection(topic: Topic) {
     if (link.section) {
       const [urlWithoutProtocol, protocol] = splitUrlByProtocol(link.url)
       if (urlWithoutProtocol && protocol) {
+        // console.log(link.section, "link.section")
         await addLinkToSectionOfGlobalTopic(
           topic.name,
           link.section,
@@ -187,6 +111,107 @@ async function getMarkdownPaths() {
 // }
 // TODO: move it away after release, is here as reference in trying to get all the topics ported for release
 async function oneOffActions() {
+  // const topic = "biases"
+  // return
+  // await addGlobalLink(
+  //   "https://blog.briansteffens.com/2017/02/20/from-math-to-machine.html",
+  //   "From math to machine: translating a function to machine code",
+  //   "2017",
+  //   "",
+  //   "fitness"
+  // )
+  // await addLinkToSectionOfGlobalTopic(
+  //   "programming-languages",
+  //   "Intro",
+  //   "blog.briansteffens.com/2017/02/20/from-math-to-machine.html"
+  // )
+  // console.log("added")
+  // return
+  // await changeGlobalTopicVerifiedstatus(topic, false)
+  // await deleteSectionsInGlobalTopic(topic)
+  // await moveLinksFromSectionsIncludingLinksToGuide(topic)
+  // console.log("done")
+  // return
+  // console.log("done")
+  // return
+  // console.log("done")
+  // return
+  // console.log("done")
+  // return
+  // const topicName = ""
+  // console.log("done")
+  // return
+  // return
+  // await deleteSectionsInGlobalTopic(topicName)
+  // await updateTitleOfGlobalLink(
+  //   "https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab",
+  //   "Essense Of Linear Algebra"
+  // )
+  // const links = await removeTrailingSlashFromGlobalLinks()
+  // console.log(links, "links")
+  // const hankoId = process.env.LOCAL_USER_HANKO_ID!
+  // await updateGlobalTopic(hankoId!)
+  // const res = await getLearningStatus("neural-nets", hankoId)
+  // console.log(res)
+  // await updateUnverifiedTopicLearningStatus(hankoId, "", "none")
+  // await addPersonalLink("https://news.ycombinator.com", "Hacker News", hankoId!)
+  // await updateUnverifiedTopicLearningStatus(hankoId!, "reactivity", "to_learn")
+  // return
+  // clipboard.writeSync(JSON.stringify(someJson))
+  // const res = await getAllLikedLinks(hankoId!)
+  // console.log(res?.likedLinks)
+
+  // return
+  // const topics = await getAllTopicNames()
+  // const justNames = topics.map((t) => t.name)
+  // const topicObject = topics.reduce((obj, topic) => {
+  //   // @ts-ignore
+  //   obj[topic.name] = {
+  //     prettyName: topic.prettyName,
+  //     connections: []
+  //   }
+  //   return obj
+  // }, {})
+  // console.log(topicObject)
+  // clipboard.writeSync(JSON.stringify(topicObject))
+  // return
+  // const paths = await getMarkdownPaths()
+  // for (const path of paths) {
+  //   const topic = await parseMdFile(path)
+  //   const parts = path.split("/")
+  //   const fileName = parts[parts.length - 1] // Get the last part which is the filename
+  //   const topicName = fileName!.split(".")[0]
+  //   if (topicName) {
+  //     await setPrettyNameOfGlobalTopic(topicName, topic.prettyName)
+  //     // await processLinksFromMarkdownFilesAsGlobalLinks(topicName)
+  //     // const sections = await checkSectionsAreEmpty("design")
+  //     // if (sections.length === 0) {
+  //     //   await deleteSectionsInGlobalTopic(topicName)
+  //     //   await moveLinksFromSectionsIncludingLinksToGuide(topicName)
+  //     // }
+  //   }
+  // }
+  // const exists = await checkGlobalTopicExists(topicName!)
+  // if (exists.length > 0) {
+  //   console.log("topic exists")
+  //   continue
+  // }
+  // const prettyName = toTitleCase(topicName!)
+  // await createGlobalTopicWithGlobalGuide(topicName!, prettyName, "")
+  // await processLinksFromMarkdownFilesAsGlobalLinks(topicName!)
+  // await moveLinksFromSectionsToGuide(topicName!)
+  // await moveAllLinksOfGlobalTopicToSectionOther(topicName!)
+  // }
+  // const hankoId = process.env.LOCAL_USER_HANKO_ID!
+  // const res = await getTopicsLearned(hankoId)
+  // console.log(res, "res")
+  // const topicName = "edgedb"
+  // console.log("done")
+  // return
+  // await deleteSectionsInGlobalTopic(topicName)
+  // await processLinksFromMarkdownFilesAsGlobalLinks(topicName)
+  // await moveLinksFromSectionsIncludingLinksToGuide(topicName)
+  console.log("done")
   // const paths = await getMarkdownPaths()
   // for (const path of paths) {
   //   const parts = path.split("/")

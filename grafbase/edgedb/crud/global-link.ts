@@ -315,6 +315,7 @@ export async function addGlobalLink(
 ) {
   const [urlWithoutProtocol, protocol] = splitUrlByProtocol(url)
   if (urlWithoutProtocol && protocol) {
+    console.log(urlWithoutProtocol, "..")
     await e
       .insert(e.GlobalLink, {
         url: urlWithoutProtocol,

@@ -92,20 +92,30 @@ export async function getUserDetails(hankoId: string) {
   const user = await e
     .select(e.User, (u) => ({
       filter_single: e.op(u.hankoId, "=", hankoId),
-      memberUntil: true
+      isMember: e.op(u.memberUntil, ">", e.datetime_current())
     }))
     .run(client)
-  const currentDate = new Date()
-  if (user?.memberUntil && user.memberUntil > currentDate) {
-    return {
-      isMember: true
-    }
-  } else {
-    return {
-      isMember: false
-    }
-  }
+  return user ?? { isMember: false }
 }
+
+// export async function getUserDetails(hankoId: string) {
+//   const user = await e
+//     .select(e.User, (u) => ({
+//       filter_single: e.op(u.hankoId, "=", hankoId),
+//       memberUntil: true
+//     }))
+//     .run(client)
+//   const currentDate = new Date()
+//   if (user?.memberUntil && user.memberUntil > currentDate) {
+//     return {
+//       isMember: true
+//     }
+//   } else {
+//     return {
+//       isMember: false
+//     }
+//   }
+// }
 
 export async function getLearningStatus(topicName: string, hankoId: string) {
   const res = await queryGetLearningStatus(client, {
