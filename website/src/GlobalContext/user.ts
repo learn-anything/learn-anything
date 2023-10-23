@@ -38,6 +38,9 @@ type User = {
   completedLinks: Link[]
   personalLinks: Link[]
   globalLinks: Link[]
+  stripePlan?: string
+  memberUntil?: string
+  subscriptionStopped?: boolean
 }
 
 // global state of user
@@ -47,14 +50,15 @@ export function createUserState(mobius: MobiusType) {
     email: "",
     signedIn: undefined,
     member: undefined,
-    admin: undefined,
+    admin: true,
     topicsToLearn: [],
     topicsToLearning: [],
     topicsLearned: [],
     likedLinks: [],
     personalLinks: [],
     completedLinks: [],
-    globalLinks: []
+    globalLinks: [],
+    stripePlan: "month"
   })
 
   createMemo(() => {
@@ -85,7 +89,6 @@ export function createUserState(mobius: MobiusType) {
     const email = hankoUser.email
     setUser({ email, signedIn: true })
 
-    // TODO: check it works well
     const res = await mobius.query({
       getUserDetails: {
         isMember: true
@@ -117,6 +120,23 @@ export function createUserState(mobius: MobiusType) {
   })
 
   const location = useLocation()
+  // createEffect(async () => {
+  //   if (location.pathname === "/pricing" && user.member) {
+  //     const res = await mobius.query({
+  //       getPricingUserDetails: {
+  //         stripePlan: true,
+  //         memberUntil: true,
+  //         subscriptionStopped: true
+  //       }
+  //     })
+  //     // @ts-ignore
+  //     const data = res?.data?.getPricingUserDetails
+  //     setUser("stripePlan", data.stripePlan)
+  //     setUser("memberUntil", data.memberUntil)
+  //     setUser("subscriptionStopped", data.subscriptionStopped)
+  //     console.log(user, "user")
+  //   }
+  // })
   createEffect(async () => {
     if (!(location.pathname === "/profile")) return
     const res = await mobius.query({

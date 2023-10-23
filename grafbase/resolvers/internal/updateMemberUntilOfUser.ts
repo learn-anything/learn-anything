@@ -4,7 +4,13 @@ import { updateMemberUntilOfUser } from "../../edgedb/crud/user"
 
 export default async function updateMemberUntilOfUserResolver(
   root: any,
-  args: { email: string; memberUntilDateInUnixTime: number; secret: string },
+  args: {
+    email: string
+    memberUntilDateInUnixTime: number
+    secret: string
+    stripeSubscriptionObjectId: string
+    stripePlan: string
+  },
   context: Context
 ) {
   try {
@@ -14,7 +20,12 @@ export default async function updateMemberUntilOfUserResolver(
     }
     const token = authHeader.split("Bearer ")[1]
     if (token === process.env.INTERNAL_SECRET) {
-      await updateMemberUntilOfUser(args.email, args.memberUntilDateInUnixTime)
+      await updateMemberUntilOfUser(
+        args.email,
+        args.memberUntilDateInUnixTime,
+        args.stripeSubscriptionObjectId,
+        args.stripePlan
+      )
       return "ok"
     }
   } catch (err) {

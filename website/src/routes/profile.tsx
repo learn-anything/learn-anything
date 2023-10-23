@@ -298,8 +298,7 @@ export default function Profile() {
               </div>
               <div>
                 We want to make this tool work exactly how you want it. You can
-                always <A href="/pricing">unsubscribe without a call</A> though.
-                😿
+                always <A href="/pricing">unsubscribe without a call</A> too. 😿
               </div>
               <div class="w-full">
                 <FancyButton

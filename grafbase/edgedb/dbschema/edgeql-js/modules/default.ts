@@ -273,6 +273,9 @@ export type $UserλShape = $.typeutil.flatten<_std.$Object_d29c95e25d6b11eeabaf0
   "wiki": $.LinkDesc<$Wiki, $.Cardinality.Many, {}, false, true,  false, false>;
   "admin": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, false>;
   "personalLinks": $.LinkDesc<$PersonalLink, $.Cardinality.Many, {}, false, false,  false, false>;
+  "stripeSubscriptionObjectId": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "subscriptionStopped": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, false>;
+  "stripePlan": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "<user[is UserGuide]": $.LinkDesc<$UserGuide, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user[is Wiki]": $.LinkDesc<$Wiki, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;

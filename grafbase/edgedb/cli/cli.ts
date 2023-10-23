@@ -11,7 +11,6 @@ import {
 } from "../sync/markdown"
 
 async function main() {
-  // await deletePersonalLink("776c0fe8-6e8e-11ee-8b11-af81c6bf19c3")
   return
   // const topicName = ""
   // console.log("done")

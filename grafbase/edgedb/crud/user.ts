@@ -8,6 +8,86 @@ export interface User {
   name?: string
 }
 
+export async function getStripeSubscriptionObjectId(hankoId: string) {
+  return await e
+    .select(e.User, (u) => ({
+      filter_single: e.op(u.hankoId, "=", hankoId),
+      stripeSubscriptionObjectId: true
+    }))
+    .run(client)
+}
+
+export async function updateUserStoppedSubscription(hankoId: string) {
+  await e
+    .update(e.User, (u) => ({
+      filter: e.op(u.hankoId, "=", hankoId),
+      set: {
+        subscriptionStopped: true
+      }
+    }))
+    .run(client)
+
+  return await e
+    .select(e.User, (u) => ({
+      filter_single: e.op(u.hankoId, "=", hankoId),
+      stripeSubscriptionObjectId: true
+    }))
+    .run(client)
+}
+
+export async function updateUserRenewedSubscription(hankoId: string) {
+  await e
+    .update(e.User, (u) => ({
+      filter: e.op(u.hankoId, "=", hankoId),
+      set: {
+        subscriptionStopped: false
+      }
+    }))
+    .run(client)
+
+  return await e
+    .select(e.User, (u) => ({
+      filter_single: e.op(u.hankoId, "=", hankoId),
+      stripeSubscriptionObjectId: true
+    }))
+    .run(client)
+}
+
+export async function upgradeStripeMonthlyPlanToYear(hankoId: string) {
+  const user = await e
+    .select(e.User, (u) => ({
+      filter_single: e.op(u.hankoId, "=", hankoId),
+      stripeSubscriptionObjectId: true,
+      memberUntil: true
+    }))
+    .run(client)
+
+  // @ts-ignore
+  const date = new Date(user?.memberUntil)
+  date.setFullYear(date.getFullYear() + 1)
+  const newDateString = date.toISOString()
+  await e
+    .update(e.User, (u) => ({
+      filter_single: e.op(u.hankoId, "=", hankoId),
+      set: {
+        memberUntil: new Date(newDateString),
+        stripePlan: "year"
+      }
+    }))
+    .run(client)
+}
+
+export async function getPricingUserDetails(hankoId: string) {
+  return await e
+    .select(e.User, (u) => ({
+      filter_single: e.op(u.hankoId, "=", hankoId),
+      stripePlan: true,
+      memberUntil: true,
+      subscriptionStopped: true
+    }))
+    .run(client)
+}
+
 export async function getUserDetails(hankoId: string) {
   const user = await e
     .select(e.User, (u) => ({
@@ -157,6 +237,7 @@ export async function getUserIdByName(name: string) {
   if (res.length === 0) {
     return undefined
   } else {
+    // @ts-ignore
     return res[0].id
   }
 }
@@ -187,13 +268,19 @@ export async function updateLearningStatusForGlobalTopic(
 
 export async function updateMemberUntilOfUser(
   email: string,
-  memberUntilDateInUnixTime: number
+  memberUntilDateInUnixTime: number,
+  stripeSubscriptionObjectId: string,
+  stripePlan: string
 ) {
-  const res = await e
+  return await e
     .update(e.User, () => ({
       filter_single: { email },
-      set: { memberUntil: new Date(memberUntilDateInUnixTime * 1000) }
+      set: {
+        memberUntil: new Date(memberUntilDateInUnixTime * 1000),
+        stripeSubscriptionObjectId: stripeSubscriptionObjectId,
+        stripePlan: stripePlan,
+        subscriptionStopped: false
+      }
     }))
     .run(client)
-  console.log(res, "res")
 }

@@ -27,7 +27,7 @@ import UserProfile from "./routes/@(username)"
 
 // TODO: https://github.com/nikitavoloboev/la-issues/issues/54 (should stop having to manually update this schema )
 export const typeDefs = `
-""""
+"""
 De-prioritizes a fragment, causing the fragment to be omitted in the initial response and delivered as a subsequent response afterward.
 """
 directive @defer(
@@ -42,6 +42,12 @@ directive @defer(
 
 """Indicates that an input object is a oneOf input object"""
 directive @oneOf on INPUT_OBJECT
+
+type CompletedLink {
+  id: String!
+  title: String!
+  url: String!
+}
 
 type GlobalLink {
   id: String!
@@ -65,7 +71,10 @@ type Mutation {
   updateLinkStatusResolver(linkId: String!, action: linkAction!): String!
   updateGlobalLinkStatus(action: globalLinkAction!, globalLinkId: String!): String!
   addPersonalLink(title: String!, url: String!, description: String): String!
-  internalUpdateMemberUntilOfUser(email: String!, memberUntilDateInUnixTime: Int!): String!
+  cancelStripe: String!
+  renewStripe: String!
+  updateStripePlan: String!
+  internalUpdateMemberUntilOfUser(email: String!, memberUntilDateInUnixTime: Int!, stripeSubscriptionObjectId: String!, stripePlan: String!): String!
   internalUpdateGrafbaseKv(topicsWithConnections: [updateGrafbaseKvOutput!]!): String!
   internalUpdateLatestGlobalGuide(topicName: String!, topicSummary: String!, sections: [section!]!): String!
   internalAddGlobalLinkToSection(linkUrl: String!, topicName: String!, sectionName: String!): String!
@@ -82,6 +91,7 @@ type Query {
   publicGetGlobalTopics: [publicGetGlobalTopicsOutput!]!
   publicGetGlobalTopic(topicName: String!): publicGetGlobalTopicOutput!
   getUserDetails: getUserDetailsOutput!
+  getPricingUserDetails: getPricingUserDetailsOutput!
   getNotesForGlobalTopic(topicName: String!): [globalNote!]!
   getLikedLinks: outputOfGetLikedLinks!
   getTopicsLearned: getTopicsLearnedOutput!
@@ -103,6 +113,12 @@ type getGlobalTopicOutput {
   learningStatus: learningStatus!
   likedLinkIds: [String!]!
   completedLinkIds: [String!]!
+}
+
+type getPricingUserDetailsOutput {
+  plan: String!
+  memberUntil: String!
+  subscriptionStopped: Boolean!
 }
 
 type getTopicsLearnedOutput {
@@ -154,6 +170,7 @@ enum linkAction {
 
 type outputOfGetLikedLinks {
   likedLinks: [LikedLink!]!
+  completedLinks: [CompletedLink!]!
   personalLinks: [PersonalLink!]!
 }
 

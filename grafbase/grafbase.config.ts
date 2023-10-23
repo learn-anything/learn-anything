@@ -88,6 +88,18 @@ g.query("getUserDetails", {
   resolver: "getUserDetails"
 })
 
+g.query("getPricingUserDetails", {
+  args: {},
+  returns: g.ref(
+    g.type("getPricingUserDetailsOutput", {
+      stripePlan: g.string().optional(),
+      memberUntil: g.string().optional(),
+      subscriptionStopped: g.boolean().optional()
+    })
+  ),
+  resolver: "getPricingUserDetails"
+})
+
 const globalNote = g.type("globalNote", {
   content: g.string(),
   url: g.string().optional()
@@ -275,11 +287,31 @@ g.mutation("addPersonalLink", {
   resolver: "addPersonalLink"
 })
 
+g.mutation("cancelStripe", {
+  args: {},
+  returns: g.string(),
+  resolver: "cancelStripe"
+})
+
+g.mutation("renewStripe", {
+  args: {},
+  returns: g.string(),
+  resolver: "renewStripe"
+})
+
+g.mutation("updateStripePlan", {
+  args: {},
+  returns: g.string(),
+  resolver: "updateStripePlan"
+})
+
 // internal
 g.mutation("internalUpdateMemberUntilOfUser", {
   args: {
     email: g.string(),
-    memberUntilDateInUnixTime: g.int()
+    memberUntilDateInUnixTime: g.int(),
+    stripeSubscriptionObjectId: g.string(),
+    stripePlan: g.string()
   },
   returns: g.string(),
   resolver: "internal/updateMemberUntilOfUser"

@@ -48,6 +48,12 @@ module default {
     multi topicsModerated: GlobalTopic;
     # date until user has paid membership for
     memberUntil: datetime;
+    # month / year
+    stripePlan: str;
+    # after stripe payment works, you get back subscription object id (can be used to cancel subscription)
+    stripeSubscriptionObjectId: str;
+    # whether user has stopped subscription and won't be be charged again
+    subscriptionStopped: bool;
   }
   type Wiki {
     # owner of this wiki

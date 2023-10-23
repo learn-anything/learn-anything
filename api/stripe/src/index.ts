@@ -45,29 +45,25 @@ app.post("/learn-anything-bought", async (c: Context) => {
       // @ts-ignore
       const checkoutSessionCompleted = event.data.object
       if (checkoutSessionCompleted.status === "complete") {
-        // const subscriptionType =
-        //   checkoutSessionCompleted.metadata.subscriptionType.trim()
-        // console.log(checkoutSessionCompleted.metadata, "metadata")
-        const email = checkoutSessionCompleted.metadata.userEmail.trim()
-        // const email = "nikita@nikiv.dev"
-        // console.log(email, "email")
+        // const email = checkoutSessionCompleted.metadata.userEmail.trim()
+        const email = "nikita@nikiv.dev"
         const subscription = await stripe.subscriptions.retrieve(
           checkoutSessionCompleted.subscription,
         )
-        // console.log(checkoutSessionCompleted.subscription, "value")
         const endDateInUnix = subscription.current_period_end
-        // console.log(endDateInUnix, "end date in unix!")
-        // const iso8601_format = new Date(endDateInUnix * 1000)
+        const priceID = subscription.items.data[0].price.id
 
         const query = `
-        mutation InternalUpdateMemberUntilOfUser($email: String!, $memberUntilDateInUnixTime: Int!) {
-          internalUpdateMemberUntilOfUser(email: $email, memberUntilDateInUnixTime: $memberUntilDateInUnixTime)
+        mutation InternalUpdateMemberUntilOfUser($email: String!, $memberUntilDateInUnixTime: Int!, $stripeSubscriptionObjectId: String!, $stripePlan: String!) {
+          internalUpdateMemberUntilOfUser(email: $email, memberUntilDateInUnixTime: $memberUntilDateInUnixTime, stripeSubscriptionObjectId: $stripeSubscriptionObjectId, stripePlan: $stripePlan)
         }
         `
 
         const variables = {
           email: email,
           memberUntilDateInUnixTime: endDateInUnix,
+          stripeSubscriptionObjectId: subscription.id,
+          stripePlan: priceID === c.env.LA_MONTH_PRICE_ID! ? "month" : "year",
         }
 
         // TODO: check for errors, show in ui if error happens
@@ -82,18 +78,6 @@ app.post("/learn-anything-bought", async (c: Context) => {
             variables,
           }),
         })
-
-        // const res = await client.querySingle(
-        //   `
-        //   update User
-        //   filter .email = <str>$email
-        //   set {
-        //     memberUntil:= <datetime>$iso8601_format
-        //   }
-        // `,
-        //   { email, iso8601_format },
-        // )
-        // console.log(res, "res")
         return c.json({ success: `memberUntil value is updated` })
       }
       break
