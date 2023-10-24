@@ -1,5 +1,12 @@
 import clsx from "clsx"
-import { Match, Show, Switch, createEffect, createSignal } from "solid-js"
+import {
+  Match,
+  Show,
+  Switch,
+  createEffect,
+  createSignal,
+  onMount
+} from "solid-js"
 import { useNavigate } from "solid-start"
 import { useGlobalState } from "../../GlobalContext/global"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
@@ -47,9 +54,8 @@ export default function GlobalTopic() {
     }
   })
   createEffect(() => {
-    window.addEventListener("resize", () => {
-      const specificViewportWidth = 800
-
+    const specificViewportWidth = 800
+    function handleResize() {
       if (window.innerWidth <= specificViewportWidth) {
         // Perform actions when the viewport width is less than or equal to the specific width
         global.setShowSidebar(false)
@@ -60,7 +66,9 @@ export default function GlobalTopic() {
 
         global.setShowSidebar(true)
       }
-    })
+    }
+    window.addEventListener("resize", handleResize)
+    handleResize()
   })
 
   return (
@@ -90,7 +98,11 @@ export default function GlobalTopic() {
           display: none;
         }
       @media (min-width: 700px) {
-
+        #InfoSidebar {
+          position: static;
+          width: 20%;
+          animation: none;
+        }
 
         #InfoOptions {
           display: flex
