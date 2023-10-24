@@ -665,7 +665,6 @@
   { "name": "1password", "prettyName": "1Password", "connections": [] },
   { "name": "karabiner", "prettyName": "Karabiner", "connections": ["macOS"] },
   { "name": "tracking", "prettyName": "Tracking", "connections": [] },
-  { "name": "things", "prettyName": "Things I own", "connections": [] },
   { "name": "tor", "prettyName": "Tor Project", "connections": ["browsers"] },
   {
     "name": "self-hosting",

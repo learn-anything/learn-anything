@@ -94,6 +94,7 @@ const NewLinkModal = (props: {
     }
 
     props.onSubmit(newLink)
+    props.onClose()
   }
 
   return (
@@ -176,11 +177,8 @@ export default function Profile() {
   const [linkFilter, setLinkFilter] = createSignal("")
 
   const submitNewLink = async (newLink: NewLink) => {
-    user.set(
-      "personalLinks",
-      // @ts-ignore
-      user.user.personalLinks.concat(newLinkData())
-    )
+    // @ts-ignore
+    user.set("personalLinks", (currentLinks) => [...currentLinks, newLink])
     await mobius.mutate({
       addPersonalLink: {
         where: {

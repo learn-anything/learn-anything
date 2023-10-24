@@ -173,6 +173,7 @@ function handleInputKeydown(
 
       e.preventDefault()
       selectSearchResult(state, focused)
+      state.setQuery("")
 
       break
     }

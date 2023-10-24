@@ -50,7 +50,7 @@ export function createUserState(mobius: MobiusType) {
     email: "",
     signedIn: undefined,
     member: undefined,
-    admin: true,
+    admin: undefined,
     topicsToLearn: [],
     topicsToLearning: [],
     topicsLearned: [],

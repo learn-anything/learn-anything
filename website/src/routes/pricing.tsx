@@ -205,7 +205,7 @@ export default function Pricing() {
           </div>
 
           <div id="PayInfo" class="flex w-full h-full relative">
-            <div id="InfoTitle" class="w-full font-light text-3xl sticky">
+            <div id="InfoTitle" class="w-full font-light text-3xl sticky pr-4">
               <div
                 onClick={() => {
                   // TODO: grafbase call to do stripe checkout
@@ -222,6 +222,11 @@ export default function Pricing() {
                 Unlock premium features and help us build the future of
                 education together ♥️
               </div>
+              <video
+                class="py-4"
+                src="https://video.learn-anything.xyz/demo.mp4"
+                controls
+              />
             </div>
             <div class="w-full flex flex-col gap-4 text-lg font-light opacity-60 text-[14px]">
               <div>
