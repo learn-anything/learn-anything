@@ -12,8 +12,6 @@ export default async function updateGrafbaseKvResolver(
       throw new GraphQLError("Missing or invalid Authorization header")
     }
     const token = authHeader.split("Bearer ")[1]
-    console.log(token, "token")
-    console.log(process.env.INTERNAL_SECRET)
     if (token === process.env.INTERNAL_SECRET) {
       await context.kv.set(
         "topicsWithConnections",

@@ -12,7 +12,6 @@ app.onError((e, c) => {
 })
 
 app.post("/learn-anything-bought", async (c: Context) => {
-  // console.log(c.env.LA_STRIPE_WEBHOOK_SECRET!, "key..")
   let event = c.req.body
   const stripe = new Stripe(c.env.LA_STRIPE_SECRET_KEY!, {
     apiVersion: "2023-08-16",

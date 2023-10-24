@@ -23,5 +23,5 @@ Check logs in server (from `bun run` command) for errors.
 ## Deploy
 
 ```
-bun deploy --name stripe --keep-vars
+bun run deploy --name la-stripe --keep-vars
 ```
