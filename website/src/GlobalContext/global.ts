@@ -38,6 +38,7 @@ type GlobalState = {
   guidePage: string
   theme: string
   topicsWithConnections: TopicWithConnections[]
+  showSidebar: boolean
 }
 
 // various global state
@@ -47,6 +48,7 @@ export function createGlobalState(mobius: MobiusType) {
     globalLinkSearchDb: undefined,
     guidePage: "Guide",
     theme: "",
+    showSidebar: false,
     topicsWithConnections: []
   })
   const [showMemberOnlyModal, setShowMemberOnlyModal] = createSignal(false)
@@ -199,6 +201,9 @@ export function createGlobalState(mobius: MobiusType) {
     set: setState,
     setGuidePage: (page: string) => {
       setState({ guidePage: page })
+    },
+    setShowSidebar: (boolean: boolean) => {
+      setState({ showSidebar: boolean })
     },
     showMemberOnlyModal,
     setShowMemberOnlyModal,

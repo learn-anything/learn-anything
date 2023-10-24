@@ -77,14 +77,7 @@ export default function Home() {
           }}
         />
         <div class="flex flex-col gap-1 items-center z-50">
-          <div
-            class="tracking-wide font-bold bg-clip-text text-transparent"
-            style={{
-              "background-image":
-                "linear-gradient(145deg, #fff 65%, rgba(255,255,255,.43))",
-              "font-size": "clamp(3rem, 10vw, 5rem)"
-            }}
-          >
+          <div class="tracking-wide font-bold bg-clip-text text-transparent">
             I want to learn
           </div>
           <div

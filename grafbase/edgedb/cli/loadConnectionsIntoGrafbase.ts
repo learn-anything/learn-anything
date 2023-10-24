@@ -25,6 +25,7 @@ async function main() {
     }))
   }
 
+  console.log(process.env.GRAFBASE_INTERNAL_SECRET, "secret..")
   const res = await fetch(process.env.GRAFBASE_URL!, {
     method: "POST",
     headers: {

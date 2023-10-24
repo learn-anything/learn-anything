@@ -142,9 +142,14 @@ export default function GuideNav() {
               <Search placeholder="Search Topic" state={search_state} />
             </div>
           </div>
-          <div id="NavMenu">
+          <div
+            id="NavMenu"
+            onClick={() => {
+              global.setShowSidebar(!global.state.showSidebar)
+            }}
+          >
             {/* <Icon name="Menu" /> */}
-            <Icon name="UserProfile" />
+            <Icon name="Menu" />
           </div>
           <div id="NavButtons" class="flex items-center justify-center gap-4">
             {/* TODO:  */}

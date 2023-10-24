@@ -341,9 +341,9 @@ export default function Profile() {
                 <div
                   id="ToLearn"
                   class={clsx(
-                    "p-2 cursor-pointer",
+                    "p-2 cursor-pointer border-b border-inherit",
                     currentTab() === "ToLearn" &&
-                      "border-b border-black text-black dark:text-white dark:border-white font-bold"
+                      " border-black text-black dark:text-white dark:border-white font-bold"
                   )}
                   onClick={() => {
                     setCurrentTab("ToLearn")
@@ -354,9 +354,9 @@ export default function Profile() {
                 <div
                   id="Learning"
                   class={clsx(
-                    "p-2 cursor-pointer",
+                    "p-2 cursor-pointer border-b border-inherit",
                     currentTab() === "Learning" &&
-                      "border-b border-black text-black dark:text-white dark:border-white font-bold"
+                      " border-black text-black dark:text-white dark:border-white font-bold"
                   )}
                   onClick={() => {
                     setCurrentTab("Learning")
@@ -367,9 +367,9 @@ export default function Profile() {
                 <div
                   id="Learned"
                   class={clsx(
-                    "p-2 cursor-pointer",
+                    "p-2 cursor-pointer border-b border-inherit",
                     currentTab() === "Learned" &&
-                      "border-b border-black text-black dark:text-white dark:border-white font-bold"
+                      " border-black text-black dark:text-white dark:border-white font-bold"
                   )}
                   onClick={() => {
                     setCurrentTab("Learned")
@@ -380,9 +380,9 @@ export default function Profile() {
                 <div
                   id="Links"
                   class={clsx(
-                    "p-2 cursor-pointer",
+                    "p-2 cursor-pointer border-b border-inherit",
                     currentTab() === "Links" &&
-                      "border-b border-black text-black dark:text-white dark:border-white font-bold"
+                      " border-black text-black dark:text-white dark:border-white font-bold"
                   )}
                   onClick={() => {
                     setCurrentTab("Links")

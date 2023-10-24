@@ -46,12 +46,41 @@ export default function GlobalTopic() {
       }
     }
   })
+  createEffect(() => {
+    window.addEventListener("resize", () => {
+      const specificViewportWidth = 800
+
+      if (window.innerWidth <= specificViewportWidth) {
+        // Perform actions when the viewport width is less than or equal to the specific width
+        global.setShowSidebar(false)
+
+        // Add your code here
+      } else {
+        // Perform actions when the viewport width is greater than the specific width
+
+        global.setShowSidebar(true)
+      }
+    })
+  })
 
   return (
     <>
       <style>{`
         #InfoSidebar {
-          display: none;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          animation: 0.4s SidebarSlide forwards ease-in
+        }
+
+        @keyframes SidebarSlide {
+          0% {
+            height: 0%;
+          }
+          100% {
+            height: 100%;
+          }
         }
 
         #InfoMain::-webkit-scrollbar {
@@ -61,9 +90,7 @@ export default function GlobalTopic() {
           display: none;
         }
       @media (min-width: 700px) {
-        #InfoSidebar {
-          display: flex;
-        }
+
 
         #InfoOptions {
           display: flex
@@ -107,7 +134,7 @@ export default function GlobalTopic() {
             }}
           />
         </Show>
-        <div class="h-[90%] w-full flex">
+        <div class="h-[90%] w-full flex relative">
           <Show
             when={topic.globalTopic?.latestGlobalGuide?.sections.length > 0}
             fallback={
@@ -204,12 +231,14 @@ export default function GlobalTopic() {
             </div>
           </Show>
 
-          <div
-            id="InfoSidebar"
-            class="  dark:bg-[#161616] bg-[#F4F4F6] border-l-[0.5px] border-[#69696951] h-full min-w-[250px]"
-          >
-            <GuideSidebar></GuideSidebar>
-          </div>
+          <Show when={global.state.showSidebar}>
+            <div
+              id="InfoSidebar"
+              class="  dark:bg-[#161616] bg-[#F4F4F6] border-l-[0.5px] overflow-hidden border-[#69696951] h-full min-w-[250px]"
+            >
+              <GuideSidebar></GuideSidebar>
+            </div>
+          </Show>
           {/* TODO: only here because commenting below block failed.. */}
           {/* add this when we have the data from server for who is learning the topic..  */}
         </div>
