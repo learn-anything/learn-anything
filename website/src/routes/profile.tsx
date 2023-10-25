@@ -278,21 +278,27 @@ export default function Profile() {
               </div>
               <div>
                 Work is being done already on the desktop app. To same level of
-                quality as Obsidian/Reflect. If you want to test it, join
-                Discord.
+                quality as Obsidian/Reflect. If you want to test it, join{" "}
+                <a href="https://discord.com/invite/bxtD8x6aNF">Discord</a>. All
+                the{" "}
+                <a href="https://discord.com/invite/bxtD8x6aNF">code is open</a>
+                , if you are developer, you are welcome to tune the tool to your
+                liking.
               </div>
               <div>
                 Work is also being done on making your markdown or any other
                 kinds of notes publishing to the web. Vectorising it all and
-                providing AI search interface to it. Together with API.
+                providing AI search interface to it. Together with API. And lots
+                more.
               </div>
               <div>
                 If you don't like something and are thinking of stopping being a
                 member, it would be lovely to{" "}
                 <a href="https://cal.com/nikiv/15min">
                   talk with you in person
-                </a>
-                or on <a href="https://discord.com/invite/bxtD8x6aNF"></a>.
+                </a>{" "}
+                or on{" "}
+                <a href="https://discord.com/invite/bxtD8x6aNF">Discord</a>.
               </div>
               <div>
                 We want to make this tool work exactly how you want it. You can

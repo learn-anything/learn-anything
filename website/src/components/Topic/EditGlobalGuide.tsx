@@ -303,6 +303,10 @@ export default function EditGlobalGuide() {
                   />
                   <div
                     onClick={() => {
+                      if (!user.user.admin) {
+                        setShowCantEditGuideModal(true)
+                        return
+                      }
                       topic.set("latestGlobalGuide", "sections", (p) => {
                         const copy = [...p]
                         copy.splice(sectionIndex(), 1)
@@ -375,7 +379,10 @@ export default function EditGlobalGuide() {
                             <div class="flex gap-1 dark:text-white flex-col items-end text-[14px] opacity-50">
                               <div
                                 onClick={async () => {
-                                  // navigate(`/links/${link.id}`)
+                                  if (!user.user.admin) {
+                                    setShowCantEditGuideModal(true)
+                                    return
+                                  }
                                   setLinkToEdit(link.id)
                                   setSectionOfLinkEdited(section.title)
                                 }}
@@ -385,6 +392,10 @@ export default function EditGlobalGuide() {
                               </div>
                               <div
                                 onClick={() => {
+                                  if (!user.user.admin) {
+                                    setShowCantEditGuideModal(true)
+                                    return
+                                  }
                                   topic.set(
                                     "latestGlobalGuide",
                                     "sections",
