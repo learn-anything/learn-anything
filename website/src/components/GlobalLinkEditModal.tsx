@@ -51,8 +51,8 @@ export default function GlobalLinkEditModal(props: Props) {
 }
 #LinkFocused {
   font-size: 12px;
-  left: 0;
-  top: -20px;
+  left: 8px;
+  top: -25px;
 }
 #LinkUnFocused {
 
@@ -63,12 +63,12 @@ export default function GlobalLinkEditModal(props: Props) {
       </style>
       <Show when={linkToEdit()}>
         <Modal>
-          <div class="rounded-lg w-1/2 relative bg-white dark:bg-neutral-900 z-50 font-light h-1/2 flex flex-col p-6 px-6 gap-4">
+          <div class="rounded-lg w-1/2 relative bg-white dark:border-[#282828]  border-[#69696951] border dark:bg-neutral-900 z-50 font-light h-1/2 flex flex-col p-6 px-6 gap-4">
             <div class="flex flex-col gap-5 [&>*]:px-2 [&>*]:transition-all [&>*]:p-1">
-              <div class="relative w-full border-b border-slate-200 hover:border-slate-400">
+              <div class="relative w-full ">
                 <input
                   value={linkToEdit().title}
-                  class="text-[20px] font-semibold w-full bg-inherit outline-none"
+                  class="text-[20px] font-semibold w-full bg-inherit outline-none focus:bg-neutral-800 focus:bg-opacity-70 hover:bg-neutral-800 hover:bg-opacity-50 transition-all px-2 p-1 rounded-[4px]"
                 ></input>
                 <div
                   id={linkToEdit().title ? "LinkFocused" : "LinkUnFocused"}
@@ -131,7 +131,7 @@ export default function GlobalLinkEditModal(props: Props) {
               Description
             </input>
             <Button.Root
-              class=" bg-blue-500 absolute bottom-4 left-4 active:scale-[1.1] hover:bg-blue-600 rounded-[6px] text-[22px] px-6 p-2 text-white"
+              class=" bg-blue-500 text-[14px] absolute bottom-4 left-4 active:scale-[1.1] hover:bg-blue-600 rounded-[4px] px-6 p-2 text-white"
               onClick={() => {
                 props.onClose()
               }}
@@ -139,7 +139,7 @@ export default function GlobalLinkEditModal(props: Props) {
               Cancel
             </Button.Root>
             <Button.Root
-              class=" bg-blue-500 absolute bottom-4 right-4 active:scale-[1.1] hover:bg-blue-600 rounded-[6px] text-[22px] px-6 p-2 text-white"
+              class=" bg-blue-500 text-[14px] absolute bottom-4 right-4 active:scale-[1.1] hover:bg-blue-600 rounded-[4px] px-6 p-2 text-white"
               onClick={() => {}}
             >
               Save

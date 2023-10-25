@@ -77,13 +77,18 @@ export default function Home() {
           }}
         />
         <div class="flex flex-col gap-1 items-center z-50">
-          <div class="tracking-wide font-bold bg-clip-text text-transparent">
+          <div
+            class="tracking-wide font-bold bg-clip-text "
+            style={{
+              "font-size": "clamp(3rem, 10vw, 5rem)"
+            }}
+          >
             I want to learn
           </div>
           <div
-            class="relative w-[50%] h-full flex items-center transition-all duration-150"
+            class="relative w-[70%] h-full flex items-center transition-all duration-150"
             classList={{
-              "w-[70%]": search_state.searchOpen
+              "w-[100%]": search_state.searchOpen
             }}
           >
             <Search placeholder={searchPlaceholder()} state={search_state} />

@@ -201,7 +201,7 @@ export default function EditGlobalGuide() {
               //   }
               // })
             }}
-            class="bg-[#3B5CCC] text-white border-[#3B5CCC] border px-[8px] p-[4px] text-[12px] rounded-[4px] font-light cursor-pointer"
+            class="hover:bg-[#3B5CCC] text-[#3B5CCC] hover:text-white border-[#3B5CCC] border px-[8px] p-[4px] text-[12px] rounded-[4px] font-light cursor-pointer"
           >
             {/* TODO: do <Icon name="Loading" /> when making a request and waiting for response from grafbase */}
             {/* how to do it? */}
@@ -237,7 +237,7 @@ export default function EditGlobalGuide() {
           </Show> */}
         </div>
         <div
-          class="bg-[#3B5CCC] text-white p-[10px] rounded-[4px] flex justify-center items-center cursor-pointer hover:bg-[#3554b9] transition-all"
+          class="hover:bg-[#3B5CCC] hover:text-white p-[10px] rounded-[4px] flex justify-center items-center cursor-pointer text-[#3B5CCC] border border-[#3B5CCC] transition-all"
           onClick={() => {
             topic.set("latestGlobalGuide", "sections", (p) => [
               {
