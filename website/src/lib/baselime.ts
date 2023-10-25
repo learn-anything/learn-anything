@@ -1,19 +1,16 @@
-export async function log(
-  resolver: string,
-  message: any,
-  data?: Record<string, any>
-) {
+export async function log(message: any, data?: Record<string, any>) {
   // @ts-ignore
-  if (!import.meta.env.PRODUCTION!) {
-    return
-  }
-  const url = `https://events.baselime.io/v1/cloudflare-workers/grafbase/logs`
+  // if (!import.meta.env.PRODUCTION) {
+  //   console.log(message)
+  //   return
+  // }
+  const url = `https://events.baselime.io/v1/website/${window.location.hostname}/${window.location.pathname}`
 
   const requestOptions = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "x-api-key": process.env.BASELIME_API_KEY!
+      "x-api-key": import.meta.env.VITE_BASELIME_API_KEY!
     },
     body: JSON.stringify([{ message, data }])
   }
@@ -26,7 +23,6 @@ export async function logError(error: any, data?: Record<string, any>) {
     console.log(error)
     return
   }
-
   if (typeof error === "object") {
     error = Object.assign(
       {
@@ -36,13 +32,13 @@ export async function logError(error: any, data?: Record<string, any>) {
       error
     )
   }
-  const url = `https://events.baselime.io/v1/cloudflare-workers/grafbase/error`
+  const url = `https://events.baselime.io/v1/website/errors`
 
   const requestOptions = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "x-api-key": process.env.BASELIME_API_KEY!
+      "x-api-key": import.meta.env.VITE_BASELIME_API_KEY!
     },
     body: JSON.stringify([{ error, data }])
   }

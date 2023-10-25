@@ -2,6 +2,7 @@ import Stripe from "stripe"
 import { hankoIdFromToken } from "../lib/hanko-validate"
 import { Context } from "@grafbase/sdk"
 import { GraphQLError } from "graphql"
+import { log } from "../lib/baselime"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-08-16",

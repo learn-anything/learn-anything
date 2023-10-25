@@ -1,4 +1,3 @@
-import clsx from "clsx"
 import {
   Match,
   Show,
@@ -17,8 +16,8 @@ import ModalWithMessageAndButton from "../../components/ModalWithMessageAndButto
 import GlobalGuide from "../../components/Topic/GlobalGuide"
 import GuideLinks from "../../components/Topic/GuideLinks"
 import GuideNav from "../../components/Topic/GuideNav"
-import GuideSidebar from "../../components/Topic/GuideSidebar"
 import GuideNotes from "../../components/Topic/GuideNotes"
+import GuideSidebar from "../../components/Topic/GuideSidebar"
 
 export default function GlobalTopic() {
   const global = useGlobalState()

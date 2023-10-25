@@ -4,6 +4,7 @@ import { useLocation } from "solid-start"
 import { SearchResult } from "../components/Search"
 import { MobiusType } from "../root"
 import { getHankoCookie } from "../../lib/auth"
+import { log } from "../lib/baselime"
 
 export type GlobalLink = {
   id: string
@@ -166,6 +167,10 @@ export default function createGlobalTopic(
       )
       setGlobalTopic("verifiedTopic", Boolean(foundTopic))
       verifiedTopic = Boolean(foundTopic)
+      if (!foundTopic) {
+        console.log("runs..")
+        // log(`topic not found: ${location.pathname.slice(1)}`)
+      }
     }
 
     if (!verifiedTopic) {

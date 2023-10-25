@@ -9,8 +9,6 @@ import { createUserState } from "../GlobalContext/user"
 export default function SignInPage() {
   const user = createUserState()
   onMount(async () => {
-    console.log(import.meta.env.VITE_HANKO_API, "hanko api")
-
     // checks if user is already logged in with valid token
     // TODO: perhaps there is better way to do this?
     const res = await fetch(`${import.meta.env.VITE_HANKO_API}/me`, {
