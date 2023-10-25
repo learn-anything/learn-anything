@@ -86,7 +86,7 @@ export default function Home() {
             I want to learn
           </div>
           <div
-            class="relative w-[70%] h-full flex items-center transition-all duration-150"
+            class="relative w-[70%]  h-full flex items-center transition-all duration-150"
             classList={{
               "w-[100%]": search_state.searchOpen
             }}

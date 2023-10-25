@@ -79,17 +79,17 @@ export default function GlobalTopic() {
           top: 0;
           left: 0;
           width: 100%;
-          animation: 0.4s SidebarSlide forwards ease-in
+          // animation: 0.4s SidebarSlide forwards ease-in
         }
 
-        @keyframes SidebarSlide {
-          0% {
-            height: 0%;
-          }
-          100% {
-            height: 100%;
-          }
-        }
+        // @keyframes SidebarSlide {
+        //   0% {
+        //     height: 0%;
+        //   }
+        //   100% {
+        //     height: 100%;
+        //   }
+        // }
 
         #InfoMain::-webkit-scrollbar {
           display: none;

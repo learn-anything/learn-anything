@@ -205,7 +205,7 @@ export interface SearchProps {
 export function Search(props: SearchProps): solid.JSX.Element {
   return (
     <div
-      class="relative h-10 w-full"
+      class="relative h-10 w-full bg-white rounded-[4px] dark:bg-neutral-900 text-black dark:text-white"
       ref={(el) => {
         /*
           if the click is outside the container, close the search
@@ -217,14 +217,11 @@ export function Search(props: SearchProps): solid.JSX.Element {
         })
       }}
     >
-      <div
-        class="w-full
-        bg-white rounded-[4px] dark:bg-neutral-900"
-      >
+      <div class="w-full ">
         <input
           type="text"
           placeholder={props.placeholder}
-          class="w-full h-10 bg-transparent p-3 px-4  rounded-[4px] text-black dark:text-white text-opacity-70 outline-none border dark:border-[#323232]  border-[#69696951] hover:border-[#363636] transition-all focus:border-[#505050]"
+          class="w-full h-10 bg-transparent p-3 px-4  rounded-[4px]  text-opacity-70 outline-none border dark:border-[#323232]  border-[#69696951] hover:border-[#363636] transition-all focus:border-[#505050]"
           on:keydown={(e) =>
             handleInputKeydown(e, e.currentTarget, props.state)
           }
