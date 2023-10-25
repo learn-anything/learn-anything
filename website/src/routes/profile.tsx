@@ -283,7 +283,7 @@ export default function Profile() {
                 the{" "}
                 <a href="https://discord.com/invite/bxtD8x6aNF">code is open</a>
                 , if you are developer, you are welcome to tune the tool to your
-                liking.
+                liking. We will help you with that.
               </div>
               <div>
                 Work is also being done on making your markdown or any other
