@@ -69,7 +69,7 @@ export default function Home() {
       <div
         class="w-screen h-screen
           flex flex-col items-center justify-center
-          bg-neutral-950 text-white"
+          dark:bg-neutral-950 bg-gray-200 text-black dark:text-white"
       >
         <ForceGraph
           onNodeClick={(name) => {
