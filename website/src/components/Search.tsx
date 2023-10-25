@@ -219,7 +219,7 @@ export function Search(props: SearchProps): solid.JSX.Element {
     >
       <div
         class="w-full
-        bg-white dark:bg-neutral-900"
+        bg-white rounded-[4px] dark:bg-neutral-900"
       >
         <input
           type="text"
