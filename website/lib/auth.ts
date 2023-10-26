@@ -1,24 +1,11 @@
+import { default as Cookies } from "js-cookie"
+
 export function getHankoCookie(): string {
-  const allCookies = document.cookie
-  const hankoCookie = allCookies
-    .split(";")
-    .find((cookie) => {
-      return cookie
-    })
-    ?.split("=")[1]
+  const hankoCookie = Cookies.get("hanko")
   return hankoCookie ?? ""
 }
 
 export function signedIn() {
-  const allCookies = document.cookie
-  const hankoCookie = allCookies
-    .split(";")
-    .find((cookie) => {
-      return cookie
-    })
-    ?.split("=")[1]
-  if (hankoCookie) {
-    return true
-  }
-  return false
+  const hankoCookie = Cookies.get("hanko")
+  return !!hankoCookie
 }
