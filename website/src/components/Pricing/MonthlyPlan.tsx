@@ -96,7 +96,8 @@ export default function MonthlyPlan(props: Props) {
             })
             // @ts-ignore
             const stripeCheckout = res.data.stripe
-            window.location.href = stripeCheckout
+            console.log(res, "res")
+            // window.location.href = stripeCheckout
           }}
         >
           <Show
