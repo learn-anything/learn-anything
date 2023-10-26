@@ -30,12 +30,12 @@ export default function Home() {
 
   const search_state = createSearchState({
     searchResults,
-    onSelect: async ({ name }) => {
+    onSelect: ({ name }) => {
       const foundTopic = global.state.topicsWithConnections.find(
         (t) => t.prettyName === name
       )!
       navigate(`/${foundTopic.name}`)
-      await log("Topic searched", search_state.query)
+      log("Topic searched", search_state.query)
     }
   })
 

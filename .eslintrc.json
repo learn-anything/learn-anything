@@ -23,6 +23,7 @@
     */
     // "no-console": "warn",
     "no-debugger": "warn",
+    "require-await": "warn",
     "prefer-const": "warn",
     "@typescript-eslint/no-unused-vars": [
       "warn",

@@ -2625,7 +2625,6 @@
   { "name": "korea", "prettyName": "Korea", "connections": [] },
   { "name": "georgia", "prettyName": "Georgia", "connections": [] },
   { "name": "india", "prettyName": "India", "connections": [] },
-  { "name": "belgium", "prettyName": "Belgium", "connections": [] },
   { "name": "ukraine", "prettyName": "Ukraine", "connections": [] },
   {
     "name": "united-arab-emirates",

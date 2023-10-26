@@ -41,6 +41,7 @@ export async function log(
     console.log(message)
     return
   }
+  console.log("runs..")
   let url
   if (import.meta.env.VITE_ENV === "staging") {
     url = `https://events.baselime.io/v1/staging-website-logs/${window.location.hostname}/${window.location.pathname}`

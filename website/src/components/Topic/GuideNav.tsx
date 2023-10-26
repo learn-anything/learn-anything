@@ -1,63 +1,19 @@
-import { createShortcut } from "@solid-primitives/keyboard"
 import clsx from "clsx"
-import { Show, createMemo, createSignal } from "solid-js"
+import { Show, createMemo } from "solid-js"
 import { A, useLocation, useNavigate } from "solid-start"
 import { useGlobalState } from "../../GlobalContext/global"
-import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import { useUser } from "../../GlobalContext/user"
+import { log } from "../../lib/baselime"
 import FancyButton from "../FancyButton"
 import Icon from "../Icon"
 import { Search, createSearchState } from "../Search"
-import { log } from "../../lib/baselime"
 
 // TODO: add fuzzy searching for topics. also consider lower case inputs matching results too
 export default function GuideNav() {
-  const [showInput, setShowInput] = createSignal(false)
   const navigate = useNavigate()
-  const topic = useGlobalTopic()
   const global = useGlobalState()
   const user = useUser()
-
-  const [topicSearchResults, setTopicSearchResults] = createSignal<string[]>([])
-  const [topicSearchInput, setTopicSearchInput] = createSignal("")
-  const [focusedTopic, setFocusedTopic] = createSignal(0)
-  const [focusedTodoTitle, setFocusedTodoTitle] = createSignal("")
   const location = useLocation()
-
-  // TODO: make it into effect so it switches when user changes theme whilst site is loaded
-  // https://discord.com/channels/722131463138705510/1163448241577283675/1163453275400585216
-
-  createShortcut(["ARROWDOWN"], () => {
-    if (focusedTopic() === topicSearchResults().length - 1) {
-      setFocusedTopic(0)
-      return
-    }
-    setFocusedTopic(focusedTopic() + 1)
-  })
-  createShortcut(["ARROWUP"], () => {
-    if (focusedTopic() === 0) {
-      setFocusedTopic(topicSearchResults().length - 1)
-      return
-    }
-    setFocusedTopic(focusedTopic() - 1)
-  })
-
-  // createEffect(() => {
-  //   if (topicSearchInput()) {
-  //     untrack(() => {
-  //       setTopicSearchResults(
-  //         topicSearchResults().filter((word: string) =>
-  //           topicSearchInput()
-  //             .split("")
-  //             .every((value) => {
-  //               return word.split("").includes(value)
-  //             })
-  //         )
-  //       )
-  //     })
-  //     setFocusedTodoTitle(topicSearchResults()[focusedTopic()])
-  //   }
-  // })
 
   const searchResults = createMemo(() => {
     return global.state.topicsWithConnections.map((t) => ({
@@ -67,12 +23,12 @@ export default function GuideNav() {
 
   const search_state = createSearchState({
     searchResults,
-    onSelect: async ({ name }) => {
+    onSelect: ({ name }) => {
       const foundTopic = global.state.topicsWithConnections.find(
         (t) => t.prettyName === name
       )!
       navigate(`/${foundTopic.name}`)
-      await log("Topic searched", search_state.query)
+      log("Topic searched", search_state.query)
     }
   })
 
