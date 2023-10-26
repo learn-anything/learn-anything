@@ -14,6 +14,7 @@ export async function log(
     url = `https://events.baselime.io/v1/grafbase/logs/${resolver}`
   }
 
+  console.log("making request")
   const requestOptions = {
     method: "POST",
     headers: {
@@ -22,7 +23,8 @@ export async function log(
     },
     body: JSON.stringify([{ message, additionalMessage }])
   }
-  await fetch(url, requestOptions)
+  const res = await fetch(url, requestOptions)
+  console.log(res, "res")
 }
 
 export async function logError(

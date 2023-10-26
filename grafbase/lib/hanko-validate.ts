@@ -1,6 +1,7 @@
 import { jwtVerify, createRemoteJWKSet } from "jose"
 import { GraphQLError } from "graphql"
 import { Context } from "@grafbase/sdk"
+import { log } from "./baselime"
 
 // validates that the token in `authorization` header is correct
 // if it is valid, returns hanko id of the user
@@ -17,7 +18,7 @@ export async function hankoIdFromToken(context: Context) {
     new URL(`${process.env.PUBLIC_HANKO_API_URL}/.well-known/jwks.json`)
   )
   const hankoToken = authHeader.split(" ")[1]
-  console.log(hankoToken, "hanko token")
+  await log("hanko-validate", { hankoToken })
   try {
     const verifiedJWT = await jwtVerify(hankoToken ?? "", JWKS)
     const hankoId = verifiedJWT.payload.sub
