@@ -19,6 +19,7 @@ export async function hankoIdFromToken(context: Context) {
   )
   const hankoToken = authHeader.split(" ")[1]
   await log("hanko-validate", { hankoToken })
+  console.log(hankoToken, "hanko token")
   try {
     const verifiedJWT = await jwtVerify(hankoToken ?? "", JWKS)
     const hankoId = verifiedJWT.payload.sub

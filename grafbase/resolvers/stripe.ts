@@ -18,6 +18,7 @@ export default async function StripeResolver(
 ) {
   await log("stripe", "trying to get stripe checkout", { args })
   await log("stripe", process.env.GRAFBASE_ENV, "grafbase env")
+  console.log(process.env.GRAFBASE_ENV, "grafbase env")
   const hankoId = await hankoIdFromToken(context)
   if (hankoId) {
     try {
