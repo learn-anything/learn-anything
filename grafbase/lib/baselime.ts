@@ -4,11 +4,11 @@ export async function log(
   additionalMessage?: string | Record<string, any>
 ) {
   console.log(message, additionalMessage)
-  if (process.env.env !== "prod" && process.env.env !== "staging") {
+  if (process.env.ENV !== "prod" && process.env.ENV !== "staging") {
     return
   }
   let url
-  if (process.env.env === "staging") {
+  if (process.env.ENV === "staging") {
     url = `https://events.baselime.io/v1/staging-grafbase/logs/{${resolver}`
   } else {
     url = `https://events.baselime.io/v1/grafbase/logs/${resolver}`
@@ -31,11 +31,11 @@ export async function logError(
   additionalMessage?: string | Record<string, any>
 ) {
   console.log(error, additionalMessage)
-  if (process.env.env !== "prod" && process.env.env !== "staging") {
+  if (process.env.ENV !== "prod" && process.env.ENV !== "staging") {
     return
   }
   let url
-  if (process.env.env === "staging") {
+  if (process.env.ENV === "staging") {
     url = `https://events.baselime.io/v1/staging-grafbase/errors/{${resolver}`
   } else {
     url = `https://events.baselime.io/v1/grafbase/errors/${resolver}`
