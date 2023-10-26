@@ -169,7 +169,7 @@ export default function createGlobalTopic(
       setGlobalTopic("verifiedTopic", Boolean(foundTopic))
       verifiedTopic = Boolean(foundTopic)
       if (!foundTopic) {
-        log(`topic not found: ${location.pathname.slice(1)}`)
+        await log(`topic not found: ${location.pathname.slice(1)}`)
       }
     }
 

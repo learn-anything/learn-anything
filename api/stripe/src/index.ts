@@ -6,13 +6,13 @@ import { cors } from "hono/cors"
 const app = new Hono()
 app.use("*", cors())
 
-app.onError((e, c) => {
-  logError(e.message, "error in hono")
+app.onError(async (e, c) => {
+  await logError(e.message, "error in hono")
   return c.text("Internal Sever Error", 500)
 })
 
 app.post("/learn-anything-bought", async (c: Context) => {
-  let event = c.req.body
+  let event = await c.req.parseBody()
   const stripe = new Stripe(c.env.LA_STRIPE_SECRET_KEY!, {
     apiVersion: "2023-08-16",
     typescript: true,
@@ -30,7 +30,7 @@ app.post("/learn-anything-bought", async (c: Context) => {
         endpointSecret,
       )
     } catch (err) {
-      logError(err, "Webhook signature verification failed")
+      await logError(err, "Webhook signature verification failed")
       c.status(400)
       return c.json({ err: "failed" })
     }
@@ -43,8 +43,7 @@ app.post("/learn-anything-bought", async (c: Context) => {
       // @ts-ignore
       const checkoutSessionCompleted = event.data.object
       if (checkoutSessionCompleted.status === "complete") {
-        // const email = checkoutSessionCompleted.metadata.userEmail.trim()
-        const email = "nikita@nikiv.dev"
+        const email = checkoutSessionCompleted.metadata.userEmail.trim()
         const subscription = await stripe.subscriptions.retrieve(
           checkoutSessionCompleted.subscription,
         )
@@ -91,7 +90,7 @@ app.post("/learn-anything-bought", async (c: Context) => {
     //   subscription: customerSubscriptionUpdated.ID,
     // })
     default:
-      logError(event, "Unhandled event type")
+      await logError(event, "Unhandled event type")
       return c.json({ error: `Unhandled event type` })
   }
   return c.json({})
