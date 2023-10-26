@@ -1,26 +1,23 @@
-import { Show, createMemo, createResource, createSignal } from "solid-js"
+import { Show, createMemo, createResource } from "solid-js"
 import { useNavigate } from "solid-start"
 import { getHankoCookie } from "../../lib/auth"
 import { useGlobalState } from "../GlobalContext/global.ts"
 import { Search, createSearchState } from "../components/Search"
 import { ForceGraph } from "../components/force-graph/index.tsx"
 import { getRandomItem } from "../lib/lib.ts"
+import { log } from "../lib/baselime.ts"
 
-// TODO: load the graph with graph data from server (no undefined flying around)
 export default function Home() {
   const navigate = useNavigate()
   const global = useGlobalState()
-  const [suggestedTopicName, setSuggestedTopicName] = createSignal("")
 
   const [hankoCookie] = createResource(() => {
-    const hankoCookie = getHankoCookie()
-    return hankoCookie
+    return getHankoCookie()
   })
 
   const searchPlaceholder = createMemo(() => {
     const item = getRandomItem(global.state.topicsWithConnections)
     if (item) {
-      setSuggestedTopicName(item.name)
       return item.prettyName
     }
   })
@@ -33,11 +30,12 @@ export default function Home() {
 
   const search_state = createSearchState({
     searchResults,
-    onSelect: ({ name }) => {
+    onSelect: async ({ name }) => {
       const foundTopic = global.state.topicsWithConnections.find(
         (t) => t.prettyName === name
       )!
       navigate(`/${foundTopic.name}`)
+      await log("Topic searched", search_state.query)
     }
   })
 

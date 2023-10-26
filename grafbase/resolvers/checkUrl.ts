@@ -29,8 +29,10 @@ export default async function checkUrlResolver(
       })
       await rewriter.transform(response.clone()).text()
       if (title) {
+        console.log(args.linkUrl, title)
         return title
       } else {
+        console.error("Title not found", args.linkUrl)
         throw new GraphQLError("Title not found")
       }
     }

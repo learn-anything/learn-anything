@@ -8,6 +8,7 @@ import { useUser } from "../../GlobalContext/user"
 import FancyButton from "../FancyButton"
 import Icon from "../Icon"
 import { Search, createSearchState } from "../Search"
+import { log } from "../../lib/baselime"
 
 // TODO: add fuzzy searching for topics. also consider lower case inputs matching results too
 export default function GuideNav() {
@@ -66,11 +67,12 @@ export default function GuideNav() {
 
   const search_state = createSearchState({
     searchResults,
-    onSelect: ({ name }) => {
+    onSelect: async ({ name }) => {
       const foundTopic = global.state.topicsWithConnections.find(
         (t) => t.prettyName === name
       )!
       navigate(`/${foundTopic.name}`)
+      await log("Topic searched", search_state.query)
     }
   })
 

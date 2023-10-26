@@ -129,7 +129,7 @@ export async function logError(
   additionalMessage?: string | Record<string, any>,
 ) {
   if (ENV !== "prod" && ENV !== "staging") {
-    console.log(error, additionalMessage)
+    console.error(error, additionalMessage)
     return
   }
   let url

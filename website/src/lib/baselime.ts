@@ -74,7 +74,7 @@ export async function logError(
     import.meta.env.VITE_ENV !== "prod" &&
     import.meta.env.VITE_ENV !== "staging"
   ) {
-    console.log(error)
+    console.error(error)
     return
   }
   let url
