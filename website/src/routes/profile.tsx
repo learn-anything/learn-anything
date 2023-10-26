@@ -270,7 +270,7 @@ export default function Profile() {
                 on <a href="https://discord.com/invite/bxtD8x6aNF">Discord</a>.
               </div>
               <div>
-                For now you can see 1,050+ topics available with guides.
+                For now you can see 1,100+ topics available with guides.
               </div>
               <div>You can also mark any of the guides learning status.</div>
               <div>
