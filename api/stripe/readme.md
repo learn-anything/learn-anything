@@ -2,8 +2,6 @@ This is a webhook endpoint that listens in to events from Stripe and does things
 
 Currently it triggers when a person bought membership to LA. It checks the time frame (month/year) and then updates the `User` object with `memberUntil` property set to the date until membership is valid.
 
-# Run
-
 ## Test Stripe events locally
 
 Assumes you are logged in with `stripe login`.
@@ -20,8 +18,14 @@ Check logs in server (from `bun run` command) for errors.
 
 [Use incoming webhooks to get real-time updates](https://stripe.com/docs/webhooks) is a good read.
 
-## Deploy
+## Deploy production
 
 ```
-bun run deploy --name la-stripe --keep-vars
+bun run deploy
+```
+
+## Deploy staging
+
+```
+bun run deploy:staging
 ```

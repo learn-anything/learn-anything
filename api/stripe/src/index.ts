@@ -7,7 +7,7 @@ const app = new Hono()
 app.use("*", cors())
 
 app.onError((e, c) => {
-  console.log(e.message)
+  logError(e.message, "error in hono")
   return c.text("Internal Sever Error", 500)
 })
 
@@ -30,8 +30,7 @@ app.post("/learn-anything-bought", async (c: Context) => {
         endpointSecret,
       )
     } catch (err) {
-      // @ts-ignore
-      console.log(`⚠️  Webhook signature verification failed.`, err.message)
+      logError(err, "Webhook signature verification failed")
       c.status(400)
       return c.json({ err: "failed" })
     }
@@ -92,13 +91,66 @@ app.post("/learn-anything-bought", async (c: Context) => {
     //   subscription: customerSubscriptionUpdated.ID,
     // })
     default:
-      // Unexpected event type
-      // TODO: log?
-      // @ts-ignore
-      console.log(`Unhandled event type`)
+      logError(event, "Unhandled event type")
       return c.json({ error: `Unhandled event type` })
   }
   return c.json({})
 })
 
 export default app
+
+export async function log(message: any, additionalMessage?: string) {
+  if (ENV !== "prod" && ENV !== "staging") {
+    console.log(message, additionalMessage)
+    return
+  }
+  let url
+  if (ENV === "staging") {
+    url = `https://events.baselime.io/v1/staging-stripe/events/logs`
+  } else {
+    url = `https://events.baselime.io/v1/stripe/events/logs`
+  }
+
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": process.env.BASELIME_API_KEY!,
+    },
+    body: JSON.stringify([{ message, additionalMessage }]),
+  }
+  await fetch(url, requestOptions)
+}
+
+export async function logError(error: any, additionalMessage?: string) {
+  if (ENV !== "prod" && ENV !== "staging") {
+    console.log(error, additionalMessage)
+    return
+  }
+  let url
+  if (ENV === "staging") {
+    url = `https://events.baselime.io/v1/staging-stripe/events/errors`
+  } else {
+    url = `https://events.baselime.io/v1/stripe/events/errors`
+  }
+
+  if (typeof error === "object") {
+    error = Object.assign(
+      {
+        message: error.message,
+        stack: error.stack,
+      },
+      error,
+    )
+  }
+
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": process.env.BASELIME_API_KEY!,
+    },
+    body: JSON.stringify([{ error, additionalMessage }]),
+  }
+  await fetch(url, requestOptions)
+}

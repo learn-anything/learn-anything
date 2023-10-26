@@ -1,2 +1,11 @@
-name = "stripe"
+name = "la-stripe"
 compatibility_date = "2023-01-01"
+
+[define]
+ENV = '""'
+
+[env.staging.define]
+ENV = '"staging"'
+
+[env.prod.define]
+ENV = '"prod"'

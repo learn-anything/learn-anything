@@ -2,7 +2,8 @@
   "name": "@la/stripe",
   "scripts": {
     "dev": "wrangler dev src/index.ts",
-    "deploy": "wrangler deploy src/index.ts"
+    "deploy": "wrangler deploy src/index.ts --keep-vars --env prod",
+    "deploy:staging": "wrangler deploy src/index.ts --keep-vars --env staging"
   },
   "prettier": {
     "semi": false
