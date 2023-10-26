@@ -5,6 +5,7 @@ import Icon from "../Icon"
 import { useMobius } from "../../root"
 import { toRelativeTime } from "../../lib/lib"
 import { useNavigate } from "solid-start"
+import { getHankoCookie } from "../../../lib/auth"
 
 interface Props {
   setShowLetsTalkModal: (state: boolean) => void
@@ -84,6 +85,7 @@ export default function MonthlyPlan(props: Props) {
               props.setShowModalWithSignUpMessage(true)
               return
             }
+            console.log(await getHankoCookie(), "hanko cookie")
             setWaitingForStripe(true)
             const res = await mobius.query({
               stripe: {
