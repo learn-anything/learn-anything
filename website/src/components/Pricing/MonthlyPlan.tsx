@@ -85,7 +85,6 @@ export default function MonthlyPlan(props: Props) {
               props.setShowModalWithSignUpMessage(true)
               return
             }
-            console.log(await getHankoCookie(), "hanko cookie")
             setWaitingForStripe(true)
             const res = await mobius.query({
               stripe: {
@@ -98,8 +97,7 @@ export default function MonthlyPlan(props: Props) {
             })
             // @ts-ignore
             const stripeCheckout = res.data.stripe
-            console.log(res, "res")
-            // window.location.href = stripeCheckout
+            window.location.href = stripeCheckout
           }}
         >
           <Show
