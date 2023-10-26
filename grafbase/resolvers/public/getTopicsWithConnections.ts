@@ -1,6 +1,5 @@
 import { Context } from "@grafbase/sdk"
 import { GraphQLError } from "graphql"
-import { logError } from "../../lib/baselime"
 
 export default async function publicGetTopicsWithConnectionsResolver(
   root: any,
@@ -14,7 +13,7 @@ export default async function publicGetTopicsWithConnectionsResolver(
       return res
     }
   } catch (err) {
-    logError("publicGetTopicsWithConnections", err, { args })
+    console.error(err)
     throw new GraphQLError(JSON.stringify(err))
   }
 }

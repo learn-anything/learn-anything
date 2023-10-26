@@ -40,7 +40,8 @@ export default async function updateLatestGlobalGuideResolver(
       })
       return "ok"
     }
-  } catch (error) {
-    throw new GraphQLError(JSON.stringify(error))
+  } catch (err) {
+    console.error(err, { args })
+    throw new GraphQLError(JSON.stringify(err))
   }
 }

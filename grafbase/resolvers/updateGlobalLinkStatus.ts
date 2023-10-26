@@ -1,8 +1,7 @@
+import { Context } from "@grafbase/sdk"
 import { GraphQLError } from "graphql"
 import { updateGlobalLinkStatus } from "../edgedb/crud/global-link"
-import { logError } from "../lib/baselime"
 import { hankoIdFromToken } from "../lib/hanko-validate"
-import { Context } from "@grafbase/sdk"
 
 export default async function updateGlobalLinkStatusResolver(
   root: any,
@@ -19,7 +18,7 @@ export default async function updateGlobalLinkStatusResolver(
       return "ok"
     }
   } catch (err) {
-    logError("updateGlobalLinkStatus", err, { args })
+    console.error(err, { args })
     throw new GraphQLError(JSON.stringify(err))
   }
 }

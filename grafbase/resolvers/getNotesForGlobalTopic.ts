@@ -1,8 +1,7 @@
 import { Context } from "@grafbase/sdk"
-import { hankoIdFromToken } from "../lib/hanko-validate"
 import { GraphQLError } from "graphql"
 import { getNotesForGlobalTopic } from "../edgedb/crud/global-note"
-import { logError } from "../lib/baselime"
+import { hankoIdFromToken } from "../lib/hanko-validate"
 
 export default async function getNotesForGlobalTopicResolver(
   root: any,
@@ -16,7 +15,7 @@ export default async function getNotesForGlobalTopicResolver(
       return notes
     }
   } catch (err) {
-    logError("getNotesForGlobalTopic", err, { args })
+    console.error(err, { args })
     throw new GraphQLError(JSON.stringify(err))
   }
 }

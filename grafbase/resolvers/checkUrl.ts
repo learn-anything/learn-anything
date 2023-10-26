@@ -1,7 +1,6 @@
+import { Context } from "@grafbase/sdk"
 import { GraphQLError } from "graphql"
 import { hankoIdFromToken } from "../lib/hanko-validate"
-import { Context } from "@grafbase/sdk"
-import { logError } from "../lib/baselime"
 
 // for now its just a proxy to get the title to get around cors issue
 // TODO: in future, do call to db and check if we have a url like this
@@ -36,7 +35,7 @@ export default async function checkUrlResolver(
       }
     }
   } catch (err) {
-    logError("checkUrl", err, { args })
+    console.error(err, { args })
     throw new GraphQLError(JSON.stringify(err))
   }
 }

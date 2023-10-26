@@ -1,8 +1,7 @@
 import { Context } from "@grafbase/sdk"
+import { GraphQLError } from "graphql"
 import { getLearningStatus } from "../edgedb/crud/user"
 import { hankoIdFromToken } from "../lib/hanko-validate"
-import { logError } from "../lib/baselime"
-import { GraphQLError } from "graphql"
 
 export default async function getGlobalTopicLearningStatusResolver(
   root: any,
@@ -16,7 +15,7 @@ export default async function getGlobalTopicLearningStatusResolver(
       return status?.learningStatus
     }
   } catch (err) {
-    logError("getGlobalTopicLearningStatus", err, { args })
+    console.error(err, { args })
     throw new GraphQLError(JSON.stringify(err))
   }
 }

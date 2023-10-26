@@ -2,7 +2,6 @@ import { Context } from "@grafbase/sdk"
 import { GraphQLError } from "graphql"
 import { getGlobalTopicDetails } from "../edgedb/crud/global-topic"
 import { hankoIdFromToken } from "../lib/hanko-validate"
-import { logError } from "../lib/baselime"
 
 export default async function getGlobalTopicResolver(
   root: any,
@@ -16,7 +15,7 @@ export default async function getGlobalTopicResolver(
       return topicDetails
     }
   } catch (err) {
-    logError("getGlobalTopic", err, { args })
+    console.error(err, { args })
     throw new GraphQLError(JSON.stringify(err))
   }
 }

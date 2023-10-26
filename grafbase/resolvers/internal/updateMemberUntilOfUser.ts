@@ -1,7 +1,6 @@
 import { GraphQLError } from "graphql"
 import { Context } from "@grafbase/sdk"
 import { updateMemberUntilOfUser } from "../../edgedb/crud/user"
-import { logError } from "../../lib/baselime"
 
 export default async function updateMemberUntilOfUserResolver(
   root: any,
@@ -30,7 +29,7 @@ export default async function updateMemberUntilOfUserResolver(
       return "ok"
     }
   } catch (err) {
-    logError("updateMemberUntilOfUser", err)
+    console.error(err, { args })
     throw new GraphQLError(JSON.stringify(err))
   }
 }

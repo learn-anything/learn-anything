@@ -1,8 +1,7 @@
 import { Context } from "@grafbase/sdk"
+import { GraphQLError } from "graphql"
 import { getGlobalLink } from "../edgedb/crud/global-link"
 import { hankoIdFromToken } from "../lib/hanko-validate"
-import { GraphQLError } from "graphql"
-import { logError } from "../lib/baselime"
 
 export default async function getGlobalLinkResolver(
   root: any,
@@ -16,7 +15,7 @@ export default async function getGlobalLinkResolver(
       return link
     }
   } catch (err) {
-    logError("getGlobalLink", err, { args })
+    console.error(err, { args })
     throw new GraphQLError(JSON.stringify(err))
   }
 }

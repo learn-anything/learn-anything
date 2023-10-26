@@ -15,7 +15,6 @@ export default async function addPersonalLinkResolver(
       return "ok"
     }
   } catch (error) {
-    // logError("addPersonalLink", error, { args })
     console.log(error, { args })
     throw new GraphQLError(JSON.stringify(error))
   }

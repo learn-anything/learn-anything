@@ -3,7 +3,6 @@ import { GraphQLError } from "graphql"
 import Stripe from "stripe"
 import { upgradeStripeMonthlyPlanToYear } from "../edgedb/crud/user"
 import { hankoIdFromToken } from "../lib/hanko-validate"
-import { log, logError } from "../lib/baselime"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-08-16",
@@ -17,7 +16,7 @@ export default async function updateStripePlan(
   args: {},
   context: Context
 ) {
-  log("updateStripePlan", "updating stripe plan", { args })
+  console.log("updating stripe plan", { args })
   const hankoId = await hankoIdFromToken(context)
   if (hankoId) {
     try {
@@ -42,9 +41,9 @@ export default async function updateStripePlan(
         }
       )
       return "ok"
-    } catch (error) {
-      logError("updateStripePlan", error, { args })
-      throw new GraphQLError(JSON.stringify(error))
+    } catch (err) {
+      console.error(err)
+      throw new GraphQLError(JSON.stringify(err))
     }
   }
 }

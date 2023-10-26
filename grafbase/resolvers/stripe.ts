@@ -15,8 +15,6 @@ export default async function StripeResolver(
   args: { plan: StripePlan; userEmail: string },
   context: Context
 ) {
-  console.log("getting stripe checkout", { args: JSON.stringify(args) })
-  console.log(process.env.GRAFBASE_ENV, "grafbase env")
   const hankoId = await hankoIdFromToken(context)
   if (hankoId) {
     try {
@@ -56,9 +54,9 @@ export default async function StripeResolver(
             stripeCheckoutUrl: null
           }
       }
-    } catch (error) {
-      console.error(error, { args })
-      throw new GraphQLError(JSON.stringify(error))
+    } catch (err) {
+      console.error(err, { args })
+      throw new GraphQLError(JSON.stringify(err))
     }
   } else {
     console.error("not a member", { args })

@@ -1,12 +1,11 @@
 import { Context } from "@grafbase/sdk"
+import { GraphQLError } from "graphql"
 import { getAllLikedLinks } from "../edgedb/crud/user"
 import { hankoIdFromToken } from "../lib/hanko-validate"
-import { GraphQLError } from "graphql"
-import { logError } from "../lib/baselime"
 
 export default async function getLikedLinksResolver(
   root: any,
-  args: any,
+  args: {},
   context: Context
 ) {
   try {
@@ -16,7 +15,7 @@ export default async function getLikedLinksResolver(
       return links
     }
   } catch (err) {
-    logError("getLikedLinks", err, { args })
+    console.error(err)
     throw new GraphQLError(JSON.stringify(err))
   }
 }

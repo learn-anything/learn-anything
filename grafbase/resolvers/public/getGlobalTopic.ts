@@ -1,7 +1,6 @@
+import { Context } from "@grafbase/sdk"
 import { GraphQLError } from "graphql"
 import { getGlobalTopicPublic } from "../../edgedb/crud/global-topic"
-import { Context } from "@grafbase/sdk"
-import { logError } from "../../lib/baselime"
 
 export default async function publicGetGlobalTopicResolver(
   root: any,
@@ -11,8 +10,8 @@ export default async function publicGetGlobalTopicResolver(
   try {
     const topic = await getGlobalTopicPublic(args.topicName)
     return topic
-  } catch (error) {
-    logError("publicGetGlobalTopicResolver", error, { args })
-    throw new GraphQLError(JSON.stringify(error))
+  } catch (err) {
+    console.error(err, { args })
+    throw new GraphQLError(JSON.stringify(err))
   }
 }
