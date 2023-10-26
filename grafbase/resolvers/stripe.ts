@@ -18,6 +18,8 @@ export default async function StripeResolver(
 ) {
   log("stripe", "trying to get stripe checkout", { args })
   console.log("log test")
+  console.log(process.env.STRIPE_SECRET_KEY!, "stripe secret key")
+  console.log(process.env.BASELIME_API_KEY!, "baselime api key")
   return "ok"
   // const hankoId = await hankoIdFromToken(context)
   // if (hankoId) {
