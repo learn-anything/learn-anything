@@ -7,6 +7,7 @@ import { toRelativeTime } from "../../lib/lib"
 
 interface Props {
   setShowLetsTalkModal: (state: boolean) => void
+  setShowModalWithSignUpMessage: (state: boolean) => void
 }
 
 export default function YearlyPlan(props: Props) {
@@ -50,12 +51,13 @@ export default function YearlyPlan(props: Props) {
         </div>
 
         <div class="font-light opacity-60 flex flex-col gap-3">
-          <div>• See in full 1,000+ high quality guides on various topics</div>
+          <div>• See in full 1,100+ high quality guides on various topics</div>
           <div>• Mark any topic as learned / to learn / learning</div>
-          <div>• Publish your notes to your own personal wiki page</div>
           <div>
             • Mark any link you find in LA as completed or to complete later
           </div>
+          <div>• Add your own links and track progress on them</div>
+          <div>• Publish your notes to your own personal wiki page (soon)</div>
           <div>
             • Sync all your private/public notes with a mobile app (soon)
           </div>
@@ -94,7 +96,8 @@ export default function YearlyPlan(props: Props) {
               const stripeCheckout = res.data.stripe
               window.location.href = stripeCheckout
             } else {
-              // setShowModalWithSignUpMessage(true)
+              props.setShowModalWithSignUpMessage(true)
+              return
             }
           }}
         >

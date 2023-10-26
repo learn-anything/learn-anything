@@ -197,10 +197,16 @@ export default function Pricing() {
             <Show
               when={planChosen() === "monthly"}
               fallback={
-                <YearlyPlan setShowLetsTalkModal={setShowLetsTalkModal} />
+                <YearlyPlan
+                  setShowLetsTalkModal={setShowLetsTalkModal}
+                  setShowModalWithSignUpMessage={setShowModalWithSignUpMessage}
+                />
               }
             >
-              <MonthlyPlan setShowLetsTalkModal={setShowLetsTalkModal} />
+              <MonthlyPlan
+                setShowLetsTalkModal={setShowLetsTalkModal}
+                setShowModalWithSignUpMessage={setShowModalWithSignUpMessage}
+              />
             </Show>
           </div>
 
@@ -208,7 +214,6 @@ export default function Pricing() {
             <div id="InfoTitle" class="w-full font-light text-3xl sticky pr-4">
               <div
                 onClick={() => {
-                  // TODO: grafbase call to do stripe checkout
                   if (!user.user.signedIn) {
                     localStorage.setItem("pageBeforeSignIn", location.pathname)
                     navigate("/auth")

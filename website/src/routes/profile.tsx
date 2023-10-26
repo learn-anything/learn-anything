@@ -265,7 +265,10 @@ export default function Profile() {
           {/* @ts-ignore */}
           <Modal onClose={setShowHelpModal}>
             <div class="w-1/2 relative z-50 h-[570px] overflow-auto rounded-lg bg-white border-slate-400 border dark:bg-neutral-900 flex flex-col gap-4 p-[20px] px-[24px]">
-              <div>This page is being improved rapidly.</div>
+              <div>
+                This page is being improved rapidly. If you hit any issues, ask
+                on <a href="https://discord.com/invite/bxtD8x6aNF">Discord</a>.
+              </div>
               <div>
                 For now you can see 1,050+ topics available with guides.
               </div>

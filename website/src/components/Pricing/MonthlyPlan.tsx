@@ -4,15 +4,18 @@ import { useUser } from "../../GlobalContext/user"
 import Icon from "../Icon"
 import { useMobius } from "../../root"
 import { toRelativeTime } from "../../lib/lib"
+import { useNavigate } from "solid-start"
 
 interface Props {
   setShowLetsTalkModal: (state: boolean) => void
+  setShowModalWithSignUpMessage: (state: boolean) => void
 }
 
 export default function MonthlyPlan(props: Props) {
   const [waitingForStripe, setWaitingForStripe] = createSignal(false)
   const mobius = useMobius()
   const user = useUser()
+  const navigate = useNavigate()
 
   return (
     <div class="w-full h-full p-8 flex flex-col gap-6 justify-between">
@@ -47,12 +50,13 @@ export default function MonthlyPlan(props: Props) {
         </div>
 
         <div class="font-light opacity-60 flex flex-col gap-3">
-          <div>• See in full 1,000+ high quality guides on various topics</div>
+          <div>• See in full 1,100+ high quality guides on various topics</div>
           <div>• Mark any topic as learned / to learn / learning</div>
-          <div>• Publish your notes to your own personal wiki page</div>
           <div>
             • Mark any link you find in LA as completed or to complete later
           </div>
+          <div>• Add your own links and track progress on them</div>
+          <div>• Publish your notes to your own personal wiki page (soon)</div>
           <div>
             • Sync all your private/public notes with a mobile app (soon)
           </div>
@@ -76,21 +80,23 @@ export default function MonthlyPlan(props: Props) {
         <div
           class="flex items-center justify-center rounded-lg bg-black w-full p-3 opacity-80 text-white cursor-pointer"
           onClick={async () => {
-            if (user.user.signedIn) {
-              setWaitingForStripe(true)
-              const res = await mobius.query({
-                stripe: {
-                  where: {
-                    plan: "month",
-                    userEmail: user.user.email
-                  },
-                  select: true
-                }
-              })
-              // @ts-ignore
-              const stripeCheckout = res.data.stripe
-              window.location.href = stripeCheckout
+            if (!user.user.signedIn) {
+              props.setShowModalWithSignUpMessage(true)
+              return
             }
+            setWaitingForStripe(true)
+            const res = await mobius.query({
+              stripe: {
+                where: {
+                  plan: "month",
+                  userEmail: user.user.email
+                },
+                select: true
+              }
+            })
+            // @ts-ignore
+            const stripeCheckout = res.data.stripe
+            window.location.href = stripeCheckout
           }}
         >
           <Show

@@ -157,6 +157,7 @@ export default function createGlobalTopic(
     // only run effect on /topic pages
     const topicName = extractTopicFromPath(location.pathname)
     if (!topicName) return
+    if (topicName === "profile" || topicName === "pricing") return
     setGlobalTopic("name", location.pathname.slice(1))
 
     let verifiedTopic = false
@@ -168,8 +169,7 @@ export default function createGlobalTopic(
       setGlobalTopic("verifiedTopic", Boolean(foundTopic))
       verifiedTopic = Boolean(foundTopic)
       if (!foundTopic) {
-        console.log("runs..")
-        // log(`topic not found: ${location.pathname.slice(1)}`)
+        log(`topic not found: ${location.pathname.slice(1)}`)
       }
     }
 

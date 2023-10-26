@@ -1,9 +1,9 @@
 export async function log(message: any, data?: Record<string, any>) {
   // @ts-ignore
-  // if (!import.meta.env.PRODUCTION) {
-  //   console.log(message)
-  //   return
-  // }
+  if (!import.meta.env.PRODUCTION) {
+    console.log(message)
+    return
+  }
   const url = `https://events.baselime.io/v1/website/${window.location.hostname}/${window.location.pathname}`
 
   const requestOptions = {

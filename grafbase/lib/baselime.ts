@@ -7,7 +7,7 @@ export async function log(
   if (!import.meta.env.PRODUCTION!) {
     return
   }
-  const url = `https://events.baselime.io/v1/cloudflare-workers/grafbase/logs`
+  const url = `https://events.baselime.io/v1/grafbase/logs/{${resolver}`
 
   const requestOptions = {
     method: "POST",
@@ -20,7 +20,11 @@ export async function log(
   await fetch(url, requestOptions)
 }
 
-export async function logError(error: any, data?: Record<string, any>) {
+export async function logError(
+  resolver: string,
+  error: any,
+  data?: Record<string, any>
+) {
   // @ts-ignore
   if (!import.meta.env.PRODUCTION!) {
     console.log(error)
@@ -36,7 +40,7 @@ export async function logError(error: any, data?: Record<string, any>) {
       error
     )
   }
-  const url = `https://events.baselime.io/v1/cloudflare-workers/grafbase/error`
+  const url = `https://events.baselime.io/v1/grafbase/errors/{${resolver}`
 
   const requestOptions = {
     method: "POST",
