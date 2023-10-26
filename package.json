@@ -53,7 +53,6 @@
     "graphql-codegen": "^0.4.0",
     "graphql-request": "^6.1.0",
     "jose": "^4.15.4",
-    "js-cookie": "^3.0.5",
     "micromark": "^4.0.0",
     "mri": "^1.2.0",
     "prettier": "^3.0.3",

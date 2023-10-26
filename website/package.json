@@ -15,6 +15,7 @@
     "vite": "^4.5.0"
   },
   "dependencies": {
+    "js-cookie": "^3.0.5",
     "@kobalte/core": "^0.11.2",
     "@kobalte/tailwindcss": "^0.9.0",
     "@modular-forms/solid": "^0.20.0",
