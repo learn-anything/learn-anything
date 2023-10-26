@@ -2,7 +2,7 @@ import { Context } from "@grafbase/sdk"
 import { GraphQLError } from "graphql"
 import Stripe from "stripe"
 import { hankoIdFromToken } from "../lib/hanko-validate"
-import { logError } from "../lib/baselime"
+import { log, logError } from "../lib/baselime"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-08-16",
@@ -16,6 +16,7 @@ export default async function StripeResolver(
   args: { plan: StripePlan; userEmail: string },
   context: Context
 ) {
+  log("stripe", "trying to get stripe checkout", { args })
   const hankoId = await hankoIdFromToken(context)
   if (hankoId) {
     try {
