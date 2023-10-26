@@ -20,7 +20,7 @@ export default async function StripeResolver(
   console.log("log test")
   console.log(process.env.STRIPE_SECRET_KEY!, "stripe secret key")
   console.log(process.env.BASELIME_API_KEY!, "baselime api key")
-  return "ok"
+  // return "ok"
   // const hankoId = await hankoIdFromToken(context)
   // if (hankoId) {
   //   try {
