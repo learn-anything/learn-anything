@@ -16,7 +16,6 @@ export default async function StripeResolver(
   context: Context
 ) {
   const hankoId = await hankoIdFromToken(context)
-  console.log(hankoId, "hanko id")
   if (hankoId) {
     try {
       switch (args.plan) {
