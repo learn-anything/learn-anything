@@ -17,6 +17,7 @@ export async function hankoIdFromToken(context: Context) {
   const JWKS = createRemoteJWKSet(
     new URL(`${process.env.PUBLIC_HANKO_API_URL}/.well-known/jwks.json`)
   )
+  console.log(authHeader, "auth header")
   const hankoToken = authHeader.split(" ")[1]
   await log("hanko-validate", { hankoToken })
   console.log(hankoToken, "hanko token")
