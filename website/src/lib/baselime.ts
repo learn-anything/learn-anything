@@ -1,6 +1,5 @@
 export async function log(message: any, data?: Record<string, any>) {
-  // @ts-ignore
-  if (!import.meta.env.PRODUCTION) {
+  if (!import.meta.env.VITE_PRODUCTION) {
     console.log(message)
     return
   }
@@ -18,8 +17,7 @@ export async function log(message: any, data?: Record<string, any>) {
 }
 
 export async function logError(error: any, data?: Record<string, any>) {
-  // @ts-ignore
-  if (!import.meta.env.PRODUCTION!) {
+  if (!import.meta.env.VITE_PRODUCTION!) {
     console.log(error)
     return
   }
