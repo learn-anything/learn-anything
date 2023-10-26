@@ -1,5 +1,6 @@
 import { GraphQLError } from "graphql"
 import { Context } from "@grafbase/sdk"
+import { logError } from "../../lib/baselime"
 
 export default async function updateGrafbaseKvResolver(
   root: any,
@@ -20,7 +21,7 @@ export default async function updateGrafbaseKvResolver(
       return "ok"
     }
   } catch (err) {
-    console.log(JSON.stringify(err), "err")
+    logError("udpateGrafbaseKv", err)
     throw new GraphQLError(JSON.stringify(err))
   }
 }

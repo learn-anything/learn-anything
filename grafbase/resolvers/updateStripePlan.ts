@@ -3,23 +3,26 @@ import { GraphQLError } from "graphql"
 import Stripe from "stripe"
 import { upgradeStripeMonthlyPlanToYear } from "../edgedb/crud/user"
 import { hankoIdFromToken } from "../lib/hanko-validate"
+import { log, logError } from "../lib/baselime"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-08-16",
   typescript: true
 })
 
+// TODO: should use grafbase stripe connector
+// https://grafbase.com/docs/connectors
 export default async function updateStripePlan(
   root: any,
   args: {},
   context: Context
 ) {
+  log("updateStripePlan", "updating stripe plan", { args })
   const hankoId = await hankoIdFromToken(context)
   if (hankoId) {
     try {
       const stripeSubscriptionObjectId =
         await upgradeStripeMonthlyPlanToYear(hankoId)
-      return
       const subscription = await stripe.subscriptions.retrieve(
         // @ts-ignore
         stripeSubscriptionObjectId?.stripeSubscriptionObjectId
@@ -33,13 +36,14 @@ export default async function updateStripePlan(
           items: [
             {
               id: subscriptionItemId,
-              price: "price_1O0mgN4soP2HpBfdFkfIl9Bl"
+              price: process.env.STRIPE_YEAR_SUBSCRIPTION
             }
           ]
         }
       )
       return "ok"
     } catch (error) {
+      logError("updateStripePlan", error, { args })
       throw new GraphQLError(JSON.stringify(error))
     }
   }

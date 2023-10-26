@@ -2,6 +2,7 @@ import { Context } from "@grafbase/sdk"
 import { hankoIdFromToken } from "../lib/hanko-validate"
 import { GraphQLError } from "graphql"
 import { getUserDetails } from "../edgedb/crud/user"
+import { logError } from "../lib/baselime"
 
 export default async function getUserDetailsResolver(
   root: any,
@@ -15,6 +16,7 @@ export default async function getUserDetailsResolver(
       return user
     }
   } catch (err) {
+    logError("getUserDetails", err, { args })
     throw new GraphQLError(JSON.stringify(err))
   }
 }

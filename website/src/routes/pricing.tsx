@@ -1,12 +1,12 @@
 import clsx from "clsx"
-import { Show, createEffect, createSignal, onMount } from "solid-js"
+import { Show, createEffect, createSignal } from "solid-js"
 import { useNavigate } from "solid-start"
 import { useUser } from "../GlobalContext/user"
 import Icon from "../components/Icon"
+import Modal from "../components/Modal"
 import ModalWithMessageAndButton from "../components/ModalWithMessageAndButton"
 import MonthlyPlan from "../components/Pricing/MonthlyPlan"
 import YearlyPlan from "../components/Pricing/YearlyPlan"
-import Modal from "../components/Modal"
 import { useMobius } from "../root"
 
 export default function Pricing() {

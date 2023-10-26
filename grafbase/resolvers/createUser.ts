@@ -23,7 +23,7 @@ export default async function createUserResolver(
       throw new GraphQLError("User already exists")
     }
   } catch (err) {
-    logError("createUser", err)
+    logError("createUser", err, { args })
     throw new GraphQLError(JSON.stringify(err))
   }
 }

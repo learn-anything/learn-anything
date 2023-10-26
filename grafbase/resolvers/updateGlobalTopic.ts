@@ -1,16 +1,18 @@
 import { Context } from "@grafbase/sdk"
-import { resetGlobalTopicSections } from "../edgedb/crud/global-topic"
-import { hankoIdFromToken } from "../lib/hanko-validate"
-import { GraphQLError } from "graphql"
 
+// TODO: not used, delete?
 export default async function updateGlobalTopicResolver(
   root: any,
   args: { topic: any },
   context: Context
 ) {
-  const hankoId = await hankoIdFromToken(context)
-  if (hankoId) {
-    await resetGlobalTopicSections(hankoId, args.topic)
+  try {
+    // const hankoId = await hankoIdFromToken(context)
+    // if (hankoId) {
+    //   await resetGlobalTopicSections(hankoId, args.topic)
+    // }
+  } catch (err) {
+    // logError("updateGlobalTopic", err, { args })
+    // throw new GraphQLError(JSON.stringify(err))
   }
-  throw new GraphQLError("Error")
 }

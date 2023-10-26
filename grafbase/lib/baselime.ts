@@ -1,13 +1,18 @@
 export async function log(
   resolver: string,
   message: any,
-  data?: Record<string, any>
+  additionalMessage?: string | Record<string, any>
 ) {
-  // @ts-ignore
-  if (!import.meta.env.PRODUCTION!) {
+  console.log(message, additionalMessage)
+  if (process.env.env !== "prod" && process.env.env !== "staging") {
     return
   }
-  const url = `https://events.baselime.io/v1/grafbase/logs/{${resolver}`
+  let url
+  if (process.env.env === "staging") {
+    url = `https://events.baselime.io/v1/staging-grafbase/logs/{${resolver}`
+  } else {
+    url = `https://events.baselime.io/v1/grafbase/logs/${resolver}`
+  }
 
   const requestOptions = {
     method: "POST",
@@ -15,7 +20,7 @@ export async function log(
       "Content-Type": "application/json",
       "x-api-key": process.env.BASELIME_API_KEY!
     },
-    body: JSON.stringify([{ message, data }])
+    body: JSON.stringify([{ message, additionalMessage }])
   }
   await fetch(url, requestOptions)
 }
@@ -23,12 +28,17 @@ export async function log(
 export async function logError(
   resolver: string,
   error: any,
-  data?: Record<string, any>
+  additionalMessage?: string | Record<string, any>
 ) {
-  // @ts-ignore
-  if (!import.meta.env.PRODUCTION!) {
-    console.log(error)
+  console.log(error, additionalMessage)
+  if (process.env.env !== "prod" && process.env.env !== "staging") {
     return
+  }
+  let url
+  if (process.env.env === "staging") {
+    url = `https://events.baselime.io/v1/staging-grafbase/errors/{${resolver}`
+  } else {
+    url = `https://events.baselime.io/v1/grafbase/errors/${resolver}`
   }
 
   if (typeof error === "object") {
@@ -40,7 +50,6 @@ export async function logError(
       error
     )
   }
-  const url = `https://events.baselime.io/v1/grafbase/errors/{${resolver}`
 
   const requestOptions = {
     method: "POST",
@@ -48,7 +57,7 @@ export async function logError(
       "Content-Type": "application/json",
       "x-api-key": process.env.BASELIME_API_KEY!
     },
-    body: JSON.stringify([{ error, data }])
+    body: JSON.stringify([{ error, additionalMessage }])
   }
   await fetch(url, requestOptions)
 }

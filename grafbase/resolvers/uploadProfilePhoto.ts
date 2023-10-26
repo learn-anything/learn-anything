@@ -1,6 +1,7 @@
 import { Context } from "@grafbase/sdk"
 import { hankoIdFromToken } from "../lib/hanko-validate"
 
+// TODO: complete
 export default async function uploadProfilePhotoResolver(
   root: any,
   args: { imageInBase64: string },
@@ -8,8 +9,6 @@ export default async function uploadProfilePhotoResolver(
 ) {
   const hankoId = await hankoIdFromToken(context)
   if (hankoId) {
-    // TODO: upload a passed in image to S3
-    // get URL, then save the URL to the user object
-    // probably image coming in is encoded in base 64, not sure
+    // TODO: upload a passed in image to R2
   }
 }

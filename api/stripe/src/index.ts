@@ -99,7 +99,10 @@ app.post("/learn-anything-bought", async (c: Context) => {
 
 export default app
 
-export async function log(message: any, additionalMessage?: string) {
+export async function log(
+  message: any,
+  additionalMessage?: string | Record<string, any>,
+) {
   if (ENV !== "prod" && ENV !== "staging") {
     console.log(message, additionalMessage)
     return
@@ -122,7 +125,10 @@ export async function log(message: any, additionalMessage?: string) {
   await fetch(url, requestOptions)
 }
 
-export async function logError(error: any, additionalMessage?: string) {
+export async function logError(
+  error: any,
+  additionalMessage?: string | Record<string, any>,
+) {
   if (ENV !== "prod" && ENV !== "staging") {
     console.log(error, additionalMessage)
     return

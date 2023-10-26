@@ -1,6 +1,7 @@
 import { GraphQLError } from "graphql"
 import { Context } from "@grafbase/sdk"
 import { addLinkToSectionOfGlobalTopic } from "../../edgedb/crud/global-topic"
+import { logError } from "../../lib/baselime"
 
 export default async function addGlobalLinkToSection(
   root: any,
@@ -22,7 +23,7 @@ export default async function addGlobalLinkToSection(
       return "ok"
     }
   } catch (err) {
-    console.log(err, "err")
+    logError("addGlobalLinkToSection", err)
     throw new GraphQLError(JSON.stringify(err))
   }
 }
