@@ -2,7 +2,6 @@ import { Context } from "@grafbase/sdk"
 import { GraphQLError } from "graphql"
 import Stripe from "stripe"
 import { hankoIdFromToken } from "../lib/hanko-validate"
-import { log, logError } from "../lib/baselime"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-08-16",
@@ -16,8 +15,7 @@ export default async function StripeResolver(
   args: { plan: StripePlan; userEmail: string },
   context: Context
 ) {
-  await log("stripe", "trying to get stripe checkout", { args })
-  await log("stripe", process.env.GRAFBASE_ENV, "grafbase env")
+  console.log("getting stripe checkout", { args })
   console.log(process.env.GRAFBASE_ENV, "grafbase env")
   const hankoId = await hankoIdFromToken(context)
   if (hankoId) {
@@ -59,11 +57,11 @@ export default async function StripeResolver(
           }
       }
     } catch (error) {
-      logError("stripe", error, { args })
+      console.error(error, { args })
       throw new GraphQLError(JSON.stringify(error))
     }
   } else {
-    logError("stripe", "not a member", { args })
+    console.error("not a member", { args })
     throw new GraphQLError("not member")
   }
 }

@@ -1,8 +1,7 @@
+import { Context } from "@grafbase/sdk"
 import { GraphQLError } from "graphql"
 import { addPersonalLink } from "../edgedb/crud/global-link"
 import { hankoIdFromToken } from "../lib/hanko-validate"
-import { Context } from "@grafbase/sdk"
-import { logError } from "../lib/baselime"
 
 export default async function addPersonalLinkResolver(
   root: any,
@@ -16,7 +15,8 @@ export default async function addPersonalLinkResolver(
       return "ok"
     }
   } catch (error) {
-    logError("addPersonalLink", error, { args })
+    // logError("addPersonalLink", error, { args })
+    console.log(error, { args })
     throw new GraphQLError(JSON.stringify(error))
   }
 }
