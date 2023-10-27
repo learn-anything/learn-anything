@@ -4,8 +4,8 @@ import { getHankoCookie } from "../../lib/auth"
 import { useGlobalState } from "../GlobalContext/global.ts"
 import { Search, createSearchState } from "../components/Search"
 import { ForceGraph } from "../components/force-graph/index.tsx"
+import { logUntracked } from "../lib/baselime"
 import { getRandomItem } from "../lib/lib.ts"
-import { log } from "../lib/baselime.ts"
 
 export default function Home() {
   const navigate = useNavigate()
@@ -35,7 +35,7 @@ export default function Home() {
         (t) => t.prettyName === name
       )!
       navigate(`/${foundTopic.name}`)
-      log("Topic searched", search_state.query)
+      logUntracked("Topic searched", search_state.query)
     }
   })
 

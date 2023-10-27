@@ -3,7 +3,7 @@ import { Show, createMemo } from "solid-js"
 import { A, useLocation, useNavigate } from "solid-start"
 import { useGlobalState } from "../../GlobalContext/global"
 import { useUser } from "../../GlobalContext/user"
-import { log } from "../../lib/baselime"
+import { logUntracked } from "../../lib/baselime"
 import FancyButton from "../FancyButton"
 import Icon from "../Icon"
 import { Search, createSearchState } from "../Search"
@@ -28,7 +28,7 @@ export default function GuideNav() {
         (t) => t.prettyName === name
       )!
       navigate(`/${foundTopic.name}`)
-      log("Topic searched", search_state.query)
+      logUntracked("Topic searched", search_state.query)
     }
   })
 

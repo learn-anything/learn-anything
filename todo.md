@@ -1,5 +1,7 @@
 ## Public website release
 
+- `setup.ts` works well
+- add command to generate the command table from package.json (as external cli tool?)
 - be able to attach a topic to a link
 - Add `Create Personal Guide` button (maybe next to `Improve Guide`)
 - allow edits of `topic summary` and `section summary` of each section
@@ -340,3 +342,5 @@
 - wrap around mobius and show a pill or toast when error happens with any of the grafbase requests
   - this way you can just do queries to grafbase and error showing is fully abstracted and nice
 - replace `npx grafbase@latest dev` with `bunx grafbase@latest dev`. [issue with bun](https://github.com/oven-sh/bun/issues/5552). reach out to help resolve it
+- run command to remove non used package.json deps
+  - there was github repo that did this well

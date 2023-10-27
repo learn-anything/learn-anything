@@ -1,9 +1,9 @@
 async function main() {
-  const currentFilePath = new URL(import.meta.url).pathname
+  const currentFilePath = import.meta.path
   const connectionsFilePath = `${currentFilePath.replace(
     "loadConnectionsIntoGrafbase.ts",
-    ""
-  )}connections.json`
+    "connections.json"
+  )}`
   const file = Bun.file(connectionsFilePath)
   const fileContent = await file.text()
   const obj = JSON.parse(fileContent)

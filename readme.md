@@ -57,10 +57,10 @@ First run:
 
 ```
 bun i
-bun dev-setup
+bun setup
 ```
 
-`bun dev-setup` will `git clone` [seed repo](https://github.com/learn-anything/seed). It's needed for some commands below to work.
+`bun setup` runs `bun setup.ts init` (can see [setup.ts](setup.ts) code for what it does). It will create `.env` files for you so you can start coding the project fast. It will also `git clone` [seed repo](https://github.com/learn-anything/seed). Which contains various files needed to bootstrap the database with content.
 
 ### Setup EdgeDB
 
@@ -83,14 +83,16 @@ Follow instructions, name EdgeDB instance `learn-anything`.
 
 Run `bun db:ui`. This will open EdgeDB graphical interface where you can run queries or explore the schema.
 
-Then in `grafbase/.env`, set:
+If you ran `bun setup`, you should have already a `grafbase/.env` file with this content:
 
 ```
 LOCAL=true
 EDGEDB_DSN=
+PUBLIC_HANKO_API_URL=https://e879ccc9-285e-49d3-b37e-b569f0db4035.hanko.io
+INTERNAL_SECRET=secret
 ```
 
-Where `EDGEDB_DSN` value comes from running `bun db:get-dsn`.
+Fill `EDGEDB_DSN` value with value you get from running `bun db:get-dsn`. It's needed to connect to EdgeDB locally.
 
 #### Generate edgedb-js bindings
 
@@ -109,7 +111,9 @@ This gives you type safe access to EdgeDB and lets you use the query builder nic
 bun db:seed
 ```
 
-Above command is currently breaking. It should take the files you got in [seed folder](https://github.com/learn-anything/seed) (after running `bun dev-setup`) and fill EdgeDB db with content necessary to develop LA very fast.
+Above command is incomplete but will be soon. It should take the files you got in [seed folder](https://github.com/learn-anything/seed) (after running `bun dev-setup`) and fill EdgeDB db with content necessary to develop LA very fast.
+
+Reach out on [Discord](https://discord.com/invite/bxtD8x6aNF) to get a semi working version of the command. ♥️
 
 ## Run GraphQL server (Grafbase)
 
@@ -142,10 +146,7 @@ Download [Pathfinder](https://pathfinder.dev/) app and open http://localhost:400
 > **Warning**
 > If you reach any problems with setup, reach out on [Discord](https://discord.com/invite/bxtD8x6aNF)
 
-<!-- TODO: automate creating of `.env` file with default content as part of `bun dev-setup` command -->
-<!-- TODO: do same for Grafbase .env too -->
-
-Create `.env` file inside [website](app/packages/website) with this content:
+If you ran `bun setup` before, you should have `website/.env` file with this content:
 
 ```
 VITE_HANKO_API=https://e879ccc9-285e-49d3-b37e-b569f0db4035.hanko.io
@@ -164,7 +165,7 @@ bun web
 Open http://localhost:3000
 
 > **Warning**
-> You need to make sure you have data in the database to actually develop. So do section `Seed EdgeDB with content`. Reach out on [Discord](https://discord.com/invite/bxtD8x6aNF) for help.
+> You need to make sure you have data in the database to actually develop. So do section `Seed EdgeDB with content`. Reach out on [Discord](https://discord.com/invite/bxtD8x6aNF) for help as things are unstable still.
 
 ## Run desktop app (Tauri/Rust)
 
@@ -237,25 +238,32 @@ Check [docs/dev-tips.md](docs/dev-tips.md) for some advice on development.
 
 Ran with `bun <Name>`
 
-| Name           | Command                                                                                               |
-| -------------- | ----------------------------------------------------------------------------------------------------- |
-| seed-clone     | git clone https://github.com/learn-anything/seed                                                      |
-| seed-update    | cd seed && git pull                                                                                   |
-| dev-setup      | bun seed-clone                                                                                        |
-| app            | cd app && bun tauri:dev                                                                               |
-| web            | cd website && bun dev                                                                                 |
-| web:build      | cd website && solid-start build                                                                       |
-| web:start      | cd website && solid-start start                                                                       |
-| db             | cd edgedb && tput reset && bun --watch cli/cli.ts                                                     |
-| db:init        | cd edgedb && edgedb project init                                                                      |
-| db:ui          | cd edgedb && edgedb ui                                                                                |
-| db:watch       | cd edgedb && edgedb watch                                                                             |
-| db:migrate     | cd edgedb && edgedb migration create && edgedb migrate && bunx @edgedb/generate edgeql-js --target ts |
-| db:ts-generate | cd edgedb && bunx @edgedb/generate edgeql-js --target ts                                              |
-| api            | bunx grafbase@latest dev                                                                              |
-| api:codegen    | graphql-codegen                                                                                       |
-| ts             | tput reset && bun --watch run.ts                                                                      |
-| test-rust-wiki | cd app/src-tauri/crates/wiki/ && cargo watch -q -- sh -c "tput reset && cargo test -q --lib"          |
+| Name                | Command                                                                                                                                                     |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| setup               | bun setup.ts init                                                                                                                                           |
+| seed-clone          | git clone https://github.com/learn-anything/seed                                                                                                            |
+| seed-update         | cd seed && git pull                                                                                                                                         |
+| app                 | cd app && bun tauri:dev                                                                                                                                     |
+| web                 | cd website && bun dev                                                                                                                                       |
+| web:build           | cd website && solid-start build                                                                                                                             |
+| web:start           | cd website && solid-start start                                                                                                                             |
+| db                  | cd grafbase/edgedb && tput reset && bun --watch cli/cli.ts                                                                                                  |
+| db:init             | cd grafbase/edgedb && edgedb project init                                                                                                                   |
+| db:ui               | cd grafbase/edgedb && edgedb ui                                                                                                                             |
+| db:watch            | cd grafbase/edgedb && edgedb watch                                                                                                                          |
+| db:migrate          | cd grafbase/edgedb && edgedb migration create && edgedb migrate && bunx @edgedb/generate edgeql-js --target ts && bunx @edgedb/generate queries --target ts |
+| db:queries-generate | cd grafbase/edgedb && bunx @edgedb/generate edgeql-js --target ts && bunx @edgedb/generate queries --target ts                                              |
+| db:get-dsn          | cd grafbase/edgedb && edgedb instance credentials --insecure-dsn                                                                                            |
+| db:dump             | cd private && edgedb dump prod.db                                                                                                                           |
+| db:load-connections | cd grafbase/edgedb && tput reset && bun cli/loadConnectionsIntoGrafbase.ts                                                                                  |
+| api                 | bunx grafbase@latest dev                                                                                                                                    |
+| ts                  | tput reset && bun --watch run.ts                                                                                                                            |
+| test-rust-wiki      | cd app/src-tauri/crates/wiki/ && cargo watch -q -- sh -c "tput reset && cargo test -q --lib"                                                                |
+| grafbase            | npx grafbase@latest dev                                                                                                                                     |
+| format              | prettier -w .                                                                                                                                               |
+| lint:code           | eslint --ignore-path .gitignore --max-warnings 0 --ext .ts,.tsx,.js,.jsx .                                                                                  |
+| lint:types          | tsc --noEmit                                                                                                                                                |
+| lint                | bun lint:code && bun lint:types                                                                                                                             |
 
 ### ♥️
 

@@ -41,7 +41,6 @@ export async function log(
     console.log(message)
     return
   }
-  console.log("runs..")
   let url
   if (import.meta.env.VITE_ENV === "staging") {
     url = `https://events.baselime.io/v1/staging-website-logs/${window.location.hostname}/${window.location.pathname}`
@@ -106,6 +105,40 @@ export async function logError(
         additionalMessage,
         requestId: getSessionId(),
         userEmail: await getUserEmail()
+      }
+    ])
+  }
+  await fetch(url, requestOptions)
+}
+
+export async function logUntracked(
+  message: any,
+  additionalMessage?: string | Record<string, any>
+) {
+  if (
+    import.meta.env.VITE_ENV !== "prod" &&
+    import.meta.env.VITE_ENV !== "staging"
+  ) {
+    console.log(message)
+    return
+  }
+  let url
+  if (import.meta.env.VITE_ENV === "staging") {
+    url = `https://events.baselime.io/v1/staging-website-logs/${window.location.hostname}/${window.location.pathname}`
+  } else {
+    url = `https://events.baselime.io/v1/website-logs/${window.location.hostname}/${window.location.pathname}`
+  }
+
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": import.meta.env.VITE_BASELIME_API_KEY!
+    },
+    body: JSON.stringify([
+      {
+        message,
+        additionalMessage
       }
     ])
   }
