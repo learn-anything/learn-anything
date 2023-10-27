@@ -1,4 +1,5 @@
 import { makeEventListener } from "@solid-primitives/event-listener"
+import { default as Cookies } from "js-cookie"
 import { onMount } from "solid-js"
 import { register } from "@teamhanko/hanko-elements"
 import { UserClient } from "@teamhanko/hanko-frontend-sdk"
@@ -57,12 +58,7 @@ export default function SignInPage() {
       const email = user.email
 
       const allCookies = document.cookie
-      const hankoCookie = allCookies
-        .split(";")
-        .find((cookie) => {
-          return cookie
-        })
-        ?.split("=")[1]
+      const hankoCookie = await getHankoCookie()
       // doing this so that below GraphQL query can work, it supplies `mobius` client with the hanko token
       signIn(hankoCookie!)
 
