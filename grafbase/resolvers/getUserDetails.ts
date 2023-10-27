@@ -11,7 +11,9 @@ export default async function getUserDetailsResolver(
   try {
     const hankoId = await hankoIdFromToken(context)
     if (hankoId) {
+      console.log(hankoId, "hanko id")
       const user = await getUserDetails(hankoId)
+      console.log(user, "user details")
       return user
     }
   } catch (err) {
