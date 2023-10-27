@@ -16,8 +16,11 @@ export default function ModalWithMessageAndButton(props: Props) {
         border-radius: 0px;
       }
       @media (min-width: 700px) {
-        width: 50%;
-        border-radius: 6px;
+        #MessageModal {
+          width: 50%;
+          border-radius: 6px;
+
+        }
       }
     `}</style>
       <Modal onClose={props.onClose}>

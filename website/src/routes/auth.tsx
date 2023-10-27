@@ -118,7 +118,7 @@ export default function SignInPage() {
           --background-color: #070c19;
           --error-color: #FF2E4C;
           --link-color: #AEDFFF;
-          --font-family: "IBM Plex Sans";
+          --font-family: "Raleway";
           --font-size: 1rem;
           --font-weight: 400;
           --headline1-font-size: 0px;
