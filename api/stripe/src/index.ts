@@ -14,7 +14,7 @@ app.onError(async (e, c) => {
 app.post("/learn-anything-bought", async (c: Context) => {
   let event = await c.req.parseBody()
   const stripe = new Stripe(c.env.LA_STRIPE_SECRET_KEY!, {
-    apiVersion: "2023-08-16",
+    apiVersion: "2023-10-16",
     typescript: true,
   })
   const endpointSecret = c.env.LA_STRIPE_WEBHOOK_SECRET!

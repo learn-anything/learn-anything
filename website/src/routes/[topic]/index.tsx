@@ -208,7 +208,7 @@ export default function GlobalTopic() {
 
               <Show when={!user.user.member && blurWidth()}>
                 <div
-                  class="absolute flex flex-col right-0 z-50 w-full"
+                  class="absolute flex flex-col right-0 w-full"
                   style={{
                     top: `${blurWidth()}px`,
                     "min-height": `${blurWidth()}px`,
