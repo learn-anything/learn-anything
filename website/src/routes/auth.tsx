@@ -167,7 +167,7 @@ export default function SignInPage() {
       <div class="bg-white text-black dark:text-white dark:bg-neutral-950">
         <div class="">
           <div class="flex flex-col items-center h-screen justify-center ">
-            <div class="flex flex-col items-center p-10 rounded-lg border bg-black border-neutral-900 dark:border-gray-200">
+            <div class="flex flex-col items-center p-10 rounded-lg border dark:bg-black bg-white border-neutral-900 dark:border-gray-200">
               <div class="text-xl font-bold">Sign in / up with</div>
               {/* @ts-ignore */}
               <hanko-auth />
