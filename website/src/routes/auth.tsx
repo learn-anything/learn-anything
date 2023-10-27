@@ -76,6 +76,17 @@ export default function SignInPage() {
       })
       userStore.setSignedIn(true)
       userStore.setEmail(email)
+      // TODO: do it as part of `createUser`. have `createUser` return `isMember` in case user exists
+      // and is member
+      const res = await mobius.query({
+        getUserDetails: {
+          isMember: true
+        }
+      })
+      if (res) {
+        // @ts-ignore
+        userStore.set({ member: res?.data?.getUserDetails.isMember })
+      }
       const route = localStorage.getItem("pageBeforeSignIn")
       if (route) {
         localStorage.setItem("pageBeforeSignIn", "")
