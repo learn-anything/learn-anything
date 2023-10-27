@@ -9,7 +9,6 @@
     "semi": false
   },
   "dependencies": {
-    "@upstash/redis": "^1.23.4",
     "edgedb": "^1.3.7",
     "hono": "^3.8.3",
     "stripe": "^14.1.0"
