@@ -36,11 +36,11 @@ async function main() {
       variables
     })
   }).catch((err) => {
-    console.log(err, "err")
+    console.error(err, "err")
   })
   // @ts-ignore
   const jsonBody = await res.json()
-  console.log(jsonBody)
+  console.log(jsonBody, "json resp")
 }
 
 await main()
