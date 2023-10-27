@@ -100,15 +100,7 @@ export function createUserState(mobius: MobiusType) {
       setUser({ member: res?.data?.getUserDetails.isMember })
     }
 
-    // TODO: move this cookie reading into lib function
-    // also there has to be better way to do this than this
-    const allCookies = document.cookie
-    const hankoCookie = allCookies
-      .split(";")
-      .find((cookie) => {
-        return cookie
-      })
-      ?.split("=")[1]
+    const hankoCookie = await getHankoCookie()
     if (hankoCookie) {
       setUser({ signedIn: true })
     }
