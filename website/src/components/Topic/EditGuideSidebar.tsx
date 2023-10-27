@@ -46,24 +46,28 @@ export default function EditGuideSidebar() {
 
   return (
     <>
-      <div class="flex flex-col gap-2 p-5">
-        <For each={topic.globalTopic.latestGlobalGuide.sections}>
-          {(section) => {
-            return (
-              <div
-                ref={(el) => {
-                  createEffect(() => {
-                    createDraggable(section.title)(el)
-                    createDroppable(section.title)(el)
-                  })
-                }}
-                class="cursor-pointer"
-              >
-                {section.title}
-              </div>
-            )
-          }}
-        </For>
+      <div class="flex flex-col gap-1 p-5 px-6">
+        <div class="font-bold opacity-50 ">Edit Sections</div>
+
+        <div class="pl-2 font-light hover:font-medium transition-all text-[14px] flex flex-col gap-1">
+          <For each={topic.globalTopic.latestGlobalGuide.sections}>
+            {(section) => {
+              return (
+                <div
+                  ref={(el) => {
+                    createEffect(() => {
+                      createDraggable(section.title)(el)
+                      createDroppable(section.title)(el)
+                    })
+                  }}
+                  class="cursor-pointer"
+                >
+                  {section.title}
+                </div>
+              )
+            }}
+          </For>
+        </div>
       </div>
     </>
   )

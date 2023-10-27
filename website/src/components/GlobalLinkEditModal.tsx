@@ -59,11 +59,24 @@ export default function GlobalLinkEditModal(props: Props) {
   left: 0;
   top: 0;
 }
+#LinkEditModal {
+  width: 100%;
+  border-radius: 0px;
+}
+@media (min-width: 700px) {
+  #LinkEditModal {
+    width: 50%;
+    border-radius: 4px;
+  }
+}
       `}
       </style>
       <Show when={linkToEdit()}>
         <Modal>
-          <div class="rounded-lg w-1/2 relative bg-white dark:border-[#282828]  border-[#69696951] border dark:bg-neutral-900 z-50 font-light h-1/2 flex flex-col p-6 px-6 gap-4">
+          <div
+            id="LinkEditModal"
+            class="rounded-lg relative bg-white dark:border-[#282828]  border-[#69696951] border dark:bg-neutral-900 z-50 font-light h-1/2 flex flex-col p-6 px-6 gap-4"
+          >
             <div class="flex flex-col gap-5 [&>*]:px-2 [&>*]:transition-all [&>*]:p-1">
               <div class="relative w-full ">
                 <input

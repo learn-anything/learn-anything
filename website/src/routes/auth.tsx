@@ -136,37 +136,11 @@ export default function SignInPage() {
       }
       `}
       </style>
-      <div
-        style={{
-          "background-color": "#02050e"
-        }}
-      >
-        <div
-          style={{
-            "background-image": "url('./blue-left.svg')",
-            "background-size": "cover"
-          }}
-        >
-          <div
-            style={{
-              "background-image": "url('./blue-right.svg')",
-              "background-size": "cover"
-            }}
-            class="flex flex-col items-center h-screen justify-center text-white"
-          >
-            <div
-              style={{
-                border: "solid 1px rgba(13, 19, 39, 0.5)",
-                "background-image": `linear-gradient(
-                  34deg in oklab,
-                  rgb(1% 2% 5% / 86%) 0%, rgb(7, 12, 25) 50%, rgb(1% 2% 5% / 86%) 100%
-                )`
-              }}
-              class="flex flex-col items-center p-10 rounded-lg border-2 border-neutral-900"
-            >
-              <div id="text" class="text-2xl mt-3 mb-2">
-                Sign in/up with
-              </div>
+      <div class="bg-white text-black dark:text-white dark:bg-neutral-950">
+        <div class="">
+          <div class="flex flex-col items-center h-screen justify-center ">
+            <div class="flex flex-col items-center p-10 rounded-lg border border-neutral-900 dark:border-gray-200">
+              <div class="text-xl font-bold">Sign in / up with</div>
               {/* @ts-ignore */}
               <hanko-auth />
             </div>

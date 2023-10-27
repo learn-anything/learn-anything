@@ -34,10 +34,12 @@ export default function GlobalGuideLink(props: Props) {
         #LinkTitle {
           flex-direction: column;
           align-items: start;
+          gap: 1px;
         }
          @media (min-width: 700px) {
           #LinkTitle {
             flex-direction: row;
+            gap: 12px;
           }
           #LinkIcons {
             flex-direction: row;
@@ -129,7 +131,7 @@ export default function GlobalGuideLink(props: Props) {
                   }
                 }}
                 class={clsx(
-                  "cursor-pointer rounded-[2px] flex dark:hover:bg-neutral-950 items-center hover:border-none transition-all justify-center border h-[26px] w-[26px] border-[#69696951] dark:border-[#282828]",
+                  "cursor-pointer rounded-[2px] flex dark:hover:bg-neutral-950 items-center hover:opacity-50 transition-all justify-center border h-[26px] w-[26px] border-[#69696951] dark:border-[#282828]",
                   topic.globalTopic.likedLinkIds.includes(props.id) &&
                     "bg-red-500 border-none transition-all"
                 )}
@@ -188,7 +190,7 @@ export default function GlobalGuideLink(props: Props) {
                   }
                 }}
                 class={clsx(
-                  "cursor-pointer rounded-[2px] dark:hover:bg-neutral-950 hover:border-none border flex items-center transition-all justify-center h-[26px] w-[26px] border-[#69696951] dark:border-[#282828]",
+                  "cursor-pointer rounded-[2px] dark:hover:bg-neutral-950 border flex items-center hover:opacity-50 transition-all justify-center h-[26px] w-[26px] border-[#69696951] dark:border-[#282828]",
                   topic.globalTopic.completedLinkIds.includes(props.id) &&
                     "bg-blue-500 bg-opacity border-none"
                 )}

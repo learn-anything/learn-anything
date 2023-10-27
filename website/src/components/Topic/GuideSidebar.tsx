@@ -215,7 +215,8 @@ export default function GuideSidebar() {
                 <div
                   class={clsx(
                     "flex gap-2 cursor-pointer",
-                    global.state.guidePage === "Guide" && "font-bold"
+                    global.state.guidePage === "Guide" &&
+                      "font-bold text-black dark:text-white text-opacity-70 dark:text-opacity-70"
                   )}
                   onClick={() => {
                     global.setGuidePage("Guide")
@@ -226,7 +227,8 @@ export default function GuideSidebar() {
                 <div
                   class={clsx(
                     "flex gap-2 cursor-pointer",
-                    global.state.guidePage === "Links" && "font-bold"
+                    global.state.guidePage === "Links" &&
+                      "font-bold text-black dark:text-white text-opacity-70 dark:text-opacity-70"
                   )}
                   onClick={() => {
                     global.setGuidePage("Links")
@@ -241,7 +243,8 @@ export default function GuideSidebar() {
                   <div
                     class={clsx(
                       "flex gap-2 cursor-pointer",
-                      global.state.guidePage === "Notes" && "font-bold"
+                      global.state.guidePage === "Notes" &&
+                        "font-bold text-black dark:text-white text-opacity-70 dark:text-opacity-70"
                     )}
                     onClick={() => {
                       if (!user.user.signedIn) {

@@ -112,6 +112,7 @@ export default function EditGlobalGuide() {
             }}
           />
         </Show>
+
         <div class="flex justify-between items-center ">
           <div
             class="border-[#696969] dark:border-gray-200 dark:hover:bg-gray-200 dark:hover:text-black border p-[4px] px-[8px] text-[12px] rounded-[4px] text-[#696969] dark:text-white font-light hover:bg-gray-300 hover:bg-opacity-50 cursor-pointer transition-all"
