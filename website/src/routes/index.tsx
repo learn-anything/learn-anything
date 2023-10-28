@@ -74,12 +74,24 @@ export default function Home() {
             navigate(`/${name}`)
           }}
         />
-        <div class="flex flex-col gap-1 items-center z-50">
+        <div
+          class="flex flex-col gap-1 items-center z-50"
+          style={`
+            filter: drop-shadow(2px 6px 126px rgb(10 10 10));
+          `}
+        >
+          {/* shadow el */}
+          <div
+            class="absolute -z-1 inset-0 rounded-full bg-neutral-950/90"
+            style={`
+              filter: blur(100px);
+            `}
+          />
           <div
             class="tracking-wide font-bold bg-clip-text "
-            style={{
-              "font-size": "clamp(3rem, 10vw, 5rem)"
-            }}
+            style={`
+              font-size: clamp(3rem, 10vw, 5rem);
+            `}
           >
             I want to learn
           </div>
