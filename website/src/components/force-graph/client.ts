@@ -1,16 +1,17 @@
-import * as solid from "solid-js"
+import * as s from "solid-js"
 import * as fg from "@nothing-but/force-graph"
 import { Ease, Trig } from "@nothing-but/utils"
 import { useWindowSize } from "@solid-primitives/resize-observer"
+import * as schedule from "@solid-primitives/scheduled"
 
-export type RawData = {
+export type RawNode = {
   name: string
   prettyName: string
   connections: string[]
 }
 
 export function generateNodesFromRawData(
-  raw_data: RawData[]
+  raw_data: RawNode[]
 ): [fg.graph.Node[], fg.graph.Edge[]] {
   const nodes_map = new Map<string, fg.graph.Node>()
   const edges: fg.graph.Edge[] = []
@@ -34,26 +35,82 @@ export function generateNodesFromRawData(
 
   const nodes = Array.from(nodes_map.values())
 
+  fg.graph.randomizeNodePositions(nodes, graph_options.grid_size)
+
   return [nodes, edges]
 }
 
-const graph_options = fg.graph.graphOptions({
+const graph_options: fg.graph.Options = {
+  ...fg.graph.DEFAULT_OPTIONS,
   inertia_strength: 0.3,
   origin_strength: 0.01,
   repel_distance: 22,
   repel_strength: 0.5,
   link_strength: 0.015
-})
+}
+
+const filterToRegex = (filter: string): RegExp => {
+  // regex matching all letters of the filter (out of order)
+  const letters = filter.split("")
+  const regex = new RegExp(letters.join(".*"), "i")
+  return regex
+}
+
+const filterNodes = (
+  graph: fg.graph.Graph,
+  nodes: readonly fg.graph.Node[],
+  edges: readonly fg.graph.Edge[],
+  filter: string
+): void => {
+  if (filter === "") {
+    graph.nodes = nodes.slice()
+    graph.edges = edges.slice()
+    fg.graph.resetGraphGrid(graph.grid, graph.nodes)
+    return
+  }
+
+  const regex = filterToRegex(filter)
+
+  const new_nodes = nodes.filter((node) => regex.test(node.label))
+  const new_edges = edges.filter(
+    (edge) => regex.test(edge.a.label) && regex.test(edge.b.label)
+  )
+
+  graph.nodes = new_nodes
+  graph.edges = new_edges
+
+  fg.graph.resetGraphGrid(graph.grid, graph.nodes)
+}
+
+export type ForceGraphProps = {
+  onNodeClick: (name: string) => void
+  /**
+   * Filter the displayed nodes by name.
+   *
+   * `""` means no filter
+   */
+  filterQuery: s.Accessor<string>
+  raw_nodes: RawNode[]
+}
 
 export function createForceGraph(
-  raw_data: RawData[],
-  onNodeClick: (name: string) => void
-): HTMLCanvasElement {
-  const [nodes, edges] = generateNodesFromRawData(raw_data)
+  props: ForceGraphProps
+): HTMLCanvasElement | undefined {
+  if (props.raw_nodes.length === 0) return
 
-  fg.graph.randomizeNodePositions(nodes, graph_options.grid_size)
+  const [nodes, edges] = generateNodesFromRawData(props.raw_nodes)
 
-  const graph = fg.graph.makeGraph(graph_options, nodes, edges)
+  const graph = fg.graph.makeGraph(graph_options, nodes.slice(), edges.slice())
+
+  /*
+    Filter nodes when the filter query changes
+  */
+  const scheduleFilterNodes = schedule.scheduleIdle(filterNodes)
+  s.createEffect(() => {
+    const query = props.filterQuery()
+
+    scheduleFilterNodes(graph, nodes, edges, query)
+  })
 
   const el = document.createElement("canvas")
   el.className = "absolute w-full h-full"
@@ -113,13 +170,13 @@ export function createForceGraph(
   })
   fg.anim.bump(animation)
 
-  solid.onCleanup(() => fg.anim.cleanup(animation))
+  s.onCleanup(() => fg.anim.cleanup(animation))
 
   const ro = fg.canvas.resizeObserver(el, (size) => {
     fg.canvas.updateCanvasSize(canvas, size)
     fg.anim.requestFrame(animation)
   })
-  solid.onCleanup(() => ro.disconnect())
+  s.onCleanup(() => ro.disconnect())
 
   const gestures = fg.canvas.canvasGestures({
     canvas,
@@ -127,7 +184,7 @@ export function createForceGraph(
       fg.anim.bump(animation)
     },
     onNodeClick(node) {
-      onNodeClick(node.key as string)
+      props.onNodeClick(node.key as string)
     },
     onNodeHover(node) {
       canvas.hovered_node = node
@@ -144,7 +201,7 @@ export function createForceGraph(
       }
     }
   })
-  solid.onCleanup(() => fg.canvas.cleanupCanvasGestures(gestures))
+  s.onCleanup(() => fg.canvas.cleanupCanvasGestures(gestures))
 
   return el
 }

@@ -1,23 +1,22 @@
 import * as solid from "solid-js"
 import { isServer } from "solid-js/web"
-import { useGlobalState } from "../../GlobalContext/global.ts"
+import type * as client from "./client"
 
 /**
  * Lazy-loaded force graph
  */
-export function ForceGraph(props: {
-  onNodeClick: (name: string) => void
-}): solid.JSX.Element {
-  const [client] = solid.createResource(!isServer, () => import("./client.ts"))
-  const global = useGlobalState()
+export function ForceGraph(props: client.ForceGraphProps): solid.JSX.Element {
+  const [clientModule] = solid.createResource(
+    !isServer,
+    () => import("./client.ts")
+  )
 
   return (
     <solid.Suspense>
       {(() => {
-        const client_value = client()
-        const raw_data = global.state.topicsWithConnections
-        if (!client_value || raw_data.length === 0) return ""
-        return client_value.createForceGraph(raw_data, props.onNodeClick)
+        const client_module = clientModule()
+        if (!client_module) return ""
+        return client_module.createForceGraph(props)
       })()}
     </solid.Suspense>
   )

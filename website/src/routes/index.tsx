@@ -17,9 +17,7 @@ export default function Home() {
 
   const searchPlaceholder = createMemo(() => {
     const item = getRandomItem(global.state.topicsWithConnections)
-    if (item) {
-      return item.prettyName
-    }
+    if (item) return item.prettyName
   })
 
   const searchResults = createMemo(() => {
@@ -73,6 +71,8 @@ export default function Home() {
           onNodeClick={(name) => {
             navigate(`/${name}`)
           }}
+          filterQuery={() => search_state.query}
+          raw_nodes={global.state.topicsWithConnections}
         />
         <div
           class="flex flex-col gap-1 items-center z-50"
