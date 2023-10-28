@@ -1,6 +1,7 @@
 import * as solid from "solid-js"
 import * as fg from "@nothing-but/force-graph"
-import { Ease } from "@nothing-but/utils"
+import { Ease, Trig } from "@nothing-but/utils"
+import { useWindowSize } from "@solid-primitives/resize-observer"
 
 export type RawData = {
   name: string
@@ -90,8 +91,13 @@ export function createForceGraph(
     el,
     ctx,
     graph,
-    init_scale: 2
+    max_scale: 4,
+    init_scale: 2,
+    init_grid_pos: Trig.ZERO
   })
+
+  const TITLE_SIZE_PX = 600
+  const window_size = useWindowSize()
 
   const animation = fg.anim.frameAnimation({
     ...fg.anim.DEFAULT_OPTIONS,
@@ -104,8 +110,11 @@ export function createForceGraph(
       const grid_radius = graph.grid.size / 2
       const origin_x = grid_radius + canvas.translate.x
       const origin_y = grid_radius + canvas.translate.y
-
-      const push_radius = graph.grid.size / 2 / canvas.scale
+      const vw = window_size.width
+      const vh = window_size.height
+      const push_radius =
+        (Math.min(TITLE_SIZE_PX, vw, vh) / Math.max(vw, vh)) *
+        (graph.grid.size / canvas.scale)
 
       for (const node of graph.nodes) {
         const dist_x = node.position.x - origin_x
