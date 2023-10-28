@@ -110,13 +110,13 @@ export default function SignInPage() {
         }
 
         hanko-auth, hanko-profile {
-          --color: #000;
+          --color: #fff;
           --color-shade-1: #989BA1;
           --color-shade-2: #43464E;
           --brand-color: #AEDFFF;
           --brand-color-shade-1: #A1C9E7;
           --brand-contrast-color: #0B0D0E;
-          --background-color: inherit;
+          --background-color: black;
           --error-color: #FF2E4C;
           --link-color: #AEDFFF;
           --font-family: "Raleway";
@@ -134,40 +134,40 @@ export default function SignInPage() {
           --headline1-margin: 0 0 1rem;
           --headline2-margin: 1rem 0 .5rem;
         }
-        @media (prefers-color-scheme: dark) {
-          hanko-auth, hanko-profile {
-            --color: #fff;
-            --color-shade-1: #989BA1;
-            --color-shade-2: #43464E;
-            --brand-color: #AEDFFF;
-            --brand-color-shade-1: #A1C9E7;
-            --brand-contrast-color: #0B0D0E;
-            --background-color: black;
-            --error-color: #FF2E4C;
-            --link-color: #AEDFFF;
-            --font-family: "Raleway";
-            --font-size: 1rem;
-            --font-weight: 400;
-            --headline1-font-size: 0px;
-            --headline1-font-weight: 600;
-            --headline2-font-size: 1rem;
-            --headline2-font-weight: 600;
-            --border-radius: 8px;
-            --item-height: 40px;
-            --item-margin: 18px 0px;
-            --container-padding: 20px 50px 50px 50px;
-            --container-max-width: 800px;
-            --headline1-margin: 0 0 1rem;
-            --headline2-margin: 1rem 0 .5rem;
-          }
-        }
-      }
+      //   @media (prefers-color-scheme: dark) {
+      //     hanko-auth, hanko-profile {
+      //       --color: #fff;
+      //       --color-shade-1: #989BA1;
+      //       --color-shade-2: #43464E;
+      //       --brand-color: #AEDFFF;
+      //       --brand-color-shade-1: #A1C9E7;
+      //       --brand-contrast-color: #0B0D0E;
+      //       --background-color: black;
+      //       --error-color: #FF2E4C;
+      //       --link-color: #AEDFFF;
+      //       --font-family: "Raleway";
+      //       --font-size: 1rem;
+      //       --font-weight: 400;
+      //       --headline1-font-size: 0px;
+      //       --headline1-font-weight: 600;
+      //       --headline2-font-size: 1rem;
+      //       --headline2-font-weight: 600;
+      //       --border-radius: 8px;
+      //       --item-height: 40px;
+      //       --item-margin: 18px 0px;
+      //       --container-padding: 20px 50px 50px 50px;
+      //       --container-max-width: 800px;
+      //       --headline1-margin: 0 0 1rem;
+      //       --headline2-margin: 1rem 0 .5rem;
+      //     }
+      //   }
+      // }
       `}
       </style>
-      <div class="bg-white text-black dark:text-white dark:bg-neutral-950">
+      <div class="text-white bg-neutral-950">
         <div class="">
           <div class="flex flex-col items-center h-screen justify-center ">
-            <div class="flex flex-col items-center p-10 rounded-lg border dark:bg-black bg-white border-neutral-900 dark:border-gray-200">
+            <div class="flex flex-col items-center p-10 rounded-lg border bg-black border-gray-200">
               <div class="text-xl font-bold">Sign in / up with</div>
               {/* @ts-ignore */}
               <hanko-auth />
