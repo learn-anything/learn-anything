@@ -37,32 +37,6 @@ export function generateNodesFromRawData(
   return [nodes, edges]
 }
 
-// export function generateInitialGraph(length: number = 256): NodesData {
-//   const nodes: fg.graph.Node[] = Array.from({ length }, fg.graph.makeNode)
-//   const edges: fg.graph.Edge[] = []
-
-//   for (let i = 0; i < length; i++) {
-//     const node = nodes[i]!
-
-//     if (node.edges.length > 0 && Math.random() < 0.8) continue
-
-//     const b_index = Num.random_int(length)
-//     let node_b = nodes[b_index]!
-
-//     if (node_b === node) {
-//       node_b = nodes[(b_index + 1) % length]!
-//     }
-
-//     edges.push(fg.graph.connect(node, node_b))
-//   }
-
-//   return {
-//     nodes,
-//     edges,
-//     getLabel: (node) => String(node.key)
-//   }
-// }
-
 const graph_options = fg.graph.graphOptions({
   inertia_strength: 0.3,
   origin_strength: 0.01,
