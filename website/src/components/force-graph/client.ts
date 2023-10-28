@@ -67,7 +67,8 @@ const graph_options = fg.graph.graphOptions({
   inertia_strength: 0.3,
   origin_strength: 0.01,
   repel_distance: 22,
-  repel_strength: 0.5
+  repel_strength: 0.5,
+  link_strength: 0.015
 })
 
 export function createForceGraph(
@@ -102,6 +103,8 @@ export function createForceGraph(
   const animation = fg.anim.frameAnimation({
     ...fg.anim.DEFAULT_OPTIONS,
     onIteration(alpha) {
+      alpha = alpha / 2 // slow things down a bit
+
       fg.graph.simulate(graph, alpha)
 
       /*
@@ -112,9 +115,11 @@ export function createForceGraph(
       const origin_y = grid_radius + canvas.translate.y
       const vw = window_size.width
       const vh = window_size.height
+      const vmax = Math.max(vw, vh)
       const push_radius =
-        (Math.min(TITLE_SIZE_PX, vw, vh) / Math.max(vw, vh)) *
-        (graph.grid.size / canvas.scale)
+        (Math.min(TITLE_SIZE_PX, vw, vh) / vmax) *
+          (graph.grid.size / canvas.scale) +
+        20 /* additional margin for when scrolled in */
 
       for (const node of graph.nodes) {
         const dist_x = node.position.x - origin_x
