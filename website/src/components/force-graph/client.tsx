@@ -41,12 +41,13 @@ export function generateNodesFromRawData(
 }
 
 const graph_options: fg.graph.Options = {
-  ...fg.graph.DEFAULT_OPTIONS,
+  min_move: 0.001,
   inertia_strength: 0.3,
   origin_strength: 0.01,
-  repel_distance: 22,
-  repel_strength: 0.5,
-  link_strength: 0.015
+  repel_distance: 40,
+  repel_strength: 2,
+  link_strength: 0.015,
+  grid_size: 500
 }
 
 const filterToRegex = (filter: string): RegExp => {
@@ -93,9 +94,7 @@ export type ForceGraphProps = {
   raw_nodes: RawNode[]
 }
 
-export function createForceGraph(
-  props: ForceGraphProps
-): HTMLCanvasElement | undefined {
+export function createForceGraph(props: ForceGraphProps): s.JSXElement {
   if (props.raw_nodes.length === 0) return
 
   const [nodes, edges] = generateNodesFromRawData(props.raw_nodes)
@@ -112,29 +111,50 @@ export function createForceGraph(
     scheduleFilterNodes(graph, nodes, edges, query)
   })
 
-  const el = document.createElement("canvas")
-  el.className = "absolute w-full h-full"
+  let canvas_el!: HTMLCanvasElement
+  const root_el = (
+    <div
+      style={`
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      `}
+    >
+      <canvas
+        ref={canvas_el}
+        style={`
+          position: absolute;
+          top: -10%;
+          left: -10%;
+          width: 120%;
+          height: 120%;
+        `}
+      />
+    </div>
+  )
 
-  const ctx = el.getContext("2d")
+  const ctx = canvas_el.getContext("2d")
   if (!ctx) throw new Error("no context")
 
   const canvas = fg.canvas.canvasState({
-    ...fg.canvas.DEFAULT_OPTIONS,
-    el,
+    el: canvas_el,
     ctx,
     graph,
-    max_scale: 4,
-    init_scale: 2,
+    max_scale: 3,
+    init_scale: 1.7,
     init_grid_pos: Trig.ZERO
   })
 
-  const TITLE_SIZE_PX = 600
+  const TITLE_SIZE_PX = 400
   const window_size = useWindowSize()
 
   const animation = fg.anim.frameAnimation({
     ...fg.anim.DEFAULT_OPTIONS,
     onIteration(alpha) {
-      alpha = alpha / 2 // slow things down a bit
+      alpha = alpha / 3 // slow things down a bit
 
       fg.graph.simulate(graph, alpha)
 
@@ -148,9 +168,9 @@ export function createForceGraph(
       const vh = window_size.height
       const vmax = Math.max(vw, vh)
       const push_radius =
-        (Math.min(TITLE_SIZE_PX, vw, vh) / vmax) *
+        (Math.min(TITLE_SIZE_PX, vw / 2, vh / 2) / vmax) *
           (graph.grid.size / canvas.scale) +
-        20 /* additional margin for when scrolled in */
+        80 /* additional margin for when scrolled in */
 
       for (const node of graph.nodes) {
         const dist_x = node.position.x - origin_x
@@ -172,7 +192,7 @@ export function createForceGraph(
 
   s.onCleanup(() => fg.anim.cleanup(animation))
 
-  const ro = fg.canvas.resizeObserver(el, (size) => {
+  const ro = fg.canvas.resizeObserver(canvas_el, (size) => {
     fg.canvas.updateCanvasSize(canvas, size)
     fg.anim.requestFrame(animation)
   })
@@ -203,5 +223,5 @@ export function createForceGraph(
   })
   s.onCleanup(() => fg.canvas.cleanupCanvasGestures(gestures))
 
-  return el
+  return root_el
 }

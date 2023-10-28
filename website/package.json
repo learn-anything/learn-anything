@@ -20,7 +20,7 @@
     "@kobalte/tailwindcss": "^0.9.0",
     "@modular-forms/solid": "^0.20.0",
     "@motionone/solid": "^10.16.4",
-    "@nothing-but/force-graph": "^0.3.0",
+    "@nothing-but/force-graph": "^0.4.1",
     "@nothing-but/utils": "^0.10.1",
     "@orama/orama": "^1.2.11",
     "@solid-primitives/active-element": "^2.0.17",

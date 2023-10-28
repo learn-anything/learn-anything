@@ -8,7 +8,7 @@ import type * as client from "./client"
 export function ForceGraph(props: client.ForceGraphProps): solid.JSX.Element {
   const [clientModule] = solid.createResource(
     !isServer,
-    () => import("./client.ts")
+    () => import("./client.tsx")
   )
 
   return (
