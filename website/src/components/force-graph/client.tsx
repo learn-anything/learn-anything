@@ -10,7 +10,65 @@ export type RawNode = {
   connections: string[]
 }
 
-export function generateNodesFromRawData(
+type HSL = [hue: number, saturation: number, lightness: number]
+
+const COLORS: HSL[] = [
+  [3, 86, 64],
+  [31, 90, 69],
+  [15, 87, 66]
+]
+
+/* use a plain object instead of Map for faster lookups */
+type ColorMap = { [key: string]: string }
+type HSLMap = Map<fg.graph.Node, HSL>
+
+const MAX_COLOR_ITERATIONS = 20
+
+const visitColorNode = (
+  prev: fg.graph.Node,
+  node: fg.graph.Node,
+  hsl_map: HSLMap,
+  add: HSL,
+  iteration: number = 1
+): void => {
+  if (iteration > MAX_COLOR_ITERATIONS) return
+
+  const color = hsl_map.get(node)
+
+  if (!color) {
+    hsl_map.set(node, [...add])
+  } else {
+    const add_strength = MAX_COLOR_ITERATIONS / iteration
+    color[0] = (color[0] + add[0] * add_strength) / (1 + add_strength)
+    color[1] = (color[1] + add[1] * add_strength) / (1 + add_strength)
+    color[2] = (color[2] + add[2] * add_strength) / (1 + add_strength)
+  }
+
+  for (const edge of node.edges) {
+    const other_node = edge.a === node ? edge.b : edge.a
+    if (other_node === prev) continue
+    visitColorNode(node, other_node, hsl_map, add, iteration + 1)
+  }
+}
+
+function generateColorMap(nodes: readonly fg.graph.Node[]): ColorMap {
+  const hls_map: HSLMap = new Map()
+
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i]!
+    const color = COLORS[i % COLORS.length]!
+    visitColorNode(node, node, hls_map, color)
+  }
+
+  const color_map: ColorMap = {}
+  for (const [node, [hue, saturation, lightness]] of hls_map.entries()) {
+    color_map[node.key as string] = `${hue} ${saturation}% ${lightness}%`
+  }
+
+  return color_map
+}
+
+function generateNodesFromRawData(
   raw_data: RawNode[]
 ): [fg.graph.Node[], fg.graph.Edge[]] {
   const nodes_map = new Map<string, fg.graph.Node>()
@@ -83,6 +141,77 @@ const filterNodes = (
   fg.graph.resetGraphGrid(graph.grid, graph.nodes)
 }
 
+const TITLE_SIZE_PX = 400
+
+const simulateGraph = (
+  alpha: number,
+  graph: fg.graph.Graph,
+  canvas: fg.canvas.CanvasState,
+  vw: number,
+  vh: number
+): void => {
+  alpha = alpha / 3 // slow things down a bit
+
+  fg.graph.simulate(graph, alpha)
+
+  /*
+    Push nodes away from the center (the title)
+  */
+  const grid_radius = graph.grid.size / 2
+  const origin_x = grid_radius + canvas.translate.x
+  const origin_y = grid_radius + canvas.translate.y
+  const vmax = Math.max(vw, vh)
+  const push_radius =
+    (Math.min(TITLE_SIZE_PX, vw / 2, vh / 2) / vmax) *
+      (graph.grid.size / canvas.scale) +
+    80 /* additional margin for when scrolled in */
+
+  for (const node of graph.nodes) {
+    const dist_x = node.position.x - origin_x
+    const dist_y = (node.position.y - origin_y) * 2
+    const dist = Math.sqrt(dist_x * dist_x + dist_y * dist_y)
+    if (dist > push_radius) continue
+
+    const strength = Ease.in_expo((push_radius - dist) / push_radius)
+
+    node.velocity.x += strength * (node.position.x - origin_x) * 10 * alpha
+    node.velocity.y += strength * (node.position.y - origin_y) * 10 * alpha
+  }
+}
+
+const drawGraph = (
+  canvas: fg.canvas.CanvasState,
+  color_map: ColorMap
+): void => {
+  fg.canvas.resetFrame(canvas)
+  fg.canvas.drawEdges(canvas)
+
+  /*
+    Draw text nodes
+  */
+  const { ctx, graph } = canvas.options
+
+  ctx.textAlign = "center"
+  ctx.textBaseline = "middle"
+
+  for (const node of graph.nodes) {
+    const { x, y } = node.position
+    const opacity = 0.6 + ((node.mass - 1) / 50) * 4
+
+    ctx.font = `${
+      canvas.max_size / 200 +
+      (((node.mass - 1) / 5) * (canvas.max_size / 100)) / canvas.scale
+    }px sans-serif`
+    ctx.fillStyle = `hsl(${color_map[node.key as string]} / ${opacity})`
+
+    ctx.fillText(
+      node.label,
+      (x / graph.grid.size) * canvas.max_size,
+      (y / graph.grid.size) * canvas.max_size
+    )
+  }
+}
+
 export type ForceGraphProps = {
   onNodeClick: (name: string) => void
   /**
@@ -98,6 +227,8 @@ export function createForceGraph(props: ForceGraphProps): s.JSXElement {
   if (props.raw_nodes.length === 0) return
 
   const [nodes, edges] = generateNodesFromRawData(props.raw_nodes)
+
+  const color_map = generateColorMap(nodes)
 
   const graph = fg.graph.makeGraph(graph_options, nodes.slice(), edges.slice())
 
@@ -139,44 +270,15 @@ export function createForceGraph(props: ForceGraphProps): s.JSXElement {
     init_grid_pos: Trig.ZERO
   })
 
-  const TITLE_SIZE_PX = 400
   const window_size = useWindowSize()
 
   const animation = fg.anim.frameAnimation({
     ...fg.anim.DEFAULT_OPTIONS,
     onIteration(alpha) {
-      alpha = alpha / 3 // slow things down a bit
-
-      fg.graph.simulate(graph, alpha)
-
-      /*
-        Push nodes away from the center (the title)
-      */
-      const grid_radius = graph.grid.size / 2
-      const origin_x = grid_radius + canvas.translate.x
-      const origin_y = grid_radius + canvas.translate.y
-      const vw = window_size.width
-      const vh = window_size.height
-      const vmax = Math.max(vw, vh)
-      const push_radius =
-        (Math.min(TITLE_SIZE_PX, vw / 2, vh / 2) / vmax) *
-          (graph.grid.size / canvas.scale) +
-        80 /* additional margin for when scrolled in */
-
-      for (const node of graph.nodes) {
-        const dist_x = node.position.x - origin_x
-        const dist_y = (node.position.y - origin_y) * 2
-        const dist = Math.sqrt(dist_x * dist_x + dist_y * dist_y)
-        if (dist > push_radius) continue
-
-        const strength = Ease.in_expo((push_radius - dist) / push_radius)
-
-        node.velocity.x += strength * (node.position.x - origin_x) * 10 * alpha
-        node.velocity.y += strength * (node.position.y - origin_y) * 10 * alpha
-      }
+      simulateGraph(alpha, graph, canvas, window_size.width, window_size.height)
     },
     onFrame() {
-      fg.canvas.drawCanvas(canvas)
+      drawGraph(canvas, color_map)
     }
   })
   fg.anim.bump(animation)
