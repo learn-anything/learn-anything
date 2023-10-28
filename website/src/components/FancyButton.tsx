@@ -32,8 +32,8 @@ export default function FancyButton(props: Props) {
   return (
     <>
       <style>
-        {`
-
+        {
+          /*css*/ `
 button {
   --radius: 4px;
   --text-padding: 4px 8px;
@@ -93,42 +93,42 @@ button:before{
   transition: opacity 0.2s;
 }
 .backdrop {
-          position: relative;
-          width: 100%;
-          height: 100%;
-          background: hsl(0 0% 98% / 0.2);
-          border-radius: calc(var(--radius) - var(--padding));
-          display: block;
-          grid-column: 1;
-          grid-row: 1;
-          backdrop-filter: blur(20px) brightness(1.5);
-        }
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: hsl(0 0% 98% / 0.2);
+  border-radius: calc(var(--radius) - var(--padding));
+  display: block;
+  grid-column: 1;
+  grid-row: 1;
+  backdrop-filter: blur(20px) brightness(1.5);
+}
 .text {
-          padding: var(--text-padding);
-          grid-row: 1;
-          grid-column: 1;
-          z-index: 2;
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          white-space: nowrap;
+  padding: var(--text-padding);
+  grid-row: 1;
+  grid-column: 1;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+@media (prefers-color-scheme: dark) {
+  button {
+    border-color: hsl(0 0% 20%);
+    color: hsl(0 0% 98%);
+    background: hsl(0 0% 10%);
+  }
+  button .backdrop {
+    background: hsl(0 0% 10% / 0.7);
+    backdrop-filter: blur(20px) brightness(1.2) saturate(1);
+  }
+  button:after {
+    background: hsl(0 0% 10% / calc(1 - var(--hover, 0) * 0.25));
+  }
+}
+`
         }
-        @media (prefers-color-scheme: dark) {
-          button {
-            border-color: hsl(0 0% 20%);
-            color: hsl(0 0% 98%);
-            background: hsl(0 0% 10%);
-          }
-          button .backdrop {
-            background: hsl(0 0% 10% / 0.7);
-            backdrop-filter: blur(20px) brightness(1.2) saturate(1);
-          }
-          button:after {
-            background: hsl(0 0% 10% / calc(1 - var(--hover, 0) * 0.25));
-          }
-
-        }
-        `}
       </style>
       <button
         onClick={props.onClick}
