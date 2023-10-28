@@ -62,6 +62,8 @@ bun setup
 
 `bun setup` runs `bun setup.ts init` (can see [setup.ts](setup.ts) code for what it does). It will create `.env` files for you so you can start coding the project fast. It will also `git clone` [seed repo](https://github.com/learn-anything/seed). Which contains various files needed to bootstrap the database with content.
 
+Running `bun setup:full` will clone [ai](https://github.com/learn-anything/ai), [mobile](https://github.com/learn-anything/mobile) and [buy](https://github.com/learn-anything/buy) codebases so you can work with them as one monorepo. Tooling for that will get better with time.
+
 ### Setup EdgeDB
 
 > **Warning**

@@ -15,11 +15,6 @@ import {
 import { MobiusType } from "../root"
 import { useLocation } from "solid-start"
 
-type GlobalTopicSearchItem = {
-  name: string
-  prettyName: string
-}
-
 type GlobalLink = {
   id: string
   url: string

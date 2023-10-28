@@ -10,6 +10,9 @@ switch (command) {
   case "env":
     await setupEnvFiles()
     break
+  case "full-monorepo":
+    await getFullMonorepo()
+    break
   case undefined:
     console.log("No command provided")
     break
@@ -107,4 +110,10 @@ VITE_GRAFBASE_INTERNAL_SECRET=secret`
 
   // maybe in future have `setup -with-nix` or provide
   // flake with flox or how grafbase repo has it
+}
+
+async function getFullMonorepo() {
+  await $`git clone https://github.com/learn-anything/ai`
+  await $`git clone https://github.com/learn-anything/mobile`
+  await $`git clone https://github.com/learn-anything/buy`
 }

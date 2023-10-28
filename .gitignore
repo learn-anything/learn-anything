@@ -17,4 +17,6 @@ private
 package-lock.json
 tsconfig.tsbuildinfo
 .cache/
-other
+ai
+buy
+mobile

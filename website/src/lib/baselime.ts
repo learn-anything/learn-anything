@@ -119,7 +119,7 @@ export async function logUntracked(
     import.meta.env.VITE_ENV !== "prod" &&
     import.meta.env.VITE_ENV !== "staging"
   ) {
-    console.log(message)
+    // console.log(message)
     return
   }
   let url
