@@ -8,7 +8,7 @@ The end goal of Learn Anything is to become the best place and tool for keeping 
 
 It is a fully open source project with an active community on [Discord](https://discord.com/invite/bxtD8x6aNF). There is great focus on both DX of developing everything LA and even more, the end user UX.
 
-Project as it stands is a website and a desktop app. There is also [mobile app](https://github.com/learn-anything/mobile) in works currently in separate repo. We plan to train our own LLMs as we provide AI interfaces to all things knowledge, be it global AGI level queries ala ChatGPT or [querying into any person's knowledge base](https://github.com/learn-anything/ml) with different levels of privacy.
+Project as it stands is a website and a desktop app. There is also [mobile app](https://github.com/learn-anything/mobile) in works currently in separate repo. We plan to train our own LLMs as we provide AI interfaces to all things knowledge, be it global AGI level queries ala ChatGPT or [querying into any person's knowledge base](https://github.com/learn-anything/ai) with different levels of privacy.
 
 There is more exciting projects planned and under way (like [digital idea/goods marketplace with solana support](https://github.com/learn-anything/buy)). If interested, read on to setup the project and start writing your first code. ♥️
 

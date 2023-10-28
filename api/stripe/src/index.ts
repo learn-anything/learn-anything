@@ -12,6 +12,8 @@ app.onError(async (e, c) => {
 })
 
 app.post("/learn-anything-bought", async (c: Context) => {
+  // TODO: test https://discord.com/channels/1011308539819597844/1011308539819597847/1167292883758489640
+  // maybe its better? below seems to work too though
   let event = await c.req.parseBody()
   const stripe = new Stripe(c.env.LA_STRIPE_SECRET_KEY!, {
     apiVersion: "2023-10-16",
