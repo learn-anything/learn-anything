@@ -113,16 +113,7 @@ export function createForceGraph(props: ForceGraphProps): s.JSXElement {
 
   let canvas_el!: HTMLCanvasElement
   const root_el = (
-    <div
-      style={`
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-      `}
-    >
+    <div class="absolute inset-0 overflow-hidden">
       <canvas
         ref={canvas_el}
         style={`
