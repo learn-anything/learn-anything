@@ -1,9 +1,68 @@
 import * as solid from "solid-js"
-import { Canvas, Graph, Anim } from "@nothing-but/force-graph"
+import * as fg from "@nothing-but/force-graph"
 import { Ease } from "@nothing-but/utils"
-import { RawData, generateNodesFromData } from "./generate"
 
-const graph_options = Graph.graphOptions({
+export type RawData = {
+  name: string
+  prettyName: string
+  connections: string[]
+}
+
+export function generateNodesFromRawData(
+  raw_data: RawData[]
+): [fg.graph.Node[], fg.graph.Edge[]] {
+  const nodes_map = new Map<string, fg.graph.Node>()
+  const edges: fg.graph.Edge[] = []
+
+  for (const raw of raw_data) {
+    const node = fg.graph.zeroNode()
+    node.key = raw.name
+    node.label = raw.prettyName
+    nodes_map.set(raw.name, node)
+  }
+
+  for (const raw of raw_data) {
+    const node_a = nodes_map.get(raw.name)!
+
+    for (const name_b of raw.connections) {
+      const node_b = nodes_map.get(name_b)!
+      const edge = fg.graph.connect(node_a, node_b)
+      edges.push(edge)
+    }
+  }
+
+  const nodes = Array.from(nodes_map.values())
+
+  return [nodes, edges]
+}
+
+// export function generateInitialGraph(length: number = 256): NodesData {
+//   const nodes: fg.graph.Node[] = Array.from({ length }, fg.graph.makeNode)
+//   const edges: fg.graph.Edge[] = []
+
+//   for (let i = 0; i < length; i++) {
+//     const node = nodes[i]!
+
+//     if (node.edges.length > 0 && Math.random() < 0.8) continue
+
+//     const b_index = Num.random_int(length)
+//     let node_b = nodes[b_index]!
+
+//     if (node_b === node) {
+//       node_b = nodes[(b_index + 1) % length]!
+//     }
+
+//     edges.push(fg.graph.connect(node, node_b))
+//   }
+
+//   return {
+//     nodes,
+//     edges,
+//     getLabel: (node) => String(node.key)
+//   }
+// }
+
+const graph_options = fg.graph.graphOptions({
   inertia_strength: 0.3,
   origin_strength: 0.01,
   repel_distance: 22,
@@ -14,11 +73,11 @@ export function createForceGraph(
   raw_data: RawData[],
   onNodeClick: (name: string) => void
 ): HTMLCanvasElement {
-  const data = generateNodesFromData(raw_data)
+  const [nodes, edges] = generateNodesFromRawData(raw_data)
 
-  Graph.randomizeNodePositions(data.nodes, graph_options.grid_size)
+  fg.graph.randomizeNodePositions(nodes, graph_options.grid_size)
 
-  const graph = Graph.makeGraph(graph_options, data.nodes, data.edges)
+  const graph = fg.graph.makeGraph(graph_options, nodes, edges)
 
   const el = document.createElement("canvas")
   el.className = "absolute w-full h-full"
@@ -26,19 +85,18 @@ export function createForceGraph(
   const ctx = el.getContext("2d")
   if (!ctx) throw new Error("no context")
 
-  const canvas = Canvas.canvasState({
-    ...Canvas.default_options,
+  const canvas = fg.canvas.canvasState({
+    ...fg.canvas.DEFAULT_OPTIONS,
     el,
     ctx,
     graph,
-    init_scale: 2,
-    nodeLabel: data.getLabel
+    init_scale: 2
   })
 
-  const animation = Anim.frameAnimation({
-    ...Anim.default_options,
+  const animation = fg.anim.frameAnimation({
+    ...fg.anim.DEFAULT_OPTIONS,
     onIteration(alpha) {
-      Graph.simulate(graph, alpha)
+      fg.graph.simulate(graph, alpha)
 
       /*
         Push nodes away from the center (the title)
@@ -62,23 +120,23 @@ export function createForceGraph(
       }
     },
     onFrame() {
-      Canvas.drawCanvas(canvas)
+      fg.canvas.drawCanvas(canvas)
     }
   })
-  Anim.bump(animation)
+  fg.anim.bump(animation)
 
-  solid.onCleanup(() => Anim.cleanup(animation))
+  solid.onCleanup(() => fg.anim.cleanup(animation))
 
-  const ro = Canvas.resizeObserver(el, (size) => {
-    Canvas.updateCanvasSize(canvas, size)
-    Anim.requestFrame(animation)
+  const ro = fg.canvas.resizeObserver(el, (size) => {
+    fg.canvas.updateCanvasSize(canvas, size)
+    fg.anim.requestFrame(animation)
   })
   solid.onCleanup(() => ro.disconnect())
 
-  const gestures = Canvas.canvasGestures({
+  const gestures = fg.canvas.canvasGestures({
     canvas,
     onTranslate() {
-      Anim.bump(animation)
+      fg.anim.bump(animation)
     },
     onNodeClick(node) {
       onNodeClick(node.key as string)
@@ -87,18 +145,18 @@ export function createForceGraph(
       canvas.hovered_node = node
     },
     onNodeDrag(node, pos) {
-      Graph.changeNodePosition(canvas.options.graph.grid, node, pos.x, pos.y)
-      Anim.requestFrame(animation)
+      fg.graph.changeNodePosition(canvas.options.graph.grid, node, pos.x, pos.y)
+      fg.anim.requestFrame(animation)
     },
     onModeChange(mode) {
-      if (mode === Canvas.Mode.DraggingNode) {
-        Anim.start(animation)
+      if (mode === fg.canvas.Mode.DraggingNode) {
+        fg.anim.start(animation)
       } else {
-        Anim.pause(animation)
+        fg.anim.pause(animation)
       }
     }
   })
-  solid.onCleanup(() => Canvas.cleanupCanvasGestures(gestures))
+  solid.onCleanup(() => fg.canvas.cleanupCanvasGestures(gestures))
 
   return el
 }
