@@ -111,7 +111,7 @@ export async function logError(
   await fetch(url, requestOptions)
 }
 
-export async function logUntracked(
+export function logUntracked(
   message: any,
   additionalMessage?: string | Record<string, any>
 ) {
@@ -142,5 +142,5 @@ export async function logUntracked(
       }
     ])
   }
-  await fetch(url, requestOptions)
+  return fetch(url, requestOptions)
 }
