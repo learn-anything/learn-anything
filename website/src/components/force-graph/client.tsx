@@ -202,7 +202,11 @@ const drawGraph = (
       canvas.max_size / 200 +
       (((node.mass - 1) / 5) * (canvas.max_size / 100)) / canvas.scale
     }px sans-serif`
-    ctx.fillStyle = `hsl(${color_map[node.key as string]} / ${opacity})`
+
+    ctx.fillStyle =
+      node.anchor || canvas.hovered_node === node
+        ? `rgba(129, 140, 248, ${opacity})`
+        : `hsl(${color_map[node.key as string]} / ${opacity})`
 
     ctx.fillText(
       node.label,
@@ -240,6 +244,7 @@ export function createForceGraph(props: ForceGraphProps): s.JSXElement {
     const query = props.filterQuery()
 
     scheduleFilterNodes(graph, nodes, edges, query)
+    fg.anim.bump(animation)
   })
 
   let canvas_el!: HTMLCanvasElement
@@ -300,7 +305,9 @@ export function createForceGraph(props: ForceGraphProps): s.JSXElement {
       props.onNodeClick(node.key as string)
     },
     onNodeHover(node) {
+      if (canvas.hovered_node === node) return
       canvas.hovered_node = node
+      fg.anim.requestFrame(animation)
     },
     onNodeDrag(node, pos) {
       fg.graph.changeNodePosition(canvas.options.graph.grid, node, pos.x, pos.y)
