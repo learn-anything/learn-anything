@@ -12,7 +12,7 @@ export type RawNode = {
 
 type HSL = [hue: number, saturation: number, lightness: number]
 
-const COLORS: HSL[] = [
+const COLORS: readonly HSL[] = [
   [3, 86, 64],
   [31, 90, 69],
   [15, 87, 66]
@@ -22,8 +22,11 @@ const COLORS: HSL[] = [
 type ColorMap = { [key: string]: string }
 type HSLMap = Map<fg.graph.Node, HSL>
 
-const MAX_COLOR_ITERATIONS = 20
+const MAX_COLOR_ITERATIONS = 10
 
+/**
+ * Add a color to a node and all its connected nodes.
+ */
 const visitColorNode = (
   prev: fg.graph.Node,
   node: fg.graph.Node,
@@ -51,7 +54,7 @@ const visitColorNode = (
   }
 }
 
-function generateColorMap(nodes: readonly fg.graph.Node[]): ColorMap {
+const generateColorMap = (nodes: readonly fg.graph.Node[]): ColorMap => {
   const hls_map: HSLMap = new Map()
 
   for (let i = 0; i < nodes.length; i++) {
@@ -68,9 +71,9 @@ function generateColorMap(nodes: readonly fg.graph.Node[]): ColorMap {
   return color_map
 }
 
-function generateNodesFromRawData(
+const generateNodesFromRawData = (
   raw_data: RawNode[]
-): [fg.graph.Node[], fg.graph.Edge[]] {
+): [fg.graph.Node[], fg.graph.Edge[]] => {
   const nodes_map = new Map<string, fg.graph.Node>()
   const edges: fg.graph.Edge[] = []
 
@@ -98,23 +101,6 @@ function generateNodesFromRawData(
   return [nodes, edges]
 }
 
-const graph_options: fg.graph.Options = {
-  min_move: 0.001,
-  inertia_strength: 0.3,
-  origin_strength: 0.01,
-  repel_distance: 40,
-  repel_strength: 2,
-  link_strength: 0.015,
-  grid_size: 500
-}
-
-const filterToRegex = (filter: string): RegExp => {
-  // regex matching all letters of the filter (out of order)
-  const letters = filter.split("")
-  const regex = new RegExp(letters.join(".*"), "i")
-  return regex
-}
-
 const filterNodes = (
   graph: fg.graph.Graph,
   nodes: readonly fg.graph.Node[],
@@ -128,17 +114,25 @@ const filterNodes = (
     return
   }
 
-  const regex = filterToRegex(filter)
+  // regex matching all letters of the filter (out of order)
+  const regex = new RegExp(filter.split("").join(".*"), "i")
 
-  const new_nodes = nodes.filter((node) => regex.test(node.label))
-  const new_edges = edges.filter(
+  graph.nodes = nodes.filter((node) => regex.test(node.label))
+  graph.edges = edges.filter(
     (edge) => regex.test(edge.a.label) && regex.test(edge.b.label)
   )
 
-  graph.nodes = new_nodes
-  graph.edges = new_edges
-
   fg.graph.resetGraphGrid(graph.grid, graph.nodes)
+}
+
+const graph_options: fg.graph.Options = {
+  min_move: 0.001,
+  inertia_strength: 0.3,
+  origin_strength: 0.01,
+  repel_distance: 40,
+  repel_strength: 2,
+  link_strength: 0.015,
+  grid_size: 500
 }
 
 const TITLE_SIZE_PX = 400
@@ -227,7 +221,7 @@ export type ForceGraphProps = {
   raw_nodes: RawNode[]
 }
 
-export function createForceGraph(props: ForceGraphProps): s.JSXElement {
+export const createForceGraph = (props: ForceGraphProps): s.JSXElement => {
   if (props.raw_nodes.length === 0) return
 
   const [nodes, edges] = generateNodesFromRawData(props.raw_nodes)
