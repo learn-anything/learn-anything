@@ -227,7 +227,7 @@ We want this project to have by far the best DX of any open source project on Gi
 
 All docs can be seen in [docs](docs). Will be rendered nicely on website with [VitePress](https://vitepress.dev/) soon.
 
-It is advisable you read them, before you start developing anything as they try give a lot of context and general knowledge.
+It is advisable you read them, before you start developing anything as they provide a lot of context and general knowledge.
 
 There is big focus on documentation and clarity in the project. All code should be clear and understandable and well documented.
 
