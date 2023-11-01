@@ -271,5 +271,4 @@ Ran with `bun <Name>`
 
 [![MIT License](http://bit.ly/mitbadge)](https://choosealicense.com/licenses/mit/) 
 [![Learn Anything](https://img.shields.io/badge/learnanything-100000?style=flat&logo=X&logoColor=white&labelColor=black&color=black)](https://twitter.com/learnanything_)
-
-
+[![Discord](https://img.shields.io/badge/Discord-100000?style=flat&logo=discord&logoColor=white&labelColor=black&color=black)](https://discord.com/invite/bxtD8x6aNF)
