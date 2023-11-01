@@ -231,6 +231,18 @@ g.mutation("createUser", {
   resolver: "createUser"
 })
 
+g.mutation("createProduct", {
+  args: {
+    name: g.string(),
+    description: g.string().optional(),
+    imageUrl: g.string().optional(),
+    websiteUrl: g.string().optional(),
+    priceInUsd: g.float().optional()
+  },
+  returns: g.string(),
+  resolver: "createProduct"
+})
+
 g.mutation("deletePersonalLink", {
   args: { personalLinkId: g.string() },
   returns: g.string(),

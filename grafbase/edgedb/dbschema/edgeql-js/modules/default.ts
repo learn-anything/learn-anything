@@ -203,6 +203,24 @@ const $PersonalLink = $.makeType<$PersonalLink>(_.spec, "a27a574a-6e8d-11ee-9d60
 
 const PersonalLink: $.$expr_PathNode<$.TypeSet<$PersonalLink, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($PersonalLink, $.Cardinality.Many), null);
 
+export type $ProductλShape = $.typeutil.flatten<_std.$Object_d29c95e25d6b11eeabaf012dd32b5eadλShape & {
+  "description": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "imageUrl": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "name": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
+  "priceInUsd": $.PropertyDesc<_std.$float32, $.Cardinality.AtMostOne, false, false, false, false>;
+  "websiteUrl": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "<productsBought[is User]": $.LinkDesc<$User, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<productsSelling[is User]": $.LinkDesc<$User, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<productsBought": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<productsSelling": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
+}>;
+type $Product = $.ObjectType<"default::Product", $ProductλShape, null, [
+  ..._std.$Object_d29c95e25d6b11eeabaf012dd32b5ead['__exclusives__'],
+]>;
+const $Product = $.makeType<$Product>(_.spec, "0958a4fe-78a1-11ee-9f34-efa489a5b8bf", _.syntax.literal);
+
+const Product: $.$expr_PathNode<$.TypeSet<$Product, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Product, $.Cardinality.Many), null);
+
 export type $RelatedLinkλShape = $.typeutil.flatten<_std.$Object_d29c95e25d6b11eeabaf012dd32b5eadλShape & {
   "title": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "url": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
@@ -276,6 +294,8 @@ export type $UserλShape = $.typeutil.flatten<_std.$Object_d29c95e25d6b11eeabaf0
   "stripeSubscriptionObjectId": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "subscriptionStopped": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, false>;
   "stripePlan": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "productsBought": $.LinkDesc<$Product, $.Cardinality.Many, {}, false, false,  false, false>;
+  "productsSelling": $.LinkDesc<$Product, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user[is UserGuide]": $.LinkDesc<$UserGuide, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user[is Wiki]": $.LinkDesc<$Wiki, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
@@ -334,7 +354,7 @@ const Wiki: $.$expr_PathNode<$.TypeSet<$Wiki, $.Cardinality.Many>, null> = _.syn
 
 
 
-export { $GlobalGraph, GlobalGraph, $GlobalGuide, GlobalGuide, $GlobalGuideSection, GlobalGuideSection, $GlobalLink, GlobalLink, $GlobalNote, GlobalNote, $GlobalTopic, GlobalTopic, $Link, Link, $Note, Note, $PersonalLink, PersonalLink, $RelatedLink, RelatedLink, $Topic, Topic, $User, User, $UserGuide, UserGuide, $UserGuideSection, UserGuideSection, $Wiki, Wiki };
+export { $GlobalGraph, GlobalGraph, $GlobalGuide, GlobalGuide, $GlobalGuideSection, GlobalGuideSection, $GlobalLink, GlobalLink, $GlobalNote, GlobalNote, $GlobalTopic, GlobalTopic, $Link, Link, $Note, Note, $PersonalLink, PersonalLink, $Product, Product, $RelatedLink, RelatedLink, $Topic, Topic, $User, User, $UserGuide, UserGuide, $UserGuideSection, UserGuideSection, $Wiki, Wiki };
 
 type __defaultExports = {
   "GlobalGraph": typeof GlobalGraph;
@@ -346,6 +366,7 @@ type __defaultExports = {
   "Link": typeof Link;
   "Note": typeof Note;
   "PersonalLink": typeof PersonalLink;
+  "Product": typeof Product;
   "RelatedLink": typeof RelatedLink;
   "Topic": typeof Topic;
   "User": typeof User;
@@ -363,6 +384,7 @@ const __defaultExports: __defaultExports = {
   "Link": Link,
   "Note": Note,
   "PersonalLink": PersonalLink,
+  "Product": Product,
   "RelatedLink": RelatedLink,
   "Topic": Topic,
   "User": User,

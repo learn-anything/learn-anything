@@ -159,6 +159,7 @@ export type Schema = {
   'Mutation': {
     __typename?: 'Mutation';
     createUser?: string;
+    createProduct?: string;
     deletePersonalLink?: string;
     updateTopicLearningStatus?: string;
     updateLinkStatusResolver?: string;
@@ -192,6 +193,7 @@ export type Resolver = {
   'Query.checkUrl': ResolverFn<Schema['Query'], { linkUrl: string,  }, string>
   'Query.stripe': ResolverFn<Schema['Query'], { plan: string, userEmail: string,  }, string>
   'Mutation.createUser': ResolverFn<Schema['Mutation'], { email: string,  }, string>
+  'Mutation.createProduct': ResolverFn<Schema['Mutation'], { name: string, description: string | null, imageUrl: string | null, websiteUrl: string | null, priceInUsd: number | null,  }, string>
   'Mutation.deletePersonalLink': ResolverFn<Schema['Mutation'], { personalLinkId: string,  }, string>
   'Mutation.updateTopicLearningStatus': ResolverFn<Schema['Mutation'], { learningStatus: Schema['learningStatus'], topicName: string, verifiedTopic: boolean,  }, string>
   'Mutation.updateLinkStatusResolver': ResolverFn<Schema['Mutation'], { linkId: string, action: Schema['linkAction'],  }, string>

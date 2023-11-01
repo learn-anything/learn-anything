@@ -46,6 +46,10 @@ module default {
     multi dislikedNotes: Note;
     # list of topics user is moderating
     multi topicsModerated: GlobalTopic;
+    # products user is selling
+    multi productsSelling: Product;
+    # products user bought
+    multi productsBought: Product;
     # date until user has paid membership for
     memberUntil: datetime;
     # month / year
@@ -54,6 +58,13 @@ module default {
     stripeSubscriptionObjectId: str;
     # whether user has stopped subscription and won't be be charged again
     subscriptionStopped: bool;
+  }
+  type Product {
+    required name: str;
+    description: str;
+    imageUrl: str;
+    websiteUrl: str;
+    priceInUsd: float32;
   }
   type Wiki {
     # owner of this wiki
