@@ -144,7 +144,7 @@ const simulateGraph = (
   vw: number,
   vh: number
 ): void => {
-  alpha = alpha / 3 // slow things down a bit
+  alpha = alpha / 4 // slow things down a bit
 
   fg.graph.simulate(graph, alpha)
 
@@ -238,7 +238,7 @@ export const createForceGraph = (props: ForceGraphProps): s.JSXElement => {
     const query = props.filterQuery()
 
     scheduleFilterNodes(graph, nodes, edges, query)
-    fg.anim.bump(animation)
+    bump_end = fg.anim.bump(bump_end)
   })
 
   let canvas_el!: HTMLCanvasElement
@@ -271,29 +271,27 @@ export const createForceGraph = (props: ForceGraphProps): s.JSXElement => {
 
   const window_size = useWindowSize()
 
-  const animation = fg.anim.frameAnimation({
-    ...fg.anim.DEFAULT_OPTIONS,
-    onIteration(alpha) {
-      simulateGraph(alpha, graph, canvas, window_size.width, window_size.height)
-    },
-    onFrame() {
-      drawGraph(canvas, color_map)
-    }
-  })
-  fg.anim.bump(animation)
+  let is_active = false
+  let alpha = 0 // 0 - 1
+  let bump_end = fg.anim.bump(0)
 
-  s.onCleanup(() => fg.anim.cleanup(animation))
+  const loop = fg.anim.animationLoop((time) => {
+    alpha = fg.anim.updateAlpha(alpha, is_active || time < bump_end)
+    simulateGraph(alpha, graph, canvas, window_size.width, window_size.height)
+    drawGraph(canvas, color_map)
+  })
+  fg.anim.loopStart(loop)
+  s.onCleanup(() => fg.anim.loopClear(loop))
 
   const ro = fg.canvas.resizeObserver(canvas_el, (size) => {
     fg.canvas.updateCanvasSize(canvas, size)
-    fg.anim.requestFrame(animation)
   })
   s.onCleanup(() => ro.disconnect())
 
   const gestures = fg.canvas.canvasGestures({
     canvas,
     onTranslate() {
-      fg.anim.bump(animation)
+      bump_end = fg.anim.bump(bump_end)
     },
     onNodeClick(node) {
       props.onNodeClick(node.key as string)
@@ -301,18 +299,12 @@ export const createForceGraph = (props: ForceGraphProps): s.JSXElement => {
     onNodeHover(node) {
       if (canvas.hovered_node === node) return
       canvas.hovered_node = node
-      fg.anim.requestFrame(animation)
     },
     onNodeDrag(node, pos) {
       fg.graph.changeNodePosition(canvas.options.graph.grid, node, pos.x, pos.y)
-      fg.anim.requestFrame(animation)
     },
     onModeChange(mode) {
-      if (mode === fg.canvas.Mode.DraggingNode) {
-        fg.anim.start(animation)
-      } else {
-        fg.anim.pause(animation)
-      }
+      is_active = mode === fg.canvas.Mode.DraggingNode
     }
   })
   s.onCleanup(() => fg.canvas.cleanupCanvasGestures(gestures))
