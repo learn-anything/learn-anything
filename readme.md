@@ -269,4 +269,7 @@ Ran with `bun <Name>`
 
 ### ♥️
 
-[![MIT](http://bit.ly/mitbadge)](https://choosealicense.com/licenses/mit/) [![Twitter](http://bit.ly/latwitt)](https://twitter.com/learnanything_)
+[![MIT License](http://bit.ly/mitbadge)](https://choosealicense.com/licenses/mit/) 
+[![Learn Anything](https://img.shields.io/badge/learnanything-100000?style=flat&logo=X&logoColor=white&labelColor=black&color=black)](https://twitter.com/learnanything_)
+
+
