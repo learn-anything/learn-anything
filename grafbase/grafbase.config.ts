@@ -217,6 +217,12 @@ g.query("checkUrl", {
   resolver: "checkUrl"
 })
 
+g.query("getSuggestionsForUrl", {
+  args: { linkUrl: g.string() },
+  returns: g.string(),
+  resolver: "getSuggestionsForUrl"
+})
+
 g.query("stripe", {
   args: { plan: g.string(), userEmail: g.string() },
   returns: g.string(),
