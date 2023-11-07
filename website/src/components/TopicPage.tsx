@@ -1,5 +1,5 @@
-import { For, Setter, Show, createSignal, onMount } from "solid-js"
-import SolidMarkdown from "solid-markdown"
+import { Show } from "solid-js"
+import { SolidMarkdown } from "solid-markdown"
 import MiniSidebar from "./MiniSidebar"
 import TopBar from "./TopBar"
 
@@ -117,7 +117,7 @@ export default function TopicPage(props: Props) {
       >
         <div
           style={{
-            height: "65px",
+            height: "65px"
           }}
           class="fixed w-full z-20   top-0 right-0 flex "
           id="Topbar"
@@ -125,7 +125,7 @@ export default function TopicPage(props: Props) {
           <div
             class="Topbar z-10"
             style={{
-              height: "65px",
+              height: "65px"
             }}
           >
             <TopBar></TopBar>
@@ -161,7 +161,7 @@ export default function TopicPage(props: Props) {
               style={{
                 "word-spacing": "0px",
                 "line-height": "30px",
-                "font-size": "16px",
+                "font-size": "16px"
               }}
               class="h-full w-full py-16 pl-16 opacity-80 pr-80 font-light overflow-scroll"
             >
