@@ -24,16 +24,6 @@ export default function App() {
   //   }
   // })
 
-  let fileRef!: HTMLInputElement
-
-  const handleOpenFile = () => {
-    fileRef?.click()
-  }
-
-  const handleFileChange = () => {
-    console.log({ fileRef }, "..")
-  }
-
   return (
     <>
       <style>
@@ -64,26 +54,19 @@ export default function App() {
         <div class="w-full h-full flex justify-center items-center flex-col gap-5">
           <FancyButton
             onClick={async () => {
-              const folderPath = await invoke("pick_folder", {
+              const connectedFolder = await invoke("connect_folder", {
                 command: {},
               })
-              console.log(folderPath)
+              console.log(connectedFolder)
+              // @ts-ignore
+              if (connectedFolder?.length > 0) {
+                // @ts-ignore
+                global.set("files", connectedFolder)
+              }
+              // {"path": string, "files": ["content": "..", "path": ".."]}
             }}
           >
-            Create folder
-          </FancyButton>
-          {/* <input
-            value="Create folder"
-            type="file"
-            directory=""
-            webkitdirectory=""
-            multiple
-            ref={fileRef}
-            style={{ display: "none" }}
-            onChange={handleFileChange}
-          /> */}
-          <FancyButton onClick={() => {}}>
-            Connect existing folder of markdown notes
+            Connect folder
           </FancyButton>
         </div>
 

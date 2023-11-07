@@ -1,7 +1,6 @@
 import { createContext, createEffect, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 import { captureStoreUpdates } from "@solid-primitives/deep"
-import { Wiki } from "../../../lib/wiki/wiki"
 
 // see app/packages/preload/src/tinybase/tinybase.ts
 // to understand schema of tinybase store
@@ -11,7 +10,7 @@ import { Wiki } from "../../../lib/wiki/wiki"
 
 // global state of wiki
 export default function createWikiState() {
-  const [wiki, setWiki] = createStore<Wiki>({
+  const [wiki, setWiki] = createStore<any>({
     wikiFolderPath: "", // TODO: temp, load from tinybase
     openTopic: {
       topicName: "",
