@@ -25,7 +25,7 @@ import { UserProvider, createUserState } from "./GlobalContext/user"
 import "./root.css"
 import UserProfile from "./routes/@(username)"
 
-// TODO: https://github.com/nikitavoloboev/la-issues/issues/54 (should stop having to manually update this schema )
+// TODO: https://github.com/learn-anything/learn-anything.xyz/issues/66 (should stop having to manually update this schema)
 export const typeDefs = `
 """
 De-prioritizes a fragment, causing the fragment to be omitted in the initial response and delivered as a subsequent response afterward.

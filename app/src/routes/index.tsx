@@ -8,10 +8,12 @@ import NoTopicChosen from "../components/NoTopicChosen"
 import SearchModal from "../components/SearchModal"
 import Sidebar from "../components/Sidebar"
 import SignInPage from "../components/SignInPage"
+import { GlobalStateProvider, createGlobalState } from "../GlobalContext/global"
 
 export default function App() {
   const user = createUserState()
   const wiki = createWikiState()
+  const global = createGlobalState()
 
   // TODO: Meta + L gives problems
   // does not trigger most of the time
@@ -30,48 +32,50 @@ export default function App() {
         {`
       `}
       </style>
-      <UserProvider value={user}>
-        <WikiProvider value={wiki}>
-          <div
-            style={{ width: "100vw", height: "100vh" }}
-            class="flex items-center dark:bg-[#1e1e1e] bg-white"
-          >
-            <Show when={user.user.showSignIn}>
-              {/* TODO: make a modal, pretty */}
-              {/* TODO: try not to have 'pages', just have modals on top of the editor */}
-              <SignInPage />
-            </Show>
-            <Sidebar />
-            <Show
-              when={wiki.wiki.openTopic.fileContent}
-              fallback={<NoTopicChosen />}
+      <GlobalStateProvider value={global}>
+        <UserProvider value={user}>
+          <WikiProvider value={wiki}>
+            <div
+              style={{ width: "100vw", height: "100vh" }}
+              class="flex items-center dark:bg-[#1e1e1e] bg-white"
             >
-              {/* <Editor /> */}
-              {/* <TiptapEditor /> */}
-              {/* <CodemirrorEditor /> */}
-            </Show>
+              <Show when={user.user.showSignIn}>
+                {/* TODO: make a modal, pretty */}
+                {/* TODO: try not to have 'pages', just have modals on top of the editor */}
+                <SignInPage />
+              </Show>
+              <Sidebar />
+              <Show
+                when={wiki.wiki.openTopic.fileContent}
+                fallback={<NoTopicChosen />}
+              >
+                {/* <Editor /> */}
+                {/* <TiptapEditor /> */}
+                {/* <CodemirrorEditor /> */}
+              </Show>
 
-            {/* <Show
+              {/* <Show
               when={!wiki.wiki.wikiFolderPath || user.user.mode === "Settings"}
             >
               <Settings />
             </Show> */}
-            <Show when={user.user.mode === "Search Topics"}>
-              <SearchModal
-                items={wiki.wiki.topics}
-                action={() => {}}
-                searchPlaceholder="Search Topics"
-              />
+              <Show when={user.user.mode === "Search Topics"}>
+                <SearchModal
+                  items={wiki.wiki.topics}
+                  action={() => {}}
+                  searchPlaceholder="Search Topics"
+                />
+              </Show>
+            </div>
+            <Show when={import.meta.env.MODE === "development"}>
+              <DevToolsPanel />
             </Show>
-          </div>
-          <Show when={import.meta.env.MODE === "development"}>
-            <DevToolsPanel />
-          </Show>
-          <Show when={user.user.mode === "New Note"}>
-            <InputModal />
-          </Show>
-        </WikiProvider>
-      </UserProvider>
+            <Show when={user.user.mode === "New Note"}>
+              <InputModal />
+            </Show>
+          </WikiProvider>
+        </UserProvider>
+      </GlobalStateProvider>
     </>
   )
 }
