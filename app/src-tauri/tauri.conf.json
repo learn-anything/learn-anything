@@ -51,7 +51,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "Learn Anything",
+        "title": "",
         "titleBarStyle": "Overlay",
         "maximized": true
       }

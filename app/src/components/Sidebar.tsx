@@ -1,10 +1,13 @@
 import { For } from "solid-js"
 import { useUser } from "../GlobalContext/user"
 import { useWiki } from "../GlobalContext/wiki"
+import { useGlobalState } from "../GlobalContext/global"
+import Icon from "./Icon"
 
 export default function Sidebar() {
   const user = useUser()
   const wiki = useWiki()
+  const global = useGlobalState()
 
   return (
     <>
@@ -14,23 +17,34 @@ export default function Sidebar() {
         style={{ width: "25%", "min-width": "250px" }}
       >
         <div class="flex w-18 dark:bg-[#1e1e1e] bg-white flex-col justify-between items-center font-semibold p-2 py-4 border-r-2 border-opacity-20 border-slate-400">
-          <div class="p-1 px-2 rounded-md">Wiki</div>
+          <div
+            class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
+            onClick={() => {
+              // TODO: show modal of settings like in obsidian
+              // user.setMode("Settings")
+            }}
+          >
+            <Icon name="FileSearch" />
+          </div>
+          <div class="p-1 px-2 rounded-md"></div>
           <div class="flex flex-col items-center gap-3">
+            {/* <div
+              class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
+              onClick={() => {
+                // TODO: fix sign in
+                // user.setShowSignIn(true)
+              }}
+            >
+              <Icon name="UserProfile" />
+            </div> */}
             <div
               class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
               onClick={() => {
+                // TODO: show modal of settings like in obsidian
                 user.setMode("Settings")
               }}
             >
-              Settings
-            </div>
-            <div
-              class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
-              onClick={() => {
-                user.setShowSignIn(true)
-              }}
-            >
-              Sign
+              <Icon name="Settings" />
             </div>
           </div>
         </div>

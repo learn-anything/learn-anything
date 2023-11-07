@@ -21,12 +21,12 @@ fn main() {
 }
 
 #[tauri::command]
-async fn connect_folder() -> Option<Vec<serde_json::Value>> {
+async fn connect_folder() -> Option<(String, Vec<serde_json::Value>)> {
     if let Some(folder_path) = FileDialogBuilder::new().pick_folder() {
-        let folder_str = folder_path.to_str().unwrap();
-        let result = read_files_in_dir(folder_str);
+        let folder_str = folder_path.to_str().unwrap().to_string();
+        let result = read_files_in_dir(&folder_str);
         log!(result);
-        Some(result)
+        Some((folder_str, result))
     } else {
         None
     }
