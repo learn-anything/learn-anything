@@ -83,7 +83,17 @@ bun db:init
 
 Follow instructions, name EdgeDB instance `learn-anything`.
 
-Run `bun db:ui`. This will open EdgeDB graphical interface where you can run queries or explore the schema.
+Then run `bun setup.ts seed-edgedb`.
+
+Then do:
+
+```
+cd grafbase/edgedb
+edgedb database wipe -I learn-anything
+edgedb restore seed.db
+```
+
+Now you can run `bun db:ui`. This will open EdgeDB graphical interface where you can run queries or explore the schema. The EdgeDB database you got, has all the content of existing Learn Anything, you can explore the data inside and run various queries.
 
 If you ran `bun setup`, you should have already a `grafbase/.env` file with this content:
 
