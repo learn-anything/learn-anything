@@ -154,6 +154,7 @@ export type Schema = {
     getGlobalTopicLearningStatus?: string;
     getGlobalLinks?: Schema['getGlobalLinksOutput'];
     checkUrl?: string;
+    getStripeDashboard?: string;
     stripe?: string;
   };
   'Mutation': {
@@ -191,6 +192,7 @@ export type Resolver = {
   'Query.getGlobalTopicLearningStatus': ResolverFn<Schema['Query'], { topicName: string,  }, string>
   'Query.getGlobalLinks': ResolverFn<Schema['Query'], {  }, Schema['getGlobalLinksOutput']>
   'Query.checkUrl': ResolverFn<Schema['Query'], { linkUrl: string,  }, string>
+  'Query.getStripeDashboard': ResolverFn<Schema['Query'], {  }, string>
   'Query.stripe': ResolverFn<Schema['Query'], { plan: string, userEmail: string,  }, string>
   'Mutation.createUser': ResolverFn<Schema['Mutation'], { email: string,  }, string>
   'Mutation.createProduct': ResolverFn<Schema['Mutation'], { name: string, description: string | null, imageUrl: string | null, websiteUrl: string | null, priceInUsd: number | null,  }, string>
