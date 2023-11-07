@@ -12,8 +12,15 @@ import {
   Title,
 } from "solid-start"
 import "./root.css"
+import { UserProvider, createUserState } from "./GlobalContext/user"
+import createWikiState, { WikiProvider } from "./GlobalContext/wiki"
+import { GlobalStateProvider, createGlobalState } from "./GlobalContext/global"
 
 export default function Root() {
+  const user = createUserState()
+  const wiki = createWikiState()
+  const global = createGlobalState()
+
   return (
     <Html lang="en">
       <Head>
@@ -25,9 +32,15 @@ export default function Root() {
       <Body>
         <Suspense>
           <ErrorBoundary>
-            <Routes>
-              <FileRoutes />
-            </Routes>
+            <GlobalStateProvider value={global}>
+              <UserProvider value={user}>
+                <WikiProvider value={wiki}>
+                  <Routes>
+                    <FileRoutes />
+                  </Routes>
+                </WikiProvider>
+              </UserProvider>
+            </GlobalStateProvider>
           </ErrorBoundary>
         </Suspense>
         <Scripts />

@@ -1,4 +1,5 @@
 {
+  "$schema": "https://raw.githubusercontent.com/tauri-apps/tauri/1.x/core/tauri-config-schema/schema.json",
   "build": {
     "beforeDevCommand": "bun dev",
     "beforeBuildCommand": "bun build",
