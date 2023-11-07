@@ -217,6 +217,12 @@ g.query("checkUrl", {
   resolver: "checkUrl"
 })
 
+g.query("getStripeDashboard", {
+  args: {},
+  returns: g.string(),
+  resolver: "getStripeDashboard"
+})
+
 g.query("stripe", {
   args: { plan: g.string(), userEmail: g.string() },
   returns: g.string(),

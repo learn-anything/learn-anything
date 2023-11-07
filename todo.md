@@ -1,16 +1,5 @@
 ## Public website release
 
-- desktop app release
-  - allow edits of markdown files in OS (using monaco or codemirror)
-  - publish to LA
-  - published as `@nikiv/topic`
-  - update profile page, allow choosing username
-- setup free trial
-  - otpimise onboarding so users see value instantly in platform and convert to `member` fast
-  - show AI summaries of links
-- next / doing / completed
-  - for completed do either completed icon or
-  - completed and liked as one icon
 - inbox and top inbox. make it save into LA, as personal links.
   - create a CLI for it
   - use it. allow searches for it. add metadata to each addition

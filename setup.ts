@@ -13,6 +13,9 @@ switch (command) {
   case "full-monorepo":
     await getFullMonorepo()
     break
+  case "seed-edgedb":
+    await seedEdgeDb()
+    break
   case undefined:
     console.log("No command provided")
     break
@@ -116,4 +119,8 @@ async function getFullMonorepo() {
   await $`git clone https://github.com/learn-anything/ai`
   await $`git clone https://github.com/learn-anything/mobile`
   await $`git clone https://github.com/learn-anything/buy`
+}
+
+async function seedEdgeDb() {
+  await $`mv seed/seed.db grafbase/edgedb`
 }

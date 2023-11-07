@@ -26,7 +26,7 @@ There is more exciting projects planned and under way (like [digital idea/goods 
 - [Docs](#docs)
 - [Commands](#commands)
 
-Current tasks to do are in [todo.md](todo.md) (sorted by priority). Will be migrated to GitHub issues soon. As aside there is work being done too to make [KusKus](https://github.com/kuskusapp/kuskus) be the GitHub issues client that will be recommended to keep track of issues being worked on. Can join development of that too if you like.
+Current tasks to do are in [GitHub issues](../../issues) (can [sort by priority](https://github.com/learn-anything/learn-anything.xyz/labels?q=priority)). Currently the issues are synced from [Linear](https://linear.app). In future [KusKus](https://github.com/kuskusapp/kuskus) will be used as the GitHub issues client instead.
 
 Do join [Discord](https://discord.com/invite/bxtD8x6aNF) and ask questions. Any issues with setup or making your first feature or trying to fix a bug will be resolved asap. Same goes for discussing ideas on how to make the tool even better than it is now.
 
@@ -270,5 +270,5 @@ Ran with `bun <Name>`
 ### ♥️
 
 [![MIT License](http://bit.ly/mitbadge)](https://choosealicense.com/licenses/mit/)
-[![X](https://img.shields.io/badge/learnanything-100000?style=flat&logo=X&logoColor=white&labelColor=black&color=black)](https://twitter.com/learnanything_)
 [![Discord](https://img.shields.io/badge/Discord-100000?style=flat&logo=discord&logoColor=white&labelColor=black&color=black)](https://discord.com/invite/bxtD8x6aNF)
+[![X](https://img.shields.io/badge/learnanything-100000?style=flat&logo=X&logoColor=white&labelColor=black&color=black)](https://twitter.com/learnanything_)

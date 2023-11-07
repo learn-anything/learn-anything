@@ -21,6 +21,9 @@
       "solid-start/env",
       "bun-types" // add Bun global
     ],
-    "jsxImportSource": "solid-js"
+    "jsxImportSource": "solid-js",
+    "paths": {
+      "@grafbase/generated": ["./grafbase/generated"]
+    }
   }
 }
