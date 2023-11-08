@@ -21,3 +21,6 @@ ai
 buy
 mobile
 **.db
+
+# vite
+**/vite.config.ts.timestamp-**
