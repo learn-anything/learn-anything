@@ -144,7 +144,7 @@ const simulateGraph = (
   vw: number,
   vh: number
 ): void => {
-  alpha = alpha / 4 // slow things down a bit
+  alpha = alpha / 10 // slow things down a bit
 
   fg.graph.simulate(graph, alpha)
 
@@ -271,13 +271,18 @@ export const createForceGraph = (props: ForceGraphProps): s.JSXElement => {
 
   const window_size = useWindowSize()
 
-  let is_active = false
   let alpha = 0 // 0 - 1
   let bump_end = fg.anim.bump(0)
+  const frame_iter_limit = fg.anim.frameIterationsLimit()
 
   const loop = fg.anim.animationLoop((time) => {
-    alpha = fg.anim.updateAlpha(alpha, is_active || time < bump_end)
-    simulateGraph(alpha, graph, canvas, window_size.width, window_size.height)
+    const is_active = gestures.mode.type === fg.canvas.Mode.DraggingNode
+    const iterations = fg.anim.calcIterations(frame_iter_limit, time)
+
+    for (let i = Math.min(iterations, 2); i >= 0; i--) {
+      alpha = fg.anim.updateAlpha(alpha, is_active || time < bump_end)
+      simulateGraph(alpha, graph, canvas, window_size.width, window_size.height)
+    }
     drawGraph(canvas, color_map)
   })
   fg.anim.loopStart(loop)
@@ -290,21 +295,24 @@ export const createForceGraph = (props: ForceGraphProps): s.JSXElement => {
 
   const gestures = fg.canvas.canvasGestures({
     canvas,
-    onTranslate() {
-      bump_end = fg.anim.bump(bump_end)
-    },
-    onNodeClick(node) {
-      props.onNodeClick(node.key as string)
-    },
-    onNodeHover(node) {
-      if (canvas.hovered_node === node) return
-      canvas.hovered_node = node
-    },
-    onNodeDrag(node, pos) {
-      fg.graph.changeNodePosition(canvas.options.graph.grid, node, pos.x, pos.y)
-    },
-    onModeChange(mode) {
-      is_active = mode === fg.canvas.Mode.DraggingNode
+    onGesture: (e) => {
+      // eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
+      switch (e.type) {
+        case fg.canvas.GestureEventType.Translate:
+          bump_end = fg.anim.bump(bump_end)
+          break
+        case fg.canvas.GestureEventType.NodeClick:
+          props.onNodeClick(e.node.key as string)
+          break
+        case fg.canvas.GestureEventType.NodeDrag:
+          fg.graph.changeNodePosition(
+            canvas.options.graph.grid,
+            e.node,
+            e.pos.x,
+            e.pos.y
+          )
+          break
+      }
     }
   })
   s.onCleanup(() => fg.canvas.cleanupCanvasGestures(gestures))
