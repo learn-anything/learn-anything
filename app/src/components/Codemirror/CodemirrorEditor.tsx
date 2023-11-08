@@ -1,26 +1,66 @@
-// using https://github.com/riccardoperra/solid-codemirror
-// had issues trying to make it to work
-// so moved to https://github.com/microsoft/monaco-editor
-// TODO: to remove once/if monaco editor works well
-function CodemirrorEditor() {
-  // const [editorContent, setEditorContent] = createSignal("")
-  // const user = useUser()
+import { useGlobalState } from "../../GlobalContext/global"
+import { createEffect } from "solid-js"
+import { createCodeMirror } from "./createCodeMirror"
+import * as scheduled from "@solid-primitives/scheduled"
+import { invoke } from "@tauri-apps/api/tauri"
 
-  // createEffect(() => {
-  //   setEditorContent(user.user.topicContent)
-  // })
+export function CodemirrorEditor() {
+  const global = useGlobalState()
 
-  // const { ref, createExtension, editorView } = createCodeMirror({
-  //   onValueChange: setEditorContent,
-  // })
+  const scheduledFileUpdate = scheduled.throttle(
+    async (newFileContent: string) => {
+      if (global.state.currentlyOpenFile) {
+        const filePath = global.state.currentlyOpenFile.filePath
+        await invoke("overwrite_file_content", {
+          path: filePath,
+          newContent: newFileContent,
+        })
+      }
+    },
+    1000,
+  )
 
-  // createEditorControlledValue(editorView, () => {
-  //   return editorContent()
-  // })
+  const { editorView, ref: editorRef } = createCodeMirror({
+    /**
+     * The initial value of the editor
+     */
+    value: "",
+    /**
+     * Fired whenever the editor code value changes.
+     */
+    onValueChange: (value) => {
+      // console.log("value changed", value)
+      scheduledFileUpdate(value)
+    },
+    /**
+     * Fired whenever a change occurs to the document, every time the view updates.
+     */
+    onModelViewUpdate: (modelView) => {
+      // console.log("modelView updated", modelView)
+    },
+    /**
+     * Fired whenever a transaction has been dispatched to the view.
+     * Used to add external behavior to the transaction [dispatch function](https://codemirror.net/6/docs/ref/#view.EditorView.dispatch) for this editor view, which is the way updates get routed to the view
+     */
+    onTransactionDispatched: (tr, view) => {
+      // console.log("Transaction", tr)
+    },
+  })
+
+  createEffect(() => {
+    const localValue = editorView()?.state.doc.toString()
+    editorView()?.dispatch({
+      changes: {
+        from: 0,
+        to: localValue?.length,
+        insert: global.state.currentlyOpenFile?.fileContent,
+      },
+    })
+  })
 
   return (
     <>
-      {/* <style>
+      <style>
         {`
         .cm-editor {
           height: 100%;
@@ -36,15 +76,12 @@ function CodemirrorEditor() {
           outline: none !important;
         }
         `}
-      </style> */}
+      </style>
       <div
-      // class="dark:bg-neutral-900 bg-white flex flex-col gap-4 py-10 pr-10 pl-2 h-full overflow-scroll"
-      // style={{ width: "78%" }}
-      >
-        {/* <h1 class="font-bold pl-7 text-3xl">{user.user.topicToEdit}</h1> */}
-        {/* <input type="text" value={editorContent()} /> */}
-        {/* <div class="h-full" ref={ref} /> */}
-      </div>
+        ref={editorRef}
+        class="dark:bg-neutral-900 bg-white flex flex-col gap-4 py-10 pr-10 pl-2 h-full overflow-scroll"
+        style={{ width: "78%" }}
+      />
     </>
   )
 }

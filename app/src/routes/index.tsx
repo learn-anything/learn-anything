@@ -3,11 +3,11 @@ import { useGlobalState } from "../GlobalContext/global"
 import { useUser } from "../GlobalContext/user"
 import { useWiki } from "../GlobalContext/wiki"
 import FancyButton from "../components/FancyButton"
-import NoTopicChosen from "../components/NoTopicChosen"
 import SearchModal from "../components/SearchModal"
 import Sidebar from "../components/Sidebar"
 import { invoke } from "@tauri-apps/api/tauri"
 import { File } from "../GlobalContext/global"
+import { CodemirrorEditor } from "../components/Codemirror/CodemirrorEditor"
 
 export default function App() {
   const user = useUser()
@@ -36,27 +36,18 @@ export default function App() {
           <div class="h-[25px]"></div>
         </div>
         <div class="flex items-center dark:bg-[#1e1e1e] bg-white grow">
-          {/* <Show when={user.user.showSignIn}> */}
-          {/* TODO: make a modal, pretty */}
-          {/* TODO: try not to have 'pages', just have modals on top of the editor */}
-          {/* <SignInPage /> */}
-          {/* </Show> */}
           <Show when={global.state.localFolderPath}>
             <Sidebar />
           </Show>
-          <Show
-            when={wiki.wiki.openTopic.fileContent}
-            fallback={<NoTopicChosen />}
-          >
-            {/* <Editor /> */}
-            {/* <TiptapEditor /> */}
-            {/* <CodemirrorEditor /> */}
+          <Show when={global.state.localFolderPath}>
+            <CodemirrorEditor />
           </Show>
 
           <Show when={!global.state.localFolderPath}>
             <div class="w-full h-full flex justify-center items-center flex-col gap-5">
               <FancyButton
                 onClick={async () => {
+                  console.log("runs...")
                   // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                   const connectedFolder = (await invoke("connect_folder", {
                     command: {},
@@ -72,11 +63,6 @@ export default function App() {
             </div>
           </Show>
 
-          {/* <Show
-              when={!wiki.wiki.wikiFolderPath || user.user.mode === "Settings"}
-            >
-              <Settings />
-            </Show> */}
           <Show when={user.user.mode === "Search Topics"}>
             <SearchModal
               items={wiki.wiki.topics}
@@ -86,12 +72,6 @@ export default function App() {
           </Show>
         </div>
       </div>
-      {/* <Show when={import.meta.env.MODE === "development"}>
-        <DevToolsPanel />
-      </Show> */}
-      {/* <Show when={user.user.mode === "New Note"}>
-        <InputModal />
-      </Show> */}
     </>
   )
 }

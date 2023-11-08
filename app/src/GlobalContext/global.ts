@@ -1,9 +1,10 @@
-import { createContext, useContext } from "solid-js"
+import { createContext, createEffect, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
+import { invoke } from "@tauri-apps/api/tauri"
 
 export type File = {
-  path: string
-  content: string
+  fileContent: string
+  filePath: string
 }
 
 type GlobalState = {
@@ -16,6 +17,28 @@ export function createGlobalState() {
   const [state, setState] = createStore<GlobalState>({
     localFolderPath: "",
     files: [],
+  })
+
+  onMount(async () => {
+    const localFolderPath = localStorage.getItem("localFolderPath")
+    if (localFolderPath) {
+      const connectedFolder = await invoke("connect_folder_with_path", {
+        path: localFolderPath,
+      })
+      setState("localFolderPath", localFolderPath)
+      if (connectedFolder !== null) {
+        // @ts-ignore
+        setState("localFolderPath", connectedFolder[0])
+        // @ts-ignore
+        setState("files", connectedFolder[1])
+      }
+    }
+  })
+
+  createEffect(() => {
+    if (state.localFolderPath) {
+      localStorage.setItem("localFolderPath", state.localFolderPath)
+    }
   })
 
   return {
