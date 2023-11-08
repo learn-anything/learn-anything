@@ -82,10 +82,8 @@ export default function Home() {
         >
           {/* shadow el */}
           <div
-            class="absolute -z-1 inset-0 rounded-full bg-neutral-950/90"
-            style={`
-              filter: blur(100px);
-            `}
+            class="absolute -z-1 inset-0 pointer-events-none rounded-full bg-neutral-950/90"
+            style={`filter: blur(100px)`}
           />
           <div
             class="tracking-wide font-bold bg-clip-text "
