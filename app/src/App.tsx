@@ -1,53 +1,92 @@
-import { createSignal } from "solid-js"
-import logo from "./assets/logo.svg"
 import { invoke } from "@tauri-apps/api/tauri"
-import "./App.css"
+import { Show, Suspense } from "solid-js"
+import {
+  File,
+  GlobalStateProvider,
+  createGlobalState,
+} from "./GlobalContext/global"
+import { UserProvider, createUserState } from "./GlobalContext/user"
+import createWikiState, { WikiProvider } from "./GlobalContext/wiki"
+import { CodemirrorEditor } from "./components/Codemirror/CodemirrorEditor"
+import FancyButton from "./components/FancyButton"
+import SearchModal from "./components/SearchModal"
+import Sidebar from "./components/Sidebar"
 
-function App() {
-  const [greetMsg, setGreetMsg] = createSignal("")
-  const [name, setName] = createSignal("")
+export default function App() {
+  const user = createUserState()
+  const wiki = createWikiState()
+  const global = createGlobalState()
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setGreetMsg(await invoke("greet", { name: name() }))
-  }
+  // TODO: Meta + L gives problems
+  // does not trigger most of the time
+  // so control + .. is used instead
+  // createShortcut(["Control", "L"], () => {
+  //   if (user.user.mode === "Search Topics") {
+  //     user.setMode("Default")
+  //   } else {
+  //     user.setMode("Search Topics")
+  //   }
+  // })
 
   return (
-    <div class="container">
-      <h1>Welcome to Tauri!</h1>
+    <>
+      <Suspense>
+        <GlobalStateProvider value={global}>
+          <UserProvider value={user}>
+            <WikiProvider value={wiki}>
+              <div
+                class="flex flex-col"
+                style={{ width: "100vw", height: "100vh" }}
+              >
+                <div>
+                  <div class="h-[25px]"></div>
+                </div>
+                <div class="flex items-center dark:bg-[#1e1e1e] bg-white grow">
+                  <Show when={global.state.localFolderPath}>
+                    <Sidebar />
+                  </Show>
+                  <Show when={global.state.localFolderPath}>
+                    <div class="h-screen">
+                      <CodemirrorEditor />
+                    </div>
+                  </Show>
 
-      <div class="row">
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" class="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://solidjs.com" target="_blank">
-          <img src={logo} class="logo solid" alt="Solid logo" />
-        </a>
-      </div>
+                  <Show when={!global.state.localFolderPath}>
+                    <div class="w-full h-full flex justify-center items-center flex-col gap-5">
+                      <FancyButton
+                        onClick={async () => {
+                          console.log("runs...")
+                          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+                          const connectedFolder = (await invoke(
+                            "connect_folder",
+                            {
+                              command: {},
+                            },
+                          )) as [string, File[]] | null
+                          if (connectedFolder !== null) {
+                            global.set("localFolderPath", connectedFolder[0])
+                            global.set("files", connectedFolder[1])
+                          }
+                        }}
+                      >
+                        Connect folder
+                      </FancyButton>
+                    </div>
+                  </Show>
 
-      <p>Click on the Tauri, Vite, and Solid logos to learn more.</p>
-
-      <form
-        class="row"
-        onSubmit={(e) => {
-          e.preventDefault()
-          greet()
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-
-      <p>{greetMsg()}</p>
-    </div>
+                  <Show when={user.user.mode === "Search Topics"}>
+                    <SearchModal
+                      items={wiki.wiki.topics}
+                      action={() => {}}
+                      searchPlaceholder="Search Topics"
+                    />
+                  </Show>
+                </div>
+              </div>
+            </WikiProvider>
+          </UserProvider>
+        </GlobalStateProvider>
+      </Suspense>
+    </>
   )
 }
-
-export default App
