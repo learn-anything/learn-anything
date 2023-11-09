@@ -55,7 +55,11 @@ export default function App() {
                       <div class="absolute top-1 right-1 py-2 px-4 text-lg">
                         <FancyButton
                           onClick={() => {
-                            console.log("sign in")
+                            // TODO: check if not logged in
+                            window.open(
+                              "https://learn-anything.xyz/desktop-login",
+                              "_blank",
+                            )
                           }}
                         >
                           Publish
