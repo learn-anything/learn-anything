@@ -9,7 +9,7 @@
                 <string>xyz.learn-anything</string>
                 <key>CFBundleURLSchemes</key>
                 <array>
-                    <string>app</string>
+                    <string>learn-anything</string>
                 </array>
             </dict>
         </array>
