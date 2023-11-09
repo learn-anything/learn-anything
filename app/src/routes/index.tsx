@@ -40,7 +40,9 @@ export default function App() {
             <Sidebar />
           </Show>
           <Show when={global.state.localFolderPath}>
-            <CodemirrorEditor />
+            <div class="h-screen">
+              <CodemirrorEditor />
+            </div>
           </Show>
 
           <Show when={!global.state.localFolderPath}>

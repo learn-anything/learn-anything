@@ -4,6 +4,7 @@
     windows_subsystem = "windows"
 )]
 
+#[allow(unused_imports)]
 #[macro_use]
 extern crate log_macro;
 
@@ -67,15 +68,18 @@ fn read_files_in_dir(dir_path: &str) -> Vec<serde_json::Value> {
     files
 }
 
+// TODO: improve: https://discord.com/channels/616186924390023171/1172127015453851709/1172132128855687178
 #[tauri::command]
 async fn overwrite_file_content(path: String, new_content: String) -> Result<(), String> {
     use std::io::Write;
 
-    log!("trying to update file..");
-
     let path = PathBuf::from(&path);
     if path.exists() {
-        let mut file = match fs::OpenOptions::new().write(true).open(&path) {
+        let mut file = match fs::OpenOptions::new()
+            .write(true)
+            .truncate(true)
+            .open(&path)
+        {
             Ok(file) => file,
             Err(e) => return Err(format!("Failed to open file: {}", e)),
         };

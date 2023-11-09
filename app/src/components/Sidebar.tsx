@@ -139,29 +139,33 @@ export default function Sidebar() {
             <div class="font-bold opacity-70 rounded-md p-1  w-full">
               Topics
             </div>
-            <div class="pl-6 overflow-hidden opacity-70 flex flex-col gap-2 border-l border-opacity-30 border-slate-100">
-              <For each={directoryTree()[0]}>
-                {(item) => {
-                  return (
-                    <div
-                      class="cursor-pointer"
-                      style={{ "padding-left": `${item.depth * 10}px` }}
-                      onClick={() => {
-                        if (item.type === "file") {
-                          global.set({
-                            currentlyOpenFile: global.state.files.find(
-                              (f) => f.filePath === item.path,
-                            ),
-                          })
-                        }
-                      }}
-                    >
-                      {item.name}
-                    </div>
-                  )
-                }}
-              </For>
-              {/* <For each={wiki.wiki.sidebarTopics}>
+            <div class="h-screen">
+              <div class="pl-6 overflow-hidden opacity-70 flex flex-col gap-2 border-l border-opacity-30 border-slate-100">
+                <For each={directoryTree()[0]}>
+                  {(item) => {
+                    return (
+                      <div
+                        class="cursor-pointer"
+                        style={{ "padding-left": `${item.depth * 10}px` }}
+                        onClick={() => {
+                          if (item.type === "file") {
+                            global.set({
+                              currentlyOpenFile: global.state.files.find(
+                                (f) => f.filePath === item.path,
+                              ),
+                            })
+                            return
+                          }
+                          // if (item.type === "directory") {
+                          // }
+                        }}
+                      >
+                        {item.name}
+                      </div>
+                    )
+                  }}
+                </For>
+                {/* <For each={wiki.wiki.sidebarTopics}>
                 {(topic) => {
                   // TODO: use indent levels to make pretty sidebar
                   return (
@@ -176,6 +180,7 @@ export default function Sidebar() {
                   )
                 }}
               </For> */}
+              </div>
             </div>
           </div>
         </div>

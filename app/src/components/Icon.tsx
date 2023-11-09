@@ -1,7 +1,15 @@
 import { Match, Show, Switch } from "solid-js"
 
 interface Props {
-  name: "Bug" | "Close" | "Minimise" | "Settings" | "UserProfile" | "FileSearch"
+  name:
+    | "Bug"
+    | "Close"
+    | "Minimise"
+    | "Settings"
+    | "UserProfile"
+    | "FileSearch"
+    | "ArrowDown"
+    | "ArrowRight"
   width?: string
   height?: string
   color?: string
@@ -58,6 +66,42 @@ export default function Icon(props: Props) {
                 stroke-width="1.5"
                 d="M6.75 6.75L17.25 17.25"
               />
+            </svg>
+          </Match>
+          <Match when={props.name === "ArrowDown"}>
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M17.25 13.75L12 19.25L6.75 13.75"
+              ></path>
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M12 18.25V4.75"
+              ></path>
+            </svg>
+          </Match>
+          <Match when={props.name === "ArrowRight"}>
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M13.75 6.75L19.25 12L13.75 17.25"
+              ></path>
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M19 12H4.75"
+              ></path>
             </svg>
           </Match>
           <Match when={props.name === "FileSearch"}>
