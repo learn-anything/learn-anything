@@ -1,7 +1,7 @@
 import { Num } from "@nothing-but/utils"
 import { createEventListener } from "@solid-primitives/event-listener"
 import clsx from "clsx"
-import Fuse from "fuse.js"
+import * as fuse from "fuse.js"
 import * as solid from "solid-js"
 
 /*
@@ -41,11 +41,11 @@ function getRandomSubarray(arr: SearchResult[], size: number): SearchResult[] {
   return shuffled.slice(0, size)
 }
 
-const FUSE_OPTIONS: Fuse.IFuseOptions<SearchResult> = {
+const FUSE_OPTIONS: fuse.IFuseOptions<SearchResult> = {
   keys: ["name"]
 }
 const SEARCH_RESULTS_LIMIT = 5
-const FUSE_SEARCH_OPTIONS: Fuse.FuseSearchOptions = {
+const FUSE_SEARCH_OPTIONS: fuse.FuseSearchOptions = {
   limit: SEARCH_RESULTS_LIMIT
 }
 
@@ -56,7 +56,9 @@ export function createSearchState({
   const [query, setQuery] = solid.createSignal("")
   const [searchOpen, setSearchOpen] = solid.createSignal(false)
 
-  const fuse = solid.createMemo(() => new Fuse(searchResults(), FUSE_OPTIONS))
+  const fuseInstance = solid.createMemo(
+    () => new fuse.default(searchResults(), FUSE_OPTIONS)
+  )
 
   interface ResultsMemo {
     results: SearchResult[]
@@ -65,8 +67,8 @@ export function createSearchState({
   }
 
   const results = solid.createMemo<ResultsMemo>((prev) => {
-    const results = query()
-      ? fuse()
+    const _results = query()
+      ? fuseInstance()
           .search(query(), FUSE_SEARCH_OPTIONS)
           .map((r) => r.item)
       : getRandomSubarray(searchResults(), SEARCH_RESULTS_LIMIT)
@@ -76,14 +78,14 @@ export function createSearchState({
       otherwise, focus the first result
     */
     let init_focused = prev && solid.untrack(prev.focused)
-    if (!init_focused || !results.includes(init_focused)) {
-      init_focused = results[0]
+    if (!init_focused || !_results.includes(init_focused)) {
+      init_focused = _results[0]
     }
 
     const [focused, setFocused] = solid.createSignal(init_focused)
 
     return {
-      results,
+      results: _results,
       focused,
       setFocused
     }

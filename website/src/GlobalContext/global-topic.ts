@@ -1,7 +1,7 @@
 import { createContext, createEffect, createMemo, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 import { useLocation } from "solid-start"
-import { SearchResult } from "../components/Search"
+import { SearchResult } from "@la/shared/ui"
 import { MobiusType } from "../root"
 import { getHankoCookie } from "../../lib/auth"
 import { log } from "../lib/baselime"

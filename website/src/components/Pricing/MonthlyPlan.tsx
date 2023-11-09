@@ -1,11 +1,9 @@
 import { Show, createSignal } from "solid-js"
 import clsx from "clsx"
 import { useUser } from "../../GlobalContext/user"
-import Icon from "../Icon"
+import { ui } from "@la/shared"
 import { useMobius } from "../../root"
 import { toRelativeTime } from "../../lib/lib"
-import { useNavigate } from "solid-start"
-import { getHankoCookie } from "../../../lib/auth"
 
 interface Props {
   setShowLetsTalkModal: (state: boolean) => void
@@ -16,7 +14,6 @@ export default function MonthlyPlan(props: Props) {
   const [waitingForStripe, setWaitingForStripe] = createSignal(false)
   const mobius = useMobius()
   const user = useUser()
-  const navigate = useNavigate()
 
   return (
     <div class="w-full h-full p-8 flex flex-col gap-6 justify-between">
@@ -102,7 +99,7 @@ export default function MonthlyPlan(props: Props) {
         >
           <Show
             when={!waitingForStripe()}
-            fallback={<Icon name="Loader" border="white" />}
+            fallback={<ui.Icon name="Loader" border="white" />}
           >
             <div>Become member</div>
           </Show>

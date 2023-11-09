@@ -1,7 +1,7 @@
 import { Show, createSignal } from "solid-js"
 import clsx from "clsx"
 import { useUser } from "../../GlobalContext/user"
-import Icon from "../Icon"
+import { ui } from "@la/shared"
 import { useMobius } from "../../root"
 import { toRelativeTime } from "../../lib/lib"
 
@@ -103,7 +103,7 @@ export default function YearlyPlan(props: Props) {
         >
           <Show
             when={!waitingForStripe()}
-            fallback={<Icon name="Loader" border="white" />}
+            fallback={<ui.Icon name="Loader" border="white" />}
           >
             <Show
               when={user.user.stripePlan !== "month"}
