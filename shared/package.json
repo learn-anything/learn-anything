@@ -1,0 +1,14 @@
+{
+  "name": "@la/shared",
+  "private": true,
+  "type": "module",
+  "module": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./ui": "./ui/index.ts"
+  },
+  "dependencies": {
+    "solid-js": "^1.8.5"
+  }
+}

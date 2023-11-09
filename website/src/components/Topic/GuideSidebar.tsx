@@ -5,8 +5,7 @@ import { useGlobalState } from "../../GlobalContext/global"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import { useUser } from "../../GlobalContext/user"
 import { useMobius } from "../../root"
-import FancyButton from "../FancyButton"
-import Icon from "../Icon"
+import { ui } from "@la/shared"
 
 export default function GuideSidebar() {
   const topic = useGlobalTopic()
@@ -26,7 +25,7 @@ export default function GuideSidebar() {
           <div id="Status" class="flex flex-col gap-2">
             <div class="font-bold text-[#696969] text-[14px]">TOPIC STATUS</div>
             <div class="flex gap-2 text-[12px]">
-              <FancyButton
+              <ui.FancyButton
                 onClick={async () => {
                   if (!user.user.signedIn) {
                     localStorage.setItem("pageBeforeSignIn", location.pathname)
@@ -71,8 +70,8 @@ export default function GuideSidebar() {
                 active={topic.globalTopic.learningStatus === "to_learn"}
               >
                 To Learn
-              </FancyButton>
-              <FancyButton
+              </ui.FancyButton>
+              <ui.FancyButton
                 onClick={async () => {
                   if (!user.user.signedIn) {
                     localStorage.setItem("pageBeforeSignIn", location.pathname)
@@ -116,8 +115,8 @@ export default function GuideSidebar() {
                 active={topic.globalTopic.learningStatus === "learning"}
               >
                 Learning
-              </FancyButton>
-              <FancyButton
+              </ui.FancyButton>
+              <ui.FancyButton
                 onClick={async () => {
                   if (!user.user.signedIn) {
                     localStorage.setItem("pageBeforeSignIn", location.pathname)
@@ -161,7 +160,7 @@ export default function GuideSidebar() {
                 active={topic.globalTopic.learningStatus === "learned"}
               >
                 Learned
-              </FancyButton>
+              </ui.FancyButton>
             </div>
           </div>
           <Show
@@ -281,19 +280,19 @@ export default function GuideSidebar() {
             class="hover:opacity-100 transition-all cursor-pointer text-current"
             href="https://twitter.com/learnanything_"
           >
-            <Icon name="X" />
+            <ui.Icon name="X" />
           </a>
           <a
             class="hover:opacity-100 transition-all cursor-pointer text-current"
             href="https://discord.com/invite/bxtD8x6aNF"
           >
-            <Icon name="Discord" />
+            <ui.Icon name="Discord" />
           </a>
           <a
             class="hover:opacity-100 transition-all cursor-pointer text-current"
             href="https://github.com/learn-anything/learn-anything.xyz"
           >
-            <Icon name="Github" />
+            <ui.Icon name="Github" />
           </a>
         </div>
       </div>

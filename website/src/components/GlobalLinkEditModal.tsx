@@ -1,8 +1,7 @@
 import { Button, Checkbox } from "@kobalte/core"
 import { Show, createSignal, onMount } from "solid-js"
 import { GlobalLink, useGlobalTopic } from "../GlobalContext/global-topic"
-import Icon from "./Icon"
-import Modal from "./Modal"
+import { ui } from "@la/shared"
 
 interface Props {
   linkId: string
@@ -72,7 +71,11 @@ export default function GlobalLinkEditModal(props: Props) {
       `}
       </style>
       <Show when={linkToEdit()}>
-        <Modal>
+        <ui.Modal
+          onClose={() => {
+            /**/
+          }}
+        >
           <div
             id="LinkEditModal"
             class="rounded-lg relative bg-white dark:border-[#282828]  border-[#69696951] border dark:bg-neutral-900 z-50 font-light h-1/2 flex flex-col p-6 px-6 gap-4"
@@ -111,7 +114,7 @@ export default function GlobalLinkEditModal(props: Props) {
                   <Checkbox.Input class="checkbox__input" />
                   <Checkbox.Control class="checkbox__control active:scale-[1.1]">
                     <Checkbox.Indicator>
-                      <Icon name="Checkmark"></Icon>
+                      <ui.Icon name="Checkmark"></ui.Icon>
                     </Checkbox.Indicator>
                   </Checkbox.Control>
                   <Checkbox.Label class="checkbox__label">
@@ -122,7 +125,7 @@ export default function GlobalLinkEditModal(props: Props) {
                   <Checkbox.Input class="checkbox__input" />
                   <Checkbox.Control class="checkbox__control active:scale-[1.1]">
                     <Checkbox.Indicator>
-                      <Icon name="Checkmark"></Icon>
+                      <ui.Icon name="Checkmark"></ui.Icon>
                     </Checkbox.Indicator>
                   </Checkbox.Control>
                   <Checkbox.Label class="checkbox__label">
@@ -158,7 +161,7 @@ export default function GlobalLinkEditModal(props: Props) {
               Save
             </Button.Root>
           </div>
-        </Modal>
+        </ui.Modal>
       </Show>
     </>
   )

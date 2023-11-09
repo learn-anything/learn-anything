@@ -3,7 +3,7 @@ interface Props {
   children: any
 }
 
-export default function ToolTip(props: Props) {
+export function ToolTip(props: Props) {
   return (
     <>
       <div class="has-tooltip">

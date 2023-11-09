@@ -5,10 +5,7 @@ import { For, Match, Show, Switch, createSignal, onMount } from "solid-js"
 import { A, useNavigate } from "solid-start"
 import toast, { Toaster } from "solid-toast"
 import { useUser } from "../GlobalContext/user"
-import FancyButton from "../components/FancyButton"
-import Icon from "../components/Icon"
-import Modal from "../components/Modal"
-import { Search, createSearchState } from "../components/Search"
+import { ui } from "@la/shared"
 import GuideNav from "../components/Topic/GuideNav"
 import ProfileGuideLink from "../components/Topic/ProfileGlobalLink"
 import { useMobius } from "../root"
@@ -98,7 +95,7 @@ const NewLinkModal = (props: {
   }
 
   return (
-    <Modal onClose={props.onClose}>
+    <ui.Modal onClose={props.onClose}>
       <div class="w-3/4 relative z-50 h-1/2 rounded-lg dark:border-opacity-50 bg-white dark:border-[#282828]  border-[#69696951] border dark:bg-neutral-900 flex flex-col justify-between gap-1 p-[20px] px-[24px]">
         <div class="flex flex-col ">
           <input
@@ -162,7 +159,7 @@ const NewLinkModal = (props: {
           </div>
         </div>
       </div>
-    </Modal>
+    </ui.Modal>
   )
 }
 
@@ -263,7 +260,7 @@ export default function Profile() {
         </div>
         <Show when={showHelpModal()}>
           {/* @ts-ignore */}
-          <Modal onClose={setShowHelpModal}>
+          <ui.Modal onClose={setShowHelpModal}>
             <div class="w-1/2 relative z-50 h-[570px] overflow-auto rounded-lg bg-white border-slate-400 border dark:bg-neutral-900 flex flex-col gap-4 p-[20px] px-[24px]">
               <div>
                 This page is being improved rapidly. If you hit any issues, ask
@@ -308,21 +305,21 @@ export default function Profile() {
                 always <A href="/pricing">unsubscribe without a call</A> too. 😿
               </div>
               <div class="w-full">
-                <FancyButton
+                <ui.FancyButton
                   onClick={() => {
                     window.open("https://discord.com/invite/bxtD8x6aNF")
                   }}
                 >
                   Join Discord to get help and beta test out features
-                </FancyButton>
+                </ui.FancyButton>
               </div>
             </div>
-          </Modal>
+          </ui.Modal>
         </Show>
         <div id="ProfileMain" class="h-full w-full flex justify-center">
           <div id="ProfileInfo" class="h-full flex gap-6 flex-col p-[40px]">
             {(() => {
-              const search_state = createSearchState({
+              const search_state = ui.createSearchState({
                 searchResults: user.likedLinksSearch,
                 onSelect({ name }) {
                   let foundLink = user.user.likedLinks.find(
@@ -339,7 +336,7 @@ export default function Profile() {
               })
 
               return (
-                <Search
+                <ui.Search
                   placeholder={"Search liked and added links"}
                   state={search_state}
                 />
@@ -457,7 +454,7 @@ export default function Profile() {
                       setShowFilter(!showFilter())
                     }}
                   >
-                    <Icon name="Filter"></Icon>
+                    <ui.Icon name="Filter"></ui.Icon>
                   </div>
                 </div>
               </Show>
@@ -474,7 +471,7 @@ export default function Profile() {
                               <div class="w-fit flex gap-1 flex-col">
                                 <div class="flex gap-3 items-center">
                                   <Show when={topic.verified}>
-                                    <Icon name="Verified" />
+                                    <ui.Icon name="Verified" />
                                   </Show>
                                   <A
                                     class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer"
@@ -520,7 +517,7 @@ export default function Profile() {
                             <div class="w-full  h-full flex justify-between items-center">
                               <div class="w-fit flex gap-2 items-center">
                                 <div class="flex gap-3 items-center">
-                                  <Icon name="UserProfile" />
+                                  <ui.Icon name="UserProfile" />
                                   <a
                                     class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer"
                                     href={`https://${link.url}`}
@@ -552,7 +549,7 @@ export default function Profile() {
                               }}
                               class="cursor-pointer"
                             >
-                              <Icon name="Trash" />
+                              <ui.Icon name="Trash" />
                             </div>
                           </div>
                         </>
@@ -572,7 +569,7 @@ export default function Profile() {
                               <div class="w-fit flex gap-1 flex-col">
                                 <div class="flex gap-3 items-center">
                                   <Show when={topic.verified}>
-                                    <Icon name="Verified" />
+                                    <ui.Icon name="Verified" />
                                   </Show>
                                   <A
                                     class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer"
@@ -604,7 +601,7 @@ export default function Profile() {
                               <div class="w-fit flex gap-1 flex-col">
                                 <div class="flex gap-3 items-center">
                                   <Show when={topic.verified}>
-                                    <Icon name="Verified" />
+                                    <ui.Icon name="Verified" />
                                   </Show>
                                   <A
                                     class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer"

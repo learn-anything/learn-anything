@@ -1,13 +1,38 @@
-import Modal from "./Modal"
-import FancyButton from "./FancyButton"
+import * as s from "solid-js"
+import { FancyButton } from "./FancyButton"
 
-interface Props {
+export type ModalProps = {
+  onClose: () => void
+}
+
+export const Modal: s.ParentComponent<ModalProps> = (props) => {
+  return (
+    <>
+      <div class="fixed top-0 left-0 w-screen z-10 h-screen backdrop-blur-sm">
+        <div
+          class="fixed top-0 left-0 z-20 w-screen h-screen"
+          onClick={() => {
+            props.onClose()
+          }}
+        ></div>
+        <div class="w-full h-full z-30 flex items-center justify-center">
+          {props.children}
+        </div>
+      </div>
+    </>
+  )
+}
+
+export type ModalWithMessageAndButtonProps = {
   message: string
   buttonText: string
   buttonAction: () => void
   onClose: () => void
 }
-export default function ModalWithMessageAndButton(props: Props) {
+
+export const ModalWithMessageAndButton: s.Component<
+  ModalWithMessageAndButtonProps
+> = (props) => {
   return (
     <>
       <style>{`
@@ -19,7 +44,6 @@ export default function ModalWithMessageAndButton(props: Props) {
         #MessageModal {
           width: 50%;
           border-radius: 6px;
-
         }
       }
     `}</style>

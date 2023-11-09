@@ -35,7 +35,7 @@ interface Props {
   }
 }
 
-export default function Icon(props: Props) {
+export function Icon(props: Props) {
   return (
     <>
       <style>{`

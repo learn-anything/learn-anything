@@ -4,9 +4,7 @@ import { A, useLocation, useNavigate } from "solid-start"
 import { useGlobalState } from "../../GlobalContext/global"
 import { useUser } from "../../GlobalContext/user"
 import { logUntracked } from "../../lib/baselime"
-import FancyButton from "../FancyButton"
-import Icon from "../Icon"
-import { Search, createSearchState } from "../Search"
+import { ui } from "@la/shared"
 
 // TODO: add fuzzy searching for topics. also consider lower case inputs matching results too
 export default function GuideNav() {
@@ -21,7 +19,7 @@ export default function GuideNav() {
     }))
   })
 
-  const search_state = createSearchState({
+  const search_state = ui.createSearchState({
     searchResults,
     onSelect: ({ name }) => {
       const foundTopic = global.state.topicsWithConnections.find(
@@ -97,7 +95,7 @@ export default function GuideNav() {
                 search_state.searchOpen && "w-full"
               )}
             >
-              <Search placeholder="Search Topic" state={search_state} />
+              <ui.Search placeholder="Search Topic" state={search_state} />
             </div>
           </div>
           <div
@@ -107,7 +105,7 @@ export default function GuideNav() {
             }}
           >
             {/* <Icon name="Menu" /> */}
-            <Icon name="Menu" />
+            <ui.Icon name="Menu" />
           </div>
           <div id="NavButtons" class="flex items-center justify-center gap-4">
             {/* TODO:  */}
@@ -139,7 +137,7 @@ export default function GuideNav() {
                   user.user.username ? `/@${user.user.username}` : "/profile"
                 }`}
               >
-                <Icon name="UserProfile" />
+                <ui.Icon name="UserProfile" />
               </A>
             </Show>
             <Show
@@ -157,13 +155,13 @@ export default function GuideNav() {
                   )
                 }}
               >
-                <Icon name="UserProfile" />
+                <ui.Icon name="UserProfile" />
               </div>
             </Show>
             <Show when={!user.user.signedIn}>
-              <FancyButton onClick={() => navigate("/auth")}>
+              <ui.FancyButton onClick={() => navigate("/auth")}>
                 Sign In
-              </FancyButton>
+              </ui.FancyButton>
             </Show>
             {/* <div>Menu</div> */}
           </div>

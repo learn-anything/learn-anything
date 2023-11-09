@@ -5,8 +5,7 @@ import { createTiptapEditor } from "solid-tiptap"
 import toast, { Toaster } from "solid-toast"
 import { parseURL } from "ufo"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
-import { Search, createSearchState } from "../Search"
-// @ts-ignore
+import { ui } from "@la/shared"
 import {
   createDraggable,
   createDroppable,
@@ -14,7 +13,6 @@ import {
 } from "@thisbeyond/solid-dnd"
 import { useUser } from "../../GlobalContext/user"
 import GlobalLinkEditModal from "../GlobalLinkEditModal"
-import ModalWithMessageAndButton from "../ModalWithMessageAndButton"
 
 export default function EditGlobalGuide() {
   const topic = useGlobalTopic()
@@ -101,7 +99,7 @@ export default function EditGlobalGuide() {
   `}</style>
       <div class="w-full flex flex-col gap-4 text-[16px] leading-[18.78px] ">
         <Show when={showCantEditGuideModal()}>
-          <ModalWithMessageAndButton
+          <ui.ModalWithMessageAndButton
             message="Ability to edit personal and global guides will be coming soon 😻"
             buttonText="Join Discord to test beta version out"
             buttonAction={() => {
@@ -423,7 +421,7 @@ export default function EditGlobalGuide() {
 
                 <div class="w-full p-4 gap-2 flex flex-col">
                   {(() => {
-                    const search_state = createSearchState({
+                    const search_state = ui.createSearchState({
                       searchResults: topic.currentTopicGlobalLinksSearch,
                       onSelect({ name }) {
                         const linkToAdd = topic.globalTopic.links.find(
@@ -442,7 +440,7 @@ export default function EditGlobalGuide() {
                     })
 
                     return (
-                      <Search
+                      <ui.Search
                         placeholder={
                           "Search URL title of global links for the topic to add a new link"
                         }

@@ -4,12 +4,9 @@ import { useLocation, useNavigate } from "solid-start"
 import { useGlobalState } from "../../GlobalContext/global"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import { useUser } from "../../GlobalContext/user"
-import FancyButton from "../FancyButton"
-import Icon from "../Icon"
-import Modal from "../Modal"
+import { ui } from "@la/shared"
 import GuideSection from "./GuideSection"
 import GuideSummary from "./GuideSummary"
-import ToolTip from "../ToolTip"
 
 export default function GlobalGuide() {
   const navigate = useNavigate()
@@ -23,7 +20,7 @@ export default function GlobalGuide() {
     <>
       <Show when={showHelpModal()}>
         {/* @ts-ignore */}
-        <Modal onClose={setShowHelpModal}>
+        <ui.Modal onClose={setShowHelpModal}>
           <div class="w-[500px] h-[320px] relative z-50 rounded-lg bg-white border-slate-400 border dark:bg-neutral-900 flex flex-col gap-4 p-[20px] px-[24px]">
             <div>This page is being improved rapidly.</div>
             <div>
@@ -39,16 +36,16 @@ export default function GlobalGuide() {
               links/topics you are learning or have completed.
             </div>
             <div class="w-full">
-              <FancyButton
+              <ui.FancyButton
                 onClick={() => {
                   window.open("https://discord.com/invite/bxtD8x6aNF")
                 }}
               >
                 Join Discord to get help and beta test out features
-              </FancyButton>
+              </ui.FancyButton>
             </div>
           </div>
-        </Modal>
+        </ui.Modal>
       </Show>
       <div class="w-full flex flex-col gap-[20px] relative">
         <div
@@ -73,15 +70,15 @@ export default function GlobalGuide() {
               }}
             >
               {/* TODO: do <Show here that on hover shows the full AI description of the topic */}
-              <ToolTip title="AI Description">
-                <Icon name="Sparkles" />
-              </ToolTip>
+              <ui.ToolTip title="AI Description">
+                <ui.Icon name="Sparkles" />
+              </ui.ToolTip>
             </div>
           </div>
           <div class="flex h-full text-[12px] gap-4">
             <div></div>
             <div>
-              <FancyButton
+              <ui.FancyButton
                 onClick={() => {
                   if (!user.user.signedIn) {
                     localStorage.setItem("pageBeforeSignIn", location.pathname)
@@ -98,7 +95,7 @@ export default function GlobalGuide() {
                 }}
               >
                 Improve Guide
-              </FancyButton>
+              </ui.FancyButton>
             </div>
           </div>
         </div>

@@ -7,7 +7,7 @@ interface Props {
   active?: boolean
 }
 
-export default function FancyButton(props: Props) {
+export function FancyButton(props: Props) {
   createEffect(() => {
     // const CONTROLS = document.querySelectorAll("button")
     // @ts-ignore

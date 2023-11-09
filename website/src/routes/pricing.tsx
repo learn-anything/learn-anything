@@ -2,9 +2,7 @@ import clsx from "clsx"
 import { Show, createEffect, createSignal } from "solid-js"
 import { useNavigate } from "solid-start"
 import { useUser } from "../GlobalContext/user"
-import Icon from "../components/Icon"
-import Modal from "../components/Modal"
-import ModalWithMessageAndButton from "../components/ModalWithMessageAndButton"
+import { ui } from "@la/shared"
 import MonthlyPlan from "../components/Pricing/MonthlyPlan"
 import YearlyPlan from "../components/Pricing/YearlyPlan"
 import { useMobius } from "../root"
@@ -87,7 +85,7 @@ export default function Pricing() {
       </style>
       <div class="h-full w-screen flex flex-col gap-10 dark:bg-neutral-900 dark:text-white bg-[#fafafa] text-black pb-[50px]">
         <Show when={showModalWithSignUpMessage()}>
-          <ModalWithMessageAndButton
+          <ui.ModalWithMessageAndButton
             message="You need to sign up first to become a member"
             buttonText="Sign Up"
             buttonAction={() => {
@@ -109,7 +107,7 @@ export default function Pricing() {
             }}
           >
             {/* <img class="rounded-full" src="/logo.png" alt="" /> */}
-            <Icon name="Home" />
+            <ui.Icon name="Home" />
           </div>
           <Show when={!user.user.signedIn}>
             <div
@@ -287,7 +285,7 @@ export default function Pricing() {
             </div>
             <Show when={showLetsTalkModal()}>
               {/* @ts-ignore */}
-              <Modal onClose={setShowLetsTalkModal}>
+              <ui.Modal onClose={setShowLetsTalkModal}>
                 <div class="w-[400px] relative z-50 h-[200px] rounded-lg bg-white border-slate-400 border dark:bg-neutral-900 flex flex-col gap-4 p-[20px] px-[24px]">
                   <div>
                     Would love to{" "}
@@ -313,7 +311,7 @@ export default function Pricing() {
                   </div>
                   <div></div>
                 </div>
-              </Modal>
+              </ui.Modal>
             </Show>
           </div>
         </div>
