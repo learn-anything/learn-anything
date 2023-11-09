@@ -41,7 +41,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "learn-anything.xyz",
+      "identifier": "xyz.learn-anything",
       "targets": "all"
     },
     "security": {
