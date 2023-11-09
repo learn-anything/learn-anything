@@ -65,7 +65,8 @@
   "workspaces": [
     "app",
     "website",
-    "api/stripe"
+    "api/stripe",
+    "shared"
   ],
   "trustedDependencies": [
     "grafbase"
