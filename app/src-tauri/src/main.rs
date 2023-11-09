@@ -48,17 +48,13 @@ fn main() {
       Ok(())
     })
     // .plugin(tauri_plugin_deep_link::init()) // consider adding a js api later
+    .invoke_handler(tauri::generate_handler![
+        connect_folder,
+        connect_folder_with_path,
+        overwrite_file_content
+    ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
-
-    tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![
-            connect_folder,
-            connect_folder_with_path,
-            overwrite_file_content
-        ])
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
 }
 
 #[tauri::command]
