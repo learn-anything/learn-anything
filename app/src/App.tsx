@@ -45,8 +45,22 @@ export default function App() {
                   <Show when={global.state.localFolderPath}>
                     <Sidebar />
                   </Show>
-                  <Show when={global.state.localFolderPath}>
+                  <Show
+                    when={
+                      global.state.localFolderPath &&
+                      global.state.currentlyOpenFile
+                    }
+                  >
                     <div class="h-screen">
+                      <div class="absolute top-1 right-1 py-2 px-4 text-lg">
+                        <FancyButton
+                          onClick={() => {
+                            console.log("sign in")
+                          }}
+                        >
+                          Publish
+                        </FancyButton>
+                      </div>
                       <CodemirrorEditor />
                     </div>
                   </Show>
