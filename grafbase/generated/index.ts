@@ -154,6 +154,7 @@ export type Schema = {
     getGlobalTopicLearningStatus?: string;
     getGlobalLinks?: Schema['getGlobalLinksOutput'];
     checkUrl?: string;
+    getSuggestionsForUrl?: string;
     stripe?: string;
   };
   'Mutation': {
@@ -190,6 +191,7 @@ export type Resolver = {
   'Query.getGlobalTopicLearningStatus': ResolverFn<Schema['Query'], { topicName: string,  }, string>
   'Query.getGlobalLinks': ResolverFn<Schema['Query'], {  }, Schema['getGlobalLinksOutput']>
   'Query.checkUrl': ResolverFn<Schema['Query'], { linkUrl: string,  }, string>
+  'Query.getSuggestionsForUrl': ResolverFn<Schema['Query'], { linkUrl: string,  }, string>
   'Query.stripe': ResolverFn<Schema['Query'], { plan: string, userEmail: string,  }, string>
   'Mutation.createUser': ResolverFn<Schema['Mutation'], { email: string,  }, string>
   'Mutation.deletePersonalLink': ResolverFn<Schema['Mutation'], { personalLinkId: string,  }, string>

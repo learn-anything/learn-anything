@@ -43,6 +43,7 @@
   },
   "dependencies": {
     "@codemirror/view": "^6.21.4",
+    "@qdrant/js-client-rest": "^1.6.0",
     "bnx": "^0.3.1",
     "clipboardy": "^4.0.0",
     "dotenv": "^16.3.1",

@@ -1,11 +1,14 @@
 import { Context } from "@grafbase/sdk"
 import { GraphQLError } from "graphql"
 import { hankoIdFromToken } from "../lib/hanko-validate"
+import {QdrantClient} from '@qdrant/js-client-rest';
 
-// for now its just a proxy to get the title to get around cors issue
-// TODO: in future, do call to db and check if we have a url like this
-// if yes, fill it with details we do have or at least let users pick the details
-// essentially check if it's a GlobalLink already + more
+const client = new QdrantClient({
+    url: process.env.QDRANT_URL!,
+    apiKey: process.env.QDRANT_SECRET_KEY!,
+});
+
+
 export default async function getSuggestionsForUrlResolver(
   root: any,
   args: { linkUrl: string },
@@ -39,7 +42,16 @@ export default async function getSuggestionsForUrlResolver(
       summary += title + " // " + description
       if (title && description) {
         console.log(args.linkUrl, summary)
-        return summary 
+        const embedding = await context.ai.textEmbeddings({
+            model: 'baai/bge-large-en-v1.5',
+            text: summary
+        })
+        console.log(embedding.data);
+        const res = await client.search("topics_collections", {
+            vector: embedding.data,
+            limit: 3,
+        })
+        return res
       } else {
         if (description) {
             console.error("Title not found", args.linkUrl)
