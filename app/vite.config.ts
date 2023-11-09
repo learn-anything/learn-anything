@@ -1,12 +1,13 @@
-import solid from "solid-start/vite"
+import solid from "vite-plugin-solid"
 import { defineConfig } from "vite"
 
 export default defineConfig({
-  plugins: [solid({ ssr: false }) as any],
+  plugins: [solid() as any],
+  // prevent vite from obscuring rust errors
   clearScreen: false,
   // tauri expects a fixed port, fail if that port is not available
   server: {
-    port: 3000,
+    port: 1420,
     strictPort: true,
   },
   // to make use of `TAURI_DEBUG` and other env variables

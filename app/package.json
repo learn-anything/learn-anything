@@ -1,13 +1,12 @@
 {
   "name": "@la/app",
   "scripts": {
-    "dev": "solid-start dev --https",
-    "build": "solid-start build",
-    "start": "solid-start start",
-    "graphql": "graphql-codegen --config ./src/graphql/codegen.ts -r dotenv/config",
+    "start": "vite",
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
     "tauri:dev": "tauri dev",
-    "tauri:build": "tauri build --debug",
-    "grafbase": "grafbase dev"
+    "tauri:build": "tauri build --debug"
   },
   "type": "module",
   "devDependencies": {

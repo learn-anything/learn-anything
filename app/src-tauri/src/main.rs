@@ -106,19 +106,15 @@ async fn overwrite_file_content(path: String, new_content: String) -> Result<(),
 
     let path = PathBuf::from(&path);
     if path.exists() {
-        let mut file = match fs::OpenOptions::new()
+        let mut file = fs::OpenOptions::new()
             .write(true)
             .truncate(true)
             .open(&path)
-        {
-            Ok(file) => file,
-            Err(e) => return Err(format!("Failed to open file: {}", e)),
-        };
+            .map_err(|e| format!("Failed to open file: {}", e))?;
 
-        match file.write_all(new_content.as_bytes()) {
-            Ok(_) => Ok(()),
-            Err(e) => Err(format!("Failed to write to file: {}", e)),
-        }
+        file.write_all(new_content.as_bytes())
+            .map(|_| ())
+            .map_err(|e| format!("Failed to write to file: {}", e))
     } else {
         Err("File does not exist".into())
     }

@@ -1,9 +1,7 @@
 /* @refresh reload */
 import { render } from "solid-js/web"
 
-import "./index.css"
+import "./root.css"
 import App from "./routes"
 
-const root = document.getElementById("root")
-
-render(() => <App />, root!)
+render(() => <App />, document.getElementById("root") as HTMLElement)
