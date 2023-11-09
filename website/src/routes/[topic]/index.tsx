@@ -1,18 +1,9 @@
-import {
-  Match,
-  Show,
-  Switch,
-  createEffect,
-  createSignal,
-  onMount
-} from "solid-js"
+import { FancyButton, Icon, ModalWithMessageAndButton } from "@la/shared/ui"
+import { Match, Show, Switch, createEffect, createSignal } from "solid-js"
 import { useNavigate } from "solid-start"
 import { useGlobalState } from "../../GlobalContext/global"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import { useUser } from "../../GlobalContext/user"
-import FancyButton from "../../components/FancyButton"
-import Icon from "../../components/Icon"
-import ModalWithMessageAndButton from "../../components/ModalWithMessageAndButton"
 import GlobalGuide from "../../components/Topic/GlobalGuide"
 import GuideLinks from "../../components/Topic/GuideLinks"
 import GuideNav from "../../components/Topic/GuideNav"
