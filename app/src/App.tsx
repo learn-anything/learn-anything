@@ -55,7 +55,6 @@ export default function App() {
                     <div class="w-full h-full flex justify-center items-center flex-col gap-5">
                       <FancyButton
                         onClick={async () => {
-                          console.log("runs...")
                           // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                           const connectedFolder = (await invoke(
                             "connect_folder",
