@@ -12,7 +12,8 @@ interface Props {
     | "ArrowRight"
   width?: string
   height?: string
-  color?: string
+  border?: string
+  fill?: string
   tooltip?: {
     content: string
     position: string
@@ -69,38 +70,36 @@ export default function Icon(props: Props) {
             </svg>
           </Match>
           <Match when={props.name === "ArrowDown"}>
-            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <path
+                d="M12 15.25L16.25 9.75H7.75L12 15.25Z"
                 stroke="currentColor"
+                stroke-width="1.5"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                stroke-width="1.5"
-                d="M17.25 13.75L12 19.25L6.75 13.75"
-              ></path>
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.5"
-                d="M12 18.25V4.75"
               ></path>
             </svg>
           </Match>
           <Match when={props.name === "ArrowRight"}>
-            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <path
+                d="M14.25 12L8.75 7.75V16.25L14.25 12Z"
                 stroke="currentColor"
+                stroke-width="1.5"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                stroke-width="1.5"
-                d="M13.75 6.75L19.25 12L13.75 17.25"
-              ></path>
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.5"
-                d="M19 12H4.75"
               ></path>
             </svg>
           </Match>

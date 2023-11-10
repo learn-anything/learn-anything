@@ -2,6 +2,7 @@ import { For, Show, createMemo, createSignal } from "solid-js"
 import { useGlobalState } from "../GlobalContext/global"
 import { useUser } from "../GlobalContext/user"
 import Icon from "./Icon"
+import clsx from "clsx"
 
 type TreeContent = TreeDirectory | TreeFile
 
@@ -187,19 +188,23 @@ export default function Sidebar() {
                           }
                         }}
                       >
-                        <div>
+                        <div
+                          style={{ "padding-left": `${item.depth * 10}px` }}
+                          class={clsx(
+                            "",
+                            item.type !== "directory" && "ml-[24px]",
+                          )}
+                        >
                           <Show when={item.type === "directory"}>
                             <Show
                               when={!collapsed().has(item)}
-                              fallback={<Icon name={"ArrowDown"} />}
+                              fallback={<Icon name={"ArrowRight"} />}
                             >
-                              <Icon name={"ArrowRight"} />
+                              <Icon name={"ArrowDown"} />
                             </Show>
                           </Show>
                         </div>
-                        <div style={{ "padding-left": `${item.depth * 10}px` }}>
-                          {item.name}
-                        </div>
+                        <div>{item.name}</div>
                       </div>
                     )
                   }}
