@@ -1,5 +1,7 @@
 <p align="center">
-  <img alt="Learn-Anything.xyz" src="./docs/brand/learn-anything-banner.png" width="800" />
+  <a href="https://learn-anything.xyz">
+    <img alt="Learn-Anything.xyz" src="./docs/brand/learn-anything-banner.png" width="800" />
+  </a>
 </p>
 
 # [Learn-Anything.xyz](https://learn-anything.xyz) [![Discord](https://img.shields.io/badge/Discord-100000?style=flat&logo=discord&logoColor=white&labelColor=black&color=black)](https://discord.com/invite/bxtD8x6aNF)
