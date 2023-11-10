@@ -18,6 +18,8 @@ serde_json = "1.0"
 walkdir = "2"
 log_macro = "0.1.6"
 tauri-plugin-deep-link = "0.1.2"
+url = "2.2.2"
+serde_urlencoded = "0.7.0"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem

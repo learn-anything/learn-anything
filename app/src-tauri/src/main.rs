@@ -9,11 +9,14 @@
 extern crate log_macro;
 
 use serde_json::json;
+use serde_urlencoded;
+use std::collections::HashMap;
 use std::ffi::OsStr;
 use std::fs;
 use std::path::PathBuf;
 use tauri::api::dialog::blocking::FileDialogBuilder;
 use tauri::Manager;
+use url::Url;
 use walkdir::WalkDir;
 
 fn main() {
@@ -24,37 +27,51 @@ fn main() {
     // Unfortuenetly getting it is pretty ugly without access to sth that implements `Manager`.
 
     tauri::Builder::default()
-    .setup(|app| {
-      // If you need macOS support this must be called in .setup() !
-      // Otherwise this could be called right after prepare() but then you don't have access to tauri APIs
-      let handle = app.handle();
-      tauri_plugin_deep_link::register(
-        "my-scheme",
-        move |request| {
-          dbg!(&request);
-          handle.emit_all("scheme-request-received", request).unwrap();
-        },
-      )
-      .unwrap(/* If listening to the scheme is optional for your app, you don't want to unwrap here. */);
+        .setup(|app| {
+            let handle = app.handle();
+            tauri_plugin_deep_link::register("learn-anything", move |request| {
+                dbg!(&request);
+                // Parse the URL
+                if let Ok(url) = Url::parse(&request) {
+                    // Get the path and query string
+                    let path = url.path();
+                    let query = url.query();
 
-      // If you also need the url when the primary instance was started by the custom scheme, you currently have to read it yourself
-      /*
-      #[cfg(not(target_os = "macos"))] // on macos the plugin handles this (macos doesn't use cli args for the url)
-      if let Some(url) = std::env::args().nth(1) {
-        app.emit_all("scheme-request-received", url).unwrap();
-      }
-      */
+                    // Parse the query string into a HashMap
+                    if let Some(query) = query {
+                        if let Ok(params) =
+                            serde_urlencoded::from_str::<HashMap<String, String>>(query)
+                        {
+                            // Emit an event with the query parameters
+                            handle
+                                .emit_all("scheme-request-received", (path, params))
+                                .unwrap();
+                        }
+                    }
+                } else {
+                    println!("Failed to parse URL: {}", request);
+                }
+            })
+            .unwrap();
 
-      Ok(())
-    })
-    // .plugin(tauri_plugin_deep_link::init()) // consider adding a js api later
-    .invoke_handler(tauri::generate_handler![
-        connect_folder,
-        connect_folder_with_path,
-        overwrite_file_content
-    ])
-    .run(tauri::generate_context!())
-    .expect("error while running tauri application");
+            // If you also need the url when the primary instance was started by the custom scheme, you currently have to read it yourself
+            /*
+            #[cfg(not(target_os = "macos"))] // on macos the plugin handles this (macos doesn't use cli args for the url)
+            if let Some(url) = std::env::args().nth(1) {
+              app.emit_all("scheme-request-received", url).unwrap();
+            }
+            */
+
+            Ok(())
+        })
+        // .plugin(tauri_plugin_deep_link::init()) // consider adding a js api later
+        .invoke_handler(tauri::generate_handler![
+            connect_folder,
+            connect_folder_with_path,
+            overwrite_file_content
+        ])
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
 }
 
 #[tauri::command]

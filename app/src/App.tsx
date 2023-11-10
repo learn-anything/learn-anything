@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/tauri"
-import { Show, Suspense } from "solid-js"
+import { Show, Suspense, onMount } from "solid-js"
 import {
   File,
   GlobalStateProvider,
@@ -27,6 +27,14 @@ export default function App() {
   //     user.setMode("Search Topics")
   //   }
   // })
+
+  onMount(() => {
+    window.__TAURI__.event.listen("scheme-request-received", (event) => {
+      const [path, params] = event.payload
+      console.log("Path:", path)
+      console.log("Parameters:", params)
+    })
+  })
 
   return (
     <>

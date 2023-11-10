@@ -1442,9 +1442,11 @@ dependencies = [
  "log_macro",
  "serde",
  "serde_json",
+ "serde_urlencoded",
  "tauri",
  "tauri-build",
  "tauri-plugin-deep-link",
+ "url",
  "walkdir",
 ]
 
@@ -2435,6 +2437,18 @@ version = "0.6.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "12022b835073e5b11e90a14f86838ceb1c8fb0325b72416845c487ac0fa95e80"
 dependencies = [
+ "serde",
+]
+
+[[package]]
+name = "serde_urlencoded"
+version = "0.7.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d3491c14715ca2294c4d6a88f15e84739788c1d030eed8c110436aafdaa2f3fd"
+dependencies = [
+ "form_urlencoded",
+ "itoa 1.0.9",
+ "ryu",
  "serde",
 ]
 
