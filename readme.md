@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="Learn-Anything.xyz" src="./brand/learn-anything-banner.png" width="800" />
+  <img alt="Learn-Anything.xyz" src="./docs/brand/learn-anything-banner.png" width="800" />
 </p>
 
 # [Learn-Anything.xyz](https://learn-anything.xyz) [![Discord](https://img.shields.io/badge/Discord-100000?style=flat&logo=discord&logoColor=white&labelColor=black&color=black)](https://discord.com/invite/bxtD8x6aNF)
@@ -296,6 +296,7 @@ Ran with `bun <Name>`
 [![X](https://img.shields.io/badge/learnanything-100000?style=flat&logo=X&logoColor=white&labelColor=black&color=black)](https://twitter.com/learnanything_)
 
 ### Acknowledgements
+
 Learn Anything logo by [NUMI](https://github.com/numi-hq/open-design):
 
 [<img src="https://raw.githubusercontent.com/numi-hq/open-design/main/assets/numi-lockup.png" alt="NUMI Logo" style="width: 200px;"/>](https://numi.tech/?ref=learn-anything)
