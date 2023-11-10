@@ -1,6 +1,6 @@
 import * as solid from "solid-js"
 import { isServer } from "solid-js/web"
-import type * as client from "./client"
+import type * as client from "./client.jsx"
 
 /**
  * Lazy-loaded force graph
@@ -8,7 +8,7 @@ import type * as client from "./client"
 export function ForceGraph(props: client.ForceGraphProps): solid.JSX.Element {
   const [clientModule] = solid.createResource(
     !isServer,
-    () => import("./client.tsx")
+    () => import("./client.jsx")
   )
 
   return (

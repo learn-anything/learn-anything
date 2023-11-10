@@ -1,5 +1,5 @@
 import * as s from "solid-js"
-import { FancyButton } from "./FancyButton"
+import { FancyButton } from "./FancyButton.jsx"
 
 export type ModalProps = {
   onClose: () => void

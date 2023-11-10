@@ -1,6 +1,10 @@
 {
   "name": "@la/shared",
   "private": true,
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc"
+  },
   "type": "module",
   "module": "./index.ts",
   "types": "./index.ts",
@@ -10,6 +14,17 @@
     "./lib": "./lib/index.ts"
   },
   "dependencies": {
+    "@nothing-but/force-graph": "^0.6.0",
+    "@nothing-but/utils": "^0.11.1",
+    "@solid-primitives/event-listener": "^2.3.0",
+    "@solid-primitives/resize-observer": "^2.0.22",
+    "@solid-primitives/scheduled": "^1.4.1",
+    "clsx": "^2.0.0",
+    "fuse.js": "^7.0.0",
+    "js-cookie": "^3.0.5",
     "solid-js": "^1.8.5"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2"
   }
 }
