@@ -51,10 +51,7 @@ export default function App() {
                 class="flex flex-col"
                 style={{ width: "100vw", height: "100vh" }}
               >
-                <div>
-                  <div class="h-[25px]"></div>
-                </div>
-                <div class="flex items-center dark:bg-[#1e1e1e] bg-white grow">
+                <div class="flex h-full items-center dark:bg-[#1e1e1e] bg-white grow">
                   <Show when={global.state.localFolderPath}>
                     <Sidebar />
                   </Show>
@@ -64,8 +61,8 @@ export default function App() {
                       global.state.currentlyOpenFile
                     }
                   >
-                    <div class="h-screen">
-                      <div class="absolute top-1 right-1 py-2 px-4 text-lg">
+                    <div class="h-full">
+                      <div class="absolute bottom-1 right-1 py-2 px-4 text-lg">
                         <FancyButton
                           onClick={() => {
                             // TODO: check if not logged in
@@ -78,7 +75,7 @@ export default function App() {
                           Publish
                         </FancyButton>
                       </div>
-                      <CodemirrorEditor />
+                      {/* <CodemirrorEditor /> */}
                     </div>
                   </Show>
 

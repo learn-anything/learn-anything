@@ -124,7 +124,6 @@ export default function Sidebar() {
     <>
       <div
         class=" flex h-full border-r-2 border-slate-400 border-opacity-20"
-        id="Sidebar"
         style={{ width: "25%", "min-width": "250px" }}
       >
         <div class="flex w-18 dark:bg-[#1e1e1e] bg-white flex-col justify-between items-center font-semibold p-2 py-4 border-r-2 border-opacity-20 border-slate-400">
@@ -171,7 +170,7 @@ export default function Sidebar() {
               Topics
             </div>
             <div class="h-screen">
-              <Motion.div class="pl-6 overflow-hidden opacity-70 flex flex-col border-l border-opacity-30 border-slate-100">
+              <Motion.div class="pl-6 overflow-hidden opacity-70 flex flex-col">
                 <For each={collapsedList()}>
                   {(item) => {
                     return (
