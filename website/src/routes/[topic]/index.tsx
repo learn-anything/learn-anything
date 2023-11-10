@@ -1,4 +1,4 @@
-import { FancyButton, Icon, ModalWithMessageAndButton } from "@la/shared/ui"
+import { ui } from "@la/shared"
 import { Match, Show, Switch, createEffect, createSignal } from "solid-js"
 import { useNavigate } from "solid-start"
 import { useGlobalState } from "../../GlobalContext/global"
@@ -111,7 +111,7 @@ export default function GlobalTopic() {
       <div class="w-screen fixed top-0 right-0 h-screen text-black dark:text-white bg-white dark:bg-[#1C1C1C]">
         <GuideNav />
         <Show when={global.showMemberOnlyModal()}>
-          <ModalWithMessageAndButton
+          <ui.ModalWithMessageAndButton
             message="This is a member only feature"
             buttonText="Become Member"
             buttonAction={() => {
@@ -125,7 +125,7 @@ export default function GlobalTopic() {
         {/* TODO: ugly but need to release */}
         {/* ideally this is a more generalised component without needed extra global state.. */}
         <Show when={global.showMemberOnlyModalWithMessage() !== ""}>
-          <ModalWithMessageAndButton
+          <ui.ModalWithMessageAndButton
             message={global.showMemberOnlyModalWithMessage()}
             buttonText="Become Member"
             buttonAction={() => {
@@ -144,14 +144,14 @@ export default function GlobalTopic() {
                 <Show
                   when={!topic.globalTopic.verifiedTopic}
                   fallback={
-                    <Icon
+                    <ui.Icon
                       name="Loader"
                       width="40"
                       height="40"
                       border={
                         global.state.theme === "light" ? "Black" : "White"
                       }
-                    ></Icon>
+                    ></ui.Icon>
                   }
                 >
                   <div class="w-fit">
@@ -164,14 +164,14 @@ export default function GlobalTopic() {
                         </div>
                       }
                     >
-                      <FancyButton
+                      <ui.FancyButton
                         onClick={() => {
                           navigate("/pricing")
                         }}
                       >
                         Become member to track learning state and make your own
                         guide for this topic.
-                      </FancyButton>
+                      </ui.FancyButton>
                     </Show>
                   </div>
                 </Show>
@@ -216,13 +216,13 @@ export default function GlobalTopic() {
                       <div class="sticky top-[50%] translate-y-[50%] z-[60] right-0 w-full flex items-center justify-center">
                         <div class="">
                           <Show when={!global.showMemberOnlyModal()}>
-                            <FancyButton
+                            <ui.FancyButton
                               onClick={() => {
                                 navigate("/pricing")
                               }}
                             >
                               Become member
-                            </FancyButton>
+                            </ui.FancyButton>
                           </Show>
                         </div>
                       </div>
