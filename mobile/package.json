@@ -1,7 +1,7 @@
 {
   "name": "@la/mobile",
   "main": "app/app.js",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "scripts": {},
   "dependencies": {
     "@nativescript-community/solid-js": "^0.0.4-alpha.5",

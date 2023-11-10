@@ -5,7 +5,7 @@ const command = args[2]
 switch (command) {
   case "init":
     await setupEnvFiles()
-    await cloneSeed()
+    await getFullMonorepo()
     break
   case "env":
     await setupEnvFiles()
@@ -13,6 +13,7 @@ switch (command) {
   case "full-monorepo":
     await getFullMonorepo()
     break
+  // TODO: finish and make work, seed edgedb from files in seed folder
   case "seed-edgedb":
     await seedEdgeDb()
     break
@@ -22,12 +23,6 @@ switch (command) {
   default:
     console.log("Unknown command")
     break
-}
-
-// TODO: add error checks, nice log in case folder already exists
-// https://github.com/wobsoriano/bnx/issues/3
-async function cloneSeed() {
-  await $`git clone https://github.com/learn-anything/seed`
 }
 
 async function setupEnvFiles() {
@@ -115,12 +110,14 @@ VITE_GRAFBASE_INTERNAL_SECRET=secret`
   // flake with flox or how grafbase repo has it
 }
 
+// TODO: add error checks, nice log in case folder already exists
+// https://github.com/wobsoriano/bnx/issues/3
 async function getFullMonorepo() {
   await $`git clone https://github.com/learn-anything/ai`
-  await $`git clone https://github.com/learn-anything/mobile`
-  await $`git clone https://github.com/learn-anything/buy`
+  await $`git clone https://github.com/learn-anything/solana`
 }
 
+// TODO: make better, automate full seed without any feedback from user
 async function seedEdgeDb() {
   await $`mv seed/seed.db grafbase/edgedb`
 }

@@ -8,9 +8,11 @@ The end goal of Learn Anything is to become the best place and tool for keeping 
 
 It is a fully open source project with an active community on [Discord](https://discord.com/invite/bxtD8x6aNF). There is great focus on both DX of developing everything LA and even more, the end user UX.
 
-Project as it stands is a website and a desktop app. There is also [mobile app](https://github.com/learn-anything/mobile) in works currently in separate repo. We plan to train our own LLMs as we provide AI interfaces to all things knowledge, be it global AGI level queries ala ChatGPT or [querying into any person's knowledge base](https://github.com/learn-anything/ai) with different levels of privacy.
+Project consists of a [website](website), [desktop app](app), [mobile app](mobile).
 
-There is more exciting projects planned and under way (like [digital idea/goods marketplace with solana support](https://github.com/learn-anything/buy)). If interested, read on to setup the project and start writing your first code. ♥️
+There is also separate repo of [AI](https://github.com/learn-anything/ai) where we train & fine tune LLMs to provide AI interfaces to all things knowledge. Part of the goals of LA is to reach AGI faster than [OpenAI](https://openai.com) and do it in a fully open way. The current start of that journey is in providing state of art ability to index any knowledge of a person and provide chat bot interface to it with different privacy controls. As well as having state of the art chat bots for each of the topics in LA platform.
+
+If you're interested in the mission and like the project, join [Discord](https://discord.com/invite/bxtD8x6aNF) where you can ask questions and interact with community and read on to get you started writing your first code.
 
 ###### Contents
 
@@ -26,9 +28,9 @@ There is more exciting projects planned and under way (like [digital idea/goods 
 - [Docs](#docs)
 - [Commands](#commands)
 
-Current tasks to do are in [GitHub issues](../../issues) (can [sort by priority](https://github.com/learn-anything/learn-anything.xyz/labels?q=priority)). Currently the issues are synced from [Linear](https://linear.app). In future [KusKus](https://github.com/kuskusapp/kuskus) will be used as the GitHub issues client instead.
+Current tasks to do are in [GitHub issues](../../issues) (can [sort by priority](https://github.com/learn-anything/learn-anything.xyz/labels?q=priority)). Currently the issues are synced from [Linear](https://linear.app) but will be using [KusKus](https://github.com/kuskusapp/kuskus) instead soon.
 
-Do join [Discord](https://discord.com/invite/bxtD8x6aNF) and ask questions. Any issues with setup or making your first feature or trying to fix a bug will be resolved asap. Same goes for discussing ideas on how to make the tool even better than it is now.
+Any issues with setup or making your first feature or trying to fix a bug will be resolved asap. Same goes for discussing ideas on how to make the tool even better than it is now.
 
 ## File structure
 
@@ -44,7 +46,8 @@ Tech stack is described in [docs/tech-stack.md](docs/tech-stack.md).
     - [crud](grafbase/edgedb/crud) - CRUD functions on models (imported either from grafbase resolvers or from [cli](grafbase/edgedb/cli/))
   - [resolvers](grafbase/resolvers) - [edge resolvers](https://grafbase.com/docs/edge-gateway/resolvers) are server functions exposed with GraphQL
   - [grafbase.config.ts](grafbase/grafbase.config.ts) - [Grafbase's config](https://grafbase.com/docs/config). You create file in resolvers folder, then extend grafbase.config.ts. Can use [Pathfinder](https://pathfinder.dev) to test query. Then call it from anywhere using some GraphQL client.
-- [packages](packages) - shared TS packages
+- [mobile](mobile) - mobile app using NativeScript/Solid
+- [shared](shared) - shared TS functions (can be used by any part of monorepo)
 - [website](website) - learn-anything.xyz website code in Solid
   - [components](website/components) - solid components
   - [routes](website/src/routes) - routes defined using file system
@@ -60,9 +63,9 @@ bun i
 bun setup
 ```
 
-`bun setup` runs `bun setup.ts init` (can see [setup.ts](setup.ts) code for what it does). It will create `.env` files for you so you can start coding the project fast. It will also `git clone` [seed repo](https://github.com/learn-anything/seed). Which contains various files needed to bootstrap the database with content.
+`bun setup` runs `bun setup.ts init` (can see [setup.ts](setup.ts) code for what it does). It will create `.env` files for you so you can start coding the project fast. It will also `git clone` [seed](https://github.com/learn-anything/seed), [ai](https://github.com/learn-anything/ai) and [solana](https://learn-anything.xyz/solana) repos.
 
-Running `bun setup:full` will clone [ai](https://github.com/learn-anything/ai), [mobile](https://github.com/learn-anything/mobile) and [buy](https://github.com/learn-anything/buy) codebases so you can work with them as one monorepo. Tooling for that will get better with time.
+Monorepo tooling should get better soon. If you're intested in making it better by integrating [Nx](https://nx.dev) or similar tools, please reach out on [Discord](https://discord.com/invite/bxtD8x6aNF).
 
 ### Setup EdgeDB
 
@@ -184,7 +187,7 @@ Open http://localhost:3000
 > **Warning**
 > WIP, massive effort is put here after website is released and is working without issues
 
-Goal of desktop app is to be essentially a clone of [Obsidian](https://obsidian.md/)/[Reflect](https://reflect.app) (working with local markdown files). And with ability to publish the markdown content to LA. All private data and files will be end to end encrypted and synced with [mobile app](https://github.com/learn-anything/mobile).
+Goal of desktop app is to be essentially a clone of [Obsidian](https://obsidian.md/)/[Reflect](https://reflect.app) (working with local markdown files). And with ability to publish the markdown content to LA. All private data and files will be end to end encrypted and synced with [mobile app](mobile).
 
 It will be the best note taking experience you can get. All open source.
 
