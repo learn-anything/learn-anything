@@ -3,7 +3,7 @@ import { onMount } from "solid-js"
 import { register } from "@teamhanko/hanko-elements"
 import { UserClient } from "@teamhanko/hanko-frontend-sdk"
 import { useNavigate } from "solid-start"
-import { getHankoCookie } from "../../lib/auth"
+import { getHankoCookie } from "@la/shared/lib"
 import { useMobius, useSignIn } from "../root"
 import { useUser } from "../GlobalContext/user"
 

@@ -6,7 +6,8 @@
   "types": "./index.ts",
   "exports": {
     ".": "./index.ts",
-    "./ui": "./ui/index.ts"
+    "./ui": "./ui/index.ts",
+    "./lib": "./lib/index.ts"
   },
   "dependencies": {
     "solid-js": "^1.8.5"

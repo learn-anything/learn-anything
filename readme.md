@@ -229,7 +229,7 @@ You can point the tests at your own wiki/notes folder too. Put the folder with f
 
 ## Run mobile app (NativeScript/Solid)
 
-Read instructions in [mobile/readme.md](mobile/readme.md)
+Read instructions in [mobile](mobile)
 
 ## Contribute
 

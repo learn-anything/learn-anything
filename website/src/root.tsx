@@ -16,7 +16,7 @@ import {
   Scripts,
   Title
 } from "solid-start"
-import { getHankoCookie } from "../lib/auth"
+import { getHankoCookie } from "@la/shared/lib"
 import { GlobalStateProvider, createGlobalState } from "./GlobalContext/global"
 import createGlobalTopic, {
   GlobalTopicProvider

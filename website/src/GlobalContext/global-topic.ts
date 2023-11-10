@@ -3,7 +3,7 @@ import { createStore } from "solid-js/store"
 import { useLocation } from "solid-start"
 import { SearchResult } from "@la/shared/ui"
 import { MobiusType } from "../root"
-import { getHankoCookie } from "../../lib/auth"
+import { getHankoCookie } from "@la/shared/lib"
 import { log } from "../lib/baselime"
 
 export type GlobalLink = {
