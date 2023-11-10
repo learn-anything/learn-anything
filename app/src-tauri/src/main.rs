@@ -44,7 +44,7 @@ fn main() {
                         {
                             // Emit an event with the query parameters
                             handle
-                                .emit_all("scheme-request-received", (path, params))
+                                .emit_all("signed-in-token-and-email", (path, params))
                                 .unwrap();
                         }
                     }

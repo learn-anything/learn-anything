@@ -1,4 +1,4 @@
-import { For, createMemo } from "solid-js"
+import { For, Show, createMemo, createSignal } from "solid-js"
 import { useGlobalState } from "../GlobalContext/global"
 import { useUser } from "../GlobalContext/user"
 import Icon from "./Icon"
@@ -89,6 +89,35 @@ export default function Sidebar() {
     return filepathsToTree(global.state.files.map((f) => f.filePath))
   })
 
+  const [collapsed, setCollapsed] = createSignal(new WeakSet<TreeContent>(), {
+    equals: false,
+  })
+
+  const toggleCollapsed = (node: TreeContent) => {
+    setCollapsed((set) => {
+      set.delete(node) || set.add(node)
+      return set
+    })
+  }
+
+  const collapsedList = createMemo(() => {
+    const collapsedList: TreeContent[] = []
+    const set = collapsed()
+
+    let skip = 0
+    for (const node of directoryTree()[0]) {
+      const skipped = skip > 0
+      if (skipped) skip--
+      else collapsedList.push(node)
+
+      if (node.type === "directory" && (skipped || set.has(node))) {
+        skip += node.contents.length
+      }
+    }
+
+    return collapsedList
+  })
+
   return (
     <>
       <div
@@ -141,26 +170,36 @@ export default function Sidebar() {
             </div>
             <div class="h-screen">
               <div class="pl-6 overflow-hidden opacity-70 flex flex-col gap-2 border-l border-opacity-30 border-slate-100">
-                <For each={directoryTree()[0]}>
+                <For each={collapsedList()}>
                   {(item) => {
                     return (
                       <div
-                        class="cursor-pointer"
-                        style={{ "padding-left": `${item.depth * 10}px` }}
+                        class="flex cursor-pointer hover:bg-gray-200" // Add hover styling here
                         onClick={() => {
+                          toggleCollapsed(item)
+                          console.log(collapsed(), "collapsed")
                           if (item.type === "file") {
                             global.set({
                               currentlyOpenFile: global.state.files.find(
                                 (f) => f.filePath === item.path,
                               ),
                             })
-                            return
                           }
-                          // if (item.type === "directory") {
-                          // }
                         }}
                       >
-                        {item.name}
+                        <div>
+                          <Show when={item.type === "directory"}>
+                            <Show
+                              when={!collapsed().has(item)}
+                              fallback={<Icon name={"ArrowDown"} />}
+                            >
+                              <Icon name={"ArrowRight"} />
+                            </Show>
+                          </Show>
+                        </div>
+                        <div style={{ "padding-left": `${item.depth * 10}px` }}>
+                          {item.name}
+                        </div>
                       </div>
                     )
                   }}

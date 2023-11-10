@@ -1,3 +1,4 @@
+import { listen } from "@tauri-apps/api/event"
 import { invoke } from "@tauri-apps/api/tauri"
 import { Show, Suspense, onMount } from "solid-js"
 import {
@@ -28,12 +29,16 @@ export default function App() {
   //   }
   // })
 
-  onMount(() => {
-    window.__TAURI__.event.listen("scheme-request-received", (event) => {
-      const [path, params] = event.payload
-      console.log("Path:", path)
-      console.log("Parameters:", params)
-    })
+  // TODO: listen to deep links made to desktop app
+  onMount(async () => {
+    await listen<[path: string, params: any]>(
+      "signed-in-token-and-email",
+      (event) => {
+        const [path, params] = event.payload
+        console.log("Path:", path)
+        console.log("Parameters:", params)
+      },
+    )
   })
 
   return (
