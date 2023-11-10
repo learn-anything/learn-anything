@@ -9,7 +9,7 @@ import {
 import { UserProvider, createUserState } from "./GlobalContext/user"
 import createWikiState, { WikiProvider } from "./GlobalContext/wiki"
 import { CodemirrorEditor } from "./components/Codemirror/CodemirrorEditor"
-import FancyButton from "./components/FancyButton"
+import { FancyButton } from "@la/shared/ui"
 import SearchModal from "./components/SearchModal"
 import Sidebar from "./components/Sidebar"
 
