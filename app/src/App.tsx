@@ -75,29 +75,31 @@ export default function App() {
                           Publish
                         </FancyButton>
                       </div>
-                      {/* <CodemirrorEditor /> */}
+                      <CodemirrorEditor />
                     </div>
                   </Show>
 
                   <Show when={!global.state.localFolderPath}>
                     <div class="w-full h-full flex justify-center items-center flex-col gap-5">
-                      <FancyButton
-                        onClick={async () => {
-                          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-                          const connectedFolder = (await invoke(
-                            "connect_folder",
-                            {
-                              command: {},
-                            },
-                          )) as [string, File[]] | null
-                          if (connectedFolder !== null) {
-                            global.set("localFolderPath", connectedFolder[0])
-                            global.set("files", connectedFolder[1])
-                          }
-                        }}
-                      >
-                        Connect folder
-                      </FancyButton>
+                      <div>
+                        <FancyButton
+                          onClick={async () => {
+                            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+                            const connectedFolder = (await invoke(
+                              "connect_folder",
+                              {
+                                command: {},
+                              },
+                            )) as [string, File[]] | null
+                            if (connectedFolder !== null) {
+                              global.set("localFolderPath", connectedFolder[0])
+                              global.set("files", connectedFolder[1])
+                            }
+                          }}
+                        >
+                          Connect folder
+                        </FancyButton>
+                      </div>
                     </div>
                   </Show>
 
