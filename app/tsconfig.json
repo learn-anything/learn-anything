@@ -6,7 +6,7 @@
     "target": "ESNext",
     "lib": ["DOM", "ESNext"],
     "moduleResolution": "Bundler",
-    "types": ["solid-start/env", "bun-types"],
+    "types": ["vite/client", "bun-types"],
     // rules
     "strict": true,
     "isolatedModules": true,
