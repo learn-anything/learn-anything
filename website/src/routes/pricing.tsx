@@ -262,10 +262,14 @@ export default function Pricing() {
               </div>
               <div>
                 This is all just the beginning. Learn Anything aims to create
-                personalised AGI in a fully open way. Not controlled by any
-                entity. No closed code/data.
+                personalised AGI in a fully open way. No closed code/data. Join
+                the platform.{" "}
+                <a href="https://github.com/learn-anything/learn-anything.xyz">
+                  Clone the code
+                </a>
+                and let's build it together. ✨
               </div>
-              <div>
+              {/* <div>
                 In future, LA will also be a better and open source version of{" "}
                 <a href="https://www.google.com">Google</a> (will create our own
                 crawler and index the web). Better and cheaper version of{" "}
@@ -281,7 +285,7 @@ export default function Pricing() {
                 system with payouts to creators done in instant and not monthly.
                 And a lot lot more. The code is open. The data is open. It's up
                 to you what this project can become.
-              </div>
+              </div> */}
             </div>
             <Show when={showLetsTalkModal()}>
               {/* @ts-ignore */}

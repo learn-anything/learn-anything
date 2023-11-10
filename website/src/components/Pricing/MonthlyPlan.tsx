@@ -44,7 +44,7 @@ export default function MonthlyPlan(props: Props) {
       </div>
       <div class="w-full h-full flex flex-col gap-4">
         <div class="text-2xl font-semibold gap-2">
-          $6 <span class="opacity-90 font-light text-sm">per month</span>
+          $3 <span class="opacity-90 font-light text-sm">per month</span>
         </div>
 
         <div class="font-light opacity-60 flex flex-col gap-3">
@@ -54,11 +54,11 @@ export default function MonthlyPlan(props: Props) {
             • Mark any link you find in LA as completed or to complete later
           </div>
           <div>• Add your own links and track progress on them</div>
-          <div>• Publish your notes to your own personal wiki page (soon)</div>
+          <div>• Publish your notes to your own personal wiki page</div>
           <div>
-            • Sync all your private/public notes with a mobile app (soon)
+            • Sync all your private/public notes with a mobile app (beta)
           </div>
-          <div>• AI interface to all your notes (soon) </div>
+          <div>• AI interface to all your notes (beta) </div>
         </div>
       </div>
 
