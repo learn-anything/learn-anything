@@ -12,6 +12,16 @@ export function CodemirrorEditor() {
       if (global.state.currentlyOpenFile) {
         const filePath = global.state.currentlyOpenFile.filePath
         const pathToFile = `${global.state.localFolderPath}/${filePath}`
+        const indexOfCurrentlyEditedFile = global.state.files.findIndex(
+          (f) => f.filePath === filePath,
+        )
+
+        global.set(
+          "files",
+          indexOfCurrentlyEditedFile,
+          "fileContent",
+          newFileContent,
+        )
         await invoke("overwrite_file_content", {
           path: pathToFile,
           newContent: newFileContent,
