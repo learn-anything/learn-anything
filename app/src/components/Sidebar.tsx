@@ -202,12 +202,20 @@ export default function Sidebar() {
                         >
                           <div>
                             <Show when={item.type === "directory"}>
-                              <Show
+                              {/* <Show
                                 when={!collapsed().has(item)}
                                 fallback={<Icon name={"ArrowRight"} />}
                               >
                                 <Icon name={"ArrowDown"} />
-                              </Show>
+                              </Show> */}
+                              <div
+                                class={clsx(
+                                  " transition-all",
+                                  !collapsed().has(item) && "rotate-90",
+                                )}
+                              >
+                                <Icon name={"ArrowRight"} />
+                              </div>
                             </Show>
                           </div>
                           <div class="flex items-center justify-center">
