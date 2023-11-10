@@ -1,6 +1,6 @@
 import { Show, createMemo, createResource } from "solid-js"
 import { useNavigate } from "solid-start"
-import { getHankoCookie } from "../../lib/auth"
+import { getHankoCookie } from "@la/shared/lib"
 import { useGlobalState } from "../GlobalContext/global.ts"
 import { ui } from "@la/shared"
 import { logUntracked } from "../lib/baselime"

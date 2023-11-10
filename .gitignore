@@ -18,8 +18,7 @@ package-lock.json
 tsconfig.tsbuildinfo
 .cache/
 ai
-buy
-mobile
+solana
 **.db
 
 # vite
