@@ -24,6 +24,7 @@ If you're interested in the mission and like the project, join [Discord](https:/
 - [Run GraphQL server (Grafbase)](#run-graphql-server-grafbase)
 - [Run website (Solid)](#run-website-solid)
 - [Run desktop app (Tauri/Rust)](#run-desktop-app-taurirust)
+- [Run mobile app (NativeScript/Solid)](#run-mobile-app-nativescriptsolid)
 - [Contribute](#contribute) - contribute to project effectively
 - [Docs](#docs)
 - [Commands](#commands)
@@ -225,6 +226,10 @@ Will run tests found in [test](test).
 Running code via tests is very effective. You can open terminal on your right and edit code on the left and on each `.ts` file save it will rerun the test and check if behavior you are testing is correct. Reading through the test suite is great way to understand the backend part of the app.
 
 You can point the tests at your own wiki/notes folder too. Put the folder with files into seed/test folder you get from running `bun dev-setup` -->
+
+## Run mobile app (NativeScript/Solid)
+
+Read instructions in [mobile/readme.md](mobile/readme.md)
 
 ## Contribute
 
