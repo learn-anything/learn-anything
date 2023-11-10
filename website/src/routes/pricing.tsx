@@ -266,7 +266,7 @@ export default function Pricing() {
                 the platform.{" "}
                 <a href="https://github.com/learn-anything/learn-anything.xyz">
                   Clone the code
-                </a>
+                </a>{" "}
                 and let's build it together. ✨
               </div>
               {/* <div>
