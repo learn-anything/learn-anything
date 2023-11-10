@@ -3,6 +3,7 @@ import { useGlobalState } from "../GlobalContext/global"
 import { useUser } from "../GlobalContext/user"
 import Icon from "./Icon"
 import clsx from "clsx"
+import { Motion } from "@motionone/solid"
 
 type TreeContent = TreeDirectory | TreeFile
 
@@ -170,7 +171,7 @@ export default function Sidebar() {
               Topics
             </div>
             <div class="h-screen">
-              <div class="pl-6 overflow-hidden opacity-70 flex flex-col border-l border-opacity-30 border-slate-100">
+              <Motion.div class="pl-6 overflow-hidden opacity-70 flex flex-col border-l border-opacity-30 border-slate-100">
                 <For each={collapsedList()}>
                   {(item) => {
                     return (
@@ -241,7 +242,7 @@ export default function Sidebar() {
                   )
                 }}
               </For> */}
-              </div>
+              </Motion.div>
             </div>
           </div>
         </div>
