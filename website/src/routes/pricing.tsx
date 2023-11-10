@@ -148,7 +148,7 @@ export default function Pricing() {
                   setPlanChosen("yearly")
                 }}
               >
-                Yearly -20%
+                Yearly -11%
               </div>
             </div>
           </div>
