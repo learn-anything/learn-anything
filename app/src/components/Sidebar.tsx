@@ -170,12 +170,12 @@ export default function Sidebar() {
               Topics
             </div>
             <div class="h-screen">
-              <div class="pl-6 overflow-hidden opacity-70 flex flex-col gap-2 border-l border-opacity-30 border-slate-100">
+              <div class="pl-6 overflow-hidden opacity-70 flex flex-col border-l border-opacity-30 border-slate-100">
                 <For each={collapsedList()}>
                   {(item) => {
                     return (
                       <div
-                        class="flex cursor-pointer hover:bg-gray-200" // Add hover styling here
+                        // Add hover styling here
                         onClick={() => {
                           toggleCollapsed(item)
                           console.log(collapsed(), "collapsed")
@@ -187,24 +187,33 @@ export default function Sidebar() {
                             })
                           }
                         }}
+                        class={clsx(
+                          "flex cursor-pointer hover:bg-gray-200 hover:rounded-[6px]",
+                        )}
                       >
                         <div
                           style={{ "padding-left": `${item.depth * 10}px` }}
                           class={clsx(
-                            "",
+                            "flex cursor-pointer  p-1 ",
                             item.type !== "directory" && "ml-[24px]",
+                            item.depth > 0 &&
+                              "border-l-[0.1px] border-black border-opacity-60",
                           )}
                         >
-                          <Show when={item.type === "directory"}>
-                            <Show
-                              when={!collapsed().has(item)}
-                              fallback={<Icon name={"ArrowRight"} />}
-                            >
-                              <Icon name={"ArrowDown"} />
+                          <div>
+                            <Show when={item.type === "directory"}>
+                              <Show
+                                when={!collapsed().has(item)}
+                                fallback={<Icon name={"ArrowRight"} />}
+                              >
+                                <Icon name={"ArrowDown"} />
+                              </Show>
                             </Show>
-                          </Show>
+                          </div>
+                          <div class="flex items-center justify-center">
+                            {item.name}
+                          </div>
                         </div>
-                        <div>{item.name}</div>
                       </div>
                     )
                   }}
