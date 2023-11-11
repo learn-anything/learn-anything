@@ -4,6 +4,7 @@ import { useUser } from "../GlobalContext/user"
 import Icon from "./Icon"
 import clsx from "clsx"
 import { Motion } from "@motionone/solid"
+import Tooltip from "./Tooltip"
 
 type TreeContent = TreeDirectory | TreeFile
 
@@ -154,7 +155,9 @@ export default function Sidebar() {
                 user.setMode("Settings")
               }}
             >
-              <Icon name="Settings" />
+              <Tooltip label="Settings">
+                <Icon name="Settings" />
+              </Tooltip>
             </div>
           </div>
         </div>
