@@ -1,10 +1,10 @@
 import { Show, createMemo, createResource } from "solid-js"
 import { useNavigate } from "solid-start"
 import { getHankoCookie } from "@la/shared/lib"
-import { useGlobalState } from "../GlobalContext/global.ts"
+import { useGlobalState } from "../GlobalContext/global"
 import { ui } from "@la/shared"
 import { logUntracked } from "../lib/baselime"
-import { getRandomItem } from "../lib/lib.ts"
+import { getRandomItem } from "../lib/lib"
 
 export default function Home() {
   const navigate = useNavigate()

@@ -1,5 +1,5 @@
 {
-  "include": ["src", "../solid.d.ts"],
+  "include": ["**/*.ts", "../solid.d.ts", "**/*.tsx"],
   "compilerOptions": {
     // lib
     "module": "ESNext",
@@ -20,6 +20,6 @@
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
     // build
-    "noEmit": true
-  }
+    "noEmit": true,
+  },
 }

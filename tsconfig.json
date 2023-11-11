@@ -20,5 +20,6 @@
     "paths": {
       "@grafbase/generated": ["./grafbase/generated"]
     }
-  }
+  },
+  "include": ["**/*.ts", "**/*.tsx"]
 }

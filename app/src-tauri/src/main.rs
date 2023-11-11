@@ -27,25 +27,28 @@ fn main() {
     // Unfortuenetly getting it is pretty ugly without access to sth that implements `Manager`.
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_sql::Builder::default().build())
         .setup(|app| {
             let handle = app.handle();
             tauri_plugin_deep_link::register("learn-anything", move |request| {
                 dbg!(&request);
                 // Parse the URL
                 if let Ok(url) = Url::parse(&request) {
-                    // Get the path and query string
+                    // Get path and query string
                     let path = url.path();
                     let query = url.query();
 
-                    // Parse the query string into a HashMap
+                    // Parse query string into a HashMap
                     if let Some(query) = query {
                         if let Ok(params) =
                             serde_urlencoded::from_str::<HashMap<String, String>>(query)
                         {
-                            // Emit an event with the query parameters
-                            handle
-                                .emit_all("signed-in-token-and-email", (path, params))
-                                .unwrap();
+                            handle.emit_all("signed-in-token", (path, params)).unwrap();
+                            // TODO: commented as in theory its best to also send the email to the app
+                            // for now only token is sent
+                            // handle
+                            //     .emit_all("signed-in-token-and-email", (path, params))
+                            //     .unwrap();
                         }
                     }
                 } else {

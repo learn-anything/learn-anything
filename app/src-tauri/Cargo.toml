@@ -20,6 +20,12 @@ log_macro = "0.1.6"
 tauri-plugin-deep-link = "0.1.2"
 url = "2.2.2"
 serde_urlencoded = "0.7.0"
+tauri-plugin-fs-watch = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
+
+[dependencies.tauri-plugin-sql]
+git = "https://github.com/tauri-apps/plugins-workspace"
+branch = "v1"
+features = ["sqlite"]
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem

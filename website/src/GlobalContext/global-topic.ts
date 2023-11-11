@@ -157,7 +157,13 @@ export default function createGlobalTopic(
     // only run effect on /topic pages
     const topicName = extractTopicFromPath(location.pathname)
     if (!topicName) return
-    if (topicName === "profile" || topicName === "pricing") return
+    // TODO: not scaleable, fix it
+    if (
+      topicName === "profile" ||
+      topicName === "pricing" ||
+      topicName === "desktop-login"
+    )
+      return
     setGlobalTopic("name", location.pathname.slice(1))
 
     let verifiedTopic = false
