@@ -167,7 +167,7 @@ export default function Profile() {
   const user = useUser()
   const mobius = useMobius()
   const navigate = useNavigate()
-  const [currentTab, setCurrentTab] = createSignal("ToLearn")
+  const [currentTab, setCurrentTab] = createSignal("Learning")
   const [showAddLinkModal, setShowAddLinkModal] = createSignal(false)
   const [showHelpModal, setShowHelpModal] = createSignal(false)
   const [showFilter, setShowFilter] = createSignal(false)
@@ -345,19 +345,6 @@ export default function Profile() {
             <div class="flex justify-between items-center text-[#696969] ">
               <div class="w-full flex text-[#696969] text-[14px] gap-4">
                 <div
-                  id="ToLearn"
-                  class={clsx(
-                    "p-2 cursor-pointer border-b border-inherit",
-                    currentTab() === "ToLearn" &&
-                      " border-black text-black dark:text-white dark:border-white font-bold"
-                  )}
-                  onClick={() => {
-                    setCurrentTab("ToLearn")
-                  }}
-                >
-                  To Learn
-                </div>
-                <div
                   id="Learning"
                   class={clsx(
                     "p-2 cursor-pointer border-b border-inherit",
@@ -369,6 +356,19 @@ export default function Profile() {
                   }}
                 >
                   Learning
+                </div>
+                <div
+                  id="ToLearn"
+                  class={clsx(
+                    "p-2 cursor-pointer border-b border-inherit",
+                    currentTab() === "ToLearn" &&
+                      " border-black text-black dark:text-white dark:border-white font-bold"
+                  )}
+                  onClick={() => {
+                    setCurrentTab("ToLearn")
+                  }}
+                >
+                  To Learn
                 </div>
                 <div
                   id="Learned"

@@ -14,7 +14,6 @@ import SearchModal from "./components/SearchModal"
 import Sidebar from "./components/Sidebar"
 import Database from "tauri-plugin-sql-api"
 
-// learn-anything://open-in-desktop/login?email=email@gmail.com&token=M1BFT5
 export default function App() {
   const user = createUserState()
   const wiki = createWikiState()
