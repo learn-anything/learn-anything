@@ -6,7 +6,6 @@ import { onMount } from "solid-js"
 
 export default function DesktopLogin() {
   onMount(async () => {
-    return
     const cookieToken = getHankoCookie()
     const url = `learn-anything://open-in-desktop/login?hankoToken=${cookieToken}`
     window.open(url, "_blank")
