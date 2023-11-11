@@ -78,7 +78,7 @@ export default function App() {
                       global.state.currentlyOpenFile
                     }
                   >
-                    <div class="h-full">
+                    <div class="h-full overflow-auto">
                       <div class="absolute bottom-1 right-1 py-2 px-4 text-lg">
                         <FancyButton
                           onClick={() => {

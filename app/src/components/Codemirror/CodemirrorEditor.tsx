@@ -91,7 +91,7 @@ export function CodemirrorEditor() {
       <div
         ref={editorRef}
         class="dark:bg-neutral-900 bg-white flex flex-col gap-4 py-10 pr-10 pl-2 h-full overflow-scroll"
-        style={{ width: "78%" }}
+        style={{ width: "100%" }}
       />
     </>
   )
