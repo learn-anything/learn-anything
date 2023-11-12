@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@edgedb/generate": "^0.4.1",
-    "@grafbase/sdk": "~0.7.2",
+    "@grafbase/sdk": "^0.9.1",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
     "@typescript-eslint/parser": "^6.10.0",
     "bun-types": "^1.0.10",
