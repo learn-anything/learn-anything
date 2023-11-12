@@ -1,5 +1,4 @@
 import { useGlobalState } from "../../GlobalContext/global"
-import { css } from "solid-styled"
 import { createEffect } from "solid-js"
 import { createCodeMirror } from "./createCodeMirror"
 import * as scheduled from "@solid-primitives/scheduled"
@@ -70,24 +69,26 @@ export function CodemirrorEditor() {
     })
   })
 
-  css`
-    .cm-editor {
-      height: 100%;
-    }
-    ::-webkit-scrollbar {
-      display: none;
-    }
-    .cm-line {
-      text-align: start !important;
-      padding: 0 !important;
-    }
-    .cm-focused {
-      outline: none !important;
-    }
-  `
-
   return (
     <>
+      {/* TODO: can this be done with https://github.com/lxsmnsyc/solid-styled? should it? when i tried it, no styles got applied */}
+      <style>
+        {`
+        .cm-editor {
+          height: 100%;
+        }
+        ::-webkit-scrollbar {
+          display: none;
+      }
+        .cm-line {
+          text-align: start !important;
+          padding: 0 !important;
+        }
+        .cm-focused {
+          outline: none !important;
+        }
+        `}
+      </style>
       <div
         ref={editorRef}
         class="dark:bg-neutral-900 bg-white flex flex-col gap-4 py-10 pr-10 pl-2 h-full overflow-scroll"
