@@ -1,8 +1,18 @@
 import solid from "vite-plugin-solid"
+import solidStyled from "vite-plugin-solid-styled"
 import { defineConfig } from "vite"
 
 export default defineConfig({
-  plugins: [solid() as any],
+  plugins: [
+    solid() as any,
+    solidStyled({
+      prefix: "my-prefix", // optional
+      filter: {
+        include: "src/**/*.{ts,js,tsx,jsx}",
+        exclude: "node_modules/**/*.{ts,js,tsx,jsx}",
+      },
+    }),
+  ],
   // prevent vite from obscuring rust errors
   clearScreen: false,
   // tauri expects a fixed port, fail if that port is not available

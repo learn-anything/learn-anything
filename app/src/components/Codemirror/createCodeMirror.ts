@@ -8,7 +8,7 @@ import {
 } from "solid-js"
 import { EditorView, ViewUpdate } from "@codemirror/view"
 import { EditorState, Extension, Transaction } from "@codemirror/state"
-import { createCompartmentExtension as coreCreateCompartmentExtension } from "./createCompartmentExtension.ts"
+import { createCompartmentExtension as coreCreateCompartmentExtension } from "./createCompartmentExtension"
 
 // modified from https://github.com/riccardoperra/solid-codemirror
 export interface CreateCodeMirrorProps {
@@ -48,7 +48,6 @@ export function createCodeMirror(props?: CreateCodeMirrorProps) {
     (vu) => props?.onModelViewUpdate?.(vu),
   )
 
-  // eslint-disable-next-line solid/reactivity
   localCreateCompartmentExtension(updateListener)
 
   createEffect(
