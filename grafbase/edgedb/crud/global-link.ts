@@ -59,10 +59,10 @@ export async function getGlobalLink(id: string) {
       filter_single: { id: id },
       title: true,
       url: true,
-      fullUrl: true,
-      protocol: true,
       verified: true,
       public: true,
+      protocol: true,
+      fullUrl: true,
       description: true,
       urlTitle: true,
       year: true
@@ -347,7 +347,7 @@ export async function addPersonalLink(
   url: string,
   title: string,
   hankoId: string,
-  description?: string
+  description: string | null
 ) {
   const [urlWithoutProtocol, protocol] = splitUrlByProtocol(url)
   if (urlWithoutProtocol && protocol) {

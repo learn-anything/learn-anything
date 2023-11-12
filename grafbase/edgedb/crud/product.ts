@@ -3,10 +3,10 @@ import e from "../dbschema/edgeql-js"
 
 export type Product = {
   name: string
-  description?: string
-  imageUrl?: string
-  websiteUrl?: string
-  priceInUsd?: number
+  description: string | null
+  imageUrl: string | null
+  websiteUrl: string | null
+  priceInUsdCents?: number
 }
 
 export async function createProduct(hankoId: string, product: Product) {
@@ -16,7 +16,7 @@ export async function createProduct(hankoId: string, product: Product) {
       description: product.description,
       imageUrl: product.imageUrl,
       websiteUrl: product.websiteUrl,
-      priceInUsd: product.priceInUsd
+      priceInUsdCents: product.priceInUsdCents
     })
     .run(client)
 }

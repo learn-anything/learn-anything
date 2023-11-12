@@ -1,21 +1,25 @@
-import { hankoIdFromToken } from "../lib/hanko-validate"
-import { getAllGlobalLinks } from "../edgedb/crud/global-link"
-import { Context } from "@grafbase/sdk"
+import { Resolver } from "@grafbase/generated"
 import { GraphQLError } from "graphql"
+import { getAllGlobalLinks } from "../edgedb/crud/global-link"
+import { hankoIdFromToken } from "../lib/hanko-validate"
 
-export default async function getGLobalLinksResolver(
-  root: any,
-  args: any,
-  context: Context
-) {
+// TODO: not sure
+// @ts-ignore
+const getGLobalLinksResolver: Resolver["Query.getGlobalLinks"] = async (
+  parent,
+  args,
+  context,
+  info
+) => {
   try {
     const hankoId = await hankoIdFromToken(context)
     if (hankoId) {
-      const links = await getAllGlobalLinks()
-      return links
+      return await getAllGlobalLinks()
+    } else {
+      throw new GraphQLError("Missing or invalid Authorization header")
     }
   } catch (err) {
-    console.error(err, { args })
+    console.error(err)
     throw new GraphQLError(JSON.stringify(err))
   }
 }

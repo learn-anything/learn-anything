@@ -1,4 +1,4 @@
-import { Context } from "@grafbase/sdk"
+import { Resolver } from "@grafbase/generated"
 import { GraphQLError } from "graphql"
 import { hankoIdFromToken } from "../lib/hanko-validate"
 
@@ -6,11 +6,12 @@ import { hankoIdFromToken } from "../lib/hanko-validate"
 // TODO: in future, do call to db and check if we have a url like this
 // if yes, fill it with details we do have or at least let users pick the details
 // essentially check if it's a GlobalLink already + more
-export default async function checkUrlResolver(
-  root: any,
-  args: { linkUrl: string },
-  context: Context
-) {
+const checkUrlResolver: Resolver["Query.checkUrl"] = async (
+  parent,
+  args,
+  context,
+  info
+) => {
   try {
     const hankoId = await hankoIdFromToken(context)
     if (hankoId) {
@@ -35,9 +36,11 @@ export default async function checkUrlResolver(
         console.error("Title not found", args.linkUrl)
         throw new GraphQLError("Title not found")
       }
+    } else {
+      throw new GraphQLError("Missing or invalid Authorization header")
     }
   } catch (err) {
-    console.error(err, { args })
+    console.error(err)
     throw new GraphQLError(JSON.stringify(err))
   }
 }

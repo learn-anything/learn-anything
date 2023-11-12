@@ -1,4 +1,4 @@
-import { Context } from "@grafbase/sdk"
+import { Resolver } from "@grafbase/generated"
 import { GraphQLError } from "graphql"
 import Stripe from "stripe"
 import { hankoIdFromToken } from "../lib/hanko-validate"
@@ -8,16 +8,17 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   typescript: true
 })
 
-type StripePlan = "month" | "year"
-
-export default async function StripeResolver(
-  root: any,
-  args: { plan: StripePlan; userEmail: string },
-  context: Context
-) {
-  const hankoId = await hankoIdFromToken(context)
-  if (hankoId) {
-    try {
+// TODO:
+// @ts-ignore
+const StripeResolver: Resolver["Query.stripe"] = async (
+  parent,
+  args,
+  context,
+  info
+) => {
+  try {
+    const hankoId = await hankoIdFromToken(context)
+    if (hankoId) {
       switch (args.plan) {
         case "month":
           const monthSubscription = await stripe.checkout.sessions.create({
@@ -54,12 +55,11 @@ export default async function StripeResolver(
             stripeCheckoutUrl: null
           }
       }
-    } catch (err) {
-      console.error(err, { args })
-      throw new GraphQLError(JSON.stringify(err))
+    } else {
+      throw new GraphQLError("Missing or invalid Authorization header")
     }
-  } else {
-    console.error("not a member", { args })
-    throw new GraphQLError("not member")
+  } catch (err) {
+    console.error(err)
+    throw new GraphQLError(JSON.stringify(err))
   }
 }

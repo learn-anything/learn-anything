@@ -50,9 +50,9 @@ const GlobalLink = g.type("GlobalLink", {
   id: g.string(),
   title: g.string(),
   url: g.string(),
-  protocol: g.string(),
   year: g.string().optional(),
-  description: g.string().optional()
+  protocol: g.string()
+  // description: g.string().optional()
 })
 const globalGuideSection = g.type("globalGuideSection", {
   title: g.string(),
@@ -171,7 +171,7 @@ g.query("getGlobalLink", {
       url: g.string(),
       verified: g.boolean(),
       public: g.boolean(),
-      protocol: g.string().optional(),
+      protocol: g.string(),
       fullUrl: g.string().optional(),
       description: g.string().optional(),
       urlTitle: g.string().optional(),
@@ -243,7 +243,7 @@ g.mutation("createProduct", {
     description: g.string().optional(),
     imageUrl: g.string().optional(),
     websiteUrl: g.string().optional(),
-    priceInUsd: g.float().optional()
+    priceInUsdCents: g.int().optional()
   },
   returns: g.string(),
   resolver: "createProduct"
@@ -277,6 +277,7 @@ const linkAction = g.enum("linkAction", [
   "complete",
   "uncomplete"
 ])
+// TODO: should not have Resolver in name
 g.mutation("updateLinkStatusResolver", {
   args: { linkId: g.string(), action: g.enumRef(linkAction) },
   returns: g.string(),

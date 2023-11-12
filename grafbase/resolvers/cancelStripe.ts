@@ -1,22 +1,23 @@
-import Stripe from "stripe"
-import { hankoIdFromToken } from "../lib/hanko-validate"
-import { Context } from "@grafbase/sdk"
+import { Resolver } from "@grafbase/generated"
 import { GraphQLError } from "graphql"
+import Stripe from "stripe"
 import { updateUserStoppedSubscription } from "../edgedb/crud/user"
+import { hankoIdFromToken } from "../lib/hanko-validate"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16",
   typescript: true
 })
 
-export default async function cancelStripeResolver(
-  root: any,
-  args: {},
-  context: Context
-) {
-  const hankoId = await hankoIdFromToken(context)
-  if (hankoId) {
-    try {
+const cancelStripeResolver: Resolver["Mutation.cancelStripe"] = async (
+  parent,
+  args,
+  context,
+  info
+) => {
+  try {
+    const hankoId = await hankoIdFromToken(context)
+    if (hankoId) {
       const stripeSubscriptionObjectId =
         await updateUserStoppedSubscription(hankoId)
       await stripe.subscriptions.update(
@@ -27,9 +28,11 @@ export default async function cancelStripeResolver(
         }
       )
       return "ok"
-    } catch (err) {
-      console.error(err)
-      throw new GraphQLError(JSON.stringify(err))
+    } else {
+      throw new GraphQLError("Missing or invalid Authorization header")
     }
+  } catch (err) {
+    console.error(err)
+    throw new GraphQLError(JSON.stringify(err))
   }
 }

@@ -7,3 +7,4 @@
   - The goal of the repo is to be truly easily hackable and extendable. Any part of the code should be understandable, easily runnable locally. And easily understandable through clear code / great docs.
   - The goal always is, UX first and foremost. Then DX. With focus on great UX and way technology stack was picked, you can achieve fastest UI/server responses/latencies without sacrificing DX in any way.
   - That means strong typing, avoiding or no `any` in the code. Everything is typed well.
+- Make it work first, above all. Can optimise later if needed. Iteration speed is most important.
