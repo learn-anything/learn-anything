@@ -1,13 +1,15 @@
-import { Show, onMount } from "solid-js"
+import { FancyButton, ModalWithMessageAndButton } from "@la/shared/ui"
 import { listen } from "@tauri-apps/api/event"
-import Sidebar from "./components/Sidebar"
-import { useGlobalState } from "./GlobalContext/global"
-import { FancyButton } from "@la/shared/ui"
-import { CodemirrorEditor } from "./components/Codemirror/CodemirrorEditor"
+import { open } from "@tauri-apps/api/shell"
 import { invoke } from "@tauri-apps/api/tauri"
+import { Show, onMount } from "solid-js"
+import { useGlobalState } from "./GlobalContext/global"
 import { useUser } from "./GlobalContext/user"
-import SearchModal from "./components/SearchModal"
 import { useWiki } from "./GlobalContext/wiki"
+import { CodemirrorEditor } from "./components/Codemirror/CodemirrorEditor"
+import SearchModal from "./components/SearchModal"
+import Sidebar from "./components/Sidebar"
+import { isLoggedIn } from "../lib/lib"
 
 export default function App() {
   const global = useGlobalState()
@@ -35,6 +37,7 @@ export default function App() {
         // due to: Localstorage is not a guarantee that you have absolute persistence And the OS can always decide to prune ANY localstorage, and even cookies
         const hankoToken = params.hankoToken
         localStorage.setItem("hanko", hankoToken)
+        global.set("showModal", "")
       }
     })
   })
@@ -55,12 +58,8 @@ export default function App() {
               <div class="absolute bottom-1 right-1 py-2 px-4 text-lg">
                 <FancyButton
                   onClick={async () => {
-                    return
-                    const loggedIn = localStorage.getItem("hanko")
-                    // TODO: should also check if token is valid or maybe do it later time but need to do it
-                    if (!loggedIn) {
-                      await open(import.meta.env.VITE_LA_DESKTOP_SIGNIN_URL)
-                    }
+                    const loggedIn = isLoggedIn()
+                    console.log(loggedIn, "logged in")
                   }}
                 >
                   Publish
@@ -97,6 +96,21 @@ export default function App() {
               items={wiki.wiki.topics}
               action={() => {}}
               searchPlaceholder="Search Topics"
+            />
+          </Show>
+          <Show when={global.state.showModal === "needToLoginInstructions"}>
+            <ModalWithMessageAndButton
+              // TODO: maybe have submessage? or have `message` accept solid JSX so you can have paragraphs?
+              message={
+                "Press the button below to login with browser. If you're already logged in to learn-anything.xyz, it will automatically redirect you to desktop. You might need to accept a pop up window to go back to desktop. If not logged in, you will need to login in browser first then it will prompt you to go back."
+              }
+              buttonText="Login"
+              buttonAction={async () => {
+                await open(import.meta.env.VITE_LA_DESKTOP_SIGNIN_URL)
+              }}
+              onClose={() => {
+                global.set("showModal", "")
+              }}
             />
           </Show>
         </div>

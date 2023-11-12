@@ -3,18 +3,20 @@
 
 import { getHankoCookie } from "@la/shared/lib"
 import { onMount } from "solid-js"
+import { useNavigate } from "solid-start"
 
 export default function DesktopLogin() {
+  const navigate = useNavigate()
+
   onMount(async () => {
-    return
     const cookieToken = getHankoCookie()
     if (cookieToken) {
       const url = `learn-anything://open-in-desktop/login?hankoToken=${cookieToken}`
       window.open(url, "_blank")
+      navigate("/")
     } else {
-      // TODO:
-      // do auth process but after that auth process, instantly go to /desktop-login to get the auth session cookie inside desktop
-      // and the existing page should go to landing page
+      localStorage.setItem("pageBeforeSignIn", location.pathname)
+      navigate("/auth")
     }
   })
   return <></>

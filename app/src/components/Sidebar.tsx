@@ -153,6 +153,7 @@ export default function Sidebar() {
               class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
               onClick={() => {
                 // user.setMode("Settings")
+                console.log("run")
                 global.set("showModal", "needToLoginInstructions")
               }}
             >

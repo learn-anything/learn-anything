@@ -29,7 +29,7 @@ export default async function addGlobalLinkToSection(
 }
 
 // const addGlobalLinkToSectionResolver: Resolver["Mutation.internalAddGlobalLinkToSection"] =
-//   async (parent, args, { kv }, info) => {
+//   async (parent, args, context, info) => {
 //     try {
 //       const authHeader = context.request.headers["authorization"]
 //       if (!authHeader || !authHeader.startsWith("Bearer ")) {

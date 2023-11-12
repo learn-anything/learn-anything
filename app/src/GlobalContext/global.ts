@@ -11,7 +11,7 @@ type GlobalState = {
   localFolderPath: string
   files: File[]
   currentlyOpenFile?: File
-  showModal: string
+  showModal: "" | "needToLoginInstructions"
 }
 
 export function createGlobalState() {
