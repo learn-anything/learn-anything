@@ -55,6 +55,7 @@ export function createCodeMirror(props?: CreateCodeMirrorProps) {
       const state = EditorState.create({ doc: props?.value ?? "" })
       const currentView = new EditorView({
         state,
+        // TODO: does not work https://discuss.codemirror.net/t/linewrapping-true-fails-with-ts-error-and-does-not-work/7408/5
         extensions: [EditorView.lineWrapping],
         parent: ref,
         // Replace the old `updateListenerExtension`
