@@ -33,7 +33,7 @@ export default async function updateTopicLearningStatusResolver(
       }
     }
   } catch (err) {
-    console.error(err, { args })
+    console.error(err)
     throw new GraphQLError(JSON.stringify(err))
   }
 }

@@ -74,12 +74,18 @@ export function CodemirrorEditor() {
       {/* TODO: can this be done with https://github.com/lxsmnsyc/solid-styled? should it? when i tried it, no styles got applied */}
       <style>
         {`
+        @media (prefers-color-scheme: dark) {
+          // TODO: does not work https://discuss.codemirror.net/t/codemirror-cursor-class-does-not-work-in-safari/7409/2
+          .cm-cursor {
+            color: white;
+          }
+        }
         .cm-editor {
           height: 100%;
         }
         ::-webkit-scrollbar {
           display: none;
-      }
+        }
         .cm-line {
           text-align: start !important;
           padding: 0 !important;
