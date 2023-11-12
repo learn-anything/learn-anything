@@ -2,7 +2,8 @@ import { config, g } from "@grafbase/sdk"
 export default config({
   schema: g,
   experimental: {
-    kv: true
+    kv: true,
+    codegen: true
   },
   auth: {
     rules: (rules) => {

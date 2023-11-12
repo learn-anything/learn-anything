@@ -41,9 +41,8 @@ export type Schema = {
     id: string;
     title: string;
     url: string;
-    protocol: string;
     year: string | null;
-    description: string | null;
+    protocol: string;
   };
   'globalGuideSection': {
     __typename?: 'globalGuideSection';
@@ -121,7 +120,7 @@ export type Schema = {
     url: string;
     verified: boolean;
     public: boolean;
-    protocol: string | null;
+    protocol: string;
     fullUrl: string | null;
     description: string | null;
     urlTitle: string | null;
@@ -195,7 +194,7 @@ export type Resolver = {
   'Query.getStripeDashboard': ResolverFn<Schema['Query'], {  }, string>
   'Query.stripe': ResolverFn<Schema['Query'], { plan: string, userEmail: string,  }, string>
   'Mutation.createUser': ResolverFn<Schema['Mutation'], { email: string,  }, string>
-  'Mutation.createProduct': ResolverFn<Schema['Mutation'], { name: string, description: string | null, imageUrl: string | null, websiteUrl: string | null, priceInUsd: number | null,  }, string>
+  'Mutation.createProduct': ResolverFn<Schema['Mutation'], { name: string, description: string | null, imageUrl: string | null, websiteUrl: string | null, priceInUsdCents: number | null,  }, string>
   'Mutation.deletePersonalLink': ResolverFn<Schema['Mutation'], { personalLinkId: string,  }, string>
   'Mutation.updateTopicLearningStatus': ResolverFn<Schema['Mutation'], { learningStatus: Schema['learningStatus'], topicName: string, verifiedTopic: boolean,  }, string>
   'Mutation.updateLinkStatusResolver': ResolverFn<Schema['Mutation'], { linkId: string, action: Schema['linkAction'],  }, string>

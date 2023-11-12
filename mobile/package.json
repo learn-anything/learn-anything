@@ -5,22 +5,22 @@
   "scripts": {},
   "dependencies": {
     "@nativescript-community/solid-js": "^0.0.4-alpha.5",
-    "@nativescript/core": "~8.5.9",
+    "@nativescript/core": "~8.6.1",
     "@nativescript/theme": "~3.0.2",
     "dominative": "^0.0.9-alpha.4",
-    "solid-js": "^1.7.11",
+    "solid-js": "^1.8.5",
     "undom-ng": "^1.0.10"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.15",
-    "@babel/preset-env": "^7.22.15",
+    "@babel/core": "^7.23.3",
+    "@babel/preset-env": "^7.23.3",
     "@nativescript/ios": "8.6.3",
     "@nativescript/preview-cli": "1.0.5",
     "@nativescript/stackblitz": "0.0.8",
-    "@nativescript/webpack": "~5.0.17",
+    "@nativescript/webpack": "~5.0.18",
     "babel": "^6.23.0",
     "babel-loader": "^9.1.3",
-    "babel-preset-solid": "^1.7.7",
+    "babel-preset-solid": "^1.8.4",
     "solid-refresh": "^0.5.3"
   }
 }
