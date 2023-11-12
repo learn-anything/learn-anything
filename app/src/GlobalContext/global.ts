@@ -11,12 +11,14 @@ type GlobalState = {
   localFolderPath: string
   files: File[]
   currentlyOpenFile?: File
+  showModal: string
 }
 
 export function createGlobalState() {
   const [state, setState] = createStore<GlobalState>({
     localFolderPath: "",
     files: [],
+    showModal: "",
   })
 
   onMount(async () => {

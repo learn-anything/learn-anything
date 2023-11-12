@@ -3,6 +3,7 @@ import { useGlobalState } from "../GlobalContext/global"
 import { useUser } from "../GlobalContext/user"
 import Icon from "./Icon"
 import clsx from "clsx"
+// @ts-ignore
 import { Motion } from "@motionone/solid"
 import Tooltip from "./Tooltip"
 
@@ -129,7 +130,7 @@ export default function Sidebar() {
       >
         <div class="flex w-18 dark:bg-[#1e1e1e] bg-white flex-col justify-between items-center font-semibold p-2 py-4 border-r-2 border-opacity-20 border-slate-400">
           <div
-            class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
+            class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer mt-4"
             onClick={() => {
               // TODO: show modal of settings like in obsidian
               // user.setMode("Settings")
@@ -148,6 +149,19 @@ export default function Sidebar() {
             >
               <Icon name="UserProfile" />
             </div> */}
+            <div
+              class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
+              onClick={() => {
+                // user.setMode("Settings")
+                global.set("showModal", "needToLoginInstructions")
+              }}
+            >
+              <Tooltip
+                label={localStorage.getItem("hanko") ? "Profile" : "Sign In"}
+              >
+                <Icon name="UserProfile" />
+              </Tooltip>
+            </div>
             <div
               class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
               onClick={() => {
@@ -181,7 +195,6 @@ export default function Sidebar() {
                         // Add hover styling here
                         onClick={() => {
                           toggleCollapsed(item)
-                          console.log(collapsed(), "collapsed")
                           if (item.type === "file") {
                             global.set({
                               currentlyOpenFile: global.state.files.find(

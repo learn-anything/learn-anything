@@ -22,6 +22,8 @@ module default {
     displayName: str;
     # aws s3 or cloudflare r2 url with image
     profileImage: str;
+    # limit to actions non member user can do
+    freeActions: int16;
     # user owns one wiki
     link wiki := .<user[is Wiki];
     # topics user wants to learn
@@ -64,7 +66,7 @@ module default {
     description: str;
     imageUrl: str;
     websiteUrl: str;
-    priceInUsd: float32;
+    priceInUsdCents: int16;
   }
   type Wiki {
     # owner of this wiki
