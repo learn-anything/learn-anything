@@ -1,8 +1,5 @@
-import { useGlobalState } from "../src/GlobalContext/global"
-
 // TODO: should also check if token is valid or maybe do it later time but need to do it
-export function isLoggedIn() {
-  const global = useGlobalState()
+export function isLoggedIn(global: any) {
   if (localStorage.getItem("hanko")) {
     return true
   }

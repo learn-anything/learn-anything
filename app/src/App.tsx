@@ -58,7 +58,7 @@ export default function App() {
               <div class="absolute bottom-1 right-1 py-2 px-4 text-lg">
                 <FancyButton
                   onClick={async () => {
-                    const loggedIn = isLoggedIn()
+                    const loggedIn = isLoggedIn(global)
                     console.log(loggedIn, "logged in")
                   }}
                 >
@@ -106,6 +106,13 @@ export default function App() {
               }
               buttonText="Login"
               buttonAction={async () => {
+                if (import.meta.env.VITE_LOCAL) {
+                  localStorage.setItem(
+                    "hanko",
+                    import.meta.env.VITE_HANKO_TOKEN,
+                  )
+                  return
+                }
                 await open(import.meta.env.VITE_LA_DESKTOP_SIGNIN_URL)
               }}
               onClose={() => {

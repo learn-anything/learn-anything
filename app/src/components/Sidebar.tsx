@@ -6,6 +6,7 @@ import clsx from "clsx"
 // @ts-ignore
 import { Motion } from "@motionone/solid"
 import Tooltip from "./Tooltip"
+import { isLoggedIn } from "../../lib/lib"
 
 type TreeContent = TreeDirectory | TreeFile
 
@@ -140,21 +141,11 @@ export default function Sidebar() {
           </div>
           <div class="p-1 px-2 rounded-md"></div>
           <div class="flex flex-col items-center gap-3">
-            {/* <div
-              class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
-              onClick={() => {
-                // TODO: fix sign in
-                // user.setShowSignIn(true)
-              }}
-            >
-              <Icon name="UserProfile" />
-            </div> */}
             <div
               class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
               onClick={() => {
-                // user.setMode("Settings")
-                console.log("run")
-                global.set("showModal", "needToLoginInstructions")
+                const loggedIn = isLoggedIn(global)
+                console.log(loggedIn, "logged in")
               }}
             >
               <Tooltip
