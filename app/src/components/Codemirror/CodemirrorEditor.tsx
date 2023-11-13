@@ -75,7 +75,8 @@ export function CodemirrorEditor() {
       <style>
         {`
         @media (prefers-color-scheme: dark) {
-          // TODO: does not work https://discuss.codemirror.net/t/codemirror-cursor-class-does-not-work-in-safari/7409/2
+          // TODO: does not work https://discuss.codemirror.net/t/codemirror-cursor-class-does-not-work-in-safari/7409/3
+          // need to have to add another selector for your rule to override the default theme (https://codemirror.net/examples/styling/)
           .cm-cursor {
             color: white;
           }

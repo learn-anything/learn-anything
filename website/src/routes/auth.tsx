@@ -48,18 +48,15 @@ export default function SignInPage() {
     document,
     "hankoAuthSuccess",
     async () => {
-      console.log("success..")
       const userClient = new UserClient(import.meta.env.VITE_HANKO_API, {
         timeout: 0,
         cookieName: "hanko",
         localStorageKey: "hanko"
       })
-      console.log(userClient, "user client")
       const user = await userClient.getCurrent()
       const email = user.email
 
       const hankoCookie = await getHankoCookie()
-      console.log(hankoCookie, "hanko")
       // doing this so that below GraphQL query can work, it supplies `mobius` client with the hanko token
       signIn(hankoCookie)
 
