@@ -79,7 +79,12 @@ export default function App() {
             </div>
           </Show>
 
-          <Show when={!global.state.localFolderPath}>
+          <Show
+            when={
+              !global.state.localFolderPath &&
+              localStorage.getItem("localFolderPath") === null
+            }
+          >
             <div class="w-full h-full flex justify-center items-center flex-col gap-5">
               <div>
                 <FancyButton

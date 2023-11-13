@@ -43,18 +43,27 @@ export function Monaco() {
     1000,
   )
 
+  createEffect(() => {
+    console.log("updating the file")
+    if (global.state.currentlyOpenFile?.fileContent) {
+      scheduledFileUpdate(global.state.currentlyOpenFile?.fileContent)
+    }
+  })
+
   return (
-    <div class="w-full h-full overflow-y-auto fixed">
+    <div class="flex flex-col h-full overflow-auto">
       <MonacoEditor
         language={"markdown"}
-        onChange={() => {}}
+        onChange={(text) => {
+          global.set("currentlyOpenFile", "fileContent", text)
+        }}
         options={{
           padding: { top: 24 },
           minimap: { enabled: false },
           wordWrap: "on",
           lineNumbers: "off",
         }}
-        theme={"vs-dark"}
+        theme="vs-dark"
         value={global.state.currentlyOpenFile?.fileContent}
       />
     </div>

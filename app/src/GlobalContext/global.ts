@@ -38,6 +38,24 @@ export function createGlobalState() {
   })
 
   createEffect(() => {
+    if (state.files.length > 0) {
+      const openFile = localStorage.getItem("openFile")
+      if (openFile) {
+        setState(
+          "currentlyOpenFile",
+          state.files.find((file) => file.filePath === openFile),
+        )
+      }
+    }
+  })
+
+  createEffect(() => {
+    if (state.currentlyOpenFile) {
+      localStorage.setItem("openFile", state.currentlyOpenFile.filePath)
+    }
+  })
+
+  createEffect(() => {
     if (state.localFolderPath) {
       localStorage.setItem("localFolderPath", state.localFolderPath)
     }
