@@ -12,6 +12,7 @@ type GlobalState = {
   files: File[]
   currentlyOpenFile?: File
   showModal: "" | "needToLoginInstructions"
+  showBox: boolean
 }
 
 export function createGlobalState() {
@@ -19,6 +20,7 @@ export function createGlobalState() {
     localFolderPath: "",
     files: [],
     showModal: "",
+    showBox: false,
   })
 
   onMount(async () => {
@@ -27,6 +29,7 @@ export function createGlobalState() {
       const connectedFolder = await invoke("connect_folder_with_path", {
         path: localFolderPath,
       })
+
       setState("localFolderPath", localFolderPath)
       if (connectedFolder !== null) {
         // @ts-ignore
@@ -64,6 +67,9 @@ export function createGlobalState() {
   return {
     state,
     set: setState,
+    setShowBox: (boolean: boolean) => {
+      setState({ showBox: boolean })
+    },
   }
 }
 

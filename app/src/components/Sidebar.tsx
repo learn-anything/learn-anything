@@ -127,7 +127,7 @@ export default function Sidebar() {
     <>
       <div
         class=" flex h-full border-r-2 border-slate-400 border-opacity-20"
-        style={{ width: "25%", "min-width": "250px" }}
+        style={{ "min-width": "300px" }}
       >
         <div class="flex w-18 dark:bg-[#1e1e1e] bg-white flex-col justify-between items-center font-semibold p-2 py-4 border-r-2 border-opacity-20 border-slate-400">
           <div
@@ -196,7 +196,7 @@ export default function Sidebar() {
                           }
                         }}
                         class={clsx(
-                          "flex cursor-pointer hover:bg-gray-200 hover:rounded-[6px]",
+                          "flex cursor-pointer hover:bg-gray-200 dark:hover:bg-neutral-800 hover:rounded-[6px]",
                         )}
                       >
                         <div

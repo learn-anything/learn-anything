@@ -10,6 +10,9 @@ import { useWiki } from "./GlobalContext/wiki"
 import SearchModal from "./components/SearchModal"
 import Sidebar from "./components/Sidebar"
 import { Monaco } from "./components/Monaco/Monaco"
+import Modal from "./components/Modal"
+import clsx from "clsx"
+import Checkbox from "./components/checkbox"
 
 export default function App() {
   const global = useGlobalState()
@@ -44,7 +47,18 @@ export default function App() {
 
   return (
     <>
-      <div class="flex flex-col" style={{ width: "100vw", height: "100vh" }}>
+      <div class="flex flex-col " style={{ width: "100vw", height: "100vh" }}>
+        <Show when={user.user.mode === "Settings"}>
+          <Modal>
+            <div class="w-5/6 h-4/5 bg-white p-[24px] px-[30px] dark:bg-neutral-900 rounded-lg border-2 dark:border-neutral-700 border-slate-400">
+              <div class="text-[32px] font-bold">Settings</div>
+              <Checkbox
+                state={global.state.showBox}
+                setter={global.setShowBox}
+              />
+            </div>
+          </Modal>
+        </Show>
         <div class="flex h-full items-center dark:bg-[#1e1e1e] bg-white grow">
           <Show when={global.state.localFolderPath}>
             <Sidebar />
