@@ -33,6 +33,7 @@ If you're interested in the mission and like the project, join [Discord](https:/
 - [Run mobile app (NativeScript/Solid)](#run-mobile-app-nativescriptsolid)
 - [Contribute](#contribute) - contribute to project effectively
 - [Docs](#docs)
+- [Design](#design)
 - [Commands](#commands)
 
 Current tasks to do are in [GitHub issues](../../issues) (can [sort by priority](https://github.com/learn-anything/learn-anything.xyz/labels?q=priority)). Currently the issues are synced from [Linear](https://linear.app) but will be using [KusKus](https://github.com/kuskusapp/kuskus) instead soon.
@@ -256,6 +257,12 @@ It is advisable you read them, before you start developing anything as they prov
 There is big focus on documentation and clarity in the project. All code should be clear and understandable and well documented.
 
 Check [docs/dev-tips.md](docs/dev-tips.md) for some advice on development.
+
+## Design
+
+All design is done in [Figma](https://www.figma.com/file/cJbTJZLDUpz8QPI5Q9Etiu/LA?type=design&node-id=1%3A28&mode=design&t=jNI0kHbT31qr4rpm-1). There is also a [FigJam going over the software architecture](https://www.figma.com/file/GelB3DWCdjQ2tU4v3kbHOj/LA-architecture?type=whiteboard&node-id=0%3A1&t=nL3VXI1ztTo7ohmd-1) such as the [EdgeDB schema](grafbase/edgedb/dbschema/default.esdl).
+
+If you're designer and want to help out or have ideas, mention it on [Discord](https://discord.com/invite/bxtD8x6aNF).
 
 ## Commands
 

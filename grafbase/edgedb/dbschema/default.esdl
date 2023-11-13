@@ -6,6 +6,8 @@
 # PersonalTopic is part of user's PersonalWiki and only that user can edit it (at least for now)
 # being edited as we figure out how to best store personal user data and integrate it well
 # into the global knowledge graph that is LA
+# figjam going over the architecture:
+# https://www.figma.com/file/GelB3DWCdjQ2tU4v3kbHOj/LA-architecture?type=whiteboard&node-id=0%3A1&t=nL3VXI1ztTo7ohmd-1
 
 module default {
   type User {
