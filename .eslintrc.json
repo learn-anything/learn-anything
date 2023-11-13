@@ -29,7 +29,7 @@
       "warn",
       {
         "argsIgnorePattern": "^_|^info$|^context$|^parent$|^args$",
-        "varsIgnorePattern": "^_|Resolver$",
+        "varsIgnorePattern": "",
         "caughtErrorsIgnorePattern": "^_"
       }
     ],

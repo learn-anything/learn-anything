@@ -25,3 +25,5 @@ const createUserResolver: Resolver["Mutation.createUser"] = async (
     throw new GraphQLError(JSON.stringify(err))
   }
 }
+
+export default createUserResolver

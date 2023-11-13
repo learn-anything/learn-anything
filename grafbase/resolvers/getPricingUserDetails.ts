@@ -19,3 +19,5 @@ const getPricingUserDetailsResolver: Resolver["Query.getPricingUserDetails"] =
       throw new GraphQLError(JSON.stringify(err))
     }
   }
+
+export default getPricingUserDetailsResolver

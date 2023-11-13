@@ -13,3 +13,5 @@ const publicGetTopicsWithConnectionsResolver: Resolver["Query.publicGetTopicsWit
       throw new GraphQLError(JSON.stringify(err))
     }
   }
+
+export default publicGetTopicsWithConnectionsResolver

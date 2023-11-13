@@ -23,3 +23,5 @@ const getLikedLinksResolver: Resolver["Query.getLikedLinks"] = async (
     throw new GraphQLError(JSON.stringify(err))
   }
 }
+
+export default getLikedLinksResolver

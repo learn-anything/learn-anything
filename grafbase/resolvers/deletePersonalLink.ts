@@ -18,3 +18,5 @@ const deletePersonalLinkResolver: Resolver["Mutation.deletePersonalLink"] =
       throw new GraphQLError(JSON.stringify(err))
     }
   }
+
+export default deletePersonalLinkResolver

@@ -24,3 +24,5 @@ const updateGrafbaseKvResolver: Resolver["Mutation.internalUpdateGrafbaseKv"] =
       throw new GraphQLError(JSON.stringify(err))
     }
   }
+
+export default updateGrafbaseKvResolver

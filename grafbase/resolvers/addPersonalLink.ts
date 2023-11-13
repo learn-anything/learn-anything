@@ -22,3 +22,5 @@ const addPersonalLinkResolver: Resolver["Mutation.addPersonalLink"] = async (
     throw new GraphQLError(JSON.stringify(error))
   }
 }
+
+export default addPersonalLinkResolver

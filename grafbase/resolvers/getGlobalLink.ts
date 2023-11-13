@@ -23,3 +23,5 @@ const getGlobalLinkResolver: Resolver["Query.getGlobalLink"] = async (
     throw new GraphQLError(JSON.stringify(err))
   }
 }
+
+export default getGlobalLinkResolver

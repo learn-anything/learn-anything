@@ -20,3 +20,5 @@ const getGlobalTopicLearningStatusResolver: Resolver["Query.getGlobalTopicLearni
       throw new GraphQLError(JSON.stringify(err))
     }
   }
+
+export default getGlobalTopicLearningStatusResolver

@@ -44,3 +44,5 @@ const checkUrlResolver: Resolver["Query.checkUrl"] = async (
     throw new GraphQLError(JSON.stringify(err))
   }
 }
+
+export default checkUrlResolver

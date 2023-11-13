@@ -63,3 +63,5 @@ const StripeResolver: Resolver["Query.stripe"] = async (
     throw new GraphQLError(JSON.stringify(err))
   }
 }
+
+export default StripeResolver

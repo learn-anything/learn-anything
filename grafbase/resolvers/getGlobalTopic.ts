@@ -23,3 +23,5 @@ const getGlobalTopicResolver: Resolver["Query.getGlobalTopic"] = async (
     throw new GraphQLError(JSON.stringify(err))
   }
 }
+
+export default getGlobalTopicResolver

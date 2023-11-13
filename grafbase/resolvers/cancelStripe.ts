@@ -36,3 +36,5 @@ const cancelStripeResolver: Resolver["Mutation.cancelStripe"] = async (
     throw new GraphQLError(JSON.stringify(err))
   }
 }
+
+export default cancelStripeResolver

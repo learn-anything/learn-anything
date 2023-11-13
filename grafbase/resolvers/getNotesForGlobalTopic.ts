@@ -17,3 +17,5 @@ const getNotesForGlobalTopicResolver: Resolver["Query.getNotesForGlobalTopic"] =
       throw new GraphQLError(JSON.stringify(err))
     }
   }
+
+export default getNotesForGlobalTopicResolver

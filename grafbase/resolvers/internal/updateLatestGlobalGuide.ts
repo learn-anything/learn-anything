@@ -39,3 +39,5 @@ const updateLatestGlobalGuideResolver: Resolver["Mutation.internalUpdateLatestGl
       throw new GraphQLError(JSON.stringify(err))
     }
   }
+
+export default updateLatestGlobalGuideResolver

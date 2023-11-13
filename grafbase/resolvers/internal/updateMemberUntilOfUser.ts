@@ -27,3 +27,5 @@ const updateMemberUntilOfUserResolver: Resolver["Mutation.internalUpdateMemberUn
       throw new GraphQLError(JSON.stringify(err))
     }
   }
+
+export default updateMemberUntilOfUserResolver

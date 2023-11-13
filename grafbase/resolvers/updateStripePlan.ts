@@ -50,3 +50,5 @@ const updateStripePlanResolver: Resolver["Mutation.updateStripePlan"] = async (
     throw new GraphQLError(JSON.stringify(err))
   }
 }
+
+export default updateStripePlanResolver

@@ -23,3 +23,5 @@ const getStripeDashboardResolver: Resolver["Query.getStripeDashboard"] = async (
     throw new GraphQLError(JSON.stringify(err))
   }
 }
+
+export default getStripeDashboardResolver

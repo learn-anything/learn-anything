@@ -12,6 +12,7 @@ const createProductResolver: Resolver["Mutation.createProduct"] = async (
   try {
     const hankoId = await hankoIdFromToken(context)
     if (hankoId) {
+      // @ts-ignore
       await createProduct(hankoId, args)
       return "ok"
     } else {
@@ -22,3 +23,5 @@ const createProductResolver: Resolver["Mutation.createProduct"] = async (
     throw new GraphQLError(JSON.stringify(err))
   }
 }
+
+export default createProductResolver

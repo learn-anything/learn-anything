@@ -18,3 +18,5 @@ const updateGlobalLinkStatusResolver: Resolver["Mutation.updateGlobalLinkStatus"
       throw new GraphQLError(JSON.stringify(err))
     }
   }
+
+export default updateGlobalLinkStatusResolver
