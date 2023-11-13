@@ -3,14 +3,13 @@ import { listen } from "@tauri-apps/api/event"
 import { open } from "@tauri-apps/api/shell"
 import { invoke } from "@tauri-apps/api/tauri"
 import { Show, onMount } from "solid-js"
+import { isLoggedIn } from "../lib/lib"
 import { useGlobalState } from "./GlobalContext/global"
 import { useUser } from "./GlobalContext/user"
 import { useWiki } from "./GlobalContext/wiki"
-import { CodemirrorEditor } from "./components/Codemirror/CodemirrorEditor"
 import SearchModal from "./components/SearchModal"
 import Sidebar from "./components/Sidebar"
-import { isLoggedIn } from "../lib/lib"
-import Monaco from "./components/Monaco/Monaco"
+import { Monaco } from "./components/Monaco/Monaco"
 
 export default function App() {
   const global = useGlobalState()
@@ -56,7 +55,7 @@ export default function App() {
             }
           >
             <div class="h-full overflow-auto w-full">
-              <div class="absolute bottom-1 right-1 py-2 px-4 text-lg">
+              <div class="absolute bottom-1 right-1 py-2 px-4 text-lg z-50">
                 <FancyButton
                   onClick={async () => {
                     const loggedIn = isLoggedIn(global)
