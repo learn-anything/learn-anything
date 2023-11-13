@@ -10,6 +10,7 @@ import { CodemirrorEditor } from "./components/Codemirror/CodemirrorEditor"
 import SearchModal from "./components/SearchModal"
 import Sidebar from "./components/Sidebar"
 import { isLoggedIn } from "../lib/lib"
+import Monaco from "./components/Monaco/Monaco"
 
 export default function App() {
   const global = useGlobalState()
@@ -54,18 +55,28 @@ export default function App() {
               global.state.localFolderPath && global.state.currentlyOpenFile
             }
           >
-            <div class="h-full overflow-auto">
+            <div class="h-full overflow-auto w-full">
               <div class="absolute bottom-1 right-1 py-2 px-4 text-lg">
                 <FancyButton
                   onClick={async () => {
                     const loggedIn = isLoggedIn(global)
                     console.log(loggedIn, "logged in")
+                    // TODO: publish current note to user's wiki
                   }}
                 >
                   Publish
                 </FancyButton>
               </div>
-              <CodemirrorEditor />
+              {/* TODO: commented out codemirror as it was giving issues */}
+              {/* such as, line wrapping: https://discuss.codemirror.net/t/linewrapping-true-fails-with-ts-error-and-does-not-work/7408/5 */}
+              {/* and styling cursor to white in dark theme failed: https://discuss.codemirror.net/t/codemirror-cursor-class-does-not-work-in-safari/7409/3 */}
+              {/* if it can be resolved, codemirror can be considered for use again */}
+              {/* <CodemirrorEditor /> */}
+
+              {/* monaco editor is chosen instead until then, it might be a better option in long term too as its used by vscode */}
+              {/* and can be styled/tuned to achieve all the tasks we need */}
+              {/* in LA we should be able to edit code inline in some code blocks with LSP support perhaps in some instances, monaco can allow this */}
+              <Monaco />
             </div>
           </Show>
 

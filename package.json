@@ -55,6 +55,7 @@
     "mri": "^1.2.0",
     "prettier": "^3.0.3",
     "solid-codemirror": "^2.3.0",
+    "solid-monaco": "^0.2.0",
     "stripe": "^14.4.0",
     "zod": "^3.22.4"
   },
