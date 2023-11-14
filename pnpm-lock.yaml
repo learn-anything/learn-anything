@@ -214,6 +214,9 @@ importers:
       stripe:
         specifier: ^14.4.0
         version: 14.4.0
+      vite-plugin-solid:
+        specifier: ^2.7.2
+        version: 2.7.2(solid-js@1.8.5)(vite@4.5.0)
       zod:
         specifier: ^3.22.4
         version: 3.22.4

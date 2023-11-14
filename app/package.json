@@ -46,12 +46,13 @@
     "fuse.js": "^7.0.0",
     "graphql": "^16.8.1",
     "oidc-client-ts": "^2.4.0",
-    "solid-monaco": "^0.2.0",
     "solid-headless": "^0.13.1",
     "solid-js": "^1.8.5",
+    "solid-monaco": "^0.2.0",
     "solid-tiptap": "^0.6.0",
     "split.js": "^1.6.5",
     "stripe": "^14.4.0",
+    "vite-plugin-solid": "^2.7.2",
     "zod": "^3.22.4"
   },
   "prettier": {
