@@ -2,10 +2,9 @@ import { updateGlobalLinkStatus } from "../crud/global-link"
 
 async function main() {
   const hankoId = process.env.LOCAL_USER_HANKO_ID!
-  console.log(hankoId)
   const res = await updateGlobalLinkStatus(
     hankoId,
-    "cc90ac84-71ba-11ee-a80a-9fb4f006c8ba",
+    "d88b5d34-6da7-11ee-bab3-bb6a7f9c90a9",
     "uncomplete"
   )
   console.log(res)

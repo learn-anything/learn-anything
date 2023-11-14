@@ -80,98 +80,52 @@ export async function updateGlobalLinkStatus(
     filter_single: { id: globalLinkId }
   }))
 
+  const foundUser = e.select(e.User, (user) => ({
+    filter: e.all(
+      e.set(
+        e.op(user.hankoId, "=", hankoId),
+        e.op("exists", user.memberUntil),
+        e.op(
+          e.op(user.memberUntil, ">", e.datetime_current()),
+          "or",
+          e.op(user.freeActions, ">", 0)
+        )
+      )
+    )
+  }))
+
   switch (action) {
     case "like":
       return await e
-        .update(
-          e.select(e.User, (user) => ({
-            filter: e.all(
-              e.set(
-                e.op(user.hankoId, "=", hankoId),
-                e.op("exists", user.memberUntil),
-                e.op(
-                  e.op(user.memberUntil, ">", e.datetime_current()),
-                  "or",
-                  e.op(user.freeActions, ">", 5)
-                )
-              )
-            )
-          })),
-          () => ({
-            set: {
-              likedLinks: { "+=": foundLink }
-            }
-          })
-        )
+        .update(foundUser, () => ({
+          set: {
+            likedLinks: { "+=": foundLink }
+          }
+        }))
         .run(client)
     case "unlike":
       return e
-        .update(
-          e.select(e.User, (user) => ({
-            filter: e.all(
-              e.set(
-                e.op(user.hankoId, "=", hankoId),
-                e.op("exists", user.memberUntil),
-                e.op(
-                  e.op(user.memberUntil, ">", e.datetime_current()),
-                  "or",
-                  e.op(user.freeActions, ">", 5)
-                )
-              )
-            )
-          })),
-          () => ({
-            set: {
-              likedLinks: { "-=": foundLink }
-            }
-          })
-        )
+        .update(foundUser, () => ({
+          set: {
+            likedLinks: { "-=": foundLink }
+          }
+        }))
         .run(client)
     case "complete":
       return e
-        .update(
-          e.select(e.User, (user) => ({
-            filter: e.all(
-              e.set(
-                e.op(user.hankoId, "=", hankoId),
-                e.op("exists", user.memberUntil),
-                e.op(
-                  e.op(user.memberUntil, ">", e.datetime_current()),
-                  "or",
-                  e.op(user.freeActions, ">", 5)
-                )
-              )
-            )
-          })),
-          () => ({
-            set: {
-              completedLinks: { "+=": foundLink }
-            }
-          })
-        )
+        .update(foundUser, () => ({
+          set: {
+            completedLinks: { "+=": foundLink }
+          }
+        }))
         .run(client)
     case "uncomplete":
       return e
-        .update(
-          e.select(e.User, (user) => ({
-            filter: e.all(
-              e.set(
-                e.op(user.hankoId, "=", hankoId),
-                e.op("exists", user.memberUntil),
-                e.op(
-                  e.op(user.memberUntil, ">", e.datetime_current()),
-                  "or",
-                  e.op(user.freeActions, ">", 5)
-                )
-              )
-            )
-          })),
-          () => ({
-            set: {
-              completedLinks: { "-=": foundLink }
-            }
-          })
-        )
+        .update(foundUser, () => ({
+          set: {
+            completedLinks: { "-=": foundLink }
+          }
+        }))
         .run(client)
     default:
       break
