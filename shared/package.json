@@ -1,5 +1,6 @@
 {
   "name": "@la/shared",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "dev": "tsc -w",

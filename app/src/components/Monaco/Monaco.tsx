@@ -44,7 +44,6 @@ export function Monaco() {
   )
 
   createEffect(() => {
-    console.log("updating the file")
     if (global.state.currentlyOpenFile?.fileContent) {
       scheduledFileUpdate(global.state.currentlyOpenFile?.fileContent)
     }
@@ -58,6 +57,7 @@ export function Monaco() {
           global.set("currentlyOpenFile", "fileContent", text)
         }}
         options={{
+          quickSuggestions: false,
           padding: { top: 24 },
           minimap: { enabled: false },
           wordWrap: "on",

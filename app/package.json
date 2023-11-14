@@ -1,5 +1,6 @@
 {
   "name": "@la/app",
+  "version": "0.0.1",
   "scripts": {
     "start": "vite",
     "dev": "vite",

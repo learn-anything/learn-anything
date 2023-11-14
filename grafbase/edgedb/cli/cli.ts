@@ -1,6 +1,9 @@
+import { updateGlobalLinkStatus } from "../crud/global-link"
+
 async function main() {}
 
 await main()
+console.log("done")
 
 // TODO: cleanup code below, make into functions exported from `wiki.ts` or something
 // these functions read .md files and then transfer content into edgedb
@@ -202,7 +205,6 @@ await main()
 // await deleteSectionsInGlobalTopic(topicName)
 // await processLinksFromMarkdownFilesAsGlobalLinks(topicName)
 // await moveLinksFromSectionsIncludingLinksToGuide(topicName)
-console.log("done")
 // const paths = await getMarkdownPaths()
 // for (const path of paths) {
 //   const parts = path.split("/")
