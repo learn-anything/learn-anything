@@ -20,6 +20,7 @@
     "vite": "^4.5.0"
   },
   "dependencies": {
+    "@la/shared": "workspace:*",
     "@chronark/zod-bird": "^0.2.2",
     "@motionone/solid": "^10.16.4",
     "@nozbe/microfuzz": "^1.0.0",
