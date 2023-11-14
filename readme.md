@@ -62,12 +62,12 @@ Tech stack is described in [docs/tech-stack.md](docs/tech-stack.md).
 
 ## Setup
 
-Everything is driven using [bun](https://bun.sh) commands as part of monorepo setup using [bun workspaces](https://bun.sh/docs/install/workspaces).
+Everything is driven using [bun](https://bun.sh) commands as part of monorepo setup using [pnpm workspaces](https://pnpm.io/workspaces) ([bun gave issues with installing deps and breaking builds](docs/bun.md)) so [pnpm](https://pnpm.io) is used to install and add dependencies but bun to run them.
 
 First run:
 
 ```
-bun i
+pnpm i
 bun setup
 ```
 
