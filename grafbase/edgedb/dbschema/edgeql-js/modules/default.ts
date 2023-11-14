@@ -265,6 +265,7 @@ export type $TopicλShape = $.typeutil.flatten<_std.$Object_d29c95e25d6b11eeabaf
   "links": $.LinkDesc<$Link, $.Cardinality.Many, {}, false, true,  false, false>;
   "notes": $.LinkDesc<$Note, $.Cardinality.Many, {}, false, true,  false, false>;
   "wiki": $.LinkDesc<$PersonalWiki, $.Cardinality.One, {}, false, false,  false, false>;
+  "published": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, false>;
   "<relatedTopics[is Note]": $.LinkDesc<$Note, $.Cardinality.Many, {}, false, false,  false, false>;
   "<mentionedTopics[is Topic]": $.LinkDesc<$Topic, $.Cardinality.Many, {}, false, false,  false, false>;
   "<parentTopic[is Topic]": $.LinkDesc<$Topic, $.Cardinality.Many, {}, false, false,  false, false>;

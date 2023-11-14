@@ -1,25 +1,23 @@
+import { ui } from "@la/shared"
 import { FancyButton, ModalWithMessageAndButton } from "@la/shared/ui"
-import { listen } from "@tauri-apps/api/event"
 import { open } from "@tauri-apps/api/shell"
 import { invoke } from "@tauri-apps/api/tauri"
-import { Show, onMount } from "solid-js"
+import { Show } from "solid-js"
 import { isLoggedIn } from "../lib/lib"
 import { useGlobalState } from "./GlobalContext/global"
 import { useUser } from "./GlobalContext/user"
 import { useWiki } from "./GlobalContext/wiki"
-import SearchModal from "./components/SearchModal"
-import Sidebar from "./components/Sidebar"
+import { useMobius } from "./root"
 import { Monaco } from "./components/Monaco/Monaco"
-import Modal from "./components/Modal"
-import clsx from "clsx"
-import Checkbox from "./components/checkbox"
+import SearchModal from "./components/SearchModal"
 import Settings from "./components/Settings"
-import { ui } from "@la/shared"
+import Sidebar from "./components/Sidebar"
 
 export default function App() {
   const global = useGlobalState()
   const user = useUser()
   const wiki = useWiki()
+  const mobius = useMobius()
 
   // TODO: CMD+L = search files/topics in wiki
   // there was some issue with CMD+L not triggering, fix
@@ -32,20 +30,6 @@ export default function App() {
   //     user.setMode("Search Topics")
   //   }
   // })
-
-  // starts a listner for signed-in-token event (used for authentication)
-  onMount(async () => {
-    await listen<[path: string, params: any]>("signed-in-token", (event) => {
-      const [path, params] = event.payload
-      if (path === "/login") {
-        // TODO: store in sqlite instead!
-        // due to: Localstorage is not a guarantee that you have absolute persistence And the OS can always decide to prune ANY localstorage, and even cookies
-        const hankoToken = params.hankoToken
-        localStorage.setItem("hanko", hankoToken)
-        global.set("showModal", "")
-      }
-    })
-  })
 
   return (
     <>
@@ -73,8 +57,41 @@ export default function App() {
                 <FancyButton
                   onClick={async () => {
                     const loggedIn = isLoggedIn(global)
-                    console.log(loggedIn, "logged in")
                     // TODO: publish current note to user's wiki
+                    if (loggedIn) {
+                      // const res = await mobius().query({
+                      //   getGlobalTopic: {
+                      //     where: {
+                      //       topicName: "physics",
+                      //     },
+                      //     select: {
+                      //       learningStatus: true,
+                      //       likedLinkIds: true,
+                      //       completedLinkIds: true,
+                      //     },
+                      //   },
+                      //   getNotesForGlobalTopic: {
+                      //     where: {
+                      //       topicName: "physics",
+                      //     },
+                      //     select: {
+                      //       content: true,
+                      //       url: true,
+                      //     },
+                      //   },
+                      // })
+                      // // @ts-ignore
+                      // const topicData = res.data.getGlobalTopic
+                      // // @ts-ignore
+                      // const notesData = res.data.getNotesForGlobalTopic
+                      // console.log(topicData, "data")
+                      // setGlobalTopic({
+                      //   learningStatus: topicData.learningStatus,
+                      //   likedLinkIds: topicData.likedLinkIds,
+                      //   completedLinkIds: topicData.completedLinkIds,
+                      //   notes: notesData,
+                      // })
+                    }
                   }}
                 >
                   Publish
@@ -125,28 +142,6 @@ export default function App() {
               items={wiki.wiki.topics}
               action={() => {}}
               searchPlaceholder="Search Topics"
-            />
-          </Show>
-          <Show when={global.state.showModal === "needToLoginInstructions"}>
-            <ModalWithMessageAndButton
-              // TODO: maybe have submessage? or have `message` accept solid JSX so you can have paragraphs?
-              message={
-                "Press the button below to login with browser. If you're already logged in to learn-anything.xyz, it will automatically redirect you to desktop. You might need to accept a pop up window to go back to desktop. If not logged in, you will need to login in browser first then it will prompt you to go back."
-              }
-              buttonText="Login"
-              buttonAction={async () => {
-                if (import.meta.env.VITE_LOCAL) {
-                  localStorage.setItem(
-                    "hanko",
-                    import.meta.env.VITE_HANKO_TOKEN,
-                  )
-                  return
-                }
-                await open(import.meta.env.VITE_LA_DESKTOP_SIGNIN_URL)
-              }}
-              onClose={() => {
-                global.set("showModal", "")
-              }}
             />
           </Show>
         </div>

@@ -266,6 +266,9 @@ importers:
       '@solid-primitives/scheduled':
         specifier: ^1.4.1
         version: 1.4.1(solid-js@1.8.5)
+      '@types/js-cookie':
+        specifier: ^3.0.6
+        version: 3.0.6
       clsx:
         specifier: ^2.0.0
         version: 2.0.0

@@ -1,7 +1,7 @@
 # schema that defines entire LA data model
 # User type is at the center of it
 # there are `GlobalThings` and `PersonalThings`
-# such as GlobalTopic and PersonalTopic
+# such as GlobalTopic and Topic (will be named PersonalTopic in future)
 # GlobalTopic is viewed by all and many can edit it
 # PersonalTopic is part of user's PersonalWiki and only that user can edit it (at least for now)
 # being edited as we figure out how to best store personal user data and integrate it well
@@ -29,9 +29,9 @@ module default {
     displayName: str;
     # aws s3 or cloudflare r2 url with image
     profileImage: str;
-    # limit to actions non member user can do (current limit is 5 for non members)
+    # limit to actions non member user can do
     freeActions: int16 {
-      default := 5;
+      default := 10;
     };
     # TODO: in future can consider `GlobalWiki` as concept maybe as a wiki that multiple users can edit
     # user owns one personal wiki
@@ -100,7 +100,7 @@ module default {
     # TODO: same for this, can be computed as part of query
     topicGraph: json;
   }
-  # TODO: should probably be called PersonalTopic
+  # TODO: should be called PersonalTopic
   type Topic {
     # wiki this topic belongs to
     required link wiki: PersonalWiki;
@@ -117,6 +117,8 @@ module default {
     required public: bool;
     # markdown content of topic (user's knowledge/thoughts on the topic)
     required content: str;
+    # non published content will be end to end encrypted
+    published: bool;
     # each published topic is part of a global topic
     # TODO: not sure how to best do it
     # TODO: probably best to just do it by `name`, if `name` matches, its part of that global topic

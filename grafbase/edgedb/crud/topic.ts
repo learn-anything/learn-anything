@@ -10,11 +10,11 @@ export async function addTopic(topic: any, wikiId: string, topicPath: string) {
         name: e.str,
         prettyName: e.str,
         public: e.bool,
-        content: e.str,
+        content: e.str
       }),
       notes: e.json,
       links: e.json,
-      topicPath: e.str,
+      topicPath: e.str
     },
     (params) => {
       const newTopic = e
@@ -22,18 +22,18 @@ export async function addTopic(topic: any, wikiId: string, topicPath: string) {
           wiki: e.assert_exists(
             e.assert_single(
               e.select(e.Wiki, (wiki) => ({
-                filter: e.op(wiki.id, "=", e.cast(e.uuid, wikiId)),
-              })),
-            ),
+                filter: e.op(wiki.id, "=", e.cast(e.uuid, wikiId))
+              }))
+            )
           ),
           name: topic.name,
           prettyName: topic.prettyName,
           public: topic.public,
           content: topic.content,
-          topicPath: topicPath,
+          topicPath: topicPath
         })
         .unlessConflict((topic) => ({
-          on: topic.name,
+          on: topic.name
         }))
       return e.with(
         [newTopic],
@@ -44,8 +44,8 @@ export async function addTopic(topic: any, wikiId: string, topicPath: string) {
                 content: e.cast(e.str, e.json_get(note, "content")),
                 url: e.cast(e.str, e.json_get(note, "url")),
                 public: e.cast(e.bool, e.json_get(note, "public")),
-                topic: newTopic,
-              }),
+                topic: newTopic
+              })
             ),
             "union",
             e.for(e.json_array_unpack(params.links), (link) =>
@@ -61,8 +61,8 @@ export async function addTopic(topic: any, wikiId: string, topicPath: string) {
                   (relatedLink) =>
                     e.insert(e.RelatedLink, {
                       url: e.cast(e.str, e.json_get(relatedLink, "url")),
-                      title: e.cast(e.str, e.json_get(relatedLink, "title")),
-                    }),
+                      title: e.cast(e.str, e.json_get(relatedLink, "title"))
+                    })
                 ),
                 globalLink: e.insert(e.GlobalLink, {
                   title: e.cast(e.str, e.json_get(link, "title")),
@@ -75,20 +75,20 @@ export async function addTopic(topic: any, wikiId: string, topicPath: string) {
                     (relatedLink) =>
                       e.insert(e.RelatedLink, {
                         url: e.cast(e.str, e.json_get(relatedLink, "url")),
-                        title: e.cast(e.str, e.json_get(relatedLink, "title")),
-                      }),
-                  ),
-                }),
+                        title: e.cast(e.str, e.json_get(relatedLink, "title"))
+                      })
+                  )
+                })
                 // TODO: was crashing for random reason
                 // even though below code should in theory prevent it
                 // made url not unique to avoid this
                 // .unlessConflict((gl) => ({ on: gl.url })),
-              }),
-            ),
-          ),
-        ),
+              })
+            )
+          )
+        )
       )
-    },
+    }
   )
   return query.run(client, {
     wikiId,
@@ -96,11 +96,11 @@ export async function addTopic(topic: any, wikiId: string, topicPath: string) {
       name: topic.name,
       prettyName: topic.prettyName,
       public: topic.public,
-      content: topic.content,
+      content: topic.content
     },
     links: topic.links,
     notes: topic.notes,
-    topicPath: topicPath,
+    topicPath: topicPath
   })
 }
 
@@ -116,7 +116,7 @@ export async function getGlobalTopic(topicName: string) {
     notes: {
       content: true,
       url: true,
-      additionalContent: true,
+      additionalContent: true
     },
     links: {
       title: true,
@@ -125,9 +125,9 @@ export async function getGlobalTopic(topicName: string) {
       relatedLinks: {
         title: true,
         url: true,
-        description: true,
-      },
-    },
+        description: true
+      }
+    }
   }))
   return query.run(client)
 }
@@ -143,7 +143,7 @@ export async function getTopic(name: string) {
     notes: {
       content: true,
       url: true,
-      additionalContent: true,
+      additionalContent: true
     },
     links: {
       title: true,
@@ -151,20 +151,20 @@ export async function getTopic(name: string) {
       description: true,
       year: true,
       topic: {
-        name: true,
+        name: true
       },
       globalLink: {
         title: true,
         url: true,
         description: true,
-        year: true,
+        year: true
       },
       relatedLinks: {
         url: true,
-        title: true,
-      },
+        title: true
+      }
     },
-    filter: e.op(topic.name, "=", name),
+    filter: e.op(topic.name, "=", name)
   }))
 
   return query.run(client)
@@ -172,7 +172,7 @@ export async function getTopic(name: string) {
 
 export async function topicExists(topicName: string) {
   const query = e.select(e.Topic, (topic) => ({
-    filter: e.op(topic.name, "=", topicName),
+    filter: e.op(topic.name, "=", topicName)
   }))
   const res = await query.run(client)
   if (res.length === 0) {
@@ -224,21 +224,21 @@ export async function deleteTopic(topicId: string) {
   // Delete all Link objects associated with the Topic
   await e
     .delete(e.Link, (link) => ({
-      filter: e.op(link.topic.id, "=", e.cast(e.uuid, topicId)),
+      filter: e.op(link.topic.id, "=", e.cast(e.uuid, topicId))
     }))
     .run(client)
 
   // Delete all Note objects associated with the Topic
   await e
     .delete(e.Note, (note) => ({
-      filter: e.op(note.topic.id, "=", e.cast(e.uuid, topicId)),
+      filter: e.op(note.topic.id, "=", e.cast(e.uuid, topicId))
     }))
     .run(client)
 
   // Delete the Topic
   const res = await e
     .delete(e.Topic, (topic) => ({
-      filter: e.op(topic.id, "=", e.cast(e.uuid, topicId)),
+      filter: e.op(topic.id, "=", e.cast(e.uuid, topicId))
     }))
     .run(client)
   return res
@@ -249,7 +249,7 @@ export async function getTopics() {
     .select(e.Topic, () => ({
       name: true,
       content: true,
-      id: true,
+      id: true
     }))
     .run(client)
   return res
@@ -258,7 +258,7 @@ export async function getTopics() {
 export async function getTopicTitles() {
   const res = await e
     .select(e.Topic, () => ({
-      name: true,
+      name: true
     }))
     .run(client)
   return res
@@ -315,7 +315,7 @@ export async function getTopicGraph(userId: string) {
   const res = await e
     .select(e.Topic, (topic) => ({
       name: true,
-      prettyName: true,
+      prettyName: true
     }))
     .run(client)
   console.log(res, "res")

@@ -84,9 +84,12 @@ export async function updateGlobalLinkStatus(
     filter: e.all(
       e.set(
         e.op(user.hankoId, "=", hankoId),
-        e.op("exists", user.memberUntil),
         e.op(
-          e.op(user.memberUntil, ">", e.datetime_current()),
+          e.op(
+            e.op("exists", user.memberUntil),
+            "and",
+            e.op(user.memberUntil, ">", e.datetime_current())
+          ),
           "or",
           e.op(user.freeActions, ">", 0)
         )
@@ -97,33 +100,53 @@ export async function updateGlobalLinkStatus(
   switch (action) {
     case "like":
       return await e
-        .update(foundUser, () => ({
+        .update(foundUser, (user) => ({
           set: {
-            likedLinks: { "+=": foundLink }
+            likedLinks: { "+=": foundLink },
+            freeActions: e.op(
+              user.freeActions,
+              "-",
+              e.op(0, "if", e.op("exists", user.memberUntil), "else", 1)
+            )
           }
         }))
         .run(client)
     case "unlike":
       return e
-        .update(foundUser, () => ({
+        .update(foundUser, (user) => ({
           set: {
-            likedLinks: { "-=": foundLink }
+            likedLinks: { "-=": foundLink },
+            freeActions: e.op(
+              user.freeActions,
+              "-",
+              e.op(0, "if", e.op("exists", user.memberUntil), "else", 1)
+            )
           }
         }))
         .run(client)
     case "complete":
       return e
-        .update(foundUser, () => ({
+        .update(foundUser, (user) => ({
           set: {
-            completedLinks: { "+=": foundLink }
+            completedLinks: { "+=": foundLink },
+            freeActions: e.op(
+              user.freeActions,
+              "-",
+              e.op(0, "if", e.op("exists", user.memberUntil), "else", 1)
+            )
           }
         }))
         .run(client)
     case "uncomplete":
       return e
-        .update(foundUser, () => ({
+        .update(foundUser, (user) => ({
           set: {
-            completedLinks: { "-=": foundLink }
+            completedLinks: { "-=": foundLink },
+            freeActions: e.op(
+              user.freeActions,
+              "-",
+              e.op(0, "if", e.op("exists", user.memberUntil), "else", 1)
+            )
           }
         }))
         .run(client)
