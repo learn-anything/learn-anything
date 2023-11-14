@@ -45,6 +45,7 @@
     "dotenv": "^16.3.1",
     "fuse.js": "^7.0.0",
     "graphql": "^16.8.1",
+    "graphql-mobius": "^0.1.13",
     "oidc-client-ts": "^2.4.0",
     "solid-headless": "^0.13.1",
     "solid-js": "^1.8.5",

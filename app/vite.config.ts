@@ -1,6 +1,7 @@
 import solid from "vite-plugin-solid"
-// import solidStyled from "vite-plugin-solid-styled"
 import { defineConfig } from "vite"
+// TODO: commented as it had issues, probably works if i try again
+// import solidStyled from "vite-plugin-solid-styled"
 
 export default defineConfig({
   plugins: [
