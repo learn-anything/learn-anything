@@ -45,7 +45,6 @@
     "dotenv": "^16.3.1",
     "fuse.js": "^7.0.0",
     "graphql": "^16.8.1",
-    "monaco-editor": "^0.44.0",
     "oidc-client-ts": "^2.4.0",
     "solid-monaco": "^0.2.0",
     "solid-headless": "^0.13.1",

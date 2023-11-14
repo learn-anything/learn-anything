@@ -19,7 +19,7 @@ const getUserDetailsResolver: Resolver["Query.getUserDetails"] = async (
       throw new GraphQLError("Missing or invalid Authorization header")
     }
   } catch (err) {
-    console.error(err, { args })
+    console.error(err)
     throw new GraphQLError(JSON.stringify(err))
   }
 }
