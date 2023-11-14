@@ -14,7 +14,8 @@ const getGlobalTopicResolver: Resolver["Query.getGlobalTopic"] = async (
   try {
     const hankoId = await hankoIdFromToken(context)
     if (hankoId) {
-      return await getGlobalTopicDetails(args.topicName, hankoId)
+      const topic = await getGlobalTopicDetails(args.topicName, hankoId)
+      return topic
     } else {
       throw new GraphQLError("Missing or invalid Authorization header")
     }

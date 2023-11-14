@@ -52,8 +52,8 @@ const GlobalLink = g.type("GlobalLink", {
   title: g.string(),
   url: g.string(),
   year: g.string().optional(),
-  protocol: g.string()
-  // description: g.string().optional()
+  protocol: g.string(),
+  description: g.string().optional()
 })
 const globalGuideSection = g.type("globalGuideSection", {
   title: g.string(),

@@ -43,6 +43,7 @@ export type Schema = {
     url: string;
     year: string | null;
     protocol: string;
+    description: string | null;
   };
   'globalGuideSection': {
     __typename?: 'globalGuideSection';
