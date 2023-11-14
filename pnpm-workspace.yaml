@@ -1,5 +1,5 @@
 packages:
-  - 'app/*'
-  - 'website/*'
-  - 'api/stripe/*'
-  - 'shared/*'
+  - "app"
+  - "website"
+  - "api/stripe"
+  - "shared"
