@@ -1,12 +1,11 @@
-import { createContext, useContext } from "solid-js"
-import { MobiusType } from "../root"
+import { createContext, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
+import { MobiusType } from "../root"
 
 type PersonalTopicStore = {
   name: string
   content: string
   prettyName: string
-  public: boolean
   topicPath: string
 }
 
@@ -17,8 +16,31 @@ export default function createPersonalTopic(mobius: MobiusType) {
     name: "",
     prettyName: "",
     content: "",
-    public: false,
     topicPath: ""
+  })
+
+  onMount(async () => {
+    const res = await mobius.query({
+      publicGetPersonalTopic: {
+        where: {
+          topicName: "asking-questions",
+          user: "nikiv"
+        },
+        // TODO: not sure why `select: true` was failing..
+        select: {
+          prettyName: true,
+          content: true,
+          topicPath: true
+        }
+      }
+    })
+    // @ts-ignore
+    const topic = res?.data.publicGetPersonalTopic[0]
+    if (topic) {
+      setTopic("content", topic.content)
+      setTopic("prettyName", topic.prettyName)
+      setTopic("topicPath", topic.topicPath)
+    }
   })
 
   return {

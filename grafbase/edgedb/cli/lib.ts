@@ -1,4 +1,6 @@
 import { grafbaseTypeDefs } from "@la/shared/lib"
+import fs from "fs"
+import path from "path"
 import Mobius from "graphql-mobius"
 
 export function mobius() {
@@ -18,25 +20,15 @@ export function mobius() {
   })
 }
 
-// async function getMarkdownPaths() {
-//   const paths = await markdownFilePaths(process.env.wikiFolderPath!, [])
-//   return paths
-//   // console.log(paths[0])
-//   // const filePath = paths[0]!
-//   // const topic = await parseMdFile(filePath)
-//   // console.log(topic, "topic")
-// }
-
-// async function markdownFilePaths(dirPath, filePaths=[]) {
-//   const entries = fs.readdirSync(dirPath, { withFileTypes: true });
-
-//   for (const entry of entries) {
-//     const res = path.resolve(dirPath, entry.name);
-//     if (entry.isDirectory()) {
-//       filePaths = await markdownFilePaths(res, filePaths);
-//     } else if (entry.isFile() && path.extname(entry.name) === '.md') {
-//       filePaths.push(res);
-//     }
-//   }
-//   return filePaths;
-// }
+export function getMarkdownFiles(dirPath: string) {
+  let mdFiles = <string[]>[]
+  fs.readdirSync(dirPath).forEach((file) => {
+    const fullPath = path.join(dirPath, file)
+    if (fs.statSync(fullPath).isDirectory()) {
+      mdFiles = mdFiles.concat(getMarkdownFiles(fullPath))
+    } else if (path.extname(fullPath) === ".md") {
+      mdFiles.push(fullPath)
+    }
+  })
+  return mdFiles
+}

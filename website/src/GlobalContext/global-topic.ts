@@ -161,7 +161,8 @@ export default function createGlobalTopic(
     if (
       topicName === "profile" ||
       topicName === "pricing" ||
-      topicName === "desktop-login"
+      topicName === "desktop-login" ||
+      topicName.startsWith("@")
     )
       return
     setGlobalTopic("name", location.pathname.slice(1))

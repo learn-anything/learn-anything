@@ -458,9 +458,8 @@ export default function EditGlobalGuide() {
                           setShowCantEditGuideModal(true)
                           return
                         }
-                        const [urlWithoutProtocol, _] = splitUrlByProtocol(
-                          urlToAdd()
-                        )
+                        const [urlWithoutProtocol, _] =
+                          splitUrlByProtocol(urlToAdd())
 
                         const query = `
                         mutation InternalAddGlobalLinkToSection($linkUrl: String!, $topicName: String!, $sectionName: String!) {

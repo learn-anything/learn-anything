@@ -134,7 +134,7 @@ async function seedEdgeDb() {
 
 async function updateMobiusSchema() {
   const schema = (
-    await $`npx grafbase@latest subgraph introspect http://127.0.0.1:4000/graphql`
+    await $`npx grafbase@latest introspect http://127.0.0.1:4000/graphql`
   ).trim()
   const formattedSchema = `export const grafbaseTypeDefs = \`
 ${schema}

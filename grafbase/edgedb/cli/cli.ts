@@ -1,34 +1,14 @@
+import { markdownToHtml } from "@la/shared/lib"
+import { getMarkdownFiles } from "./lib"
+
 async function main() {
+  const files = getMarkdownFiles(process.env.wikiFolderPath!)
+  console.log(files)
+  return
   const hankoId = process.env.LOCAL_USER_HANKO_ID!
-  // console.log(process.env.wikiFolderPath)
-  // await saveFileAsTopic()
-
-  // TODO:
-  // go over all the files in wiki folder, and upload to wiki
-  // one button to publish, then mark as public, each one
-
-  // const res = await addFileAsTopic(
-  //   hankoId,
-  //   "physics",
-  //   "Physics",
-  //   true,
-  //   "physics is great"
-  // )
-  // console.log(res, "res")
-  // const res = await editTopic(
-  //   hankoId,
-  //   "physics",
-  //   "Physics",
-  //   true,
-  //   "Physics is great"
-  // )
-  // console.log(res)
-  // const res = await updateGlobalLinkStatus(
-  //   hankoId,
-  //   "d88b5d34-6da7-11ee-bab3-bb6a7f9c90a9",
-  //   "uncomplete"
-  // )
-  // console.log(res)
+  const testString = `# Asking Questions<br><br>[This](http://www.catb.org/esr/faqs/smart-questions.html) has everything in it on how to ask questions correctly.<br><br>In short, it can be summed down to this:<br><br>1. Do your own research first.<br>2. Include things you have tried and thought of before asking the question.<br>3. Be explicit about what you want to achieve in the end and provide as much information as possible to help.<br>4. Respect other people's time.<br><br>[XY problem](http://xyproblem.info) is also something to be aware of. When asking for help, let the people know what the problem you are trying to solve actually is instead of simply saying your solution and the reader guessing what it is you are actually trying to do.<br><br>`
+  const html = await markdownToHtml(testString)
+  console.log(html, "html")
 }
 
 async function saveFileAsTopic(filePath: string, localFolderPath: string) {

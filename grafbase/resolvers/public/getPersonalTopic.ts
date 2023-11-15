@@ -1,12 +1,12 @@
-import { GraphQLError } from "graphql"
-import { getGlobalTopicPublic } from "../../edgedb/crud/global-topic"
 import { Resolver } from "@grafbase/generated"
+import { GraphQLError } from "graphql"
+import { getPersonalTopic } from "../../edgedb/crud/personal-wiki"
 
-const publicGetPersonalTopicResolver: Resolver["Query.publicGetGlobalTopic"] =
+const publicGetPersonalTopicResolver: Resolver["Query.publicGetPersonalTopic"] =
   async (parent, args, context, info) => {
     try {
-      // const publicTopic = await getGlobalTopicPublic(args.topicName)
-      // return publicTopic
+      const personalTopic = await getPersonalTopic(args.user, args.topicName)
+      return personalTopic
     } catch (err) {
       console.error(err)
       throw new GraphQLError(JSON.stringify(err))

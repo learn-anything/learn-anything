@@ -20,9 +20,6 @@ import { GlobalStateProvider, createGlobalState } from "./GlobalContext/global"
 import createGlobalTopic, {
   GlobalTopicProvider
 } from "./GlobalContext/global-topic"
-import createPersonalTopic, {
-  PersonalTopicProvider
-} from "./GlobalContext/personal-topic"
 import { UserProvider, createUserState } from "./GlobalContext/user"
 import "./root.css"
 import UserProfile from "./routes/@(username)"
@@ -77,7 +74,6 @@ export default function Root() {
   const user = createUserState(mobius)
   const global = createGlobalState(mobius)
   const globalTopic = createGlobalTopic(mobius, user, global)
-  const personalTopic = createPersonalTopic(mobius)
 
   return (
     <Html lang="en">
@@ -102,29 +98,27 @@ export default function Root() {
             <SignInCtx.Provider value={setHankoCookie}>
               <MobiusCtx.Provider value={mobius}>
                 <UserProvider value={user}>
-                  <PersonalTopicProvider value={personalTopic}>
-                    <GlobalStateProvider value={global}>
-                      <GlobalTopicProvider value={globalTopic}>
-                        {/* TODO: should probably move it from here as drag/drop is currently only done in /global-topic/edit */}
-                        <DragDropProvider>
-                          <DragDropSensors>
-                            <Routes>
-                              <Route
-                                path="/:username"
-                                component={UserProfile}
-                                matchFilters={filters}
-                              />
-                              <Route
-                                path="/:username/:topic"
-                                component={PersonalTopic}
-                              />
-                              <FileRoutes />
-                            </Routes>
-                          </DragDropSensors>
-                        </DragDropProvider>
-                      </GlobalTopicProvider>
-                    </GlobalStateProvider>
-                  </PersonalTopicProvider>
+                  <GlobalStateProvider value={global}>
+                    <GlobalTopicProvider value={globalTopic}>
+                      {/* TODO: should probably move it from here as drag/drop is currently only done in /global-topic/edit */}
+                      <DragDropProvider>
+                        <DragDropSensors>
+                          <Routes>
+                            <Route
+                              path="/:username"
+                              component={UserProfile}
+                              matchFilters={filters}
+                            />
+                            <Route
+                              path="/:username/:topic"
+                              component={PersonalTopic}
+                            />
+                            <FileRoutes />
+                          </Routes>
+                        </DragDropSensors>
+                      </DragDropProvider>
+                    </GlobalTopicProvider>
+                  </GlobalStateProvider>
                 </UserProvider>
               </MobiusCtx.Provider>
             </SignInCtx.Provider>
