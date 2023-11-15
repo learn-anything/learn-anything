@@ -1,3 +1,4 @@
+import { watch, watchImmediate } from "tauri-plugin-fs-watch-api"
 import {
   Suspense,
   createContext,
@@ -7,6 +8,7 @@ import {
   onMount,
   createMemo,
   Show,
+  createEffect,
 } from "solid-js"
 import Mobius from "graphql-mobius"
 import App from "./App"
@@ -16,6 +18,7 @@ import createWikiState, { WikiProvider } from "./GlobalContext/wiki"
 import { grafbaseTypeDefs } from "@la/shared/lib"
 import { listen } from "@tauri-apps/api/event"
 import { ModalWithMessageAndButton } from "@la/shared/ui"
+import { invoke } from "@tauri-apps/api/tauri"
 
 export function createMobius(options: { hankoCookie: () => string }) {
   const { hankoCookie } = options
@@ -73,6 +76,31 @@ export default function Root() {
         global.set("showModal", "")
       }
     })
+  })
+
+  // start listening to all files inside connected folder for changes
+  createEffect(async () => {
+    if (global.state.localFolderPath) {
+      const stopWatching = await watch(
+        global.state.localFolderPath,
+        async (event) => {
+          // @ts-ignore
+          const path = event[0].path
+          console.log(path, "path")
+          if (path) {
+            const fileContent = await invoke("read_file_content", { path })
+            console.log(fileContent, "file content")
+            global.set("currentlyOpenFile", {
+              filePath: path,
+              fileContent: fileContent as string,
+            })
+          }
+        },
+        { recursive: true },
+      )
+    }
+    // TODO: use stopWatching to unsubscribe to old watcher when local folder path changes
+    // and subscribe to new folder
   })
 
   return (

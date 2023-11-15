@@ -28,6 +28,7 @@ fn main() {
 
     tauri::Builder::default()
         .plugin(tauri_plugin_sql::Builder::default().build())
+        .plugin(tauri_plugin_fs_watch::init())
         .setup(|app| {
             let handle = app.handle();
             tauri_plugin_deep_link::register("learn-anything", move |request| {
@@ -71,7 +72,8 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             connect_folder,
             connect_folder_with_path,
-            overwrite_file_content
+            overwrite_file_content,
+            read_file_content
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -135,6 +137,18 @@ async fn overwrite_file_content(path: String, new_content: String) -> Result<(),
         file.write_all(new_content.as_bytes())
             .map(|_| ())
             .map_err(|e| format!("Failed to write to file: {}", e))
+    } else {
+        Err("File does not exist".into())
+    }
+}
+
+#[tauri::command]
+async fn read_file_content(path: String) -> Result<String, String> {
+    use std::fs::read_to_string;
+
+    let path = PathBuf::from(&path);
+    if path.exists() {
+        read_to_string(&path).map_err(|e| format!("Failed to read file: {}", e))
     } else {
         Err("File does not exist".into())
     }

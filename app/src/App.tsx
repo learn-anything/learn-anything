@@ -1,17 +1,16 @@
 import { ui } from "@la/shared"
-import { FancyButton, ModalWithMessageAndButton } from "@la/shared/ui"
-import { open } from "@tauri-apps/api/shell"
+import { FancyButton } from "@la/shared/ui"
 import { invoke } from "@tauri-apps/api/tauri"
 import { Show } from "solid-js"
 import { isLoggedIn } from "../lib/lib"
 import { useGlobalState } from "./GlobalContext/global"
 import { useUser } from "./GlobalContext/user"
 import { useWiki } from "./GlobalContext/wiki"
-import { useMobius } from "./root"
 import { Monaco } from "./components/Monaco/Monaco"
 import SearchModal from "./components/SearchModal"
 import Settings from "./components/Settings"
 import Sidebar from "./components/Sidebar"
+import { useMobius } from "./root"
 
 export default function App() {
   const global = useGlobalState()
@@ -59,6 +58,7 @@ export default function App() {
                     const loggedIn = isLoggedIn(global)
                     // TODO: publish current note to user's wiki
                     if (loggedIn) {
+                      // await mobius().mutate({})
                       // const res = await mobius().query({
                       //   getGlobalTopic: {
                       //     where: {

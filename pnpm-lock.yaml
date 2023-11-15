@@ -220,6 +220,9 @@ importers:
       stripe:
         specifier: ^14.4.0
         version: 14.4.0
+      tauri-plugin-fs-watch-api:
+        specifier: github:tauri-apps/tauri-plugin-fs-watch#v1
+        version: github.com/tauri-apps/tauri-plugin-fs-watch/abeb03702eefa1f3c0287d48f2ed81a5afc5d6f7
       vite-plugin-solid:
         specifier: ^2.7.2
         version: 2.7.2(solid-js@1.8.5)(vite@4.5.0)
@@ -8878,3 +8881,11 @@ packages:
 
   /zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
+
+  github.com/tauri-apps/tauri-plugin-fs-watch/abeb03702eefa1f3c0287d48f2ed81a5afc5d6f7:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-fs-watch/tar.gz/abeb03702eefa1f3c0287d48f2ed81a5afc5d6f7}
+    name: tauri-plugin-fs-watch-api
+    version: 0.0.0
+    dependencies:
+      '@tauri-apps/api': 1.5.1
+    dev: false
