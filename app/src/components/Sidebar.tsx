@@ -124,136 +124,132 @@ export default function Sidebar() {
   })
 
   return (
-    <>
-      <div
-        class=" flex h-full border-r-2 border-slate-400 border-opacity-20"
-        style={{ "min-width": "300px" }}
-      >
-        <div class="flex w-18 dark:bg-[#1e1e1e] bg-white flex-col justify-between items-center font-semibold p-2 py-4 border-r-2 border-opacity-20 border-slate-400">
+    <div
+      class=" flex h-full border-r-2 border-slate-400 border-opacity-20"
+      style={{ "min-width": "300px" }}
+    >
+      <div class="flex w-18 dark:bg-[#1e1e1e] bg-white flex-col justify-between items-center font-semibold p-2 py-4 border-r-2 border-opacity-20 border-slate-400">
+        <div
+          class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer mt-4"
+          onClick={() => {
+            // TODO: show modal of settings like in obsidian
+            // user.setMode("Settings")
+          }}
+        >
+          <Icon name="FileSearch" />
+        </div>
+        <div class="p-1 px-2 rounded-md"></div>
+        <div class="flex flex-col items-center gap-3">
           <div
-            class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer mt-4"
+            class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
             onClick={() => {
-              // TODO: show modal of settings like in obsidian
-              // user.setMode("Settings")
+              const loggedIn = isLoggedIn(global)
+              console.log(loggedIn, "logged in")
             }}
           >
-            <Icon name="FileSearch" />
-          </div>
-          <div class="p-1 px-2 rounded-md"></div>
-          <div class="flex flex-col items-center gap-3">
-            <div
-              class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
-              onClick={() => {
-                const loggedIn = isLoggedIn(global)
-                console.log(loggedIn, "logged in")
-              }}
+            <Tooltip
+              label={localStorage.getItem("hanko") ? "Profile" : "Sign In"}
             >
-              <Tooltip
-                label={localStorage.getItem("hanko") ? "Profile" : "Sign In"}
-              >
-                <Icon name="UserProfile" />
-              </Tooltip>
-            </div>
-            <div
-              class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
-              onClick={() => {
-                // TODO: show modal of settings like in obsidian
-                user.setMode("Settings")
-              }}
-            >
-              <Tooltip label="Settings">
-                <Icon name="Settings" />
-              </Tooltip>
-            </div>
+              <Icon name="UserProfile" />
+            </Tooltip>
           </div>
-        </div>
-        <div
-          id="ContentSidebar"
-          class="dark:bg-[#1e1e1e] bg-white w-full overflow-auto"
-        >
           <div
-            class="flex flex-col w-full gap-3 px-6 pl-4 py-4 font-semibold"
-            style={{ "font-size": "14px" }}
+            class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
+            onClick={() => {
+              // TODO: show modal of settings like in obsidian
+              user.setMode("Settings")
+            }}
           >
-            <div class="font-bold opacity-70 rounded-md p-1  w-full">
-              Topics
-            </div>
-            <div class="h-screen">
-              <Motion.div class="pl-6 overflow-hidden opacity-70 flex flex-col">
-                <For each={collapsedList()}>
-                  {(item) => {
-                    return (
-                      <div
-                        // Add hover styling here
-                        onClick={() => {
-                          toggleCollapsed(item)
-                          if (item.type === "file") {
-                            global.set({
-                              currentlyOpenFile: global.state.files.find(
-                                (f) => f.filePath === item.path,
-                              ),
-                            })
-                          }
-                        }}
-                        class={clsx(
-                          "flex cursor-pointer hover:bg-gray-200 dark:hover:bg-neutral-800 hover:rounded-[6px]",
-                        )}
-                      >
-                        <div
-                          style={{ "padding-left": `${item.depth * 10}px` }}
-                          class={clsx(
-                            "flex cursor-pointer  p-1 ",
-                            item.type !== "directory" && "ml-[24px]",
-                            item.depth > 0 &&
-                              "border-l-[0.1px] border-black border-opacity-60",
-                          )}
-                        >
-                          <div>
-                            <Show when={item.type === "directory"}>
-                              {/* <Show
-                                when={!collapsed().has(item)}
-                                fallback={<Icon name={"ArrowRight"} />}
-                              >
-                                <Icon name={"ArrowDown"} />
-                              </Show> */}
-                              <div
-                                class={clsx(
-                                  " transition-all",
-                                  !collapsed().has(item) && "rotate-90",
-                                )}
-                              >
-                                <Icon name={"ArrowRight"} />
-                              </div>
-                            </Show>
-                          </div>
-                          <div class="flex items-center justify-center">
-                            {item.name}
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  }}
-                </For>
-                {/* <For each={wiki.wiki.sidebarTopics}>
-                {(topic) => {
-                  // TODO: use indent levels to make pretty sidebar
-                  return (
-                    <div
-                      class="cursor-pointer hover:text-green-400 hover:opacity-90 transition-all"
-                      onClick={() => {
-                        wiki.setOpenTopic(topic.prettyName)
-                      }}
-                    >
-                      {topic.prettyName}
-                    </div>
-                  )
-                }}
-              </For> */}
-              </Motion.div>
-            </div>
+            <Tooltip label="Settings">
+              <Icon name="Settings" />
+            </Tooltip>
           </div>
         </div>
       </div>
-    </>
+      <div
+        id="ContentSidebar"
+        class="dark:bg-[#1e1e1e] bg-white w-full overflow-auto"
+      >
+        <div
+          class="flex flex-col w-full gap-3 px-6 pl-4 py-4 font-semibold"
+          style={{ "font-size": "14px" }}
+        >
+          <div class="font-bold opacity-70 rounded-md p-1  w-full">Topics</div>
+          <div class="h-screen">
+            <Motion.div class="pl-6 overflow-hidden opacity-70 flex flex-col">
+              <For each={collapsedList()}>
+                {(item) => {
+                  return (
+                    <div
+                      // Add hover styling here
+                      onClick={() => {
+                        toggleCollapsed(item)
+                        if (item.type === "file") {
+                          global.set({
+                            currentlyOpenFile: global.state.files.find(
+                              (f) => f.filePath === item.path,
+                            ),
+                          })
+                        }
+                      }}
+                      class={clsx(
+                        "flex cursor-pointer hover:bg-gray-200 dark:hover:bg-neutral-800 hover:rounded-[6px]",
+                      )}
+                    >
+                      <div
+                        style={{ "padding-left": `${item.depth * 10}px` }}
+                        class={clsx(
+                          "flex cursor-pointer  p-1 ",
+                          item.type !== "directory" && "ml-[24px]",
+                          item.depth > 0 &&
+                            "border-l-[0.1px] border-black border-opacity-60",
+                        )}
+                      >
+                        <div>
+                          <Show when={item.type === "directory"}>
+                            {/* <Show
+                              when={!collapsed().has(item)}
+                              fallback={<Icon name={"ArrowRight"} />}
+                            >
+                              <Icon name={"ArrowDown"} />
+                            </Show> */}
+                            <div
+                              class={clsx(
+                                " transition-all",
+                                !collapsed().has(item) && "rotate-90",
+                              )}
+                            >
+                              <Icon name={"ArrowRight"} />
+                            </div>
+                          </Show>
+                        </div>
+                        <div class="flex items-center justify-center">
+                          {item.name}
+                        </div>
+                      </div>
+                    </div>
+                  )
+                }}
+              </For>
+              {/* <For each={wiki.wiki.sidebarTopics}>
+              {(topic) => {
+                // TODO: use indent levels to make pretty sidebar
+                return (
+                  <div
+                    class="cursor-pointer hover:text-green-400 hover:opacity-90 transition-all"
+                    onClick={() => {
+                      wiki.setOpenTopic(topic.prettyName)
+                    }}
+                  >
+                    {topic.prettyName}
+                  </div>
+                )
+              }}
+            </For> */}
+            </Motion.div>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }

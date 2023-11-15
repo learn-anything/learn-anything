@@ -64,14 +64,31 @@ export default function App() {
           </ui.Modal>
         </Show>
         <div class="flex h-full items-center dark:bg-[#1e1e1e] bg-white grow">
-          <Show when={global.state.localFolderPath}>
-            <Sidebar />
-          </Show>
           <Show
-            when={
-              global.state.localFolderPath && global.state.currentlyOpenFile
+            when={global.state.localFolderPath}
+            fallback={
+              <div class="w-full h-full flex justify-center items-center flex-col gap-5">
+                <div>
+                  <FancyButton
+                    onClick={async () => {
+                      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+                      const connectedFolder = (await invoke("connect_folder", {
+                        command: {},
+                      })) as [string, File[]] | null
+                      if (connectedFolder !== null) {
+                        global.set("localFolderPath", connectedFolder[0])
+                        // @ts-ignore
+                        global.set("files", connectedFolder[1])
+                      }
+                    }}
+                  >
+                    Connect folder
+                  </FancyButton>
+                </div>
+              </div>
             }
           >
+            <Sidebar />
             <div class="h-full overflow-auto w-full">
               <div class="absolute bottom-1 right-1 py-2 px-4 text-lg z-50">
                 <FancyButton
@@ -159,33 +176,6 @@ export default function App() {
               {/* and can be styled/tuned to achieve all the tasks we need */}
               {/* in LA we should be able to edit code inline in some code blocks with LSP support perhaps in some instances, monaco can allow this */}
               <Monaco />
-            </div>
-          </Show>
-
-          <Show
-            when={
-              !global.state.localFolderPath &&
-              localStorage.getItem("localFolderPath") === null
-            }
-          >
-            <div class="w-full h-full flex justify-center items-center flex-col gap-5">
-              <div>
-                <FancyButton
-                  onClick={async () => {
-                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-                    const connectedFolder = (await invoke("connect_folder", {
-                      command: {},
-                    })) as [string, File[]] | null
-                    if (connectedFolder !== null) {
-                      global.set("localFolderPath", connectedFolder[0])
-                      // @ts-ignore
-                      global.set("files", connectedFolder[1])
-                    }
-                  }}
-                >
-                  Connect folder
-                </FancyButton>
-              </div>
             </div>
           </Show>
 

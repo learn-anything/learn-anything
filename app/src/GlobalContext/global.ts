@@ -17,26 +17,26 @@ type GlobalState = {
 
 export function createGlobalState() {
   const [state, setState] = createStore<GlobalState>({
-    localFolderPath: "",
+    localFolderPath: localStorage.getItem("localFolderPath") || "",
     files: [],
     showModal: "",
     showBox: false,
   })
 
   onMount(async () => {
-    const localFolderPath = localStorage.getItem("localFolderPath")
-    if (localFolderPath) {
-      const connectedFolder = await invoke("connect_folder_with_path", {
-        path: localFolderPath,
-      })
+    const localFolderPath = state.localFolderPath
+    if (!localFolderPath) return
 
-      setState("localFolderPath", localFolderPath)
-      if (connectedFolder !== null) {
-        // @ts-ignore
-        setState("localFolderPath", connectedFolder[0])
-        // @ts-ignore
-        setState("files", connectedFolder[1])
-      }
+    const connectedFolder = await invoke("connect_folder_with_path", {
+      path: localFolderPath,
+    })
+
+    setState("localFolderPath", localFolderPath)
+    if (connectedFolder !== null) {
+      // @ts-ignore
+      setState("localFolderPath", connectedFolder[0])
+      // @ts-ignore
+      setState("files", connectedFolder[1])
     }
   })
 
