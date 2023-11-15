@@ -71,7 +71,7 @@ pnpm i
 bun setup
 ```
 
-`bun setup` runs `bun setup.ts init` (can see [setup.ts](setup.ts) code for what it does). It will create `.env` files for you so you can start coding the project fast. It will also `git clone` [seed](https://github.com/learn-anything/seed), [ai](https://github.com/learn-anything/ai) and [solana](https://learn-anything.xyz/solana) repos.
+`bun setup` runs `bun cmd.ts init` (can see [cmd.ts](cmd.ts) code for what it does). It will create `.env` files for you so you can start coding the project fast. It will also `git clone` [seed](https://github.com/learn-anything/seed), [ai](https://github.com/learn-anything/ai) and [solana](https://learn-anything.xyz/solana) repos.
 
 Monorepo tooling should get better soon. If you're intested in making it better by integrating [Nx](https://nx.dev) or similar tools, please reach out on [Discord](https://discord.com/invite/bxtD8x6aNF).
 
@@ -94,7 +94,7 @@ bun db:init
 
 Follow instructions, name EdgeDB instance `learn-anything`.
 
-Then run `bun setup.ts seed-edgedb`.
+Then run `bun cmd.ts seedEdgeDb`.
 
 Then do:
 
@@ -273,7 +273,7 @@ Ran with `bun <Name>`
 
 | Name                | Command                                                                                                                                                     |
 | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| setup               | bun setup.ts init                                                                                                                                           |
+| setup               | bun cmd.ts init                                                                                                                                             |
 | seed-clone          | git clone https://github.com/learn-anything/seed                                                                                                            |
 | seed-update         | cd seed && git pull                                                                                                                                         |
 | app                 | cd app && bun tauri:dev                                                                                                                                     |

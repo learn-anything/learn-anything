@@ -1,21 +1,31 @@
 import { $ } from "bnx"
 
+// TODO: make it so you can for given command get its help
+// or take the `//` before each case and generate a table in readme with possible commands and descriptions
 const args = Bun.argv
 const command = args[2]
 switch (command) {
+  // sets up .env files for grafbase, grafbase/edgedb and website + clones other LA repos
   case "init":
     await setupEnvFiles()
     await getFullMonorepo()
     break
+  // sets up .env files for grafbase, grafbase/edgedb and website
   case "env":
     await setupEnvFiles()
     break
-  case "full-monorepo":
+  // clones other LA repos
+  case "getFullMonorepo":
     await getFullMonorepo()
     break
-  // TODO: finish and make work, seed edgedb from files in seed folder
-  case "seed-edgedb":
+  // seed edgedb from files in seed folder
+  // TODO: finish
+  case "seedEdgeDb":
     await seedEdgeDb()
+    break
+  // updates mobius schema in shared/lib/mobius so all graphql clients are type safe
+  case "updateMobiusSchema":
+    await updateMobiusSchema()
     break
   case undefined:
     console.log("No command provided")
@@ -120,4 +130,8 @@ async function getFullMonorepo() {
 // TODO: make better, automate full seed without any feedback from user
 async function seedEdgeDb() {
   await $`mv seed/seed.db grafbase/edgedb`
+}
+
+async function updateMobiusSchema() {
+  await $`npx grafbase@latest subgraph introspect http://127.0.0.1:4000/graphql`
 }

@@ -238,6 +238,17 @@ g.mutation("createUser", {
   resolver: "createUser"
 })
 
+g.mutation("updateTopicOfWiki", {
+  args: {
+    topicName: g.string(),
+    prettyName: g.string(),
+    content: g.string(),
+    published: g.boolean()
+  },
+  returns: g.string(),
+  resolver: "updateTopicOfWiki"
+})
+
 g.mutation("createProduct", {
   args: {
     name: g.string(),

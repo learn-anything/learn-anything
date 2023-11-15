@@ -113,12 +113,12 @@ module default {
     # pretty version of `name`, uppercased nicely, proper capitalisation
     # i.e. Physics
     required prettyName: str;
-    # true = anyone can see the topic. false = only user can see topic
-    required public: bool;
     # markdown content of topic (user's knowledge/thoughts on the topic)
     required content: str;
+    # true = anyone can see the topic. false = only user can see topic
+    public: bool;
     # non published content will be end to end encrypted
-    published: bool;
+    required published: bool;
     # each published topic is part of a global topic
     # TODO: not sure how to best do it
     # TODO: probably best to just do it by `name`, if `name` matches, its part of that global topic

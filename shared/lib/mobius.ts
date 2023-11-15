@@ -2,6 +2,10 @@
 // currently we start grafbase server then go to the schema and manually copy it here
 // so https://github.com/SaltyAom/mobius graphql client is type safe
 // its very annoying and should be automatic
+// there is way to solve this using
+// `npx grafbase@latest subgraph introspect http://127.0.0.1:4000/graphql`
+// then parsing output and replacing this file inline
+// details in https://discord.com/channels/890534438151274507/1174283549004804106
 export const grafbaseTypeDefs = `
 """
 De-prioritizes a fragment, causing the fragment to be omitted in the initial response and delivered as a subsequent response afterward.
@@ -29,8 +33,8 @@ type GlobalLink {
   id: String!
   title: String!
   url: String!
-  protocol: String!
   year: String
+  protocol: String!
   description: String
 }
 
@@ -42,6 +46,8 @@ type LikedLink {
 
 type Mutation {
   createUser(email: String!): String!
+  updateTopicOfWiki(topicName: String!, prettyName: String!, content: String!, published: Boolean!): String!
+  createProduct(name: String!, description: String, imageUrl: String, websiteUrl: String, priceInUsdCents: Int): String!
   deletePersonalLink(personalLinkId: String!): String!
   updateTopicLearningStatus(learningStatus: learningStatus!, topicName: String!, verifiedTopic: Boolean!): String!
   updateLinkStatusResolver(linkId: String!, action: linkAction!): String!
@@ -76,6 +82,7 @@ type Query {
   getGlobalTopicLearningStatus(topicName: String!): String!
   getGlobalLinks: getGlobalLinksOutput!
   checkUrl(linkUrl: String!): String!
+  getStripeDashboard: String!
   stripe(plan: String!, userEmail: String!): String!
 }
 
@@ -155,7 +162,7 @@ type publicGetGlobalLinkOutput {
   url: String!
   verified: Boolean!
   public: Boolean!
-  protocol: String
+  protocol: String!
   fullUrl: String
   description: String
   urlTitle: String

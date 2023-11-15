@@ -15,6 +15,7 @@ private
 # local sqlite dbs
 *.sqlite
 package-lock.json
+bun.lockb
 tsconfig.tsbuildinfo
 .cache/
 ai

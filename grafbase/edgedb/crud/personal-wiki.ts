@@ -12,12 +12,40 @@ export async function addPersonalWiki(hankoId: string) {
   return res
 }
 
-export async function addFileAsTopic(
+// TODO: make it values are optional and only update the ones that are passed
+export async function editTopic(
   hankoId: string,
-  fileContent: string,
   topicName: string,
   prettyName: string,
-  published: boolean
+  published: boolean,
+  fileContent: string
+) {
+  const foundWiki = e.assert_single(
+    e.assert_exists(
+      e.select(e.PersonalWiki, (pw) => ({
+        filter: e.op(pw.user.hankoId, "=", hankoId)
+      }))
+    )
+  )
+
+  return await e
+    .update(e.Topic, (t) => ({
+      filter_single: { wiki: foundWiki, name: topicName },
+      set: {
+        content: fileContent,
+        prettyName: prettyName,
+        public: true
+      }
+    }))
+    .run(client)
+}
+
+export async function addFileAsTopic(
+  hankoId: string,
+  topicName: string,
+  prettyName: string,
+  published: boolean,
+  fileContent: string
 ) {
   const foundWiki = e.assert_single(
     e.assert_exists(
@@ -34,18 +62,9 @@ export async function addFileAsTopic(
       prettyName: prettyName,
       content: fileContent,
       public: true
+      // published
     })
     .run(client)
-
-  // await e
-  //   .insert(e.Topic, {
-  //     wiki: e.select(e.PersonalWiki, (pw) => ({
-  //       filter: e.op(pw.user.hankoId, "=", hankoId)
-  //     })),
-  //     name: topicName,
-  //     content: fileContent
-  //   })
-  //   .run(client)
 }
 
 // Given userId, return wikiId if exists

@@ -1,16 +1,24 @@
 import { updateGlobalLinkStatus } from "../crud/global-link"
-import { addFileAsTopic } from "../crud/personal-wiki"
+import { addFileAsTopic, editTopic } from "../crud/personal-wiki"
 
 async function main() {
   const hankoId = process.env.LOCAL_USER_HANKO_ID!
-  const res = await addFileAsTopic(
+  // const res = await addFileAsTopic(
+  //   hankoId,
+  //   "physics",
+  //   "Physics",
+  //   true,
+  //   "physics is great"
+  // )
+  // console.log(res, "res")
+  const res = await editTopic(
     hankoId,
-    "physics is great",
     "physics",
     "Physics",
-    true
+    true,
+    "Physics is great"
   )
-  console.log(res, "res")
+  console.log(res)
   // const res = await updateGlobalLinkStatus(
   //   hankoId,
   //   "d88b5d34-6da7-11ee-bab3-bb6a7f9c90a9",
