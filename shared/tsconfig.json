@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    // lib
+    "module": "NodeNext",
+    "target": "ESNext",
+    "newLine": "LF",
+    "lib": ["DOM", "ESNext"],
+    "moduleResolution": "NodeNext",
+    // rules
+    "strict": true,
+    "isolatedModules": true,
+    "noUncheckedIndexedAccess": true,
+    "skipLibCheck": true,
+    // solid
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    // build
+    "noEmit": false,
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "dist"
+  },
+  "include": ["lib", "ui", "../solid.d.ts"]
+}

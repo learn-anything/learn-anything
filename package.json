@@ -1,11 +1,9 @@
 {
   "name": "la",
   "scripts": {
-    "setup": "bun setup.ts init",
-    "setup:full": "bun setup.ts full-monorepo",
-    "seed-clone": "git clone https://github.com/learn-anything/seed",
-    "seed-update": "cd seed && git pull",
+    "setup": "bun cmd.ts init",
     "app": "cd app && bun tauri:dev",
+    "app:build": "cd app && bun run tauri build --debug",
     "web": "cd website && bun dev",
     "web:build": "cd website && solid-start build",
     "web:start": "cd website && solid-start start",
@@ -22,39 +20,46 @@
     "ts": "tput reset && bun --watch run.ts",
     "test-rust-wiki": "cd app/src-tauri/crates/wiki/ && cargo watch -q -- sh -c \"tput reset && cargo test -q --lib\"",
     "grafbase": "npx grafbase@latest dev",
+    "mobius-update": "bun cmd.ts updateMobiusSchema",
     "format": "prettier -w .",
     "lint:code": "eslint --ignore-path .gitignore --max-warnings 0 --ext .ts,.tsx,.js,.jsx .",
     "lint:types": "tsc --noEmit",
     "lint": "bun lint:code && bun lint:types"
   },
   "devDependencies": {
-    "@edgedb/generate": "^0.3.4",
-    "@grafbase/sdk": "~0.7.2",
-    "@typescript-eslint/eslint-plugin": "^6.9.0",
-    "@typescript-eslint/parser": "^6.9.0",
-    "bun-types": "^1.0.7",
-    "eslint": "^8.52.0",
+    "@la/shared": "workspace:*",
+    "@edgedb/generate": "^0.4.1",
+    "@grafbase/sdk": "^0.9.1",
+    "@typescript-eslint/eslint-plugin": "^6.10.0",
+    "@typescript-eslint/parser": "^6.10.0",
+    "bun-types": "^1.0.11",
+    "eslint": "^8.53.0",
     "eslint-plugin-eslint-comments": "^3.2.0",
     "mdast-util-from-markdown": "^2.0.0",
     "mdast-util-to-markdown": "^2.1.0",
     "mdast-util-to-string": "^4.0.0",
+    "postcss": "^8.4.31",
     "typescript": "^5.2.2",
     "ufo": "^1.3.1"
   },
   "dependencies": {
-    "@codemirror/view": "^6.21.4",
     "@qdrant/js-client-rest": "^1.6.0",
+    "@codemirror/view": "^6.22.0",
+    "@motionone/solid": "^10.16.4",
+    "@solid-primitives/scheduled": "^1.4.1",
     "bnx": "^0.3.1",
     "clipboardy": "^4.0.0",
     "dotenv": "^16.3.1",
-    "edgedb": "^1.3.7",
-    "grafbase": "^0.41.1",
+    "edgedb": "^1.4.1",
+    "grafbase": "^0.44.0",
     "graphql": "^16.8.1",
-    "jose": "^5.0.1",
+    "graphql-mobius": "^0.1.13",
+    "jose": "^5.1.0",
     "micromark": "^4.0.0",
     "mri": "^1.2.0",
     "prettier": "^3.0.3",
-    "stripe": "^14.2.0",
+    "solid-codemirror": "^2.3.0",
+    "stripe": "^14.4.0",
     "zod": "^3.22.4"
   },
   "prettier": {
@@ -64,7 +69,8 @@
   "workspaces": [
     "app",
     "website",
-    "api/stripe"
+    "api/stripe",
+    "shared"
   ],
   "trustedDependencies": [
     "grafbase"

@@ -2,9 +2,7 @@ import clsx from "clsx"
 import { Show, createEffect, createSignal } from "solid-js"
 import { useNavigate } from "solid-start"
 import { useUser } from "../GlobalContext/user"
-import Icon from "../components/Icon"
-import Modal from "../components/Modal"
-import ModalWithMessageAndButton from "../components/ModalWithMessageAndButton"
+import { ui } from "@la/shared"
 import MonthlyPlan from "../components/Pricing/MonthlyPlan"
 import YearlyPlan from "../components/Pricing/YearlyPlan"
 import { useMobius } from "../root"
@@ -87,7 +85,7 @@ export default function Pricing() {
       </style>
       <div class="h-full w-screen flex flex-col gap-10 dark:bg-neutral-900 dark:text-white bg-[#fafafa] text-black pb-[50px]">
         <Show when={showModalWithSignUpMessage()}>
-          <ModalWithMessageAndButton
+          <ui.ModalWithMessageAndButton
             message="You need to sign up first to become a member"
             buttonText="Sign Up"
             buttonAction={() => {
@@ -109,7 +107,7 @@ export default function Pricing() {
             }}
           >
             {/* <img class="rounded-full" src="/logo.png" alt="" /> */}
-            <Icon name="Home" />
+            <ui.Icon name="Home" />
           </div>
           <Show when={!user.user.signedIn}>
             <div
@@ -150,7 +148,7 @@ export default function Pricing() {
                   setPlanChosen("yearly")
                 }}
               >
-                Yearly -20%
+                Yearly -11%
               </div>
             </div>
           </div>
@@ -264,10 +262,14 @@ export default function Pricing() {
               </div>
               <div>
                 This is all just the beginning. Learn Anything aims to create
-                personalised AGI in a fully open way. Not controlled by any
-                entity. No closed code/data.
+                personalised AGI in a fully open way. No closed code/data. Join
+                the platform.{" "}
+                <a href="https://github.com/learn-anything/learn-anything.xyz">
+                  Clone the code
+                </a>{" "}
+                and let's build it together. ✨
               </div>
-              <div>
+              {/* <div>
                 In future, LA will also be a better and open source version of{" "}
                 <a href="https://www.google.com">Google</a> (will create our own
                 crawler and index the web). Better and cheaper version of{" "}
@@ -283,11 +285,11 @@ export default function Pricing() {
                 system with payouts to creators done in instant and not monthly.
                 And a lot lot more. The code is open. The data is open. It's up
                 to you what this project can become.
-              </div>
+              </div> */}
             </div>
             <Show when={showLetsTalkModal()}>
               {/* @ts-ignore */}
-              <Modal onClose={setShowLetsTalkModal}>
+              <ui.Modal onClose={setShowLetsTalkModal}>
                 <div class="w-[400px] relative z-50 h-[200px] rounded-lg bg-white border-slate-400 border dark:bg-neutral-900 flex flex-col gap-4 p-[20px] px-[24px]">
                   <div>
                     Would love to{" "}
@@ -313,7 +315,7 @@ export default function Pricing() {
                   </div>
                   <div></div>
                 </div>
-              </Modal>
+              </ui.Modal>
             </Show>
           </div>
         </div>

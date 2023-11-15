@@ -1,9 +1,9 @@
 import { createContext, createEffect, createMemo, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 import { useLocation } from "solid-start"
-import { SearchResult } from "../components/Search"
+import { SearchResult } from "@la/shared/ui"
 import { MobiusType } from "../root"
-import { getHankoCookie } from "../../lib/auth"
+import { getHankoCookie } from "@la/shared/lib"
 import { log } from "../lib/baselime"
 
 export type GlobalLink = {
@@ -157,7 +157,13 @@ export default function createGlobalTopic(
     // only run effect on /topic pages
     const topicName = extractTopicFromPath(location.pathname)
     if (!topicName) return
-    if (topicName === "profile" || topicName === "pricing") return
+    // TODO: not scaleable, fix it
+    if (
+      topicName === "profile" ||
+      topicName === "pricing" ||
+      topicName === "desktop-login"
+    )
+      return
     setGlobalTopic("name", location.pathname.slice(1))
 
     let verifiedTopic = false

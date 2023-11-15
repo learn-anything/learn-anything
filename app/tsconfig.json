@@ -1,0 +1,25 @@
+{
+  "include": ["**/*.ts", "../solid.d.ts", "**/*.tsx"],
+  "compilerOptions": {
+    // lib
+    "module": "ESNext",
+    "target": "ESNext",
+    "lib": ["DOM", "ESNext"],
+    "moduleResolution": "Bundler",
+    "types": ["vite/client", "bun-types"],
+    // rules
+    "strict": true,
+    "isolatedModules": true,
+    "noUncheckedIndexedAccess": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    // solid
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    // build
+    "noEmit": true,
+  },
+}

@@ -3,5 +3,15 @@ import { defineConfig } from "vite"
 import cloudflare from "solid-start-cloudflare-pages"
 
 export default defineConfig({
-  plugins: [solid({ ssr: false, adapter: cloudflare({}) })],
+  build: { target: "esnext" },
+  esbuild: { target: "esnext" },
+  plugins: [
+    solid({
+      ssr: false
+    }) as any,
+    cloudflare({}) as any
+  ],
+  optimizeDeps: {
+    exclude: ["@la/shared", "@la/shared/ui", "@la/shared/lib"]
+  }
 })

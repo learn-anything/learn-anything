@@ -1,19 +1,17 @@
-import { Context } from "@grafbase/sdk"
+import { Resolver } from "@grafbase/generated"
 import { GraphQLError } from "graphql"
 
-export default async function publicGetTopicsWithConnectionsResolver(
-  root: any,
-  args: {},
-  context: Context
-) {
-  try {
-    const { value } = await context.kv.get("topicsWithConnections")
-    if (value) {
-      const res = JSON.parse(value)
-      return res
+const publicGetTopicsWithConnectionsResolver: Resolver["Query.publicGetTopicsWithConnections"] =
+  async (parent, args, context, info) => {
+    try {
+      const { value } = await context.kv.get("topicsWithConnections")
+      if (value) {
+        return JSON.parse(value)
+      }
+    } catch (err) {
+      console.error(err)
+      throw new GraphQLError(JSON.stringify(err))
     }
-  } catch (err) {
-    console.error(err)
-    throw new GraphQLError(JSON.stringify(err))
   }
-}
+
+export default publicGetTopicsWithConnectionsResolver

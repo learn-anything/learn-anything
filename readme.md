@@ -1,4 +1,10 @@
-# [Learn-Anything.xyz](https://learn-anything.xyz)
+<p align="center">
+  <a href="https://learn-anything.xyz">
+    <img alt="Learn-Anything.xyz" src="./docs/brand/learn-anything-banner.png" width="800" />
+  </a>
+</p>
+
+# [Learn-Anything.xyz](https://learn-anything.xyz) [![Discord](https://img.shields.io/badge/Discord-100000?style=flat&logo=discord&logoColor=white&labelColor=black&color=black)](https://discord.com/invite/bxtD8x6aNF)
 
 > Organize world's knowledge, explore connections and curate learning paths
 
@@ -8,9 +14,11 @@ The end goal of Learn Anything is to become the best place and tool for keeping 
 
 It is a fully open source project with an active community on [Discord](https://discord.com/invite/bxtD8x6aNF). There is great focus on both DX of developing everything LA and even more, the end user UX.
 
-Project as it stands is a website and a desktop app. There is also [mobile app](https://github.com/learn-anything/mobile) in works currently in separate repo. We plan to train our own LLMs as we provide AI interfaces to all things knowledge, be it global AGI level queries ala ChatGPT or [querying into any person's knowledge base](https://github.com/learn-anything/ai) with different levels of privacy.
+Project consists of a [website](website), [desktop app](app), [mobile app](mobile).
 
-There is more exciting projects planned and under way (like [digital idea/goods marketplace with solana support](https://github.com/learn-anything/buy)). If interested, read on to setup the project and start writing your first code. ♥️
+There is also separate repo of [AI](https://github.com/learn-anything/ai) where we train & fine tune LLMs to provide AI interfaces to all things knowledge. Part of the goals of LA is to reach AGI faster than [OpenAI](https://openai.com) and do it in a fully open way. The current start of that journey is in providing state of art ability to index any knowledge of a person and provide chat bot interface to it with different privacy controls. As well as having state of the art chat bots for each of the topics in LA platform.
+
+If you're interested in the mission and like the project, join [Discord](https://discord.com/invite/bxtD8x6aNF) where you can ask questions and interact with community and read on to get you started writing your first code.
 
 ###### Contents
 
@@ -22,13 +30,15 @@ There is more exciting projects planned and under way (like [digital idea/goods 
 - [Run GraphQL server (Grafbase)](#run-graphql-server-grafbase)
 - [Run website (Solid)](#run-website-solid)
 - [Run desktop app (Tauri/Rust)](#run-desktop-app-taurirust)
+- [Run mobile app (NativeScript/Solid)](#run-mobile-app-nativescriptsolid)
 - [Contribute](#contribute) - contribute to project effectively
 - [Docs](#docs)
+- [Design](#design)
 - [Commands](#commands)
 
-Current tasks to do are in [todo.md](todo.md) (sorted by priority). Will be migrated to GitHub issues soon. As aside there is work being done too to make [KusKus](https://github.com/kuskusapp/kuskus) be the GitHub issues client that will be recommended to keep track of issues being worked on. Can join development of that too if you like.
+Current tasks to do are in [GitHub issues](../../issues) (can [sort by priority](https://github.com/learn-anything/learn-anything.xyz/labels?q=priority)). Currently the issues are synced from [Linear](https://linear.app) but will be using [KusKus](https://github.com/kuskusapp/kuskus) instead soon.
 
-Do join [Discord](https://discord.com/invite/bxtD8x6aNF) and ask questions. Any issues with setup or making your first feature or trying to fix a bug will be resolved asap. Same goes for discussing ideas on how to make the tool even better than it is now.
+Any issues with setup or making your first feature or trying to fix a bug will be resolved asap. Same goes for discussing ideas on how to make the tool even better than it is now.
 
 ## File structure
 
@@ -44,25 +54,26 @@ Tech stack is described in [docs/tech-stack.md](docs/tech-stack.md).
     - [crud](grafbase/edgedb/crud) - CRUD functions on models (imported either from grafbase resolvers or from [cli](grafbase/edgedb/cli/))
   - [resolvers](grafbase/resolvers) - [edge resolvers](https://grafbase.com/docs/edge-gateway/resolvers) are server functions exposed with GraphQL
   - [grafbase.config.ts](grafbase/grafbase.config.ts) - [Grafbase's config](https://grafbase.com/docs/config). You create file in resolvers folder, then extend grafbase.config.ts. Can use [Pathfinder](https://pathfinder.dev) to test query. Then call it from anywhere using some GraphQL client.
-- [packages](packages) - shared TS packages
+- [mobile](mobile) - mobile app using NativeScript/Solid
+- [shared](shared) - shared TS functions (can be used by any part of monorepo)
 - [website](website) - learn-anything.xyz website code in Solid
   - [components](website/components) - solid components
   - [routes](website/src/routes) - routes defined using file system
 
 ## Setup
 
-Everything is driven using [bun](https://bun.sh) commands as part of monorepo setup using [bun workspaces](https://bun.sh/docs/install/workspaces).
+Everything is driven using [bun](https://bun.sh) commands as part of monorepo setup using [pnpm workspaces](https://pnpm.io/workspaces) ([bun gave issues with installing deps and breaking builds](docs/bun.md)) so [pnpm](https://pnpm.io) is used to install and add dependencies but bun to run them. You can also swap `bun` with `pnpm` and commands will work as well. Bun is used only because it's faster to run and works quite well already in most cases.
 
 First run:
 
 ```
-bun i
+pnpm i
 bun setup
 ```
 
-`bun setup` runs `bun setup.ts init` (can see [setup.ts](setup.ts) code for what it does). It will create `.env` files for you so you can start coding the project fast. It will also `git clone` [seed repo](https://github.com/learn-anything/seed). Which contains various files needed to bootstrap the database with content.
+`bun setup` runs `bun cmd.ts init` (can see [cmd.ts](cmd.ts) code for what it does). It will create `.env` files for you so you can start coding the project fast. It will also `git clone` [seed](https://github.com/learn-anything/seed), [ai](https://github.com/learn-anything/ai) and [solana](https://learn-anything.xyz/solana) repos.
 
-Running `bun setup:full` will clone [ai](https://github.com/learn-anything/ai), [mobile](https://github.com/learn-anything/mobile) and [buy](https://github.com/learn-anything/buy) codebases so you can work with them as one monorepo. Tooling for that will get better with time.
+Monorepo tooling should get better soon. If you're intested in making it better by integrating [Nx](https://nx.dev) or similar tools, please reach out on [Discord](https://discord.com/invite/bxtD8x6aNF).
 
 ### Setup EdgeDB
 
@@ -83,7 +94,17 @@ bun db:init
 
 Follow instructions, name EdgeDB instance `learn-anything`.
 
-Run `bun db:ui`. This will open EdgeDB graphical interface where you can run queries or explore the schema.
+Then run `bun cmd.ts seedEdgeDb`.
+
+Then do:
+
+```
+cd grafbase/edgedb
+edgedb database wipe -I learn-anything
+edgedb restore seed.db
+```
+
+Now you can run `bun db:ui`. This will open EdgeDB graphical interface where you can run queries or explore the schema. The EdgeDB database you got, has all the content of existing Learn Anything, you can explore the data inside and run various queries.
 
 If you ran `bun setup`, you should have already a `grafbase/.env` file with this content:
 
@@ -143,6 +164,8 @@ Download [Pathfinder](https://pathfinder.dev/) app and open http://localhost:400
 
 [Grafbase config](https://grafbase.com/docs/config) is set in [grafbase/grafbase.config.ts](grafbase/grafbase.config.ts). You specify what [resolvers](https://grafbase.com/docs/edge-gateway/resolvers) are defined, what inputs/outputs they have. Then you create or edit files in [grafbase/resolvers](grafbase/resolvers). Read existing resolvers to make sense of how it works.
 
+When you make changes to grafbase.config.ts as we are using [Mobius](https://github.com/SaltyAom/mobius) as our GraphQL client and it is fully typed. You can run `bun mobius-update`, it will update the schema in [shared/lib/mobius.ts](shared/lib/mobius.ts) with new schema.
+
 ## Run website (Solid)
 
 > **Warning**
@@ -174,7 +197,7 @@ Open http://localhost:3000
 > **Warning**
 > WIP, massive effort is put here after website is released and is working without issues
 
-Goal of desktop app is to be essentially a clone of [Obsidian](https://obsidian.md/)/[Reflect](https://reflect.app) (working with local markdown files). And with ability to publish the markdown content to LA. All private data and files will be end to end encrypted and synced with [mobile app](https://github.com/learn-anything/mobile).
+Goal of desktop app is to be essentially a clone of [Obsidian](https://obsidian.md/)/[Reflect](https://reflect.app) (working with local markdown files). And with ability to publish the markdown content to LA. All private data and files will be end to end encrypted and synced with [mobile app](mobile).
 
 It will be the best note taking experience you can get. All open source.
 
@@ -213,6 +236,10 @@ Running code via tests is very effective. You can open terminal on your right an
 
 You can point the tests at your own wiki/notes folder too. Put the folder with files into seed/test folder you get from running `bun dev-setup` -->
 
+## Run mobile app (NativeScript/Solid)
+
+Read instructions in [mobile](mobile)
+
 ## Contribute
 
 Current tasks to do are in [todo.md](todo.md) (sorted by priority). Will be organised much better with GitHub issues very soon.
@@ -227,11 +254,17 @@ We want this project to have by far the best DX of any open source project on Gi
 
 All docs can be seen in [docs](docs). Will be rendered nicely on website with [VitePress](https://vitepress.dev/) soon.
 
-It is advisable you read them, before you start developing anything as they try give a lot of context and general knowledge.
+It is advisable you read them, before you start developing anything as they provide a lot of context and general knowledge.
 
 There is big focus on documentation and clarity in the project. All code should be clear and understandable and well documented.
 
 Check [docs/dev-tips.md](docs/dev-tips.md) for some advice on development.
+
+## Design
+
+All design is done in [Figma](https://www.figma.com/file/cJbTJZLDUpz8QPI5Q9Etiu/LA?type=design&node-id=1%3A28&mode=design&t=jNI0kHbT31qr4rpm-1). There is also a [FigJam going over the software architecture](https://www.figma.com/file/GelB3DWCdjQ2tU4v3kbHOj/LA-architecture?type=whiteboard&node-id=0%3A1&t=nL3VXI1ztTo7ohmd-1) such as the [EdgeDB schema](grafbase/edgedb/dbschema/default.esdl).
+
+If you're designer and want to help out or have ideas, mention it on [Discord](https://discord.com/invite/bxtD8x6aNF).
 
 ## Commands
 
@@ -242,7 +275,7 @@ Ran with `bun <Name>`
 
 | Name                | Command                                                                                                                                                     |
 | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| setup               | bun setup.ts init                                                                                                                                           |
+| setup               | bun cmd.ts init                                                                                                                                             |
 | seed-clone          | git clone https://github.com/learn-anything/seed                                                                                                            |
 | seed-update         | cd seed && git pull                                                                                                                                         |
 | app                 | cd app && bun tauri:dev                                                                                                                                     |
@@ -269,4 +302,10 @@ Ran with `bun <Name>`
 
 ### ♥️
 
-[![MIT](http://bit.ly/mitbadge)](https://choosealicense.com/licenses/mit/) [![Twitter](http://bit.ly/latwitt)](https://twitter.com/learnanything_)
+Learn Anything logo by [NUMI](https://github.com/numi-hq/open-design):
+
+[<img src="https://raw.githubusercontent.com/numi-hq/open-design/main/assets/numi-lockup.png" alt="NUMI Logo" style="width: 200px;"/>](https://numi.tech/?ref=learn-anything)
+
+[![MIT License](http://bit.ly/mitbadge)](https://choosealicense.com/licenses/mit/)
+[![Discord](https://img.shields.io/badge/Discord-100000?style=flat&logo=discord&logoColor=white&labelColor=black&color=black)](https://discord.com/invite/bxtD8x6aNF)
+[![X](https://img.shields.io/badge/learnanything-100000?style=flat&logo=X&logoColor=white&labelColor=black&color=black)](https://twitter.com/learnanything_)

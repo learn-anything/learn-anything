@@ -22,15 +22,19 @@ export default function Modal(props: Props) {
           }
         }
       `}</style>
-      <div class="w-full h-full absolute top-0 left-0 flex items-center justify-center">
+      <div class="w-full h-full absolute top-0 z-10 left-0 flex items-center justify-center">
         <div
           id="ModalBackdrop"
           onclick={() => {
             user.setMode("Default")
+            console.log("hi")
           }}
-          class="bg-white bg-opacity-50 dark:bg-neutral-900   dark:bg-opacity-50 absolute left-0 w-full h-full top-0"
+          class="bg-white bg-opacity-50 z-40 dark:bg-neutral-900   dark:bg-opacity-50 absolute left-0 w-full h-full top-0"
         ></div>
-        {props.children}
+        <div class="h-screen w-screen flex items-center justify-center z-50">
+          {" "}
+          {props.children}
+        </div>
       </div>
     </>
   )

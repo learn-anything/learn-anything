@@ -1,27 +1,25 @@
 {
-  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.json"],
+  "include": ["src", "../solid.d.ts"],
   "compilerOptions": {
-    "lib": ["ESNext"],
-    "module": "esnext",
-    "target": "esnext",
-    "moduleResolution": "bundler",
-    "moduleDetection": "force",
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
-    "composite": true,
+    // lib
+    "module": "ESNext",
+    "target": "ESNext",
+    "lib": ["DOM", "ESNext"],
+    "moduleResolution": "Bundler",
+    "types": ["solid-start/env", "bun-types"],
+    // rules
     "strict": true,
-    "downlevelIteration": true,
-    "skipLibCheck": true,
-    "jsx": "react-jsx",
+    "isolatedModules": true,
+    "noUncheckedIndexedAccess": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "noUncheckedIndexedAccess": true,
     "resolveJsonModule": true,
     "allowJs": true,
-    "types": [
-      "solid-start/env",
-      "bun-types" // add Bun global
-    ],
-    "jsxImportSource": "solid-js"
+    "skipLibCheck": true,
+    // solid
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    // build
+    "noEmit": true
   }
 }

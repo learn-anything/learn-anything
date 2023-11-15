@@ -5,7 +5,7 @@ import { useGlobalState } from "../../GlobalContext/global"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import { useUser } from "../../GlobalContext/user"
 import { useMobius } from "../../root"
-import Icon from "../Icon"
+import { ui } from "@la/shared"
 
 interface Props {
   title: string
@@ -136,7 +136,7 @@ export default function GlobalGuideLink(props: Props) {
                     "bg-red-500 border-none transition-all"
                 )}
               >
-                <Icon
+                <ui.Icon
                   name="Heart"
                   fill="white"
                   border={
@@ -195,7 +195,7 @@ export default function GlobalGuideLink(props: Props) {
                     "bg-blue-500 bg-opacity border-none"
                 )}
               >
-                <Icon
+                <ui.Icon
                   name="Checkmark"
                   border={
                     topic.globalTopic.completedLinkIds.includes(props.id)

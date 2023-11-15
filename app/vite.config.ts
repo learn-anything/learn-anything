@@ -1,29 +1,24 @@
-import solid from "solid-start/vite"
+import solid from "vite-plugin-solid"
 import { defineConfig } from "vite"
-import devtools from "solid-devtools/vite"
+// TODO: commented as it had issues, probably works if i try again
+// import solidStyled from "vite-plugin-solid-styled"
 
-// TODO: ssr: false because with it createResource doesn't log to client
-// because callbacks happen on server
-// something to fix for later
-// ideally the landing page is SSR'd
-// with true, the logs are sent to client
 export default defineConfig({
   plugins: [
-    solid({ ssr: false }),
-    devtools({
-      /* additional options */
-      autoname: true, // e.g. enable autoname
-      locator: {
-        targetIDE: "vscode-insiders",
-        componentLocation: true,
-        jsxLocation: true,
-      },
-    }),
+    solid() as any,
+    // solidStyled({
+    //   prefix: "my-prefix", // optional
+    //   filter: {
+    //     include: "src/**/*.{ts,js,tsx,jsx}",
+    //     exclude: "node_modules/**/*.{ts,js,tsx,jsx}",
+    //   },
+    // }),
   ],
+  // prevent vite from obscuring rust errors
   clearScreen: false,
   // tauri expects a fixed port, fail if that port is not available
   server: {
-    port: 3000,
+    port: 1420,
     strictPort: true,
   },
   // to make use of `TAURI_DEBUG` and other env variables

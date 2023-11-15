@@ -1,21 +1,27 @@
-import { Context } from "@grafbase/sdk"
+import { Resolver } from "@grafbase/generated"
 import { GraphQLError } from "graphql"
 import { getUserDetails } from "../edgedb/crud/user"
 import { hankoIdFromToken } from "../lib/hanko-validate"
 
-export default async function getUserDetailsResolver(
-  root: any,
-  args: {},
-  context: Context
-) {
+// TODO:
+// @ts-ignore
+const getUserDetailsResolver: Resolver["Query.getUserDetails"] = async (
+  parent,
+  args,
+  context,
+  info
+) => {
   try {
     const hankoId = await hankoIdFromToken(context)
     if (hankoId) {
-      const user = await getUserDetails(hankoId)
-      return user
+      return await getUserDetails(hankoId)
+    } else {
+      throw new GraphQLError("Missing or invalid Authorization header")
     }
   } catch (err) {
     console.error(err)
     throw new GraphQLError(JSON.stringify(err))
   }
 }
+
+export default getUserDetailsResolver

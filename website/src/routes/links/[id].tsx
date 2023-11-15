@@ -3,7 +3,7 @@ import { useParams } from "solid-start"
 import { useMobius } from "../../root"
 import { Button } from "@kobalte/core"
 import { Checkbox } from "@kobalte/core"
-import Icon from "../../components/Icon"
+import { Icon } from "@la/shared/ui"
 // @ts-ignore
 import { Motion } from "@motionone/solid"
 
@@ -16,7 +16,7 @@ export default function GlobalLinkEdit() {
     const link = await mobius.query({
       getGlobalLink: {
         where: {
-          linkId: params.id!,
+          linkId: params.id!
         },
         select: {
           title: true,
@@ -27,9 +27,9 @@ export default function GlobalLinkEdit() {
           public: true,
           description: true,
           urlTitle: true,
-          year: true,
-        },
-      },
+          year: true
+        }
+      }
     })
     console.log(link, "link")
     // TODO: super annoying having to do this, figure out how to get stuff type safe
@@ -88,12 +88,12 @@ export default function GlobalLinkEdit() {
             animate={{
               transform: "translateY(0)",
               filter:
-                "blur(0px) drop-shadow(0px 10px 8px rgba(25, 25 ,25, 0.2))",
+                "blur(0px) drop-shadow(0px 10px 8px rgba(25, 25 ,25, 0.2))"
             }}
             initial={{
               transform: "translateY(500px)",
               filter:
-                "blur(2px) drop-shadow(0px 10px 8px rgba(25, 25 ,25, 0.5))",
+                "blur(2px) drop-shadow(0px 10px 8px rgba(25, 25 ,25, 0.5))"
             }}
             class="rounded-lg w-1/2 relative bg-white font-light h-1/2 flex flex-col p-6 px-6 gap-4"
           >

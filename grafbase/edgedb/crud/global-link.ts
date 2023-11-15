@@ -59,10 +59,10 @@ export async function getGlobalLink(id: string) {
       filter_single: { id: id },
       title: true,
       url: true,
-      fullUrl: true,
-      protocol: true,
       verified: true,
       public: true,
+      protocol: true,
+      fullUrl: true,
       description: true,
       urlTitle: true,
       year: true
@@ -76,50 +76,77 @@ export async function updateGlobalLinkStatus(
   globalLinkId: string,
   action: "like" | "unlike" | "complete" | "uncomplete"
 ) {
-  const userByHankoId = await e.select(e.User, (user) => ({
-    filter: e.all(
-      e.set(
-        e.op(user.hankoId, "=", hankoId),
-        e.op("exists", user.memberUntil),
-        e.op(user.memberUntil, ">", e.datetime_current())
-      )
-    )
-  }))
-
   const foundLink = e.select(e.GlobalLink, () => ({
     filter_single: { id: globalLinkId }
   }))
 
+  const foundUser = e.select(e.User, (user) => ({
+    filter: e.all(
+      e.set(
+        e.op(user.hankoId, "=", hankoId),
+        e.op(
+          e.op(
+            e.op("exists", user.memberUntil),
+            "and",
+            e.op(user.memberUntil, ">", e.datetime_current())
+          ),
+          "or",
+          e.op(user.freeActions, ">", 0)
+        )
+      )
+    )
+  }))
+
   switch (action) {
     case "like":
-      return e
-        .update(userByHankoId, () => ({
+      return await e
+        .update(foundUser, (user) => ({
           set: {
-            likedLinks: { "+=": foundLink }
+            likedLinks: { "+=": foundLink },
+            freeActions: e.op(
+              user.freeActions,
+              "-",
+              e.op(0, "if", e.op("exists", user.memberUntil), "else", 1)
+            )
           }
         }))
         .run(client)
     case "unlike":
       return e
-        .update(userByHankoId, () => ({
+        .update(foundUser, (user) => ({
           set: {
-            likedLinks: { "-=": foundLink }
+            likedLinks: { "-=": foundLink },
+            freeActions: e.op(
+              user.freeActions,
+              "-",
+              e.op(0, "if", e.op("exists", user.memberUntil), "else", 1)
+            )
           }
         }))
         .run(client)
     case "complete":
       return e
-        .update(userByHankoId, () => ({
+        .update(foundUser, (user) => ({
           set: {
-            completedLinks: { "+=": foundLink }
+            completedLinks: { "+=": foundLink },
+            freeActions: e.op(
+              user.freeActions,
+              "-",
+              e.op(0, "if", e.op("exists", user.memberUntil), "else", 1)
+            )
           }
         }))
         .run(client)
     case "uncomplete":
       return e
-        .update(userByHankoId, () => ({
+        .update(foundUser, (user) => ({
           set: {
-            completedLinks: { "-=": foundLink }
+            completedLinks: { "-=": foundLink },
+            freeActions: e.op(
+              user.freeActions,
+              "-",
+              e.op(0, "if", e.op("exists", user.memberUntil), "else", 1)
+            )
           }
         }))
         .run(client)
@@ -347,7 +374,7 @@ export async function addPersonalLink(
   url: string,
   title: string,
   hankoId: string,
-  description?: string
+  description: string | null
 ) {
   const [urlWithoutProtocol, protocol] = splitUrlByProtocol(url)
   if (urlWithoutProtocol && protocol) {

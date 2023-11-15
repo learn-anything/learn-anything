@@ -15,8 +15,12 @@ private
 # local sqlite dbs
 *.sqlite
 package-lock.json
+bun.lockb
 tsconfig.tsbuildinfo
 .cache/
 ai
-buy
-mobile
+solana
+**.db
+
+# vite
+**/vite.config.ts.timestamp-**

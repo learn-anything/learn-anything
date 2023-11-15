@@ -3,7 +3,8 @@ export default config({
   schema: g,
   experimental: {
     kv: true,
-    ai: true
+    ai: true,
+    codegen: true
   },
   auth: {
     rules: (rules) => {
@@ -46,13 +47,27 @@ g.query("publicGetGlobalTopics", {
     .list(),
   resolver: "public/getGlobalTopics"
 })
+g.query("publicGetPersonalTopic", {
+  args: { topicName: g.string(), user: g.string() },
+  returns: g
+    .ref(
+      g.type("publicGetPersonalTopicOutput", {
+        prettyName: g.string(),
+        content: g.string(),
+        public: g.boolean(),
+        topicPath: g.string()
+      })
+    )
+    .list(),
+  resolver: "public/getPersonalTopic"
+})
 
 const GlobalLink = g.type("GlobalLink", {
   id: g.string(),
   title: g.string(),
   url: g.string(),
-  protocol: g.string(),
   year: g.string().optional(),
+  protocol: g.string(),
   description: g.string().optional()
 })
 const globalGuideSection = g.type("globalGuideSection", {
@@ -172,7 +187,7 @@ g.query("getGlobalLink", {
       url: g.string(),
       verified: g.boolean(),
       public: g.boolean(),
-      protocol: g.string().optional(),
+      protocol: g.string(),
       fullUrl: g.string().optional(),
       description: g.string().optional(),
       urlTitle: g.string().optional(),
@@ -230,6 +245,12 @@ g.query("getSuggestionsForUrl", {
   resolver: "getSuggestionsForUrl"
 })
 
+g.query("getStripeDashboard", {
+  args: {},
+  returns: g.string(),
+  resolver: "getStripeDashboard"
+})
+
 g.query("stripe", {
   args: { plan: g.string(), userEmail: g.string() },
   returns: g.string(),
@@ -242,6 +263,30 @@ g.mutation("createUser", {
   args: { email: g.string() },
   returns: g.string(),
   resolver: "createUser"
+})
+
+g.mutation("updateTopicOfWiki", {
+  args: {
+    topicName: g.string(),
+    prettyName: g.string(),
+    content: g.string(),
+    published: g.boolean(),
+    topicPath: g.string()
+  },
+  returns: g.string(),
+  resolver: "updateTopicOfWiki"
+})
+
+g.mutation("createProduct", {
+  args: {
+    name: g.string(),
+    description: g.string().optional(),
+    imageUrl: g.string().optional(),
+    websiteUrl: g.string().optional(),
+    priceInUsdCents: g.int().optional()
+  },
+  returns: g.string(),
+  resolver: "createProduct"
 })
 
 g.mutation("deletePersonalLink", {
@@ -272,6 +317,7 @@ const linkAction = g.enum("linkAction", [
   "complete",
   "uncomplete"
 ])
+// TODO: should not have Resolver in name
 g.mutation("updateLinkStatusResolver", {
   args: { linkId: g.string(), action: g.enumRef(linkAction) },
   returns: g.string(),

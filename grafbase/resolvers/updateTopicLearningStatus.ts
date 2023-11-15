@@ -1,4 +1,4 @@
-import { Context } from "@grafbase/sdk"
+import { Resolver } from "@grafbase/generated"
 import { GraphQLError } from "graphql"
 import {
   updateTopicLearningStatus,
@@ -6,34 +6,33 @@ import {
 } from "../edgedb/crud/global-topic"
 import { hankoIdFromToken } from "../lib/hanko-validate"
 
-export default async function updateTopicLearningStatusResolver(
-  root: any,
-  args: {
-    learningStatus: "to_learn" | "learning" | "learned" | "none"
-    topicName: string
-    verifiedTopic: boolean
-  },
-  context: Context
-) {
-  try {
-    const hankoId = await hankoIdFromToken(context)
-    if (hankoId) {
-      if (args.verifiedTopic) {
-        await updateTopicLearningStatus(
-          hankoId,
-          args.topicName,
-          args.learningStatus
-        )
+// TODO:
+// @ts-ignore
+const updateTopicLearningStatusResolver: Resolver["Mutation.updateTopicLearningStatus"] =
+  async (parent, args, context, info) => {
+    try {
+      const hankoId = await hankoIdFromToken(context)
+      if (hankoId) {
+        if (args.verifiedTopic) {
+          await updateTopicLearningStatus(
+            hankoId,
+            args.topicName,
+            args.learningStatus
+          )
+        } else {
+          updateUnverifiedTopicLearningStatus(
+            hankoId,
+            args.topicName,
+            args.learningStatus
+          )
+        }
       } else {
-        updateUnverifiedTopicLearningStatus(
-          hankoId,
-          args.topicName,
-          args.learningStatus
-        )
+        throw new GraphQLError("Missing or invalid Authorization header")
       }
+    } catch (err) {
+      console.error(err)
+      throw new GraphQLError(JSON.stringify(err))
     }
-  } catch (err) {
-    console.error(err, { args })
-    throw new GraphQLError(JSON.stringify(err))
   }
-}
+
+export default updateTopicLearningStatusResolver

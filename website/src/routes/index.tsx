@@ -1,11 +1,10 @@
 import { Show, createMemo, createResource } from "solid-js"
 import { useNavigate } from "solid-start"
-import { getHankoCookie } from "../../lib/auth"
-import { useGlobalState } from "../GlobalContext/global.ts"
-import { Search, createSearchState } from "../components/Search"
-import { ForceGraph } from "../components/force-graph/index.tsx"
+import { getHankoCookie } from "@la/shared/lib"
+import { useGlobalState } from "../GlobalContext/global"
+import { ui } from "@la/shared"
 import { logUntracked } from "../lib/baselime"
-import { getRandomItem } from "../lib/lib.ts"
+import { getRandomItem } from "../lib/lib"
 
 export default function Home() {
   const navigate = useNavigate()
@@ -26,7 +25,7 @@ export default function Home() {
     }))
   })
 
-  const search_state = createSearchState({
+  const search_state = ui.createSearchState({
     searchResults,
     onSelect: ({ name }) => {
       const foundTopic = global.state.topicsWithConnections.find(
@@ -67,7 +66,7 @@ export default function Home() {
           flex flex-col items-center justify-center
           bg-neutral-950 text-white"
       >
-        <ForceGraph
+        <ui.ForceGraph
           onNodeClick={(name) => {
             navigate(`/${name}`)
           }}
@@ -82,10 +81,8 @@ export default function Home() {
         >
           {/* shadow el */}
           <div
-            class="absolute -z-1 inset-0 rounded-full bg-neutral-950/90"
-            style={`
-              filter: blur(100px);
-            `}
+            class="absolute -z-1 inset-0 pointer-events-none rounded-full bg-neutral-950/90"
+            style={`filter: blur(100px)`}
           />
           <div
             class="tracking-wide font-bold bg-clip-text "
@@ -101,7 +98,7 @@ export default function Home() {
               "w-[100%]": search_state.searchOpen
             }}
           >
-            <Search placeholder={searchPlaceholder()} state={search_state} />
+            <ui.Search placeholder={searchPlaceholder()} state={search_state} />
           </div>
         </div>
         <Show when={!hankoCookie}>

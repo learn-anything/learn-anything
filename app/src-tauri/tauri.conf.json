@@ -1,9 +1,10 @@
 {
+  "$schema": "https://raw.githubusercontent.com/tauri-apps/tauri/1.x/core/tauri-config-schema/schema.json",
   "build": {
-    "beforeDevCommand": "bun dev",
-    "beforeBuildCommand": "bun build",
-    "devPath": "http://localhost:3000",
-    "distDir": "https://learn-anything.xyz",
+    "beforeDevCommand": "bun run dev",
+    "beforeBuildCommand": "bun run build",
+    "devPath": "http://localhost:1420",
+    "distDir": "../dist",
     "withGlobalTauri": false
   },
   "package": {
@@ -40,7 +41,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "learn-anything.xyz",
+      "identifier": "xyz.learn-anything",
       "targets": "all"
     },
     "security": {
@@ -50,7 +51,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "Learn Anything",
+        "title": "",
         "titleBarStyle": "Overlay",
         "maximized": true
       }

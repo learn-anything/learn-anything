@@ -1,6 +1,6 @@
 import { For, Show, createEffect, createSignal, untrack } from "solid-js"
 import { createShortcut } from "@solid-primitives/keyboard"
-import Icon from "../Icon"
+import { ui } from "@la/shared"
 import { useEditGuide } from "../../GlobalContext/edit-guide"
 
 export default function GuideSectionEdit(props: any) {
@@ -27,7 +27,7 @@ export default function GuideSectionEdit(props: any) {
     "Chemistry",
     "Physics",
     "Nature",
-    "Math",
+    "Math"
   ])
   const [topicSearchResults, setTopicSearchResults] = createSignal<string[]>([])
   const [topicSearchInput, setTopicSearchInput] = createSignal("")
@@ -59,8 +59,8 @@ export default function GuideSectionEdit(props: any) {
               .split("")
               .every((value) => {
                 return word.split("").includes(value)
-              }),
-          ),
+              })
+          )
         )
       })
       setFocusedTodoTitle(topicSearchResults()[focusedTopic()])
@@ -138,8 +138,8 @@ export default function GuideSectionEdit(props: any) {
                                           onClick={() => {
                                             setFocusedTopic(
                                               topicSearchResults().indexOf(
-                                                topic,
-                                              ),
+                                                topic
+                                              )
                                             )
                                           }}
                                           class="px-4 overflow-auto py-2"
@@ -268,10 +268,10 @@ export default function GuideSectionEdit(props: any) {
                     <div class="flex items-center gap-[34px]">
                       <div class="gap-4 flex ">
                         <div class="rounded-[2px] border h-[28px] w-[28px] border-[#CCCCCC]">
-                          <Icon name="Plus" />
+                          <ui.Icon name="Plus" />
                         </div>
                         <div class="rounded-[2px] border h-[28px] w-[28px] border-[#CCCCCC]">
-                          <Icon name="Checkmark" />
+                          <ui.Icon name="Checkmark" />
                         </div>
                       </div>
                     </div>
@@ -286,7 +286,8 @@ export default function GuideSectionEdit(props: any) {
               setAddLink(true)
             }}
           >
-            <Icon name="Plus"></Icon>Add a Link
+            <ui.Icon name="Plus" />
+            Add a Link
           </div>
         </div>
         <Show when={addLink()}>

@@ -1,5 +1,11 @@
 ## Public website release
 
+- inbox and top inbox. make it save into LA, as personal links.
+  - create a CLI for it
+  - use it. allow searches for it. add metadata to each addition
+- setup to use https://vercel.com/font (should probably look better than current font, try it out)
+- add tags support. pre tag with inbox. top-inbox
+  - add ‘explain ..’ selected text. show in desktop app result with ability to drill further. if cache return instantly. if not let it process in background then send notification or instantly turn to app and stream result. user setting. cache result. always use best state of art GPT!
 - `setup.ts` works well
 - add command to generate the command table from package.json (as external cli tool?)
 - be able to attach a topic to a link

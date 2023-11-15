@@ -1,9 +1,7 @@
 /* @refresh reload */
 import { render } from "solid-js/web"
 
-import "./index.css"
-import App from "./App"
+import "./root.css"
+import Root from "./root.jsx"
 
-const root = document.getElementById("root")
-
-render(() => <App />, root!)
+render(() => <Root />, document.getElementById("root") as HTMLElement)

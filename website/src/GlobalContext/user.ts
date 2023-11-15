@@ -8,7 +8,7 @@ import {
 } from "solid-js"
 import { createStore } from "solid-js/store"
 import { MobiusType } from "../root"
-import { getHankoCookie } from "../../lib/auth"
+import { getHankoCookie } from "@la/shared/lib"
 import { useLocation } from "solid-start"
 
 type Topic = {

@@ -3,6 +3,7 @@ import { GraphQLError } from "graphql"
 import Stripe from "stripe"
 import { upgradeStripeMonthlyPlanToYear } from "../edgedb/crud/user"
 import { hankoIdFromToken } from "../lib/hanko-validate"
+import { Resolver } from "@grafbase/generated"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16",
@@ -11,15 +12,15 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 // TODO: should use grafbase stripe connector
 // https://grafbase.com/docs/connectors
-export default async function updateStripePlan(
-  root: any,
-  args: {},
-  context: Context
-) {
-  console.log("updating stripe plan", { args })
-  const hankoId = await hankoIdFromToken(context)
-  if (hankoId) {
-    try {
+const updateStripePlanResolver: Resolver["Mutation.updateStripePlan"] = async (
+  parent,
+  args,
+  context,
+  info
+) => {
+  try {
+    const hankoId = await hankoIdFromToken(context)
+    if (hankoId) {
       const stripeSubscriptionObjectId =
         await upgradeStripeMonthlyPlanToYear(hankoId)
       const subscription = await stripe.subscriptions.retrieve(
@@ -41,9 +42,13 @@ export default async function updateStripePlan(
         }
       )
       return "ok"
-    } catch (err) {
-      console.error(err)
-      throw new GraphQLError(JSON.stringify(err))
+    } else {
+      throw new GraphQLError("Missing or invalid Authorization header")
     }
+  } catch (err) {
+    console.error(err)
+    throw new GraphQLError(JSON.stringify(err))
   }
 }
+
+export default updateStripePlanResolver

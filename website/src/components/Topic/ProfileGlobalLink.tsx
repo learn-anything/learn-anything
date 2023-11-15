@@ -1,10 +1,9 @@
 import clsx from "clsx"
 import { Show } from "solid-js"
-import { useNavigate } from "solid-start"
 import { useGlobalState } from "../../GlobalContext/global"
 import { useUser } from "../../GlobalContext/user"
 import { useMobius } from "../../root"
-import Icon from "../Icon"
+import { ui } from "@la/shared"
 
 interface Props {
   title: string
@@ -28,7 +27,7 @@ export default function ProfileGuideLink(props: Props) {
       <div class="w-full  h-full flex justify-between items-center">
         <div class={clsx("w-fit flex flex-col", props.description && "gap-1")}>
           <div class="flex gap-3 items-center">
-            <Icon name="Verified" />
+            <ui.Icon name="Verified" />
             <a
               class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer"
               href={`${props.protocol}://${props.url}`}
@@ -104,7 +103,7 @@ export default function ProfileGuideLink(props: Props) {
                   "bg-red-500 border-none transition-all"
               )}
             >
-              <Icon
+              <ui.Icon
                 name="Heart"
                 fill="white"
                 border={
@@ -162,7 +161,7 @@ export default function ProfileGuideLink(props: Props) {
                   "bg-blue-500 bg-opacity border-none"
               )}
             >
-              <Icon
+              <ui.Icon
                 name="Checkmark"
                 border={
                   user.user.completedLinks.some((link) => link.id === props.id)

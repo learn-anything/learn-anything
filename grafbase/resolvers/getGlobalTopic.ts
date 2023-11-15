@@ -1,21 +1,28 @@
-import { Context } from "@grafbase/sdk"
+import { Resolver } from "@grafbase/generated"
 import { GraphQLError } from "graphql"
 import { getGlobalTopicDetails } from "../edgedb/crud/global-topic"
 import { hankoIdFromToken } from "../lib/hanko-validate"
 
-export default async function getGlobalTopicResolver(
-  root: any,
-  args: { topicName: string },
-  context: Context
-) {
+// TODO: not sure
+// @ts-ignore
+const getGlobalTopicResolver: Resolver["Query.getGlobalTopic"] = async (
+  parent,
+  args,
+  context,
+  info
+) => {
   try {
     const hankoId = await hankoIdFromToken(context)
     if (hankoId) {
-      const topicDetails = await getGlobalTopicDetails(args.topicName, hankoId)
-      return topicDetails
+      const topic = await getGlobalTopicDetails(args.topicName, hankoId)
+      return topic
+    } else {
+      throw new GraphQLError("Missing or invalid Authorization header")
     }
   } catch (err) {
-    console.error(err, { args })
+    console.error(err)
     throw new GraphQLError(JSON.stringify(err))
   }
 }
+
+export default getGlobalTopicResolver

@@ -1,15 +1,22 @@
-# Short summary:
-# User: user of the app. owns one wiki
-# Wiki: collection of topics
-# Topic: contains markdown content (user's knowledge on the topic) + notes/links
-# GlobalTopic: public GlobalTopic is found on learn-anything.xyz/<GlobalTopic>
+# schema that defines entire LA data model
+# User type is at the center of it
+# there are `GlobalThings` and `PersonalThings`
+# such as GlobalTopic and Topic (will be named PersonalTopic in future)
+# GlobalTopic is viewed by all and many can edit it
+# PersonalTopic is part of user's PersonalWiki and only that user can edit it (at least for now)
+# being edited as we figure out how to best store personal user data and integrate it well
+# into the global knowledge graph that is LA
+# figjam going over the architecture:
+# https://www.figma.com/file/GelB3DWCdjQ2tU4v3kbHOj/LA-architecture?type=whiteboard&node-id=0%3A1&t=nL3VXI1ztTo7ohmd-1
+
 module default {
   type User {
     # unique email
     required email: str {
       constraint exclusive;
     };
-    # uniquie UUID for user, created on signup
+    # User is authorised by `hankoToken` which comes from Hanko JWT token
+    # its unique and is created on signup
     hankoId: str {
         constraint exclusive;
     };
@@ -22,8 +29,13 @@ module default {
     displayName: str;
     # aws s3 or cloudflare r2 url with image
     profileImage: str;
-    # user owns one wiki
-    link wiki := .<user[is Wiki];
+    # limit to actions non member user can do
+    freeActions: int16 {
+      default := 10;
+    };
+    # TODO: in future can consider `GlobalWiki` as concept maybe as a wiki that multiple users can edit
+    # user owns one personal wiki
+    link wiki := .<user[is PersonalWiki];
     # topics user wants to learn
     multi topicsToLearn: GlobalTopic;
     # topics user is learning
@@ -41,11 +53,17 @@ module default {
     # links user has disliked
     multi dislikedLinks: GlobalLink;
     # notes user has liked
+    # TODO: what happens when user deletes note? should it be deleted from here too?
+    # or moved to global note?
     multi likedNotes: Note;
     # notes user has disliked
     multi dislikedNotes: Note;
     # list of topics user is moderating
     multi topicsModerated: GlobalTopic;
+    # products user is selling
+    multi productsSelling: Product;
+    # products user bought
+    multi productsBought: Product;
     # date until user has paid membership for
     memberUntil: datetime;
     # month / year
@@ -55,9 +73,14 @@ module default {
     # whether user has stopped subscription and won't be be charged again
     subscriptionStopped: bool;
   }
-  type Wiki {
+  # other users can `like` or `follow` PersonalWiki
+  type PersonalWiki {
+    # TODO: is `required link user` the best way to store this relationship of a user owning one wiki
     # owner of this wiki
     required link user: User;
+    # all topics belonging to this wiki
+    multi link topics := .<wiki[is Topic];
+    # TODO: everything below is questionable (maybe no need to store it)
     # contains topic names + children of the topic(s)
     # is used to generate sidebar in wiki
     # indent is how to know which topics are children of which
@@ -68,17 +91,19 @@ module default {
     #   1: {name: 'Grafana', indent: 1},
     # }
     # TODO: should in theory just be array of objects above. but how?
-    # TODO: perhaps there is better way to do this?
+    # TODO: perhaps there is better way to do this?8
+    # TODO: probably computed from the topics, can also compute it as part of query
+    # so maybe no need to store it?
     topicSidebar: json;
     # used to generate local interactive graph of topics for wiki
     # TODO: find out structure needed for this
+    # TODO: same for this, can be computed as part of query
     topicGraph: json;
-    # all topics belonging to this wiki
-    multi link topics := .<wiki[is Topic];
   }
+  # TODO: should be called PersonalTopic
   type Topic {
     # wiki this topic belongs to
-    required link wiki: Wiki;
+    required link wiki: PersonalWiki;
     # url friendly unique name of topic. i.e. 'physics' or 'linear-algebra'
     # lowercase + dash separate words
     # the connected .md file name of topic is also this name
@@ -88,17 +113,25 @@ module default {
     # pretty version of `name`, uppercased nicely, proper capitalisation
     # i.e. Physics
     required prettyName: str;
-    # true = anyone can see the topic. false = only user can see topic
-    required public: bool;
     # markdown content of topic (user's knowledge/thoughts on the topic)
     required content: str;
+    # true = anyone can see the topic. false = only user can see topic
+    public: bool;
+    # non published content will be end to end encrypted
+    required published: bool;
     # each published topic is part of a global topic
+    # TODO: not sure how to best do it
+    # TODO: probably best to just do it by `name`, if `name` matches, its part of that global topic
     globalTopic: GlobalTopic;
     # optional path of topic: /physics/quantum-physics where each GlobalTopic name is separated by /
+    # for start, do the folder/file structure and have that be the topicPath
+    # optional for users to define
     topicPath: str;
+    # TODO: there should probably be a GlobalNote and PersonalNote
     # all notes belonging to this topic
     multi link notes := .<topic[is Note];
     # all links belonging to this topic
+    # TODO: should probably be PersonalLink, not Link (need to check properly)
     multi link links := .<topic[is Link];
     # parent topic if there is one
     parentTopic: Topic;
@@ -304,6 +337,7 @@ module default {
     # list of links in a section
     multi links: GlobalLink;
   }
+  # TODO: think through how useful this is
   type GlobalGraph {
     # JSON graph of all topics and connections
     # structure:
@@ -315,5 +349,14 @@ module default {
     # ]
     # gets recomputed from how users in LA draw connections between topics
     required connections: json;
+  }
+  # digital marketplace (anything from above can in theory be a product that can have a price attached)
+  # or be gated to certain members that user decides on
+  type Product {
+    required name: str;
+    description: str;
+    imageUrl: str;
+    websiteUrl: str;
+    priceInUsdCents: int16;
   }
 }

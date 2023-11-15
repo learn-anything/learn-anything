@@ -5,9 +5,9 @@ import { Context } from "@grafbase/sdk"
 // validates that the token in `authorization` header is correct
 // if it is valid, returns hanko id of the user
 export async function hankoIdFromToken(context: Context) {
-  // if (process.env.GRAFBASE_ENV === "dev") {
-  //   return process.env.LOCAL_USER_HANKO_ID
-  // }
+  if (process.env.GRAFBASE_ENV === "dev") {
+    return process.env.LOCAL_USER_HANKO_ID
+  }
   const authHeader = context.request.headers["authorization"]
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     throw new GraphQLError("Missing or invalid Authorization header")
@@ -21,7 +21,7 @@ export async function hankoIdFromToken(context: Context) {
     const hankoId = verifiedJWT.payload.sub
     return hankoId
   } catch (err) {
-    console.error(err, "error verifying token", { context })
+    console.error(err, "error verifying token")
     throw new GraphQLError("Verification failed")
   }
 }

@@ -1,0 +1,15 @@
+# https://www.gitpod.io/docs/config-gitpod-file
+
+image:
+  file: .gitpod.Dockerfile
+
+tasks:
+  - name: Install dependencies
+    init: |
+      bun i
+      bun setup
+
+vscode:
+  extensions:
+    - esbenp.prettier-vscode
+    - dbaeumer.vscode-eslint
