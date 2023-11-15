@@ -42,7 +42,7 @@ export function Monaco() {
   })
 
   return (
-    <div class="flex flex-col h-full overflow-auto">
+    <div class="w-full h-full overflow-auto">
       <MonacoEditor
         language={"markdown"}
         onChange={(text) => {
