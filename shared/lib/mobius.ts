@@ -1,34 +1,9 @@
-// TODO: https://github.com/learn-anything/learn-anything.xyz/issues/66
-// currently we start grafbase server then go to the schema and manually copy it here
-// so https://github.com/SaltyAom/mobius graphql client is type safe
-// its very annoying and should be automatic
-// there is way to solve this using
-// `npx grafbase@latest subgraph introspect http://127.0.0.1:4000/graphql`
-// then parsing output and replacing this file inline
-// details in https://discord.com/channels/890534438151274507/1174283549004804106
 export const grafbaseTypeDefs = `
-"""
-De-prioritizes a fragment, causing the fragment to be omitted in the initial response and delivered as a subsequent response afterward.
-"""
-directive @defer(
-  """When true fragment may be deferred"""
-  if: Boolean! = true
-
-  """
-  This label should be used by GraphQL clients to identify the data from patch responses and associate it with the correct fragment.
-  """
-  label: String
-) on INLINE_FRAGMENT | FRAGMENT_SPREAD
-
-"""Indicates that an input object is a oneOf input object"""
-directive @oneOf on INPUT_OBJECT
-
 type CompletedLink {
   id: String!
   title: String!
   url: String!
 }
-
 type GlobalLink {
   id: String!
   title: String!
@@ -37,13 +12,11 @@ type GlobalLink {
   protocol: String!
   description: String
 }
-
 type LikedLink {
   id: String!
   title: String!
   url: String!
 }
-
 type Mutation {
   createUser(email: String!): String!
   updateTopicOfWiki(topicName: String!, prettyName: String!, content: String!, published: Boolean!): String!
@@ -61,13 +34,11 @@ type Mutation {
   internalUpdateLatestGlobalGuide(topicName: String!, topicSummary: String!, sections: [section!]!): String!
   internalAddGlobalLinkToSection(linkUrl: String!, topicName: String!, sectionName: String!): String!
 }
-
 type PersonalLink {
   id: String!
   title: String!
   url: String!
 }
-
 type Query {
   publicGetTopicsWithConnections: [publicGetTopicsWithConnectionsOutput!]!
   publicGetGlobalTopics: [publicGetGlobalTopicsOutput!]!
@@ -85,78 +56,47 @@ type Query {
   getStripeDashboard: String!
   stripe(plan: String!, userEmail: String!): String!
 }
-
 type getGlobalLinksOutput {
   id: String!
   title: String!
   url: String!
 }
-
 type getGlobalTopicOutput {
   learningStatus: learningStatus!
   likedLinkIds: [String!]!
   completedLinkIds: [String!]!
 }
-
 type getPricingUserDetailsOutput {
   stripePlan: String
   memberUntil: String
   subscriptionStopped: Boolean
 }
-
 type getTopicsLearnedOutput {
   topicsToLearn: [topicToLearn!]!
   topicsLearning: [topicToLearn!]!
   topicsLearned: [topicToLearn!]!
 }
-
 type getUserDetailsOutput {
   isMember: Boolean!
 }
-
 type globalGuideSection {
   title: String!
   summary: String
   links: [GlobalLink!]!
 }
-
-enum globalLinkAction {
-  like
-  unlike
-  complete
-  uncomplete
-}
-
 type globalNote {
   content: String!
   url: String
 }
-
 type latestGlobalGuide {
   summary: String!
   sections: [globalGuideSection!]!
 }
-
-enum learningStatus {
-  to_learn
-  learning
-  learned
-  none
-}
-
-enum linkAction {
-  like
-  unlike
-  complete
-  uncomplete
-}
-
 type outputOfGetLikedLinks {
   likedLinks: [LikedLink!]!
   completedLinks: [CompletedLink!]!
   personalLinks: [PersonalLink!]!
 }
-
 type publicGetGlobalLinkOutput {
   title: String!
   url: String!
@@ -168,7 +108,6 @@ type publicGetGlobalLinkOutput {
   urlTitle: String
   year: String
 }
-
 type publicGetGlobalTopicOutput {
   prettyName: String!
   topicSummary: String!
@@ -176,30 +115,43 @@ type publicGetGlobalTopicOutput {
   links: [GlobalLink!]!
   notesCount: Int!
 }
-
 type publicGetGlobalTopicsOutput {
   prettyName: String!
   name: String!
 }
-
 type publicGetTopicsWithConnectionsOutput {
   name: String!
   prettyName: String!
   connections: [String!]!
 }
-
-input section {
-  title: String!
-  summary: String
-  linkIds: [String!]!
-}
-
 type topicToLearn {
   name: String!
   prettyName: String!
   verified: Boolean!
 }
-
+enum globalLinkAction {
+  like
+  unlike
+  complete
+  uncomplete
+}
+enum learningStatus {
+  to_learn
+  learning
+  learned
+  none
+}
+enum linkAction {
+  like
+  unlike
+  complete
+  uncomplete
+}
+input section {
+  title: String!
+  summary: String
+  linkIds: [String!]!
+}
 input updateGrafbaseKvOutput {
   name: String!
   prettyName: String!

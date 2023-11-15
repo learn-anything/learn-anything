@@ -20,6 +20,7 @@
     "ts": "tput reset && bun --watch run.ts",
     "test-rust-wiki": "cd app/src-tauri/crates/wiki/ && cargo watch -q -- sh -c \"tput reset && cargo test -q --lib\"",
     "grafbase": "npx grafbase@latest dev",
+    "mobius-update": "bun cmd.ts updateMobiusSchema",
     "format": "prettier -w .",
     "lint:code": "eslint --ignore-path .gitignore --max-warnings 0 --ext .ts,.tsx,.js,.jsx .",
     "lint:types": "tsc --noEmit",

@@ -38,7 +38,7 @@ switch (command) {
 async function setupEnvFiles() {
   const currentFilePath = import.meta.path
   const grafbaseEnvPath = `${currentFilePath.replace(
-    "setup.ts",
+    "cmd.ts",
     "grafbase/.env"
   )}`
   const grfabaseEnvfileExists = await Bun.file(grafbaseEnvPath).exists()
@@ -54,7 +54,7 @@ INTERNAL_SECRET=secret`
     console.log(`File: ${grafbaseEnvPath} already exists`)
   }
   const grafbaseEdgedbEnvPath = `${currentFilePath.replace(
-    "setup.ts",
+    "cmd.ts",
     "grafbase/edgedb/.env"
   )}`
   const grafbaseEdgedbEnvFileExists = await Bun.file(
@@ -75,7 +75,7 @@ email=`
   }
 
   const websiteEnvFilePath = `${currentFilePath.replace(
-    "setup.ts",
+    "cmd.ts",
     "website/.env"
   )}`
   const websiteEnvFileExists = await Bun.file(websiteEnvFilePath).exists()
@@ -133,5 +133,17 @@ async function seedEdgeDb() {
 }
 
 async function updateMobiusSchema() {
-  await $`npx grafbase@latest subgraph introspect http://127.0.0.1:4000/graphql`
+  const schema = (
+    await $`npx grafbase@latest subgraph introspect http://127.0.0.1:4000/graphql`
+  ).trim()
+  const formattedSchema = `export const grafbaseTypeDefs = \`
+${schema}
+\``
+
+  const currentFilePath = import.meta.path
+  const mobiusFilePath = `${currentFilePath.replace(
+    "cmd.ts",
+    "shared/lib/mobius.ts"
+  )}`
+  Bun.write(mobiusFilePath, formattedSchema)
 }

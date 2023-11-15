@@ -164,6 +164,8 @@ Download [Pathfinder](https://pathfinder.dev/) app and open http://localhost:400
 
 [Grafbase config](https://grafbase.com/docs/config) is set in [grafbase/grafbase.config.ts](grafbase/grafbase.config.ts). You specify what [resolvers](https://grafbase.com/docs/edge-gateway/resolvers) are defined, what inputs/outputs they have. Then you create or edit files in [grafbase/resolvers](grafbase/resolvers). Read existing resolvers to make sense of how it works.
 
+When you make changes to grafbase.config.ts as we are using [Mobius](https://github.com/SaltyAom/mobius) as our GraphQL client and it is fully typed. You can run `bun mobius-update`, it will update the schema in [shared/lib/mobius.ts](shared/lib/mobius.ts) with new schema.
+
 ## Run website (Solid)
 
 > **Warning**
