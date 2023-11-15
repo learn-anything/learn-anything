@@ -196,7 +196,7 @@ export type Resolver = {
   'Query.getStripeDashboard': ResolverFn<Schema['Query'], {  }, string>
   'Query.stripe': ResolverFn<Schema['Query'], { plan: string, userEmail: string,  }, string>
   'Mutation.createUser': ResolverFn<Schema['Mutation'], { email: string,  }, string>
-  'Mutation.updateTopicOfWiki': ResolverFn<Schema['Mutation'], { topicName: string, prettyName: string, content: string, published: boolean,  }, string>
+  'Mutation.updateTopicOfWiki': ResolverFn<Schema['Mutation'], { topicName: string, prettyName: string, content: string, published: boolean, topicPath: string,  }, string>
   'Mutation.createProduct': ResolverFn<Schema['Mutation'], { name: string, description: string | null, imageUrl: string | null, websiteUrl: string | null, priceInUsdCents: number | null,  }, string>
   'Mutation.deletePersonalLink': ResolverFn<Schema['Mutation'], { personalLinkId: string,  }, string>
   'Mutation.updateTopicLearningStatus': ResolverFn<Schema['Mutation'], { learningStatus: Schema['learningStatus'], topicName: string, verifiedTopic: boolean,  }, string>

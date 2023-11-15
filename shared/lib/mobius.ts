@@ -19,7 +19,7 @@ type LikedLink {
 }
 type Mutation {
   createUser(email: String!): String!
-  updateTopicOfWiki(topicName: String!, prettyName: String!, content: String!, published: Boolean!): String!
+  updateTopicOfWiki(topicName: String!, prettyName: String!, content: String!, published: Boolean!, topicPath: String!): String!
   createProduct(name: String!, description: String, imageUrl: String, websiteUrl: String, priceInUsdCents: Int): String!
   deletePersonalLink(personalLinkId: String!): String!
   updateTopicLearningStatus(learningStatus: learningStatus!, topicName: String!, verifiedTopic: Boolean!): String!

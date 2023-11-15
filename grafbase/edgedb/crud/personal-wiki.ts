@@ -18,7 +18,8 @@ export async function editTopic(
   topicName: string,
   prettyName: string,
   published: boolean,
-  fileContent: string
+  fileContent: string,
+  topicPath: string
 ) {
   const foundWiki = e.assert_single(
     e.assert_exists(
@@ -34,7 +35,8 @@ export async function editTopic(
       set: {
         content: fileContent,
         prettyName: prettyName,
-        public: true
+        public: published,
+        topicPath: topicPath
       }
     }))
     .run(client)

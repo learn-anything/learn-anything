@@ -1,23 +1,24 @@
 import { ui } from "@la/shared"
 import { FancyButton, Modal } from "@la/shared/ui"
+import { createShortcut } from "@solid-primitives/keyboard"
 import { invoke } from "@tauri-apps/api/tauri"
-import { Show, createMemo } from "solid-js"
+import { Show, createMemo, createSignal } from "solid-js"
 import { isLoggedIn } from "../lib/lib"
 import { useGlobalState } from "./GlobalContext/global"
 import { useUser } from "./GlobalContext/user"
-import { useWiki } from "./GlobalContext/wiki"
 import { Monaco } from "./components/Monaco/Monaco"
-import SearchModal from "./components/SearchModal"
 import Settings from "./components/Settings"
 import Sidebar from "./components/Sidebar"
 import { useMobius } from "./root"
-import { createShortcut } from "@solid-primitives/keyboard"
 
 export default function App() {
   const global = useGlobalState()
   const user = useUser()
-  const wiki = useWiki()
+  // const wiki = useWiki()
   const mobius = useMobius()
+  const [publishingState, setPublishingState] = createSignal<null | string>(
+    null,
+  )
 
   // TODO: CMD+L = search files/topics in wiki
   // there was some issue with CMD+L not triggering, fix
@@ -77,45 +78,75 @@ export default function App() {
                     const loggedIn = isLoggedIn(global)
                     // TODO: publish current note to user's wiki
                     if (loggedIn) {
-                      // await mobius().mutate({})
-                      // const res = await mobius().query({
-                      //   getGlobalTopic: {
-                      //     where: {
-                      //       topicName: "physics",
-                      //     },
-                      //     select: {
-                      //       learningStatus: true,
-                      //       likedLinkIds: true,
-                      //       completedLinkIds: true,
-                      //     },
-                      //   },
-                      //   getNotesForGlobalTopic: {
-                      //     where: {
-                      //       topicName: "physics",
-                      //     },
-                      //     select: {
-                      //       content: true,
-                      //       url: true,
-                      //     },
-                      //   },
-                      // })
-                      // // @ts-ignore
-                      // const topicData = res.data.getGlobalTopic
-                      // // @ts-ignore
-                      // const notesData = res.data.getNotesForGlobalTopic
-                      // console.log(topicData, "data")
-                      // setGlobalTopic({
-                      //   learningStatus: topicData.learningStatus,
-                      //   likedLinkIds: topicData.likedLinkIds,
-                      //   completedLinkIds: topicData.completedLinkIds,
-                      //   notes: notesData,
-                      // })
+                      setPublishingState("publishing")
+                      const parts =
+                        global.state.currentlyOpenFile?.filePath.split("/")
+                      // TODO: not sure how to avoid ts-ignore nicely here
+                      // @ts-ignore
+                      const fileName = parts[parts.length - 1]
+                      // @ts-ignore
+                      const topicName = fileName.split(".")[0]
+                      const prettyName =
+                        // @ts-ignore
+                        topicName.charAt(0).toUpperCase() +
+                        // @ts-ignore
+                        topicName.slice(1).replace(/-/g, " ")
+                      let relativePath = ""
+                      if (
+                        global.state.currentlyOpenFile?.filePath &&
+                        global.state.localFolderPath
+                      ) {
+                        relativePath =
+                          global.state.currentlyOpenFile.filePath.replace(
+                            global.state.localFolderPath,
+                            "",
+                          )
+                      }
+                      console.log(topicName)
+                      console.log(prettyName)
+                      // TODO: give ui to set it to true or false
+                      // for now set to true as no E2E yet or mobile
+                      const published = true
+                      console.log(
+                        global.state.currentlyOpenFile?.fileContent,
+                        "content",
+                      )
+                      console.log(relativePath)
+
+                      const content =
+                        global.state.currentlyOpenFile?.fileContent!
+
+                      // doing this as edgedb when taking a string with new lines
+                      // save it strangely without `\n`, hard to see where new lines are this way
+                      // this solves this, probably better way to do this
+                      const cleanContent = content.replace(/\n/g, "<br>")
+                      console.log(cleanContent, "clean")
+
+                      const res = await mobius().mutate({
+                        updateTopicOfWiki: {
+                          where: {
+                            topicName: topicName!,
+                            prettyName: prettyName,
+                            published: published,
+                            content: cleanContent,
+                            topicPath: relativePath,
+                          },
+                          select: true,
+                        },
+                      })
+                      setPublishingState(null)
                     }
                   }}
                 >
-                  Publish
+                  <Show
+                    when={publishingState() === "publishing"}
+                    fallback={<>Publish</>}
+                  >
+                    Publishing...
+                  </Show>
                 </FancyButton>
               </div>
+
               {/* TODO: commented out codemirror as it was giving issues */}
               {/* such as, line wrapping: https://discuss.codemirror.net/t/linewrapping-true-fails-with-ts-error-and-does-not-work/7408/5 */}
               {/* and styling cursor to white in dark theme failed: https://discuss.codemirror.net/t/codemirror-cursor-class-does-not-work-in-safari/7409/3 */}

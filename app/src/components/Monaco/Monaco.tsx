@@ -8,17 +8,7 @@ export function Monaco() {
   const [value, setValue] = createSignal<string>("some text")
   const global = useGlobalState()
 
-  // createEffect(() => {
-  //   const localValue = editorView()?.state.doc.toString()
-  //   editorView()?.dispatch({
-  //     changes: {
-  //       from: 0,
-  //       to: localValue?.length,
-  //       insert: global.state.currentlyOpenFile?.fileContent,
-  //     },
-  //   })
-  // })
-
+  // TODO: should not write to file when file opens, I think (currently does)
   const scheduledFileUpdate = scheduled.throttle(
     async (newFileContent: string) => {
       if (global.state.currentlyOpenFile) {
@@ -34,6 +24,8 @@ export function Monaco() {
           "fileContent",
           newFileContent,
         )
+        console.log(pathToFile, "path to file")
+        console.log("write to file")
         await invoke("overwrite_file_content", {
           path: pathToFile,
           newContent: newFileContent,

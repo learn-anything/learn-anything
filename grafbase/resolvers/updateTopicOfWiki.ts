@@ -13,7 +13,8 @@ const updateTopicOfWikiResolver: Resolver["Mutation.updateTopicOfWiki"] =
           args.topicName,
           args.prettyName,
           args.published,
-          args.content
+          args.content,
+          args.topicPath
         )
         return "ok"
       } else {

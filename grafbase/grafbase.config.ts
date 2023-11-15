@@ -243,7 +243,8 @@ g.mutation("updateTopicOfWiki", {
     topicName: g.string(),
     prettyName: g.string(),
     content: g.string(),
-    published: g.boolean()
+    published: g.boolean(),
+    topicPath: g.string()
   },
   returns: g.string(),
   resolver: "updateTopicOfWiki"
