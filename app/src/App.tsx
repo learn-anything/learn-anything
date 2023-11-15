@@ -24,6 +24,7 @@ export default function App() {
   // there was some issue with CMD+L not triggering, fix
   // TODO: should these bindings be placed in this file? also they should be customisable
   // similar to https://x.com/fabiospampinato/status/1722729570573430979
+  // TODO: probably switch to fabio's keybindings lib and wrap over it with solid
   createShortcut(["Control", "L"], () => {
     if (global.state.showModal === "searchFiles") {
       global.set("showModal", "")
@@ -120,7 +121,7 @@ export default function App() {
                       // save it strangely without `\n`, hard to see where new lines are this way
                       // this solves this, probably better way to do this
                       const cleanContent = content.replace(/\n/g, "<br>")
-                      console.log(cleanContent, "clean")
+                      // console.log(cleanContent, "clean")
 
                       const res = await mobius().mutate({
                         updateTopicOfWiki: {
@@ -134,6 +135,7 @@ export default function App() {
                           select: true,
                         },
                       })
+                      console.log(res, "res")
                       setPublishingState(null)
                     }
                   }}

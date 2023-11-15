@@ -2,13 +2,11 @@ import { Match, Switch, createSignal } from "solid-js"
 
 // import Card from "../../components/Topic/Card"
 import clsx from "clsx"
-import { useTopic } from "../../GlobalContext/topic"
 import GuideNav from "../../components/Topic/GuideNav"
 // import ProfilePage from "../../components/ProfilePage"
 
 export default function UserProfile() {
   const [currentTab, setCurrentTab] = createSignal("All")
-  const topic = useTopic()
 
   return (
     <>

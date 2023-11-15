@@ -79,29 +79,31 @@ export default function Root() {
   })
 
   // start listening to all files inside connected folder for changes
-  // createEffect(async () => {
-  //   if (global.state.localFolderPath) {
-  //     const stopWatching = await watch(
-  //       global.state.localFolderPath,
-  //       async (event) => {
-  //         // @ts-ignore
-  //         const path = event[0].path
-  //         // console.log(path, "path")
-  //         if (path) {
-  //           const fileContent = await invoke("read_file_content", { path })
-  //           // console.log(fileContent, "file content")
-  //           global.set("currentlyOpenFile", {
-  //             filePath: path,
-  //             fileContent: fileContent as string,
-  //           })
-  //         }
-  //       },
-  //       { recursive: true },
-  //     )
-  //   }
-  //   // TODO: use stopWatching to unsubscribe to old watcher when local folder path changes
-  //   // and subscribe to new folder
-  // })
+  createEffect(async () => {
+    if (global.state.localFolderPath) {
+      const stopWatching = await watch(
+        global.state.localFolderPath,
+        async (event) => {
+          // @ts-ignore
+          const path = event[0].path
+          // console.log(path, "path")
+          if (path) {
+            const fileContent = await invoke("read_file_content", { path })
+            // console.log(fileContent, "file content")
+            let filePath = path.replace(global.state.localFolderPath, "")
+            console.log(filePath, "file path")
+            global.set("currentlyOpenFile", {
+              filePath: filePath,
+              fileContent: fileContent as string,
+            })
+          }
+        },
+        { recursive: true },
+      )
+    }
+    // TODO: use stopWatching to unsubscribe to old watcher when local folder path changes
+    // and subscribe to new folder
+  })
 
   return (
     <>

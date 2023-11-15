@@ -27,6 +27,7 @@
     "lint": "bun lint:code && bun lint:types"
   },
   "devDependencies": {
+    "@la/shared": "workspace:*",
     "@edgedb/generate": "^0.4.1",
     "@grafbase/sdk": "^0.9.1",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
@@ -51,6 +52,7 @@
     "edgedb": "^1.4.1",
     "grafbase": "^0.44.0",
     "graphql": "^16.8.1",
+    "graphql-mobius": "^0.1.13",
     "jose": "^5.1.0",
     "micromark": "^4.0.0",
     "mri": "^1.2.0",

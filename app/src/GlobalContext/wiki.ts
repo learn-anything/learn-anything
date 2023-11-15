@@ -19,7 +19,7 @@ export default function createWikiState() {
       notes: [],
       links: [],
       filePath: "",
-      fileContent: "# Hello world",
+      fileContent: "",
     },
     sidebarTopics: [],
     topics: [],

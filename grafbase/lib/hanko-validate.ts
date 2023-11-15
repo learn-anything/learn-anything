@@ -6,8 +6,6 @@ import { Context } from "@grafbase/sdk"
 // if it is valid, returns hanko id of the user
 export async function hankoIdFromToken(context: Context) {
   if (process.env.GRAFBASE_ENV === "dev") {
-    console.log("should run")
-    console.log(process.env.LOCAL_USER_HANKO_ID, "test")
     return process.env.LOCAL_USER_HANKO_ID
   }
   const authHeader = context.request.headers["authorization"]

@@ -35,6 +35,9 @@ importers:
       graphql:
         specifier: ^16.8.1
         version: 16.8.1
+      graphql-mobius:
+        specifier: ^0.1.13
+        version: 0.1.13(graphql@16.8.1)
       jose:
         specifier: ^5.1.0
         version: 5.1.1
@@ -63,6 +66,9 @@ importers:
       '@grafbase/sdk':
         specifier: ^0.9.1
         version: 0.9.1
+      '@la/shared':
+        specifier: workspace:*
+        version: link:shared
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.10.0
         version: 6.11.0(@typescript-eslint/parser@6.11.0)(eslint@8.53.0)(typescript@5.2.2)

@@ -1,6 +1,9 @@
 import { client } from "../client"
 import e from "../dbschema/edgeql-js"
 
+// TODO: this file should be renamed personal-topic.ts
+// as we move away from just topic to personal-topic
+
 // Add a topic to a wiki of a user
 export async function addTopic(topic: any, wikiId: string, topicPath: string) {
   const query = e.params(
@@ -21,7 +24,7 @@ export async function addTopic(topic: any, wikiId: string, topicPath: string) {
         .insert(e.Topic, {
           wiki: e.assert_exists(
             e.assert_single(
-              e.select(e.Wiki, (wiki) => ({
+              e.select(e.PersonalWiki, (wiki) => ({
                 filter: e.op(wiki.id, "=", e.cast(e.uuid, wikiId))
               }))
             )
@@ -63,22 +66,22 @@ export async function addTopic(topic: any, wikiId: string, topicPath: string) {
                       url: e.cast(e.str, e.json_get(relatedLink, "url")),
                       title: e.cast(e.str, e.json_get(relatedLink, "title"))
                     })
-                ),
-                globalLink: e.insert(e.GlobalLink, {
-                  title: e.cast(e.str, e.json_get(link, "title")),
-                  url: e.cast(e.str, e.json_get(link, "url")),
-                  description: e.cast(e.str, e.json_get(link, "description")),
-                  public: e.cast(e.bool, e.json_get(link, "public")),
-                  year: e.cast(e.str, e.json_get(link, "year")),
-                  relatedLinks: e.for(
-                    e.json_array_unpack(e.json_get(link, "relatedLinks")),
-                    (relatedLink) =>
-                      e.insert(e.RelatedLink, {
-                        url: e.cast(e.str, e.json_get(relatedLink, "url")),
-                        title: e.cast(e.str, e.json_get(relatedLink, "title"))
-                      })
-                  )
-                })
+                )
+                // globalLink: e.insert(e.GlobalLink, {
+                //   title: e.cast(e.str, e.json_get(link, "title")),
+                //   url: e.cast(e.str, e.json_get(link, "url")),
+                //   description: e.cast(e.str, e.json_get(link, "description")),
+                //   public: e.cast(e.bool, e.json_get(link, "public")),
+                //   year: e.cast(e.str, e.json_get(link, "year")),
+                //   relatedLinks: e.for(
+                //     e.json_array_unpack(e.json_get(link, "relatedLinks")),
+                //     (relatedLink) =>
+                //       e.insert(e.RelatedLink, {
+                //         url: e.cast(e.str, e.json_get(relatedLink, "url")),
+                //         title: e.cast(e.str, e.json_get(relatedLink, "title"))
+                //       })
+                //   )
+                // })
                 // TODO: was crashing for random reason
                 // even though below code should in theory prevent it
                 // made url not unique to avoid this

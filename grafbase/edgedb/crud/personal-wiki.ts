@@ -1,6 +1,23 @@
 import { client } from "../client"
 import e from "../dbschema/edgeql-js"
 
+export async function getPersonalTopic(userName: string, topicName: string) {
+  const res = await e
+    .select(e.Topic, (t) => ({
+      filter: e.op(
+        e.op(t.wiki.user.name, "=", userName),
+        "and",
+        e.op(t.name, "=", topicName)
+      ),
+      prettyName: true,
+      content: true,
+      public: true,
+      topicPath: true
+    }))
+    .run(client)
+  return res
+}
+
 export async function addPersonalWiki(hankoId: string) {
   const res = await e
     .insert(e.PersonalWiki, {

@@ -46,6 +46,20 @@ g.query("publicGetGlobalTopics", {
     .list(),
   resolver: "public/getGlobalTopics"
 })
+g.query("publicGetPersonalTopic", {
+  args: { topicName: g.string(), user: g.string() },
+  returns: g
+    .ref(
+      g.type("publicGetPersonalTopicOutput", {
+        prettyName: g.string(),
+        content: g.string(),
+        public: g.boolean(),
+        topicPath: g.string()
+      })
+    )
+    .list(),
+  resolver: "public/getPersonalTopic"
+})
 
 const GlobalLink = g.type("GlobalLink", {
   id: g.string(),

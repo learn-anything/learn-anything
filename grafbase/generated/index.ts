@@ -36,6 +36,13 @@ export type Schema = {
     prettyName: string;
     name: string;
   };
+  'publicGetPersonalTopicOutput': {
+    __typename?: 'publicGetPersonalTopicOutput';
+    prettyName: string;
+    content: string;
+    public: boolean;
+    topicPath: string;
+  };
   'GlobalLink': {
     __typename?: 'GlobalLink';
     id: string;
@@ -143,6 +150,7 @@ export type Schema = {
     __typename?: 'Query';
     publicGetTopicsWithConnections?: Array<Schema['publicGetTopicsWithConnectionsOutput']>;
     publicGetGlobalTopics?: Array<Schema['publicGetGlobalTopicsOutput']>;
+    publicGetPersonalTopic?: Array<Schema['publicGetPersonalTopicOutput']>;
     publicGetGlobalTopic?: Schema['publicGetGlobalTopicOutput'];
     getUserDetails?: Schema['getUserDetailsOutput'];
     getPricingUserDetails?: Schema['getPricingUserDetailsOutput'];
@@ -182,6 +190,7 @@ import { ResolverFn } from '@grafbase/sdk'
 export type Resolver = {
   'Query.publicGetTopicsWithConnections': ResolverFn<Schema['Query'], {  }, Array<Schema['publicGetTopicsWithConnectionsOutput']>>
   'Query.publicGetGlobalTopics': ResolverFn<Schema['Query'], {  }, Array<Schema['publicGetGlobalTopicsOutput']>>
+  'Query.publicGetPersonalTopic': ResolverFn<Schema['Query'], { topicName: string, user: string,  }, Array<Schema['publicGetPersonalTopicOutput']>>
   'Query.publicGetGlobalTopic': ResolverFn<Schema['Query'], { topicName: string,  }, Schema['publicGetGlobalTopicOutput']>
   'Query.getUserDetails': ResolverFn<Schema['Query'], {  }, Schema['getUserDetailsOutput']>
   'Query.getPricingUserDetails': ResolverFn<Schema['Query'], {  }, Schema['getPricingUserDetailsOutput']>

@@ -1,26 +1,8 @@
-import { Show, createResource, createSignal, onMount } from "solid-js"
-import { useParams } from "solid-start"
-import TopicPage from "../../components/TopicPage"
+import { Show } from "solid-js"
 // import Sidebar from "../../components/Sidebar"
 // import { TopicPage } from "../../components/TopicPage"
 
-export default function Topic() {
-  const params = useParams()
-
-  const [notes, setNotes] = createSignal([
-    {
-      content: "hello",
-      url: "..",
-    },
-  ])
-
-  const [links, setLinks] = createSignal([
-    {
-      title: "hello",
-      url: "..",
-    },
-  ])
-
+export default function PersonalTopic() {
   // topic's content/notes/links
   // const [topic] = createResource(
   //   () => params.topic,
@@ -127,7 +109,7 @@ export default function Topic() {
         <Show when={true}>
           <div
             style={{
-              "min-width": "250px",
+              "min-width": "250px"
             }}
             class="fixed top-0 left-0 h-full z-50 "
             id="FixedSidebar"
@@ -146,12 +128,12 @@ export default function Topic() {
         <div style={{ width: "100%" }} class=" h-full">
           {/* <Show when={topic() && topic().content}> */}
           <Show when={true}>
-            <TopicPage
+            {/* <TopicPage
               // setShowSidebar={setShowSidebar}
               content={"# Hello"}
               notes={notes()}
               links={links()}
-            />
+            /> */}
           </Show>
         </div>
       </main>
