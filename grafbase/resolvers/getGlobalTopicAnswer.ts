@@ -21,7 +21,6 @@ export default async function getSuggestionsForUrlResolver(
               }
             ]
         })
-        console.log(answer);
         return answer
     }
   } catch (err) {

@@ -41,12 +41,10 @@ export default async function getSuggestionsForUrlResolver(
       await rewriter_description.transform(response.clone()).text()
       summary += title + " // " + description
       if (title && description) {
-        console.log(args.linkUrl, summary)
         const embedding = await context.ai.textEmbeddings({
             model: 'baai/bge-large-en-v1.5',
             text: summary
         })
-        console.log(embedding.data);
         const res = await client.search("topics_collections", {
             vector: embedding.data,
             limit: 3,
