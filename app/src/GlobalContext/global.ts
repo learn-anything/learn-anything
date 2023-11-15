@@ -11,7 +11,7 @@ type GlobalState = {
   localFolderPath: string
   files: File[]
   currentlyOpenFile?: File
-  showModal: "" | "needToLoginInstructions"
+  showModal: "" | "needToLoginInstructions" | "searchFiles"
   showBox: boolean
 }
 

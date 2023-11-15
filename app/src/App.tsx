@@ -1,7 +1,7 @@
 import { ui } from "@la/shared"
-import { FancyButton } from "@la/shared/ui"
+import { FancyButton, Modal } from "@la/shared/ui"
 import { invoke } from "@tauri-apps/api/tauri"
-import { Show } from "solid-js"
+import { Show, createMemo } from "solid-js"
 import { isLoggedIn } from "../lib/lib"
 import { useGlobalState } from "./GlobalContext/global"
 import { useUser } from "./GlobalContext/user"
@@ -11,6 +11,7 @@ import SearchModal from "./components/SearchModal"
 import Settings from "./components/Settings"
 import Sidebar from "./components/Sidebar"
 import { useMobius } from "./root"
+import { createShortcut } from "@solid-primitives/keyboard"
 
 export default function App() {
   const global = useGlobalState()
@@ -22,13 +23,31 @@ export default function App() {
   // there was some issue with CMD+L not triggering, fix
   // TODO: should these bindings be placed in this file? also they should be customisable
   // similar to https://x.com/fabiospampinato/status/1722729570573430979
-  // createShortcut(["Control", "L"], () => {
-  //   if (user.user.mode === "Search Topics") {
-  //     user.setMode("Default")
-  //   } else {
-  //     user.setMode("Search Topics")
-  //   }
-  // })
+  createShortcut(["Control", "L"], () => {
+    if (global.state.showModal === "searchFiles") {
+      global.set("showModal", "")
+    } else {
+      global.set("showModal", "searchFiles")
+    }
+  })
+
+  const searchResults = createMemo(() => {
+    return global.state.files.map((f) => ({
+      name: f.filePath,
+    }))
+  })
+
+  const search_state = ui.createSearchState({
+    searchResults,
+    onSelect: ({ name }) => {
+      console.log(name, "name")
+      // const foundTopic = global.state.topicsWithConnections.find(
+      //   (t) => t.prettyName === name,
+      // )!
+      // navigate(`/${foundTopic.name}`)
+      // logUntracked("Topic searched", search_state.query)
+    },
+  })
 
   return (
     <>
@@ -137,12 +156,20 @@ export default function App() {
             </div>
           </Show>
 
-          <Show when={user.user.mode === "Search Topics"}>
-            <SearchModal
+          <Show when={global.state.showModal === "searchFiles"}>
+            <Modal
+              onClose={() => {
+                global.set("showModal", "")
+              }}
+            >
+              {/* TODO: focus on input */}
+              <ui.Search placeholder={""} state={search_state} />
+            </Modal>
+            {/* <SearchModal
               items={wiki.wiki.topics}
               action={() => {}}
               searchPlaceholder="Search Topics"
-            />
+            /> */}
           </Show>
         </div>
       </div>
