@@ -24,7 +24,10 @@
 html {
   background: #1e1e1e;
 }
-
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
 a {
   font-weight: 500;
   color: #646cff;
