@@ -145,6 +145,9 @@ importers:
       '@la/shared':
         specifier: workspace:*
         version: link:../shared
+      '@monaco-editor/loader':
+        specifier: ^1.4.0
+        version: 1.4.0(monaco-editor@0.44.0)
       '@motionone/solid':
         specifier: ^10.16.4
         version: 10.16.4(solid-js@1.8.5)
@@ -220,6 +223,12 @@ importers:
       graphql-mobius:
         specifier: ^0.1.13
         version: 0.1.13(graphql@16.8.1)
+      monaco-editor:
+        specifier: ^0.44.0
+        version: 0.44.0
+      monaco-vim:
+        specifier: ^0.4.0
+        version: 0.4.0(monaco-editor@0.44.0)
       oidc-client-ts:
         specifier: ^2.4.0
         version: 2.4.0
@@ -231,7 +240,7 @@ importers:
         version: 1.8.5
       solid-monaco:
         specifier: ^0.2.0
-        version: 0.2.0(monaco-editor@0.43.0)(solid-js@1.8.5)
+        version: 0.2.0(monaco-editor@0.44.0)(solid-js@1.8.5)
       solid-tiptap:
         specifier: ^0.6.0
         version: 0.6.0(@tiptap/core@2.1.12)(@tiptap/pm@2.1.12)(solid-js@1.8.5)
@@ -2698,12 +2707,12 @@ packages:
       solid-js: 1.8.5
     dev: false
 
-  /@monaco-editor/loader@1.4.0(monaco-editor@0.43.0):
+  /@monaco-editor/loader@1.4.0(monaco-editor@0.44.0):
     resolution: {integrity: sha512-00ioBig0x642hytVspPl7DbQyaSWRaolYie/UFNjoTdvoKPzo6xrXLhTk9ixgIKcLH5b5vDOjVNiGyY+uDCUlg==}
     peerDependencies:
       monaco-editor: '>= 0.21.0 < 1'
     dependencies:
-      monaco-editor: 0.43.0
+      monaco-editor: 0.44.0
       state-local: 1.0.7
     dev: false
 
@@ -6732,8 +6741,16 @@ packages:
     engines: {node: '>= 8.0.0'}
     dev: false
 
-  /monaco-editor@0.43.0:
-    resolution: {integrity: sha512-cnoqwQi/9fml2Szamv1XbSJieGJ1Dc8tENVMD26Kcfl7xGQWp7OBKMjlwKVGYFJ3/AXJjSOGvcqK7Ry/j9BM1Q==}
+  /monaco-editor@0.44.0:
+    resolution: {integrity: sha512-5SmjNStN6bSuSE5WPT2ZV+iYn1/yI9sd4Igtk23ChvqB7kDk9lZbB9F5frsuvpB+2njdIeGGFf2G4gbE6rCC9Q==}
+    dev: false
+
+  /monaco-vim@0.4.0(monaco-editor@0.44.0):
+    resolution: {integrity: sha512-+CsW0+Mvx2+eitkXS7OpUXIu57qXlqAL8oVkYhkPCEZ/c6+6gOp/IcG7w+Lb33YiZuTyvJ891+czkeJRPIEwVA==}
+    peerDependencies:
+      monaco-editor: '*'
+    dependencies:
+      monaco-editor: 0.44.0
     dev: false
 
   /mri@1.2.0:
@@ -7841,15 +7858,15 @@ packages:
       - supports-color
     dev: false
 
-  /solid-monaco@0.2.0(monaco-editor@0.43.0)(solid-js@1.8.5):
+  /solid-monaco@0.2.0(monaco-editor@0.44.0)(solid-js@1.8.5):
     resolution: {integrity: sha512-Jr8EqBuQQqMl1wChsU57gW7KTxfXTBei1r4DjV84u7fAr5mQ3ZbD4XNli38Qz1vN1UicqOkHOJRSt2oqYUAhYQ==}
     engines: {node: '>=18', pnpm: '>=8.6.0'}
     peerDependencies:
       monaco-editor: ^0.43.0
       solid-js: ^1.6.0
     dependencies:
-      '@monaco-editor/loader': 1.4.0(monaco-editor@0.43.0)
-      monaco-editor: 0.43.0
+      '@monaco-editor/loader': 1.4.0(monaco-editor@0.44.0)
+      monaco-editor: 0.44.0
       solid-js: 1.8.5
     dev: false
 

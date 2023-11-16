@@ -22,6 +22,7 @@
   "dependencies": {
     "@chronark/zod-bird": "^0.2.2",
     "@la/shared": "workspace:*",
+    "@monaco-editor/loader": "^1.4.0",
     "@motionone/solid": "^10.16.4",
     "@nozbe/microfuzz": "^1.0.0",
     "@solid-primitives/autofocus": "^0.0.108",
@@ -47,6 +48,8 @@
     "fuse.js": "^7.0.0",
     "graphql": "^16.8.1",
     "graphql-mobius": "^0.1.13",
+    "monaco-editor": "^0.44.0",
+    "monaco-vim": "^0.4.0",
     "oidc-client-ts": "^2.4.0",
     "solid-headless": "^0.13.1",
     "solid-js": "^1.8.5",

@@ -1,6 +1,8 @@
-import { createContext, createEffect, onMount, useContext } from "solid-js"
+import { createContext, createEffect, createSignal, onMount, useContext } from "solid-js"
+import loader, { Monaco } from '@monaco-editor/loader'
 import { createStore } from "solid-js/store"
 import { invoke } from "@tauri-apps/api/tauri"
+import { editor as monacoEditor } from 'monaco-editor'
 
 export type File = {
   fileContent: string
@@ -12,7 +14,9 @@ type GlobalState = {
   files: File[]
   currentlyOpenFile?: File
   showModal: "" | "needToLoginInstructions" | "searchFiles"
-  showBox: boolean
+  showBox: boolean,
+  // monaco: Monaco | null,
+  // editor: monacoEditor.IStandaloneCodeEditor | null
 }
 
 export function createGlobalState() {
@@ -21,6 +25,8 @@ export function createGlobalState() {
     files: [],
     showModal: "",
     showBox: false,
+    // monaco: null,
+    // editor: null
   })
 
   onMount(async () => {

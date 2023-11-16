@@ -1,8 +1,11 @@
-import { createEffect, createSignal } from "solid-js"
-import { invoke } from "@tauri-apps/api/tauri"
 import * as scheduled from "@solid-primitives/scheduled"
-import { MonacoEditor } from "solid-monaco"
-import { useGlobalState } from "../../GlobalContext/global"
+import { invoke } from "@tauri-apps/api/tauri"
+import { createEffect, createSignal } from "solid-js"
+import { initVimMode } from 'monaco-vim';
+
+import { useGlobalState } from "~/GlobalContext/global"
+import { MonacoEditor } from '~/components/solid-monaco'
+
 
 export function Monaco() {
   const [value, setValue] = createSignal<string>("some text")
@@ -37,9 +40,11 @@ export function Monaco() {
 
   createEffect(() => {
     if (global.state.currentlyOpenFile?.fileContent) {
-      scheduledFileUpdate(global.state.currentlyOpenFile?.fileContent)
+      scheduledFileUpdate(global.state.currentlyOpenFile.fileContent)
     }
   })
+
+  let vimMode: any
 
   return (
     <div class="w-full h-full overflow-auto">
@@ -57,6 +62,9 @@ export function Monaco() {
         }}
         theme="vs-dark"
         value={global.state.currentlyOpenFile?.fileContent}
+        onMount={
+          (_, ed) => vimMode = initVimMode(ed, document.createElement('div'))
+        }
       />
     </div>
   )

@@ -1,7 +1,7 @@
+import path from "path"
 import solid from "vite-plugin-solid"
-import { defineConfig } from "vite"
-// TODO: commented as it had issues, probably works if i try again
 // import solidStyled from "vite-plugin-solid-styled"
+import { defineConfig } from "vite"
 
 export default defineConfig({
   plugins: [
@@ -31,5 +31,10 @@ export default defineConfig({
     minify: !process.env.TAURI_DEBUG ? "esbuild" : false,
     // produce sourcemaps for debug builds
     sourcemap: !!process.env.TAURI_DEBUG,
+  },
+  resolve: {
+    alias: {
+      "~": path.resolve(__dirname, "src"),
+    },
   },
 })

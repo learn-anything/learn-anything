@@ -21,5 +21,13 @@
     "jsxImportSource": "solid-js",
     // build
     "noEmit": true,
+
+    // aliases
+    "baseUrl": ".",
+    "paths": {
+      "~/*": [
+        "./src/*"
+      ],
+    },
   },
 }
