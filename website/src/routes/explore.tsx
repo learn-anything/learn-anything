@@ -4,7 +4,7 @@ export default function Explore() {
       <div>Course</div>
       <div>10$</div>
       <div
-        onClick={async () => {
+        onClick={() => {
           console.log(import.meta.env.VITE_SPHEREPAY_KEY)
         }}
       >

@@ -44,7 +44,11 @@
     "no-empty": "warn",
     "@typescript-eslint/no-unused-expressions": [
       "warn",
-      { "allowShortCircuit": true, "allowTernary": true }
+      {
+        "allowShortCircuit": true,
+        "allowTernary": true,
+        "allowTaggedTemplates": true
+      }
     ],
     "eslint-comments/no-unused-disable": "warn",
     /*

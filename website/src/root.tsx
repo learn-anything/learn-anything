@@ -24,6 +24,8 @@ import { UserProvider, createUserState } from "./GlobalContext/user"
 import "./root.css"
 import UserProfile from "./routes/@(username)"
 import PersonalTopic from "./routes/@(username)/[topic]"
+import * as solid_styled from "solid-styled"
+import { useAssets } from "solid-js/web"
 
 export function createMobius(options: { hankoCookie: () => string }) {
   const { hankoCookie } = options
@@ -75,57 +77,62 @@ export default function Root() {
   const global = createGlobalState(mobius)
   const globalTopic = createGlobalTopic(mobius, user, global)
 
+  const sheets: solid_styled.StyleData[] = []
+  useAssets(() => solid_styled.renderSheets(sheets))
+
   return (
-    <Html lang="en">
-      <Head>
-        <Title>Learn Anything</Title>
-        <Meta
-          name="description"
-          content="Organize world's knowledge, explore connections and curate learning paths"
-        />
-        <Meta charset="utf-8" />
-        <Meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet"
-      ></link>
-      <Body>
-        <Suspense>
-          <ErrorBoundary>
-            <SignInCtx.Provider value={setHankoCookie}>
-              <MobiusCtx.Provider value={mobius}>
-                <UserProvider value={user}>
-                  <GlobalStateProvider value={global}>
-                    <GlobalTopicProvider value={globalTopic}>
-                      {/* TODO: should probably move it from here as drag/drop is currently only done in /global-topic/edit */}
-                      <DragDropProvider>
-                        <DragDropSensors>
-                          <Routes>
-                            <Route
-                              path="/:username"
-                              component={UserProfile}
-                              matchFilters={filters}
-                            />
-                            <Route
-                              path="/:username/:topic"
-                              component={PersonalTopic}
-                            />
-                            <FileRoutes />
-                          </Routes>
-                        </DragDropSensors>
-                      </DragDropProvider>
-                    </GlobalTopicProvider>
-                  </GlobalStateProvider>
-                </UserProvider>
-              </MobiusCtx.Provider>
-            </SignInCtx.Provider>
-          </ErrorBoundary>
-        </Suspense>
-        <Scripts />
-      </Body>
-    </Html>
+    <solid_styled.StyleRegistry styles={sheets}>
+      <Html lang="en">
+        <Head>
+          <Title>Learn Anything</Title>
+          <Meta
+            name="description"
+            content="Organize world's knowledge, explore connections and curate learning paths"
+          />
+          <Meta charset="utf-8" />
+          <Meta name="viewport" content="width=device-width, initial-scale=1" />
+        </Head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet"
+        ></link>
+        <Body>
+          <Suspense>
+            <ErrorBoundary>
+              <SignInCtx.Provider value={setHankoCookie}>
+                <MobiusCtx.Provider value={mobius}>
+                  <UserProvider value={user}>
+                    <GlobalStateProvider value={global}>
+                      <GlobalTopicProvider value={globalTopic}>
+                        {/* TODO: should probably move it from here as drag/drop is currently only done in /global-topic/edit */}
+                        <DragDropProvider>
+                          <DragDropSensors>
+                            <Routes>
+                              <Route
+                                path="/:username"
+                                component={UserProfile}
+                                matchFilters={filters}
+                              />
+                              <Route
+                                path="/:username/:topic"
+                                component={PersonalTopic}
+                              />
+                              <FileRoutes />
+                            </Routes>
+                          </DragDropSensors>
+                        </DragDropProvider>
+                      </GlobalTopicProvider>
+                    </GlobalStateProvider>
+                  </UserProvider>
+                </MobiusCtx.Provider>
+              </SignInCtx.Provider>
+            </ErrorBoundary>
+          </Suspense>
+          <Scripts />
+        </Body>
+      </Html>
+    </solid_styled.StyleRegistry>
   )
 }

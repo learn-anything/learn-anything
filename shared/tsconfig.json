@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
     // lib
-    "module": "NodeNext",
+    "module": "ESNext",
     "target": "ESNext",
+    "moduleResolution": "Bundler",
     "newLine": "LF",
     "lib": ["DOM", "ESNext"],
-    "moduleResolution": "NodeNext",
+    "types": ["solid-styled"],
     // rules
     "strict": true,
     "isolatedModules": true,
