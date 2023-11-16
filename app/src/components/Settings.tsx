@@ -42,7 +42,7 @@ export default function Settings() {
         <div class="h-full border-r-2 dark:border-neutral-700 p-3 border-slate-400 min-w-[200px]">
           <div class="text-[10px] opacity-70 pb-1">Settings</div>
           <div class="flex gap-1 flex-col w-full">
-            <div class="hover:bg-neutral-800 px-2 p-1 w-full rounded-[6px]">
+            <div class="hover:bg-neutral-800 select-none px-2 p-1 w-full rounded-[6px]">
               Editor
             </div>
           </div>

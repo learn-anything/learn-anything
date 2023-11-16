@@ -8,9 +8,9 @@ export type ModalProps = {
 export const Modal: s.ParentComponent<ModalProps> = (props) => {
   return (
     <>
-      <div class="fixed top-0 left-0 w-screen z-10 h-screen backdrop-blur-sm">
+      <div class="fixed top-0 left-0 select-none w-screen z-10 h-screen backdrop-blur-sm">
         <div
-          class="fixed top-0 left-0 z-20 w-screen h-screen"
+          class="fixed top-0 select-none left-0 z-20 w-screen h-screen"
           onClick={() => {
             props.onClose()
           }}

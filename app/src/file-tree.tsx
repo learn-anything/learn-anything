@@ -125,12 +125,12 @@ export const FileTree: solid.Component = () => {
   return (
     <div class="dark:bg-[#1e1e1e] bg-white w-full h-full overflow-auto">
       <div
-        class="flex flex-col w-full gap-3 px-6 pl-4 py-4 font-semibold"
+        class="flex flex-col w-full gap-3 px-4 py-4 font-semibold"
         style={{ "font-size": "14px" }}
       >
         <div class="font-bold opacity-70 rounded-md p-1  w-full">Topics</div>
         <div class="h-full">
-          <Motion.div class="pl-6 overflow-hidden opacity-70 flex flex-col">
+          <Motion.div class="pl-2 overflow-hidden opacity-70 flex flex-col">
             <solid.For each={collapsedList()}>
               {(item) => {
                 return (
@@ -147,7 +147,7 @@ export const FileTree: solid.Component = () => {
                       }
                     }}
                     class={clsx(
-                      "flex cursor-pointer hover:bg-gray-200 dark:hover:bg-neutral-800 hover:rounded-[6px]",
+                      "flex cursor-pointer px-[1px] hover:bg-gray-200 dark:hover:bg-neutral-800 hover:rounded-[6px]",
                     )}
                   >
                     <div

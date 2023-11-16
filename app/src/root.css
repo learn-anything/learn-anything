@@ -21,6 +21,9 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
+html {
+  background: #1e1e1e;
+}
 
 a {
   font-weight: 500;

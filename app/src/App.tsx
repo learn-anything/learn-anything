@@ -17,9 +17,9 @@ const Sidebar: solid.Component = () => {
   const user = useUser()
 
   return (
-    <div class="h-full flex w-8 dark:bg-[#1e1e1e] bg-white flex-col justify-between items-center font-semibold">
+    <div class="h-full flex py-4 p-2 dark:bg-[#1e1e1e] bg-white flex-col justify-between items-center font-semibold">
       <div
-        class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer mt-4"
+        class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
         onClick={() => {
           // TODO: show modal of settings like in obsidian
           // user.setMode("Settings")
@@ -185,56 +185,59 @@ export default function App() {
   })
 
   return (
-    <div class="w-screen h-screen overflow-hidden relative dark:bg-[#1e1e1e] bg-white">
-      <solid.Show
-        when={global.state.localFolderPath}
-        fallback={
-          <div class="w-full h-full flex justify-center items-center flex-col gap-5">
-            <div>
-              <FancyButton
-                onClick={async () => {
-                  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-                  const connectedFolder = (await invoke("connect_folder", {
-                    command: {},
-                  })) as [string, File[]] | null
-                  if (connectedFolder !== null) {
-                    global.set("localFolderPath", connectedFolder[0])
-                    // @ts-ignore
-                    global.set("files", connectedFolder[1])
-                  }
-                }}
-              >
-                Connect folder
-              </FancyButton>
+    <div class="w-screen h-screen fixed top-0 left-0 overflow-hidden  dark:bg-[#1e1e1e] bg-white">
+      <div class="h-[2%] min-h-[28px] w-full bg-[#1e1e1e] border-b border-slate-400 border-opacity-20"></div>
+      <div class="h-[97%]">
+        <solid.Show
+          when={global.state.localFolderPath}
+          fallback={
+            <div class="w-full h-full flex justify-center items-center flex-col gap-5">
+              <div>
+                <FancyButton
+                  onClick={async () => {
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+                    const connectedFolder = (await invoke("connect_folder", {
+                      command: {},
+                    })) as [string, File[]] | null
+                    if (connectedFolder !== null) {
+                      global.set("localFolderPath", connectedFolder[0])
+                      // @ts-ignore
+                      global.set("files", connectedFolder[1])
+                    }
+                  }}
+                >
+                  Connect folder
+                </FancyButton>
+              </div>
+            </div>
+          }
+        >
+          <div class="absolute bottom-1 right-1 py-2 px-4 text-lg z-50">
+            <PublishButton />
+          </div>
+
+          <div class="w-full h-full flex items-stretch justify-stretch">
+            <div class="border-r-2 border-slate-400 border-opacity-20">
+              <Sidebar />
+            </div>
+            <div class="border-r-2 border-slate-400 border-opacity-20">
+              <FileTree />
+            </div>
+            {/* TODO: commented out codemirror as it was giving issues */}
+            {/* such as, line wrapping: https://discuss.codemirror.net/t/linewrapping-true-fails-with-ts-error-and-does-not-work/7408/5 */}
+            {/* and styling cursor to white in dark theme failed: https://discuss.codemirror.net/t/codemirror-cursor-class-does-not-work-in-safari/7409/3 */}
+            {/* if it can be resolved, codemirror can be considered for use again */}
+            {/* <CodemirrorEditor /> */}
+
+            {/* monaco editor is chosen instead until then, it might be a better option in long term too as its used by vscode */}
+            {/* and can be styled/tuned to achieve all the tasks we need */}
+            {/* in LA we should be able to edit code inline in some code blocks with LSP support perhaps in some instances, monaco can allow this */}
+            <div class="grow">
+              <Monaco />
             </div>
           </div>
-        }
-      >
-        <div class="absolute bottom-1 right-1 py-2 px-4 text-lg z-50">
-          <PublishButton />
-        </div>
-
-        <div class="w-full h-full flex items-stretch justify-stretch">
-          <div class="border-r-2 border-slate-400 border-opacity-20">
-            <Sidebar />
-          </div>
-          <div class="border-r-2 border-slate-400 border-opacity-20">
-            <FileTree />
-          </div>
-          {/* TODO: commented out codemirror as it was giving issues */}
-          {/* such as, line wrapping: https://discuss.codemirror.net/t/linewrapping-true-fails-with-ts-error-and-does-not-work/7408/5 */}
-          {/* and styling cursor to white in dark theme failed: https://discuss.codemirror.net/t/codemirror-cursor-class-does-not-work-in-safari/7409/3 */}
-          {/* if it can be resolved, codemirror can be considered for use again */}
-          {/* <CodemirrorEditor /> */}
-
-          {/* monaco editor is chosen instead until then, it might be a better option in long term too as its used by vscode */}
-          {/* and can be styled/tuned to achieve all the tasks we need */}
-          {/* in LA we should be able to edit code inline in some code blocks with LSP support perhaps in some instances, monaco can allow this */}
-          <div class="grow">
-            <Monaco />
-          </div>
-        </div>
-      </solid.Show>
+        </solid.Show>
+      </div>
 
       <solid.Show when={user.user.mode === "Settings"}>
         <ui.Modal
@@ -253,7 +256,9 @@ export default function App() {
           }}
         >
           {/* TODO: focus on input */}
-          <ui.Search placeholder={""} state={search_state} />
+          <div class="w-[700px]">
+            <ui.Search placeholder={""} state={search_state} />
+          </div>
         </Modal>
         {/* <SearchModal
               items={wiki.wiki.topics}
