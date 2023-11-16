@@ -240,11 +240,13 @@ export function Search(props: SearchProps): solid.JSX.Element {
               {(topic) => (
                 <div
                   class={clsx(
-                    "cursor-pointer w-full h-10 px-3 p-2 hover:bg-neutral-100  dark:hover:bg-neutral-800 dark:text-white text-black border-y border-slate-300 dark:border-neutral-800",
+                    "cursor-pointer w-full h-10 px-3 p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:text-white text-black border-y border-slate-300 dark:border-neutral-800",
                     props.state.focused === topic &&
-                      "bg-neutral-200 dark:bg-neutral-800 dark:border-opacity-30 drop-shadow-md"
+                      "bg-neutral-200 dark:bg-black dark:border-opacity-30 drop-shadow-md"
                   )}
-                  onClick={() => selectSearchResult(props.state, topic)}
+                  onClick={() => {
+                    selectSearchResult(props.state, topic)
+                  }}
                 >
                   {topic.name}
                 </div>
