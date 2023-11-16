@@ -29,9 +29,10 @@ module default {
     displayName: str;
     # aws s3 or cloudflare r2 url with image
     profileImage: str;
-    # limit to actions non member user can do
+    # limit of actions non member user can do per day
     freeActions: int16 {
-      default := 10;
+      default := 5;
+      constraint min_value(0);
     };
     # TODO: in future can consider `GlobalWiki` as concept maybe as a wiki that multiple users can edit
     # user owns one personal wiki
@@ -360,3 +361,10 @@ module default {
     priceInUsdCents: int16;
   }
 }
+# TODO: think through more
+# users should be able to favorite some instance of NeuralCache
+# it should be tied to some mainTopic too
+# type NeuralCache {
+#   question: str;
+#   answer: str;
+# }

@@ -95,7 +95,11 @@ export async function getUserDetails(hankoId: string) {
       isMember: e.op(u.memberUntil, ">", e.datetime_current())
     }))
     .run(client)
-  return user ?? { isMember: false }
+  if (user?.isMember) {
+    return { isMember: true }
+  } else {
+    return { isMember: false }
+  }
 }
 
 // export async function getUserDetails(hankoId: string) {

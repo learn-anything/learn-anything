@@ -86,6 +86,7 @@ const PublishButton: solid.Component = () => {
         if (loggedIn) {
           setPublishingState("publishing")
           const parts = global.state.currentlyOpenFile?.filePath.split("/")
+          console.log(parts, "parts")
           // TODO: not sure how to avoid ts-ignore nicely here
           // @ts-ignore
           const fileName = parts[parts.length - 1]

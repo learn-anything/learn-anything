@@ -1,14 +1,6 @@
-import {
-  createContext,
-  createEffect,
-  createSignal,
-  onMount,
-  useContext,
-} from "solid-js"
-import loader, { Monaco } from "@monaco-editor/loader"
-import { createStore } from "solid-js/store"
 import { invoke } from "@tauri-apps/api/tauri"
-import { editor as monacoEditor } from "monaco-editor"
+import { createContext, createEffect, onMount, useContext } from "solid-js"
+import { createStore } from "solid-js/store"
 
 export type File = {
   fileContent: string

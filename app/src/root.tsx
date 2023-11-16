@@ -1,24 +1,24 @@
-import { watch, watchImmediate } from "tauri-plugin-fs-watch-api"
+import { grafbaseTypeDefs } from "@la/shared/lib"
+import { ModalWithMessageAndButton } from "@la/shared/ui"
+import { listen } from "@tauri-apps/api/event"
+import { invoke } from "@tauri-apps/api/tauri"
+import Mobius from "graphql-mobius"
 import {
+  ErrorBoundary,
+  Show,
   Suspense,
   createContext,
-  ErrorBoundary,
-  createSignal,
-  useContext,
-  onMount,
-  createMemo,
-  Show,
   createEffect,
+  createMemo,
+  createSignal,
+  onMount,
+  useContext,
 } from "solid-js"
-import Mobius from "graphql-mobius"
+import { watch } from "tauri-plugin-fs-watch-api"
 import App from "./App"
 import { GlobalStateProvider, createGlobalState } from "./GlobalContext/global"
 import { UserProvider, createUserState } from "./GlobalContext/user"
 import createWikiState, { WikiProvider } from "./GlobalContext/wiki"
-import { grafbaseTypeDefs } from "@la/shared/lib"
-import { listen } from "@tauri-apps/api/event"
-import { ModalWithMessageAndButton } from "@la/shared/ui"
-import { invoke } from "@tauri-apps/api/tauri"
 
 export function createMobius(options: { hankoCookie: () => string }) {
   const { hankoCookie } = options

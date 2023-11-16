@@ -3,6 +3,7 @@ import { client } from "../client"
 import e from "../dbschema/edgeql-js"
 import { GlobalGuideSection } from "../dbschema/edgeql-js/modules/default"
 import { queryGetGlobalTopic } from "../queries/queryGetGlobalTopic.query"
+import { foundUserByHankoId } from "./lib"
 
 export async function updateGlobalTopic(
   topicName: string,
@@ -307,58 +308,110 @@ export async function updateTopicLearningStatus(
   topicName: string,
   learningStatus: "to_learn" | "learning" | "learned" | "none"
 ) {
-  const userByHankoId = e.select(e.User, (user) => ({
-    filter: e.all(
-      e.set(
-        e.op(user.hankoId, "=", hankoId),
-        e.op("exists", user.memberUntil),
-        e.op(user.memberUntil, ">", e.datetime_current())
-      )
-    )
-  }))
-  const topicByName = e.select(e.GlobalTopic, () => ({
+  const foundUser = foundUserByHankoId(hankoId)
+  const foundTopic = e.select(e.GlobalTopic, () => ({
     filter_single: { name: topicName }
   }))
 
   switch (learningStatus) {
     case "none":
-      return e
-        .update(userByHankoId, () => ({
+      return await e
+        .update(foundUser, (user) => ({
           set: {
-            topicsToLearn: { "-=": topicByName },
-            topicsLearning: { "-=": topicByName },
-            topicsLearned: { "-=": topicByName }
+            topicsToLearn: { "-=": foundTopic },
+            topicsLearning: { "-=": foundTopic },
+            topicsLearned: { "-=": foundTopic },
+            freeActions: e.op(
+              user.freeActions,
+              "-",
+              e.op(
+                0,
+                "if",
+                e.op(
+                  e.op(user.memberUntil, ">", e.datetime_current()),
+                  "??",
+                  e.bool(false)
+                ),
+                "else",
+                1
+              )
+            )
           }
         }))
         .run(client)
     case "to_learn":
-      return e
-        .update(userByHankoId, () => ({
+      return await e
+        .update(foundUser, (user) => ({
           set: {
-            topicsToLearn: { "+=": topicByName },
-            topicsLearning: { "-=": topicByName },
-            topicsLearned: { "-=": topicByName }
+            topicsToLearn: { "+=": foundTopic },
+            topicsLearning: { "-=": foundTopic },
+            topicsLearned: { "-=": foundTopic },
+            freeActions: e.op(
+              user.freeActions,
+              "-",
+              e.op(
+                0,
+                "if",
+                e.op(
+                  e.op(user.memberUntil, ">", e.datetime_current()),
+                  "??",
+                  e.bool(false)
+                ),
+                "else",
+                1
+              )
+            )
           }
         }))
         .run(client)
 
     case "learning":
-      return e
-        .update(userByHankoId, () => ({
+      return await e
+        .update(foundUser, (user) => ({
           set: {
-            topicsToLearn: { "-=": topicByName },
-            topicsLearning: { "+=": topicByName },
-            topicsLearned: { "-=": topicByName }
+            topicsToLearn: { "-=": foundTopic },
+            topicsLearning: { "+=": foundTopic },
+            topicsLearned: { "-=": foundTopic },
+            freeActions: e.op(
+              user.freeActions,
+              "-",
+              e.op(
+                0,
+                "if",
+                e.op(
+                  e.op(user.memberUntil, ">", e.datetime_current()),
+                  "??",
+                  e.bool(false)
+                ),
+                "else",
+                1
+              )
+            )
           }
         }))
         .run(client)
     case "learned":
-      return e
-        .update(userByHankoId, () => ({
+      return await e
+        .update(foundUser, (user) => ({
           set: {
-            topicsToLearn: { "-=": topicByName },
-            topicsLearning: { "-=": topicByName },
-            topicsLearned: { "+=": topicByName }
+            topicsToLearn: { "-=": foundTopic },
+            topicsLearning: { "-=": foundTopic },
+            topicsLearned: { "+=": foundTopic },
+            freeActions: e.op(
+              user.freeActions,
+              "-",
+              e.op(
+                0,
+                "if",
+                e.op(
+                  e.op(user.memberUntil, ">", e.datetime_current()),
+                  "??",
+                  e.bool(false)
+                ),
+                "else",
+                1
+              )
+            )
           }
         }))
         .run(client)

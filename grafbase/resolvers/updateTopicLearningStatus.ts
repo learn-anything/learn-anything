@@ -6,8 +6,6 @@ import {
 } from "../edgedb/crud/global-topic"
 import { hankoIdFromToken } from "../lib/hanko-validate"
 
-// TODO:
-// @ts-ignore
 const updateTopicLearningStatusResolver: Resolver["Mutation.updateTopicLearningStatus"] =
   async (parent, args, context, info) => {
     try {
@@ -19,12 +17,14 @@ const updateTopicLearningStatusResolver: Resolver["Mutation.updateTopicLearningS
             args.topicName,
             args.learningStatus
           )
+          return "ok"
         } else {
           updateUnverifiedTopicLearningStatus(
             hankoId,
             args.topicName,
             args.learningStatus
           )
+          return "ok"
         }
       } else {
         throw new GraphQLError("Missing or invalid Authorization header")

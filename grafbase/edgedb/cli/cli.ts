@@ -1,11 +1,16 @@
 import { markdownToHtml } from "@la/shared/lib"
 import { getMarkdownFiles } from "./lib"
+import { updateTopicLearningStatus } from "../crud/global-topic"
 
 async function main() {
+  const hankoId = process.env.LOCAL_USER_HANKO_ID!
+  // console.log(foundUserIsMember(hankoId).toEdgeQL())
+  const res = await updateTopicLearningStatus(hankoId, "physics", "none")
+  console.log(res, "res")
+  return
   const files = getMarkdownFiles(process.env.wikiFolderPath!)
   console.log(files)
   return
-  const hankoId = process.env.LOCAL_USER_HANKO_ID!
   const testString = `# Asking Questions<br><br>[This](http://www.catb.org/esr/faqs/smart-questions.html) has everything in it on how to ask questions correctly.<br><br>In short, it can be summed down to this:<br><br>1. Do your own research first.<br>2. Include things you have tried and thought of before asking the question.<br>3. Be explicit about what you want to achieve in the end and provide as much information as possible to help.<br>4. Respect other people's time.<br><br>[XY problem](http://xyproblem.info) is also something to be aware of. When asking for help, let the people know what the problem you are trying to solve actually is instead of simply saying your solution and the reader guessing what it is you are actually trying to do.<br><br>`
   const html = await markdownToHtml(testString)
   console.log(html, "html")

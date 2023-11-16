@@ -259,13 +259,13 @@ export type $TopicλShape = $.typeutil.flatten<_std.$Object_d29c95e25d6b11eeabaf
   "topicBacklinks": $.LinkDesc<$Topic, $.Cardinality.Many, {}, false, false,  false, false>;
   "content": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
   "prettyName": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
-  "public": $.PropertyDesc<_std.$bool, $.Cardinality.One, false, false, false, false>;
   "topicAsMarkdown": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "topicPath": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "links": $.LinkDesc<$Link, $.Cardinality.Many, {}, false, true,  false, false>;
   "notes": $.LinkDesc<$Note, $.Cardinality.Many, {}, false, true,  false, false>;
   "wiki": $.LinkDesc<$PersonalWiki, $.Cardinality.One, {}, false, false,  false, false>;
-  "published": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, false>;
+  "public": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, false>;
+  "published": $.PropertyDesc<_std.$bool, $.Cardinality.One, false, false, false, false>;
   "<relatedTopics[is Note]": $.LinkDesc<$Note, $.Cardinality.Many, {}, false, false,  false, false>;
   "<mentionedTopics[is Topic]": $.LinkDesc<$Topic, $.Cardinality.Many, {}, false, false,  false, false>;
   "<parentTopic[is Topic]": $.LinkDesc<$Topic, $.Cardinality.Many, {}, false, false,  false, false>;

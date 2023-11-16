@@ -1,6 +1,7 @@
 import { removeTrailingSlash, splitUrlByProtocol } from "../../lib/util"
 import { client } from "../client"
 import e from "../dbschema/edgeql-js"
+import { foundUserIsMember } from "./lib"
 
 export async function updateTitleOfGlobalLink(url: string, title: string) {
   const [cleanUrl, _] = splitUrlByProtocol(url)
@@ -76,25 +77,9 @@ export async function updateGlobalLinkStatus(
   globalLinkId: string,
   action: "like" | "unlike" | "complete" | "uncomplete"
 ) {
+  const foundUser = foundUserIsMember(hankoId)
   const foundLink = e.select(e.GlobalLink, () => ({
     filter_single: { id: globalLinkId }
-  }))
-
-  const foundUser = e.select(e.User, (user) => ({
-    filter: e.all(
-      e.set(
-        e.op(user.hankoId, "=", hankoId),
-        e.op(
-          e.op(
-            e.op("exists", user.memberUntil),
-            "and",
-            e.op(user.memberUntil, ">", e.datetime_current())
-          ),
-          "or",
-          e.op(user.freeActions, ">", 0)
-        )
-      )
-    )
   }))
 
   switch (action) {
