@@ -187,7 +187,7 @@ export default function App() {
 
   return (
     <div class="w-screen h-screen fixed top-0 left-0 overflow-hidden  dark:bg-[#1e1e1e] bg-white">
-      <div class="h-[2%] min-h-[28px] w-full bg-[#1e1e1e] border-b border-slate-400 border-opacity-20"></div>
+      <div class="h-[2%] bg-white min-h-[28px] w-full dark:bg-[#1e1e1e] border-b border-slate-400 border-opacity-20"></div>
       <div class="h-[97%]">
         <solid.Show
           when={global.state.localFolderPath}

@@ -223,7 +223,7 @@ export function Search(props: SearchProps): solid.JSX.Element {
         <input
           type="text"
           placeholder={props.placeholder}
-          class="w-full h-10 bg-transparent p-3 px-4  rounded-[4px]  text-opacity-70 outline-none border dark:border-[#323232]  border-[#69696951] hover:border-[#363636] transition-all focus:border-[#505050]"
+          class="w-full h-10 p-3 px-4 dark:bg-neutral-900 bg-white rounded-[4px]  text-opacity-70 outline-none border border-slate-400 border-opacity-20"
           on:keydown={(e) =>
             handleInputKeydown(e, e.currentTarget, props.state)
           }
@@ -235,12 +235,12 @@ export function Search(props: SearchProps): solid.JSX.Element {
       </div>
       <solid.Show when={props.state.searchOpen}>
         {(_) => (
-          <div class="absolute w-full z-50 mt-2 bg-white dark:bg-neutral-900 border-slate-400 dark:border-opacity-30 border rounded-[4px]">
+          <div class="absolute w-full z-50 bg-white dark:bg-neutral-900 border-slate-400 border-opacity-20  border rounded-[4px]">
             <solid.For each={props.state.results}>
               {(topic) => (
                 <div
                   class={clsx(
-                    "cursor-pointer w-full h-10 px-3 p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:text-white text-black border-y border-slate-300 dark:border-neutral-800",
+                    "cursor-pointer w-full h-10 px-3 p-2 hover:bg-neutral-100  dark:hover:bg-neutral-800 dark:text-white text-black border-y border-slate-300 dark:border-neutral-800",
                     props.state.focused === topic &&
                       "bg-neutral-200 dark:bg-neutral-800 dark:border-opacity-30 drop-shadow-md"
                   )}
