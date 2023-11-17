@@ -4,6 +4,7 @@
   "plugins": ["@typescript-eslint", "eslint-comments"],
   "ignorePatterns": [
     "node_modules",
+    "tailwind.config.cjs",
     "dist",
     // test files
     "*.test.*",
