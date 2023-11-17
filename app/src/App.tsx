@@ -187,6 +187,13 @@ export default function App() {
 
   return (
     <div class="w-screen h-screen overflow-hidden  dark:bg-[#1e1e1e] bg-white">
+      {/* <div class="fixed top-0 bottom-0 z-[100] w-screen h-screen bg-black">
+        <div class="w-[200px] flex px-4 border p-1 items-center justify-center absolute bottom-0 left-0">
+          <ui.ToolTip title="yes">
+            <div class="bg-white text-black px-2">Hi</div>
+          </ui.ToolTip>
+        </div>
+      </div> */}
       <div class="h-[2%] bg-white min-h-[28px] w-full dark:bg-[#1e1e1e] border-b border-slate-400 border-opacity-20"></div>
       <div class="h-[97%]">
         <solid.Show
