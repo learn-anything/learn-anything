@@ -34,6 +34,7 @@ export function ToolTip(props: Props) {
           return setTooltipPosition("BL")
           break
         default:
+          return setTooltipPosition("BR")
           break
       }
     }
@@ -65,7 +66,7 @@ export function ToolTip(props: Props) {
                   ? "-50px"
                   : ""
           }}
-          class="tooltip top-[-150%] bg-white dark:bg-neutral-900 rounded-[4px] px-4 p-0.5 dark:text-white text-black text-opacity-70 dark:text-opacity-70 border dark:border-[#282828]  border-[#69696951] "
+          class="tooltip bg-white dark:bg-neutral-900 rounded-[4px] px-4 p-0.5 dark:text-white text-black text-opacity-70 dark:text-opacity-70 border dark:border-[#282828]  border-[#69696951] "
         >
           {props.title}
         </div>

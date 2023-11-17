@@ -4,7 +4,7 @@ import { createSignal } from "solid-js"
 import { useWiki } from "../GlobalContext/wiki"
 import Modal from "./Modal"
 import { useGlobalState } from "../GlobalContext/global"
-import Checkbox from "./checkbox"
+import Checkbox from "./Checkbox"
 import Icon from "./Icon"
 import { useUser } from "../GlobalContext/user"
 
