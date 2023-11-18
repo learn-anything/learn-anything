@@ -21,7 +21,7 @@ export function createGlobalState() {
   const [state, setState] = createStore<GlobalState>({
     localFolderPath: localStorage.getItem("localFolderPath") || "",
     files: [],
-    showModal: "searchFiles",
+    showModal: "",
     showBox: false,
     // monaco: null,
     // editor: null

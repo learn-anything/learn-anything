@@ -1,5 +1,4 @@
 import { ui } from "@la/shared"
-import { FancyButton, Modal } from "@la/shared/ui"
 import { createShortcut } from "@solid-primitives/keyboard"
 import { invoke } from "@tauri-apps/api/tauri"
 import * as solid from "solid-js"
@@ -25,7 +24,9 @@ const Sidebar: solid.Component = () => {
           // user.setMode("Settings")
         }}
       >
-        <Icon name="FileSearch" />
+        <ui.ToolTip title="File Search">
+          <Icon name="FileSearch" />
+        </ui.ToolTip>
       </div>
       <div class="p-1 px-2 rounded-md"></div>
       <div class="flex flex-col items-center gap-3">
@@ -79,7 +80,7 @@ const PublishButton: solid.Component = () => {
   })
 
   return (
-    <FancyButton
+    <ui.FancyButton
       onClick={async () => {
         const loggedIn = isLoggedIn(global)
         // TODO: publish current note to user's wiki
@@ -146,7 +147,7 @@ const PublishButton: solid.Component = () => {
       >
         Publishing...
       </solid.Show>
-    </FancyButton>
+    </ui.FancyButton>
   )
 }
 
@@ -194,7 +195,7 @@ export default function App() {
           fallback={
             <div class="w-full h-full flex justify-center items-center flex-col gap-5">
               <div>
-                <FancyButton
+                <ui.FancyButton
                   onClick={async () => {
                     // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                     const connectedFolder = (await invoke("connect_folder", {
@@ -208,12 +209,12 @@ export default function App() {
                   }}
                 >
                   Connect folder
-                </FancyButton>
+                </ui.FancyButton>
               </div>
             </div>
           }
         >
-          <div class="absolute bottom-1 right-1 py-2 px-4 text-lg z-50">
+          <div class="absolute bottom-4 right-4 text-lg z-50">
             <PublishButton />
           </div>
 
@@ -251,7 +252,7 @@ export default function App() {
       </solid.Show>
 
       <solid.Show when={global.state.showModal === "searchFiles"}>
-        <Modal
+        <ui.Modal
           onClose={() => {
             global.set("showModal", "")
           }}
@@ -260,7 +261,7 @@ export default function App() {
           <div class="w-[700px]">
             <ui.Search placeholder={""} state={search_state} />
           </div>
-        </Modal>
+        </ui.Modal>
         {/* <SearchModal
               items={wiki.wiki.topics}
               action={() => {}}
