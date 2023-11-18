@@ -19,11 +19,55 @@ function fade(way: "in" | "out", el: Element): Animation {
   )
 }
 
+function updateTooltipPosition(target: HTMLElement, tooltip: HTMLElement) {
+  const target_rect = target.getBoundingClientRect()
+  const target_x = target_rect.x
+  const target_y = target_rect.y
+  const target_w = target_rect.width
+  const target_h = target_rect.height
+  const tooltip_rect = tooltip.getBoundingClientRect()
+  const tooltip_w = tooltip_rect.width
+  const tooltip_h = tooltip_rect.height
+
+  const target_margin = 8
+  const window_margin = 12
+
+  /* ensure tooltip is within window bounds */
+  const x = clamp(
+    window_margin,
+    target_x + target_w / 2 - tooltip_w / 2,
+    window.innerWidth - window_margin - tooltip_w
+  )
+
+  /* position tooltip above or below target */
+  let y = target_y - tooltip_h - target_margin
+  if (y < window_margin) {
+    y = target_y + target_h + target_margin
+  }
+
+  tooltip.style.top = `${y}px`
+  tooltip.style.left = `${x}px`
+}
+
 export type TooltipTarget =
   | HTMLElement
   | s.Accessor<HTMLElement | null | undefined | false>
 export type TooltipLabel = string | s.Accessor<s.JSXElement>
 
+/**
+ * Creates a tooltip for the given target element.
+ * The tooltip will be shown when the target is hovered or focused.
+ *
+ * @param target target element, can be reactive
+ * @param label tooltip label, can be reactive
+ *
+ * @example
+ * ```tsx
+ * <div ref={el => createTooltip(el, "Hello world!")}>
+ *  Hover me!
+ * </div>
+ * ```
+ */
 export function createTooltip(
   target: TooltipTarget,
   label: TooltipLabel
@@ -54,6 +98,10 @@ export function createTooltip(
 
   s.onCleanup(deactivate)
 
+  /*
+  uses portal to render tooltip outside of the current component
+  so it does't have to return jsx
+  */
   void (
     <s.Show when={active()}>
       <PresencePortal>
@@ -63,48 +111,22 @@ export function createTooltip(
               requestAnimationFrame(() => fade("in", tooltip))
               s.onCleanup(() => fade("out", tooltip).finished.then(hide))
 
-              const updateTooltipPosition = () => {
+              function boundUpdateTooltipPosition() {
                 const el = getTarget()
-                if (!el) return
-
-                const target_rect = el.getBoundingClientRect()
-                const target_x = target_rect.x
-                const target_y = target_rect.y
-                const target_w = target_rect.width
-                const target_h = target_rect.height
-                const tooltip_rect = tooltip.getBoundingClientRect()
-                const tooltip_w = tooltip_rect.width
-                const tooltip_h = tooltip_rect.height
-
-                const target_margin = 8
-                const window_margin = 12
-
-                const x = clamp(
-                  window_margin,
-                  target_x + target_w / 2 - tooltip_w / 2,
-                  window.innerWidth - window_margin - tooltip_w
-                )
-
-                let y = target_y - tooltip_h - target_margin
-                if (y < window_margin) {
-                  y = target_y + target_h + target_margin
-                }
-
-                tooltip.style.top = `${y}px`
-                tooltip.style.left = `${x}px`
+                if (el) updateTooltipPosition(el, tooltip)
               }
 
-              s.createEffect(updateTooltipPosition)
+              s.createEffect(boundUpdateTooltipPosition) // track target el change
 
-              window.addEventListener("resize", updateTooltipPosition)
-              window.addEventListener("scroll", updateTooltipPosition)
+              window.addEventListener("resize", boundUpdateTooltipPosition)
+              window.addEventListener("scroll", boundUpdateTooltipPosition)
 
               s.onCleanup(() => {
-                window.removeEventListener("resize", updateTooltipPosition)
-                window.removeEventListener("scroll", updateTooltipPosition)
+                window.removeEventListener("resize", boundUpdateTooltipPosition)
+                window.removeEventListener("scroll", boundUpdateTooltipPosition)
               })
             }}
-            class="fixed z-0 top-0 left-0 pointer-events-none bg-white dark:bg-neutral-900 rounded-md px-4 p-0.5 dark:text-white text-black text-opacity-70 dark:text-opacity-70 border dark:border-[#282828] border-[#69696951]"
+            class="fixed z-50 top-0 left-0 pointer-events-none bg-white dark:bg-neutral-900 rounded-md px-4 p-0.5 dark:text-white text-black text-opacity-70 dark:text-opacity-70 border dark:border-[#282828] border-[#69696951]"
           >
             {label as s.JSXElement}
           </div>
@@ -114,12 +136,28 @@ export function createTooltip(
   )
 }
 
+/**
+ * Tooltip component. Uses {@link createTooltip}.
+ *
+ * `props.children` should be a single element, otherwise the tooltip won't show up.
+ *
+ * @example
+ * ```tsx
+ * <ui.Tooltip title="Hello world!">
+ *   <div>Hover me!</div>
+ * </ui.Tooltip>
+ * ```
+ */
 export function Tooltip(props: {
   title: s.JSXElement
   children: s.JSXElement
 }): s.JSXElement {
   const children = s.children(() => props.children)
 
+  /*
+  use the last child el as the target
+  thats because a lot of components return [<style />, <div />]...
+  */
   const target = s.createMemo(() => {
     const child = children.toArray().at(-1)
     return child instanceof HTMLElement ? child : null
