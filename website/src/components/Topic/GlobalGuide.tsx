@@ -70,9 +70,9 @@ export default function GlobalGuide() {
               }}
             >
               {/* TODO: do <Show here that on hover shows the full AI description of the topic */}
-              <ui.ToolTip title="AI Description">
+              <ui.Tooltip label="AI Description">
                 <ui.Icon name="Sparkles" />
-              </ui.ToolTip>
+              </ui.Tooltip>
             </div>
           </div>
           <div class="flex h-full text-[12px] gap-4">

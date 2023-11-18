@@ -24,9 +24,9 @@ const Sidebar: solid.Component = () => {
           // user.setMode("Settings")
         }}
       >
-        <ui.ToolTip title="File Search">
+        <ui.Tooltip label="File Search">
           <Icon name="FileSearch" />
-        </ui.ToolTip>
+        </ui.Tooltip>
       </div>
       <div class="p-1 px-2 rounded-md"></div>
       <div class="flex flex-col items-center gap-3">
@@ -37,11 +37,11 @@ const Sidebar: solid.Component = () => {
             console.log(loggedIn, "logged in")
           }}
         >
-          <ui.ToolTip
-            title={localStorage.getItem("hanko") ? "Profile" : "Sign In"}
+          <ui.Tooltip
+            label={localStorage.getItem("hanko") ? "Profile" : "Sign In"}
           >
             <Icon name="UserProfile" />
-          </ui.ToolTip>
+          </ui.Tooltip>
         </div>
         <div
           class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
@@ -50,9 +50,9 @@ const Sidebar: solid.Component = () => {
             user.setMode("Settings")
           }}
         >
-          <ui.ToolTip title="Settings">
+          <ui.Tooltip label="Settings">
             <Icon name="Settings" />
-          </ui.ToolTip>
+          </ui.Tooltip>
         </div>
       </div>
     </div>

@@ -143,13 +143,13 @@ export function createTooltip(
  *
  * @example
  * ```tsx
- * <ui.Tooltip title="Hello world!">
+ * <ui.Tooltip label="Hello world!">
  *   <div>Hover me!</div>
  * </ui.Tooltip>
  * ```
  */
 export function Tooltip(props: {
-  title: s.JSXElement
+  label: s.JSXElement
   children: s.JSXElement
 }): s.JSXElement {
   const children = s.children(() => props.children)
@@ -163,7 +163,7 @@ export function Tooltip(props: {
     return child instanceof HTMLElement ? child : null
   })
 
-  createTooltip(target, () => props.title)
+  createTooltip(target, () => props.label)
 
   return <>{children()}</>
 }
