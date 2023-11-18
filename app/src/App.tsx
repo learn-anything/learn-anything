@@ -8,8 +8,8 @@ import { useUser } from "./GlobalContext/user"
 import { Monaco } from "./components/Monaco/Monaco"
 import Settings from "./components/Settings"
 import { useMobius } from "./root"
-
 import { FileTree } from "./file-tree"
+import ShoSho from "shosho"
 
 const Sidebar: solid.Component = () => {
   const user = useUser()
@@ -154,18 +154,36 @@ export default function App() {
   const global = useGlobalState()
   const user = useUser()
 
+  solid.onMount(() => {
+    console.log("runs")
+    const shortcuts = new ShoSho({
+      capture: true,
+      target: document,
+      shouldHandleEvent(event) {
+        // Return "true" if this event should be handled
+        return true
+      },
+    })
+
+    // TODO: does not work, no idea why
+    shortcuts.register("Ctrl+G", (event) => {
+      console.log("called")
+      return true
+    })
+  })
+
   // TODO: CMD+L = search files/topics in wiki
   // there was some issue with CMD+L not triggering, fix
   // TODO: should these bindings be placed in this file? also they should be customisable
   // similar to https://x.com/fabiospampinato/status/1722729570573430979
   // TODO: probably switch to fabio's keybindings lib and wrap over it with solid
-  createShortcut(["Control", "L"], () => {
-    if (global.state.showModal === "searchFiles") {
-      global.set("showModal", "")
-    } else {
-      global.set("showModal", "searchFiles")
-    }
-  })
+  // createShortcut(["Control", "L"], () => {
+  //   if (global.state.showModal === "searchFiles") {
+  //     global.set("showModal", "")
+  //   } else {
+  //     global.set("showModal", "searchFiles")
+  //   }
+  // })
 
   const searchResults = solid.createMemo(() => {
     return global.state.files.map((f) => ({

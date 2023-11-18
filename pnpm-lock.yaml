@@ -232,6 +232,9 @@ importers:
       oidc-client-ts:
         specifier: ^2.4.0
         version: 2.4.0
+      shosho:
+        specifier: ^1.4.3
+        version: 1.4.3
       solid-headless:
         specifier: ^0.13.1
         version: 0.13.1(solid-js@1.8.5)
@@ -7886,6 +7889,10 @@ packages:
   /shebang-regex@3.0.0:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
+
+  /shosho@1.4.3:
+    resolution: {integrity: sha512-VzHiuOtpNcrWLZh+JeX5uSMFcxPGvLyW4LP4EzNZqS5YLDA27FR/QDTP24H1BgpGswr9Rlj0ZHeRAntEh5/XaQ==}
+    dev: false
 
   /side-channel@1.0.4:
     resolution: {integrity: sha512-q5XPytqFEIKHkGdiMIrY10mvLRvnQh42/+GoBlFW3b2LXLE2xxJpZFdm94we0BaoV3RwJyGqg5wS7epxTv0Zvw==}
