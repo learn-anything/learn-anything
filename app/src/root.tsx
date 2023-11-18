@@ -92,9 +92,11 @@ export default function Root() {
             // console.log(fileContent, "file content")
             let filePath = path.replace(global.state.localFolderPath, "")
             console.log(filePath, "file path")
-            global.set("currentlyOpenFile", {
-              filePath: filePath,
-              fileContent: fileContent as string,
+            global.set({
+              currentlyOpenFile: {
+                filePath: filePath,
+                fileContent: fileContent as string,
+              },
             })
           }
         },

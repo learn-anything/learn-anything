@@ -1,7 +1,7 @@
 import { removeTrailingSlash, splitUrlByProtocol } from "../../lib/util"
 import { client } from "../client"
 import e from "../dbschema/edgeql-js"
-import { foundUserIsMember } from "./lib"
+import { foundUserByHankoId } from "./lib"
 
 export async function updateTitleOfGlobalLink(url: string, title: string) {
   const [cleanUrl, _] = splitUrlByProtocol(url)
@@ -77,7 +77,7 @@ export async function updateGlobalLinkStatus(
   globalLinkId: string,
   action: "like" | "unlike" | "complete" | "uncomplete"
 ) {
-  const foundUser = foundUserIsMember(hankoId)
+  const foundUser = foundUserByHankoId(hankoId)
   const foundLink = e.select(e.GlobalLink, () => ({
     filter_single: { id: globalLinkId }
   }))
@@ -91,7 +91,17 @@ export async function updateGlobalLinkStatus(
             freeActions: e.op(
               user.freeActions,
               "-",
-              e.op(0, "if", e.op("exists", user.memberUntil), "else", 1)
+              e.op(
+                0,
+                "if",
+                e.op(
+                  e.op(user.memberUntil, ">", e.datetime_current()),
+                  "??",
+                  e.bool(false)
+                ),
+                "else",
+                1
+              )
             )
           }
         }))
@@ -104,7 +114,17 @@ export async function updateGlobalLinkStatus(
             freeActions: e.op(
               user.freeActions,
               "-",
-              e.op(0, "if", e.op("exists", user.memberUntil), "else", 1)
+              e.op(
+                0,
+                "if",
+                e.op(
+                  e.op(user.memberUntil, ">", e.datetime_current()),
+                  "??",
+                  e.bool(false)
+                ),
+                "else",
+                1
+              )
             )
           }
         }))
@@ -117,7 +137,17 @@ export async function updateGlobalLinkStatus(
             freeActions: e.op(
               user.freeActions,
               "-",
-              e.op(0, "if", e.op("exists", user.memberUntil), "else", 1)
+              e.op(
+                0,
+                "if",
+                e.op(
+                  e.op(user.memberUntil, ">", e.datetime_current()),
+                  "??",
+                  e.bool(false)
+                ),
+                "else",
+                1
+              )
             )
           }
         }))
@@ -130,7 +160,17 @@ export async function updateGlobalLinkStatus(
             freeActions: e.op(
               user.freeActions,
               "-",
-              e.op(0, "if", e.op("exists", user.memberUntil), "else", 1)
+              e.op(
+                0,
+                "if",
+                e.op(
+                  e.op(user.memberUntil, ">", e.datetime_current()),
+                  "??",
+                  e.bool(false)
+                ),
+                "else",
+                1
+              )
             )
           }
         }))
