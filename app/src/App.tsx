@@ -65,19 +65,6 @@ const PublishButton: solid.Component = () => {
     null | string
   >(null)
 
-  // TODO: CMD+L = search files/topics in wiki
-  // there was some issue with CMD+L not triggering, fix
-  // TODO: should these bindings be placed in this file? also they should be customisable
-  // similar to https://x.com/fabiospampinato/status/1722729570573430979
-  // TODO: probably switch to fabio's keybindings lib and wrap over it with solid
-  createShortcut(["Control", "L"], () => {
-    if (global.state.showModal === "searchFiles") {
-      global.set("showModal", "")
-    } else {
-      global.set("showModal", "searchFiles")
-    }
-  })
-
   return (
     <ui.FancyButton
       onClick={async () => {
@@ -155,21 +142,21 @@ export default function App() {
   const user = useUser()
 
   solid.onMount(() => {
-    console.log("runs")
     const shortcuts = new ShoSho({
       capture: true,
       target: document,
-      shouldHandleEvent(event) {
-        // Return "true" if this event should be handled
-        return true
-      },
     })
 
-    // TODO: does not work, no idea why
-    shortcuts.register("Ctrl+G", (event) => {
-      console.log("called")
-      return true
+    // search files in wiki
+    // TODO: should focus on input
+    shortcuts.register("Cmd+L", () => {
+      if (global.state.showModal === "searchFiles") {
+        global.set("showModal", "")
+      } else {
+        global.set("showModal", "searchFiles")
+      }
     })
+    shortcuts.start()
   })
 
   // TODO: CMD+L = search files/topics in wiki
@@ -178,11 +165,6 @@ export default function App() {
   // similar to https://x.com/fabiospampinato/status/1722729570573430979
   // TODO: probably switch to fabio's keybindings lib and wrap over it with solid
   // createShortcut(["Control", "L"], () => {
-  //   if (global.state.showModal === "searchFiles") {
-  //     global.set("showModal", "")
-  //   } else {
-  //     global.set("showModal", "searchFiles")
-  //   }
   // })
 
   const searchResults = solid.createMemo(() => {
