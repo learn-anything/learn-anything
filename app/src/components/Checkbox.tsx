@@ -1,6 +1,6 @@
-import clsx from "clsx"
-import Icon from "./Icon"
 import { Show } from "solid-js"
+import { ui } from "@la/shared"
+import clsx from "clsx"
 
 interface Props {
   state: boolean
@@ -20,7 +20,7 @@ export default function Checkbox(props: Props) {
         }}
       >
         <Show when={props.state}>
-          <Icon name="Check"></Icon>
+          <ui.Icon name="Check" />
         </Show>
       </div>
     </>

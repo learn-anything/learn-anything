@@ -19,7 +19,7 @@ function fade(way: "in" | "out", el: Element): Animation {
   )
 }
 
-function updateTooltipPosition(target: HTMLElement, tooltip: HTMLElement) {
+function updateTooltipPosition(target: Element, tooltip: HTMLElement) {
   const target_rect = target.getBoundingClientRect()
   const target_x = target_rect.x
   const target_y = target_rect.y
@@ -50,8 +50,8 @@ function updateTooltipPosition(target: HTMLElement, tooltip: HTMLElement) {
 }
 
 export type TooltipTarget =
-  | HTMLElement
-  | s.Accessor<HTMLElement | null | undefined | false>
+  | Element
+  | s.Accessor<Element | null | undefined | false>
 export type TooltipLabel = string | s.Accessor<s.JSXElement>
 
 /**
@@ -73,7 +73,7 @@ export function createTooltip(
   label: TooltipLabel
 ): void {
   const getTarget = () =>
-    target instanceof HTMLElement ? target : target() || null
+    target instanceof Element ? target : target() || null
 
   const [active, setActive] = s.createSignal(false)
   const activate = () => setActive(true)
@@ -156,11 +156,12 @@ export function Tooltip(props: {
 
   /*
   use the last child el as the target
-  thats because a lot of components return [<style />, <div />]...
+  because a lot of components return [<style />, <div />]...
   */
   const target = s.createMemo(() => {
     const child = children.toArray().at(-1)
-    return child instanceof HTMLElement ? child : null
+    const el = child instanceof Element ? child : null
+    return el
   })
 
   createTooltip(target, () => props.label)

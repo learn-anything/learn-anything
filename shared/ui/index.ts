@@ -1,5 +1,5 @@
 export * from "./FancyButton.js"
-export * from "./Icon.js"
+export * from "./icons.jsx"
 export * from "./Modal.js"
 export * from "./Search.js"
 export * from "./force-graph/index.js"

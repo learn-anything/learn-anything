@@ -1,11 +1,9 @@
 import { createSignal } from "solid-js"
-// import { connectWiki } from "#preload"
-
 import { useWiki } from "../GlobalContext/wiki"
 import Modal from "./Modal"
 import { useGlobalState } from "../GlobalContext/global"
 import Checkbox from "./Checkbox"
-import Icon from "./Icon"
+import { ui } from "@la/shared"
 import { useUser } from "../GlobalContext/user"
 
 export default function Settings() {
@@ -37,7 +35,7 @@ export default function Settings() {
       </style>
       <div class="w-5/6 flex relative h-3/4 bg-white dark:bg-neutral-900 rounded-lg border-2 dark:border-neutral-700 border-slate-400">
         <div class="absolute top-2 right-2 hover:opacity-60 transition-all">
-          <Icon name="Close"></Icon>
+          <ui.Icon name="Close" />
         </div>
         <div class="h-full border-r-2 dark:border-neutral-700 p-3 border-slate-400 min-w-[200px]">
           <div class="text-[10px] opacity-70 pb-1">Settings</div>

@@ -1,5 +1,5 @@
 import { Show, createSignal } from "solid-js"
-import Icon from "./Icon"
+import { ui } from "@la/shared"
 
 // lists useful functions you can run from electron preload file
 export default function DevToolsPanel() {
@@ -35,7 +35,7 @@ export default function DevToolsPanel() {
             setMinimiseDevTools(!minimiseDevTools())
           }}
         >
-          <Icon name="Minimise" />
+          <ui.Icon name="Minimise" />
         </div>
         <Show when={minimiseDevTools()}>
           <div>

@@ -8,7 +8,6 @@ import { useUser } from "./GlobalContext/user"
 import { Monaco } from "./components/Monaco/Monaco"
 import Settings from "./components/Settings"
 import { useMobius } from "./root"
-import Icon from "./components/Icon"
 
 import { FileTree } from "./file-tree"
 
@@ -25,7 +24,7 @@ const Sidebar: solid.Component = () => {
         }}
       >
         <ui.Tooltip label="File Search">
-          <Icon name="FileSearch" />
+          <ui.Icon name="FileSearch" />
         </ui.Tooltip>
       </div>
       <div class="p-1 px-2 rounded-md"></div>
@@ -40,7 +39,7 @@ const Sidebar: solid.Component = () => {
           <ui.Tooltip
             label={localStorage.getItem("hanko") ? "Profile" : "Sign In"}
           >
-            <Icon name="UserProfile" />
+            <ui.Icon name="UserProfile" />
           </ui.Tooltip>
         </div>
         <div
@@ -51,7 +50,7 @@ const Sidebar: solid.Component = () => {
           }}
         >
           <ui.Tooltip label="Settings">
-            <Icon name="Settings" />
+            <ui.Icon name="Settings" />
           </ui.Tooltip>
         </div>
       </div>

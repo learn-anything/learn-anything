@@ -1,6 +1,6 @@
 import * as solid from "solid-js"
+import { ui } from "@la/shared"
 import { useGlobalState } from "./GlobalContext/global"
-import Icon from "./components/Icon"
 import clsx from "clsx"
 // @ts-ignore
 import { Motion } from "@motionone/solid"
@@ -163,9 +163,9 @@ export const FileTree: solid.Component = () => {
                         <solid.Show when={item.type === "directory"}>
                           {/* <Show
                           when={!collapsed().has(item)}
-                          fallback={<Icon name={"ArrowRight"} />}
+                          fallback={<ui.Icon name={"ArrowRight"} />}
                         >
-                          <Icon name={"ArrowDown"} />
+                          <ui.Icon name={"ArrowDown"} />
                         </Show> */}
                           <div
                             class={clsx(
@@ -173,7 +173,7 @@ export const FileTree: solid.Component = () => {
                               !collapsed().has(item) && "rotate-90",
                             )}
                           >
-                            <Icon name={"ArrowRight"} />
+                            <ui.Icon name={"ArrowRight"} />
                           </div>
                         </solid.Show>
                       </div>
