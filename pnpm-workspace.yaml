@@ -3,3 +3,4 @@ packages:
   - "website"
   - "api/stripe"
   - "shared"
+  - "cli"

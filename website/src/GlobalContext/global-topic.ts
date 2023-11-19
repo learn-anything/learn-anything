@@ -162,6 +162,7 @@ export default function createGlobalTopic(
       topicName === "profile" ||
       topicName === "pricing" ||
       topicName === "desktop-login" ||
+      topicName === "get-api-key" ||
       topicName.startsWith("@")
     )
       return

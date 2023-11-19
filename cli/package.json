@@ -1,0 +1,12 @@
+{
+  "name": "@la/cli",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "bun --watch cli.ts"
+  },
+  "dependencies": {
+    "@la/shared": "workspace:*",
+    "graphql-mobius": "^0.1.13",
+    "open": "^9.1.0"
+  }
+}
