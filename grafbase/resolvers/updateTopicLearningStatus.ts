@@ -1,4 +1,5 @@
 import { Resolver } from "@grafbase/generated"
+import { ConstraintViolationError } from "edgedb"
 import { GraphQLError } from "graphql"
 import {
   updateTopicLearningStatus,
@@ -30,8 +31,12 @@ const updateTopicLearningStatusResolver: Resolver["Mutation.updateTopicLearningS
         throw new GraphQLError("Missing or invalid Authorization header")
       }
     } catch (err) {
-      console.error(err)
-      throw new GraphQLError(JSON.stringify(err))
+      if (err instanceof ConstraintViolationError) {
+        throw new GraphQLError("out-of-free-actions")
+      } else {
+        console.error(err)
+        throw new GraphQLError(JSON.stringify(err))
+      }
     }
   }
 

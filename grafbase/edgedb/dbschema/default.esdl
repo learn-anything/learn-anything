@@ -29,9 +29,9 @@ module default {
     displayName: str;
     # aws s3 or cloudflare r2 url with image
     profileImage: str;
-    # limit of actions non member user can do per day
+    # limit of actions non member user can do (initially set to 50) (then reset every day to all non members to 10)
     freeActions: int16 {
-      default := 5;
+      default := 50;
       constraint min_value(0);
     };
     # TODO: in future can consider `GlobalWiki` as concept maybe as a wiki that multiple users can edit

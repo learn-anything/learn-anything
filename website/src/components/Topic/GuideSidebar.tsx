@@ -6,6 +6,7 @@ import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import { useUser } from "../../GlobalContext/user"
 import { useMobius } from "../../root"
 import { ui } from "@la/shared"
+import { parseResponse } from "@la/shared/lib"
 
 export default function GuideSidebar() {
   const topic = useGlobalTopic()
@@ -64,7 +65,15 @@ export default function GuideSidebar() {
                         select: true
                       }
                     })
-                    console.log(res, "res")
+                    const [data, err] = parseResponse(res)
+                    if (data) {
+                      topic.set("learningStatus", "to_learn")
+                    } else {
+                      if (err === "out-of-free-actions") {
+                        console.log("show modal..")
+                      }
+                      console.log(err)
+                    }
                     // topic.set("learningStatus", "to_learn")
                   }
                 }}

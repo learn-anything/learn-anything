@@ -20,3 +20,17 @@ export function createMobiusFromApiToken(
       }).then((res) => res.json())
   })
 }
+type SuccessResponse<T> = [data: T, error: undefined]
+type ErrorResponse = [data: undefined, error: string]
+type Response<T> = { [K in keyof T]: T[K] } & { errors?: { message: string }[] }
+export function parseResponse<T>(
+  res: Response<T>
+): SuccessResponse<T> | ErrorResponse {
+  const dataKey = Object.keys(res).find((key) => key !== "errors")
+  if (res.errors) {
+    // @ts-ignore
+    return [undefined, res.errors[0].message]
+  }
+  // @ts-ignore
+  return [res[dataKey], undefined]
+}

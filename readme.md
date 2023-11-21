@@ -16,7 +16,7 @@ It is a fully open source project with an active community on [Discord](https://
 
 Project consists of a [website](website), [desktop app](app), [mobile app](mobile).
 
-There is also separate repo of [AI](https://github.com/learn-anything/ai) where we train & fine tune LLMs to provide AI interfaces to all things knowledge. Part of the goals of LA is to reach AGI faster than [OpenAI](https://openai.com) and do it in a fully open way. The current start of that journey is in providing state of art ability to index any knowledge of a person and provide chat bot interface to it with different privacy controls. As well as having state of the art chat bots for each of the topics in LA platform.
+There is also separate repo of [AI](https://github.com/learn-anything/ai) where we train & fine tune LLMs to provide AI interfaces to all things knowledge. Part of the goals of LA is to reach AGI and do it in a fully open way. The current start of that journey is in providing state of art ability to index any knowledge of a person and provide chat bot interface to it with different privacy controls. As well as having state of the art chat bots for each of the topics in LA platform.
 
 If you're interested in the mission and like the project, join [Discord](https://discord.com/invite/bxtD8x6aNF) where you can ask questions and interact with community and read on to get you started writing your first code.
 
