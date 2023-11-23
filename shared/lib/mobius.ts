@@ -79,6 +79,7 @@ type getTopicsLearnedOutput {
 }
 type getUserDetailsOutput {
   isMember: Boolean!
+  freeActions: Int
 }
 type globalGuideSection {
   title: String!

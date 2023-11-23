@@ -33,10 +33,6 @@ export default function GuideSidebar() {
                     navigate("/auth")
                     return
                   }
-                  // if (!user.user.member) {
-                  //   global.setShowMemberOnlyModal(true)
-                  //   return
-                  // }
                   if (topic.globalTopic.learningStatus === "to_learn") {
                     const res = await mobius.mutate({
                       updateTopicLearningStatus: {
@@ -50,8 +46,14 @@ export default function GuideSidebar() {
                         select: true
                       }
                     })
-                    console.log(res, "res")
-                    // topic.set("learningStatus", "")
+                    const [data, err] = parseResponse(res)
+                    if (data) {
+                      topic.set("learningStatus", "")
+                    } else {
+                      if (err === "out-of-free-actions") {
+                        global.set("showModal", "out-of-free-actions")
+                      }
+                    }
                   } else {
                     const res = await mobius.mutate({
                       updateTopicLearningStatus: {
@@ -70,11 +72,9 @@ export default function GuideSidebar() {
                       topic.set("learningStatus", "to_learn")
                     } else {
                       if (err === "out-of-free-actions") {
-                        console.log("show modal..")
+                        global.set("showModal", "out-of-free-actions")
                       }
-                      console.log(err)
                     }
-                    // topic.set("learningStatus", "to_learn")
                   }
                 }}
                 active={topic.globalTopic.learningStatus === "to_learn"}

@@ -8,7 +8,7 @@ import {
 } from "solid-js"
 import { createStore } from "solid-js/store"
 import { MobiusType } from "../root"
-import { getHankoCookie } from "@la/shared/lib"
+import { getHankoCookie, parseResponse } from "@la/shared/lib"
 import { useLocation } from "solid-start"
 
 type Topic = {
@@ -92,13 +92,16 @@ export function createUserState(mobius: MobiusType) {
 
     const res = await mobius.query({
       getUserDetails: {
-        isMember: true
+        isMember: true,
+        freeActions: true
       }
     })
-    if (res) {
-      // @ts-ignore
-      setUser({ member: res?.data?.getUserDetails.isMember })
-    }
+    const [data] = parseResponse(res)
+    console.log(data)
+    // if (res) {
+    //   // @ts-ignore
+    //   setUser({ member: res?.data?.getUserDetails.isMember })
+    // }
 
     const hankoCookie = await getHankoCookie()
     if (hankoCookie) {

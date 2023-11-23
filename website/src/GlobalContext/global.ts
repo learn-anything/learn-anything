@@ -34,6 +34,7 @@ type GlobalState = {
   theme: string
   topicsWithConnections: TopicWithConnections[]
   showSidebar: boolean
+  showModal: "" | "out-of-free-actions"
 }
 
 // various global state
@@ -44,7 +45,8 @@ export function createGlobalState(mobius: MobiusType) {
     guidePage: "Guide",
     theme: "",
     showSidebar: false,
-    topicsWithConnections: []
+    topicsWithConnections: [],
+    showModal: ""
   })
   const [showMemberOnlyModal, setShowMemberOnlyModal] = createSignal(false)
   const [showMemberOnlyModalWithMessage, setShowMemberOnlyModalWithMessage] =

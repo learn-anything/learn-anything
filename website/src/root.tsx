@@ -3,7 +3,13 @@
 import { getHankoCookie, grafbaseTypeDefs } from "@la/shared/lib"
 import { DragDropProvider, DragDropSensors } from "@thisbeyond/solid-dnd"
 import Mobius from "graphql-mobius"
-import { Suspense, createContext, createSignal, useContext } from "solid-js"
+import {
+  Show,
+  Suspense,
+  createContext,
+  createSignal,
+  useContext
+} from "solid-js"
 import {
   Body,
   ErrorBoundary,
@@ -14,7 +20,8 @@ import {
   Route,
   Routes,
   Scripts,
-  Title
+  Title,
+  useNavigate
 } from "solid-start"
 import { GlobalStateProvider, createGlobalState } from "./GlobalContext/global"
 import createGlobalTopic, {
@@ -26,6 +33,7 @@ import UserProfile from "./routes/@(username)"
 import PersonalTopic from "./routes/@(username)/[topic]"
 import * as solid_styled from "solid-styled"
 import { useAssets } from "solid-js/web"
+import { Modal, ModalWithMessageAndButton } from "@la/shared/ui"
 
 export function createMobius(options: { hankoCookie: () => string }) {
   const { hankoCookie } = options
@@ -67,6 +75,7 @@ export default function Root() {
   const filters: any = {
     username: /^@.+/
   }
+  const navigate = useNavigate()
 
   const [hankoCookie, setHankoCookie] = createSignal(getHankoCookie())
 
@@ -121,6 +130,25 @@ export default function Root() {
                               />
                               <FileRoutes />
                             </Routes>
+                            <Show
+                              when={
+                                global.state.showModal === "out-of-free-actions"
+                              }
+                            >
+                              <ModalWithMessageAndButton
+                                message={
+                                  "You run out of free actions. Please become a member for unlimited access."
+                                }
+                                buttonText="Become Member"
+                                buttonAction={async () => {
+                                  global.set("showModal", "")
+                                  navigate("/pricing")
+                                }}
+                                onClose={() => {
+                                  global.set("showModal", "")
+                                }}
+                              />
+                            </Show>
                           </DragDropSensors>
                         </DragDropProvider>
                       </GlobalTopicProvider>

@@ -9,6 +9,7 @@ import GuideLinks from "../../components/Topic/GuideLinks"
 import GuideNav from "../../components/Topic/GuideNav"
 import GuideNotes from "../../components/Topic/GuideNotes"
 import GuideSidebar from "../../components/Topic/GuideSidebar"
+import { ModalWithMessageAndButton } from "@la/shared/ui"
 
 export default function GlobalTopic() {
   const global = useGlobalState()

@@ -12,7 +12,8 @@ const getUserDetailsResolver: Resolver["Query.getUserDetails"] = async (
   try {
     const hankoId = await hankoIdFromToken(context)
     if (hankoId) {
-      return await getUserDetails(hankoId)
+      const userDetails = await getUserDetails(hankoId)
+      return userDetails
     } else {
       throw new GraphQLError("Missing or invalid Authorization header")
     }

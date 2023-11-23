@@ -4,6 +4,7 @@ import { useUser } from "../../GlobalContext/user"
 import { ui } from "@la/shared"
 import { useMobius } from "../../root"
 import { toRelativeTime } from "../../lib/lib"
+import { parseResponse } from "@la/shared/lib"
 
 interface Props {
   setShowLetsTalkModal: (state: boolean) => void
@@ -68,6 +69,7 @@ export default function MonthlyPlan(props: Props) {
           <div
             class={clsx(
               "flex items-center justify-center rounded-lg bg-black w-full p-3 opacity-80 text-white",
+              // TODO: remove this 'true', not sure why it's here
               true && "bg-neutral-800 opacity-80 text-gray-300"
             )}
           >
@@ -92,8 +94,10 @@ export default function MonthlyPlan(props: Props) {
                 select: true
               }
             })
+            const [data] = parseResponse(res)
             // @ts-ignore
-            const stripeCheckout = res.data.stripe
+            const stripeCheckout = data?.stripe
+            // @ts-ignore
             window.location.href = stripeCheckout
           }}
         >

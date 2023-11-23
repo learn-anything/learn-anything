@@ -10,6 +10,7 @@ import Settings from "./components/Settings"
 import { useMobius } from "./root"
 import { FileTree } from "./file-tree"
 import ShoSho from "shosho"
+import { parseResponse } from "@la/shared/lib"
 
 const Sidebar: solid.Component = () => {
   const user = useUser()
@@ -122,8 +123,10 @@ const PublishButton: solid.Component = () => {
               select: true,
             },
           })
-          console.log(res, "res")
-          setPublishingState(null)
+          const [data] = parseResponse(res)
+          if (data) {
+            setPublishingState(null)
+          }
         }
       }}
     >
