@@ -92,16 +92,13 @@ export function createUserState(mobius: MobiusType) {
 
     const res = await mobius.query({
       getUserDetails: {
-        isMember: true,
-        freeActions: true
+        isMember: true
       }
     })
     const [data] = parseResponse(res)
-    console.log(data)
-    // if (res) {
-    //   // @ts-ignore
-    //   setUser({ member: res?.data?.getUserDetails.isMember })
-    // }
+    if (data) {
+      setUser({ member: data.getUserDetails.isMember })
+    }
 
     const hankoCookie = await getHankoCookie()
     if (hankoCookie) {

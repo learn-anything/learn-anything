@@ -74,7 +74,6 @@ export type Schema = {
   'getUserDetailsOutput': {
     __typename?: 'getUserDetailsOutput';
     isMember: boolean;
-    freeActions: number | null;
   };
   'getPricingUserDetailsOutput': {
     __typename?: 'getPricingUserDetailsOutput';

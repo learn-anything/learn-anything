@@ -242,13 +242,15 @@ Read instructions in [mobile](mobile)
 
 ## Contribute
 
-Current tasks to do are in [todo.md](todo.md) (sorted by priority). Will be organised much better with GitHub issues very soon.
+Current tasks to do are in [GitHub issues](../../issues) (can [sort by priority](https://github.com/learn-anything/learn-anything.xyz/labels?q=priority)).
 
 If task/bug is not mentioned there, open a [GitHub issue](../../issues) or [start discussion on GitHub](../../discussions) or [Discord](https://discord.com/invite/bxtD8x6aNF).
 
 All PRs with improvements to docs/code or contributions to existing discussions/issues are welcome.
 
 We want this project to have by far the best DX of any open source project on GitHub. We plan to do live streams of developing the code, various educational videos and a lot more in coming time.
+
+Every feature/update to LA done during the month is put into a presentation (all can be seen [here](docs/updates.md)). It also serves as a roadmap of things LA is focusing in on right now.
 
 ## Docs
 

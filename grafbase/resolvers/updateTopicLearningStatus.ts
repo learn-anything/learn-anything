@@ -13,11 +13,12 @@ const updateTopicLearningStatusResolver: Resolver["Mutation.updateTopicLearningS
       const hankoId = await hankoIdFromToken(context)
       if (hankoId) {
         if (args.verifiedTopic) {
-          await updateTopicLearningStatus(
+          const res = await updateTopicLearningStatus(
             hankoId,
             args.topicName,
             args.learningStatus
           )
+          // if (res.id) {}
           return "ok"
         } else {
           updateUnverifiedTopicLearningStatus(

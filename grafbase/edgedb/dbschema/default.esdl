@@ -29,11 +29,6 @@ module default {
     displayName: str;
     # aws s3 or cloudflare r2 url with image
     profileImage: str;
-    # limit of actions non member user can do (initially set to 50) (then reset every day to all non members to 10)
-    freeActions: int16 {
-      default := 50;
-      constraint min_value(0);
-    };
     # TODO: in future can consider `GlobalWiki` as concept maybe as a wiki that multiple users can edit
     # user owns one personal wiki
     link wiki := .<user[is PersonalWiki];
@@ -43,15 +38,20 @@ module default {
     multi topicsLearning: GlobalTopic;
     # topics user learned
     multi topicsLearned: GlobalTopic;
-    # links user has `completed` in some way
+    property topicsTracked := count(.topicsToLearn) + count(.topicsLearning) + count(.topicsLearned);
+    # links user wants to complete
+    multi linksToComplete: GlobalLink;
+    # links user is currently trying to complete
+    multi linksInProgress: GlobalLink;
+    # links user has completed
     multi completedLinks: GlobalLink;
-    # links user has liked
+    # links user has completed and liked
     multi likedLinks: GlobalLink;
     # personal links user has added
     multi personalLinks: PersonalLink {
       on target delete allow;
     };
-    # links user has disliked
+    # links user has disliked (not used currently)
     multi dislikedLinks: GlobalLink;
     # notes user has liked
     # TODO: what happens when user deletes note? should it be deleted from here too?
@@ -73,6 +73,13 @@ module default {
     stripeSubscriptionObjectId: str;
     # whether user has stopped subscription and won't be be charged again
     subscriptionStopped: bool;
+    # limit of actions non member user can do (can be reset every day after to 10 or similar number)
+    # TODO: not used as instead model of just limiting actions for some operations is used instead (simpler)
+    # this can be useful for doing AI actions limits as they will cost money
+    # freeActions: int16 {
+    #   default := 50;
+    #   constraint min_value(0);
+    # };
   }
   # other users can `like` or `follow` PersonalWiki
   type PersonalWiki {

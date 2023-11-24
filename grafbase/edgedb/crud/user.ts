@@ -88,47 +88,17 @@ export async function getPricingUserDetails(hankoId: string) {
     .run(client)
 }
 
-// export async function getUserDetails(hankoId: string) {
-//   const user = await e
-//     .select(e.User, (u) => ({
-//       filter_single: e.op(u.hankoId, "=", hankoId),
-//       isMember: e.op(u.memberUntil, ">", e.datetime_current()),
-//       freeActions: true
-//     }))
-//     .run(client)
-//   if (user?.isMember) {
-//     return { isMember: true, freeActions: null }
-//   } else {
-//     return { isMember: false, freeActions: user?.freeActions }
-//   }
-// }
-
-// https://discord.com/channels/841451783728529451/1176875453336780820
 export async function getUserDetails(hankoId: string) {
   const user = await e
-    .select(e.User, (u) => {
-      const isMember = e.op(
-        e.op(u.memberUntil, ">", e.datetime_current()),
-        "??",
-        e.bool(false)
-      )
-
-      return {
-        filter_single: e.op(u.hankoId, "=", hankoId),
-        freeActions: e.op(
-          e.cast(e.int16, e.set()),
-          "if",
-          isMember,
-          "else",
-          u.freeActions
-        )
-      }
-    })
+    .select(e.User, (u) => ({
+      filter_single: e.op(u.hankoId, "=", hankoId),
+      isMember: e.op(u.memberUntil, ">", e.datetime_current())
+    }))
     .run(client)
-  const freeActions = user?.freeActions ?? null
-  return {
-    isMember: freeActions === null,
-    freeActions
+  if (user?.isMember) {
+    return { isMember: true }
+  } else {
+    return { isMember: false }
   }
 }
 
@@ -307,3 +277,33 @@ export async function updateMemberUntilOfUser(
     }))
     .run(client)
 }
+
+// https://discord.com/channels/841451783728529451/1176875453336780820
+// not used currently as `freeActions` as non members just have some actions limited instead
+// export async function getUserDetailsWithFreeActions(hankoId: string) {
+//   const user = await e
+//     .select(e.User, (u) => {
+//       const isMember = e.op(
+//         e.op(u.memberUntil, ">", e.datetime_current()),
+//         "??",
+//         e.bool(false)
+//       )
+
+//       return {
+//         filter_single: e.op(u.hankoId, "=", hankoId),
+//         freeActions: e.op(
+//           e.cast(e.int16, e.set()),
+//           "if",
+//           isMember,
+//           "else",
+//           u.freeActions
+//         )
+//       }
+//     })
+//     .run(client)
+//   const freeActions = user?.freeActions ?? null
+//   return {
+//     isMember: freeActions === null,
+//     freeActions
+//   }
+// }

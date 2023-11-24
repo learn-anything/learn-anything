@@ -64,11 +64,15 @@ export type $GlobalLinkλShape = $.typeutil.flatten<_std.$Object_d29c95e25d6b11e
   "<likedLinks[is User]": $.LinkDesc<$User, $.Cardinality.Many, {}, false, false,  false, false>;
   "<links[is UserGuideSection]": $.LinkDesc<$UserGuideSection, $.Cardinality.Many, {}, false, false,  false, false>;
   "<relatedLinks[is GlobalTopic]": $.LinkDesc<$GlobalTopic, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<linksInProgress[is User]": $.LinkDesc<$User, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<linksToComplete[is User]": $.LinkDesc<$User, $.Cardinality.Many, {}, false, false,  false, false>;
   "<completedLinks": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<dislikedLinks": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<globalLink": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<likedLinks": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<links": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<linksInProgress": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<linksToComplete": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<relatedLinks": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
 type $GlobalLink = $.ObjectType<"default::GlobalLink", $GlobalLinkλShape, null, [
@@ -313,7 +317,9 @@ export type $UserλShape = $.typeutil.flatten<_std.$Object_d29c95e25d6b11eeabaf0
   "stripePlan": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "productsBought": $.LinkDesc<$Product, $.Cardinality.Many, {}, false, false,  false, false>;
   "productsSelling": $.LinkDesc<$Product, $.Cardinality.Many, {}, false, false,  false, false>;
-  "freeActions": $.PropertyDesc<_std.$int16, $.Cardinality.AtMostOne, false, false, false, true>;
+  "topicsTracked": $.PropertyDesc<_std.$int64, $.Cardinality.One, false, true, false, false>;
+  "linksInProgress": $.LinkDesc<$GlobalLink, $.Cardinality.Many, {}, false, false,  false, false>;
+  "linksToComplete": $.LinkDesc<$GlobalLink, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user[is UserGuide]": $.LinkDesc<$UserGuide, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user[is PersonalWiki]": $.LinkDesc<$PersonalWiki, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;

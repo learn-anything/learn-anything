@@ -97,8 +97,7 @@ g.query("getUserDetails", {
   args: {},
   returns: g.ref(
     g.type("getUserDetailsOutput", {
-      isMember: g.boolean(),
-      freeActions: g.int().optional()
+      isMember: g.boolean()
     })
   ),
   resolver: "getUserDetails"

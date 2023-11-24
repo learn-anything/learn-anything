@@ -317,25 +317,15 @@ export async function updateTopicLearningStatus(
     case "none":
       return await e
         .update(foundUser, (user) => ({
+          filter: e.op(
+            e.op(user.memberUntil, ">", e.datetime_current()),
+            "or",
+            e.op(user.topicsTracked, "<", 10)
+          ),
           set: {
             topicsToLearn: { "-=": foundTopic },
             topicsLearning: { "-=": foundTopic },
-            topicsLearned: { "-=": foundTopic },
-            freeActions: e.op(
-              user.freeActions,
-              "-",
-              e.op(
-                0,
-                "if",
-                e.op(
-                  e.op(user.memberUntil, ">", e.datetime_current()),
-                  "??",
-                  e.bool(false)
-                ),
-                "else",
-                1
-              )
-            )
+            topicsLearned: { "-=": foundTopic }
           }
         }))
         .run(client)
@@ -343,24 +333,14 @@ export async function updateTopicLearningStatus(
       return await e
         .update(foundUser, (user) => ({
           set: {
+            filter: e.op(
+              e.op(user.memberUntil, ">", e.datetime_current()),
+              "or",
+              e.op(user.topicsTracked, "<", 2)
+            ),
             topicsToLearn: { "+=": foundTopic },
             topicsLearning: { "-=": foundTopic },
-            topicsLearned: { "-=": foundTopic },
-            freeActions: e.op(
-              user.freeActions,
-              "-",
-              e.op(
-                0,
-                "if",
-                e.op(
-                  e.op(user.memberUntil, ">", e.datetime_current()),
-                  "??",
-                  e.bool(false)
-                ),
-                "else",
-                1
-              )
-            )
+            topicsLearned: { "-=": foundTopic }
           }
         }))
         .run(client)
@@ -368,50 +348,30 @@ export async function updateTopicLearningStatus(
     case "learning":
       return await e
         .update(foundUser, (user) => ({
+          filter: e.op(
+            e.op(user.memberUntil, ">", e.datetime_current()),
+            "or",
+            e.op(user.topicsTracked, "<", 10)
+          ),
           set: {
             topicsToLearn: { "-=": foundTopic },
             topicsLearning: { "+=": foundTopic },
-            topicsLearned: { "-=": foundTopic },
-            freeActions: e.op(
-              user.freeActions,
-              "-",
-              e.op(
-                0,
-                "if",
-                e.op(
-                  e.op(user.memberUntil, ">", e.datetime_current()),
-                  "??",
-                  e.bool(false)
-                ),
-                "else",
-                1
-              )
-            )
+            topicsLearned: { "-=": foundTopic }
           }
         }))
         .run(client)
     case "learned":
       return await e
         .update(foundUser, (user) => ({
+          filter: e.op(
+            e.op(user.memberUntil, ">", e.datetime_current()),
+            "or",
+            e.op(user.topicsTracked, "<", 2)
+          ),
           set: {
             topicsToLearn: { "-=": foundTopic },
             topicsLearning: { "-=": foundTopic },
-            topicsLearned: { "+=": foundTopic },
-            freeActions: e.op(
-              user.freeActions,
-              "-",
-              e.op(
-                0,
-                "if",
-                e.op(
-                  e.op(user.memberUntil, ">", e.datetime_current()),
-                  "??",
-                  e.bool(false)
-                ),
-                "else",
-                1
-              )
-            )
+            topicsLearned: { "+=": foundTopic }
           }
         }))
         .run(client)
@@ -835,4 +795,124 @@ export async function createGlobalTopicWithGlobalGuide(
 //       }
 //     }))
 //     .run(client)
+// }
+
+// no longer used as instead of `freeActions` there is just a limit on number of things that can be added
+// code here for reference in case we do something with freeActions in future, such as limiting on AI tasks for non members
+// would be called `aiTasks` then or similar
+// export async function updateTopicLearningStatusUsingFreeActions(
+//   hankoId: string,
+//   topicName: string,
+//   learningStatus: "to_learn" | "learning" | "learned" | "none"
+// ) {
+//   const foundUser = foundUserByHankoId(hankoId)
+//   const foundTopic = e.select(e.GlobalTopic, () => ({
+//     filter_single: { name: topicName }
+//   }))
+
+//   switch (learningStatus) {
+//     case "none":
+//       return await e
+//         .update(foundUser, (user) => ({
+//           set: {
+//             topicsToLearn: { "-=": foundTopic },
+//             topicsLearning: { "-=": foundTopic },
+//             topicsLearned: { "-=": foundTopic },
+//             freeActions: e.op(
+//               user.freeActions,
+//               "-",
+//               e.op(
+//                 0,
+//                 "if",
+//                 e.op(
+//                   e.op(user.memberUntil, ">", e.datetime_current()),
+//                   "??",
+//                   e.bool(false)
+//                 ),
+//                 "else",
+//                 1
+//               )
+//             )
+//           }
+//         }))
+//         .run(client)
+//     case "to_learn":
+//       return await e
+//         .update(foundUser, (user) => ({
+//           set: {
+//             topicsToLearn: { "+=": foundTopic },
+//             topicsLearning: { "-=": foundTopic },
+//             topicsLearned: { "-=": foundTopic },
+//             freeActions: e.op(
+//               user.freeActions,
+//               "-",
+//               e.op(
+//                 0,
+//                 "if",
+//                 e.op(
+//                   e.op(user.memberUntil, ">", e.datetime_current()),
+//                   "??",
+//                   e.bool(false)
+//                 ),
+//                 "else",
+//                 1
+//               )
+//             )
+//           }
+//         }))
+//         .run(client)
+
+//     case "learning":
+//       return await e
+//         .update(foundUser, (user) => ({
+//           set: {
+//             topicsToLearn: { "-=": foundTopic },
+//             topicsLearning: { "+=": foundTopic },
+//             topicsLearned: { "-=": foundTopic },
+//             freeActions: e.op(
+//               user.freeActions,
+//               "-",
+//               e.op(
+//                 0,
+//                 "if",
+//                 e.op(
+//                   e.op(user.memberUntil, ">", e.datetime_current()),
+//                   "??",
+//                   e.bool(false)
+//                 ),
+//                 "else",
+//                 1
+//               )
+//             )
+//           }
+//         }))
+//         .run(client)
+//     case "learned":
+//       return await e
+//         .update(foundUser, (user) => ({
+//           set: {
+//             topicsToLearn: { "-=": foundTopic },
+//             topicsLearning: { "-=": foundTopic },
+//             topicsLearned: { "+=": foundTopic },
+//             freeActions: e.op(
+//               user.freeActions,
+//               "-",
+//               e.op(
+//                 0,
+//                 "if",
+//                 e.op(
+//                   e.op(user.memberUntil, ">", e.datetime_current()),
+//                   "??",
+//                   e.bool(false)
+//                 ),
+//                 "else",
+//                 1
+//               )
+//             )
+//           }
+//         }))
+//         .run(client)
+//     default:
+//       break
+//   }
 // }
