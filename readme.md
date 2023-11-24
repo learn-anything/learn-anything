@@ -22,7 +22,7 @@ If you're interested in the mission and like the project, join [Discord](https:/
 
 Any issues with setup or making your first feature or trying to fix a bug will be resolved asap. Same goes for discussing ideas on how to make the tool even better than it is now.
 
-Current tasks to do are in [GitHub issues](../../issues) (can [sort by priority](https://github.com/learn-anything/learn-anything.xyz/labels?q=priority)). Can see what is currently in focus for the month [here](https://learnany.notion.site/December-915470d411d84cfab71c006759f5502e).
+Current tasks to do are in [GitHub issues](../../issues) (organised with [labels](https://github.com/learn-anything/learn-anything.xyz/labels)). Can see what is currently in focus for the month [here](https://learnany.notion.site/December-915470d411d84cfab71c006759f5502e).
 
 ###### Contents
 
@@ -242,7 +242,7 @@ Read instructions in [mobile](mobile)
 
 ## Contribute
 
-Current tasks to do are in [GitHub issues](../../issues) (can [sort by priority](https://github.com/learn-anything/learn-anything.xyz/labels?q=priority)).
+Current tasks to do are in [GitHub issues](../../issues) (organised with [labels](https://github.com/learn-anything/learn-anything.xyz/labels)).
 
 If task/bug is not mentioned there, open a [GitHub issue](../../issues) or [start discussion on GitHub](../../discussions) or [Discord](https://discord.com/invite/bxtD8x6aNF).
 
