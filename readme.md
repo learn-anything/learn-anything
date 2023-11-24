@@ -250,7 +250,7 @@ All PRs with improvements to docs/code or contributions to existing discussions/
 
 We want this project to have by far the best DX of any open source project on GitHub. We plan to do live streams of developing the code, various educational videos and a lot more in coming time.
 
-Every feature/update to LA done during the month is put into a presentation (all can be seen [here](docs/updates.md)). It also serves as a roadmap of things LA is focusing in on right now.
+Every feature/update to LA done during the month is [tracked in Notion](https://learnany.notion.site/Updates-c605260d525e4409bdcfa0c4fc351e56). It also serves as a roadmap of things LA is focusing in on right now.
 
 ## Docs
 
