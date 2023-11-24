@@ -14,8 +14,6 @@ The end goal of Learn Anything is to become the best place and tool for keeping 
 
 It is a fully open source project with an active community on [Discord](https://discord.com/invite/bxtD8x6aNF). There is great focus on both DX of developing everything LA and even more, the end user UX.
 
-Current tasks to do are in [GitHub issues](../../issues) (can [sort by priority](https://github.com/learn-anything/learn-anything.xyz/labels?q=priority)). Can see what is currently in focus for the month [here](https://learnany.notion.site/December-915470d411d84cfab71c006759f5502e).
-
 Project consists of a [website](website), [desktop app](app), [mobile app](mobile).
 
 There is also separate repo of [AI](https://github.com/learn-anything/ai) where we train & fine tune LLMs to provide AI interfaces to all things knowledge. Part of the goals of LA is to reach AGI and do it in a fully open way. The current start of that journey is in providing state of art ability to index any knowledge of a person and provide chat bot interface to it with different privacy controls. As well as having state of the art chat bots for each of the topics in LA platform.
@@ -23,6 +21,8 @@ There is also separate repo of [AI](https://github.com/learn-anything/ai) where 
 If you're interested in the mission and like the project, join [Discord](https://discord.com/invite/bxtD8x6aNF) where you can ask questions and interact with community and read on to get you started writing your first code.
 
 Any issues with setup or making your first feature or trying to fix a bug will be resolved asap. Same goes for discussing ideas on how to make the tool even better than it is now.
+
+Current tasks to do are in [GitHub issues](../../issues) (can [sort by priority](https://github.com/learn-anything/learn-anything.xyz/labels?q=priority)). Can see what is currently in focus for the month [here](https://learnany.notion.site/December-915470d411d84cfab71c006759f5502e).
 
 ###### Contents
 
