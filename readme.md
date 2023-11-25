@@ -22,7 +22,7 @@ If you're interested in the mission and like the project, join [Discord](https:/
 
 Any issues with setup or making your first feature or trying to fix a bug will be resolved asap. Same goes for discussing ideas on how to make the tool even better than it is now.
 
-Current tasks to do are in [GitHub issues](../../issues) (organised with [labels](https://github.com/learn-anything/learn-anything.xyz/labels)). Can see what is currently in focus for the month [here](https://learnany.notion.site/December-915470d411d84cfab71c006759f5502e).
+Current tasks to do are in [GitHub issues](../../issues) (organised with [labels](https://github.com/learn-anything/learn-anything.xyz/labels)). Tasks currently in focus are seen [here](https://github.com/learn-anything/learn-anything.xyz/labels/Current%20Month).
 
 ###### Contents
 
@@ -242,15 +242,13 @@ Read instructions in [mobile](mobile)
 
 ## Contribute
 
-Current tasks to do are in [GitHub issues](../../issues) (organised with [labels](https://github.com/learn-anything/learn-anything.xyz/labels)).
+Current tasks to do are in [GitHub issues](../../issues) (organised with [labels](https://github.com/learn-anything/learn-anything.xyz/labels)). Tasks currently in focus are seen [here](https://github.com/learn-anything/learn-anything.xyz/labels/Current%20Month).
 
 If task/bug is not mentioned there, open a [GitHub issue](../../issues) or [start discussion on GitHub](../../discussions) or [Discord](https://discord.com/invite/bxtD8x6aNF).
 
 All PRs with improvements to docs/code or contributions to existing discussions/issues are welcome.
 
 We want this project to have by far the best DX of any open source project on GitHub. We plan to do live streams of developing the code, various educational videos and a lot more in coming time.
-
-Every feature/update to LA done during the month is [tracked in Notion](https://learnany.notion.site/December-915470d411d84cfab71c006759f5502e). It also serves as a roadmap of things LA is focusing in on right now.
 
 ## Docs
 
