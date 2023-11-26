@@ -15,8 +15,8 @@
     "./lib": "./lib/index.ts"
   },
   "dependencies": {
-    "@nothing-but/force-graph": "^0.7.2",
-    "@nothing-but/utils": "^0.13.0",
+    "@nothing-but/force-graph": "^0.6.0",
+    "@nothing-but/utils": "^0.11.1",
     "@solid-primitives/event-listener": "^2.3.0",
     "@solid-primitives/resize-observer": "^2.0.22",
     "@solid-primitives/scheduled": "^1.4.1",

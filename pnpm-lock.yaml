@@ -306,11 +306,11 @@ importers:
   shared:
     dependencies:
       '@nothing-but/force-graph':
-        specifier: ^0.7.2
-        version: 0.7.2
+        specifier: ^0.6.0
+        version: 0.6.0
       '@nothing-but/utils':
-        specifier: ^0.13.0
-        version: 0.13.0
+        specifier: ^0.11.1
+        version: 0.11.1
       '@solid-primitives/event-listener':
         specifier: ^2.3.0
         version: 2.3.0(solid-js@1.8.6)
@@ -3022,10 +3022,27 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
 
+  /@nothing-but/dom@0.1.5:
+    resolution: {integrity: sha512-LogZYULxF+xMaZ/qQiPhVDZ/gbZNF0rV5vEqIC91/JMkhFtNP6Bs3A1vr/fYI0WSmdoj2Y8XYFShqTGay7I+mQ==}
+    dependencies:
+      '@nothing-but/utils': 0.11.1
+    dev: false
+
+  /@nothing-but/force-graph@0.6.0:
+    resolution: {integrity: sha512-UdgCHhFwJ1DOXV1XMWbKOnh8DaJaThVQKlnpLKpTnV1YglLRkpXhkmafsK69rhLkRjIXQ9xqQSCdPy5i/iKSKA==}
+    dependencies:
+      '@nothing-but/dom': 0.1.5
+      '@nothing-but/utils': 0.11.1
+    dev: false
+
   /@nothing-but/force-graph@0.7.2:
     resolution: {integrity: sha512-TsDxhjfFFnJYsBw9v5M5Qhx6ThMQeqoFUDhy2Ph3UT1BoLRBL/QK2b+2ivFFdf+BxFggy6zDYMaoN70d8VS4AQ==}
     dependencies:
       '@nothing-but/utils': 0.13.0
+    dev: false
+
+  /@nothing-but/utils@0.11.1:
+    resolution: {integrity: sha512-auGB4xTzex2PXfrBOuiFi1GZ0H98n0Y82j6PQtRGK1AczkDT56ea0Eag91UQ6aAKs3yUb2WCSwQ19YY8/m/v0A==}
     dev: false
 
   /@nothing-but/utils@0.13.0:
