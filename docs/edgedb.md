@@ -97,3 +97,16 @@ if (adminUser.length === 0) {
   return
 }
 ```
+
+## Notes
+
+When we had free action blocks, we could do this in grafbase resolvers in the `catch` area.
+
+```
+if (err instanceof ConstraintViolationError) {
+  throw new GraphQLError("out-of-free-actions")
+} else {
+  console.error(err)
+  throw new GraphQLError(JSON.stringify(err))
+}
+```

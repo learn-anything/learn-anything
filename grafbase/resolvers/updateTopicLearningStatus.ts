@@ -13,12 +13,15 @@ const updateTopicLearningStatusResolver: Resolver["Mutation.updateTopicLearningS
       const hankoId = await hankoIdFromToken(context)
       if (hankoId) {
         if (args.verifiedTopic) {
+          console.log("hitting")
           const res = await updateTopicLearningStatus(
             hankoId,
             args.topicName,
             args.learningStatus
           )
-          // if (res.id) {}
+          if (res === null) {
+            throw new GraphQLError("cannot-do-it")
+          }
           return "ok"
         } else {
           updateUnverifiedTopicLearningStatus(
@@ -32,12 +35,8 @@ const updateTopicLearningStatusResolver: Resolver["Mutation.updateTopicLearningS
         throw new GraphQLError("Missing or invalid Authorization header")
       }
     } catch (err) {
-      if (err instanceof ConstraintViolationError) {
-        throw new GraphQLError("out-of-free-actions")
-      } else {
-        console.error(err)
-        throw new GraphQLError(JSON.stringify(err))
-      }
+      console.error(err)
+      throw new GraphQLError(JSON.stringify(err))
     }
   }
 

@@ -46,11 +46,13 @@ export default function GuideSidebar() {
                         select: true
                       }
                     })
+                    console.log(res, "res")
                     const [data, err] = parseResponse(res)
                     if (data) {
                       topic.set("learningStatus", "")
                     } else {
-                      if (err === "out-of-free-actions") {
+                      // TODO: not sure why `err` is {"message":"cannot-do-it"} and not just the message..
+                      if (err.includes("cannot-do-it")) {
                         global.set("showModal", "out-of-free-actions")
                       }
                     }

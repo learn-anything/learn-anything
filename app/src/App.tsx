@@ -1,16 +1,15 @@
 import { ui } from "@la/shared"
-import { createShortcut } from "@solid-primitives/keyboard"
+import { parseResponse } from "@la/shared/lib"
 import { invoke } from "@tauri-apps/api/tauri"
+import ShoSho from "shosho"
 import * as solid from "solid-js"
 import { isLoggedIn } from "../lib/lib"
 import { useGlobalState } from "./GlobalContext/global"
 import { useUser } from "./GlobalContext/user"
 import { Monaco } from "./components/Monaco/Monaco"
 import Settings from "./components/Settings"
-import { useMobius } from "./root"
 import { FileTree } from "./file-tree"
-import ShoSho from "shosho"
-import { parseResponse } from "@la/shared/lib"
+import { useMobius } from "./root"
 
 const Sidebar: solid.Component = () => {
   const user = useUser()

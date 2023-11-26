@@ -32,18 +32,22 @@ async function testEdgeDbJs() {
   const res = await e
     .update(foundUser, (user) => ({
       filter: e.op(
-        e.op(user.memberUntil, ">", e.datetime_current()),
+        e.op(
+          e.op(user.memberUntil, ">", e.datetime_current()),
+          "??",
+          e.bool(false)
+        ),
         "or",
-        e.op(user.topicsTracked, "<", 10)
+        e.op(user.topicsTracked, "<", 1)
       ),
       set: {
-        topicsToLearn: { "-=": foundTopic },
+        topicsToLearn: { "+=": foundTopic },
         topicsLearning: { "-=": foundTopic },
         topicsLearned: { "-=": foundTopic }
       }
     }))
+    // .run(client)
     .toEdgeQL()
-  // .run(client)
 
   console.log(res)
 }

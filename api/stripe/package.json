@@ -11,11 +11,11 @@
   },
   "dependencies": {
     "edgedb": "^1.4.1",
-    "hono": "^3.9.2",
-    "stripe": "^14.4.0"
+    "hono": "^3.10.2",
+    "stripe": "^14.5.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20231025.0",
-    "wrangler": "^3.15.0"
+    "@cloudflare/workers-types": "^4.20231121.0",
+    "wrangler": "^3.17.1"
   }
 }

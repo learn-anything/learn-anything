@@ -17,24 +17,26 @@ export async function updateGlobalTopic(
     aiSummary?: string
   }
 ) {
-  e.update(e.GlobalTopic, (gt) => ({
-    filter: e.op(gt.name, "=", topicName),
-    set: {
-      ...(topic.description !== undefined && {
-        description: topic.description
-      }),
-      ...(topic.topicWebsiteLink !== undefined && {
-        topicWebsiteLink: topic.topicWebsiteLink
-      }),
-      ...(topic.wikipediaLink !== undefined && {
-        wikipediaLink: topic.wikipediaLink
-      }),
-      ...(topic.githubLink !== undefined && { githubLink: topic.githubLink }),
-      ...(topic.xLink !== undefined && { xLink: topic.xLink }),
-      ...(topic.redditLink !== undefined && { redditLink: topic.redditLink }),
-      ...(topic.aiSummary !== undefined && { aiSummary: topic.aiSummary })
-    }
-  })).run(client)
+  await e
+    .update(e.GlobalTopic, (gt) => ({
+      filter: e.op(gt.name, "=", topicName),
+      set: {
+        ...(topic.description !== undefined && {
+          description: topic.description
+        }),
+        ...(topic.topicWebsiteLink !== undefined && {
+          topicWebsiteLink: topic.topicWebsiteLink
+        }),
+        ...(topic.wikipediaLink !== undefined && {
+          wikipediaLink: topic.wikipediaLink
+        }),
+        ...(topic.githubLink !== undefined && { githubLink: topic.githubLink }),
+        ...(topic.xLink !== undefined && { xLink: topic.xLink }),
+        ...(topic.redditLink !== undefined && { redditLink: topic.redditLink }),
+        ...(topic.aiSummary !== undefined && { aiSummary: topic.aiSummary })
+      }
+    }))
+    .run(client)
 }
 
 export async function checkGlobalTopicExists(topicName: string) {
@@ -318,9 +320,13 @@ export async function updateTopicLearningStatus(
       return await e
         .update(foundUser, (user) => ({
           filter: e.op(
-            e.op(user.memberUntil, ">", e.datetime_current()),
+            e.op(
+              e.op(user.memberUntil, ">", e.datetime_current()),
+              "??",
+              e.bool(false)
+            ),
             "or",
-            e.op(user.topicsTracked, "<", 10)
+            e.op(user.topicsTracked, "<", 2)
           ),
           set: {
             topicsToLearn: { "-=": foundTopic },
@@ -349,9 +355,13 @@ export async function updateTopicLearningStatus(
       return await e
         .update(foundUser, (user) => ({
           filter: e.op(
-            e.op(user.memberUntil, ">", e.datetime_current()),
+            e.op(
+              e.op(user.memberUntil, ">", e.datetime_current()),
+              "??",
+              e.bool(false)
+            ),
             "or",
-            e.op(user.topicsTracked, "<", 10)
+            e.op(user.topicsTracked, "<", 2)
           ),
           set: {
             topicsToLearn: { "-=": foundTopic },
@@ -364,7 +374,11 @@ export async function updateTopicLearningStatus(
       return await e
         .update(foundUser, (user) => ({
           filter: e.op(
-            e.op(user.memberUntil, ">", e.datetime_current()),
+            e.op(
+              e.op(user.memberUntil, ">", e.datetime_current()),
+              "??",
+              e.bool(false)
+            ),
             "or",
             e.op(user.topicsTracked, "<", 2)
           ),
