@@ -289,7 +289,7 @@ importers:
         version: 5.0.2(@types/node@20.10.0)
       vite-plugin-solid-styled:
         specifier: ^0.10.0
-        version: 0.10.0(rollup@3.29.4)(solid-styled@0.10.0)(vite@5.0.2)
+        version: 0.10.0(solid-styled@0.10.0)(vite@5.0.2)
 
   cli:
     dependencies:
@@ -461,10 +461,10 @@ importers:
         version: 2.0.0(solid-js@1.8.6)
       solid-start:
         specifier: ^0.3.10
-        version: 0.3.10(@solidjs/meta@0.29.1)(@solidjs/router@0.9.1)(solid-js@1.8.6)(solid-start-cloudflare-pages@0.3.10)(solid-start-node@0.3.10)(vite@5.0.2)
+        version: 0.3.10(@solidjs/meta@0.29.1)(@solidjs/router@0.9.1)(solid-js@1.8.6)(solid-start-cloudflare-pages@0.3.10)(solid-start-node@0.3.10)(vite@4.5.0)
       solid-start-cloudflare-pages:
         specifier: ^0.3.10
-        version: 0.3.10(solid-start@0.3.10)(vite@5.0.2)
+        version: 0.3.10(solid-start@0.3.10)(vite@4.5.0)
       solid-styled:
         specifier: ^0.10.0
         version: 0.10.0(solid-js@1.8.6)
@@ -498,7 +498,7 @@ importers:
         version: 8.4.31
       solid-start-node:
         specifier: ^0.3.10
-        version: 0.3.10(solid-start@0.3.10)(vite@5.0.2)
+        version: 0.3.10(solid-start@0.3.10)(vite@4.5.0)
       tailwindcss:
         specifier: ^3.3.5
         version: 3.3.5
@@ -509,11 +509,11 @@ importers:
         specifier: ^5.3.2
         version: 5.3.2
       vite:
-        specifier: ^5.0.2
-        version: 5.0.2(@types/node@20.10.0)
+        specifier: ^4.5.0
+        version: 4.5.0
       vite-plugin-solid-styled:
         specifier: ^0.10.0
-        version: 0.10.0(rollup@3.29.4)(solid-styled@0.10.0)(vite@5.0.2)
+        version: 0.10.0(rollup@3.29.4)(solid-styled@0.10.0)(vite@4.5.0)
 
 packages:
 
@@ -1952,7 +1952,6 @@ packages:
     cpu: [arm64]
     os: [android]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/android-arm64@0.19.7:
@@ -1977,7 +1976,6 @@ packages:
     cpu: [arm]
     os: [android]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/android-arm@0.19.7:
@@ -2002,7 +2000,6 @@ packages:
     cpu: [x64]
     os: [android]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/android-x64@0.19.7:
@@ -2027,7 +2024,6 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/darwin-arm64@0.19.7:
@@ -2052,7 +2048,6 @@ packages:
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/darwin-x64@0.19.7:
@@ -2077,7 +2072,6 @@ packages:
     cpu: [arm64]
     os: [freebsd]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/freebsd-arm64@0.19.7:
@@ -2102,7 +2096,6 @@ packages:
     cpu: [x64]
     os: [freebsd]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/freebsd-x64@0.19.7:
@@ -2127,7 +2120,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/linux-arm64@0.19.7:
@@ -2152,7 +2144,6 @@ packages:
     cpu: [arm]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/linux-arm@0.19.7:
@@ -2177,7 +2168,6 @@ packages:
     cpu: [ia32]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/linux-ia32@0.19.7:
@@ -2202,7 +2192,6 @@ packages:
     cpu: [loong64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/linux-loong64@0.19.7:
@@ -2227,7 +2216,6 @@ packages:
     cpu: [mips64el]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/linux-mips64el@0.19.7:
@@ -2252,7 +2240,6 @@ packages:
     cpu: [ppc64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/linux-ppc64@0.19.7:
@@ -2277,7 +2264,6 @@ packages:
     cpu: [riscv64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/linux-riscv64@0.19.7:
@@ -2302,7 +2288,6 @@ packages:
     cpu: [s390x]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/linux-s390x@0.19.7:
@@ -2327,7 +2312,6 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/linux-x64@0.19.7:
@@ -2352,7 +2336,6 @@ packages:
     cpu: [x64]
     os: [netbsd]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/netbsd-x64@0.19.7:
@@ -2377,7 +2360,6 @@ packages:
     cpu: [x64]
     os: [openbsd]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/openbsd-x64@0.19.7:
@@ -2402,7 +2384,6 @@ packages:
     cpu: [x64]
     os: [sunos]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/sunos-x64@0.19.7:
@@ -2427,7 +2408,6 @@ packages:
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/win32-arm64@0.19.7:
@@ -2452,7 +2432,6 @@ packages:
     cpu: [ia32]
     os: [win32]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/win32-ia32@0.19.7:
@@ -2477,7 +2456,6 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/win32-x64@0.19.7:
@@ -5049,7 +5027,6 @@ packages:
       '@esbuild/win32-arm64': 0.18.20
       '@esbuild/win32-ia32': 0.18.20
       '@esbuild/win32-x64': 0.18.20
-    dev: true
 
   /esbuild@0.19.7:
     resolution: {integrity: sha512-6brbTZVqxhqgbpqBR5MzErImcpA0SQdoKOkcWK/U30HtQxnokIpG3TX2r0IJqbFUzqLjhU/zC1S5ndgakObVCQ==}
@@ -8363,7 +8340,7 @@ packages:
       '@babel/types': 7.23.3
       solid-js: 1.8.6
 
-  /solid-start-cloudflare-pages@0.3.10(solid-start@0.3.10)(vite@5.0.2):
+  /solid-start-cloudflare-pages@0.3.10(solid-start@0.3.10)(vite@4.5.0):
     resolution: {integrity: sha512-iKQKhqfMiWOhQpot9Qz7vHqN/J+N+FfccCcKl11500zC3+GSVhJh+O+4GLXlhzUamUYXGKhKzfquY/Cqlbgshg==}
     peerDependencies:
       solid-start: '*'
@@ -8381,9 +8358,9 @@ packages:
       '@types/ws': 8.5.9
       miniflare: 2.14.1
       rollup: 3.29.4
-      solid-start: 0.3.10(@solidjs/meta@0.29.1)(@solidjs/router@0.9.1)(solid-js@1.8.6)(solid-start-cloudflare-pages@0.3.10)(solid-start-node@0.3.10)(vite@5.0.2)
+      solid-start: 0.3.10(@solidjs/meta@0.29.1)(@solidjs/router@0.9.1)(solid-js@1.8.6)(solid-start-cloudflare-pages@0.3.10)(solid-start-node@0.3.10)(vite@4.5.0)
       terser: 5.24.0
-      vite: 5.0.2(@types/node@20.10.0)
+      vite: 4.5.0
       ws: 8.14.2
     transitivePeerDependencies:
       - '@miniflare/storage-redis'
@@ -8392,7 +8369,7 @@ packages:
       - ioredis
       - utf-8-validate
 
-  /solid-start-node@0.3.10(solid-start@0.3.10)(vite@5.0.2):
+  /solid-start-node@0.3.10(solid-start@0.3.10)(vite@4.5.0):
     resolution: {integrity: sha512-MuQXw+hLaGI4YlcVFKJxLvDG6/6/DhX5vifBICGmc0kGvUtOYMFXkSVhk6J83hIOK+ZVEwVu0/Mz18Jc7kRVjg==}
     peerDependencies:
       solid-start: '*'
@@ -8405,13 +8382,13 @@ packages:
       polka: 1.0.0-next.22
       rollup: 3.29.4
       sirv: 2.0.3
-      solid-start: 0.3.10(@solidjs/meta@0.29.1)(@solidjs/router@0.9.1)(solid-js@1.8.6)(solid-start-cloudflare-pages@0.3.10)(solid-start-node@0.3.10)(vite@5.0.2)
+      solid-start: 0.3.10(@solidjs/meta@0.29.1)(@solidjs/router@0.9.1)(solid-js@1.8.6)(solid-start-cloudflare-pages@0.3.10)(solid-start-node@0.3.10)(vite@4.5.0)
       terser: 5.24.0
-      vite: 5.0.2(@types/node@20.10.0)
+      vite: 4.5.0
     transitivePeerDependencies:
       - supports-color
 
-  /solid-start@0.3.10(@solidjs/meta@0.29.1)(@solidjs/router@0.9.1)(solid-js@1.8.6)(solid-start-cloudflare-pages@0.3.10)(solid-start-node@0.3.10)(vite@5.0.2):
+  /solid-start@0.3.10(@solidjs/meta@0.29.1)(@solidjs/router@0.9.1)(solid-js@1.8.6)(solid-start-cloudflare-pages@0.3.10)(solid-start-node@0.3.10)(vite@4.5.0):
     resolution: {integrity: sha512-4z+BybZMOyw6Px6FgPvjzW6/UOLCyDNxoKRg19kGGWmcgyWf8YZv+/eIhXdt+09H/LQapZr4ZRY2iFpe7+7PbA==}
     hasBin: true
     peerDependencies:
@@ -8476,13 +8453,13 @@ packages:
       set-cookie-parser: 2.6.0
       sirv: 2.0.3
       solid-js: 1.8.6
-      solid-start-cloudflare-pages: 0.3.10(solid-start@0.3.10)(vite@5.0.2)
-      solid-start-node: 0.3.10(solid-start@0.3.10)(vite@5.0.2)
+      solid-start-cloudflare-pages: 0.3.10(solid-start@0.3.10)(vite@4.5.0)
+      solid-start-node: 0.3.10(solid-start@0.3.10)(vite@4.5.0)
       terser: 5.24.0
       undici: 5.28.0
-      vite: 5.0.2(@types/node@20.10.0)
-      vite-plugin-inspect: 0.7.42(rollup@3.29.4)(vite@5.0.2)
-      vite-plugin-solid: 2.7.2(solid-js@1.8.6)(vite@5.0.2)
+      vite: 4.5.0
+      vite-plugin-inspect: 0.7.42(rollup@3.29.4)(vite@4.5.0)
+      vite-plugin-solid: 2.7.2(solid-js@1.8.6)(vite@4.5.0)
       wait-on: 6.0.1(debug@4.3.4)
     transitivePeerDependencies:
       - '@nuxt/kit'
@@ -9199,7 +9176,25 @@ packages:
     resolution: {integrity: sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==}
     engines: {node: '>= 0.8'}
 
-  /unplugin-solid-styled@0.10.0(rollup@3.29.4)(solid-styled@0.10.0)(vite@5.0.2):
+  /unplugin-solid-styled@0.10.0(rollup@3.29.4)(solid-styled@0.10.0)(vite@4.5.0):
+    resolution: {integrity: sha512-MlZhF24r8/+OlASy1fQ0APDtzNPBOe6S7/jve7lRzAm4IFBUNOhrM1SMHQqf1wZ4TO8+zkeENe3ybI7DREz+EQ==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      solid-styled: '>=0.9'
+      vite: ^3 || ^4 || ^5
+    peerDependenciesMeta:
+      vite:
+        optional: true
+    dependencies:
+      '@rollup/pluginutils': 5.0.5(rollup@3.29.4)
+      solid-styled: 0.10.0(solid-js@1.8.6)
+      unplugin: 1.5.0
+      vite: 4.5.0
+    transitivePeerDependencies:
+      - rollup
+    dev: true
+
+  /unplugin-solid-styled@0.10.0(solid-styled@0.10.0)(vite@5.0.2):
     resolution: {integrity: sha512-MlZhF24r8/+OlASy1fQ0APDtzNPBOe6S7/jve7lRzAm4IFBUNOhrM1SMHQqf1wZ4TO8+zkeENe3ybI7DREz+EQ==}
     engines: {node: '>=10'}
     peerDependencies:
@@ -9325,7 +9320,7 @@ packages:
       vfile-message: 4.0.2
     dev: false
 
-  /vite-plugin-inspect@0.7.42(rollup@3.29.4)(vite@5.0.2):
+  /vite-plugin-inspect@0.7.42(rollup@3.29.4)(vite@4.5.0):
     resolution: {integrity: sha512-JCyX86wr3siQc+p9Kd0t8VkFHAJag0RaQVIpdFGSv5FEaePEVB6+V/RGtz2dQkkGSXQzRWrPs4cU3dRKg32bXw==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -9343,12 +9338,12 @@ packages:
       open: 9.1.0
       picocolors: 1.0.0
       sirv: 2.0.3
-      vite: 5.0.2(@types/node@20.10.0)
+      vite: 4.5.0
     transitivePeerDependencies:
       - rollup
       - supports-color
 
-  /vite-plugin-solid-styled@0.10.0(rollup@3.29.4)(solid-styled@0.10.0)(vite@5.0.2):
+  /vite-plugin-solid-styled@0.10.0(rollup@3.29.4)(solid-styled@0.10.0)(vite@4.5.0):
     resolution: {integrity: sha512-NrTrLRZCcudvTuG/nrstnTPWZuP7I07tHPEx+O8w4Bh2lSAogGnYcBjBW62+RUOD11TckxGVzO8ReWMWFTb1Eg==}
     engines: {node: '>=10'}
     peerDependencies:
@@ -9356,11 +9351,43 @@ packages:
       vite: ^3 || ^4 || ^5
     dependencies:
       solid-styled: 0.10.0(solid-js@1.8.6)
-      unplugin-solid-styled: 0.10.0(rollup@3.29.4)(solid-styled@0.10.0)(vite@5.0.2)
+      unplugin-solid-styled: 0.10.0(rollup@3.29.4)(solid-styled@0.10.0)(vite@4.5.0)
+      vite: 4.5.0
+    transitivePeerDependencies:
+      - rollup
+    dev: true
+
+  /vite-plugin-solid-styled@0.10.0(solid-styled@0.10.0)(vite@5.0.2):
+    resolution: {integrity: sha512-NrTrLRZCcudvTuG/nrstnTPWZuP7I07tHPEx+O8w4Bh2lSAogGnYcBjBW62+RUOD11TckxGVzO8ReWMWFTb1Eg==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      solid-styled: '>=0.9'
+      vite: ^3 || ^4 || ^5
+    dependencies:
+      solid-styled: 0.10.0(solid-js@1.8.6)
+      unplugin-solid-styled: 0.10.0(solid-styled@0.10.0)(vite@5.0.2)
       vite: 5.0.2(@types/node@20.10.0)
     transitivePeerDependencies:
       - rollup
     dev: true
+
+  /vite-plugin-solid@2.7.2(solid-js@1.8.6)(vite@4.5.0):
+    resolution: {integrity: sha512-GV2SMLAibOoXe76i02AsjAg7sbm/0lngBlERvJKVN67HOrJsHcWgkt0R6sfGLDJuFkv2aBe14Zm4vJcNME+7zw==}
+    peerDependencies:
+      solid-js: ^1.7.2
+      vite: ^3.0.0 || ^4.0.0
+    dependencies:
+      '@babel/core': 7.23.3
+      '@babel/preset-typescript': 7.23.3(@babel/core@7.23.3)
+      '@types/babel__core': 7.20.4
+      babel-preset-solid: 1.8.4(@babel/core@7.23.3)
+      merge-anything: 5.1.7
+      solid-js: 1.8.6
+      solid-refresh: 0.5.3(solid-js@1.8.6)
+      vite: 4.5.0
+      vitefu: 0.2.5(vite@4.5.0)
+    transitivePeerDependencies:
+      - supports-color
 
   /vite-plugin-solid@2.7.2(solid-js@1.8.6)(vite@5.0.2):
     resolution: {integrity: sha512-GV2SMLAibOoXe76i02AsjAg7sbm/0lngBlERvJKVN67HOrJsHcWgkt0R6sfGLDJuFkv2aBe14Zm4vJcNME+7zw==}
@@ -9379,6 +9406,41 @@ packages:
       vitefu: 0.2.5(vite@5.0.2)
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /vite@4.5.0:
+    resolution: {integrity: sha512-ulr8rNLA6rkyFAlVWw2q5YJ91v098AFQ2R0PRFwPzREXOUJQPtFUG0t+/ZikhaOCDqFoDhN6/v8Sq0o4araFAw==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': '>= 14'
+      less: '*'
+      lightningcss: ^1.21.0
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      lightningcss:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      esbuild: 0.18.20
+      postcss: 8.4.31
+      rollup: 3.29.4
+    optionalDependencies:
+      fsevents: 2.3.3
 
   /vite@5.0.2(@types/node@20.10.0):
     resolution: {integrity: sha512-6CCq1CAJCNM1ya2ZZA7+jS2KgnhbzvxakmlIjN24cF/PXhRMzpM/z8QgsVJA/Dm5fWUWnVEsmtBoMhmerPxT0g==}
@@ -9415,6 +9477,16 @@ packages:
     optionalDependencies:
       fsevents: 2.3.3
 
+  /vitefu@0.2.5(vite@4.5.0):
+    resolution: {integrity: sha512-SgHtMLoqaeeGnd2evZ849ZbACbnwQCIwRH57t18FxcXoZop0uQu0uzlIhJBlF/eWVzuce0sHeqPcDo+evVcg8Q==}
+    peerDependencies:
+      vite: ^3.0.0 || ^4.0.0 || ^5.0.0
+    peerDependenciesMeta:
+      vite:
+        optional: true
+    dependencies:
+      vite: 4.5.0
+
   /vitefu@0.2.5(vite@5.0.2):
     resolution: {integrity: sha512-SgHtMLoqaeeGnd2evZ849ZbACbnwQCIwRH57t18FxcXoZop0uQu0uzlIhJBlF/eWVzuce0sHeqPcDo+evVcg8Q==}
     peerDependencies:
@@ -9424,6 +9496,7 @@ packages:
         optional: true
     dependencies:
       vite: 5.0.2(@types/node@20.10.0)
+    dev: false
 
   /w3c-keyname@2.2.8:
     resolution: {integrity: sha512-dpojBhNsCNN7T82Tm7k26A6G9ML3NkhDsnw9n/eoxSRlVBB4CEtIQ/KTCLI2Fwf3ataSXRhYFkQi3SlnFwPvPQ==}

@@ -13,7 +13,7 @@
     "tailwindcss": "^3.3.5",
     "tsx": "^4.5.0",
     "typescript": "^5.3.2",
-    "vite": "^5.0.2",
+    "vite": "^4.5.0",
     "vite-plugin-solid-styled": "^0.10.0"
   },
   "dependencies": {
