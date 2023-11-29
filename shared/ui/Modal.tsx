@@ -8,14 +8,50 @@ export type ModalProps = {
 export const Modal: s.ParentComponent<ModalProps> = (props) => {
   return (
     <>
-      <div class="fixed top-0 left-0 select-none w-screen z-10 h-screen backdrop-blur-sm">
+      <style>
+        {`
+
+          #Modal > div {
+            animation: 0.2s ModalShow forwards ease-in;
+            z-index: 40;
+          }
+          #ModalOverlay {
+            animation: 1s ModalOverlayShow forwards ease-out;
+          }
+          @keyframes ModalShow {
+            0% {
+              transform: scale(0.5) translate(50px, 50px);
+              opacity: 0;
+            }
+            50% {
+              opacity: 1;
+            }
+            100% {
+              transform: scale(1) translate(0,0);
+            }
+          }
+          @keyframes ModalOverlayShow {
+            0% {
+              opacity: 0;
+            }
+            100% {
+              opacity: 1;
+            }
+          }
+      `}
+      </style>
+      <div
+        id="ModalContainer"
+        class="fixed top-0 z-10 left-0 select-none w-screen h-screen "
+      >
         <div
-          class="fixed top-0 select-none left-0 z-20 w-screen h-screen"
+          id="ModalOverlay"
+          class="fixed top-0 select-none z-20 left-0 w-screen h-screen bg-neutral-800 bg-opacity-40"
           onClick={() => {
             props.onClose()
           }}
         ></div>
-        <div class="w-full h-full z-30 flex items-center justify-center">
+        <div id="Modal" class="w-full h-full flex items-center justify-center">
           {props.children}
         </div>
       </div>

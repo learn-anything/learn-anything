@@ -4,17 +4,21 @@ import { PresencePortal } from "./presence-portal"
 const clamp = (min: number, value: number, max: number) =>
   Math.min(Math.max(min, value), max)
 
-const FADE_FROM: Keyframe = { opacity: 0, transform: "translateY(0.3rem)" }
-const FADE_TO: Keyframe = { opacity: 1, transform: "translateY(0)" }
+const FADE_0: Keyframe = {
+  opacity: 0,
+  transform: "translateY(0.3rem) scale(0.7)"
+}
+const FADE_70: Keyframe = { transform: "translateY(0) scale(1.2)" }
+const FADE_100: Keyframe = { opacity: 1, transform: "translateY(0) scale(1)" }
 const FADE_OPTIONS: KeyframeAnimationOptions = {
   duration: 100,
-  easing: "ease",
+  easing: "ease-out",
   fill: "forwards"
 }
 
 function fade(way: "in" | "out", el: Element): Animation {
   return el.animate(
-    way === "in" ? [FADE_FROM, FADE_TO] : [FADE_TO, FADE_FROM],
+    way === "in" ? [FADE_0, FADE_70, FADE_100] : [FADE_100, FADE_0],
     FADE_OPTIONS
   )
 }
@@ -103,36 +107,64 @@ export function createTooltip(
   so it does't have to return jsx
   */
   void (
-    <s.Show when={active()}>
-      <PresencePortal>
-        {(hide) => (
-          <div
-            ref={(tooltip) => {
-              requestAnimationFrame(() => fade("in", tooltip))
-              s.onCleanup(() => fade("out", tooltip).finished.then(hide))
+    <>
+      <style>
+        {`
+          #tooltip {
+            animation: 1s tooltipBounce forwards linear;
+          }
+          @keyframes tooltipBounce {
+            0% {
+              transform: scale(0.5);
+            }
+            70% {
+              transform: scale(1.2)
+            }
+            100% {
+              transform: scale(1);
+              background: red;
+            }
+          }
+        `}
+      </style>
+      <s.Show when={active()}>
+        <PresencePortal>
+          {(hide) => (
+            <div
+              ref={(tooltip) => {
+                requestAnimationFrame(() => fade("in", tooltip))
+                s.onCleanup(() => fade("out", tooltip).finished.then(hide))
 
-              function boundUpdateTooltipPosition() {
-                const el = getTarget()
-                if (el) updateTooltipPosition(el, tooltip)
-              }
+                function boundUpdateTooltipPosition() {
+                  const el = getTarget()
+                  if (el) updateTooltipPosition(el, tooltip)
+                }
 
-              s.createEffect(boundUpdateTooltipPosition) // track target el change
+                s.createEffect(boundUpdateTooltipPosition) // track target el change
 
-              window.addEventListener("resize", boundUpdateTooltipPosition)
-              window.addEventListener("scroll", boundUpdateTooltipPosition)
+                window.addEventListener("resize", boundUpdateTooltipPosition)
+                window.addEventListener("scroll", boundUpdateTooltipPosition)
 
-              s.onCleanup(() => {
-                window.removeEventListener("resize", boundUpdateTooltipPosition)
-                window.removeEventListener("scroll", boundUpdateTooltipPosition)
-              })
-            }}
-            class="fixed z-50 top-0 left-0 pointer-events-none bg-white dark:bg-neutral-900 rounded-md px-4 p-0.5 dark:text-white text-black text-opacity-70 dark:text-opacity-70 border dark:border-[#282828] border-[#69696951]"
-          >
-            {label as s.JSXElement}
-          </div>
-        )}
-      </PresencePortal>
-    </s.Show>
+                s.onCleanup(() => {
+                  window.removeEventListener(
+                    "resize",
+                    boundUpdateTooltipPosition
+                  )
+                  window.removeEventListener(
+                    "scroll",
+                    boundUpdateTooltipPosition
+                  )
+                })
+              }}
+              id="tooltip"
+              class="fixed z-50 top-0 left-0 pointer-events-none bg-white dark:bg-neutral-900 rounded-md px-4 p-0.5 dark:text-white text-black text-opacity-70 dark:text-opacity-70 border dark:border-[#282828] border-[#69696951]"
+            >
+              {label as s.JSXElement}
+            </div>
+          )}
+        </PresencePortal>
+      </s.Show>
+    </>
   )
 }
 
