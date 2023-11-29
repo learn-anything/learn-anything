@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import { For, Show } from "solid-js"
+import { For, Show, createSignal } from "solid-js"
 import { useLocation, useNavigate } from "solid-start"
 import { useGlobalState } from "../../GlobalContext/global"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
@@ -15,6 +15,7 @@ export default function GuideSidebar() {
   const user = useUser()
   const location = useLocation()
   const navigate = useNavigate()
+  const [topicStatusChanging, setTopicStatusChanging] = createSignal()
 
   return (
     <>
@@ -27,12 +28,14 @@ export default function GuideSidebar() {
             <div class="font-bold text-[#696969] text-[14px]">TOPIC STATUS</div>
             <div class="flex gap-2 text-[12px]">
               <ui.FancyButton
+                loading={topicStatusChanging() === "to_learn"}
                 onClick={async () => {
                   if (!user.user.signedIn) {
                     localStorage.setItem("pageBeforeSignIn", location.pathname)
                     navigate("/auth")
                     return
                   }
+                  setTopicStatusChanging("to_learn")
                   if (topic.globalTopic.learningStatus === "to_learn") {
                     const res = await mobius.mutate({
                       updateTopicLearningStatus: {
@@ -46,15 +49,9 @@ export default function GuideSidebar() {
                         select: true
                       }
                     })
-                    console.log(res, "res")
-                    const [data, err] = parseResponse(res)
+                    const [data] = parseResponse(res)
                     if (data) {
                       topic.set("learningStatus", "")
-                    } else {
-                      // TODO: not sure why `err` is {"message":"cannot-do-it"} and not just the message..
-                      if (err.includes("cannot-do-it")) {
-                        global.set("showModal", "out-of-free-actions")
-                      }
                     }
                   } else {
                     const res = await mobius.mutate({
@@ -73,30 +70,29 @@ export default function GuideSidebar() {
                     if (data) {
                       topic.set("learningStatus", "to_learn")
                     } else {
-                      if (err === "out-of-free-actions") {
-                        global.set("showModal", "out-of-free-actions")
+                      // TODO: not sure why `err` is {"message":"not-regular-member"} and not just the message..
+                      if (err.includes("not-regular-member")) {
+                        global.set("showModal", "not-regular-member")
                       }
                     }
                   }
+                  setTopicStatusChanging(null)
                 }}
                 active={topic.globalTopic.learningStatus === "to_learn"}
               >
                 To Learn
               </ui.FancyButton>
               <ui.FancyButton
+                loading={topicStatusChanging() === "learning"}
                 onClick={async () => {
                   if (!user.user.signedIn) {
                     localStorage.setItem("pageBeforeSignIn", location.pathname)
                     navigate("/auth")
                     return
                   }
-                  if (!user.user.member) {
-                    global.setShowMemberOnlyModal(true)
-                    return
-                  }
+                  setTopicStatusChanging("learning")
                   if (topic.globalTopic.learningStatus === "learning") {
-                    topic.set("learningStatus", "")
-                    await mobius.mutate({
+                    const res = await mobius.mutate({
                       updateTopicLearningStatus: {
                         where: {
                           learningStatus: "none",
@@ -108,9 +104,12 @@ export default function GuideSidebar() {
                         select: true
                       }
                     })
+                    const [data] = parseResponse(res)
+                    if (data) {
+                      topic.set("learningStatus", "")
+                    }
                   } else {
-                    topic.set("learningStatus", "learning")
-                    await mobius.mutate({
+                    const res = await mobius.mutate({
                       updateTopicLearningStatus: {
                         where: {
                           learningStatus: "learning",
@@ -122,26 +121,32 @@ export default function GuideSidebar() {
                         select: true
                       }
                     })
+                    const [data, err] = parseResponse(res)
+                    if (data) {
+                      topic.set("learningStatus", "learning")
+                    } else {
+                      if (err.includes("not-regular-member")) {
+                        global.set("showModal", "not-regular-member")
+                      }
+                    }
                   }
+                  setTopicStatusChanging(null)
                 }}
                 active={topic.globalTopic.learningStatus === "learning"}
               >
                 Learning
               </ui.FancyButton>
               <ui.FancyButton
+                loading={topicStatusChanging() === "learned"}
                 onClick={async () => {
                   if (!user.user.signedIn) {
                     localStorage.setItem("pageBeforeSignIn", location.pathname)
                     navigate("/auth")
                     return
                   }
-                  if (!user.user.member) {
-                    global.setShowMemberOnlyModal(true)
-                    return
-                  }
+                  setTopicStatusChanging("learned")
                   if (topic.globalTopic.learningStatus === "learned") {
-                    topic.set("learningStatus", "")
-                    await mobius.mutate({
+                    const res = await mobius.mutate({
                       updateTopicLearningStatus: {
                         where: {
                           learningStatus: "none",
@@ -153,9 +158,12 @@ export default function GuideSidebar() {
                         select: true
                       }
                     })
+                    const [data] = parseResponse(res)
+                    if (data) {
+                      topic.set("learningStatus", "")
+                    }
                   } else {
-                    topic.set("learningStatus", "learned")
-                    await mobius.mutate({
+                    const res = await mobius.mutate({
                       updateTopicLearningStatus: {
                         where: {
                           learningStatus: "learned",
@@ -167,7 +175,16 @@ export default function GuideSidebar() {
                         select: true
                       }
                     })
+                    const [data, err] = parseResponse(res)
+                    if (data) {
+                      topic.set("learningStatus", "learned")
+                    } else {
+                      if (err.includes("not-regular-member")) {
+                        global.set("showModal", "not-regular-member")
+                      }
+                    }
                   }
+                  setTopicStatusChanging(null)
                 }}
                 active={topic.globalTopic.learningStatus === "learned"}
               >

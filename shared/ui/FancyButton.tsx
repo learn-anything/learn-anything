@@ -1,4 +1,5 @@
-import { createEffect } from "solid-js"
+import { Show, createEffect } from "solid-js"
+import { ui } from "@la/shared"
 import clsx from "clsx"
 import { css } from "solid-styled"
 
@@ -6,6 +7,7 @@ interface Props {
   onClick: () => void
   children: any
   active?: boolean
+  loading?: boolean
 }
 
 export function FancyButton(props: Props) {
@@ -131,7 +133,10 @@ export function FancyButton(props: Props) {
 
   return (
     <button
-      onClick={props.onClick}
+      onClick={() => {
+        if (props.loading) return
+        props.onClick()
+      }}
       id={props.active ? "activeControl" : ""}
       class={clsx(
         "control h-full w-full",
@@ -139,7 +144,11 @@ export function FancyButton(props: Props) {
       )}
     >
       <span class="backdrop"></span>
-      <span class="text">{props.children}</span>
+      <span class="text">
+        <Show when={props.loading} fallback={props.children}>
+          <ui.Icon width="16" height="16" name="Loader" border="white" />
+        </Show>
+      </span>
     </button>
   )
 }

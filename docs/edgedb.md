@@ -110,3 +110,5 @@ if (err instanceof ConstraintViolationError) {
   throw new GraphQLError(JSON.stringify(err))
 }
 ```
+
+- [optional properties need ?? for handling the case when they're missing. For equality comparisons you could just use ?=, but when things are greater or less than a missing value needs more explicit handling](https://discord.com/channels/841451783728529451/1177262394175660104/1178762322110595184)

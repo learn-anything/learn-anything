@@ -34,7 +34,7 @@ type GlobalState = {
   theme: string
   topicsWithConnections: TopicWithConnections[]
   showSidebar: boolean
-  showModal: "" | "out-of-free-actions"
+  showModal: "" | "not-regular-member"
 }
 
 // various global state

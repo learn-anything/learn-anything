@@ -318,6 +318,16 @@ export async function updateTopicLearningStatus(
   switch (learningStatus) {
     case "none":
       return await e
+        .update(foundUser, () => ({
+          set: {
+            topicsToLearn: { "-=": foundTopic },
+            topicsLearning: { "-=": foundTopic },
+            topicsLearned: { "-=": foundTopic }
+          }
+        }))
+        .run(client)
+    case "to_learn":
+      return await e
         .update(foundUser, (user) => ({
           filter: e.op(
             e.op(
@@ -329,21 +339,6 @@ export async function updateTopicLearningStatus(
             e.op(user.topicsTracked, "<", 2)
           ),
           set: {
-            topicsToLearn: { "-=": foundTopic },
-            topicsLearning: { "-=": foundTopic },
-            topicsLearned: { "-=": foundTopic }
-          }
-        }))
-        .run(client)
-    case "to_learn":
-      return await e
-        .update(foundUser, (user) => ({
-          set: {
-            filter: e.op(
-              e.op(user.memberUntil, ">", e.datetime_current()),
-              "or",
-              e.op(user.topicsTracked, "<", 2)
-            ),
             topicsToLearn: { "+=": foundTopic },
             topicsLearning: { "-=": foundTopic },
             topicsLearned: { "-=": foundTopic }

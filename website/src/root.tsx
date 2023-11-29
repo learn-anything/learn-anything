@@ -132,14 +132,12 @@ export default function Root() {
                             </Routes>
                             <Show
                               when={
-                                global.state.showModal === "out-of-free-actions"
+                                global.state.showModal === "not-regular-member"
                               }
                             >
                               <ModalWithMessageAndButton
-                                message={
-                                  "You run out of free actions. Please become a member for unlimited access."
-                                }
-                                buttonText="Become Member"
+                                message={"You ran out of free actions."}
+                                buttonText="Become member for unlimited access to all the platform."
                                 buttonAction={async () => {
                                   global.set("showModal", "")
                                   navigate("/pricing")

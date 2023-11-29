@@ -1,12 +1,11 @@
 import { updateTopicLearningStatus } from "../crud/global-topic"
-import { client } from "../client"
-import e from "../dbschema/edgeql-js"
-import { foundUserByHankoId } from "../crud/lib"
 
 async function main() {
-  await testEdgeDbJs()
-  // const hankoId = process.env.LOCAL_USER_HANKO_ID!
-  // const res = await updateTopicLearningStatus(hankoId, "typescript", "none")
+  const hankoId = process.env.LOCAL_USER_HANKO_ID!
+  // console.log(await foundUserByHankoId(hankoId))
+  // await testEdgeDbJs()
+  const res = await updateTopicLearningStatus(hankoId, "physics", "learning")
+  console.log(res, "res")
   // console.log(res)
   // console.log(hankoId, "id")
   // const res = await getUserDetails(hankoId)
@@ -23,34 +22,7 @@ async function main() {
   // console.log(html, "html")
 }
 
-async function testEdgeDbJs() {
-  const hankoId = process.env.LOCAL_USER_HANKO_ID!
-  const foundUser = foundUserByHankoId(hankoId)
-  const foundTopic = e.select(e.GlobalTopic, () => ({
-    filter_single: { name: "physics" }
-  }))
-  const res = await e
-    .update(foundUser, (user) => ({
-      filter: e.op(
-        e.op(
-          e.op(user.memberUntil, ">", e.datetime_current()),
-          "??",
-          e.bool(false)
-        ),
-        "or",
-        e.op(user.topicsTracked, "<", 1)
-      ),
-      set: {
-        topicsToLearn: { "+=": foundTopic },
-        topicsLearning: { "-=": foundTopic },
-        topicsLearned: { "-=": foundTopic }
-      }
-    }))
-    // .run(client)
-    .toEdgeQL()
-
-  console.log(res)
-}
+async function testEdgeDbJs() {}
 
 // TODO: used for wiki publishing, make it work
 // async function saveFileAsTopic(filePath: string, localFolderPath: string) {

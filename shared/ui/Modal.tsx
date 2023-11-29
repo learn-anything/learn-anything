@@ -10,9 +10,8 @@ export const Modal: s.ParentComponent<ModalProps> = (props) => {
     <>
       <style>
         {`
-
           #Modal > div {
-            animation: 0.2s ModalShow forwards ease-in;
+            animation: 0.1s ModalShow forwards ease-in;
             z-index: 40;
           }
           #ModalOverlay {
@@ -42,11 +41,11 @@ export const Modal: s.ParentComponent<ModalProps> = (props) => {
       </style>
       <div
         id="ModalContainer"
-        class="fixed top-0 z-10 left-0 select-none w-screen h-screen "
+        class="fixed top-0 z-10 left-0 select-none w-screen h-screen backdrop-blur-sm"
       >
         <div
           id="ModalOverlay"
-          class="fixed top-0 select-none z-20 left-0 w-screen h-screen bg-neutral-800 bg-opacity-40"
+          class="fixed top-0 select-none z-20 left-0 w-screen h-screen"
           onClick={() => {
             props.onClose()
           }}
@@ -92,7 +91,7 @@ export const ModalWithMessageAndButton: s.Component<
           class="h-fit gap-4 text-[20px] border-[0.5px] border-[#69696951] dark:bg-neutral-900 flex flex-col items-center justify-between bg-white z-50 p-4 py-6 rounded-[4px]"
         >
           <div>{props.message}</div>
-          <div class=" w-full h-[50px]">
+          <div class="w-full h-[50px] overflow-hidden">
             <FancyButton
               onClick={() => {
                 props.buttonAction()

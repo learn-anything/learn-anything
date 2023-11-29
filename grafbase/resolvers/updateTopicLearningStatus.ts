@@ -1,5 +1,4 @@
 import { Resolver } from "@grafbase/generated"
-import { ConstraintViolationError } from "edgedb"
 import { GraphQLError } from "graphql"
 import {
   updateTopicLearningStatus,
@@ -13,14 +12,16 @@ const updateTopicLearningStatusResolver: Resolver["Mutation.updateTopicLearningS
       const hankoId = await hankoIdFromToken(context)
       if (hankoId) {
         if (args.verifiedTopic) {
-          console.log("hitting")
           const res = await updateTopicLearningStatus(
             hankoId,
             args.topicName,
             args.learningStatus
           )
+          console.log(res, "res")
           if (res === null) {
-            throw new GraphQLError("cannot-do-it")
+            // TODO: should be more descriptive error
+            // need to update the edgedb-js query for that
+            throw new GraphQLError("not-regular-member")
           }
           return "ok"
         } else {
@@ -35,7 +36,7 @@ const updateTopicLearningStatusResolver: Resolver["Mutation.updateTopicLearningS
         throw new GraphQLError("Missing or invalid Authorization header")
       }
     } catch (err) {
-      console.error(err)
+      console.error(err, "error")
       throw new GraphQLError(JSON.stringify(err))
     }
   }
