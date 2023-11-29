@@ -1,15 +1,14 @@
 import * as scheduled from "@solid-primitives/scheduled"
 import { invoke } from "@tauri-apps/api/tauri"
-import { createEffect, createSignal } from "solid-js"
-import { initVimMode } from 'monaco-vim';
+import { createEffect, createSignal, onMount } from "solid-js"
+import { initVimMode } from "monaco-vim"
 
 import { useGlobalState } from "~/GlobalContext/global"
-import { MonacoEditor } from '~/components/solid-monaco'
-
+import { MonacoEditor } from "~/components/solid-monaco"
 
 export function Monaco() {
-  const [value, setValue] = createSignal<string>("some text")
   const global = useGlobalState()
+  const [value, setValue] = createSignal<string>("some text")
 
   // TODO: should not write to file when file opens, I think (currently does)
   const scheduledFileUpdate = scheduled.throttle(
@@ -47,7 +46,7 @@ export function Monaco() {
   let vimMode: any
 
   return (
-    <div class="w-full h-full overflow-auto">
+    <div class="w-full h-full overflow-auto ">
       <MonacoEditor
         language={"markdown"}
         onChange={(text) => {
@@ -60,10 +59,9 @@ export function Monaco() {
           wordWrap: "on",
           lineNumbers: "off",
         }}
-        theme="vs-dark"
         value={global.state.currentlyOpenFile?.fileContent}
-        onMount={
-          (_, ed) => vimMode = initVimMode(ed, document.createElement('div'))
+        onMount={(_, ed) =>
+          (vimMode = initVimMode(ed, document.createElement("div")))
         }
       />
     </div>

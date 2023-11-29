@@ -123,7 +123,7 @@ export const FileTree: solid.Component = () => {
   })
 
   return (
-    <div class="dark:bg-[#1e1e1e] bg-white w-full h-full overflow-auto">
+    <div class="dark:bg-[#1e1e1e] bg-white h-full overflow-auto">
       <div
         class="flex flex-col w-full gap-3 px-4 py-4 font-semibold"
         style={{ "font-size": "14px" }}
@@ -156,7 +156,7 @@ export const FileTree: solid.Component = () => {
                         "flex cursor-pointer  p-1 ",
                         item.type !== "directory" && "ml-[24px]",
                         item.depth > 0 &&
-                          "border-l-[0.1px] border-black border-opacity-60",
+                          "border-l-[0.1px] border-black dark:border-white dark:border-opacity-60 border-opacity-60",
                       )}
                     >
                       <div>

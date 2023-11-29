@@ -10,12 +10,13 @@ import { Monaco } from "./components/Monaco/Monaco"
 import Settings from "./components/Settings"
 import { FileTree } from "./file-tree"
 import { useMobius } from "./root"
+import Titlebar from "./components/Titlebar"
 
 const Sidebar: solid.Component = () => {
   const user = useUser()
 
   return (
-    <div class="h-full flex py-4 p-2 dark:bg-[#1e1e1e] bg-white flex-col justify-between items-center font-semibold">
+    <div class="h-full flex  p-4 dark:bg-[#1e1e1e] bg-white flex-col justify-between items-center font-semibold">
       <div
         class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
         onClick={() => {
@@ -189,7 +190,8 @@ export default function App() {
 
   return (
     <div class="w-screen h-screen overflow-hidden  dark:bg-[#1e1e1e] bg-white">
-      <div class="h-[2%] bg-white min-h-[28px] w-full dark:bg-[#1e1e1e] border-b border-slate-400 border-opacity-20"></div>
+      <ui.Tray></ui.Tray>
+      <div class="h-[28px] bg-white min-h-[28px] w-full dark:bg-[#1e1e1e] border-b border-slate-400 border-opacity-20"></div>
 
       <div class="h-[97%]">
         <solid.Show
@@ -221,10 +223,10 @@ export default function App() {
           </div>
 
           <div class="w-full h-full flex items-stretch justify-stretch">
-            <div class="border-r-2 border-slate-400 border-opacity-20">
+            <div class="border-r border-slate-400 border-opacity-20">
               <Sidebar />
             </div>
-            <div class="border-r-2 border-slate-400 border-opacity-20">
+            <div class="border-r w-[250px] border-slate-400 border-opacity-20">
               <FileTree />
             </div>
             {/* TODO: commented out codemirror as it was giving issues */}
@@ -261,7 +263,12 @@ export default function App() {
         >
           {/* TODO: focus on input */}
           <div class="w-[700px]">
-            <ui.Search placeholder={""} state={search_state} />
+            <div
+              class="w-full absolute top-[-30vh] left-1/2"
+              style={{ transform: "translateX(-50%)" }}
+            >
+              <ui.Search placeholder={""} state={search_state} />
+            </div>
           </div>
         </ui.Modal>
         {/* <SearchModal

@@ -51,7 +51,10 @@ export const Modal: s.ParentComponent<ModalProps> = (props) => {
             props.onClose()
           }}
         ></div>
-        <div id="Modal" class="w-full h-full flex items-center justify-center">
+        <div
+          id="Modal"
+          class="w-full relative h-full flex items-center justify-center"
+        >
           {props.children}
         </div>
       </div>

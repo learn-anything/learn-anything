@@ -1,4 +1,4 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
 
 settings:
   autoInstallPeers: true
@@ -258,7 +258,7 @@ importers:
         version: 14.5.0
       tauri-plugin-fs-watch-api:
         specifier: github:tauri-apps/tauri-plugin-fs-watch#v1
-        version: github.com/tauri-apps/tauri-plugin-fs-watch/abeb03702eefa1f3c0287d48f2ed81a5afc5d6f7
+        version: github.com/tauri-apps/tauri-plugin-fs-watch/d2e3e6da1f64c012c88c1a76d1ddc4949f5301bf
       vite-plugin-solid:
         specifier: ^2.7.2
         version: 2.7.2(solid-js@1.8.6)(vite@5.0.2)
@@ -9757,8 +9757,8 @@ packages:
   /zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
-  github.com/tauri-apps/tauri-plugin-fs-watch/abeb03702eefa1f3c0287d48f2ed81a5afc5d6f7:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-fs-watch/tar.gz/abeb03702eefa1f3c0287d48f2ed81a5afc5d6f7}
+  github.com/tauri-apps/tauri-plugin-fs-watch/d2e3e6da1f64c012c88c1a76d1ddc4949f5301bf:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-fs-watch/tar.gz/d2e3e6da1f64c012c88c1a76d1ddc4949f5301bf}
     name: tauri-plugin-fs-watch-api
     version: 0.0.0
     dependencies:

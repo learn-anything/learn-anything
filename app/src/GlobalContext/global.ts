@@ -1,3 +1,4 @@
+import { eventListener } from "@solid-primitives/event-listener"
 import { invoke } from "@tauri-apps/api/tauri"
 import { createContext, createEffect, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
@@ -13,6 +14,8 @@ type GlobalState = {
   currentlyOpenFile?: File
   showModal: "" | "needToLoginInstructions" | "searchFiles"
   showBox: boolean
+  theme: "light" | "dark"
+
   // monaco: Monaco | null,
   // editor: monacoEditor.IStandaloneCodeEditor | null
 }
@@ -23,10 +26,24 @@ export function createGlobalState() {
     files: [],
     showModal: "",
     showBox: false,
+    theme: "light",
+
     // monaco: null,
     // editor: null
   })
-
+  onMount(() => {
+    const handleColorSchemeChange = (matches: any) => {
+      if (matches) {
+        setState({ theme: "dark" })
+      } else {
+        setState({ theme: "light" })
+      }
+    }
+    handleColorSchemeChange(window.matchMedia("(prefers-color-scheme: dark)"))
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", handleColorSchemeChange)
+  })
   onMount(async () => {
     const localFolderPath = state.localFolderPath
     if (!localFolderPath) return

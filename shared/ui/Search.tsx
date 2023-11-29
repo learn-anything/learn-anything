@@ -219,11 +219,11 @@ export function Search(props: SearchProps): solid.JSX.Element {
         })
       }}
     >
-      <div class="w-full ">
+      <div class="w-full mb-1">
         <input
           type="text"
           placeholder={props.placeholder}
-          class="w-full h-10 p-3 px-4 dark:bg-neutral-900 bg-white rounded-[4px]  text-opacity-70 outline-none border border-slate-400 border-opacity-20"
+          class="w-full p-3 px-4 dark:bg-[#191919] bg-white rounded-[4px]  text-opacity-70 outline-none border dark:border-[#2f2f2f]"
           on:keydown={(e) =>
             handleInputKeydown(e, e.currentTarget, props.state)
           }
@@ -235,14 +235,17 @@ export function Search(props: SearchProps): solid.JSX.Element {
       </div>
       <solid.Show when={props.state.searchOpen}>
         {(_) => (
-          <div class="absolute w-full z-50 bg-white dark:bg-neutral-900 border-slate-400 border-opacity-20  border rounded-[4px]">
+          <div class="absolute w-full z-50 bg-white dark:bg-[#191919] dark:border-[#2f2f2f]  border rounded-[4px]">
             <solid.For each={props.state.results}>
               {(topic) => (
                 <div
                   class={clsx(
-                    "cursor-pointer w-full h-10 px-3 p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:text-white text-black border-y border-slate-300 dark:border-neutral-800",
+                    "cursor-pointer w-full h-10 px-3 p-2 overflow-hidden hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:text-white text-black border-b dark:border-[#2f2f2f]",
                     props.state.focused === topic &&
-                      "bg-neutral-200 dark:bg-black dark:border-opacity-30 drop-shadow-md"
+                      "bg-neutral-200 dark:bg-neutral-800  drop-shadow-md",
+                    topic ===
+                      props.state.results[props.state.results.length - 1] &&
+                      "border-none"
                   )}
                   onClick={() => {
                     selectSearchResult(props.state, topic)
