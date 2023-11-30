@@ -308,8 +308,21 @@ export async function updatePrettyNameOfGlobalTopic(
 export async function updateTopicLearningStatus(
   hankoId: string,
   topicName: string,
-  learningStatus: "to_learn" | "learning" | "learned" | "none"
+  learningStatus: "to_learn" | "learning" | "learned" | "none",
+  unveriefiedTopic?: boolean
 ) {
+  // have to create a topic first to be able to track it
+  if (unveriefiedTopic) {
+    await e
+      .insert(e.GlobalTopic, {
+        name: topicName,
+        prettyName: topicName,
+        topicSummary: "",
+        public: true,
+        verified: false
+      })
+      .run(client)
+  }
   const foundUser = foundUserByHankoId(hankoId)
   const foundTopic = e.select(e.GlobalTopic, () => ({
     filter_single: { name: topicName }
@@ -336,7 +349,7 @@ export async function updateTopicLearningStatus(
               e.bool(false)
             ),
             "or",
-            e.op(user.topicsTracked, "<", 2)
+            e.op(user.topicsTracked, "<", 10)
           ),
           set: {
             topicsToLearn: { "+=": foundTopic },
@@ -356,7 +369,7 @@ export async function updateTopicLearningStatus(
               e.bool(false)
             ),
             "or",
-            e.op(user.topicsTracked, "<", 2)
+            e.op(user.topicsTracked, "<", 10)
           ),
           set: {
             topicsToLearn: { "-=": foundTopic },
@@ -375,95 +388,12 @@ export async function updateTopicLearningStatus(
               e.bool(false)
             ),
             "or",
-            e.op(user.topicsTracked, "<", 2)
+            e.op(user.topicsTracked, "<", 10)
           ),
           set: {
             topicsToLearn: { "-=": foundTopic },
             topicsLearning: { "-=": foundTopic },
             topicsLearned: { "+=": foundTopic }
-          }
-        }))
-        .run(client)
-    default:
-      break
-  }
-}
-
-export async function updateUnverifiedTopicLearningStatus(
-  hankoId: string,
-  topicName: string,
-  learningStatus: "to_learn" | "learning" | "learned" | "none"
-) {
-  const userByHankoId = e.select(e.User, (user) => ({
-    filter: e.all(
-      e.set(
-        e.op(user.hankoId, "=", hankoId),
-        e.op("exists", user.memberUntil),
-        e.op(user.memberUntil, ">", e.datetime_current())
-      )
-    )
-  }))
-  let topic = await e
-    .select(e.GlobalTopic, () => ({
-      filter_single: { name: topicName }
-    }))
-    .run(client)
-
-  console.log(topic, "topic found")
-  if (!topic) {
-    topic = await e
-      .insert(e.GlobalTopic, {
-        name: topicName,
-        prettyName: topicName,
-        topicSummary: "",
-        public: true,
-        verified: false
-      })
-      .run(client)
-  }
-
-  const topicToChangeStatusOf = await e.select(e.GlobalTopic, () => ({
-    filter_single: { name: topicName }
-  }))
-  switch (learningStatus) {
-    case "none":
-      return e
-        .update(userByHankoId, () => ({
-          set: {
-            topicsToLearn: { "-=": topicToChangeStatusOf },
-            topicsLearning: { "-=": topicToChangeStatusOf },
-            topicsLearned: { "-=": topicToChangeStatusOf }
-          }
-        }))
-        .run(client)
-    case "to_learn":
-      return e
-        .update(userByHankoId, () => ({
-          set: {
-            topicsToLearn: { "+=": topicToChangeStatusOf },
-            topicsLearning: { "-=": topicToChangeStatusOf },
-            topicsLearned: { "-=": topicToChangeStatusOf }
-          }
-        }))
-        .run(client)
-
-    case "learning":
-      return e
-        .update(userByHankoId, () => ({
-          set: {
-            topicsToLearn: { "-=": topicToChangeStatusOf },
-            topicsLearning: { "+=": topicToChangeStatusOf },
-            topicsLearned: { "-=": topicToChangeStatusOf }
-          }
-        }))
-        .run(client)
-    case "learned":
-      return e
-        .update(userByHankoId, () => ({
-          set: {
-            topicsToLearn: { "-=": topicToChangeStatusOf },
-            topicsLearning: { "-=": topicToChangeStatusOf },
-            topicsLearned: { "+=": topicToChangeStatusOf }
           }
         }))
         .run(client)

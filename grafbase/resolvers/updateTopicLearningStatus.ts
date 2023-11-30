@@ -1,9 +1,6 @@
 import { Resolver } from "@grafbase/generated"
 import { GraphQLError } from "graphql"
-import {
-  updateTopicLearningStatus,
-  updateUnverifiedTopicLearningStatus
-} from "../edgedb/crud/global-topic"
+import { updateTopicLearningStatus } from "../edgedb/crud/global-topic"
 import { hankoIdFromToken } from "../lib/hanko-validate"
 
 const updateTopicLearningStatusResolver: Resolver["Mutation.updateTopicLearningStatus"] =
@@ -17,7 +14,6 @@ const updateTopicLearningStatusResolver: Resolver["Mutation.updateTopicLearningS
             args.topicName,
             args.learningStatus
           )
-          console.log(res, "res")
           if (res === null) {
             // TODO: should be more descriptive error
             // need to update the edgedb-js query for that
@@ -25,11 +21,15 @@ const updateTopicLearningStatusResolver: Resolver["Mutation.updateTopicLearningS
           }
           return "ok"
         } else {
-          updateUnverifiedTopicLearningStatus(
+          const res = await updateTopicLearningStatus(
             hankoId,
             args.topicName,
-            args.learningStatus
+            args.learningStatus,
+            true
           )
+          if (res === null) {
+            throw new GraphQLError("not-regular-member")
+          }
           return "ok"
         }
       } else {

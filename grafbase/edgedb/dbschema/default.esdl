@@ -67,7 +67,7 @@ module default {
     multi productsBought: Product;
     # date until user has paid membership for
     memberUntil: datetime;
-    # TODO: would be nice to make work but
+    # TODO: would be nice to make work but fails right now (https://discord.com/channels/841451783728529451/1176875453336780820/1179455590481809538)
     # isMember := ((.memberUntil > datetime_of_statement()) ?? false);
     # month / year
     stripePlan: str;
