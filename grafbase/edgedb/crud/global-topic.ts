@@ -321,6 +321,7 @@ export async function updateTopicLearningStatus(
         public: true,
         verified: false
       })
+      .unlessConflict()
       .run(client)
   }
   const foundUser = foundUserByHankoId(hankoId)

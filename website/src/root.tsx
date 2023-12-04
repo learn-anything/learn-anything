@@ -1,6 +1,7 @@
 // @refresh reload
 // @ts-ignore
 import { getHankoCookie, grafbaseTypeDefs } from "@la/shared/lib"
+import { ModalWithMessageAndButton } from "@la/shared/ui"
 import { DragDropProvider, DragDropSensors } from "@thisbeyond/solid-dnd"
 import Mobius from "graphql-mobius"
 import {
@@ -10,6 +11,7 @@ import {
   createSignal,
   useContext
 } from "solid-js"
+import { useAssets } from "solid-js/web"
 import {
   Body,
   ErrorBoundary,
@@ -23,6 +25,7 @@ import {
   Title,
   useNavigate
 } from "solid-start"
+import * as solid_styled from "solid-styled"
 import { GlobalStateProvider, createGlobalState } from "./GlobalContext/global"
 import createGlobalTopic, {
   GlobalTopicProvider
@@ -31,9 +34,6 @@ import { UserProvider, createUserState } from "./GlobalContext/user"
 import "./root.css"
 import UserProfile from "./routes/@(username)"
 import PersonalTopic from "./routes/@(username)/[topic]"
-import * as solid_styled from "solid-styled"
-import { useAssets } from "solid-js/web"
-import { Modal, ModalWithMessageAndButton } from "@la/shared/ui"
 
 export function createMobius(options: { hankoCookie: () => string }) {
   const { hankoCookie } = options
@@ -50,7 +50,22 @@ export function createMobius(options: { hankoCookie: () => string }) {
           query,
           variables: {}
         })
-      }).then((res) => res.json())
+      })
+        .then((res) => {
+          // if (res) {
+          //   throw new Error(res.statusText)
+          // }
+          return res.json()
+        })
+        .catch((err) => {
+          console.log(err, "error happened")
+          if (err instanceof Error && err.message.includes("Token expired")) {
+            // Handle 'Token expired' error here
+            console.error("Token expired")
+          }
+          // Re-throw the error to allow further catch blocks to handle it
+          throw err
+        })
   })
 
   return mobius
