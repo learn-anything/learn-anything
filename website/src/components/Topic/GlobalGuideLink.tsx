@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import { Show } from "solid-js"
+import { Show, createEffect, createSignal } from "solid-js"
 import { useNavigate } from "solid-start"
 import { useGlobalState } from "../../GlobalContext/global"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
@@ -22,6 +22,7 @@ export default function GlobalGuideLink(props: Props) {
   const user = useUser()
   const global = useGlobalState()
   const navigate = useNavigate()
+  const [showOtherIcons, setShowOtherIcons] = createSignal(false)
 
   return (
     <>
@@ -83,7 +84,27 @@ export default function GlobalGuideLink(props: Props) {
             </div>
             {/* <div class="font-light text-[12px] text-[#696969]">PDF</div> */}
           </div>
-          <div class="flex items-center gap-[34px]">
+          <div class="flex items-center gap-[34px] relative">
+            <div
+              onMouseOver={() => setShowOtherIcons(true)}
+              onMouseOut={() => setShowOtherIcons(false)}
+              class="flex gap-3 bg-white w-[24px] h-[24px] transition-all rounded-[4px]"
+            >
+              <div
+                class={clsx(
+                  "absolute top-0 left-0 transition-all h-full",
+                  showOtherIcons() && "left-[-24%] w-[50px] "
+                )}
+              >
+                <div class="bg-red-500 w-fit h-full flex items-center justify-center">
+                  <ui.Icon name="Delete"></ui.Icon>
+                </div>
+              </div>
+
+              <div class="bg-green-500 w-full h-full">
+                <ui.Icon name="Bug"></ui.Icon>
+              </div>
+            </div>
             <div id="LinkIcons" class="gap-4 flex ">
               {/* TODO: change how icon looks when link is already added. activated state  */}
               {/* UI of being pressed in */}
@@ -131,7 +152,7 @@ export default function GlobalGuideLink(props: Props) {
                   }
                 }}
                 class={clsx(
-                  "cursor-pointer rounded-[2px] flex dark:hover:bg-neutral-950 items-center hover:opacity-50 transition-all justify-center border h-[26px] w-[26px] border-[#69696951] dark:border-[#282828]",
+                  "cursor-pointer rounded-[4px] active:scale-[1.2] active:bg-red-500 flex  items-center hover:[&>*]:scale-[0.9] transition-all justify-center border h-[26px] w-[26px] border-[#69696929] dark:border-[#2e2e2ec8]",
                   topic.globalTopic.likedLinkIds.includes(props.id) &&
                     "bg-red-500 border-none transition-all"
                 )}
@@ -190,7 +211,7 @@ export default function GlobalGuideLink(props: Props) {
                   }
                 }}
                 class={clsx(
-                  "cursor-pointer rounded-[2px] dark:hover:bg-neutral-950 border flex items-center hover:opacity-50 transition-all justify-center h-[26px] w-[26px] border-[#69696951] dark:border-[#282828]",
+                  "cursor-pointer rounded-[4px] active:scale-[1.2] active:bg-blue-500 flex  items-center hover:[&>*]:scale-[0.9] transition-all justify-center border h-[26px] w-[26px] border-[#69696929] dark:border-[#2e2e2ec8]",
                   topic.globalTopic.completedLinkIds.includes(props.id) &&
                     "bg-blue-500 bg-opacity border-none"
                 )}
@@ -203,8 +224,8 @@ export default function GlobalGuideLink(props: Props) {
                         ? "black"
                         : "white"
                       : global.state.theme === "dark"
-                      ? "white"
-                      : "black"
+                        ? "white"
+                        : "black"
                   }
                   width="24"
                   height="24"

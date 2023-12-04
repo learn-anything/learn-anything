@@ -1,6 +1,6 @@
 import * as scheduled from "@solid-primitives/scheduled"
 import { invoke } from "@tauri-apps/api/tauri"
-import { createEffect, createSignal, onMount } from "solid-js"
+import { createEffect, createSignal, onCleanup, onMount } from "solid-js"
 import { initVimMode } from "monaco-vim"
 
 import { useGlobalState } from "~/GlobalContext/global"
@@ -58,11 +58,13 @@ export function Monaco() {
           minimap: { enabled: false },
           wordWrap: "on",
           lineNumbers: "off",
+          cursorStyle: "underline",
         }}
         value={global.state.currentlyOpenFile?.fileContent}
-        onMount={(_, ed) =>
-          (vimMode = initVimMode(ed, document.createElement("div")))
-        }
+        onMount={(_, ed) => {
+          vimMode = initVimMode(ed, document.createElement("div"))
+          console.log(vimMode, "vim")
+        }}
       />
     </div>
   )
