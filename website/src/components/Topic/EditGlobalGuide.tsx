@@ -111,7 +111,7 @@ export default function EditGlobalGuide() {
           />
         </Show>
 
-        <div class="flex justify-between items-center ">
+        <div class="flex-between ">
           <div
             class="border-[#696969] dark:border-gray-200 dark:hover:bg-gray-200 dark:hover:text-black border p-[4px] px-[8px] text-[12px] rounded-[4px] text-[#696969] dark:text-white font-light hover:bg-gray-300 hover:bg-opacity-50 cursor-pointer transition-all"
             onClick={() => {
@@ -208,7 +208,7 @@ export default function EditGlobalGuide() {
           </div>
         </div>
         <div class="border-[0.5px] dark:border-[#282828] border-[#69696951] flex flex-col gap-2 rounded-[4px] w-full">
-          <div class="flex justify-between items-center">
+          <div class="flex-between">
             <div class="w-full p-4" ref={setContainer} />
             <div class="text-[#3B5CCC] cursor-pointer select-none"></div>
           </div>
@@ -236,7 +236,7 @@ export default function EditGlobalGuide() {
           </Show> */}
         </div>
         <div
-          class="hover:bg-[#3B5CCC] hover:text-white p-[10px] rounded-[4px] flex justify-center items-center cursor-pointer text-[#3B5CCC] border border-[#3B5CCC] transition-all"
+          class="hover:bg-[#3B5CCC] hover:text-white p-[10px] rounded-[4px] flex-center cursor-pointer text-[#3B5CCC] border border-[#3B5CCC] transition-all"
           onClick={() => {
             topic.set("latestGlobalGuide", "sections", (p) => [
               {
@@ -312,7 +312,7 @@ export default function EditGlobalGuide() {
                         return copy
                       })
                     }}
-                    class="hover:text-white flex items-center justify-center transition-all text-[12px] border-red-500 border text-red-500 hover:bg-red-600 border-opacity-50 rounded-[6px] p-2 w-[120px] cursor-pointer"
+                    class="hover:text-white flex-center transition-all text-[12px] border-red-500 border text-red-500 hover:bg-red-600 border-opacity-50 rounded-[6px] p-2 w-[120px] cursor-pointer"
                   >
                     Delete section
                   </div>
@@ -335,7 +335,7 @@ export default function EditGlobalGuide() {
                             draggable(el)
                             droppable(el)
                           }}
-                          class="flex items-center dark:bg-neutral-900 bg-white gap-6 justify-between border-y-[0.5px]  p-2 px-4 dark:border-[#282828]"
+                          class="flex-between dark:bg-neutral-900 bg-white gap-6 border-y-[0.5px]  p-2 px-4 dark:border-[#282828]"
                         >
                           <Show
                             when={
@@ -351,7 +351,7 @@ export default function EditGlobalGuide() {
                               }}
                             />
                           </Show>
-                          <div class="w-full  h-full flex justify-between items-center">
+                          <div class="w-full  h-full flex-between">
                             <div class="w-[80%] gap-1 flex flex-col ">
                               <div class="relative flex flex-col text-[#3B5CCC] dark:text-blue-400">
                                 <div class="text-[16px] w-full outline-none transition-all bg-inherit px-2 py-1">

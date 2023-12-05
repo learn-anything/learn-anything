@@ -69,7 +69,7 @@ export default function GuideNav() {
       `}
       </style>
       <div class="flex flex-col dark:bg-[#161616] h-[10%] dark:bg-opacity-80">
-        <div class="h-full w-full p-4 gap-4 flex items-center justify-between border-b-[0.5px] border-[#69696951]">
+        <div class="h-full w-full p-4 gap-4 flex-between border-b-[0.5px] border-[#69696951]">
           <div id="NavBarSide" class="flex gap-4 w-1/2 h-full items-center">
             <div class="rounded-full">
               <div
@@ -107,7 +107,7 @@ export default function GuideNav() {
             {/* <Icon name="Menu" /> */}
             <ui.Icon name="Menu" />
           </div>
-          <div id="NavButtons" class="flex items-center justify-center gap-4">
+          <div id="NavButtons" class="flex-center gap-4">
             {/* TODO:  */}
             {/* <div>Dark/Light switch</div> */}
             {/* <div

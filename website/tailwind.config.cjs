@@ -9,8 +9,46 @@ module.exports = {
       zIndex: {
         1: "1",
         "-1": "-1"
+      },
+      keyframes: {
+        iconSlide: {
+          "0%": { opacity: 0, transform: "translateY(10px)" },
+          "100%": { opacity: 1, transform: "translateY(0)" }
+        }
+      },
+      animation: {
+        iconSlide: "iconSlide 0.5s ease-out forwards"
       }
     }
   },
-  plugins: []
+  plugins: [
+    function ({ addUtilities }) {
+      const newUtilities = {
+        ".flex-center": {
+          display: "flex",
+          "align-items": "center",
+          "justify-content": "center"
+        },
+        ".flex-between": {
+          display: "flex",
+          "align-items": "center",
+          "justify-content": "space-between"
+        },
+        ".border-dark": {
+          border: "1px solid #282828"
+        },
+        ".border-light": {
+          border: "1px solid #69696951"
+        },
+        ".flex-gap": (value) => {
+          return {
+            display: "flex",
+            flexDirection: "column",
+            gap: value
+          }
+        }
+      }
+      addUtilities(newUtilities, ["responsive", "hover"])
+    }
+  ]
 }

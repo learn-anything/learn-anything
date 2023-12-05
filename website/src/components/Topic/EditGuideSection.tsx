@@ -103,11 +103,11 @@ export default function GuideSectionEdit(props: any) {
                 <For each={props.links}>
                   {(link) => {
                     return (
-                      <div class="flex p-5 border rounded-md border-slate-400 border-opacity-30 items-center gap-6 justify-between">
+                      <div class="flex-between p-5 border rounded-md border-slate-400 border-opacity-30 gap-6">
                         {/* <div class="">
                       <div class="bg-neutral-400 w-10 h-10 rounded-full"></div>
                     </div> */}
-                        <div class="w-full  h-full flex justify-between items-center">
+                        <div class="w-full  h-full flex-between">
                           <div class="w-fit gap-1 flex flex-col">
                             <div class="font-bold flex gap-2 px-2 text-[#3B5CCC]">
                               <div class="relative w-full">
@@ -210,7 +210,7 @@ export default function GuideSectionEdit(props: any) {
             </div>
           </div>
         </Show>
-        <div class="flex justify-between items-center">
+        <div class="flex-between">
           <div
             class="text-[#131313] font-bold"
             contentEditable={editSection()}
@@ -231,11 +231,11 @@ export default function GuideSectionEdit(props: any) {
           <For each={props.links}>
             {(link) => {
               return (
-                <div class="flex items-center gap-6 justify-between">
+                <div class="flex-between gap-6">
                   {/* <div class="">
                 <div class="bg-neutral-400 w-10 h-10 rounded-full"></div>
               </div> */}
-                  <div class="w-full  h-full flex justify-between items-center">
+                  <div class="w-full  h-full flex-between">
                     <div class="w-fit flex flex-col">
                       <div class="font-bold text-[#3B5CCC]">{link.title}</div>
                       <div class="flex">
@@ -291,7 +291,7 @@ export default function GuideSectionEdit(props: any) {
           </div>
         </div>
         <Show when={addLink()}>
-          <div class=" fixed flex items-center backdrop-blur-sm justify-center w-screen z-10 h-screen top-0 left-0">
+          <div class=" fixed flex-center backdrop-blur-sm w-screen z-10 h-screen top-0 left-0">
             <div
               class="fixed w-screen h-screen top-0 right-0 z-20"
               onClick={() => {
@@ -299,7 +299,7 @@ export default function GuideSectionEdit(props: any) {
               }}
             ></div>
             <div class="w-[60%] relative h-[80%] z-30 pb-10 px-10 flex flex-col gap-2 rounded-lg bg-white border-slate-400 border drop-shadow-md">
-              <div class="text-xl w-full py-8 border-b border-slate-400 border-opacity-30 flex items-center justify-center">
+              <div class="text-xl w-full py-8 border-b border-slate-400 border-opacity-30 flex-center">
                 New Link
               </div>
               <div class="py-8 flex flex-col gap-4">
@@ -331,22 +331,22 @@ export default function GuideSectionEdit(props: any) {
                   <input
                     type="text"
                     placeholder="time"
-                    class="p-2 px-4 rounded-[4px] border-opacity-50 border-slate-400 border w-[30%]"
+                    class="p-2 px-4 rounded-[4px] border-light dark:border-dark w-[30%]"
                   />
                   <input
                     type="text"
                     placeholder="type"
-                    class="p-2 px-4 rounded-[4px] border-opacity-50 border-slate-400 border w-[30%]"
+                    class="p-2 px-4 rounded-[4px] border-light dark:border-dark w-[30%]"
                   />
                   <input
                     type="text"
                     placeholder="author"
-                    class="p-2 px-4 rounded-[4px] border-opacity-50 border-slate-400 border w-[40%]"
+                    class="p-2 px-4 rounded-[4px] border-light dark:border-dark w-[40%]"
                   />
                 </div>
               </div>
-              <div class="absolute pb-10 px-10 bottom-0 left-0 flex items-center justify-between w-full">
-                <div class="border border-slate-400 px-6 p-3 rounded-[4px] border-opacity-50">
+              <div class="absolute pb-10 px-10 bottom-0 left-0 flex-between w-full">
+                <div class=" px-6 p-3 rounded-[4px] border-light dark:border-dark">
                   Cancel
                 </div>
                 <div class="bg-blue-400 rounded-[4px] px-6 text-white p-3">
