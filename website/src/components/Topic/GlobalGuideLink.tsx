@@ -188,7 +188,7 @@ export default function GlobalGuideLink(props: Props) {
                     }
                   }}
                   class={clsx(
-                    "sm:hidden cursor-pointer rounded-[4px] active:scale-[1.2] active:bg-red-500 items-center hover:[&>*]:scale-[0.9] transition-all justify-center border h-[26px] w-[26px] border-[#69696929] dark:border-[#2e2e2ec8]",
+                    "sm:hidden animate-[iconSlide_0.8s_ease-out_forwards] cursor-pointer rounded-[4px] active:scale-[1.2] active:bg-red-500 items-center hover:[&>*]:scale-[0.9] transition-all justify-center border h-[26px] w-[26px] border-[#69696929] dark:border-[#2e2e2ec8]",
                     topic.globalTopic.likedLinkIds.includes(props.id) &&
                       "bg-red-500 border-none transition-all !flex"
                   )}
@@ -252,7 +252,7 @@ export default function GlobalGuideLink(props: Props) {
                     }
                   }}
                   class={clsx(
-                    "sm:hidden cursor-pointer rounded-[2px] dark:hover:bg-neutral-950 items-center hover:opacity-50 transition-all justify-center border h-[26px] w-[26px] border-[#69696951] dark:border-[#282828]",
+                    "sm:hidden cursor-pointer animate-[iconSlide_0.6s_ease-out_forwards] rounded-[2px] dark:hover:bg-neutral-950 items-center hover:opacity-50 transition-all justify-center border h-[26px] w-[26px] border-[#69696951] dark:border-[#282828]",
                     topic.globalTopic.likedLinkIds.includes(props.id) &&
                       "bg-red-500 border-none transition-all !flex"
                   )}
@@ -316,7 +316,7 @@ export default function GlobalGuideLink(props: Props) {
                     }
                   }}
                   class={clsx(
-                    "sm:hidden cursor-pointer rounded-[4px] active:scale-[1.2] active:bg-blue-500 items-center hover:[&>*]:scale-[0.9] transition-all justify-center border h-[26px] w-[26px] border-[#69696929] dark:border-[#2e2e2ec8]",
+                    "sm:hidden cursor-pointer rounded-[4px] animate-[iconSlide_0.4s_ease-out_forwards] active:scale-[1.2] active:bg-blue-500 items-center hover:[&>*]:scale-[0.9] transition-all justify-center border h-[26px] w-[26px] border-[#69696929] dark:border-[#2e2e2ec8]",
                     topic.globalTopic.completedLinkIds.includes(props.id) &&
                       "bg-blue-500 bg-opacity border-none !flex"
                   )}
@@ -385,7 +385,7 @@ export default function GlobalGuideLink(props: Props) {
                     }
                   }}
                   class={clsx(
-                    "sm:hidden cursor-pointer rounded-[2px] dark:hover:bg-neutral-950 items-center hover:opacity-50 transition-all justify-center border h-[26px] w-[26px] border-[#69696951] dark:border-[#282828]",
+                    "sm:hidden cursor-pointer rounded-[2px] animate-[iconSlide_0.2s_ease-out_forwards] dark:hover:bg-neutral-950 items-center hover:opacity-50 transition-all justify-center border h-[26px] w-[26px] border-[#69696951] dark:border-[#282828]",
                     topic.globalTopic.likedLinkIds.includes(props.id) &&
                       "bg-red-500 border-none transition-all !flex"
                   )}
