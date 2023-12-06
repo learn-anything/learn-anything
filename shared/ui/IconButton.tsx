@@ -7,6 +7,8 @@ interface Props {
   activeIcon: boolean
 }
 
+// TODO: currently incomplete
+// to be used in GlobalGuideLink.tsx
 export function IconButton(props: Props) {
   return (
     <div onClick={props.onClick} class={props.class}>

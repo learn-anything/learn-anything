@@ -5,9 +5,9 @@ import { Context } from "@grafbase/sdk"
 // validates that the token in `authorization` header is correct
 // if it is valid, returns hanko id of the user
 export async function hankoIdFromToken(context: Context) {
-  // if (process.env.GRAFBASE_ENV === "dev") {
-  //   return process.env.LOCAL_USER_HANKO_ID
-  // }
+  if (process.env.GRAFBASE_ENV === "dev") {
+    return process.env.LOCAL_USER_HANKO_ID
+  }
   const authHeader = context.request.headers["authorization"]
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     throw new GraphQLError("Missing or invalid Authorization header")
@@ -20,9 +20,6 @@ export async function hankoIdFromToken(context: Context) {
     const verifiedJWT = await jwtVerify(hankoToken ?? "", JWKS)
     const hankoId = verifiedJWT.payload.sub
 
-    console.log(verifiedJWT.payload.exp, "expired field")
-    const expDate = new Date(verifiedJWT.payload.exp! * 1000)
-    console.log(expDate)
     // Check if the token is expired
     const currentUnixTimestamp = Math.floor(Date.now() / 1000)
     console.log(currentUnixTimestamp, "current")
@@ -30,7 +27,6 @@ export async function hankoIdFromToken(context: Context) {
     if (
       verifiedJWT.payload.exp &&
       verifiedJWT.payload.exp < currentUnixTimestamp
-      // 1701641325 < currentUnixTimestamp
     ) {
       throw new Error("Token expired")
     }

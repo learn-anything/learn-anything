@@ -2,14 +2,15 @@ import { makeEventListener } from "@solid-primitives/event-listener"
 import { onMount } from "solid-js"
 import { register } from "@teamhanko/hanko-elements"
 import { UserClient } from "@teamhanko/hanko-frontend-sdk"
-import { useNavigate } from "solid-start"
+import { useLocation, useNavigate } from "solid-start"
 import { getHankoCookie } from "@la/shared/lib"
 import { useMobius, useSignIn } from "../root"
 import { useUser } from "../GlobalContext/user"
+import { jwtVerify, createRemoteJWKSet } from "jose"
 
 // uses https://hanko.io authentication
 // it renders hanko web components: https://github.com/teamhanko/hanko/blob/main/frontend/elements/README.md
-// on sign up, creates a user in DB or logs in if user already exists
+// on sign up, creates a user in DB or just logs in if user already exists
 export default function SignInPage() {
   const navigate = useNavigate()
   const signIn = useSignIn()
@@ -24,7 +25,7 @@ export default function SignInPage() {
         Authorization: `Bearer ${getHankoCookie()}`
       }
     })
-    // if status 200, means user is logged in, navigate to using the app
+    // if status 200, means user is logged in with valid non expired token, navigate to using the app
     if (res.status === 200) {
       const route = localStorage.getItem("pageBeforeSignIn")
       if (route) {
@@ -39,7 +40,7 @@ export default function SignInPage() {
     register(import.meta.env.VITE_HANKO_API, {
       shadow: true, // if true, can use this for styling: https://github.com/teamhanko/hanko/blob/main/frontend/elements/README.md#css-shadow-parts
       injectStyles: true
-    }).catch(async (error) => {
+    }).catch((error) => {
       console.error(error, "error")
     })
   })

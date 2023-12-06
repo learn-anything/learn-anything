@@ -23,6 +23,7 @@ import {
   Routes,
   Scripts,
   Title,
+  useLocation,
   useNavigate
 } from "solid-start"
 import * as solid_styled from "solid-styled"
@@ -35,7 +36,10 @@ import "./root.css"
 import UserProfile from "./routes/@(username)"
 import PersonalTopic from "./routes/@(username)/[topic]"
 
-export function createMobius(options: { hankoCookie: () => string }) {
+export function createMobius(
+  options: { hankoCookie: () => string },
+  onError: (error: string) => void
+) {
   const { hankoCookie } = options
 
   const mobius = new Mobius<typeof grafbaseTypeDefs>({
@@ -50,22 +54,23 @@ export function createMobius(options: { hankoCookie: () => string }) {
           query,
           variables: {}
         })
+      }).then(async (res) => {
+        const respJson = await res.json()
+        const errorMessage = respJson?.errors?.[0]?.message
+        if (errorMessage) {
+          onError(errorMessage)
+        } else {
+          return respJson
+        }
       })
-        .then((res) => {
-          // if (res) {
-          //   throw new Error(res.statusText)
-          // }
-          return res.json()
-        })
-        .catch((err) => {
-          console.log(err, "error happened")
-          if (err instanceof Error && err.message.includes("Token expired")) {
-            // Handle 'Token expired' error here
-            console.error("Token expired")
-          }
-          // Re-throw the error to allow further catch blocks to handle it
-          throw err
-        })
+    // .catch((err) => {
+    //   if (err instanceof Error && err.message.includes("Token expired")) {
+    //     // Handle 'Token expired' error here
+    //     console.error("Token expired")
+    //   }
+    //   // Re-throw the error to allow further catch blocks to handle it
+    //   throw err
+    // })
   })
 
   return mobius
@@ -91,12 +96,25 @@ export default function Root() {
     username: /^@.+/
   }
   const navigate = useNavigate()
+  const location = useLocation()
 
   const [hankoCookie, setHankoCookie] = createSignal(getHankoCookie())
 
-  const mobius = createMobius({
-    hankoCookie
-  })
+  const onError = (error: string) => {
+    if (location.pathname !== "/auth" && error.includes("Token expired")) {
+      navigate("/auth")
+    } else if (error.includes("not-regular-member")) {
+      global.set("showModal", "not-regular-member")
+    }
+  }
+
+  const mobius = createMobius(
+    {
+      hankoCookie
+    },
+    onError
+  )
+
   const user = createUserState(mobius)
   const global = createGlobalState(mobius)
   const globalTopic = createGlobalTopic(mobius, user, global)

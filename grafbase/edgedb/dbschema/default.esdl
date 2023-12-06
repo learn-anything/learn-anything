@@ -40,13 +40,13 @@ module default {
     multi topicsLearned: GlobalTopic;
     property topicsTracked := count(.topicsToLearn) + count(.topicsLearning) + count(.topicsLearned);
     # links user wants to complete
-    multi linksToComplete: GlobalLink;
+    multi linksBookmarked: GlobalLink;
     # links user is currently trying to complete
     multi linksInProgress: GlobalLink;
     # links user has completed
-    multi completedLinks: GlobalLink;
-    # links user has completed and liked
-    multi likedLinks: GlobalLink;
+    multi linksCompleted: GlobalLink;
+    # links user has liked
+    multi linksLiked: GlobalLink;
     # personal links user has added
     multi personalLinks: PersonalLink {
       on target delete allow;

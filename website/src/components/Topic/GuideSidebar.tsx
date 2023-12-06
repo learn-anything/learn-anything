@@ -66,14 +66,9 @@ export default function GuideSidebar() {
                         select: true
                       }
                     })
-                    const [data, err] = parseResponse(res)
+                    const [data] = parseResponse(res)
                     if (data) {
                       topic.set("learningStatus", "to_learn")
-                    } else {
-                      // TODO: not sure why `err` is {"message":"not-regular-member"} and not just the message..
-                      if (err.includes("not-regular-member")) {
-                        global.set("showModal", "not-regular-member")
-                      }
                     }
                   }
                   setTopicStatusChanging(null)
@@ -121,13 +116,9 @@ export default function GuideSidebar() {
                         select: true
                       }
                     })
-                    const [data, err] = parseResponse(res)
+                    const [data] = parseResponse(res)
                     if (data) {
                       topic.set("learningStatus", "learning")
-                    } else {
-                      if (err.includes("not-regular-member")) {
-                        global.set("showModal", "not-regular-member")
-                      }
                     }
                   }
                   setTopicStatusChanging(null)
@@ -175,13 +166,9 @@ export default function GuideSidebar() {
                         select: true
                       }
                     })
-                    const [data, err] = parseResponse(res)
+                    const [data] = parseResponse(res)
                     if (data) {
                       topic.set("learningStatus", "learned")
-                    } else {
-                      if (err.includes("not-regular-member")) {
-                        global.set("showModal", "not-regular-member")
-                      }
                     }
                   }
                   setTopicStatusChanging(null)

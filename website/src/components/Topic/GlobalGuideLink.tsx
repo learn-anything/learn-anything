@@ -31,7 +31,6 @@ export default function GlobalGuideLink(props: Props) {
     function handleMouseEnter() {
       clearTimeout(timeoutId) // Clear the timeout if the mouse re-enters before 1 second
     }
-    console.log("wtf")
     function handleMouseLeave() {
       timeoutId = setTimeout(() => {
         setExpandedLink(false)
@@ -204,7 +203,7 @@ export default function GlobalGuideLink(props: Props) {
                   />
                 </div>
               </ui.ToolTip>
-              <ui.ToolTip label="Todo">
+              <ui.ToolTip label="In Progress">
                 <div
                   onClick={async () => {
                     if (!user.user.signedIn) {
@@ -268,7 +267,7 @@ export default function GlobalGuideLink(props: Props) {
                   />
                 </div>
               </ui.ToolTip>
-              <ui.ToolTip label="Complete">
+              <ui.ToolTip label="Completed">
                 <div
                   onClick={async () => {
                     if (!user.user.signedIn) {
@@ -337,7 +336,7 @@ export default function GlobalGuideLink(props: Props) {
                   />
                 </div>
               </ui.ToolTip>
-              <ui.ToolTip label="Like">
+              <ui.ToolTip label="Liked">
                 <div
                   onClick={async () => {
                     if (!user.user.signedIn) {
