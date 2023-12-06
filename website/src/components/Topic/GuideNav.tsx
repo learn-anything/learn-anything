@@ -32,45 +32,9 @@ export default function GuideNav() {
 
   return (
     <>
-      <style>
-        {`
-      #InputMinimised {
-        width: 212px;
-      }
-      #InputExpanded {
-        width: 500px;
-      }
-    #Focused {
-      background-color: rgba(124,124,124,0.4);
-    }
-    #UnFocused {
-      background-color: transparent;
-    }
-    #NavMenu {
-      display: block;
-    }
-    #NavButtons {
-      display: none;
-    }
-    #NavBarSide {
-      width: 100%
-    }
-    @media (min-width: 700px) {
-      #NavMenu {
-        display: none;
-      }
-      #NavButtons {
-        display: flex;
-      }
-      #NavBarSide {
-        width: 50%
-      }
-    }
-      `}
-      </style>
-      <div class="flex flex-col dark:bg-[#161616] h-[10%] dark:bg-opacity-80">
+      <div class="flex-col dark:bg-[#161616] h-[10%] dark:bg-opacity-80">
         <div class="h-full w-full p-4 gap-4 flex-between border-b-[0.5px] border-[#69696951]">
-          <div id="NavBarSide" class="flex gap-4 w-1/2 h-full items-center">
+          <div class="flex sm:w-1/2 w-full gap-4 h-full items-center">
             <div class="rounded-full">
               <div
                 class="cursor-pointer min-w-[50px]"
@@ -91,7 +55,7 @@ export default function GuideNav() {
 
             <div
               class={clsx(
-                "relative w-[50%] h-full flex items-center transition-all duration-150",
+                "relative w-[50%] flex-center transition-all duration-150",
                 search_state.searchOpen && "w-full"
               )}
             >
@@ -99,7 +63,7 @@ export default function GuideNav() {
             </div>
           </div>
           <div
-            id="NavMenu"
+            class="sm:hidden block"
             onClick={() => {
               global.setShowSidebar(!global.state.showSidebar)
             }}
@@ -107,7 +71,7 @@ export default function GuideNav() {
             {/* <Icon name="Menu" /> */}
             <ui.Icon name="Menu" />
           </div>
-          <div id="NavButtons" class="flex-center gap-4">
+          <div class="flex-center  gap-4">
             {/* TODO:  */}
             {/* <div>Dark/Light switch</div> */}
             {/* <div

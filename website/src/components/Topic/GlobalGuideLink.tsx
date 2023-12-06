@@ -56,7 +56,7 @@ export default function GlobalGuideLink(props: Props) {
       </style>
       <div
         class={clsx(
-          "GlobalGuideLink flex-between overflow-hidden  border-b-[0.5px] dark:border-[#282828] border-[#69696951] p-4 px-4  min-h-[60px]"
+          "GlobalGuideLink flex-between overflow-hidden border-b-[0.5px] dark:border-[#282828] border-[#69696951] p-4 px-4  min-h-[60px]"
         )}
         onClick={() => {
           if (window.innerWidth < 644) {
@@ -65,11 +65,11 @@ export default function GlobalGuideLink(props: Props) {
         }}
         id={props.id}
       >
-        <div class="w-full h-full flex-col sm:flex-row flex sm:flex-between sm:gap-10">
+        <div class="w-full h-full flex-col sm:flex-row sm:flex-between sm:gap-10">
           <div class={clsx("w-fit flex-gap-[10px]", props.description && "")}>
             <div
               id="LinkTitle"
-              class="flex gap-1 flex-col items-start sm:gap-3 sm:flex-row sm:items-center"
+              class="gap-1 flex-col items-start sm:gap-3 sm:flex-row sm:items-center"
             >
               <a
                 class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer break-all"
@@ -188,9 +188,9 @@ export default function GlobalGuideLink(props: Props) {
                     }
                   }}
                   class={clsx(
-                    "sm:hidden animate-[iconSlide_0.8s_ease-out_forwards] cursor-pointer rounded-[4px] active:scale-[1.2] active:bg-red-500 items-center hover:[&>*]:scale-[0.9] transition-all justify-center border h-[26px] w-[26px] border-[#69696929] dark:border-[#2e2e2ec8]",
+                    "sm:hidden animate-[iconSlide_0.8s_ease-out_forwards] cursor-pointer rounded-[4px] active:scale-[1.2] active:bg-red-500 hover:[&>*]:scale-[0.9] transition-all h-[26px] w-[26px] border-light dark:border-dark",
                     topic.globalTopic.likedLinkIds.includes(props.id) &&
-                      "bg-red-500 border-none transition-all !flex"
+                      "bg-red-500 border-none transition-all !flex-center"
                   )}
                 >
                   <ui.Icon
@@ -252,9 +252,9 @@ export default function GlobalGuideLink(props: Props) {
                     }
                   }}
                   class={clsx(
-                    "sm:hidden cursor-pointer animate-[iconSlide_0.6s_ease-out_forwards] rounded-[2px] dark:hover:bg-neutral-950 items-center hover:opacity-50 transition-all justify-center border h-[26px] w-[26px] border-[#69696951] dark:border-[#282828]",
+                    "sm:hidden cursor-pointer animate-[iconSlide_0.6s_ease-out_forwards] rounded-[4px] dark:hover:bg-neutral-950 hover:opacity-50 transition-all h-[26px] w-[26px] border-light dark:border-dark ",
                     topic.globalTopic.likedLinkIds.includes(props.id) &&
-                      "bg-red-500 border-none transition-all !flex"
+                      "bg-red-500 border-none transition-all !flex-center"
                   )}
                 >
                   <ui.Icon
@@ -316,9 +316,9 @@ export default function GlobalGuideLink(props: Props) {
                     }
                   }}
                   class={clsx(
-                    "sm:hidden cursor-pointer rounded-[4px] animate-[iconSlide_0.4s_ease-out_forwards] active:scale-[1.2] active:bg-blue-500 items-center hover:[&>*]:scale-[0.9] transition-all justify-center border h-[26px] w-[26px] border-[#69696929] dark:border-[#2e2e2ec8]",
+                    "sm:hidden cursor-pointer rounded-[4px] animate-[iconSlide_0.4s_ease-out_forwards] active:scale-[1.2] active:bg-blue-500 hover:[&>*]:scale-[0.9] transition-all h-[26px] w-[26px] border-light dark:border-dark",
                     topic.globalTopic.completedLinkIds.includes(props.id) &&
-                      "bg-blue-500 bg-opacity border-none !flex"
+                      "bg-blue-500 bg-opacity border-none !flex-center"
                   )}
                 >
                   <ui.Icon
@@ -385,9 +385,9 @@ export default function GlobalGuideLink(props: Props) {
                     }
                   }}
                   class={clsx(
-                    "sm:hidden cursor-pointer rounded-[2px] animate-[iconSlide_0.2s_ease-out_forwards] dark:hover:bg-neutral-950 items-center hover:opacity-50 transition-all justify-center border h-[26px] w-[26px] border-[#69696951] dark:border-[#282828]",
+                    "sm:hidden cursor-pointer rounded-[4px] animate-[iconSlide_0.2s_ease-out_forwards] dark:hover:bg-neutral-950 hover:opacity-50 transition-all h-[26px] w-[26px] border-light dark:border-dark",
                     topic.globalTopic.likedLinkIds.includes(props.id) &&
-                      "bg-red-500 border-none transition-all !flex"
+                      "bg-red-500 border-none transition-all !flex-center"
                   )}
                 >
                   <ui.Icon

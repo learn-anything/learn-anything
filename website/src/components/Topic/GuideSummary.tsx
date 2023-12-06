@@ -9,16 +9,6 @@ export default function GuideSummary(props: Props) {
 
   return (
     <>
-      <style>{`
-      #GuideSummaryExpanded {
-        height: 100%;
-
-      }
-      #GuideSummaryMinimised {
-        height: 100%
-      }
-    `}</style>
-      {/* < */}
       <Show
         when={
           !(
@@ -27,7 +17,7 @@ export default function GuideSummary(props: Props) {
           )
         }
       >
-        <div class="w-full flex flex-col gap-3 text-[16px] bg-white dark:bg-neutral-900 dark:border-[#282828] border-[#69696951] border-[0.5px] rounded-[6px] p-4 px-4  leading-[18.78px]">
+        <div class="w-full flex-col gap-3 text-[16px] bg-white dark:bg-neutral-900 dark:border-[#282828] border-[#69696951] border-[0.5px] rounded-[6px] p-4 px-4  leading-[18.78px]">
           {/* <div class=" text-black dark:text-white text-opacity-70 flex w-full justify-between">
           <div>Version</div>
         </div> */}
@@ -35,9 +25,9 @@ export default function GuideSummary(props: Props) {
             id={
               showSummary() ? "GuideSummaryExpanded" : "GuideSummaryMinimised"
             }
-            class="bg-white dark:bg-inherit font-light flex flex-col gap-2 rounded-[2px] w-full"
+            class="bg-white dark:bg-inherit font-light flex-col gap-2 rounded-[2px] w-full"
           >
-            <div class="flex justify-between items-center">
+            <div class="flex-between">
               <Show when={topic.globalTopic.topicSummary}>
                 <div
                   class="text-[#696969]"

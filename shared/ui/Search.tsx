@@ -207,7 +207,7 @@ export interface SearchProps {
 export function Search(props: SearchProps): solid.JSX.Element {
   return (
     <div
-      class="relative h-10 w-full bg-white rounded-[4px] dark:bg-neutral-900 text-black dark:text-white"
+      class="relative w-full bg-white rounded-[4px] dark:bg-neutral-900 text-black dark:text-white"
       ref={(el) => {
         /*
           if the click is outside the container, close the search

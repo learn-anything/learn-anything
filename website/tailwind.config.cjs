@@ -40,12 +40,13 @@ module.exports = {
         ".border-light": {
           border: "1px solid #69696951"
         },
-        ".flex-gap": (value) => {
-          return {
-            display: "flex",
-            flexDirection: "column",
-            gap: value
-          }
+        ".flex-col": {
+          display: "flex",
+          "flex-direction": "column"
+        },
+        ".flex-row": {
+          display: "flex",
+          "flex-direction": "row"
         }
       }
       addUtilities(newUtilities, ["responsive", "hover"])
