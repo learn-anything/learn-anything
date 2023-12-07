@@ -69,7 +69,7 @@ export default function GlobalGuideLink(props: Props) {
           <div class={clsx("w-fit flex-gap-[10px]", props.description && "")}>
             <div
               id="LinkTitle"
-              class="gap-1 flex-col items-start sm:gap-3 sm:flex-row sm:items-center"
+              class="col-gap-[4px] items-start sm:gap-3 sm:flex-row sm:items-center"
             >
               <a
                 class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer break-all"

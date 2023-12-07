@@ -6,7 +6,7 @@ export default function GuideLinks() {
   const topic = useGlobalTopic()
   return (
     <>
-      <div id="GuideLinks" class="h-full flex-col gap-2 w-full">
+      <div id="GuideLinks" class="h-full col-gap-[8px] w-full">
         <div class="text-[22px] font-bold">{topic.globalTopic.prettyName}</div>
         <For each={topic.globalTopic.links}>
           {(link) => {

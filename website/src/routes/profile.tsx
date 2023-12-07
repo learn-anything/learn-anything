@@ -96,8 +96,8 @@ const NewLinkModal = (props: {
 
   return (
     <ui.Modal onClose={props.onClose}>
-      <div class="w-3/4 relative z-50 h-1/2 rounded-lg dark:border-opacity-50 bg-white dark:border-[#282828]  border-[#69696951] border dark:bg-neutral-900 flex flex-col justify-between gap-1 p-[20px] px-[24px]">
-        <div class="flex flex-col ">
+      <div class="w-3/4 relative z-50 h-1/2 rounded-lg dark:border-opacity-50 bg-white border-default dark:bg-neutral-900 flex-col justify-between gap-1 p-[20px] px-[24px]">
+        <div class="flex-col">
           <input
             type="text"
             ref={(el) => autofocus(el)}
@@ -150,7 +150,7 @@ const NewLinkModal = (props: {
             Save
           </div>
           <div
-            class=" px-4 border border-slate-400 p-2 rounded-[8px] cursor-pointer"
+            class=" px-4 border-light dark:border-dark p-2 rounded-[8px] cursor-pointer"
             onClick={() => {
               props.onClose()
             }}
@@ -254,14 +254,14 @@ export default function Profile() {
           onClick={() => {
             setShowHelpModal(true)
           }}
-          class="fixed active:scale-[1.1] bottom-3 left-3 hover:bg-black hover:border-none hover:text-white transition-all border-slate-400 border px-4 p-2 rounded-full cursor-pointer"
+          class="fixed active:scale-[1.1] bottom-3 left-3 hover:border-none hover:text-white transition-all border-slate-400 border px-4 p-2 rounded-full cursor-pointer"
         >
           ?
         </div>
         <Show when={showHelpModal()}>
           {/* @ts-ignore */}
           <ui.Modal onClose={setShowHelpModal}>
-            <div class="w-1/2 relative z-50 h-[570px] overflow-auto rounded-lg bg-white border-slate-400 border dark:bg-neutral-900 flex flex-col gap-4 p-[20px] px-[24px]">
+            <div class="w-1/2 relative z-50 h-fit overflow-auto rounded-lg bg-white border-light dark:border-dark dark:bg-neutral-900 col-gap-[16px] p-[20px] px-[24px]">
               <div>
                 This page is being improved rapidly. If you hit any issues, ask
                 on <a href="https://discord.com/invite/bxtD8x6aNF">Discord</a>.
@@ -347,7 +347,7 @@ export default function Profile() {
                 <div
                   id="Learning"
                   class={clsx(
-                    "p-2 cursor-pointer border-b border-inherit",
+                    "p-2 cursor-pointer border-b border-transparent",
                     currentTab() === "Learning" &&
                       " border-black text-black dark:text-white dark:border-white font-bold"
                   )}
@@ -360,7 +360,7 @@ export default function Profile() {
                 <div
                   id="ToLearn"
                   class={clsx(
-                    "p-2 cursor-pointer border-b border-inherit",
+                    "p-2 cursor-pointer border-b border-transparent",
                     currentTab() === "ToLearn" &&
                       " border-black text-black dark:text-white dark:border-white font-bold"
                   )}
@@ -373,7 +373,7 @@ export default function Profile() {
                 <div
                   id="Learned"
                   class={clsx(
-                    "p-2 cursor-pointer border-b border-inherit",
+                    "p-2 cursor-pointer border-b border-transparent",
                     currentTab() === "Learned" &&
                       " border-black text-black dark:text-white dark:border-white font-bold"
                   )}
@@ -386,7 +386,7 @@ export default function Profile() {
                 <div
                   id="Links"
                   class={clsx(
-                    "p-2 cursor-pointer border-b border-inherit",
+                    "p-2 cursor-pointer border-b border-transparent",
                     currentTab() === "Links" &&
                       " border-black text-black dark:text-white dark:border-white font-bold"
                   )}

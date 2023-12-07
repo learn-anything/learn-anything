@@ -23,9 +23,9 @@ export default function ProfileGuideLink(props: Props) {
   const global = useGlobalState()
 
   return (
-    <div class="flex items-center overflow-hidden  border-b-[0.5px] dark:border-[#282828]  border-[#69696951] p-4 px-4 justify-between">
-      <div class="w-full  h-full flex justify-between items-center">
-        <div class={clsx("w-fit flex flex-col", props.description && "gap-1")}>
+    <div class="flex-between overflow-hidden dark:border-dark border-light p-4 px-4 ">
+      <div class="w-full  h-full flex-between">
+        <div class={clsx("w-fit flex-col", props.description && "gap-1")}>
           <div class="flex gap-3 items-center">
             <ui.Icon name="Verified" />
             <a
@@ -169,8 +169,8 @@ export default function ProfileGuideLink(props: Props) {
                       ? "black"
                       : "white"
                     : global.state.theme === "dark"
-                    ? "white"
-                    : "black"
+                      ? "white"
+                      : "black"
                 }
                 width="24"
                 height="24"

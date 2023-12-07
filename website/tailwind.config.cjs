@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const plugin = require("tailwindcss/plugin")
+
 module.exports = {
   content: [
     "./src/**/*.{html,js,jsx,ts,tsx}",
@@ -50,6 +52,17 @@ module.exports = {
         }
       }
       addUtilities(newUtilities, ["responsive", "hover"])
-    }
+    },
+    plugin(function ({ matchUtilities, theme }) {
+      matchUtilities({
+        "col-gap": (value) => {
+          return {
+            display: "flex",
+            "flex-direction": "column",
+            gap: value
+          }
+        }
+      })
+    })
   ]
 }
