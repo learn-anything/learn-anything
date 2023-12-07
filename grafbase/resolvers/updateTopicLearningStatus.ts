@@ -17,7 +17,7 @@ const updateTopicLearningStatusResolver: Resolver["Mutation.updateTopicLearningS
           if (res === null) {
             // TODO: should be more descriptive error
             // need to update the edgedb-js query for that
-            throw new GraphQLError("not-regular-member")
+            throw new GraphQLError("cannot-update-topic-learning-status")
           }
           return "ok"
         } else {
@@ -28,7 +28,7 @@ const updateTopicLearningStatusResolver: Resolver["Mutation.updateTopicLearningS
             true
           )
           if (res === null) {
-            throw new GraphQLError("not-regular-member")
+            throw new GraphQLError("cannot-update-topic-learning-status")
           }
           return "ok"
         }

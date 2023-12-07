@@ -95,19 +95,12 @@ export default function Root() {
   const onError = (error: string) => {
     if (location.pathname !== "/auth" && error.includes("Token expired")) {
       navigate("/auth")
-    } else if (error.includes("not-regular-member")) {
-      global.set("showModal", "not-regular-member")
+    } else if (error.includes("cannot-update-topic-learning-status")) {
+      global.set("showModal", "cannot-update-topic-learning-status")
+    } else if (error.includes("cannot-update-global-link-status")) {
+      global.set("showModal", "cannot-update-global-link-status")
     }
   }
-
-  const beforeRequest = () => {
-    if (!user.user.signedIn) {
-      localStorage.setItem("pageBeforeSignIn", location.pathname)
-      navigate("/auth")
-      return
-    }
-  }
-
   const mobius = createMobius(
     {
       hankoCookie
@@ -165,12 +158,35 @@ export default function Root() {
                             </Routes>
                             <Show
                               when={
-                                global.state.showModal === "not-regular-member"
+                                global.state.showModal ===
+                                "cannot-update-topic-learning-status"
                               }
                             >
                               <ModalWithMessageAndButton
-                                message={"You ran out of free actions."}
-                                buttonText="Become member for unlimited access to all the platform."
+                                message={
+                                  "As non member, you can only track learning status of 10 topics."
+                                }
+                                buttonText="Become member for unlimited access"
+                                buttonAction={async () => {
+                                  global.set("showModal", "")
+                                  navigate("/pricing")
+                                }}
+                                onClose={() => {
+                                  global.set("showModal", "")
+                                }}
+                              />
+                            </Show>
+                            <Show
+                              when={
+                                global.state.showModal ===
+                                "cannot-update-global-link-status"
+                              }
+                            >
+                              <ModalWithMessageAndButton
+                                message={
+                                  "As non member, you can only track learning status or like 10 links."
+                                }
+                                buttonText="Become member for unlimited access"
                                 buttonAction={async () => {
                                   global.set("showModal", "")
                                   navigate("/pricing")

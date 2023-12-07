@@ -12,10 +12,24 @@ const updateGlobalLinkStatusResolver: Resolver["Mutation.updateGlobalLinkStatus"
       const hankoId = await hankoIdFromToken(context)
       if (hankoId) {
         if (args.action === "like" || args.action === "unlike") {
-          await likeOrUnlikeGlobalLink(hankoId, args.globalLinkId, args.action)
+          const res = await likeOrUnlikeGlobalLink(
+            hankoId,
+            args.globalLinkId,
+            args.action
+          )
+          if (res === null) {
+            throw new GraphQLError("cannot-update-global-link-status")
+          }
           return "ok"
         }
-        await updateGlobalLinkProgress(hankoId, args.globalLinkId, args.action)
+        const res = await updateGlobalLinkProgress(
+          hankoId,
+          args.globalLinkId,
+          args.action
+        )
+        if (res === null) {
+          throw new GraphQLError("cannot-update-global-link-status")
+        }
         return "ok"
       } else {
         throw new GraphQLError("Missing or invalid Authorization header")

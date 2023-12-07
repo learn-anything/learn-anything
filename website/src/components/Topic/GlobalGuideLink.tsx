@@ -1,12 +1,11 @@
 import { ui } from "@la/shared"
+import { isSignedIn } from "@la/shared/lib"
 import clsx from "clsx"
 import { Show, createEffect, createSignal } from "solid-js"
 import { useNavigate } from "solid-start"
 import { useGlobalState } from "../../GlobalContext/global"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
-import { useUser } from "../../GlobalContext/user"
 import { useMobius } from "../../root"
-import { isSignedIn } from "@la/shared/lib"
 
 interface Props {
   title: string
@@ -20,7 +19,6 @@ interface Props {
 export default function GlobalGuideLink(props: Props) {
   const mobius = useMobius()
   const topic = useGlobalTopic()
-  const user = useUser()
   const global = useGlobalState()
   const navigate = useNavigate()
   const [expandedLink, setExpandedLink] = createSignal(false)
@@ -128,10 +126,23 @@ export default function GlobalGuideLink(props: Props) {
                         }
                       })
                     } else {
+                      // TODO: there is better way to do this..
                       topic.set("linksBookmarkedIds", [
                         ...topic.globalTopic.linksBookmarkedIds,
                         props.id
                       ])
+                      topic.set(
+                        "linksInProgressIds",
+                        topic.globalTopic.linksInProgressIds.filter(
+                          (id) => id !== props.id
+                        )
+                      )
+                      topic.set(
+                        "linksCompletedIds",
+                        topic.globalTopic.linksCompletedIds.filter(
+                          (id) => id !== props.id
+                        )
+                      )
                       await mobius.mutate({
                         updateGlobalLinkStatus: {
                           where: {
@@ -144,9 +155,9 @@ export default function GlobalGuideLink(props: Props) {
                     }
                   }}
                   class={clsx(
-                    "sm:hidden animate-[iconSlide_0.8s_ease-out_forwards] cursor-pointer rounded-[4px] active:scale-[1.2] active:bg-red-500 hover:[&>*]:scale-[0.9] transition-all h-[26px] w-[26px] border-light dark:border-dark",
+                    "sm:hidden animate-[iconSlide_0.8s_ease-out_forwards] cursor-pointer rounded-[4px] active:scale-[1.2] active:bg-blue-500 hover:[&>*]:scale-[0.9] transition-all h-[26px] w-[26px] border-light dark:border-dark",
                     topic.globalTopic.linksBookmarkedIds.includes(props.id) &&
-                      "bg-red-500 border-none transition-all !flex-center"
+                      "bg-blue-500 border-none transition-all !flex-center"
                   )}
                 >
                   <ui.Icon
@@ -183,10 +194,23 @@ export default function GlobalGuideLink(props: Props) {
                         }
                       })
                     } else {
+                      // TODO: better way to do this..
                       topic.set("linksInProgressIds", [
                         ...topic.globalTopic.linksInProgressIds,
                         props.id
                       ])
+                      topic.set(
+                        "linksBookmarkedIds",
+                        topic.globalTopic.linksBookmarkedIds.filter(
+                          (id) => id !== props.id
+                        )
+                      )
+                      topic.set(
+                        "linksCompletedIds",
+                        topic.globalTopic.linksCompletedIds.filter(
+                          (id) => id !== props.id
+                        )
+                      )
                       await mobius.mutate({
                         updateGlobalLinkStatus: {
                           where: {
@@ -199,9 +223,9 @@ export default function GlobalGuideLink(props: Props) {
                     }
                   }}
                   class={clsx(
-                    "sm:hidden cursor-pointer animate-[iconSlide_0.6s_ease-out_forwards] rounded-[4px] dark:hover:bg-neutral-950 hover:opacity-50 transition-all h-[26px] w-[26px] border-light dark:border-dark ",
+                    "sm:hidden cursor-pointer animate-[iconSlide_0.6s_ease-out_forwards] rounded-[4px] active:bg-blue-500 hover:opacity-50 transition-all h-[26px] w-[26px] border-light dark:border-dark ",
                     topic.globalTopic.linksInProgressIds.includes(props.id) &&
-                      "bg-red-500 border-none transition-all !flex-center"
+                      "bg-blue-500 border-none transition-all !flex-center"
                   )}
                 >
                   <ui.Icon
@@ -219,18 +243,6 @@ export default function GlobalGuideLink(props: Props) {
                 <div
                   onClick={async () => {
                     if (!isSignedIn(navigate)) return
-                    if (!user.user.signedIn) {
-                      localStorage.setItem(
-                        "pageBeforeSignIn",
-                        location.pathname
-                      )
-                      navigate("/auth")
-                      return
-                    }
-                    if (!user.user.member) {
-                      global.setShowMemberOnlyModal(true)
-                      return
-                    }
                     if (
                       topic.globalTopic.linksCompletedIds.includes(props.id)
                     ) {
@@ -250,10 +262,23 @@ export default function GlobalGuideLink(props: Props) {
                         }
                       })
                     } else {
+                      // TODO: better way to do this..
                       topic.set("linksCompletedIds", [
                         ...topic.globalTopic.linksCompletedIds,
                         props.id
                       ])
+                      topic.set(
+                        "linksBookmarkedIds",
+                        topic.globalTopic.linksBookmarkedIds.filter(
+                          (id) => id !== props.id
+                        )
+                      )
+                      topic.set(
+                        "linksInProgressIds",
+                        topic.globalTopic.linksInProgressIds.filter(
+                          (id) => id !== props.id
+                        )
+                      )
                       await mobius.mutate({
                         updateGlobalLinkStatus: {
                           where: {
@@ -324,7 +349,7 @@ export default function GlobalGuideLink(props: Props) {
                     }
                   }}
                   class={clsx(
-                    "sm:hidden cursor-pointer rounded-[4px] animate-[iconSlide_0.2s_ease-out_forwards] dark:hover:bg-neutral-950 hover:opacity-50 transition-all h-[26px] w-[26px] border-light dark:border-dark",
+                    "sm:hidden cursor-pointer rounded-[4px] animate-[iconSlide_0.2s_ease-out_forwards] hover:opacity-50 transition-all h-[26px] w-[26px] border-light dark:border-dark",
                     topic.globalTopic.linksLikedIds.includes(props.id) &&
                       "bg-red-500 border-none transition-all !flex-center"
                   )}

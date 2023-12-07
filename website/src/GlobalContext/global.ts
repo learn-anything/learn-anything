@@ -34,7 +34,10 @@ type GlobalState = {
   theme: string
   topicsWithConnections: TopicWithConnections[]
   showSidebar: boolean
-  showModal: "" | "not-regular-member"
+  showModal:
+    | ""
+    | "cannot-update-topic-learning-status"
+    | "cannot-update-global-link-status"
 }
 
 // various global state
