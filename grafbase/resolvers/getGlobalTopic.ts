@@ -3,8 +3,6 @@ import { GraphQLError } from "graphql"
 import { getGlobalTopicDetails } from "../edgedb/crud/global-topic"
 import { hankoIdFromToken } from "../lib/hanko-validate"
 
-// TODO: not sure
-// @ts-ignore
 const getGlobalTopicResolver: Resolver["Query.getGlobalTopic"] = async (
   parent,
   args,
@@ -15,6 +13,9 @@ const getGlobalTopicResolver: Resolver["Query.getGlobalTopic"] = async (
     const hankoId = await hankoIdFromToken(context)
     if (hankoId) {
       const topic = await getGlobalTopicDetails(args.topicName, hankoId)
+      if (!topic) {
+        throw new GraphQLError("Topic not found")
+      }
       return topic
     } else {
       throw new GraphQLError("Missing or invalid Authorization header")

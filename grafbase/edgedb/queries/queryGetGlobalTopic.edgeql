@@ -8,7 +8,7 @@ select User {
   linksBookmarkedIds := (
     select User.linksBookmarked
     filter .mainTopic.name = topicName
-  ),
+  ).id,
   linksInProgressIds := (
     select User.linksInProgress
     filter .mainTopic.name = topicName

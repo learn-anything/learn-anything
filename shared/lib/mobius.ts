@@ -63,7 +63,7 @@ type getGlobalLinksOutput {
   url: String!
 }
 type getGlobalTopicOutput {
-  learningStatus: learningStatus!
+  learningStatus: String!
   linksBookmarkedIds: [String!]!
   linksInProgressIds: [String!]!
   linksCompletedIds: [String!]!

@@ -218,6 +218,27 @@ export default function createGlobalTopic(
           }
         }
       })
+      const [data] = parseResponse(res)
+      console.log(data, "data pls")
+      // return
+      if (data) {
+        // TODO: no idea why it thinks `linksBookmarkedIds` returns {}[]..
+        setGlobalTopic({
+          // @ts-ignore
+          learningStatus: data.getGlobalTopic.learningStatus, // TODO: should fix grafbase return type
+          // @ts-ignore
+          linksBookmarkedIds: data.getGlobalTopic.linksBookmarkedIds,
+          // @ts-ignore
+          linksInProgressIds: data.getGlobalTopic.linksInProgressIds,
+          // @ts-ignore
+          linksCompletedIds: data.getGlobalTopic.linksCompletedIds,
+          // @ts-ignore
+          linksLikedIds: data.getGlobalTopic.linksLikedIds,
+          // @ts-ignore
+          notes: data.getNotesForGlobalTopic
+        })
+      }
+      return
       // @ts-ignore
       const topicData = res.data.getGlobalTopic
       // @ts-ignore

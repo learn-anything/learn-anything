@@ -163,18 +163,7 @@ export default function GlobalGuideLink(props: Props) {
               <ui.ToolTip label="In Progress">
                 <div
                   onClick={async () => {
-                    if (!user.user.signedIn) {
-                      localStorage.setItem(
-                        "pageBeforeSignIn",
-                        location.pathname
-                      )
-                      navigate("/auth")
-                      return
-                    }
-                    if (!user.user.member) {
-                      global.setShowMemberOnlyModal(true)
-                      return
-                    }
+                    if (!isSignedIn(navigate)) return
                     if (
                       topic.globalTopic.linksInProgressIds.includes(props.id)
                     ) {
@@ -229,6 +218,7 @@ export default function GlobalGuideLink(props: Props) {
               <ui.ToolTip label="Completed">
                 <div
                   onClick={async () => {
+                    if (!isSignedIn(navigate)) return
                     if (!user.user.signedIn) {
                       localStorage.setItem(
                         "pageBeforeSignIn",
@@ -300,18 +290,7 @@ export default function GlobalGuideLink(props: Props) {
               <ui.ToolTip label="Liked">
                 <div
                   onClick={async () => {
-                    if (!user.user.signedIn) {
-                      localStorage.setItem(
-                        "pageBeforeSignIn",
-                        location.pathname
-                      )
-                      navigate("/auth")
-                      return
-                    }
-                    if (!user.user.member) {
-                      global.setShowMemberOnlyModal(true)
-                      return
-                    }
+                    if (!isSignedIn(navigate)) return
                     if (topic.globalTopic.linksLikedIds.includes(props.id)) {
                       topic.set(
                         "linksLikedIds",

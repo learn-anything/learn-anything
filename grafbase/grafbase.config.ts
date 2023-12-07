@@ -199,7 +199,8 @@ g.query("getGlobalTopic", {
   args: { topicName: g.string() },
   returns: g.ref(
     g.type("getGlobalTopicOutput", {
-      learningStatus: g.enumRef(learningStatus),
+      // learningStatus: g.enumRef(learningStatus), // TODO: edgedb-js generates string instead of enum for query
+      learningStatus: g.string(),
       linksBookmarkedIds: g.string().list(),
       linksInProgressIds: g.string().list(),
       linksCompletedIds: g.string().list(),
@@ -297,19 +298,6 @@ g.mutation("updateTopicLearningStatus", {
   },
   returns: g.string(),
   resolver: "updateTopicLearningStatus"
-})
-
-const linkAction = g.enum("linkAction", [
-  "like",
-  "unlike",
-  "complete",
-  "uncomplete"
-])
-// TODO: should not have Resolver in name
-g.mutation("updateLinkStatusResolver", {
-  args: { linkId: g.string(), action: g.enumRef(linkAction) },
-  returns: g.string(),
-  resolver: "updateLinkStatus"
 })
 
 const globalLinkAction = g.enum("globalLinkAction", [
