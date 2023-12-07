@@ -2,6 +2,7 @@ import { makeEventListener } from "@solid-primitives/event-listener"
 import { onMount } from "solid-js"
 import { register } from "@teamhanko/hanko-elements"
 import { UserClient } from "@teamhanko/hanko-frontend-sdk"
+// @ts-ignore
 import { useNavigate } from "solid-start"
 import { useUser } from "../GlobalContext/user"
 import { getHankoCookie } from "@la/shared/lib"

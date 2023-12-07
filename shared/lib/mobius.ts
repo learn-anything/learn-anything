@@ -64,8 +64,10 @@ type getGlobalLinksOutput {
 }
 type getGlobalTopicOutput {
   learningStatus: learningStatus!
-  likedLinkIds: [String!]!
-  completedLinkIds: [String!]!
+  linksBookmarkedIds: [String!]!
+  linksInProgressIds: [String!]!
+  linksCompletedIds: [String!]!
+  linksLikedIds: [String!]!
 }
 type getPricingUserDetailsOutput {
   stripePlan: String

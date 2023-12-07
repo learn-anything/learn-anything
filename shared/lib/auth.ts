@@ -11,3 +11,16 @@ export function signedIn() {
   const hankoCookie = Cookies.get("hanko")
   return !!hankoCookie
 }
+
+// TODO: ideally I should not be calling this code manually
+// it should be done as part of mobius clients
+// be called when you make a mobius request that is not some public resolver
+// would also be nice if I didn't have to pass navigate in but it seems I am forced to
+export function isSignedIn(navigate: any) {
+  if (!getHankoCookie()) {
+    localStorage.setItem("pageBeforeSignIn", location.pathname)
+    navigate("/auth")
+    return false
+  }
+  return true
+}

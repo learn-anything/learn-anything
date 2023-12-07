@@ -1,5 +1,9 @@
+import { getGlobalTopicDetails } from "../crud/global-topic"
+
 async function main() {
   const hankoId = process.env.LOCAL_USER_HANKO_ID!
+  const res = await getGlobalTopicDetails("physics", hankoId)
+  console.log(res)
   // console.log(await foundUserByHankoId(hankoId))
   // await testEdgeDbJs()
   // const res = await updateTopicLearningStatus(hankoId, "physics", "learning")

@@ -63,14 +63,6 @@ export function createMobius(
           return respJson
         }
       })
-    // .catch((err) => {
-    //   if (err instanceof Error && err.message.includes("Token expired")) {
-    //     // Handle 'Token expired' error here
-    //     console.error("Token expired")
-    //   }
-    //   // Re-throw the error to allow further catch blocks to handle it
-    //   throw err
-    // })
   })
 
   return mobius
@@ -105,6 +97,14 @@ export default function Root() {
       navigate("/auth")
     } else if (error.includes("not-regular-member")) {
       global.set("showModal", "not-regular-member")
+    }
+  }
+
+  const beforeRequest = () => {
+    if (!user.user.signedIn) {
+      localStorage.setItem("pageBeforeSignIn", location.pathname)
+      navigate("/auth")
+      return
     }
   }
 

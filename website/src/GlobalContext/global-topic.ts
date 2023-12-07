@@ -46,9 +46,11 @@ export type GlobalTopic = {
   // redditLink?: string
   // aiSummary?: string
   learningStatus: "to_learn" | "learning" | "learned" | ""
-  likedLinkIds: string[]
-  completedLinkIds: string[]
   verifiedTopic: boolean
+  linksBookmarkedIds: string[]
+  linksInProgressIds: string[]
+  linksCompletedIds: string[]
+  linksLikedIds: string[]
 }
 
 export function extractTopicFromPath(inputStr: string) {
@@ -202,8 +204,10 @@ export default function createGlobalTopic(
           },
           select: {
             learningStatus: true,
-            likedLinkIds: true,
-            completedLinkIds: true
+            linksBookmarkedIds: true,
+            linksInProgressIds: true,
+            linksCompletedIds: true,
+            linksLikedIds: true
           }
         },
         getNotesForGlobalTopic: {
@@ -222,8 +226,10 @@ export default function createGlobalTopic(
       const notesData = res.data.getNotesForGlobalTopic
       setGlobalTopic({
         learningStatus: topicData.learningStatus,
-        likedLinkIds: topicData.likedLinkIds,
-        completedLinkIds: topicData.completedLinkIds,
+        linksBookmarkedIds: topicData.linksBookmarkedIds,
+        linksInProgressIds: topicData.linksInProgressIds,
+        linksCompletedIds: topicData.linksCompletedIds,
+        linksLikedIds: topicData.linksLikedIds,
         notes: notesData
       })
     }

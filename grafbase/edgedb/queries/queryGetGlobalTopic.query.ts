@@ -9,8 +9,12 @@ export type QueryGetGlobalTopicArgs = {
 
 export type QueryGetGlobalTopicReturns = {
   "learningStatus": string;
-  "likedLinksIds": string[];
-  "completedLinkIds": string[];
+  "linksBookmarkedIds": {
+    "id": string;
+  }[];
+  "linksInProgressIds": string[];
+  "linksCompletedIds": string[];
+  "linksLikedIds": string[];
 } | null;
 
 export async function queryGetGlobalTopic(client: Executor, args: QueryGetGlobalTopicArgs): Promise<QueryGetGlobalTopicReturns> {
@@ -22,13 +26,21 @@ select User {
   else "learning" if topicName in .topicsLearning.name
   else "learned" if topicName in .topicsLearned.name
   else "none",
-  likedLinksIds := (
-  select User.linksLiked
-  filter .mainTopic.name = topicName
+  linksBookmarkedIds := (
+    select User.linksBookmarked
+    filter .mainTopic.name = topicName
+  ),
+  linksInProgressIds := (
+    select User.linksInProgress
+    filter .mainTopic.name = topicName
   ).id,
-  completedLinkIds := (
-  select User.linksCompleted
-  filter .mainTopic.name = topicName
+  linksCompletedIds := (
+    select User.linksCompleted
+    filter .mainTopic.name = topicName
+  ).id,
+  linksLikedIds := (
+    select User.linksLiked
+    filter .mainTopic.name = topicName
   ).id
 }
 filter .hankoId = hankoId`, args);

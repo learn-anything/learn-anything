@@ -1,14 +1,14 @@
 import { Resolver } from "@grafbase/generated"
 import { GraphQLError } from "graphql"
-import { updateGlobalLinkStatus } from "../edgedb/crud/global-link"
+import { updateGlobalLinkProgress } from "../edgedb/crud/global-link"
 import { hankoIdFromToken } from "../lib/hanko-validate"
 
-const updateGlobalLinkStatusResolver: Resolver["Mutation.updateGlobalLinkStatus"] =
+const updateGlobalLinkProgressResolver: Resolver["Mutation.updateGlobalLinkProgress"] =
   async (parent, args, context, info) => {
     try {
       const hankoId = await hankoIdFromToken(context)
       if (hankoId) {
-        await updateGlobalLinkStatus(hankoId, args.globalLinkId, args.action)
+        await updateGlobalLinkProgress(hankoId, args.globalLinkId, args.action)
         return "ok"
       } else {
         throw new GraphQLError("Missing or invalid Authorization header")
@@ -19,4 +19,4 @@ const updateGlobalLinkStatusResolver: Resolver["Mutation.updateGlobalLinkStatus"
     }
   }
 
-export default updateGlobalLinkStatusResolver
+export default updateGlobalLinkProgressResolver

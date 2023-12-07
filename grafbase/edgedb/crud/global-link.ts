@@ -72,10 +72,10 @@ export async function getGlobalLink(id: string) {
   return link
 }
 
-export async function updateGlobalLinkStatus(
+export async function updateGlobalLinkProgress(
   hankoId: string,
   globalLinkId: string,
-  action: "like" | "unlike" | "complete" | "uncomplete"
+  action: "none" | "bookmark" | "inProgress" | "complete"
 ) {
   const foundUser = foundUserByHankoId(hankoId)
   const foundLink = e.select(e.GlobalLink, () => ({
@@ -83,49 +83,51 @@ export async function updateGlobalLinkStatus(
   }))
 
   switch (action) {
-    case "like":
-      return await e
-        .update(foundUser, (user) => ({
+    case "none":
+      return e
+        .update(foundUser, () => ({
           set: {
-            likedLinks: { "+=": foundLink },
-            freeActions: e.op(
-              user.freeActions,
-              "-",
-              e.op(
-                0,
-                "if",
-                e.op(
-                  e.op(user.memberUntil, ">", e.datetime_current()),
-                  "??",
-                  e.bool(false)
-                ),
-                "else",
-                1
-              )
-            )
+            linksBookmarked: { "-=": foundLink },
+            linksInProgress: { "-=": foundLink },
+            linksCompleted: { "-=": foundLink }
           }
         }))
         .run(client)
-    case "unlike":
+    case "bookmark":
+      return await e
+        .update(foundUser, (user) => ({
+          set: {
+            filter: e.op(
+              e.op(
+                e.op(user.memberUntil, ">", e.datetime_current()),
+                "??",
+                e.bool(false)
+              ),
+              "or",
+              e.op(user.linksTracked, "<", 10)
+            ),
+            linksBookmarked: { "+=": foundLink },
+            linksInProgress: { "-=": foundLink },
+            linksCompleted: { "-=": foundLink }
+          }
+        }))
+        .run(client)
+    case "inProgress":
       return e
         .update(foundUser, (user) => ({
           set: {
-            likedLinks: { "-=": foundLink },
-            freeActions: e.op(
-              user.freeActions,
-              "-",
+            filter: e.op(
               e.op(
-                0,
-                "if",
-                e.op(
-                  e.op(user.memberUntil, ">", e.datetime_current()),
-                  "??",
-                  e.bool(false)
-                ),
-                "else",
-                1
-              )
-            )
+                e.op(user.memberUntil, ">", e.datetime_current()),
+                "??",
+                e.bool(false)
+              ),
+              "or",
+              e.op(user.linksTracked, "<", 10)
+            ),
+            linksBookmarked: { "-=": foundLink },
+            linksInProgress: { "+=": foundLink },
+            linksCompleted: { "-=": foundLink }
           }
         }))
         .run(client)
@@ -133,45 +135,18 @@ export async function updateGlobalLinkStatus(
       return e
         .update(foundUser, (user) => ({
           set: {
-            completedLinks: { "+=": foundLink },
-            freeActions: e.op(
-              user.freeActions,
-              "-",
+            filter: e.op(
               e.op(
-                0,
-                "if",
-                e.op(
-                  e.op(user.memberUntil, ">", e.datetime_current()),
-                  "??",
-                  e.bool(false)
-                ),
-                "else",
-                1
-              )
-            )
-          }
-        }))
-        .run(client)
-    case "uncomplete":
-      return e
-        .update(foundUser, (user) => ({
-          set: {
-            completedLinks: { "-=": foundLink },
-            freeActions: e.op(
-              user.freeActions,
-              "-",
-              e.op(
-                0,
-                "if",
-                e.op(
-                  e.op(user.memberUntil, ">", e.datetime_current()),
-                  "??",
-                  e.bool(false)
-                ),
-                "else",
-                1
-              )
-            )
+                e.op(user.memberUntil, ">", e.datetime_current()),
+                "??",
+                e.bool(false)
+              ),
+              "or",
+              e.op(user.linksTracked, "<", 10)
+            ),
+            linksBookmarked: { "-=": foundLink },
+            linksInProgress: { "-=": foundLink },
+            linksCompleted: { "+=": foundLink }
           }
         }))
         .run(client)

@@ -47,6 +47,7 @@ module default {
     multi linksCompleted: GlobalLink;
     # links user has liked
     multi linksLiked: GlobalLink;
+    property linksTracked := count(.linksBookmarked) + count(.linksInProgress) + count(.linksCompleted) + count(.linksLiked);
     # personal links user has added
     multi personalLinks: PersonalLink {
       on target delete allow;

@@ -320,6 +320,7 @@ export type $UserλShape = $.typeutil.flatten<_std.$Object_d29c95e25d6b11eeabaf0
   "linksBookmarked": $.LinkDesc<$GlobalLink, $.Cardinality.Many, {}, false, false,  false, false>;
   "linksCompleted": $.LinkDesc<$GlobalLink, $.Cardinality.Many, {}, false, false,  false, false>;
   "linksLiked": $.LinkDesc<$GlobalLink, $.Cardinality.Many, {}, false, false,  false, false>;
+  "linksTracked": $.PropertyDesc<_std.$int64, $.Cardinality.One, false, true, false, false>;
   "<user[is UserGuide]": $.LinkDesc<$UserGuide, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user[is PersonalWiki]": $.LinkDesc<$PersonalWiki, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;

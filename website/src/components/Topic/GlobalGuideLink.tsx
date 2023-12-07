@@ -6,6 +6,7 @@ import { useGlobalState } from "../../GlobalContext/global"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import { useUser } from "../../GlobalContext/user"
 import { useMobius } from "../../root"
+import { isSignedIn } from "@la/shared/lib"
 
 interface Props {
   title: string
@@ -97,67 +98,23 @@ export default function GlobalGuideLink(props: Props) {
             </div>
           </div>
           <div class="flex items-center gap-[34px] relative self-end sm:self-center">
-            {/* <div
-              onMouseOver={() => setShowOtherIcons(true)}
-              onMouseOut={() => setShowOtherIcons(false)}
-              class="flex gap-3 bg-white w-[24px] h-[24px] transition-all rounded-[4px]"
-            >
-              <div
-                class={clsx(
-                  "absolute top-0 left-0 transition-all h-full",
-                  showOtherIcons() && "left-[-24%] w-[50px] "
-                )}
-              >
-                <div class="bg-red-500 w-fit h-full flex items-center justify-center">
-                  <ui.Icon name="Delete"></ui.Icon>
-                </div>
-              </div>
-
-              <div class="bg-green-500 w-full h-full">
-                <ui.Icon name="Bug"></ui.Icon>
-              </div>
-            </div> */}
             <div
               id="LinkIcons"
               class={clsx(
                 "hidden sm:!flex sm:gap-4",
                 expandedLink() && "gap-4 transition-all !flex animate-iconSlide"
               )}
-              // class={clsx("hidden", showAllIcons() && "flex gap-4")}
             >
-              {/* TODO: change how icon looks when link is already added. activated state  */}
-              {/* UI of being pressed in */}
-              {/* <ui.IconButton
-                  onClick={async () => {
-                    console.log("test")
-                  }}
-                  class={clsx(
-                    "cursor-pointer rounded-[4px] active:scale-[1.2] active:bg-red-500 flex  items-center hover:[&>*]:scale-[0.9] transition-all justify-center border h-[26px] w-[26px] border-[#69696929] dark:border-[#2e2e2ec8]",
-                    topic.globalTopic.likedLinkIds.includes(props.id) &&
-                      "bg-red-500 border-none transition-all"
-                  )}
-                  icon="Bookmark"
-                  activeIcon={topic.globalTopic.likedLinkIds.includes(props.id)}
-                /> */}
               <ui.ToolTip label="Bookmark">
                 <div
                   onClick={async () => {
-                    if (!user.user.signedIn) {
-                      localStorage.setItem(
-                        "pageBeforeSignIn",
-                        location.pathname
-                      )
-                      navigate("/auth")
-                      return
-                    }
-                    if (!user.user.member) {
-                      global.setShowMemberOnlyModal(true)
-                      return
-                    }
-                    if (topic.globalTopic.likedLinkIds.includes(props.id)) {
+                    if (!isSignedIn(navigate)) return
+                    if (
+                      topic.globalTopic.linksBookmarkedIds.includes(props.id)
+                    ) {
                       topic.set(
-                        "likedLinkIds",
-                        topic.globalTopic.likedLinkIds.filter(
+                        "linksBookmarkedIds",
+                        topic.globalTopic.linksBookmarkedIds.filter(
                           (id) => id !== props.id
                         )
                       )
@@ -171,8 +128,8 @@ export default function GlobalGuideLink(props: Props) {
                         }
                       })
                     } else {
-                      topic.set("likedLinkIds", [
-                        ...topic.globalTopic.likedLinkIds,
+                      topic.set("linksBookmarkedIds", [
+                        ...topic.globalTopic.linksBookmarkedIds,
                         props.id
                       ])
                       await mobius.mutate({
@@ -188,7 +145,7 @@ export default function GlobalGuideLink(props: Props) {
                   }}
                   class={clsx(
                     "sm:hidden animate-[iconSlide_0.8s_ease-out_forwards] cursor-pointer rounded-[4px] active:scale-[1.2] active:bg-red-500 hover:[&>*]:scale-[0.9] transition-all h-[26px] w-[26px] border-light dark:border-dark",
-                    topic.globalTopic.likedLinkIds.includes(props.id) &&
+                    topic.globalTopic.linksBookmarkedIds.includes(props.id) &&
                       "bg-red-500 border-none transition-all !flex-center"
                   )}
                 >
@@ -196,7 +153,7 @@ export default function GlobalGuideLink(props: Props) {
                     name="Bookmark"
                     fill="white"
                     border={
-                      topic.globalTopic.likedLinkIds.includes(props.id)
+                      topic.globalTopic.linksBookmarkedIds.includes(props.id)
                         ? "red"
                         : "black"
                     }
