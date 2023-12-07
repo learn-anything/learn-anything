@@ -83,8 +83,8 @@ type getUserDetailsOutput {
   isMember: Boolean!
 }
 type globalGuideSection {
-  title: String!
   summary: String
+  title: String!
   links: [GlobalLink!]!
 }
 type globalNote {
@@ -92,7 +92,6 @@ type globalNote {
   url: String
 }
 type latestGlobalGuide {
-  summary: String!
   sections: [globalGuideSection!]!
 }
 type outputOfGetLikedLinks {
@@ -139,10 +138,12 @@ type topicToLearn {
   verified: Boolean!
 }
 enum globalLinkAction {
+  removeProgress
+  bookmark
+  inProgress
+  complete
   like
   unlike
-  complete
-  uncomplete
 }
 enum learningStatus {
   to_learn

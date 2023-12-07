@@ -70,12 +70,11 @@ const GlobalLink = g.type("GlobalLink", {
   description: g.string().optional()
 })
 const globalGuideSection = g.type("globalGuideSection", {
-  title: g.string(),
   summary: g.string().optional(),
+  title: g.string(),
   links: g.ref(GlobalLink).list()
 })
 const latestGlobalGuide = g.type("latestGlobalGuide", {
-  summary: g.string(),
   sections: g.ref(globalGuideSection).list()
 })
 g.query("publicGetGlobalTopic", {
@@ -314,15 +313,17 @@ g.mutation("updateLinkStatusResolver", {
 })
 
 const globalLinkAction = g.enum("globalLinkAction", [
-  "none",
+  "removeProgress",
   "bookmark",
   "inProgress",
-  "complete"
+  "complete",
+  "like",
+  "unlike"
 ])
-g.mutation("updateGlobalLinkProgress", {
+g.mutation("updateGlobalLinkStatus", {
   args: { action: g.enumRef(globalLinkAction), globalLinkId: g.string() },
   returns: g.string(),
-  resolver: "updateGlobalLinkProgress"
+  resolver: "updateGlobalLinkStatus"
 })
 
 g.mutation("addPersonalLink", {

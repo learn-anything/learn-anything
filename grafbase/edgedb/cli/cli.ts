@@ -1,9 +1,20 @@
-import { getGlobalTopicDetails } from "../crud/global-topic"
+import { updateGlobalLinkProgress } from "../crud/global-link"
+import {
+  getGlobalTopicDetails,
+  getGlobalTopicPublic
+} from "../crud/global-topic"
 
 async function main() {
   const hankoId = process.env.LOCAL_USER_HANKO_ID!
-  const res = await getGlobalTopicDetails("physics", hankoId)
-  console.log(res)
+  // const res = await getGlobalTopicDetails("physics", hankoId)
+  // const res = await updateGlobalLinkProgress(
+  //   hankoId,
+  //   "7279f162-45e9-11ee-aedd-ef59b9073337",
+  //   "bookmark"
+  // )
+  const res = await getGlobalTopicPublic("physics")
+  // console.log(res)
+  console.dir(res, { depth: null })
   // console.log(await foundUserByHankoId(hankoId))
   // await testEdgeDbJs()
   // const res = await updateTopicLearningStatus(hankoId, "physics", "learning")

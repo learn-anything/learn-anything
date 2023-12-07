@@ -14,7 +14,7 @@
 export type Schema = {
   'learningStatus': | 'to_learn'| 'learning'| 'learned'| 'none';
   'linkAction': | 'like'| 'unlike'| 'complete'| 'uncomplete';
-  'globalLinkAction': | 'none'| 'bookmark'| 'inProgress'| 'complete';
+  'globalLinkAction': | 'removeProgress'| 'bookmark'| 'inProgress'| 'complete'| 'like'| 'unlike';
   'section': {
     title: string;
     summary: string | null;
@@ -54,13 +54,12 @@ export type Schema = {
   };
   'globalGuideSection': {
     __typename?: 'globalGuideSection';
-    title: string;
     summary: string | null;
+    title: string;
     links?: Array<Schema['GlobalLink']>;
   };
   'latestGlobalGuide': {
     __typename?: 'latestGlobalGuide';
-    summary: string;
     sections?: Array<Schema['globalGuideSection']>;
   };
   'publicGetGlobalTopicOutput': {
@@ -175,7 +174,7 @@ export type Schema = {
     deletePersonalLink?: string;
     updateTopicLearningStatus?: string;
     updateLinkStatusResolver?: string;
-    updateGlobalLinkProgress?: string;
+    updateGlobalLinkStatus?: string;
     addPersonalLink?: string;
     cancelStripe?: string;
     renewStripe?: string;
@@ -212,7 +211,7 @@ export type Resolver = {
   'Mutation.deletePersonalLink': ResolverFn<Schema['Mutation'], { personalLinkId: string,  }, string>
   'Mutation.updateTopicLearningStatus': ResolverFn<Schema['Mutation'], { learningStatus: Schema['learningStatus'], topicName: string, verifiedTopic: boolean,  }, string>
   'Mutation.updateLinkStatusResolver': ResolverFn<Schema['Mutation'], { linkId: string, action: Schema['linkAction'],  }, string>
-  'Mutation.updateGlobalLinkProgress': ResolverFn<Schema['Mutation'], { action: Schema['globalLinkAction'], globalLinkId: string,  }, string>
+  'Mutation.updateGlobalLinkStatus': ResolverFn<Schema['Mutation'], { action: Schema['globalLinkAction'], globalLinkId: string,  }, string>
   'Mutation.addPersonalLink': ResolverFn<Schema['Mutation'], { title: string, url: string, description: string | null,  }, string>
   'Mutation.cancelStripe': ResolverFn<Schema['Mutation'], {  }, string>
   'Mutation.renewStripe': ResolverFn<Schema['Mutation'], {  }, string>

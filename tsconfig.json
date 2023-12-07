@@ -18,7 +18,7 @@
     "allowJs": true,
     "types": ["bun-types"],
     "paths": {
-      "@grafbase/generated": ["./grafbase/generated"]
+      "@grafbase/generated": ["./generated"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx"]

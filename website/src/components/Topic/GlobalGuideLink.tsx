@@ -121,7 +121,7 @@ export default function GlobalGuideLink(props: Props) {
                       await mobius.mutate({
                         updateGlobalLinkStatus: {
                           where: {
-                            action: "unlike",
+                            action: "removeProgress",
                             globalLinkId: props.id
                           },
                           select: true
@@ -135,7 +135,7 @@ export default function GlobalGuideLink(props: Props) {
                       await mobius.mutate({
                         updateGlobalLinkStatus: {
                           where: {
-                            action: "like",
+                            action: "bookmark",
                             globalLinkId: props.id
                           },
                           select: true
@@ -175,31 +175,33 @@ export default function GlobalGuideLink(props: Props) {
                       global.setShowMemberOnlyModal(true)
                       return
                     }
-                    if (topic.globalTopic.likedLinkIds.includes(props.id)) {
+                    if (
+                      topic.globalTopic.linksInProgressIds.includes(props.id)
+                    ) {
                       topic.set(
-                        "likedLinkIds",
-                        topic.globalTopic.likedLinkIds.filter(
+                        "linksInProgressIds",
+                        topic.globalTopic.linksInProgressIds.filter(
                           (id) => id !== props.id
                         )
                       )
                       await mobius.mutate({
                         updateGlobalLinkStatus: {
                           where: {
-                            action: "unlike",
+                            action: "removeProgress",
                             globalLinkId: props.id
                           },
                           select: true
                         }
                       })
                     } else {
-                      topic.set("likedLinkIds", [
-                        ...topic.globalTopic.likedLinkIds,
+                      topic.set("linksInProgressIds", [
+                        ...topic.globalTopic.linksInProgressIds,
                         props.id
                       ])
                       await mobius.mutate({
                         updateGlobalLinkStatus: {
                           where: {
-                            action: "like",
+                            action: "inProgress",
                             globalLinkId: props.id
                           },
                           select: true
@@ -209,7 +211,7 @@ export default function GlobalGuideLink(props: Props) {
                   }}
                   class={clsx(
                     "sm:hidden cursor-pointer animate-[iconSlide_0.6s_ease-out_forwards] rounded-[4px] dark:hover:bg-neutral-950 hover:opacity-50 transition-all h-[26px] w-[26px] border-light dark:border-dark ",
-                    topic.globalTopic.likedLinkIds.includes(props.id) &&
+                    topic.globalTopic.linksInProgressIds.includes(props.id) &&
                       "bg-red-500 border-none transition-all !flex-center"
                   )}
                 >
@@ -217,7 +219,7 @@ export default function GlobalGuideLink(props: Props) {
                     name="Hourglass"
                     fill="white"
                     border={
-                      topic.globalTopic.likedLinkIds.includes(props.id)
+                      topic.globalTopic.linksInProgressIds.includes(props.id)
                         ? "red"
                         : "black"
                     }
@@ -239,25 +241,27 @@ export default function GlobalGuideLink(props: Props) {
                       global.setShowMemberOnlyModal(true)
                       return
                     }
-                    if (topic.globalTopic.completedLinkIds.includes(props.id)) {
+                    if (
+                      topic.globalTopic.linksCompletedIds.includes(props.id)
+                    ) {
                       topic.set(
-                        "completedLinkIds",
-                        topic.globalTopic.completedLinkIds.filter(
+                        "linksCompletedIds",
+                        topic.globalTopic.linksCompletedIds.filter(
                           (id) => id !== props.id
                         )
                       )
                       await mobius.mutate({
                         updateGlobalLinkStatus: {
                           where: {
-                            action: "uncomplete",
+                            action: "removeProgress",
                             globalLinkId: props.id
                           },
                           select: true
                         }
                       })
                     } else {
-                      topic.set("completedLinkIds", [
-                        ...topic.globalTopic.completedLinkIds,
+                      topic.set("linksCompletedIds", [
+                        ...topic.globalTopic.linksCompletedIds,
                         props.id
                       ])
                       await mobius.mutate({
@@ -273,14 +277,14 @@ export default function GlobalGuideLink(props: Props) {
                   }}
                   class={clsx(
                     "sm:hidden cursor-pointer rounded-[4px] animate-[iconSlide_0.4s_ease-out_forwards] active:scale-[1.2] active:bg-blue-500 hover:[&>*]:scale-[0.9] transition-all h-[26px] w-[26px] border-light dark:border-dark",
-                    topic.globalTopic.completedLinkIds.includes(props.id) &&
+                    topic.globalTopic.linksCompletedIds.includes(props.id) &&
                       "bg-blue-500 bg-opacity border-none !flex-center"
                   )}
                 >
                   <ui.Icon
                     name="Checkmark"
                     border={
-                      topic.globalTopic.completedLinkIds.includes(props.id)
+                      topic.globalTopic.linksCompletedIds.includes(props.id)
                         ? global.state.theme === "light"
                           ? "black"
                           : "white"
@@ -308,10 +312,10 @@ export default function GlobalGuideLink(props: Props) {
                       global.setShowMemberOnlyModal(true)
                       return
                     }
-                    if (topic.globalTopic.likedLinkIds.includes(props.id)) {
+                    if (topic.globalTopic.linksLikedIds.includes(props.id)) {
                       topic.set(
-                        "likedLinkIds",
-                        topic.globalTopic.likedLinkIds.filter(
+                        "linksLikedIds",
+                        topic.globalTopic.linksLikedIds.filter(
                           (id) => id !== props.id
                         )
                       )
@@ -325,8 +329,8 @@ export default function GlobalGuideLink(props: Props) {
                         }
                       })
                     } else {
-                      topic.set("likedLinkIds", [
-                        ...topic.globalTopic.likedLinkIds,
+                      topic.set("linksLikedIds", [
+                        ...topic.globalTopic.linksLikedIds,
                         props.id
                       ])
                       await mobius.mutate({
@@ -342,7 +346,7 @@ export default function GlobalGuideLink(props: Props) {
                   }}
                   class={clsx(
                     "sm:hidden cursor-pointer rounded-[4px] animate-[iconSlide_0.2s_ease-out_forwards] dark:hover:bg-neutral-950 hover:opacity-50 transition-all h-[26px] w-[26px] border-light dark:border-dark",
-                    topic.globalTopic.likedLinkIds.includes(props.id) &&
+                    topic.globalTopic.linksLikedIds.includes(props.id) &&
                       "bg-red-500 border-none transition-all !flex-center"
                   )}
                 >
@@ -350,7 +354,7 @@ export default function GlobalGuideLink(props: Props) {
                     name="Heart"
                     fill="white"
                     border={
-                      topic.globalTopic.likedLinkIds.includes(props.id)
+                      topic.globalTopic.linksLikedIds.includes(props.id)
                         ? "red"
                         : "black"
                     }

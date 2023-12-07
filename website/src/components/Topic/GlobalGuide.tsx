@@ -70,7 +70,7 @@ export default function GlobalGuide() {
               }}
             >
               {/* TODO: do <Show here that on hover shows the full AI description of the topic */}
-              <ui.Tooltip label="AI Description">
+              <ui.Tooltip label="Personalised AI Guide">
                 <ui.Icon name="Sparkles" />
               </ui.Tooltip>
             </div>

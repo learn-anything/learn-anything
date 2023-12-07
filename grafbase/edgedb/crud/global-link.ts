@@ -72,10 +72,11 @@ export async function getGlobalLink(id: string) {
   return link
 }
 
-export async function updateGlobalLinkProgress(
+// TODO: maybe can be part of `updateGlobalLinkProgress` but keeping it like this for now
+export async function likeOrUnlikeGlobalLink(
   hankoId: string,
   globalLinkId: string,
-  action: "none" | "bookmark" | "inProgress" | "complete"
+  action: "like" | "unlike"
 ) {
   const foundUser = foundUserByHankoId(hankoId)
   const foundLink = e.select(e.GlobalLink, () => ({
@@ -83,7 +84,48 @@ export async function updateGlobalLinkProgress(
   }))
 
   switch (action) {
-    case "none":
+    case "unlike":
+      return e
+        .update(foundUser, () => ({
+          set: {
+            linksLiked: { "-=": foundLink }
+          }
+        }))
+        .run(client)
+    case "like":
+      return await e
+        .update(foundUser, (user) => ({
+          filter: e.op(
+            e.op(
+              e.op(user.memberUntil, ">", e.datetime_current()),
+              "??",
+              e.bool(false)
+            ),
+            "or",
+            e.op(user.linksTracked, "<", 10)
+          ),
+          set: {
+            linksLiked: { "+=": foundLink }
+          }
+        }))
+        .run(client)
+    default:
+      break
+  }
+}
+
+export async function updateGlobalLinkProgress(
+  hankoId: string,
+  globalLinkId: string,
+  action: "removeProgress" | "bookmark" | "inProgress" | "complete"
+) {
+  const foundUser = foundUserByHankoId(hankoId)
+  const foundLink = e.select(e.GlobalLink, () => ({
+    filter_single: { id: globalLinkId }
+  }))
+
+  switch (action) {
+    case "removeProgress":
       return e
         .update(foundUser, () => ({
           set: {
@@ -96,16 +138,16 @@ export async function updateGlobalLinkProgress(
     case "bookmark":
       return await e
         .update(foundUser, (user) => ({
-          set: {
-            filter: e.op(
-              e.op(
-                e.op(user.memberUntil, ">", e.datetime_current()),
-                "??",
-                e.bool(false)
-              ),
-              "or",
-              e.op(user.linksTracked, "<", 10)
+          filter: e.op(
+            e.op(
+              e.op(user.memberUntil, ">", e.datetime_current()),
+              "??",
+              e.bool(false)
             ),
+            "or",
+            e.op(user.linksTracked, "<", 10)
+          ),
+          set: {
             linksBookmarked: { "+=": foundLink },
             linksInProgress: { "-=": foundLink },
             linksCompleted: { "-=": foundLink }
@@ -115,16 +157,16 @@ export async function updateGlobalLinkProgress(
     case "inProgress":
       return e
         .update(foundUser, (user) => ({
-          set: {
-            filter: e.op(
-              e.op(
-                e.op(user.memberUntil, ">", e.datetime_current()),
-                "??",
-                e.bool(false)
-              ),
-              "or",
-              e.op(user.linksTracked, "<", 10)
+          filter: e.op(
+            e.op(
+              e.op(user.memberUntil, ">", e.datetime_current()),
+              "??",
+              e.bool(false)
             ),
+            "or",
+            e.op(user.linksTracked, "<", 10)
+          ),
+          set: {
             linksBookmarked: { "-=": foundLink },
             linksInProgress: { "+=": foundLink },
             linksCompleted: { "-=": foundLink }
@@ -134,16 +176,16 @@ export async function updateGlobalLinkProgress(
     case "complete":
       return e
         .update(foundUser, (user) => ({
-          set: {
-            filter: e.op(
-              e.op(
-                e.op(user.memberUntil, ">", e.datetime_current()),
-                "??",
-                e.bool(false)
-              ),
-              "or",
-              e.op(user.linksTracked, "<", 10)
+          filter: e.op(
+            e.op(
+              e.op(user.memberUntil, ">", e.datetime_current()),
+              "??",
+              e.bool(false)
             ),
+            "or",
+            e.op(user.linksTracked, "<", 10)
+          ),
+          set: {
             linksBookmarked: { "-=": foundLink },
             linksInProgress: { "-=": foundLink },
             linksCompleted: { "+=": foundLink }

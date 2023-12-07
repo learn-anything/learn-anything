@@ -3,7 +3,7 @@ import { createStore } from "solid-js/store"
 import { useLocation } from "solid-start"
 import { SearchResult } from "@la/shared/ui"
 import { MobiusType } from "../root"
-import { getHankoCookie } from "@la/shared/lib"
+import { getHankoCookie, parseResponse } from "@la/shared/lib"
 import { log } from "../lib/baselime"
 
 export type GlobalLink = {
@@ -11,18 +11,17 @@ export type GlobalLink = {
   title: string
   url: string
   protocol: string
-  description?: string
+  description: string | null
   year?: string | null
   liked?: boolean
   completed?: boolean
 }
 export type Section = {
-  summary: string
   title: string
+  summary: string | null
   links: GlobalLink[]
 }
 type LatestGlobalGuide = {
-  summary: string
   sections: Section[]
 }
 type GlobalNote = {
@@ -72,14 +71,15 @@ export default function createGlobalTopic(
     topicPath: "",
     topicSummary: "",
     latestGlobalGuide: {
-      summary: "",
       sections: []
     },
     links: [],
     notes: [{ content: "test" }],
     learningStatus: "",
-    likedLinkIds: [],
-    completedLinkIds: [],
+    linksBookmarkedIds: [],
+    linksInProgressIds: [],
+    linksCompletedIds: [],
+    linksLikedIds: [],
     verifiedTopic: false
   })
 
@@ -140,17 +140,16 @@ export default function createGlobalTopic(
           }
         }
       })
-
-      // @ts-ignore
-      const topicData = topic.data.publicGetGlobalTopic
-      // @ts-ignore
-      setGlobalTopic({
-        prettyName: topicData.prettyName,
-        topicSummary: topicData.topicSummary,
-        latestGlobalGuide: topicData.latestGlobalGuide,
-        links: topicData.links,
-        notesCount: topicData.notesCount
-      })
+      const [data] = parseResponse(topic)
+      if (data) {
+        setGlobalTopic({
+          prettyName: data.publicGetGlobalTopic.prettyName,
+          topicSummary: data.publicGetGlobalTopic.topicSummary,
+          latestGlobalGuide: data.publicGetGlobalTopic.latestGlobalGuide,
+          links: data.publicGetGlobalTopic.links,
+          notesCount: data.publicGetGlobalTopic.notesCount
+        })
+      }
     }
   })
 
@@ -188,7 +187,6 @@ export default function createGlobalTopic(
         prettyName: "",
         topicSummary: "",
         latestGlobalGuide: {
-          summary: "",
           sections: []
         },
         links: [],

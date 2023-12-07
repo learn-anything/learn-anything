@@ -434,8 +434,8 @@ export async function getGlobalTopicPublic(topicName: string) {
       // redditLink: true,
       latestGlobalGuide: {
         sections: {
-          title: true,
           summary: true,
+          title: true,
           links: {
             id: true,
             title: true,
@@ -456,7 +456,8 @@ export async function getGlobalTopicPublic(topicName: string) {
         title: true,
         url: true,
         year: true,
-        protocol: true
+        protocol: true,
+        description: true
       })),
       notesCount: e.count(
         e.select(e.GlobalNote, (gn) => ({
