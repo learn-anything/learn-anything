@@ -184,7 +184,7 @@ export default function Root() {
                             >
                               <ModalWithMessageAndButton
                                 message={
-                                  "As non member, you can only track learning status or like 10 links."
+                                  "As non member, you can only track status of 10 external links."
                                 }
                                 buttonText="Become member for unlimited access"
                                 buttonAction={async () => {

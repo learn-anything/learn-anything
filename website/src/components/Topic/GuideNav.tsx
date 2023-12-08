@@ -88,13 +88,7 @@ export default function GuideNav() {
             >
               GitHub
             </a>/ */}
-            <Show
-              when={
-                user.user.signedIn &&
-                user.user.member &&
-                location.pathname !== "/profile"
-              }
-            >
+            <Show when={user.user.signedIn && location.pathname !== "/profile"}>
               <A
                 class="cursor-pointer text-black dark:text-white"
                 href={`${
@@ -103,24 +97,6 @@ export default function GuideNav() {
               >
                 <ui.Icon name="UserProfile" />
               </A>
-            </Show>
-            <Show
-              when={
-                user.user.signedIn &&
-                !user.user.member &&
-                location.pathname !== "/profile"
-              }
-            >
-              <div
-                class="cursor-pointer text-black dark:text-white"
-                onClick={() => {
-                  global.setShowMemberOnlyModalWithMessage(
-                    "Profile page is available only for members as there are no free trial features yet (except ability to view 50% of topic guides). Lots of work is being done on making profile page and member features great."
-                  )
-                }}
-              >
-                <ui.Icon name="UserProfile" />
-              </div>
             </Show>
             <Show when={!user.user.signedIn}>
               <ui.FancyButton onClick={() => navigate("/auth")}>

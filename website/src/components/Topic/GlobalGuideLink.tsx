@@ -1,5 +1,5 @@
 import { ui } from "@la/shared"
-import { isSignedIn } from "@la/shared/lib"
+import { isSignedIn, parseResponse } from "@la/shared/lib"
 import clsx from "clsx"
 import { Show, createEffect, createSignal } from "solid-js"
 import { useNavigate } from "solid-start"
@@ -22,6 +22,8 @@ export default function GlobalGuideLink(props: Props) {
   const global = useGlobalState()
   const navigate = useNavigate()
   const [expandedLink, setExpandedLink] = createSignal(false)
+  const [linkStatusChanging, setLinkStatusChanging] = createSignal()
+
   createEffect(() => {
     let timeoutId: any
 
@@ -107,6 +109,7 @@ export default function GlobalGuideLink(props: Props) {
                 <div
                   onClick={async () => {
                     if (!isSignedIn(navigate)) return
+                    setLinkStatusChanging("Bookmark")
                     if (
                       topic.globalTopic.linksBookmarkedIds.includes(props.id)
                     ) {
@@ -126,24 +129,7 @@ export default function GlobalGuideLink(props: Props) {
                         }
                       })
                     } else {
-                      // TODO: there is better way to do this..
-                      topic.set("linksBookmarkedIds", [
-                        ...topic.globalTopic.linksBookmarkedIds,
-                        props.id
-                      ])
-                      topic.set(
-                        "linksInProgressIds",
-                        topic.globalTopic.linksInProgressIds.filter(
-                          (id) => id !== props.id
-                        )
-                      )
-                      topic.set(
-                        "linksCompletedIds",
-                        topic.globalTopic.linksCompletedIds.filter(
-                          (id) => id !== props.id
-                        )
-                      )
-                      await mobius.mutate({
+                      const res = await mobius.mutate({
                         updateGlobalLinkStatus: {
                           where: {
                             action: "bookmark",
@@ -152,7 +138,31 @@ export default function GlobalGuideLink(props: Props) {
                           select: true
                         }
                       })
+                      console.log(res, "res...")
+                      const [data, err] = parseResponse(res)
+                      console.log(data, "data")
+                      console.log(err, "err")
+                      if (data) {
+                        // TODO: there is better way to do this..
+                        topic.set("linksBookmarkedIds", [
+                          ...topic.globalTopic.linksBookmarkedIds,
+                          props.id
+                        ])
+                        topic.set(
+                          "linksInProgressIds",
+                          topic.globalTopic.linksInProgressIds.filter(
+                            (id) => id !== props.id
+                          )
+                        )
+                        topic.set(
+                          "linksCompletedIds",
+                          topic.globalTopic.linksCompletedIds.filter(
+                            (id) => id !== props.id
+                          )
+                        )
+                      }
                     }
+                    setLinkStatusChanging(null)
                   }}
                   class={clsx(
                     "sm:hidden animate-[iconSlide_0.8s_ease-out_forwards] cursor-pointer rounded-[4px] active:scale-[1.2] active:bg-blue-500 hover:[&>*]:scale-[0.9] transition-all h-[26px] w-[26px] border-light dark:border-dark",
@@ -160,15 +170,29 @@ export default function GlobalGuideLink(props: Props) {
                       "bg-blue-500 border-none transition-all !flex-center"
                   )}
                 >
-                  <ui.Icon
-                    name="Bookmark"
-                    fill="white"
-                    border={
-                      topic.globalTopic.linksBookmarkedIds.includes(props.id)
-                        ? "red"
-                        : "black"
+                  <Show
+                    when={linkStatusChanging() === "Bookmark"}
+                    fallback={
+                      <ui.Icon
+                        name="Bookmark"
+                        fill="white"
+                        border={
+                          topic.globalTopic.linksBookmarkedIds.includes(
+                            props.id
+                          )
+                            ? "red"
+                            : "black"
+                        }
+                      />
                     }
-                  />
+                  >
+                    <ui.Icon
+                      width="16"
+                      height="16"
+                      name="Loader"
+                      border="white"
+                    />
+                  </Show>
                 </div>
               </ui.ToolTip>
               <ui.ToolTip label="In Progress">
