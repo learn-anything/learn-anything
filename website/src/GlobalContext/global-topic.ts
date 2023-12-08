@@ -219,8 +219,6 @@ export default function createGlobalTopic(
         }
       })
       const [data] = parseResponse(res)
-      console.log(data, "data pls")
-      // return
       if (data) {
         // TODO: no idea why it thinks `linksBookmarkedIds` returns {}[]..
         setGlobalTopic({
