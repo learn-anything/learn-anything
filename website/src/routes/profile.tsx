@@ -9,6 +9,7 @@ import { ui } from "@la/shared"
 import GuideNav from "../components/Topic/GuideNav"
 import ProfileGuideLink from "../components/Topic/ProfileGlobalLink"
 import { useMobius } from "../root"
+import { useGlobalState } from "../GlobalContext/global"
 
 type NewLink = {
   url: string
@@ -96,7 +97,7 @@ const NewLinkModal = (props: {
 
   return (
     <ui.Modal onClose={props.onClose}>
-      <div class="w-3/4 relative z-50 h-1/2 rounded-lg dark:border-opacity-50 bg-white border-default dark:bg-neutral-900 flex-col justify-between gap-1 p-[20px] px-[24px]">
+      <div class="w-3/4 border-light dark:border-dark relative z-50 h-1/2 rounded-lg dark:border-opacity-50 bg-white border-default dark:bg-neutral-900 flex-col justify-between gap-1 p-[20px] px-[24px]">
         <div class="flex-col">
           <input
             type="text"
@@ -166,6 +167,7 @@ const NewLinkModal = (props: {
 export default function Profile() {
   const user = useUser()
   const mobius = useMobius()
+  const global = useGlobalState()
   const navigate = useNavigate()
   const [currentTab, setCurrentTab] = createSignal("Learning")
   const [showAddLinkModal, setShowAddLinkModal] = createSignal(false)
@@ -240,7 +242,7 @@ export default function Profile() {
           onClick={() => {
             setShowAddLinkModal(true)
           }}
-          class="fixed active:scale-[1.1] bottom-3 right-3 text-white bg-blue-600 px-4 p-2 rounded-full cursor-pointer"
+          class="fixed hover:scale-[1.1] active:scale-[0.8] transition-all bottom-3 right-3 text-white bg-blue-600 px-4 p-2 rounded-full cursor-pointer"
         >
           Add Link
         </div>
@@ -254,7 +256,7 @@ export default function Profile() {
           onClick={() => {
             setShowHelpModal(true)
           }}
-          class="fixed active:scale-[1.1] bottom-3 left-3 hover:border-none hover:text-white transition-all border-slate-400 border px-4 p-2 rounded-full cursor-pointer"
+          class="fixed hover:scale-[1.1] active:scale-[0.8] bottom-3 left-3  transition-all border-slate-400 border px-4 p-2 rounded-full cursor-pointer"
         >
           ?
         </div>
@@ -347,9 +349,9 @@ export default function Profile() {
                 <div
                   id="Learning"
                   class={clsx(
-                    "p-2 cursor-pointer border-b border-transparent",
+                    "p-2 cursor-pointer transition-all ",
                     currentTab() === "Learning" &&
-                      " border-black text-black dark:text-white dark:border-white font-bold"
+                      " border-black border-b  text-black dark:text-white dark:border-white font-bold"
                   )}
                   onClick={() => {
                     setCurrentTab("Learning")
@@ -360,9 +362,9 @@ export default function Profile() {
                 <div
                   id="ToLearn"
                   class={clsx(
-                    "p-2 cursor-pointer border-b border-transparent",
+                    "p-2 cursor-pointer  transition-all ",
                     currentTab() === "ToLearn" &&
-                      " border-black text-black dark:text-white dark:border-white font-bold"
+                      " border-black border-b  text-black dark:text-white dark:border-white font-bold"
                   )}
                   onClick={() => {
                     setCurrentTab("ToLearn")
@@ -373,9 +375,9 @@ export default function Profile() {
                 <div
                   id="Learned"
                   class={clsx(
-                    "p-2 cursor-pointer border-b border-transparent",
+                    "p-2 cursor-pointer transition-all ",
                     currentTab() === "Learned" &&
-                      " border-black text-black dark:text-white dark:border-white font-bold"
+                      " border-black border-b  text-black dark:text-white dark:border-white font-bold"
                   )}
                   onClick={() => {
                     setCurrentTab("Learned")
@@ -386,9 +388,9 @@ export default function Profile() {
                 <div
                   id="Links"
                   class={clsx(
-                    "p-2 cursor-pointer border-b border-transparent",
+                    "p-2 cursor-pointer  transition-all ",
                     currentTab() === "Links" &&
-                      " border-black text-black dark:text-white dark:border-white font-bold"
+                      " border-black border-b text-black dark:text-white dark:border-white font-bold"
                   )}
                   onClick={() => {
                     setCurrentTab("Links")
@@ -449,12 +451,17 @@ export default function Profile() {
                     </div>
                   </Show>
                   <div
-                    class="cursor-pointer"
+                    class="cursor-pointer px-2 opacity-50 hover:opacity-100 transition-all"
                     onClick={() => {
                       setShowFilter(!showFilter())
                     }}
                   >
-                    <ui.Icon name="Filter"></ui.Icon>
+                    <ui.Icon
+                      name="Filter"
+                      border={
+                        global.state.theme === "light" ? "black" : "white"
+                      }
+                    ></ui.Icon>
                   </div>
                 </div>
               </Show>

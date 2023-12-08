@@ -11,7 +11,7 @@ export const icons = {
   Filter: (props): s.JSXElement => (
     <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
       <path
-        stroke="currentColor"
+        stroke={props.border ? props.border : "currentColor"}
         stroke-linecap="round"
         stroke-linejoin="round"
         stroke-width="1.5"
