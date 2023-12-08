@@ -138,10 +138,7 @@ export default function GlobalGuideLink(props: Props) {
                           select: true
                         }
                       })
-                      console.log(res, "res...")
-                      const [data, err] = parseResponse(res)
-                      console.log(data, "data")
-                      console.log(err, "err")
+                      const [data] = parseResponse(res)
                       if (data) {
                         // TODO: there is better way to do this..
                         topic.set("linksBookmarkedIds", [

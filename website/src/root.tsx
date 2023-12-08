@@ -1,6 +1,7 @@
 // @refresh reload
 // @ts-ignore
 import { getHankoCookie, grafbaseTypeDefs } from "@la/shared/lib"
+import toast, { Toaster } from "solid-toast"
 import { ModalWithMessageAndButton } from "@la/shared/ui"
 import { DragDropProvider, DragDropSensors } from "@thisbeyond/solid-dnd"
 import Mobius from "graphql-mobius"
@@ -99,6 +100,8 @@ export default function Root() {
       global.set("showModal", "cannot-update-topic-learning-status")
     } else if (error.includes("cannot-update-global-link-status")) {
       global.set("showModal", "cannot-update-global-link-status")
+    } else {
+      toast.error(JSON.parse(error).message)
     }
   }
   const mobius = createMobius(
@@ -196,6 +199,7 @@ export default function Root() {
                                 }}
                               />
                             </Show>
+                            <Toaster />
                           </DragDropSensors>
                         </DragDropProvider>
                       </GlobalTopicProvider>
