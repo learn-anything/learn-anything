@@ -110,7 +110,6 @@ export default function GlobalGuideLink(props: Props) {
                   onClick={async () => {
                     if (!isSignedIn(navigate)) return
                     setLinkStatusChanging("Bookmark")
-                    return
                     if (
                       topic.globalTopic.linksBookmarkedIds.includes(props.id)
                     ) {
@@ -199,6 +198,7 @@ export default function GlobalGuideLink(props: Props) {
                 <div
                   onClick={async () => {
                     if (!isSignedIn(navigate)) return
+                    setLinkStatusChanging("InProgress")
                     if (
                       topic.globalTopic.linksInProgressIds.includes(props.id)
                     ) {
@@ -245,6 +245,7 @@ export default function GlobalGuideLink(props: Props) {
                         }
                       })
                     }
+                    setLinkStatusChanging(null)
                   }}
                   class={clsx(
                     "sm:hidden cursor-pointer animate-[iconSlide_0.6s_ease-out_forwards] rounded-[4px] active:bg-blue-500 hover:opacity-50 transition-all h-[26px] w-[26px] border-light dark:border-dark ",
@@ -252,21 +253,38 @@ export default function GlobalGuideLink(props: Props) {
                       "bg-blue-500 border-none transition-all !flex-center"
                   )}
                 >
-                  <ui.Icon
-                    name="Hourglass"
-                    fill="white"
-                    border={
-                      topic.globalTopic.linksInProgressIds.includes(props.id)
-                        ? "red"
-                        : "black"
+                  <Show
+                    when={linkStatusChanging() === "InProgress"}
+                    fallback={
+                      <ui.Icon
+                        name="Hourglass"
+                        fill="white"
+                        border={
+                          topic.globalTopic.linksInProgressIds.includes(
+                            props.id
+                          )
+                            ? "red"
+                            : "black"
+                        }
+                      />
                     }
-                  />
+                  >
+                    <div class="flex-center w-full h-full">
+                      <ui.Icon
+                        width="16"
+                        height="16"
+                        name="Loader"
+                        border="white"
+                      />
+                    </div>
+                  </Show>
                 </div>
               </ui.ToolTip>
               <ui.ToolTip label="Completed">
                 <div
                   onClick={async () => {
                     if (!isSignedIn(navigate)) return
+                    setLinkStatusChanging("Completed")
                     if (
                       topic.globalTopic.linksCompletedIds.includes(props.id)
                     ) {
@@ -313,6 +331,7 @@ export default function GlobalGuideLink(props: Props) {
                         }
                       })
                     }
+                    setLinkStatusChanging(null)
                   }}
                   class={clsx(
                     "sm:hidden cursor-pointer rounded-[4px] animate-[iconSlide_0.4s_ease-out_forwards] active:scale-[1.2] active:bg-blue-500 hover:[&>*]:scale-[0.9] transition-all h-[26px] w-[26px] border-light dark:border-dark",
@@ -320,26 +339,41 @@ export default function GlobalGuideLink(props: Props) {
                       "bg-blue-500 bg-opacity border-none !flex-center"
                   )}
                 >
-                  <ui.Icon
-                    name="Checkmark"
-                    border={
-                      topic.globalTopic.linksCompletedIds.includes(props.id)
-                        ? global.state.theme === "light"
-                          ? "black"
-                          : "white"
-                        : global.state.theme === "dark"
-                          ? "white"
-                          : "black"
+                  <Show
+                    when={linkStatusChanging() === "Completed"}
+                    fallback={
+                      <ui.Icon
+                        name="Checkmark"
+                        border={
+                          topic.globalTopic.linksCompletedIds.includes(props.id)
+                            ? global.state.theme === "light"
+                              ? "black"
+                              : "white"
+                            : global.state.theme === "dark"
+                              ? "white"
+                              : "black"
+                        }
+                        width="24"
+                        height="24"
+                      />
                     }
-                    width="24"
-                    height="24"
-                  />
+                  >
+                    <div class="flex-center w-full h-full">
+                      <ui.Icon
+                        width="16"
+                        height="16"
+                        name="Loader"
+                        border="white"
+                      />
+                    </div>
+                  </Show>
                 </div>
               </ui.ToolTip>
               <ui.ToolTip label="Liked">
                 <div
                   onClick={async () => {
                     if (!isSignedIn(navigate)) return
+                    setLinkStatusChanging("Liked")
                     if (topic.globalTopic.linksLikedIds.includes(props.id)) {
                       topic.set(
                         "linksLikedIds",
@@ -371,6 +405,7 @@ export default function GlobalGuideLink(props: Props) {
                         }
                       })
                     }
+                    setLinkStatusChanging(null)
                   }}
                   class={clsx(
                     "sm:hidden cursor-pointer rounded-[4px] animate-[iconSlide_0.2s_ease-out_forwards] hover:opacity-50 transition-all h-[26px] w-[26px] border-light dark:border-dark",
@@ -378,15 +413,29 @@ export default function GlobalGuideLink(props: Props) {
                       "bg-red-500 border-none transition-all !flex-center"
                   )}
                 >
-                  <ui.Icon
-                    name="Heart"
-                    fill="white"
-                    border={
-                      topic.globalTopic.linksLikedIds.includes(props.id)
-                        ? "red"
-                        : "black"
+                  <Show
+                    when={linkStatusChanging() === "Liked"}
+                    fallback={
+                      <ui.Icon
+                        name="Heart"
+                        fill="white"
+                        border={
+                          topic.globalTopic.linksLikedIds.includes(props.id)
+                            ? "red"
+                            : "black"
+                        }
+                      />
                     }
-                  />
+                  >
+                    <div class="flex-center w-full h-full">
+                      <ui.Icon
+                        width="16"
+                        height="16"
+                        name="Loader"
+                        border="white"
+                      />
+                    </div>
+                  </Show>
                 </div>
               </ui.ToolTip>
             </div>
