@@ -110,6 +110,7 @@ export default function GlobalGuideLink(props: Props) {
                   onClick={async () => {
                     if (!isSignedIn(navigate)) return
                     setLinkStatusChanging("Bookmark")
+                    return
                     if (
                       topic.globalTopic.linksBookmarkedIds.includes(props.id)
                     ) {
@@ -183,12 +184,14 @@ export default function GlobalGuideLink(props: Props) {
                       />
                     }
                   >
-                    <ui.Icon
-                      width="16"
-                      height="16"
-                      name="Loader"
-                      border="white"
-                    />
+                    <div class="flex-center w-full h-full">
+                      <ui.Icon
+                        width="16"
+                        height="16"
+                        name="Loader"
+                        border="white"
+                      />
+                    </div>
                   </Show>
                 </div>
               </ui.ToolTip>

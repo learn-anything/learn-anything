@@ -3,8 +3,6 @@ import { GraphQLError } from "graphql"
 import { getTopicsLearned } from "../edgedb/crud/user"
 import { hankoIdFromToken } from "../lib/hanko-validate"
 
-// TODO:
-// @ts-ignore
 const getTopicsLearnedResolver: Resolver["Query.getTopicsLearned"] = async (
   parent,
   args,
@@ -15,6 +13,7 @@ const getTopicsLearnedResolver: Resolver["Query.getTopicsLearned"] = async (
     const hankoId = await hankoIdFromToken(context)
     if (hankoId) {
       const topics = await getTopicsLearned(hankoId)
+      console.log(topics, "topics")
       return topics
     } else {
       throw new GraphQLError("Missing or invalid Authorization header")

@@ -48,10 +48,6 @@ module default {
     # links user has liked
     multi linksLiked: GlobalLink;
     property linksTracked := count(.linksBookmarked) + count(.linksInProgress) + count(.linksCompleted) + count(.linksLiked);
-    # personal links user has added
-    multi personalLinks: PersonalLink {
-      on target delete allow;
-    };
     # links user has disliked (not used currently)
     multi dislikedLinks: GlobalLink;
     # notes user has liked
@@ -141,8 +137,7 @@ module default {
     # TODO: there should probably be a GlobalNote and PersonalNote
     # all notes belonging to this topic
     multi link notes := .<topic[is Note];
-    # all links belonging to this topic
-    # TODO: should probably be PersonalLink, not Link (need to check properly)
+    # all links belonging to this topic (TODO: think through how best do it with GlobalLink)
     multi link links := .<topic[is Link];
     # parent topic if there is one
     parentTopic: Topic;
@@ -241,21 +236,6 @@ module default {
     multi relatedLinks: RelatedLink;
     # connected topics for this link
     multi link links := .<globalLink[is Link];
-  }
-  type PersonalLink {
-    # nice title from url
-    required title: str;
-    # unique url of the link (without protocol)
-    required url: str {
-      constraint exclusive;
-    };
-    # http / https
-    required protocol: str;
-    # link description
-    description: str;
-    year: str;
-    # optionally have a main topic that personal link belongs to
-    link mainTopic: GlobalTopic;
   }
   type GlobalNote {
     required content: str;

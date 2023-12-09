@@ -171,9 +171,9 @@ export function createUserState(mobius: MobiusType) {
     const topicsLearned = res?.data?.getTopicsLearned
     // @ts-ignore
     const links = res?.data?.getLikedLinks
-    const likedLinks = links.likedLinks
-    const completedLinks = links.completedLinks
-    const personalLinks = links.personalLinks
+    const likedLinks = links?.likedLinks
+    const completedLinks = links?.completedLinks
+    const personalLinks = links?.personalLinks
     setUser({
       topicsToLearn: topicsLearned.topicsToLearn,
       topicsToLearning: topicsLearned.topicsLearning,

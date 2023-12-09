@@ -151,13 +151,14 @@ export async function getAllLikedLinks(hankoId: string) {
 export async function getTopicsLearned(hankoId: string) {
   return await e
     .select(e.User, (user) => ({
-      filter_single: e.all(
-        e.set(
-          e.op(user.hankoId, "=", hankoId),
-          e.op("exists", user.memberUntil),
-          e.op(user.memberUntil, ">", e.datetime_current())
-        )
-      ),
+      filter_single: e.op(user.hankoId, "=", hankoId),
+      // filter_single: e.all(
+      //   e.set(
+      //     e.op(user.hankoId, "=", hankoId),
+      //     e.op("exists", user.memberUntil),
+      //     e.op(user.memberUntil, ">", e.datetime_current())
+      //   )
+      // ),
       topicsToLearn: {
         name: true,
         prettyName: true,

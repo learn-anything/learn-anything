@@ -3,9 +3,7 @@ import { GraphQLError } from "graphql"
 import { getAllLikedLinks } from "../edgedb/crud/user"
 import { hankoIdFromToken } from "../lib/hanko-validate"
 
-// TODO:
-// @ts-ignore
-const getLikedLinksResolver: Resolver["Query.getLikedLinks"] = async (
+const getAllLinksResolver: Resolver["Query.getLikedLinks"] = async (
   parent,
   args,
   context,
@@ -14,7 +12,9 @@ const getLikedLinksResolver: Resolver["Query.getLikedLinks"] = async (
   try {
     const hankoId = await hankoIdFromToken(context)
     if (hankoId) {
-      return await getAllLikedLinks(hankoId)
+      const links = await getAllLikedLinks(hankoId)
+      console.log(links, "links")
+      return links
     } else {
       throw new GraphQLError("Missing or invalid Authorization header")
     }
@@ -24,4 +24,4 @@ const getLikedLinksResolver: Resolver["Query.getLikedLinks"] = async (
   }
 }
 
-export default getLikedLinksResolver
+export default getAllLinksResolver

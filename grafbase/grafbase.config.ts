@@ -124,40 +124,17 @@ g.query("getNotesForGlobalTopic", {
   resolver: "getNotesForGlobalTopic"
 })
 
-g.query("getLikedLinks", {
+g.query("getAllLinks", {
   args: {},
   returns: g.ref(
-    g.type("outputOfGetLikedLinks", {
-      likedLinks: g
-        .ref(
-          g.type("LikedLink", {
-            id: g.string(),
-            title: g.string(),
-            url: g.string()
-          })
-        )
-        .list(),
-      completedLinks: g
-        .ref(
-          g.type("CompletedLink", {
-            id: g.string(),
-            title: g.string(),
-            url: g.string()
-          })
-        )
-        .list(),
-      personalLinks: g
-        .ref(
-          g.type("PersonalLink", {
-            id: g.string(),
-            title: g.string(),
-            url: g.string()
-          })
-        )
-        .list()
+    g.type("outputOfGetAllLinks", {
+      linksBookmarked: g.ref(GlobalLink).list(),
+      linksInProgress: g.ref(GlobalLink).list(),
+      linksCompleted: g.ref(GlobalLink).list(),
+      linksLiked: g.ref(GlobalLink).list()
     })
   ),
-  resolver: "getLikedLinks"
+  resolver: "getAllLinks"
 })
 
 const topicToLearn = g.type("topicToLearn", {

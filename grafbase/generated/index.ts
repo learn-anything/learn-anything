@@ -84,29 +84,12 @@ export type Schema = {
     content: string;
     url: string | null;
   };
-  'LikedLink': {
-    __typename?: 'LikedLink';
-    id: string;
-    title: string;
-    url: string;
-  };
-  'CompletedLink': {
-    __typename?: 'CompletedLink';
-    id: string;
-    title: string;
-    url: string;
-  };
-  'PersonalLink': {
-    __typename?: 'PersonalLink';
-    id: string;
-    title: string;
-    url: string;
-  };
-  'outputOfGetLikedLinks': {
-    __typename?: 'outputOfGetLikedLinks';
-    likedLinks?: Array<Schema['LikedLink']>;
-    completedLinks?: Array<Schema['CompletedLink']>;
-    personalLinks?: Array<Schema['PersonalLink']>;
+  'outputOfGetAllLinks': {
+    __typename?: 'outputOfGetAllLinks';
+    linksBookmarked?: Array<Schema['GlobalLink']>;
+    linksInProgress?: Array<Schema['GlobalLink']>;
+    linksCompleted?: Array<Schema['GlobalLink']>;
+    linksLiked?: Array<Schema['GlobalLink']>;
   };
   'topicToLearn': {
     __typename?: 'topicToLearn';
@@ -155,7 +138,7 @@ export type Schema = {
     getUserDetails?: Schema['getUserDetailsOutput'];
     getPricingUserDetails?: Schema['getPricingUserDetailsOutput'];
     getNotesForGlobalTopic?: Array<Schema['globalNote']>;
-    getLikedLinks?: Schema['outputOfGetLikedLinks'];
+    getAllLinks?: Schema['outputOfGetAllLinks'];
     getTopicsLearned?: Schema['getTopicsLearnedOutput'];
     getGlobalLink?: Schema['publicGetGlobalLinkOutput'];
     getGlobalTopic?: Schema['getGlobalTopicOutput'];
@@ -194,7 +177,7 @@ export type Resolver = {
   'Query.getUserDetails': ResolverFn<Schema['Query'], {  }, Schema['getUserDetailsOutput']>
   'Query.getPricingUserDetails': ResolverFn<Schema['Query'], {  }, Schema['getPricingUserDetailsOutput']>
   'Query.getNotesForGlobalTopic': ResolverFn<Schema['Query'], { topicName: string,  }, Array<Schema['globalNote']>>
-  'Query.getLikedLinks': ResolverFn<Schema['Query'], {  }, Schema['outputOfGetLikedLinks']>
+  'Query.getAllLinks': ResolverFn<Schema['Query'], {  }, Schema['outputOfGetAllLinks']>
   'Query.getTopicsLearned': ResolverFn<Schema['Query'], {  }, Schema['getTopicsLearnedOutput']>
   'Query.getGlobalLink': ResolverFn<Schema['Query'], { linkId: string,  }, Schema['publicGetGlobalLinkOutput']>
   'Query.getGlobalTopic': ResolverFn<Schema['Query'], { topicName: string,  }, Schema['getGlobalTopicOutput']>
