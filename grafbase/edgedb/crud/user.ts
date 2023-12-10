@@ -110,6 +110,59 @@ export async function getLearningStatus(topicName: string, hankoId: string) {
   return res
 }
 
+export async function getAllLinks(hankoId: string) {
+  return await e
+    .select(e.User, (user) => ({
+      filter_single: e.op(user.hankoId, "=", hankoId),
+      linksBookmarked: {
+        id: true,
+        title: true,
+        url: true,
+        year: true,
+        protocol: true,
+        description: true,
+        mainTopic: {
+          name: true,
+          prettyName: true
+        }
+      },
+      linksInProgress: {
+        id: true,
+        title: true,
+        url: true,
+        year: true,
+        protocol: true,
+        description: true,
+        mainTopic: {
+          name: true,
+          prettyName: true
+        }
+      },
+      linksCompleted: {
+        id: true,
+        title: true,
+        url: true,
+        year: true,
+        protocol: true,
+        description: true,
+        mainTopic: {
+          name: true,
+          prettyName: true
+        }
+      },
+      linksLiked: {
+        id: true,
+        title: true,
+        url: true,
+        mainTopic: {
+          name: true,
+          prettyName: true
+        }
+      }
+    }))
+    .run(client)
+}
+
 export async function getAllLikedLinks(hankoId: string) {
   return await e
     .select(e.User, (user) => ({

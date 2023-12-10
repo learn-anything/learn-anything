@@ -1,9 +1,4 @@
 export const grafbaseTypeDefs = `
-type CompletedLink {
-  id: String!
-  title: String!
-  url: String!
-}
 type GlobalLink {
   id: String!
   title: String!
@@ -11,11 +6,11 @@ type GlobalLink {
   year: String
   protocol: String!
   description: String
+  mainTopic: MainTopicWithTitleAndPrettyName!
 }
-type LikedLink {
-  id: String!
-  title: String!
-  url: String!
+type MainTopicWithTitleAndPrettyName {
+  name: String!
+  prettyName: String!
 }
 type Mutation {
   createUser(email: String!): String!
@@ -23,7 +18,6 @@ type Mutation {
   createProduct(name: String!, description: String, imageUrl: String, websiteUrl: String, priceInUsdCents: Int): String!
   deletePersonalLink(personalLinkId: String!): String!
   updateTopicLearningStatus(learningStatus: learningStatus!, topicName: String!, verifiedTopic: Boolean!): String!
-  updateLinkStatusResolver(linkId: String!, action: linkAction!): String!
   updateGlobalLinkStatus(action: globalLinkAction!, globalLinkId: String!): String!
   addPersonalLink(title: String!, url: String!, description: String): String!
   cancelStripe: String!
@@ -34,11 +28,6 @@ type Mutation {
   internalUpdateLatestGlobalGuide(topicName: String!, topicSummary: String!, sections: [section!]!): String!
   internalAddGlobalLinkToSection(linkUrl: String!, topicName: String!, sectionName: String!): String!
 }
-type PersonalLink {
-  id: String!
-  title: String!
-  url: String!
-}
 type Query {
   publicGetTopicsWithConnections: [publicGetTopicsWithConnectionsOutput!]!
   publicGetGlobalTopics: [publicGetGlobalTopicsOutput!]!
@@ -47,7 +36,7 @@ type Query {
   getUserDetails: getUserDetailsOutput!
   getPricingUserDetails: getPricingUserDetailsOutput!
   getNotesForGlobalTopic(topicName: String!): [globalNote!]!
-  getLikedLinks: outputOfGetLikedLinks!
+  getAllLinks: outputOfGetAllLinks!
   getTopicsLearned: getTopicsLearnedOutput!
   getGlobalLink(linkId: String!): publicGetGlobalLinkOutput!
   getGlobalTopic(topicName: String!): getGlobalTopicOutput!
@@ -94,10 +83,11 @@ type globalNote {
 type latestGlobalGuide {
   sections: [globalGuideSection!]!
 }
-type outputOfGetLikedLinks {
-  likedLinks: [LikedLink!]!
-  completedLinks: [CompletedLink!]!
-  personalLinks: [PersonalLink!]!
+type outputOfGetAllLinks {
+  linksBookmarked: [GlobalLink!]!
+  linksInProgress: [GlobalLink!]!
+  linksCompleted: [GlobalLink!]!
+  linksLiked: [GlobalLink!]!
 }
 type publicGetGlobalLinkOutput {
   title: String!
@@ -150,12 +140,6 @@ enum learningStatus {
   learning
   learned
   none
-}
-enum linkAction {
-  like
-  unlike
-  complete
-  uncomplete
 }
 input section {
   title: String!

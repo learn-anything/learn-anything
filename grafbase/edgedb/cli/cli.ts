@@ -1,4 +1,4 @@
-import { getTopicsLearned } from "../crud/user"
+import { getAllLinks } from "../crud/user"
 
 async function main() {
   const hankoId = process.env.LOCAL_USER_HANKO_ID!
@@ -7,8 +7,8 @@ async function main() {
   //   "727a00a8-45e9-11ee-aedd-ab0e6a0e65eb",
   //   "like"
   // )
-  // const res = await getAllLikedLinks(hankoId)
-  const res = await getTopicsLearned(hankoId)
+  const res = await getAllLinks(hankoId)
+  // const res = await getTopicsLearned(hankoId)
   console.log(res)
   // const res = await getGlobalTopicDetails("physics", hankoId)
   // const res = await updateGlobalLinkProgress(

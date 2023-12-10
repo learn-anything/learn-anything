@@ -149,33 +149,36 @@ export function createUserState(mobius: MobiusType) {
           verified: true
         }
       },
-      getLikedLinks: {
-        likedLinks: {
+      getAllLinks: {
+        linksBookmarked: {
           id: true,
           title: true,
           url: true
         },
-        completedLinks: {
+        linksInProgress: {
           id: true,
           title: true,
           url: true
         },
-        personalLinks: {
+        linksCompleted: {
+          id: true,
+          title: true,
+          url: true
+        },
+        linksLiked: {
           id: true,
           title: true,
           url: true
         }
       }
     })
-    // @ts-ignore
-    const topicsLearned = res?.data?.getTopicsLearned
-    // @ts-ignore
-    const links = res?.data?.getLikedLinks
-    const likedLinks = links?.likedLinks
-    const completedLinks = links?.completedLinks
-    const personalLinks = links?.personalLinks
+    const [data] = parseResponse(res)
+    console.log(data, "data")
+    return
     setUser({
+      // @ts-ignore
       topicsToLearn: topicsLearned.topicsToLearn,
+      // @ts-ignore
       topicsToLearning: topicsLearned.topicsLearning,
       topicsLearned: topicsLearned.topicsLearned,
       likedLinks: likedLinks,

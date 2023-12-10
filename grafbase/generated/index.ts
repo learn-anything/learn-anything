@@ -42,6 +42,11 @@ export type Schema = {
     public: boolean;
     topicPath: string;
   };
+  'MainTopicWithTitleAndPrettyName': {
+    __typename?: 'MainTopicWithTitleAndPrettyName';
+    name: string;
+    prettyName: string;
+  };
   'GlobalLink': {
     __typename?: 'GlobalLink';
     id: string;
@@ -50,6 +55,7 @@ export type Schema = {
     year: string | null;
     protocol: string;
     description: string | null;
+    mainTopic?: Schema['MainTopicWithTitleAndPrettyName'];
   };
   'globalGuideSection': {
     __typename?: 'globalGuideSection';

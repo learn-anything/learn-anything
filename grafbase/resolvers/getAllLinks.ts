@@ -1,9 +1,9 @@
 import { Resolver } from "@grafbase/generated"
 import { GraphQLError } from "graphql"
-import { getAllLikedLinks } from "../edgedb/crud/user"
+import { getAllLinks } from "../edgedb/crud/user"
 import { hankoIdFromToken } from "../lib/hanko-validate"
 
-const getAllLinksResolver: Resolver["Query.getLikedLinks"] = async (
+const getAllLinksResolver: Resolver["Query.getAllLinks"] = async (
   parent,
   args,
   context,
@@ -12,7 +12,7 @@ const getAllLinksResolver: Resolver["Query.getLikedLinks"] = async (
   try {
     const hankoId = await hankoIdFromToken(context)
     if (hankoId) {
-      const links = await getAllLikedLinks(hankoId)
+      const links = await getAllLinks(hankoId)
       console.log(links, "links")
       return links
     } else {

@@ -61,13 +61,22 @@ g.query("publicGetPersonalTopic", {
   resolver: "public/getPersonalTopic"
 })
 
+const MainTopicWithTitleAndPrettyName = g.type(
+  "MainTopicWithTitleAndPrettyName",
+  {
+    name: g.string(),
+    prettyName: g.string()
+  }
+)
+
 const GlobalLink = g.type("GlobalLink", {
   id: g.string(),
   title: g.string(),
   url: g.string(),
   year: g.string().optional(),
   protocol: g.string(),
-  description: g.string().optional()
+  description: g.string().optional(),
+  mainTopic: g.ref(MainTopicWithTitleAndPrettyName)
 })
 const globalGuideSection = g.type("globalGuideSection", {
   summary: g.string().optional(),
