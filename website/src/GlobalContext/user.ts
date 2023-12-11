@@ -31,16 +31,16 @@ type User = {
   signedIn: boolean | undefined
   member: boolean | undefined
   admin: boolean | undefined
-  topicsToLearn: Topic[]
-  topicsToLearning: Topic[]
-  topicsLearned: Topic[]
-  likedLinks: Link[]
-  completedLinks: Link[]
-  personalLinks: Link[]
-  globalLinks: Link[]
   stripePlan?: string
   memberUntil?: string
   subscriptionStopped?: boolean
+  topicsLearning: Topic[]
+  topicsToLearn: Topic[]
+  topicsLearned: Topic[]
+  linksBookmarked?: Link[]
+  linksInProgress?: Link[]
+  linksCompleted?: Link[]
+  linksLiked?: Link[]
 }
 
 // global state of user
@@ -52,26 +52,23 @@ export function createUserState(mobius: MobiusType) {
     member: undefined,
     admin: undefined,
     topicsToLearn: [],
-    topicsToLearning: [],
+    topicsLearning: [],
     topicsLearned: [],
-    likedLinks: [],
-    personalLinks: [],
-    completedLinks: [],
-    globalLinks: [],
+    linksLiked: [],
     stripePlan: "",
     subscriptionStopped: true
   })
 
-  createMemo(() => {
-    const combinedLinks = [...user.likedLinks, ...user.completedLinks]
-    const uniqueLinks = Array.from(
-      new Set(combinedLinks.map((link) => link.id))
-    )
-      .map((id) => combinedLinks.find((link) => link.id === id))
-      .filter((link): link is Link => link !== undefined)
+  // createMemo(() => {
+  //   const combinedLinks = [...user.likedLinks, ...user.completedLinks]
+  //   const uniqueLinks = Array.from(
+  //     new Set(combinedLinks.map((link) => link.id))
+  //   )
+  //     .map((id) => combinedLinks.find((link) => link.id === id))
+  //     .filter((link): link is Link => link !== undefined)
 
-    setUser("globalLinks", uniqueLinks)
-  })
+  //   setUser("globalLinks", uniqueLinks)
+  // })
 
   onMount(async () => {
     // if (location.pathname === "/") return
@@ -106,11 +103,11 @@ export function createUserState(mobius: MobiusType) {
     }
   })
 
-  const likedLinksSearch = createMemo(() => {
-    return [...user.likedLinks, ...user.personalLinks].map((link) => ({
-      name: link.title
-    }))
-  })
+  // const likedLinksSearch = createMemo(() => {
+  //   return [...user.likedLinks, ...user.personalLinks].map((link) => ({
+  //     name: link.title
+  //   }))
+  // })
 
   const location = useLocation()
   createEffect(async () => {
@@ -173,17 +170,14 @@ export function createUserState(mobius: MobiusType) {
       }
     })
     const [data] = parseResponse(res)
-    console.log(data, "data")
-    return
     setUser({
-      // @ts-ignore
-      topicsToLearn: topicsLearned.topicsToLearn,
-      // @ts-ignore
-      topicsToLearning: topicsLearned.topicsLearning,
-      topicsLearned: topicsLearned.topicsLearned,
-      likedLinks: likedLinks,
-      completedLinks: completedLinks,
-      personalLinks: personalLinks
+      topicsLearning: data?.getTopicsLearned.topicsLearning,
+      topicsToLearn: data?.getTopicsLearned.topicsToLearn,
+      topicsLearned: data?.getTopicsLearned.topicsLearned,
+      linksBookmarked: data?.getAllLinks.linksBookmarked,
+      linksInProgress: data?.getAllLinks.linksInProgress,
+      linksCompleted: data?.getAllLinks.linksCompleted,
+      linksLiked: data?.getAllLinks.linksLiked
     })
   })
 
@@ -195,8 +189,8 @@ export function createUserState(mobius: MobiusType) {
     },
     setSignedIn: (state: boolean) => {
       return setUser({ signedIn: state })
-    },
-    likedLinksSearch
+    }
+    // likedLinksSearch
   } as const
 }
 

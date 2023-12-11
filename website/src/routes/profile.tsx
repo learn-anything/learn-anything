@@ -1,15 +1,23 @@
+import { ui } from "@la/shared"
 import { autofocus } from "@solid-primitives/autofocus"
 import * as scheduled from "@solid-primitives/scheduled"
 import clsx from "clsx"
-import { For, Match, Show, Switch, createSignal, onMount } from "solid-js"
+import {
+  For,
+  Match,
+  Show,
+  Switch,
+  createEffect,
+  createSignal,
+  onMount
+} from "solid-js"
 import { A, useNavigate } from "solid-start"
 import toast, { Toaster } from "solid-toast"
+import { useGlobalState } from "../GlobalContext/global"
 import { useUser } from "../GlobalContext/user"
-import { ui } from "@la/shared"
 import GuideNav from "../components/Topic/GuideNav"
 import ProfileGuideLink from "../components/Topic/ProfileGlobalLink"
 import { useMobius } from "../root"
-import { useGlobalState } from "../GlobalContext/global"
 
 type NewLink = {
   url: string
@@ -196,6 +204,10 @@ export default function Profile() {
     }
   })
 
+  createEffect(() => {
+    console.log(user.user, "user")
+  })
+
   // TODO: add ability to choose username (as member only)
   // see a list of all links/topics you've added etc.
   // essentially your user profile
@@ -320,30 +332,29 @@ export default function Profile() {
         </Show>
         <div id="ProfileMain" class="h-full w-full flex justify-center">
           <div id="ProfileInfo" class="h-full flex gap-6 flex-col p-[40px]">
-            {(() => {
+            {/* {(() => {
               const search_state = ui.createSearchState({
                 searchResults: user.likedLinksSearch,
                 onSelect({ name }) {
-                  let foundLink = user.user.likedLinks.find(
-                    (l) => l.title === name
-                  )
-                  if (!foundLink) {
-                    foundLink = user.user.personalLinks.find(
-                      (l) => l.title === name
-                    )
-                  }
+                  // let foundLink = user.user.likedLinks.find(
+                  //   (l) => l.title === name
+                  // )
+                  // if (!foundLink) {
+                  //   foundLink = user.user.personalLinks.find(
+                  //     (l) => l.title === name
+                  //   )
+                  // }
                   // TODO: temp hack, get protocol with all the links and use that (https should work often though for now)
-                  window.location.href = `https://${foundLink?.url}`
+                  // window.location.href = `https://${foundLink?.url}`
                 }
               })
-
               return (
                 <ui.Search
                   placeholder={"Search liked and added links"}
                   state={search_state}
                 />
               )
-            })()}
+            })()} */}
             <div class="flex justify-between items-center text-[#696969] ">
               <div class="w-full flex text-[#696969] text-[14px] gap-4">
                 <div
@@ -471,6 +482,8 @@ export default function Profile() {
                 <div class="flex gap-3 flex-col">
                   <For each={user.user.topicsToLearn}>
                     {(topic) => {
+                      console.log(user.user.topicsToLearn, "topics to learn")
+                      console.log(topic, "topic")
                       return (
                         <>
                           <div class="flex items-center overflow-hidden rounded-[4px]  border-[0.5px] dark:border-[#282828]  border-[#69696951] p-4 px-4 justify-between">
@@ -500,8 +513,9 @@ export default function Profile() {
               </Match>
               <Match when={currentTab() === "Links"}>
                 <div class="flex gap-3 flex-col">
-                  <For each={user.user.globalLinks}>
+                  <For each={user.user.linksBookmarked}>
                     {(link) => {
+                      console.log(link, "link")
                       return (
                         <div class="[&>*]:border-none border rounded-[4px] dark:border-[#282828]  border-[#69696951]">
                           <ProfileGuideLink
@@ -516,7 +530,7 @@ export default function Profile() {
                       )
                     }}
                   </For>
-                  <For each={user.user.personalLinks}>
+                  {/* <For each={user.user.linksCompleted}>
                     {(link) => {
                       return (
                         <>
@@ -562,12 +576,12 @@ export default function Profile() {
                         </>
                       )
                     }}
-                  </For>
+                  </For> */}
                 </div>
               </Match>
               <Match when={currentTab() === "Learning"}>
                 <div class="flex gap-3 flex-col">
-                  <For each={user.user.topicsToLearning}>
+                  <For each={user.user.topicsLearning}>
                     {(topic) => {
                       return (
                         <>

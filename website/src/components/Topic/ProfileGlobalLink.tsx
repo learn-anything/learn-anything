@@ -20,7 +20,6 @@ interface Props {
 export default function ProfileGuideLink(props: Props) {
   const mobius = useMobius()
   const user = useUser()
-  const global = useGlobalState()
 
   return (
     <div class="flex-between overflow-hidden dark:border-dark border-light p-4 px-4 ">
@@ -56,14 +55,14 @@ export default function ProfileGuideLink(props: Props) {
         </div>
         <div class="flex items-center gap-[34px]">
           <div class="gap-4 flex ">
-            {/* TODO: change how icon looks when link is already added. activated state  */}
-            {/* UI of being pressed in */}
             <div
               onClick={async () => {
-                if (user.user.likedLinks.some((link) => link.id === props.id)) {
+                if (
+                  user.user.linksLiked?.some((link) => link.id === props.id)
+                ) {
                   user.set(
-                    "likedLinks",
-                    user.user.likedLinks.filter((link) => link.id !== props.id)
+                    "linksLiked",
+                    user.user.linksLiked.filter((link) => link.id !== props.id)
                   )
                   const res = await mobius.mutate({
                     updateGlobalLinkStatus: {
@@ -76,8 +75,8 @@ export default function ProfileGuideLink(props: Props) {
                   })
                   console.log(res, "res")
                 } else {
-                  user.set("likedLinks", [
-                    ...user.user.likedLinks,
+                  user.set("linksLiked", [
+                    ...(user.user.linksLiked || []),
                     {
                       id: props.id,
                       title: props.title,
@@ -99,7 +98,7 @@ export default function ProfileGuideLink(props: Props) {
               }}
               class={clsx(
                 "cursor-pointer rounded-[2px] flex dark:hover:bg-neutral-950 items-center hover:border-none transition-all justify-center border h-[26px] w-[26px] border-[#69696951] dark:border-[#282828]",
-                user.user.likedLinks.some((link) => link.id === props.id) &&
+                user.user.linksLiked?.some((link) => link.id === props.id) &&
                   "bg-red-500 border-none transition-all"
               )}
             >
@@ -107,13 +106,13 @@ export default function ProfileGuideLink(props: Props) {
                 name="Heart"
                 fill="white"
                 border={
-                  user.user.likedLinks.some((link) => link.id === props.id)
+                  user.user.linksLiked?.some((link) => link.id === props.id)
                     ? "red"
                     : "black"
                 }
               />
             </div>
-            <div
+            {/* <div
               onClick={async () => {
                 if (
                   user.user.completedLinks.some((link) => link.id === props.id)
@@ -175,7 +174,7 @@ export default function ProfileGuideLink(props: Props) {
                 width="24"
                 height="24"
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
