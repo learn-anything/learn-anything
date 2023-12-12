@@ -11,14 +11,16 @@ import Settings from "./components/Settings"
 import { FileTree } from "./file-tree"
 import { useMobius } from "./root"
 import Titlebar from "./components/Titlebar"
+import { keybinds } from "./util/keybinds"
+import { onMount } from "solid-js"
 
 const Sidebar: solid.Component = () => {
-  const user = useUser()
+  const global = useGlobalState()
 
   return (
-    <div class="h-full flex  p-4 dark:bg-[#1e1e1e] bg-white flex-col justify-between items-center font-semibold">
+    <div class="h-full flex  p-2 dark:bg-[#1e1e1e] bg-white flex-col justify-between items-center font-semibold">
       <div
-        class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
+        class="font-semibold w-full hover:bg-neutral-800 p-2 rounded-lg hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
         onClick={() => {
           // TODO: show modal of settings like in obsidian
           // user.setMode("Settings")
@@ -31,7 +33,7 @@ const Sidebar: solid.Component = () => {
       <div class="p-1 px-2 rounded-md"></div>
       <div class="flex flex-col items-center gap-3">
         <div
-          class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
+          class="font-semibold p-2 hover:bg-neutral-800 rounded-lg hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
           onClick={() => {
             const loggedIn = isLoggedIn(global)
             console.log(loggedIn, "logged in")
@@ -44,10 +46,10 @@ const Sidebar: solid.Component = () => {
           </ui.Tooltip>
         </div>
         <div
-          class="font-semibold hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
+          class="font-semibold p-2 hover:bg-neutral-800 rounded-lg hover:text-green-400 hover:opacity-90 transition-all cursor-pointer"
           onClick={() => {
             // TODO: show modal of settings like in obsidian
-            user.setMode("Settings")
+            global.set("mode", "Settings")
           }}
         >
           <ui.Tooltip label="Settings">
@@ -144,24 +146,6 @@ export default function App() {
   const global = useGlobalState()
   const user = useUser()
 
-  solid.onMount(() => {
-    const shortcuts = new ShoSho({
-      capture: true,
-      target: document,
-    })
-
-    // search files in wiki
-    // TODO: should focus on input
-    shortcuts.register("Cmd+L", () => {
-      if (global.state.showModal === "searchFiles") {
-        global.set("showModal", "")
-      } else {
-        global.set("showModal", "searchFiles")
-      }
-    })
-    shortcuts.start()
-  })
-
   // TODO: CMD+L = search files/topics in wiki
   // there was some issue with CMD+L not triggering, fix
   // TODO: should these bindings be placed in this file? also they should be customisable
@@ -179,13 +163,14 @@ export default function App() {
   const search_state = ui.createSearchState({
     searchResults,
     onSelect: ({ name }) => {
-      console.log(name, "name")
-      // const foundTopic = global.state.topicsWithConnections.find(
-      //   (t) => t.prettyName === name,
-      // )!
-      // navigate(`/${foundTopic.name}`)
-      // logUntracked("Topic searched", search_state.query)
+      global.set({
+        currentlyOpenFile: global.state.files.find((f) => f.filePath === name),
+      })
+      global.set("showModal", "")
     },
+  })
+  onMount(() => {
+    keybinds()
   })
 
   return (
@@ -237,27 +222,27 @@ export default function App() {
             {/* monaco editor is chosen instead until then, it might be a better option in long term too as its used by vscode */}
             {/* and can be styled/tuned to achieve all the tasks we need */}
             {/* in LA we should be able to edit code inline in some code blocks with LSP support perhaps in some instances, monaco can allow this */}
-            <div class="grow">
+            <div class="mr-[26px] grow">
               <Monaco />
             </div>
           </div>
         </solid.Show>
       </div>
 
-      <solid.Show when={user.user.mode === "Settings"}>
+      <solid.Show when={global.state.mode === "Settings"}>
         <ui.Modal
           onClose={() => {
-            user.setMode("Default")
+            global.set("mode", "Default")
           }}
         >
           <Settings />
         </ui.Modal>
       </solid.Show>
 
-      <solid.Show when={global.state.showModal === "searchFiles"}>
+      <solid.Show when={global.state.mode === "SearchFilesModal"}>
         <ui.Modal
           onClose={() => {
-            global.set("showModal", "")
+            global.set("mode", "Default")
           }}
         >
           {/* TODO: focus on input */}

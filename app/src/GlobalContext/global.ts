@@ -15,6 +15,13 @@ type GlobalState = {
   showModal: "" | "needToLoginInstructions" | "searchFiles"
   showBox: boolean
   theme: "light" | "dark"
+  vim: boolean
+  mode:
+    | "Default"
+    | "SearchFilesModal"
+    | "LogInInstructions"
+    | "Settings"
+    | "SearchTopics"
 
   // monaco: Monaco | null,
   // editor: monacoEditor.IStandaloneCodeEditor | null
@@ -27,6 +34,8 @@ export function createGlobalState() {
     showModal: "",
     showBox: false,
     theme: "light",
+    vim: false,
+    mode: "Default",
 
     // monaco: null,
     // editor: null
@@ -90,6 +99,9 @@ export function createGlobalState() {
     set: setState,
     setShowBox: (boolean: boolean) => {
       setState({ showBox: boolean })
+    },
+    setVim: (boolean: boolean) => {
+      setState({ vim: boolean })
     },
   }
 }

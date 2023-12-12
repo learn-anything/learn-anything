@@ -156,7 +156,7 @@ export const FileTree: solid.Component = () => {
                         "flex cursor-pointer  p-1 ",
                         item.type !== "directory" && "ml-[24px]",
                         item.depth > 0 &&
-                          "border-l-[0.1px] border-black dark:border-white dark:border-opacity-60 border-opacity-60",
+                          "border-l-[0.1px] border-black/60 dark:border-white/40",
                       )}
                     >
                       <div>

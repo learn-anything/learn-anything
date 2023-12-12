@@ -126,7 +126,7 @@ export default function Root() {
             </MobiusCtx.Provider>
           </GlobalStateProvider>
         </ErrorBoundary>
-        <Show when={global.state.showModal === "needToLoginInstructions"}>
+        <Show when={global.state.mode === "LogInInstructions"}>
           <ModalWithMessageAndButton
             // TODO: maybe have submessage? or have `message` accept solid JSX so you can have paragraphs?
             message={

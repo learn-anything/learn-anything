@@ -46,26 +46,38 @@ export function Monaco() {
   let vimMode: any
 
   return (
-    <div class="w-full h-full overflow-auto ">
-      <MonacoEditor
-        language={"markdown"}
-        onChange={(text) => {
-          global.set("currentlyOpenFile", "fileContent", text)
-        }}
-        options={{
-          quickSuggestions: false,
-          padding: { top: 24 },
-          minimap: { enabled: false },
-          wordWrap: "on",
-          lineNumbers: "off",
-          cursorStyle: "underline",
-        }}
-        value={global.state.currentlyOpenFile?.fileContent}
-        onMount={(_, ed) => {
-          vimMode = initVimMode(ed, document.createElement("div"))
-          console.log(vimMode, "vim")
-        }}
-      />
-    </div>
+    <>
+      <style>
+        {`
+        ::-webkit-scrollbar {
+          display: none;
+      }
+      `}
+      </style>
+      <div class="w-full h-full overflow-auto ">
+        <MonacoEditor
+          language={"markdown"}
+          onChange={(text) => {
+            global.set("currentlyOpenFile", "fileContent", text)
+          }}
+          options={{
+            scrollbar: {
+              vertical: "hidden",
+            },
+            overviewRulerLanes: 0,
+            hideCursorInOverviewRuler: true,
+            quickSuggestions: false,
+            padding: { top: 24 },
+            minimap: { enabled: false },
+            wordWrap: "on",
+            lineNumbers: "off",
+          }}
+          value={global.state.currentlyOpenFile?.fileContent}
+          onMount={(_, ed) => {
+            vimMode = initVimMode(ed, document.createElement("div"))
+          }}
+        />
+      </div>
+    </>
   )
 }

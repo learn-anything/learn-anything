@@ -3,6 +3,6 @@ export function isLoggedIn(global: any) {
   if (localStorage.getItem("hanko")) {
     return true
   }
-  global.set("showModal", "needToLoginInstructions")
+  global.set("mode", "LogInInstructions")
   return false
 }

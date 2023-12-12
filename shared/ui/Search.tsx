@@ -1,8 +1,10 @@
 import { Num } from "@nothing-but/utils"
 import { createEventListener } from "@solid-primitives/event-listener"
+
 import clsx from "clsx"
 import * as fuse from "fuse.js"
 import * as solid from "solid-js"
+import { onMount } from "solid-js"
 
 /*
 TODO: make it look as in https://lu.ma/create `Add Event Location` visually (although it does look nice already)
@@ -205,6 +207,9 @@ export interface SearchProps {
 }
 
 export function Search(props: SearchProps): solid.JSX.Element {
+  onMount(() => {
+    document.getElementById("SearchInput")?.focus()
+  })
   return (
     <div
       class="relative w-full bg-white rounded-[4px] dark:bg-neutral-900 text-black dark:text-white"
@@ -222,6 +227,8 @@ export function Search(props: SearchProps): solid.JSX.Element {
       <div class="w-full mb-1">
         <input
           type="text"
+          id="SearchInput"
+          autofocus={true}
           placeholder={props.placeholder}
           class="w-full p-3 px-4 dark:bg-[#191919] bg-white rounded-[4px]  text-opacity-70 outline-none border dark:border-[#2f2f2f]"
           on:keydown={(e) =>

@@ -1,4 +1,4 @@
-import { createSignal } from "solid-js"
+import { Match, Switch, createSignal } from "solid-js"
 import { useWiki } from "../GlobalContext/wiki"
 import Modal from "./Modal"
 import { useGlobalState } from "../GlobalContext/global"
@@ -13,6 +13,7 @@ export default function Settings() {
   const [wikiPathInput, setWikiPathInput] = createSignal("")
 
   const [wikiPath, setWikiPath] = createSignal("")
+  const [currentPage, setCurrentPage] = createSignal("Editor")
 
   return (
     <>
@@ -45,7 +46,19 @@ export default function Settings() {
             </div>
           </div>
         </div>
-        <div></div>
+        <div class="p-[32px]">
+          <Switch>
+            <Match when={currentPage() === "Editor"}>
+              <div
+                onClick={() => {
+                  global.setVim(!global.state.vim)
+                }}
+              >
+                Vim
+              </div>
+            </Match>
+          </Switch>
+        </div>
       </div>
     </>
   )

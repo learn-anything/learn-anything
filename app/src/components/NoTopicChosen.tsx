@@ -5,9 +5,11 @@ import { useUser } from "../GlobalContext/user"
 import { readTextFile, BaseDirectory } from "@tauri-apps/api/fs"
 import { open } from "@tauri-apps/api/dialog"
 import { select } from "~/edgedb/dbschema/edgeql-js"
+import { useGlobalState } from "~/GlobalContext/global"
 // import { connectWiki } from "#preload"
 
 export default function NoTopicChosen() {
+  const global = useGlobalState()
   const wiki = useWiki()
   const user = useUser()
   return (
@@ -42,7 +44,7 @@ export default function NoTopicChosen() {
           </Button>
         }
       >
-        <Button onClick={() => user.setMode("Search Topics")}>
+        <Button onClick={() => global.set("mode", "SearchTopics")}>
           Open topic to edit
         </Button>
       </Show>
