@@ -90,7 +90,7 @@ export default function GuideNav() {
             </a>/ */}
             <Show when={user.user.signedIn && location.pathname !== "/profile"}>
               <A
-                class="cursor-pointer text-black dark:text-white"
+                class="cursor-pointer hover:button-hover p-2 text-black dark:text-white"
                 href={`${
                   user.user.username ? `/@${user.user.username}` : "/profile"
                 }`}

@@ -42,16 +42,18 @@ export default function GuideSection(props: Props) {
       </div>
       <div class="flex-col">
         <For each={props.links}>
-          {(link) => {
+          {(link, id) => {
             return (
-              <GlobalGuideLink
-                title={link.title}
-                url={link.url}
-                id={link.id}
-                year={link.year}
-                protocol={link.protocol}
-                description={link.description}
-              />
+              <div>
+                <GlobalGuideLink
+                  title={link.title}
+                  url={link.url}
+                  id={link.id}
+                  year={link.year}
+                  protocol={link.protocol}
+                  description={link.description}
+                />
+              </div>
             )
           }}
         </For>

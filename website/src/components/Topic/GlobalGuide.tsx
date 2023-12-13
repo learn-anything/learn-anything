@@ -103,14 +103,22 @@ export default function GlobalGuide() {
       <div class={clsx("w-full gap-4 flex flex-col  rounded-[6px]")}>
         <GuideSummary />
         <For each={topic.globalTopic.latestGlobalGuide?.sections}>
-          {(section) => {
+          {(section, id) => {
             return (
-              <GuideSection
-                title={section.title}
-                // @ts-ignore
-                links={section.links}
-                summary={section.summary}
-              />
+              <div
+                style={{
+                  animation: `DefaultSlide ${
+                    id() * 0.2 + 0.2
+                  }s ease-in forwards`
+                }}
+              >
+                <GuideSection
+                  title={section.title}
+                  // @ts-ignore
+                  links={section.links}
+                  summary={section.summary}
+                />
+              </div>
             )
           }}
         </For>

@@ -154,6 +154,9 @@ importers:
       '@nozbe/microfuzz':
         specifier: ^1.0.0
         version: 1.0.0
+      '@orama/orama':
+        specifier: ^1.2.11
+        version: 1.2.11
       '@solid-primitives/autofocus':
         specifier: ^0.0.108
         version: 0.0.108(solid-js@1.8.6)

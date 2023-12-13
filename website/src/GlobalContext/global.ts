@@ -34,8 +34,8 @@ type GlobalState = {
   theme: string
   topicsWithConnections: TopicWithConnections[]
   showSidebar: boolean
-  showModal:
-    | ""
+  mode:
+    | "Default"
     | "cannot-update-topic-learning-status"
     | "cannot-update-global-link-status"
 }
@@ -49,7 +49,7 @@ export function createGlobalState(mobius: MobiusType) {
     theme: "",
     showSidebar: false,
     topicsWithConnections: [],
-    showModal: ""
+    mode: "Default"
   })
   const [showMemberOnlyModal, setShowMemberOnlyModal] = createSignal(false)
   const [showMemberOnlyModalWithMessage, setShowMemberOnlyModalWithMessage] =

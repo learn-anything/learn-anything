@@ -26,6 +26,7 @@
     "@monaco-editor/loader": "^1.4.0",
     "@motionone/solid": "^10.16.4",
     "@nozbe/microfuzz": "^1.0.0",
+    "@orama/orama": "^1.2.11",
     "@solid-primitives/autofocus": "^0.0.108",
     "@solid-primitives/context": "^0.2.1",
     "@solid-primitives/deep": "^0.2.4",

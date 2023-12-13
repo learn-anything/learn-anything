@@ -14,12 +14,17 @@ module.exports = {
       },
       keyframes: {
         iconSlide: {
-          "0%": { opacity: 0, transform: "translateY(10px)" },
+          "0%": { opacity: 0, transform: "translateX(10px)" },
           "100%": { opacity: 1, transform: "translateY(0)" }
+        },
+        DefaultSlide: {
+          "0%": { transform: "translateX(20px)" },
+          "100%": { transform: "translateY(0)" }
         }
       },
       animation: {
-        iconSlide: "iconSlide 0.5s ease-out forwards"
+        iconSlide: "iconSlide 0.5s ease-out forwards",
+        DefaultSlide: "DefaultSlide 0.5s ease-out forwards"
       }
     }
   },
@@ -46,9 +51,18 @@ module.exports = {
           display: "flex",
           "flex-direction": "column"
         },
+
         ".flex-row": {
           display: "flex",
           "flex-direction": "row"
+        },
+        ".button-hover": {
+          color: "rgb(34 197 94)",
+          "border-radius": "8px",
+          "transition-property": "all",
+          "transition-timing-function": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "transition-duration": "150ms",
+          background: "rgb(38 38 38)"
         }
       }
       addUtilities(newUtilities, ["responsive", "hover"])

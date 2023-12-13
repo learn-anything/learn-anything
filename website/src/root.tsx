@@ -97,9 +97,9 @@ export default function Root() {
     if (location.pathname !== "/auth" && error.includes("Token expired")) {
       navigate("/auth")
     } else if (error.includes("cannot-update-topic-learning-status")) {
-      global.set("showModal", "cannot-update-topic-learning-status")
+      global.set("mode", "cannot-update-topic-learning-status")
     } else if (error.includes("cannot-update-global-link-status")) {
-      global.set("showModal", "cannot-update-global-link-status")
+      global.set("mode", "cannot-update-global-link-status")
     } else {
       toast.error(JSON.parse(error).message)
     }
@@ -161,7 +161,7 @@ export default function Root() {
                             </Routes>
                             <Show
                               when={
-                                global.state.showModal ===
+                                global.state.mode ===
                                 "cannot-update-topic-learning-status"
                               }
                             >
@@ -171,17 +171,17 @@ export default function Root() {
                                 }
                                 buttonText="Become member for unlimited access"
                                 buttonAction={async () => {
-                                  global.set("showModal", "")
+                                  global.set("mode", "Default")
                                   navigate("/pricing")
                                 }}
                                 onClose={() => {
-                                  global.set("showModal", "")
+                                  global.set("mode", "Default")
                                 }}
                               />
                             </Show>
                             <Show
                               when={
-                                global.state.showModal ===
+                                global.state.mode ===
                                 "cannot-update-global-link-status"
                               }
                             >
@@ -191,11 +191,11 @@ export default function Root() {
                                 }
                                 buttonText="Become member for unlimited access"
                                 buttonAction={async () => {
-                                  global.set("showModal", "")
+                                  global.set("mode", "Default")
                                   navigate("/pricing")
                                 }}
                                 onClose={() => {
-                                  global.set("showModal", "")
+                                  global.set("mode", "Default")
                                 }}
                               />
                             </Show>

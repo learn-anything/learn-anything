@@ -2,6 +2,7 @@ import { eventListener } from "@solid-primitives/event-listener"
 import { invoke } from "@tauri-apps/api/tauri"
 import { createContext, createEffect, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
+import { create, insert, search } from "@orama/orama"
 
 export type File = {
   fileContent: string
@@ -16,6 +17,7 @@ type GlobalState = {
   showBox: boolean
   theme: "light" | "dark"
   vim: boolean
+  oramaDb: any
   mode:
     | "Default"
     | "SearchFilesModal"
@@ -36,10 +38,32 @@ export function createGlobalState() {
     theme: "light",
     vim: false,
     mode: "Default",
+    oramaDb: {},
 
     // monaco: null,
     // editor: null
   })
+
+  // onMount(async () => {
+  //   const db = await create({
+  //     schema: {
+  //       fileContent: "",
+  //       filePath: ""
+  //     }
+  //   })
+
+  //   await insert(db, {
+  //     fileContent: "hi",
+  //     filePath: "gtge"
+  //   })
+
+  // })
+
+  createEffect(async () => {
+    if (state.files.length > 0) {
+    }
+  })
+
   onMount(() => {
     const handleColorSchemeChange = (matches: any) => {
       if (matches) {

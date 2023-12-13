@@ -188,7 +188,7 @@ export default function GuideSidebar() {
           >
             <div id="Info" class="text-[#696969] flex-col gap-3">
               <div class="font-bold">Sections</div>
-              <div class="text-[14px] pl-3 flex-col gap-2">
+              <div class="text-[14px] flex-col gap-1">
                 <For each={topic.globalTopic?.latestGlobalGuide?.sections}>
                   {(section) => {
                     return (
@@ -207,7 +207,7 @@ export default function GuideSidebar() {
                               })
                             }
                           }}
-                          class="cursor-pointer"
+                          class="cursor-pointer hover:button-hover px-4 p-1"
                         >
                           {section.title}
                         </div>
