@@ -18,6 +18,7 @@ import { useUser } from "../GlobalContext/user"
 import GuideNav from "../components/Topic/GuideNav"
 import ProfileGuideLink from "../components/Topic/ProfileGlobalLink"
 import { useMobius } from "../root"
+import GlobalGuideLink from "../components/Topic/GlobalGuideLink"
 
 type NewLink = {
   url: string
@@ -515,10 +516,9 @@ export default function Profile() {
                 <div class="flex gap-3 flex-col">
                   <For each={user.user.linksBookmarked}>
                     {(link) => {
-                      console.log(link, "link")
                       return (
                         <div class="[&>*]:border-none border rounded-[4px] dark:border-[#282828]  border-[#69696951]">
-                          <ProfileGuideLink
+                          <GlobalGuideLink
                             title={link.title}
                             url={link.url}
                             id={link.id}
