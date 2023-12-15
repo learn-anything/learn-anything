@@ -1,9 +1,8 @@
+import { ui } from "@la/shared"
 import clsx from "clsx"
 import { Show } from "solid-js"
-import { useGlobalState } from "../../GlobalContext/global"
 import { useUser } from "../../GlobalContext/user"
 import { useMobius } from "../../root"
-import { ui } from "@la/shared"
 
 interface Props {
   title: string

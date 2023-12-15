@@ -46,10 +46,10 @@ export type GlobalTopic = {
   // aiSummary?: string
   learningStatus: "to_learn" | "learning" | "learned" | ""
   verifiedTopic: boolean
-  linksBookmarkedIds: string[]
-  linksInProgressIds: string[]
-  linksCompletedIds: string[]
-  linksLikedIds: string[]
+  // linksBookmarkedIds: string[]
+  // linksInProgressIds: string[]
+  // linksCompletedIds: string[]
+  // linksLikedIds: string[]
 }
 
 export function extractTopicFromPath(inputStr: string) {
@@ -76,10 +76,10 @@ export default function createGlobalTopic(
     links: [],
     notes: [{ content: "test" }],
     learningStatus: "",
-    linksBookmarkedIds: [],
-    linksInProgressIds: [],
-    linksCompletedIds: [],
-    linksLikedIds: [],
+    // linksBookmarkedIds: [],
+    // linksInProgressIds: [],
+    // linksCompletedIds: [],
+    // linksLikedIds: [],
     verifiedTopic: false
   })
 
@@ -201,11 +201,11 @@ export default function createGlobalTopic(
             topicName: topicName
           },
           select: {
-            learningStatus: true,
-            linksBookmarkedIds: true,
-            linksInProgressIds: true,
-            linksCompletedIds: true,
-            linksLikedIds: true
+            learningStatus: true
+            // linksBookmarkedIds: true,
+            // linksInProgressIds: true,
+            // linksCompletedIds: true,
+            // linksLikedIds: true
           }
         },
         getNotesForGlobalTopic: {
@@ -224,31 +224,31 @@ export default function createGlobalTopic(
         setGlobalTopic({
           // @ts-ignore
           learningStatus: data.getGlobalTopic.learningStatus, // TODO: should fix grafbase return type
-          // @ts-ignore
-          linksBookmarkedIds: data.getGlobalTopic.linksBookmarkedIds,
-          // @ts-ignore
-          linksInProgressIds: data.getGlobalTopic.linksInProgressIds,
-          // @ts-ignore
-          linksCompletedIds: data.getGlobalTopic.linksCompletedIds,
-          // @ts-ignore
-          linksLikedIds: data.getGlobalTopic.linksLikedIds,
+          // // @ts-ignore
+          // linksBookmarkedIds: data.getGlobalTopic.linksBookmarkedIds,
+          // // @ts-ignore
+          // linksInProgressIds: data.getGlobalTopic.linksInProgressIds,
+          // // @ts-ignore
+          // linksCompletedIds: data.getGlobalTopic.linksCompletedIds,
+          // // @ts-ignore
+          // linksLikedIds: data.getGlobalTopic.linksLikedIds,
           // @ts-ignore
           notes: data.getNotesForGlobalTopic
         })
       }
       return
       // @ts-ignore
-      const topicData = res.data.getGlobalTopic
+      // const topicData = res.data.getGlobalTopic
       // @ts-ignore
-      const notesData = res.data.getNotesForGlobalTopic
-      setGlobalTopic({
-        learningStatus: topicData.learningStatus,
-        linksBookmarkedIds: topicData.linksBookmarkedIds,
-        linksInProgressIds: topicData.linksInProgressIds,
-        linksCompletedIds: topicData.linksCompletedIds,
-        linksLikedIds: topicData.linksLikedIds,
-        notes: notesData
-      })
+      // const notesData = res.data.getNotesForGlobalTopic
+      // setGlobalTopic({
+      //   learningStatus: topicData.learningStatus,
+      //   linksBookmarkedIds: topicData.linksBookmarkedIds,
+      //   linksInProgressIds: topicData.linksInProgressIds,
+      //   linksCompletedIds: topicData.linksCompletedIds,
+      //   linksLikedIds: topicData.linksLikedIds,
+      //   notes: notesData
+      // })
     }
   })
 

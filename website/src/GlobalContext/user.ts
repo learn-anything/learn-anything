@@ -1,15 +1,9 @@
-import { UserClient } from "@teamhanko/hanko-frontend-sdk"
-import {
-  createContext,
-  createEffect,
-  createMemo,
-  onMount,
-  useContext
-} from "solid-js"
-import { createStore } from "solid-js/store"
-import { MobiusType } from "../root"
 import { getHankoCookie, parseResponse } from "@la/shared/lib"
+import { UserClient } from "@teamhanko/hanko-frontend-sdk"
+import { createContext, createEffect, onMount, useContext } from "solid-js"
+import { createStore } from "solid-js/store"
 import { useLocation } from "solid-start"
+import { MobiusType } from "../root"
 
 type Topic = {
   name: string
@@ -126,8 +120,9 @@ export function createUserState(mobius: MobiusType) {
       setUser("subscriptionStopped", data.subscriptionStopped)
     }
   })
-  createEffect(async () => {
-    if (!(location.pathname === "/profile")) return
+  // always fetching this so it's available in global palette search etc.
+  onMount(async () => {
+    // if (!(location.pathname === "/profile")) return
     const res = await mobius.query({
       getTopicsLearned: {
         topicsToLearn: {

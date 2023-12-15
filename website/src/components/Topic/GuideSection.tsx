@@ -1,6 +1,7 @@
 import clsx from "clsx"
 import { For, Show } from "solid-js"
 import GlobalGuideLink from "./GlobalGuideLink"
+import { useGlobalTopic } from "../../GlobalContext/global-topic"
 
 type Link = {
   title: string
@@ -18,6 +19,7 @@ type Props = {
 }
 
 export default function GuideSection(props: Props) {
+  const topic = useGlobalTopic()
   return (
     <div
       id={props.title}
@@ -42,18 +44,41 @@ export default function GuideSection(props: Props) {
       </div>
       <div class="flex-col">
         <For each={props.links}>
-          {(link, id) => {
+          {(link) => {
+            // TODO: improve this
+            // const bookmarked = topic.globalTopic.linksBookmarkedIds.includes(
+            //   link.id
+            // )
+            // let inProgress
+            // let completed
+            // if (!bookmarked) {
+            //   inProgress = topic.globalTopic.linksInProgressIds.includes(
+            //     link.id
+            //   )
+            // }
+            // if (!bookmarked && !inProgress) {
+            //   completed = topic.globalTopic.linksCompletedIds.includes(link.id)
+            // }
+            // const liked = topic.globalTopic.linksLikedIds.includes(link.id)
             return (
-              <div>
-                <GlobalGuideLink
-                  title={link.title}
-                  url={link.url}
-                  id={link.id}
-                  year={link.year}
-                  protocol={link.protocol}
-                  description={link.description}
-                />
-              </div>
+              <GlobalGuideLink
+                title={link.title}
+                url={link.url}
+                id={link.id}
+                year={link.year}
+                protocol={link.protocol}
+                description={link.description}
+                // liked={liked}
+                // progressState={
+                //   bookmarked
+                //     ? "Bookmark"
+                //     : inProgress
+                //       ? "InProgress"
+                //       : completed
+                //         ? "Completed"
+                //         : null
+                // }
+              />
             )
           }}
         </For>

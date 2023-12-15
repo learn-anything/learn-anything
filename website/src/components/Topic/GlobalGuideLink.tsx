@@ -1,11 +1,12 @@
 import { ui } from "@la/shared"
 import { isSignedIn, parseResponse } from "@la/shared/lib"
 import clsx from "clsx"
-import { Show, createEffect, createSignal } from "solid-js"
+import { Show, createEffect, createMemo, createSignal } from "solid-js"
 import { useNavigate } from "solid-start"
 import { useGlobalState } from "../../GlobalContext/global"
 import { useGlobalTopic } from "../../GlobalContext/global-topic"
 import { useMobius } from "../../root"
+import { useUser } from "../../GlobalContext/user"
 
 interface Props {
   title: string
@@ -14,15 +15,45 @@ interface Props {
   protocol: string
   year?: string
   description?: string
+  // progressState?: "Bookmark" | "InProgress" | "Completed" | null
+  // liked: boolean
 }
 
+// TODO: there is nicer way to do this, improve
 export default function GlobalGuideLink(props: Props) {
   const mobius = useMobius()
+  const user = useUser()
   const topic = useGlobalTopic()
   const global = useGlobalState()
   const navigate = useNavigate()
   const [expandedLink, setExpandedLink] = createSignal(false)
   const [linkStatusChanging, setLinkStatusChanging] = createSignal()
+
+  const progressState = createMemo(() => {
+    const bookmarked = user.user.linksBookmarked?.some(
+      (link) => link.id === props.id
+    )
+    let inProgress
+    let completed
+    if (!bookmarked) {
+      inProgress = user.user.linksInProgress?.some(
+        (link) => link.id === props.id
+      )
+    }
+    if (!bookmarked && !inProgress) {
+      completed = user.user.linksCompleted?.some((link) => link.id === props.id)
+    }
+    return bookmarked
+      ? "Bookmark"
+      : inProgress
+        ? "InProgress"
+        : completed
+          ? "Completed"
+          : null
+  })
+  const liked = createMemo(() => {
+    return user.user.linksLiked?.some((link) => link.id === props.id)
+  })
 
   createEffect(() => {
     let timeoutId: any
@@ -110,14 +141,14 @@ export default function GlobalGuideLink(props: Props) {
                   onClick={async () => {
                     if (!isSignedIn(navigate)) return
                     setLinkStatusChanging("Bookmark")
-                    if (
-                      topic.globalTopic.linksBookmarkedIds.includes(props.id)
-                    ) {
-                      topic.set(
-                        "linksBookmarkedIds",
-                        topic.globalTopic.linksBookmarkedIds.filter(
-                          (id) => id !== props.id
-                        )
+                    if (progressState() === "Bookmark") {
+                      user.set(
+                        "linksBookmarked",
+                        user.user.linksBookmarked
+                          ? user.user.linksBookmarked.filter(
+                              (link) => link.id !== props.id
+                            )
+                          : []
                       )
                       await mobius.mutate({
                         updateGlobalLinkStatus: {
@@ -140,9 +171,18 @@ export default function GlobalGuideLink(props: Props) {
                       })
                       const [data] = parseResponse(res)
                       if (data) {
-                        // TODO: there is better way to do this..
-                        topic.set("linksBookmarkedIds", [
-                          ...topic.globalTopic.linksBookmarkedIds,
+                        user.set("linksBookmarked", [
+                          ...(user.user.linksBookmarked || []),
+                          {
+                            id: props.id,
+                            title: props.title,
+                            description: props.description,
+                            url: props.url,
+                            year: props.year
+                          }
+                        ])
+                        user.set("linksBookmarked", [
+                          ...user.user.linksBookmarked,
                           props.id
                         ])
                         topic.set(
@@ -173,6 +213,9 @@ export default function GlobalGuideLink(props: Props) {
                       <ui.Icon
                         name="Bookmark"
                         fill="white"
+                        // border={
+                        //   props.progressState === "Bookmark" ? "red" : "black"
+                        // }
                         border={
                           topic.globalTopic.linksBookmarkedIds.includes(
                             props.id
