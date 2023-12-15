@@ -1,0 +1,25 @@
+{
+  "include": ["app"],
+  "compilerOptions": {
+    // lib
+    "module": "ESNext",
+    "target": "ESNext",
+    "lib": ["DOM", "ESNext"],
+    "moduleResolution": "Bundler",
+    "types": ["solid-start/env", "bun-types"],
+    // rules
+    "strict": true,
+    "isolatedModules": true,
+    "noUncheckedIndexedAccess": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    // solid
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    // build
+    "noEmit": true
+  }
+}

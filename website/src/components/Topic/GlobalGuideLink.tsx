@@ -182,8 +182,14 @@ export default function GlobalGuideLink(props: Props) {
                           }
                         ])
                         user.set("linksBookmarked", [
-                          ...user.user.linksBookmarked,
-                          props.id
+                          ...(user.user.linksBookmarked || []),
+                          {
+                            id: props.id,
+                            title: props.title,
+                            description: props.description,
+                            url: props.url,
+                            year: props.year
+                          }
                         ])
                         topic.set(
                           "linksInProgressIds",
