@@ -6,9 +6,11 @@
   "dependencies": {
     "@nativescript-community/solid-js": "^0.0.4-alpha.5",
     "@nativescript/core": "~8.6.1",
+    "@nativescript/tailwind": "^2.0.1",
     "@nativescript/theme": "~3.0.2",
     "dominative": "^0.0.9-alpha.4",
     "solid-js": "^1.8.5",
+    "tailwindcss": "^3.3.6",
     "undom-ng": "^1.0.10"
   },
   "devDependencies": {
