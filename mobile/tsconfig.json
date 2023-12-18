@@ -29,4 +29,7 @@
       "@nativescript-dom/solidjs-types"
     ],
   },
+  "include": [
+    "app/**/*"
+  ]
 }

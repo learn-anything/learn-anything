@@ -1,6 +1,6 @@
 {
   "name": "@la/mobile",
-  "main": "app/app.js",
+  "main": "app/app.ts",
   "version": "0.0.1",
   "scripts": {},
   "dependencies": {
