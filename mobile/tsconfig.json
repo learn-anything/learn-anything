@@ -1,25 +1,20 @@
 {
-  "include": ["app"],
   "compilerOptions": {
-    // lib
-    "module": "ESNext",
-    "target": "ESNext",
-    "lib": ["DOM", "ESNext"],
-    "moduleResolution": "Bundler",
-    "types": ["solid-start/env", "bun-types"],
-    // rules
-    "strict": true,
-    "isolatedModules": true,
-    "noUncheckedIndexedAccess": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "allowJs": true,
+    "module": "esnext",
+    "target": "es2017",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "noEmitHelpers": true,
+    "noEmitOnError": true,
     "skipLibCheck": true,
-    // solid
-    "jsx": "preserve",
-    "jsxImportSource": "solid-js",
-    // build
-    "noEmit": true
-  }
+    "lib": ["es2017", "dom"],
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["src/*"],
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["app/**/*"],
+  "exclude": ["node_modules", "platforms"]
 }
