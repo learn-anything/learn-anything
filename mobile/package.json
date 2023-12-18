@@ -17,6 +17,8 @@
     "@babel/core": "^7.23.3",
     "@babel/preset-env": "^7.23.3",
     "@babel/preset-typescript": "^7.23.3",
+    "@nativescript-dom/core-types": "^1.0.29",
+    "@nativescript-dom/solidjs-types": "^1.0.19",
     "@nativescript/ios": "8.6.3",
     "@nativescript/preview-cli": "1.0.5",
     "@nativescript/stackblitz": "0.0.8",

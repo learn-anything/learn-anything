@@ -1,20 +1,32 @@
 {
   "compilerOptions": {
     "module": "esnext",
-    "target": "es2017",
+    "target": "es2020",
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "noEmitHelpers": true,
     "noEmitOnError": true,
     "skipLibCheck": true,
-    "lib": ["es2017", "dom"],
+    "lib": [
+      "es2020",
+      "dom"
+    ],
     "baseUrl": ".",
     "paths": {
-      "~/*": ["src/*"],
-      "@/*": ["src/*"]
-    }
+      "~/*": [
+        "src/*"
+      ],
+      "@/*": [
+        "src/*"
+      ]
+    },
+    "jsx": "preserve",
+    "jsxImportSource": "@nativescript-dom/solidjs-types",
+    "types": [
+      "node",
+      "@nativescript-dom/core-types",
+      "@nativescript-dom/solidjs-types"
+    ],
   },
-  "include": ["app/**/*"],
-  "exclude": ["node_modules", "platforms"]
 }
