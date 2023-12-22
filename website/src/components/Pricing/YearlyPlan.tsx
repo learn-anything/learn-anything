@@ -44,7 +44,10 @@ export default function YearlyPlan(props: Props) {
       </div>
       <div class="w-full h-full flex flex-col gap-4">
         <div class="text-2xl font-semibold gap-2">
-          $32 <span class="opacity-90 font-light text-sm">per year</span>
+          $4{" "}
+          <span class="opacity-90 font-light text-sm">
+            per month, billed annually
+          </span>
         </div>
 
         <div class="font-light opacity-60 flex flex-col gap-3">
