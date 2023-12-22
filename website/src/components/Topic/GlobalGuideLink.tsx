@@ -191,15 +191,17 @@ export default function GlobalGuideLink(props: Props) {
                             year: props.year
                           }
                         ])
-                        topic.set(
-                          "linksInProgressIds",
-                          topic.globalTopic.linksInProgressIds.filter(
-                            (id) => id !== props.id
-                          )
+                        user.set(
+                          "linksBookmarked",
+                          user.user.linksBookmarked
+                            ? user.user.linksBookmarked.filter(
+                                (link) => link.id !== props.id
+                              )
+                            : []
                         )
-                        topic.set(
-                          "linksCompletedIds",
-                          topic.globalTopic.linksCompletedIds.filter(
+                        user.set(
+                          "linksCompleted",
+                          user.user.linksCompleted.filter(
                             (id) => id !== props.id
                           )
                         )
