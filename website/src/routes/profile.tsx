@@ -563,8 +563,29 @@ export default function Profile() {
                   </For>
                   <For each={user.user.linksLiked}>
                     {(link) => {
+                      console.log("does not rerun..")
+                      if (
+                        user.user.linksBookmarked?.find((l) => l.id === link.id)
+                      ) {
+                        return
+                      }
+                      if (
+                        user.user.linksInProgress?.find((l) => l.id === link.id)
+                      ) {
+                        return
+                      }
+                      if (
+                        user.user.linksCompleted?.find((l) => l.id === link.id)
+                      ) {
+                        return
+                      }
+                      console.log(link.title, "title")
+                      console.log(
+                        user.user.linksBookmarked?.find((l) => l.id === link.id)
+                      )
                       return (
                         <div class="[&>*]:border-none border rounded-[4px] dark:border-[#282828]  border-[#69696951]">
+                          <div>liked</div>
                           <GlobalGuideLink
                             title={link.title}
                             url={link.url}

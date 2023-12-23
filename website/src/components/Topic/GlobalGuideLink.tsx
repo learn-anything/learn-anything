@@ -476,12 +476,16 @@ export default function GlobalGuideLink(props: Props) {
                       })
                       const [data] = parseResponse(res)
                       if (data) {
-                        user.set(
-                          "linksLiked",
-                          user.user.linksLiked?.filter(
-                            (link) => link.id !== props.id
-                          )
-                        )
+                        user.set("linksLiked", [
+                          ...(user.user.linksLiked || []),
+                          {
+                            id: props.id,
+                            title: props.title,
+                            description: props.description,
+                            url: props.url,
+                            year: props.year
+                          }
+                        ])
                       }
                     }
                     setLinkStatusChanging(null)
