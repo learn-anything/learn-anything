@@ -15,10 +15,9 @@ import { A, useNavigate } from "solid-start"
 import toast, { Toaster } from "solid-toast"
 import { useGlobalState } from "../GlobalContext/global"
 import { useUser } from "../GlobalContext/user"
-import GuideNav from "../components/Topic/GuideNav"
-import ProfileGuideLink from "../components/Topic/ProfileGlobalLink"
-import { useMobius } from "../root"
 import GlobalGuideLink from "../components/Topic/GlobalGuideLink"
+import GuideNav from "../components/Topic/GuideNav"
+import { useMobius } from "../root"
 
 type NewLink = {
   url: string
@@ -178,7 +177,7 @@ export default function Profile() {
   const mobius = useMobius()
   const global = useGlobalState()
   const navigate = useNavigate()
-  const [currentTab, setCurrentTab] = createSignal("Learning")
+  const [currentTab, setCurrentTab] = createSignal("Links")
   const [showAddLinkModal, setShowAddLinkModal] = createSignal(false)
   const [showHelpModal, setShowHelpModal] = createSignal(false)
   const [showFilter, setShowFilter] = createSignal(false)
@@ -514,6 +513,22 @@ export default function Profile() {
               </Match>
               <Match when={currentTab() === "Links"}>
                 <div class="flex gap-3 flex-col">
+                  <For each={user.user.linksInProgress}>
+                    {(link) => {
+                      return (
+                        <div class="[&>*]:border-none border rounded-[4px] dark:border-[#282828]  border-[#69696951]">
+                          <GlobalGuideLink
+                            title={link.title}
+                            url={link.url}
+                            id={link.id}
+                            year={link.year}
+                            protocol={"https"}
+                            description={link.description}
+                          />
+                        </div>
+                      )
+                    }}
+                  </For>
                   <For each={user.user.linksBookmarked}>
                     {(link) => {
                       return (
@@ -530,53 +545,38 @@ export default function Profile() {
                       )
                     }}
                   </For>
-                  {/* <For each={user.user.linksCompleted}>
+                  <For each={user.user.linksCompleted}>
                     {(link) => {
                       return (
-                        <>
-                          <div class="flex items-center overflow-hidden rounded-[4px]  border-[0.5px] dark:border-[#282828]  border-[#69696951] p-4 px-4 justify-between">
-                            <div class="w-full  h-full flex justify-between items-center">
-                              <div class="w-fit flex gap-2 items-center">
-                                <div class="flex gap-3 items-center">
-                                  <ui.Icon name="UserProfile" />
-                                  <a
-                                    class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer"
-                                    href={`https://${link.url}`}
-                                  >
-                                    {link.title}
-                                  </a>
-                                </div>
-                                <div class="font-light text-[12px] text-[#696969] text-ellipsis w-[250px] overflow-hidden whitespace-nowrap">
-                                  {link.url}
-                                </div>
-                              </div>
-                            </div>
-                            <div
-                              onClick={async () => {
-                                user.set(
-                                  "personalLinks",
-                                  user.user.personalLinks.filter(
-                                    (l) => l.id !== link.id
-                                  )
-                                )
-                                await mobius.mutate({
-                                  deletePersonalLink: {
-                                    where: {
-                                      personalLinkId: link.id
-                                    },
-                                    select: true
-                                  }
-                                })
-                              }}
-                              class="cursor-pointer"
-                            >
-                              <ui.Icon name="Trash" />
-                            </div>
-                          </div>
-                        </>
+                        <div class="[&>*]:border-none border rounded-[4px] dark:border-[#282828]  border-[#69696951]">
+                          <GlobalGuideLink
+                            title={link.title}
+                            url={link.url}
+                            id={link.id}
+                            year={link.year}
+                            protocol={"https"}
+                            description={link.description}
+                          />
+                        </div>
                       )
                     }}
-                  </For> */}
+                  </For>
+                  <For each={user.user.linksLiked}>
+                    {(link) => {
+                      return (
+                        <div class="[&>*]:border-none border rounded-[4px] dark:border-[#282828]  border-[#69696951]">
+                          <GlobalGuideLink
+                            title={link.title}
+                            url={link.url}
+                            id={link.id}
+                            year={link.year}
+                            protocol={"https"}
+                            description={link.description}
+                          />
+                        </div>
+                      )
+                    }}
+                  </For>
                 </div>
               </Match>
               <Match when={currentTab() === "Learning"}>
