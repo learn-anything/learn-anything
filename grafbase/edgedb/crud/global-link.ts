@@ -72,6 +72,8 @@ export async function getGlobalLink(id: string) {
   return link
 }
 
+// TODO: make this return previous status of link
+// this way, in GlobalGuideLink, I can easily know what to update in local store
 // TODO: maybe can be part of `updateGlobalLinkProgress` but keeping it like this for now
 export async function likeOrUnlikeGlobalLink(
   hankoId: string,

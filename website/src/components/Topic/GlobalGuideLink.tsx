@@ -4,9 +4,8 @@ import clsx from "clsx"
 import { Show, createEffect, createMemo, createSignal } from "solid-js"
 import { useNavigate } from "solid-start"
 import { useGlobalState } from "../../GlobalContext/global"
-import { useGlobalTopic } from "../../GlobalContext/global-topic"
-import { useMobius } from "../../root"
 import { useUser } from "../../GlobalContext/user"
+import { useMobius } from "../../root"
 
 interface Props {
   title: string
@@ -23,7 +22,6 @@ interface Props {
 export default function GlobalGuideLink(props: Props) {
   const mobius = useMobius()
   const user = useUser()
-  const topic = useGlobalTopic()
   const global = useGlobalState()
   const navigate = useNavigate()
   const [expandedLink, setExpandedLink] = createSignal(false)
@@ -142,15 +140,7 @@ export default function GlobalGuideLink(props: Props) {
                     if (!isSignedIn(navigate)) return
                     setLinkStatusChanging("Bookmark")
                     if (progressState() === "Bookmark") {
-                      user.set(
-                        "linksBookmarked",
-                        user.user.linksBookmarked
-                          ? user.user.linksBookmarked.filter(
-                              (link) => link.id !== props.id
-                            )
-                          : []
-                      )
-                      await mobius.mutate({
+                      const res = await mobius.mutate({
                         updateGlobalLinkStatus: {
                           where: {
                             action: "removeProgress",
@@ -159,6 +149,17 @@ export default function GlobalGuideLink(props: Props) {
                           select: true
                         }
                       })
+                      const [data] = parseResponse(res)
+                      if (data) {
+                        user.set(
+                          "linksBookmarked",
+                          user.user.linksBookmarked
+                            ? user.user.linksBookmarked.filter(
+                                (link) => link.id !== props.id
+                              )
+                            : []
+                        )
+                      }
                     } else {
                       const res = await mobius.mutate({
                         updateGlobalLinkStatus: {
@@ -181,28 +182,17 @@ export default function GlobalGuideLink(props: Props) {
                             year: props.year
                           }
                         ])
-                        user.set("linksBookmarked", [
-                          ...(user.user.linksBookmarked || []),
-                          {
-                            id: props.id,
-                            title: props.title,
-                            description: props.description,
-                            url: props.url,
-                            year: props.year
-                          }
-                        ])
+                        // TODO: can avoid doing below after updating `likeOrUnlikeGlobalLink` in global-link.ts (there is todo: there)
                         user.set(
-                          "linksBookmarked",
-                          user.user.linksBookmarked
-                            ? user.user.linksBookmarked.filter(
-                                (link) => link.id !== props.id
-                              )
-                            : []
+                          "linksInProgress",
+                          user.user.linksInProgress?.filter(
+                            (link) => link.id !== props.id
+                          )
                         )
                         user.set(
                           "linksCompleted",
-                          user.user.linksCompleted.filter(
-                            (id) => id !== props.id
+                          user.user.linksCompleted?.filter(
+                            (link) => link.id !== props.id
                           )
                         )
                       }
@@ -211,8 +201,9 @@ export default function GlobalGuideLink(props: Props) {
                   }}
                   class={clsx(
                     "sm:hidden animate-[iconSlide_0.8s_ease-out_forwards] cursor-pointer rounded-[4px] active:scale-[1.2] active:bg-blue-500 hover:[&>*]:scale-[0.9] transition-all h-[26px] w-[26px] border-light dark:border-dark",
-                    topic.globalTopic.linksBookmarkedIds.includes(props.id) &&
-                      "bg-blue-500 border-none transition-all !flex-center"
+                    user.user.linksBookmarked?.some(
+                      (link) => link.id === props.id
+                    ) && "bg-blue-500 border-none transition-all !flex-center"
                   )}
                 >
                   <Show
@@ -225,8 +216,8 @@ export default function GlobalGuideLink(props: Props) {
                         //   props.progressState === "Bookmark" ? "red" : "black"
                         // }
                         border={
-                          topic.globalTopic.linksBookmarkedIds.includes(
-                            props.id
+                          user.user.linksBookmarked?.some(
+                            (link) => link.id === props.id
                           )
                             ? "red"
                             : "black"
@@ -250,16 +241,8 @@ export default function GlobalGuideLink(props: Props) {
                   onClick={async () => {
                     if (!isSignedIn(navigate)) return
                     setLinkStatusChanging("InProgress")
-                    if (
-                      topic.globalTopic.linksInProgressIds.includes(props.id)
-                    ) {
-                      topic.set(
-                        "linksInProgressIds",
-                        topic.globalTopic.linksInProgressIds.filter(
-                          (id) => id !== props.id
-                        )
-                      )
-                      await mobius.mutate({
+                    if (progressState() === "InProgress") {
+                      const res = await mobius.mutate({
                         updateGlobalLinkStatus: {
                           where: {
                             action: "removeProgress",
@@ -268,25 +251,19 @@ export default function GlobalGuideLink(props: Props) {
                           select: true
                         }
                       })
+                      const [data] = parseResponse(res)
+                      if (data) {
+                        user.set(
+                          "linksInProgress",
+                          user.user.linksInProgress
+                            ? user.user.linksInProgress.filter(
+                                (link) => link.id !== props.id
+                              )
+                            : []
+                        )
+                      }
                     } else {
-                      // TODO: better way to do this..
-                      topic.set("linksInProgressIds", [
-                        ...topic.globalTopic.linksInProgressIds,
-                        props.id
-                      ])
-                      topic.set(
-                        "linksBookmarkedIds",
-                        topic.globalTopic.linksBookmarkedIds.filter(
-                          (id) => id !== props.id
-                        )
-                      )
-                      topic.set(
-                        "linksCompletedIds",
-                        topic.globalTopic.linksCompletedIds.filter(
-                          (id) => id !== props.id
-                        )
-                      )
-                      await mobius.mutate({
+                      const res = await mobius.mutate({
                         updateGlobalLinkStatus: {
                           where: {
                             action: "inProgress",
@@ -295,13 +272,39 @@ export default function GlobalGuideLink(props: Props) {
                           select: true
                         }
                       })
+                      const [data] = parseResponse(res)
+                      if (data) {
+                        user.set("linksInProgress", [
+                          ...(user.user.linksInProgress || []),
+                          {
+                            id: props.id,
+                            title: props.title,
+                            description: props.description,
+                            url: props.url,
+                            year: props.year
+                          }
+                        ])
+                        user.set(
+                          "linksBookmarked",
+                          user.user.linksBookmarked?.filter(
+                            (link) => link.id !== props.id
+                          )
+                        )
+                        user.set(
+                          "linksCompleted",
+                          user.user.linksCompleted?.filter(
+                            (link) => link.id !== props.id
+                          )
+                        )
+                      }
                     }
                     setLinkStatusChanging(null)
                   }}
                   class={clsx(
                     "sm:hidden cursor-pointer animate-[iconSlide_0.6s_ease-out_forwards] rounded-[4px] active:bg-blue-500 hover:opacity-50 transition-all h-[26px] w-[26px] border-light dark:border-dark ",
-                    topic.globalTopic.linksInProgressIds.includes(props.id) &&
-                      "bg-blue-500 border-none transition-all !flex-center"
+                    user.user.linksInProgress?.some(
+                      (link) => link.id === props.id
+                    ) && "bg-blue-500 border-none transition-all !flex-center"
                   )}
                 >
                   <Show
@@ -311,8 +314,8 @@ export default function GlobalGuideLink(props: Props) {
                         name="Hourglass"
                         fill="white"
                         border={
-                          topic.globalTopic.linksInProgressIds.includes(
-                            props.id
+                          user.user.linksBookmarked?.some(
+                            (link) => link.id === props.id
                           )
                             ? "red"
                             : "black"
@@ -336,16 +339,8 @@ export default function GlobalGuideLink(props: Props) {
                   onClick={async () => {
                     if (!isSignedIn(navigate)) return
                     setLinkStatusChanging("Completed")
-                    if (
-                      topic.globalTopic.linksCompletedIds.includes(props.id)
-                    ) {
-                      topic.set(
-                        "linksCompletedIds",
-                        topic.globalTopic.linksCompletedIds.filter(
-                          (id) => id !== props.id
-                        )
-                      )
-                      await mobius.mutate({
+                    if (progressState() === "Completed") {
+                      const res = await mobius.mutate({
                         updateGlobalLinkStatus: {
                           where: {
                             action: "removeProgress",
@@ -354,25 +349,19 @@ export default function GlobalGuideLink(props: Props) {
                           select: true
                         }
                       })
+                      const [data] = parseResponse(res)
+                      if (data) {
+                        user.set(
+                          "linksCompleted",
+                          user.user.linksCompleted
+                            ? user.user.linksCompleted.filter(
+                                (link) => link.id !== props.id
+                              )
+                            : []
+                        )
+                      }
                     } else {
-                      // TODO: better way to do this..
-                      topic.set("linksCompletedIds", [
-                        ...topic.globalTopic.linksCompletedIds,
-                        props.id
-                      ])
-                      topic.set(
-                        "linksBookmarkedIds",
-                        topic.globalTopic.linksBookmarkedIds.filter(
-                          (id) => id !== props.id
-                        )
-                      )
-                      topic.set(
-                        "linksInProgressIds",
-                        topic.globalTopic.linksInProgressIds.filter(
-                          (id) => id !== props.id
-                        )
-                      )
-                      await mobius.mutate({
+                      const res = await mobius.mutate({
                         updateGlobalLinkStatus: {
                           where: {
                             action: "complete",
@@ -381,13 +370,39 @@ export default function GlobalGuideLink(props: Props) {
                           select: true
                         }
                       })
+                      const [data] = parseResponse(res)
+                      if (data) {
+                        user.set("linksCompleted", [
+                          ...(user.user.linksCompleted || []),
+                          {
+                            id: props.id,
+                            title: props.title,
+                            description: props.description,
+                            url: props.url,
+                            year: props.year
+                          }
+                        ])
+                        user.set(
+                          "linksInProgress",
+                          user.user.linksInProgress?.filter(
+                            (link) => link.id !== props.id
+                          )
+                        )
+                        user.set(
+                          "linksBookmarked",
+                          user.user.linksCompleted?.filter(
+                            (link) => link.id !== props.id
+                          )
+                        )
+                      }
                     }
                     setLinkStatusChanging(null)
                   }}
                   class={clsx(
                     "sm:hidden cursor-pointer rounded-[4px] animate-[iconSlide_0.4s_ease-out_forwards] active:scale-[1.2] active:bg-blue-500 hover:[&>*]:scale-[0.9] transition-all h-[26px] w-[26px] border-light dark:border-dark",
-                    topic.globalTopic.linksCompletedIds.includes(props.id) &&
-                      "bg-blue-500 bg-opacity border-none !flex-center"
+                    user.user.linksCompleted?.some(
+                      (link) => link.id === props.id
+                    ) && "bg-blue-500 bg-opacity border-none !flex-center"
                   )}
                 >
                   <Show
@@ -396,7 +411,9 @@ export default function GlobalGuideLink(props: Props) {
                       <ui.Icon
                         name="Checkmark"
                         border={
-                          topic.globalTopic.linksCompletedIds.includes(props.id)
+                          user.user.linksCompleted?.some(
+                            (link) => link.id === props.id
+                          )
                             ? global.state.theme === "light"
                               ? "black"
                               : "white"
@@ -425,14 +442,8 @@ export default function GlobalGuideLink(props: Props) {
                   onClick={async () => {
                     if (!isSignedIn(navigate)) return
                     setLinkStatusChanging("Liked")
-                    if (topic.globalTopic.linksLikedIds.includes(props.id)) {
-                      topic.set(
-                        "linksLikedIds",
-                        topic.globalTopic.linksLikedIds.filter(
-                          (id) => id !== props.id
-                        )
-                      )
-                      await mobius.mutate({
+                    if (liked()) {
+                      const res = await mobius.mutate({
                         updateGlobalLinkStatus: {
                           where: {
                             action: "unlike",
@@ -441,12 +452,19 @@ export default function GlobalGuideLink(props: Props) {
                           select: true
                         }
                       })
+                      const [data] = parseResponse(res)
+                      if (data) {
+                        user.set(
+                          "linksLiked",
+                          user.user.linksLiked
+                            ? user.user.linksLiked.filter(
+                                (link) => link.id !== props.id
+                              )
+                            : []
+                        )
+                      }
                     } else {
-                      topic.set("linksLikedIds", [
-                        ...topic.globalTopic.linksLikedIds,
-                        props.id
-                      ])
-                      await mobius.mutate({
+                      const res = await mobius.mutate({
                         updateGlobalLinkStatus: {
                           where: {
                             action: "like",
@@ -455,13 +473,23 @@ export default function GlobalGuideLink(props: Props) {
                           select: true
                         }
                       })
+                      const [data] = parseResponse(res)
+                      if (data) {
+                        user.set(
+                          "linksLiked",
+                          user.user.linksLiked?.filter(
+                            (link) => link.id !== props.id
+                          )
+                        )
+                      }
                     }
                     setLinkStatusChanging(null)
                   }}
                   class={clsx(
                     "sm:hidden cursor-pointer rounded-[4px] animate-[iconSlide_0.2s_ease-out_forwards] hover:opacity-50 transition-all h-[26px] w-[26px] border-light dark:border-dark",
-                    topic.globalTopic.linksLikedIds.includes(props.id) &&
-                      "bg-red-500 border-none transition-all !flex-center"
+                    user.user.linksLiked?.some(
+                      (link) => link.id === props.id
+                    ) && "bg-red-500 border-none transition-all !flex-center"
                   )}
                 >
                   <Show
@@ -471,7 +499,9 @@ export default function GlobalGuideLink(props: Props) {
                         name="Heart"
                         fill="white"
                         border={
-                          topic.globalTopic.linksLikedIds.includes(props.id)
+                          user.user.linksLiked?.some(
+                            (link) => link.id === props.id
+                          )
                             ? "red"
                             : "black"
                         }
