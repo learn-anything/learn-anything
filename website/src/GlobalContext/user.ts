@@ -1,6 +1,12 @@
 import { getHankoCookie, parseResponse } from "@la/shared/lib"
 import { UserClient } from "@teamhanko/hanko-frontend-sdk"
-import { createContext, createEffect, onMount, useContext } from "solid-js"
+import {
+  createContext,
+  createEffect,
+  createMemo,
+  onMount,
+  useContext
+} from "solid-js"
 import { createStore } from "solid-js/store"
 import { useLocation } from "solid-start"
 import { MobiusType } from "../root"
@@ -51,6 +57,22 @@ export function createUserState(mobius: MobiusType) {
     linksLiked: [],
     stripePlan: "",
     subscriptionStopped: true
+  })
+
+  // TODO: find a faster/nicer way to do this..
+  const linksLikedOnly = createMemo(() => {
+    return user.linksLiked?.filter(
+      (likedLink) =>
+        !user.linksBookmarked?.some(
+          (bookmarkedLink) => bookmarkedLink.id === likedLink.id
+        ) &&
+        !user.linksInProgress?.some(
+          (inProgressLink) => inProgressLink.id === likedLink.id
+        ) &&
+        !user.linksCompleted?.some(
+          (completedLink) => completedLink.id === likedLink.id
+        )
+    )
   })
 
   // createMemo(() => {
@@ -184,7 +206,8 @@ export function createUserState(mobius: MobiusType) {
     },
     setSignedIn: (state: boolean) => {
       return setUser({ signedIn: state })
-    }
+    },
+    linksLikedOnly
     // likedLinksSearch
   } as const
 }
