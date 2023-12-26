@@ -170,33 +170,46 @@ const NewLinkModal = (props: {
           />
         </div>
         <div class="flex justify-between flex-row-reverse w-full">
-          <IconButton
-            onClick={() => {
-              if (linkState() === "Bookmark") {
-                setLinkState(null)
-              } else {
-                setLinkState("Bookmark")
-              }
-            }}
-            icon="Bookmark"
-            activeIcon={linkState() === "Bookmark"}
-          />
-          <IconButton
-            onClick={() => {
-              if (linkState() === "In Progress") {
-                setLinkState(null)
-              } else {
-                setLinkState("In Progress")
-              }
-            }}
-            icon="In Progress"
-            activeIcon={linkState() === "In Progress"}
-          />
-          <div
-            onClick={submit}
-            class="dark:bg-white bg-gray-200 px-[42px] hover:bg-opacity-90 transition-all p-2 text-black rounded-[8px] cursor-pointer"
-          >
-            Save
+          <div class="flex gap-2 items-center">
+            <IconButton
+              onClick={() => {
+                if (linkState() === "Bookmark") {
+                  setLinkState(null)
+                } else {
+                  setLinkState("Bookmark")
+                }
+              }}
+              icon="Bookmark"
+              activeIcon={linkState() === "Bookmark"}
+            />
+            <IconButton
+              onClick={() => {
+                if (linkState() === "In Progress") {
+                  setLinkState(null)
+                } else {
+                  setLinkState("In Progress")
+                }
+              }}
+              icon="In Progress"
+              activeIcon={linkState() === "In Progress"}
+            />
+            <IconButton
+              onClick={() => {
+                if (linkState() === "Completed") {
+                  setLinkState(null)
+                } else {
+                  setLinkState("Completed")
+                }
+              }}
+              icon="Completed"
+              activeIcon={linkState() === "Completed"}
+            />
+            <div
+              onClick={submit}
+              class="dark:bg-white bg-gray-200 px-[42px] hover:bg-opacity-90 transition-all p-2 text-black rounded-[8px] cursor-pointer"
+            >
+              Save
+            </div>
           </div>
           <div
             class=" px-4 border-light dark:border-dark p-2 rounded-[8px] cursor-pointer"
