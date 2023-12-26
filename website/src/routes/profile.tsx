@@ -18,6 +18,7 @@ import { useUser } from "../GlobalContext/user"
 import GlobalGuideLink from "../components/Topic/GlobalGuideLink"
 import GuideNav from "../components/Topic/GuideNav"
 import { useMobius } from "../root"
+import { IconButton } from "@la/shared/ui"
 
 type NewLink = {
   url: string
@@ -43,6 +44,8 @@ const NewLinkModal = (props: {
   const [title, setTitle] = createSignal("")
   const [url, setUrl] = createSignal("")
   const [description, setDescription] = createSignal("")
+  const [mainTopic, setMainTopic] = createSignal("")
+  const [linkState, setLinkState] = createSignal<string | null>("Bookmark")
 
   const updateProposedTitle = async (url_value: string) => {
     if (!isUrlValid(url_value)) return
@@ -148,10 +151,47 @@ const NewLinkModal = (props: {
               const str = (e.target as HTMLInputElement).value // TODO: make issue to solid
               setDescription(str)
             }}
-            class="text-[20px] bg-gray-200 dark:bg-neutral-700 px-2 outline-none w-full font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[8px] p-1"
+            class="bg-inherit text-[20px] px-2 outline-none w-full font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[8px] p-1 mb-4"
+          />
+          {/* TODO: add suggestions but allow custom input for topic (can be any topic) */}
+          <input
+            type="text"
+            placeholder="Main Topic"
+            value={description()}
+            onInput={(e) => {
+              const str = e.target.value
+              setMainTopic(str)
+            }}
+            onPaste={(e) => {
+              const str = (e.target as HTMLInputElement).value // TODO: make issue to solid
+              setMainTopic(str)
+            }}
+            class="bg-inherit text-[20px] px-2 outline-none w-full font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[8px] p-1"
           />
         </div>
         <div class="flex justify-between flex-row-reverse w-full">
+          <IconButton
+            onClick={() => {
+              if (linkState() === "Bookmark") {
+                setLinkState(null)
+              } else {
+                setLinkState("Bookmark")
+              }
+            }}
+            icon="Bookmark"
+            activeIcon={linkState() === "Bookmark"}
+          />
+          <IconButton
+            onClick={() => {
+              if (linkState() === "In Progress") {
+                setLinkState(null)
+              } else {
+                setLinkState("In Progress")
+              }
+            }}
+            icon="In Progress"
+            activeIcon={linkState() === "In Progress"}
+          />
           <div
             onClick={submit}
             class="dark:bg-white bg-gray-200 px-[42px] hover:bg-opacity-90 transition-all p-2 text-black rounded-[8px] cursor-pointer"

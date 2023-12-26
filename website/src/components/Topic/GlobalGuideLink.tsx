@@ -1,7 +1,7 @@
 import { ui } from "@la/shared"
 import { isSignedIn, parseResponse } from "@la/shared/lib"
 import clsx from "clsx"
-import { Show, createEffect, createMemo, createSignal, onMount } from "solid-js"
+import { Show, createEffect, createMemo, createSignal } from "solid-js"
 import { useNavigate } from "solid-start"
 import { useGlobalState } from "../../GlobalContext/global"
 import { useUser } from "../../GlobalContext/user"
