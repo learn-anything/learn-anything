@@ -25,6 +25,8 @@ type NewLink = {
   title: string
   description: string
   mainTopic: string
+  linkState: string
+  liked: boolean
 }
 
 const isUrlValid = (url: string) => {
@@ -45,7 +47,8 @@ const NewLinkModal = (props: {
   const [url, setUrl] = createSignal("")
   const [description, setDescription] = createSignal("")
   const [mainTopic, setMainTopic] = createSignal("")
-  const [linkState, setLinkState] = createSignal<string | null>("Bookmark")
+  const [linkState, setLinkState] = createSignal<string>("Bookmark")
+  const [liked, setLiked] = createSignal(false)
 
   const updateProposedTitle = async (url_value: string) => {
     if (!isUrlValid(url_value)) return
@@ -78,28 +81,30 @@ const NewLinkModal = (props: {
   }
 
   const submit = () => {
-    const url_value = url()
-    const title_value = title()
-    const description_value = description()
-
-    if (!url_value) {
+    if (!url()) {
       toast("Need to enter URL to save")
       return
     }
-    if (!title_value) {
+    if (!title()) {
       toast("Need to enter title to save")
       return
     }
-    if (!isUrlValid(url_value)) {
+    if (!mainTopic()) {
+      toast("Need to enter main topic to save")
+      return
+    }
+    if (!isUrlValid(url())) {
       toast("Invalid URL")
       return
     }
 
     const newLink: NewLink = {
-      url: url_value,
-      title: title_value,
-      description: description_value,
-      mainTopic: ""
+      url: url(),
+      title: title(),
+      description: description(),
+      mainTopic: mainTopic(),
+      linkState: linkState(),
+      liked: liked()
     }
 
     props.onSubmit(newLink)
@@ -174,7 +179,7 @@ const NewLinkModal = (props: {
             <IconButton
               onClick={() => {
                 if (linkState() === "Bookmark") {
-                  setLinkState(null)
+                  setLinkState("")
                 } else {
                   setLinkState("Bookmark")
                 }
@@ -185,7 +190,7 @@ const NewLinkModal = (props: {
             <IconButton
               onClick={() => {
                 if (linkState() === "In Progress") {
-                  setLinkState(null)
+                  setLinkState("")
                 } else {
                   setLinkState("In Progress")
                 }
@@ -196,13 +201,24 @@ const NewLinkModal = (props: {
             <IconButton
               onClick={() => {
                 if (linkState() === "Completed") {
-                  setLinkState(null)
+                  setLinkState("")
                 } else {
                   setLinkState("Completed")
                 }
               }}
               icon="Completed"
               activeIcon={linkState() === "Completed"}
+            />
+            <IconButton
+              onClick={() => {
+                if (liked()) {
+                  setLiked(false)
+                } else {
+                  setLiked(true)
+                }
+              }}
+              icon="Liked"
+              activeIcon={liked()}
             />
             <div
               onClick={submit}

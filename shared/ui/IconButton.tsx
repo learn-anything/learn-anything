@@ -6,7 +6,6 @@ interface Props {
   onClick: () => void
   icon: "Bookmark" | "In Progress" | "Completed" | "Liked"
   activeIcon: boolean
-  class?: string
 }
 
 export function IconButton(props: Props) {
@@ -92,8 +91,37 @@ export function IconButton(props: Props) {
             >
               <Show
                 when={statusChanging()}
+                fallback={<Icon name="Checkmark" width="24" height="24" />}
+              >
+                <div class="flex-center w-full h-full">
+                  <Icon width="16" height="16" name="Loader" border="white" />
+                </div>
+              </Show>
+            </div>
+          </ToolTip>
+        </Match>
+        <Match when={props.icon === "Liked"}>
+          <ToolTip label="Liked">
+            <div
+              onClick={async () => {
+                setStatusChanging(true)
+                props.onClick()
+                setStatusChanging(false)
+              }}
+              class={clsx(
+                "cursor-pointer rounded-[4px] animate-[iconSlide_0.2s_ease-out_forwards] hover:opacity-50 transition-all h-[26px] w-[26px] border-light dark:border-dark",
+                props.activeIcon &&
+                  "bg-red-500 border-none transition-all !flex-center"
+              )}
+            >
+              <Show
+                when={statusChanging()}
                 fallback={
-                  <Icon name="Checkmark" fill="white" width="24" height="24" />
+                  <Icon
+                    name="Heart"
+                    fill="white"
+                    border={props.activeIcon ? "red" : "black"}
+                  />
                 }
               >
                 <div class="flex-center w-full h-full">
