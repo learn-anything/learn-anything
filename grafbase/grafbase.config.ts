@@ -264,6 +264,7 @@ g.mutation("createProduct", {
   resolver: "createProduct"
 })
 
+// TODO: delete and make it `deleteUserGlobalLink`
 g.mutation("deletePersonalLink", {
   args: { personalLinkId: g.string() },
   returns: g.string(),
@@ -300,14 +301,14 @@ g.mutation("updateGlobalLinkStatus", {
   resolver: "updateGlobalLinkStatus"
 })
 
-g.mutation("addPersonalLink", {
+g.mutation("addGlobalLink", {
   args: {
     title: g.string(),
     url: g.string(),
     description: g.string().optional()
   },
   returns: g.string(),
-  resolver: "addPersonalLink"
+  resolver: "addGlobalLink"
 })
 
 g.mutation("cancelStripe", {

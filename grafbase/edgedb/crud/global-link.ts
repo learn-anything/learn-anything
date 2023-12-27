@@ -415,47 +415,112 @@ export async function addGlobalLink(
 }
 
 export async function addPersonalLink(
+  hankoId: string,
   url: string,
   title: string,
-  hankoId: string,
-  description: string | null
+  description: string,
+  mainTopic: string,
+  linkState: "Bookmark" | "InProgress" | "Completed",
+  liked: boolean
 ) {
   const [urlWithoutProtocol, protocol] = splitUrlByProtocol(url)
   if (urlWithoutProtocol && protocol) {
     const link = await e
-      .insert(e.PersonalLink, {
+      .insert(e.GlobalLink, {
         url: urlWithoutProtocol,
         protocol: protocol,
         title: title,
-        description: description
+        verified: false,
+        // TODO: consider adding a switch on `add new link` to mark link public/private
+        public: true
+        // TODO: add main topic later
+        // mainTopic: e.select(e.GlobalTopic, () => ({
+        //   filter_single: { name: mainTopic! }
+        // }))
       })
       .unlessConflict((gl) => ({
         on: gl.url,
-        else: e.update(gl, () => ({
+        else: gl
+      }))
+      .run(client)
+
+    const personalLink = await e
+      .insert(e.PersonalLink, {
+        globalLink: e.select(e.GlobalLink, () => ({
+          filter_single: { id: link.id }
+        })),
+        title: title,
+        description: description,
+        mainTopic: e.insert(e.GlobalTopic, {
+          name: mainTopic.toLowerCase().replace(/\s+/g, "-"),
+          prettyName: mainTopic,
+          public: true,
+          verified: false
+        })
+      })
+      .unlessConflict((pl) => ({
+        on: pl.globalLink,
+        else: e.update(pl, () => ({
           set: {
-            url: urlWithoutProtocol,
-            protocol: protocol,
             title: title,
-            description: description
+            description: description,
+            mainTopic: e.insert(e.GlobalTopic, {
+              name: mainTopic.toLowerCase().replace(/\s+/g, "-"),
+              prettyName: mainTopic,
+              public: true,
+              verified: false
+            })
           }
         }))
       }))
       .run(client)
-
-    await e
-      .update(e.User, () => ({
-        filter_single: { hankoId },
-        set: {
-          personalLinks: {
-            "+=": e.select(e.PersonalLink, () => ({
-              filter_single: { id: link.id }
-            }))
-          }
-        }
-      }))
-      .run(client)
+    console.log(personalLink, "")
   }
 }
+
+// TODO: delete
+// export async function addPersonalLink(
+//   url: string,
+//   title: string,
+//   hankoId: string,
+//   description: string | null
+// ) {
+//   const [urlWithoutProtocol, protocol] = splitUrlByProtocol(url)
+//   if (urlWithoutProtocol && protocol) {
+//     const link = await e
+//       .insert(e.PersonalLink, {
+//         url: urlWithoutProtocol,
+//         protocol: protocol,
+//         title: title,
+//         description: description
+//       })
+//       .unlessConflict((gl) => ({
+//         on: gl.url,
+//         else: e.update(gl, () => ({
+//           set: {
+//             url: urlWithoutProtocol,
+//             protocol: protocol,
+//             title: title,
+//             description: description
+//           }
+//         }))
+//       }))
+//       .run(client)
+
+//     await e
+//       .update(e.User, () => ({
+//         filter_single: { hankoId },
+//         set: {
+//           personalLinks: {
+//             "+=": e.select(e.PersonalLink, () => ({
+//               filter_single: { id: link.id }
+//             }))
+//           }
+//         }
+//       }))
+//       .run(client)
+//   }
+// }
 
 export async function removeDuplicateUrls() {
   const links = await e

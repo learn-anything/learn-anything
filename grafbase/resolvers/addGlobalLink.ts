@@ -3,7 +3,7 @@ import { GraphQLError } from "graphql"
 import { addPersonalLink } from "../edgedb/crud/global-link"
 import { hankoIdFromToken } from "../lib/hanko-validate"
 
-const addPersonalLinkResolver: Resolver["Mutation.addPersonalLink"] = async (
+const addGlobalLinkResolver: Resolver["Mutation.addGlobalLink"] = async (
   parent,
   args,
   context,
@@ -23,4 +23,4 @@ const addPersonalLinkResolver: Resolver["Mutation.addPersonalLink"] = async (
   }
 }
 
-export default addPersonalLinkResolver
+export default addGlobalLinkResolver
