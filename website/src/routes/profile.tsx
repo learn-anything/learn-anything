@@ -162,7 +162,7 @@ const NewLinkModal = (props: {
           <input
             type="text"
             placeholder="Main Topic"
-            value={description()}
+            value={mainTopic()}
             onInput={(e) => {
               const str = e.target.value
               setMainTopic(str)

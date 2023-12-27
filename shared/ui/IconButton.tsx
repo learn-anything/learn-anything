@@ -18,7 +18,7 @@ export function IconButton(props: Props) {
             <div
               onClick={async () => {
                 setStatusChanging(true)
-                props.onClick()
+                await props.onClick()
                 setStatusChanging(false)
               }}
               class={clsx(
@@ -49,7 +49,7 @@ export function IconButton(props: Props) {
             <div
               onClick={async () => {
                 setStatusChanging(true)
-                props.onClick()
+                await props.onClick()
                 setStatusChanging(false)
               }}
               class={clsx(
@@ -80,7 +80,7 @@ export function IconButton(props: Props) {
             <div
               onClick={async () => {
                 setStatusChanging(true)
-                props.onClick()
+                await props.onClick()
                 setStatusChanging(false)
               }}
               class={clsx(
@@ -105,7 +105,7 @@ export function IconButton(props: Props) {
             <div
               onClick={async () => {
                 setStatusChanging(true)
-                props.onClick()
+                await props.onClick()
                 setStatusChanging(false)
               }}
               class={clsx(
