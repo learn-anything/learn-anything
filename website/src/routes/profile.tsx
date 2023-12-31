@@ -19,13 +19,14 @@ import GlobalGuideLink from "../components/Topic/GlobalGuideLink"
 import GuideNav from "../components/Topic/GuideNav"
 import { useMobius } from "../root"
 import { IconButton } from "@la/shared/ui"
+import { parseResponse } from "@la/shared/lib"
 
 type NewLink = {
   url: string
   title: string
   description: string
   mainTopic: string
-  linkState: string
+  linkState: "Bookmark" | "InProgress" | "Completed" | "None"
   liked: boolean
 }
 
@@ -40,14 +41,16 @@ const isUrlValid = (url: string) => {
 
 const NewLinkModal = (props: {
   onClose: () => void
-  onSubmit: (newLink: NewLink) => void
+  onSubmit: (newLink: NewLink) => [done: any, error: any]
 }) => {
   const mobius = useMobius()
   const [title, setTitle] = createSignal("")
   const [url, setUrl] = createSignal("")
   const [description, setDescription] = createSignal("")
   const [mainTopic, setMainTopic] = createSignal("")
-  const [linkState, setLinkState] = createSignal<string>("Bookmark")
+  const [linkState, setLinkState] = createSignal<
+    "Bookmark" | "InProgress" | "Completed" | "None"
+  >("Bookmark")
   const [liked, setLiked] = createSignal(false)
 
   const updateProposedTitle = async (url_value: string) => {
@@ -80,7 +83,7 @@ const NewLinkModal = (props: {
     }
   }
 
-  const submit = () => {
+  const submit = async () => {
     if (!url()) {
       toast("Need to enter URL to save")
       return
@@ -107,8 +110,12 @@ const NewLinkModal = (props: {
       liked: liked()
     }
 
-    props.onSubmit(newLink)
-    props.onClose()
+    const [done, err] = await props.onSubmit(newLink)
+    if (done) {
+      props.onClose()
+    } else {
+      toast(JSON.stringify(err))
+    }
   }
 
   return (
@@ -179,7 +186,7 @@ const NewLinkModal = (props: {
             <IconButton
               onClick={() => {
                 if (linkState() === "Bookmark") {
-                  setLinkState("")
+                  setLinkState("None")
                 } else {
                   setLinkState("Bookmark")
                 }
@@ -189,19 +196,19 @@ const NewLinkModal = (props: {
             />
             <IconButton
               onClick={() => {
-                if (linkState() === "In Progress") {
-                  setLinkState("")
+                if (linkState() === "InProgress") {
+                  setLinkState("None")
                 } else {
-                  setLinkState("In Progress")
+                  setLinkState("InProgress")
                 }
               }}
               icon="In Progress"
-              activeIcon={linkState() === "In Progress"}
+              activeIcon={linkState() === "InProgress"}
             />
             <IconButton
               onClick={() => {
                 if (linkState() === "Completed") {
-                  setLinkState("")
+                  setLinkState("None")
                 } else {
                   setLinkState("Completed")
                 }
@@ -253,18 +260,25 @@ export default function Profile() {
   const [linkFilter, setLinkFilter] = createSignal("")
 
   const submitNewLink = async (newLink: NewLink) => {
-    // @ts-ignore
-    user.set("personalLinks", (currentLinks) => [...currentLinks, newLink])
-    await mobius.mutate({
+    const res = await mobius.mutate({
       addPersonalLink: {
         where: {
-          title: newLink.title,
           url: newLink.url,
-          description: newLink.description
+          title: newLink.title,
+          description: newLink.description,
+          mainTopic: newLink.mainTopic,
+          linkState: newLink.linkState,
+          liked: newLink.liked
         },
         select: true
       }
     })
+    const [data, err] = parseResponse(res)
+    if (data) {
+      return [true, null]
+    } else {
+      return [false, err]
+    }
   }
 
   onMount(() => {

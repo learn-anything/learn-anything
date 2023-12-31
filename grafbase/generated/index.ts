@@ -14,6 +14,7 @@
 export type Schema = {
   'learningStatus': | 'to_learn'| 'learning'| 'learned'| 'none';
   'globalLinkAction': | 'removeProgress'| 'bookmark'| 'inProgress'| 'complete'| 'like'| 'unlike';
+  'linkState': | 'Bookmark'| 'InProgress'| 'Completed'| 'None';
   'section': {
     title: string;
     summary: string | null;
@@ -162,7 +163,7 @@ export type Schema = {
     deletePersonalLink?: string;
     updateTopicLearningStatus?: string;
     updateGlobalLinkStatus?: string;
-    addGlobalLink?: string;
+    addPersonalLink?: string;
     cancelStripe?: string;
     renewStripe?: string;
     updateStripePlan?: string;
@@ -198,7 +199,7 @@ export type Resolver = {
   'Mutation.deletePersonalLink': ResolverFn<Schema['Mutation'], { personalLinkId: string,  }, string>
   'Mutation.updateTopicLearningStatus': ResolverFn<Schema['Mutation'], { learningStatus: Schema['learningStatus'], topicName: string, verifiedTopic: boolean,  }, string>
   'Mutation.updateGlobalLinkStatus': ResolverFn<Schema['Mutation'], { action: Schema['globalLinkAction'], globalLinkId: string,  }, string>
-  'Mutation.addGlobalLink': ResolverFn<Schema['Mutation'], { title: string, url: string, description: string | null,  }, string>
+  'Mutation.addPersonalLink': ResolverFn<Schema['Mutation'], { url: string, title: string, description: string, mainTopic: string, linkState: Schema['linkState'], liked: boolean,  }, string>
   'Mutation.cancelStripe': ResolverFn<Schema['Mutation'], {  }, string>
   'Mutation.renewStripe': ResolverFn<Schema['Mutation'], {  }, string>
   'Mutation.updateStripePlan': ResolverFn<Schema['Mutation'], {  }, string>

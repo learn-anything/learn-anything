@@ -66,7 +66,7 @@ export type $GlobalLinkλShape = $.typeutil.flatten<_std.$Object_d29c95e25d6b11e
   "<linksInProgress[is User]": $.LinkDesc<$User, $.Cardinality.Many, {}, false, false,  false, false>;
   "<linksLiked[is User]": $.LinkDesc<$User, $.Cardinality.Many, {}, false, false,  false, false>;
   "<linksCompleted[is User]": $.LinkDesc<$User, $.Cardinality.Many, {}, false, false,  false, false>;
-  "<globalLink[is PersonalLink]": $.LinkDesc<$PersonalLink, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<globalLink[is PersonalLink]": $.LinkDesc<$PersonalLink, $.Cardinality.AtMostOne, {}, true, false,  false, false>;
   "<dislikedLinks": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<globalLink": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<links": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
@@ -191,13 +191,14 @@ const $Note = $.makeType<$Note>(_.spec, "f80ed565-45e2-11ee-abb6-39c0845797dd", 
 const Note: $.$expr_PathNode<$.TypeSet<$Note, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Note, $.Cardinality.Many), null);
 
 export type $PersonalLinkλShape = $.typeutil.flatten<_std.$Object_d29c95e25d6b11eeabaf012dd32b5eadλShape & {
-  "globalLink": $.LinkDesc<$GlobalLink, $.Cardinality.One, {}, false, false,  false, false>;
   "mainTopic": $.LinkDesc<$GlobalTopic, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
   "description": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "title": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "globalLink": $.LinkDesc<$GlobalLink, $.Cardinality.One, {}, true, false,  false, false>;
 }>;
 type $PersonalLink = $.ObjectType<"default::PersonalLink", $PersonalLinkλShape, null, [
   ..._std.$Object_d29c95e25d6b11eeabaf012dd32b5ead['__exclusives__'],
+  {globalLink: {__element__: $GlobalLink, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
 ]>;
 const $PersonalLink = $.makeType<$PersonalLink>(_.spec, "5ff52846-a4b1-11ee-bddf-edd602456c31", _.syntax.literal);
 

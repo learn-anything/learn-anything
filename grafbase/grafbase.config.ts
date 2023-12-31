@@ -301,14 +301,23 @@ g.mutation("updateGlobalLinkStatus", {
   resolver: "updateGlobalLinkStatus"
 })
 
-g.mutation("addGlobalLink", {
+const linkState = g.enum("linkState", [
+  "Bookmark",
+  "InProgress",
+  "Completed",
+  "None"
+])
+g.mutation("addPersonalLink", {
   args: {
-    title: g.string(),
     url: g.string(),
-    description: g.string().optional()
+    title: g.string(),
+    description: g.string(),
+    mainTopic: g.string(),
+    linkState: g.enumRef(linkState),
+    liked: g.boolean()
   },
   returns: g.string(),
-  resolver: "addGlobalLink"
+  resolver: "addPersonalLink"
 })
 
 g.mutation("cancelStripe", {

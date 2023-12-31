@@ -420,9 +420,11 @@ export async function addPersonalLink(
   title: string,
   description: string,
   mainTopic: string,
-  linkState: "Bookmark" | "InProgress" | "Completed",
+  linkState: "Bookmark" | "InProgress" | "Completed" | "None",
   liked: boolean
 ) {
+  const foundUser = foundUserByHankoId(hankoId)
+
   const [urlWithoutProtocol, protocol] = splitUrlByProtocol(url)
   if (urlWithoutProtocol && protocol) {
     const link = await e
@@ -451,12 +453,21 @@ export async function addPersonalLink(
         })),
         title: title,
         description: description,
-        mainTopic: e.insert(e.GlobalTopic, {
-          name: mainTopic.toLowerCase().replace(/\s+/g, "-"),
-          prettyName: mainTopic,
-          public: true,
-          verified: false
-        })
+        mainTopic: e
+          .insert(e.GlobalTopic, {
+            name: mainTopic.toLowerCase().replace(/\s+/g, "-"),
+            prettyName: mainTopic,
+            public: true,
+            verified: false
+          })
+          .unlessConflict((topic) => ({
+            on: topic.name,
+            else: e.select(e.GlobalTopic, () => ({
+              filter_single: {
+                name: mainTopic.toLowerCase().replace(/\s+/g, "-")
+              }
+            }))
+          }))
       })
       .unlessConflict((pl) => ({
         on: pl.globalLink,
@@ -464,17 +475,86 @@ export async function addPersonalLink(
           set: {
             title: title,
             description: description,
-            mainTopic: e.insert(e.GlobalTopic, {
-              name: mainTopic.toLowerCase().replace(/\s+/g, "-"),
-              prettyName: mainTopic,
-              public: true,
-              verified: false
-            })
+            mainTopic: e
+              .insert(e.GlobalTopic, {
+                name: mainTopic.toLowerCase().replace(/\s+/g, "-"),
+                prettyName: mainTopic,
+                public: true,
+                verified: false
+              })
+              .unlessConflict((topic) => ({
+                on: topic.name,
+                else: e.select(e.GlobalTopic, () => ({
+                  filter_single: {
+                    name: mainTopic.toLowerCase().replace(/\s+/g, "-")
+                  }
+                }))
+              }))
           }
         }))
       }))
       .run(client)
-    console.log(personalLink, "")
+
+    // TODO: ideally it's done in 1 query, doing another query for now
+    const globalLinkId = await e.select(e.GlobalLink, () => ({
+      filter_single: { url: urlWithoutProtocol }
+    }))
+
+    switch (linkState) {
+      case "Bookmark":
+        await e
+          .update(foundUser, () => ({
+            set: {
+              linksBookmarked: { "+=": globalLinkId }
+            }
+          }))
+          .run(client)
+        break
+      case "InProgress":
+        await e
+          .update(foundUser, () => ({
+            set: {
+              linksInProgress: { "+=": globalLinkId }
+            }
+          }))
+          .run(client)
+        break
+      case "Completed":
+        await e
+          .update(foundUser, () => ({
+            set: {
+              linksCompleted: { "+=": globalLinkId }
+            }
+          }))
+          .run(client)
+        break
+      default:
+        break
+    }
+
+    switch (liked) {
+      case true:
+        await e
+          .update(foundUser, () => ({
+            set: {
+              linksLiked: { "+=": globalLinkId }
+            }
+          }))
+          .run(client)
+        break
+      case false:
+        await e
+          .update(foundUser, () => ({
+            set: {
+              linksLiked: { "-=": globalLinkId }
+            }
+          }))
+          .run(client)
+        break
+      default:
+        break
+    }
+    return personalLink
   }
 }
 

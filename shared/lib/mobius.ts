@@ -19,7 +19,7 @@ type Mutation {
   deletePersonalLink(personalLinkId: String!): String!
   updateTopicLearningStatus(learningStatus: learningStatus!, topicName: String!, verifiedTopic: Boolean!): String!
   updateGlobalLinkStatus(action: globalLinkAction!, globalLinkId: String!): String!
-  addPersonalLink(title: String!, url: String!, description: String): String!
+  addPersonalLink(url: String!, title: String!, description: String!, mainTopic: String!, linkState: linkState!, liked: Boolean!): String!
   cancelStripe: String!
   renewStripe: String!
   updateStripePlan: String!
@@ -140,6 +140,12 @@ enum learningStatus {
   learning
   learned
   none
+}
+enum linkState {
+  Bookmark
+  InProgress
+  Completed
+  None
 }
 input section {
   title: String!

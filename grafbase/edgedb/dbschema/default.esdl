@@ -238,7 +238,9 @@ module default {
     multi link links := .<globalLink[is Link];
   }
   type PersonalLink {
-    required link globalLink: GlobalLink;
+    required link globalLink: GlobalLink {
+      constraint exclusive;
+    };
     title: str;
     description: str;
     link mainTopic: GlobalTopic;
