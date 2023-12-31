@@ -110,6 +110,7 @@ export async function getLearningStatus(topicName: string, hankoId: string) {
   return res
 }
 
+// TODO: should return PersonalLink `description` etc. if it exists for the url
 export async function getAllLinks(hankoId: string) {
   return await e
     .select(e.User, (user) => ({

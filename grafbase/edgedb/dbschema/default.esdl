@@ -40,22 +40,22 @@ module default {
     multi topicsLearned: GlobalTopic;
     property topicsTracked := count(.topicsToLearn) + count(.topicsLearning) + count(.topicsLearned);
     # links user wants to complete
-    multi linksBookmarked: GlobalLink;
+    multi linksBookmarked: PersonalLink;
     # links user is currently trying to complete
-    multi linksInProgress: GlobalLink;
+    multi linksInProgress: PersonalLink;
     # links user has completed
-    multi linksCompleted: GlobalLink;
+    multi linksCompleted: PersonalLink;
     # links user has liked
-    multi linksLiked: GlobalLink;
+    multi linksLiked: PersonalLink;
     property linksTracked := count(.linksBookmarked) + count(.linksInProgress) + count(.linksCompleted) + count(.linksLiked);
-    # links user has disliked (not used currently)
-    multi dislikedLinks: GlobalLink;
+    # links user has disliked (not sure if useful, but we need some way to give feedback to links more perhaps?)
+    # multi dislikedLinks: GlobalLink;
     # notes user has liked
     # TODO: what happens when user deletes note? should it be deleted from here too?
     # or moved to global note?
     multi likedNotes: Note;
-    # notes user has disliked
-    multi dislikedNotes: Note;
+    # notes user has disliked (same question as for `dislikedLinks`)
+    # multi dislikedNotes: Note;
     # list of topics user is moderating
     multi topicsModerated: GlobalTopic;
     # products user is selling
