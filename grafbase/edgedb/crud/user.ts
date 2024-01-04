@@ -116,48 +116,83 @@ export async function getAllLinks(hankoId: string) {
     .select(e.User, (user) => ({
       filter_single: e.op(user.hankoId, "=", hankoId),
       linksBookmarked: {
-        id: true,
         title: true,
-        url: true,
-        year: true,
-        protocol: true,
         description: true,
         mainTopic: {
           name: true,
           prettyName: true
+        },
+        globalLink: {
+          id: true,
+          title: true,
+          url: true,
+          year: true,
+          protocol: true,
+          description: true,
+          mainTopic: {
+            name: true,
+            prettyName: true
+          }
         }
       },
       linksInProgress: {
-        id: true,
         title: true,
-        url: true,
-        year: true,
-        protocol: true,
         description: true,
         mainTopic: {
           name: true,
           prettyName: true
+        },
+        globalLink: {
+          id: true,
+          title: true,
+          url: true,
+          year: true,
+          protocol: true,
+          description: true,
+          mainTopic: {
+            name: true,
+            prettyName: true
+          }
         }
       },
       linksCompleted: {
-        id: true,
         title: true,
-        url: true,
-        year: true,
-        protocol: true,
         description: true,
         mainTopic: {
           name: true,
           prettyName: true
+        },
+        globalLink: {
+          id: true,
+          title: true,
+          url: true,
+          year: true,
+          protocol: true,
+          description: true,
+          mainTopic: {
+            name: true,
+            prettyName: true
+          }
         }
       },
       linksLiked: {
-        id: true,
         title: true,
-        url: true,
+        description: true,
         mainTopic: {
           name: true,
           prettyName: true
+        },
+        globalLink: {
+          id: true,
+          title: true,
+          url: true,
+          year: true,
+          protocol: true,
+          description: true,
+          mainTopic: {
+            name: true,
+            prettyName: true
+          }
         }
       }
     }))

@@ -141,6 +141,7 @@ g.query("getAllLinks", {
       linksInProgress: g.ref(GlobalLink).list(),
       linksCompleted: g.ref(GlobalLink).list(),
       linksLiked: g.ref(GlobalLink).list()
+      // otherLinks: g.ref(GlobalLink).list()
     })
   ),
   resolver: "getAllLinks"
