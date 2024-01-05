@@ -1,11 +1,14 @@
 import { Application } from "@nativescript/core"
 import { render } from "@nativescript-community/solid-js"
-
+import { document } from "dominative";
 import { App } from "./app.tsx"
 
-document.body.actionBarHidden = false
-render(App, document.body)
+document.body.actionBarHidden = true
+// todo: check with Ammar on types
+document.body.appendChild(document.createElement("ContentView") as any)
 
-const create = () => document
+render(App, document.body.firstElementChild);
 
-Application.run({ create })
+const create = () => document;
+
+Application.run({ create });

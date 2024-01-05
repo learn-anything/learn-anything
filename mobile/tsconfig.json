@@ -1,35 +1,37 @@
 {
   "compilerOptions": {
-    "module": "esnext",
+    "strict": true,
     "target": "es2020",
+    "module": "esnext",
     "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "noEmitHelpers": true,
-    "noEmitOnError": true,
-    "skipLibCheck": true,
-    "lib": [
-      "es2020",
-      "dom"
-    ],
-    "baseUrl": ".",
-    "paths": {
-      "~/*": [
-        "src/*"
-      ],
-      "@/*": [
-        "src/*"
-      ]
-    },
+    "lib": ["es2020", "DOM"],
+    "sourceMap": true,
     "jsx": "preserve",
     "jsxImportSource": "@nativescript-dom/solidjs-types",
+    "noEmit": true,
+    "noEmitHelpers": true,
+    "importHelpers": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["app/*"],
+      "@/*": ["app/*"]
+    },
+    "allowJs": true,
     "types": [
       "node",
       "@nativescript-dom/core-types",
       "@nativescript-dom/solidjs-types"
     ],
+    "allowImportingTsExtensions": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "outDir": "dist",
+    "downlevelIteration": true,
+    "maxNodeModuleJsDepth": 5
   },
-  "include": [
-    "app/**/*"
-  ]
+  "include": ["app"],
+  "exclude": ["node_modules", "platforms"]
 }
