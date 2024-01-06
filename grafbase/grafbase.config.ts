@@ -76,7 +76,13 @@ const GlobalLink = g.type("GlobalLink", {
   year: g.string().optional(),
   protocol: g.string(),
   description: g.string().optional(),
-  mainTopic: g.ref(MainTopicWithTitleAndPrettyName)
+  mainTopic: g.ref(MainTopicWithTitleAndPrettyName).optional()
+})
+const PersonalLink = g.type("PersonalLink", {
+  title: g.string().optional(),
+  description: g.string().optional(),
+  mainTopic: g.ref(MainTopicWithTitleAndPrettyName).optional(),
+  globalLink: g.ref(GlobalLink)
 })
 const globalGuideSection = g.type("globalGuideSection", {
   summary: g.string().optional(),
@@ -137,10 +143,11 @@ g.query("getAllLinks", {
   args: {},
   returns: g.ref(
     g.type("outputOfGetAllLinks", {
-      linksBookmarked: g.ref(GlobalLink).list(),
-      linksInProgress: g.ref(GlobalLink).list(),
-      linksCompleted: g.ref(GlobalLink).list(),
-      linksLiked: g.ref(GlobalLink).list()
+      linksBookmarked: g.ref(PersonalLink).list()
+      // linksInProgress: g.ref(PersonalLink).list(),
+      // linksCompleted: g.ref(PersonalLink).list(),
+      // linksLiked: g.ref(PersonalLink).list()
+      // TODO: not yet implemented
       // otherLinks: g.ref(GlobalLink).list()
     })
   ),

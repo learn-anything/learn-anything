@@ -56,7 +56,14 @@ export type Schema = {
     year: string | null;
     protocol: string;
     description: string | null;
-    mainTopic?: Schema['MainTopicWithTitleAndPrettyName'];
+    mainTopic?: Schema['MainTopicWithTitleAndPrettyName'] | null;
+  };
+  'PersonalLink': {
+    __typename?: 'PersonalLink';
+    title: string | null;
+    description: string | null;
+    mainTopic?: Schema['MainTopicWithTitleAndPrettyName'] | null;
+    globalLink?: Schema['GlobalLink'];
   };
   'globalGuideSection': {
     __typename?: 'globalGuideSection';
@@ -93,10 +100,7 @@ export type Schema = {
   };
   'outputOfGetAllLinks': {
     __typename?: 'outputOfGetAllLinks';
-    linksBookmarked?: Array<Schema['GlobalLink']>;
-    linksInProgress?: Array<Schema['GlobalLink']>;
-    linksCompleted?: Array<Schema['GlobalLink']>;
-    linksLiked?: Array<Schema['GlobalLink']>;
+    linksBookmarked?: Array<Schema['PersonalLink']>;
   };
   'topicToLearn': {
     __typename?: 'topicToLearn';

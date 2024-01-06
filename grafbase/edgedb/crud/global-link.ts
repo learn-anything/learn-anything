@@ -427,7 +427,7 @@ export async function addPersonalLink(
 
   const [urlWithoutProtocol, protocol] = splitUrlByProtocol(url)
   if (urlWithoutProtocol && protocol) {
-    const link = await e
+    const globalLink = await e
       .insert(e.GlobalLink, {
         url: urlWithoutProtocol,
         protocol: protocol,
@@ -449,7 +449,7 @@ export async function addPersonalLink(
     const personalLink = await e
       .insert(e.PersonalLink, {
         globalLink: e.select(e.GlobalLink, () => ({
-          filter_single: { id: link.id }
+          filter_single: { id: globalLink.id }
         })),
         title: title,
         description: description,
@@ -496,16 +496,19 @@ export async function addPersonalLink(
       .run(client)
 
     // TODO: ideally it's done in 1 query, doing another query for now
-    const globalLinkId = await e.select(e.GlobalLink, () => ({
-      filter_single: { url: urlWithoutProtocol }
-    }))
+    // const globalLinkId = await e.select(e.GlobalLink, () => ({
+    //   filter_single: { url: urlWithoutProtocol }
+    // }))
+    // const personalLinkId = await e.select(e.PersonalLink, () => ({
+    //   filter_single: { globalLink.url: urlWithoutProtocol}
+    // }))
 
     switch (linkState) {
       case "Bookmark":
         await e
           .update(foundUser, () => ({
             set: {
-              linksBookmarked: { "+=": globalLinkId }
+              linksBookmarked: { "+=": personalLink }
             }
           }))
           .run(client)
