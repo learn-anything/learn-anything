@@ -1,5 +1,4 @@
-import { addPersonalLink } from "../crud/global-link"
-import { getAllLinks } from "../crud/user"
+import { addOrUpdatePersonalLink } from "../crud/global-link"
 
 async function main() {
   const hankoId = process.env.LOCAL_USER_HANKO_ID!
@@ -11,7 +10,7 @@ async function main() {
   // const links = await getAllLinks(hankoId)
   // console.log(links)
 
-  const res = await addPersonalLink(
+  const res = await addOrUpdatePersonalLink(
     hankoId,
     "https://github.com/ardeora/solid-toast",
     "Customisable Toast Notifications for SolidJS",

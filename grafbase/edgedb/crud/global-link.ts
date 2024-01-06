@@ -414,7 +414,7 @@ export async function addGlobalLink(
   }
 }
 
-export async function addPersonalLink(
+export async function addOrUpdatePersonalLink(
   hankoId: string,
   url: string,
   title: string,
@@ -446,7 +446,7 @@ export async function addPersonalLink(
       }))
       .run(client)
 
-    const personalLink = await e
+    const personalLinkId = await e
       .insert(e.PersonalLink, {
         globalLink: e.select(e.GlobalLink, () => ({
           filter_single: { id: globalLink.id }
@@ -499,9 +499,9 @@ export async function addPersonalLink(
     // const globalLinkId = await e.select(e.GlobalLink, () => ({
     //   filter_single: { url: urlWithoutProtocol }
     // }))
-    // const personalLinkId = await e.select(e.PersonalLink, () => ({
-    //   filter_single: { globalLink.url: urlWithoutProtocol}
-    // }))
+    const personalLink = await e.select(e.PersonalLink, () => ({
+      filter_single: { id: personalLinkId.id }
+    }))
 
     switch (linkState) {
       case "Bookmark":
@@ -517,7 +517,7 @@ export async function addPersonalLink(
         await e
           .update(foundUser, () => ({
             set: {
-              linksInProgress: { "+=": globalLinkId }
+              linksInProgress: { "+=": personalLink }
             }
           }))
           .run(client)
@@ -526,7 +526,7 @@ export async function addPersonalLink(
         await e
           .update(foundUser, () => ({
             set: {
-              linksCompleted: { "+=": globalLinkId }
+              linksCompleted: { "+=": personalLink }
             }
           }))
           .run(client)
@@ -540,7 +540,7 @@ export async function addPersonalLink(
         await e
           .update(foundUser, () => ({
             set: {
-              linksLiked: { "+=": globalLinkId }
+              linksLiked: { "+=": personalLink }
             }
           }))
           .run(client)
@@ -549,7 +549,7 @@ export async function addPersonalLink(
         await e
           .update(foundUser, () => ({
             set: {
-              linksLiked: { "-=": globalLinkId }
+              linksLiked: { "-=": personalLink }
             }
           }))
           .run(client)
@@ -557,7 +557,7 @@ export async function addPersonalLink(
       default:
         break
     }
-    return personalLink
+    return personalLinkId
   }
 }
 
