@@ -1,16 +1,9 @@
-// You can add your native dependencies here
-dependencies {
-//  implementation 'androidx.multidex:multidex:2.0.1'
-}
-
 android {
-  // compileSdkVersion 32
-  // buildToolsVersion "32.0.0"
-  // ndkVersion ""
-
+  compileSdkVersion 33
+  buildToolsVersion "33"
   defaultConfig {
-    minSdkVersion 17
-    // targetSdkVersion 32
+    minSdkVersion 23
+    targetSdkVersion 33
 
     // Version Information
     versionCode 1
