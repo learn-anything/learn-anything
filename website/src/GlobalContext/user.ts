@@ -145,6 +145,7 @@ export function createUserState(mobius: MobiusType) {
   // always fetching this so it's available in global palette search etc.
   onMount(async () => {
     // if (!(location.pathname === "/profile")) return
+    console.log("runs..")
     const res = await mobius.query({
       getTopicsLearned: {
         topicsToLearn: {
@@ -165,36 +166,35 @@ export function createUserState(mobius: MobiusType) {
       },
       getAllLinks: {
         linksBookmarked: {
-          id: true,
-          title: true,
-          url: true
-        },
-        linksInProgress: {
-          id: true,
-          title: true,
-          url: true
-        },
-        linksCompleted: {
-          id: true,
-          title: true,
-          url: true
-        },
-        linksLiked: {
-          id: true,
-          title: true,
-          url: true
+          title: true
         }
+        // linksInProgress: {
+        //   id: true,
+        //   title: true,
+        //   url: true
+        // }
+        // linksCompleted: {
+        //   id: true,
+        //   title: true,
+        //   url: true
+        // },
+        // linksLiked: {
+        //   id: true,
+        //   title: true,
+        //   url: true
+        // }
       }
     })
     const [data] = parseResponse(res)
+    console.log(data, "resp data")
     setUser({
       topicsLearning: data?.getTopicsLearned.topicsLearning,
       topicsToLearn: data?.getTopicsLearned.topicsToLearn,
-      topicsLearned: data?.getTopicsLearned.topicsLearned,
-      linksBookmarked: data?.getAllLinks.linksBookmarked,
-      linksInProgress: data?.getAllLinks.linksInProgress,
-      linksCompleted: data?.getAllLinks.linksCompleted,
-      linksLiked: data?.getAllLinks.linksLiked
+      topicsLearned: data?.getTopicsLearned.topicsLearned
+      // linksBookmarked: data?.getAllLinks.linksBookmarked,
+      // linksInProgress: data?.getAllLinks.linksInProgress,
+      // linksCompleted: data?.getAllLinks.linksCompleted,
+      // linksLiked: data?.getAllLinks.linksLiked
     })
   })
 

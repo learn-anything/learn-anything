@@ -6,7 +6,7 @@ type GlobalLink {
   year: String
   protocol: String!
   description: String
-  mainTopic: MainTopicWithTitleAndPrettyName!
+  mainTopic: MainTopicWithTitleAndPrettyName
 }
 type MainTopicWithTitleAndPrettyName {
   name: String!
@@ -27,6 +27,12 @@ type Mutation {
   internalUpdateGrafbaseKv(topicsWithConnections: [updateGrafbaseKvOutput!]!): String!
   internalUpdateLatestGlobalGuide(topicName: String!, topicSummary: String!, sections: [section!]!): String!
   internalAddGlobalLinkToSection(linkUrl: String!, topicName: String!, sectionName: String!): String!
+}
+type PersonalLink {
+  title: String
+  description: String
+  mainTopic: MainTopicWithTitleAndPrettyName
+  globalLink: GlobalLink!
 }
 type Query {
   publicGetTopicsWithConnections: [publicGetTopicsWithConnectionsOutput!]!
@@ -84,10 +90,7 @@ type latestGlobalGuide {
   sections: [globalGuideSection!]!
 }
 type outputOfGetAllLinks {
-  linksBookmarked: [GlobalLink!]!
-  linksInProgress: [GlobalLink!]!
-  linksCompleted: [GlobalLink!]!
-  linksLiked: [GlobalLink!]!
+  linksBookmarked: [PersonalLink!]!
 }
 type publicGetGlobalLinkOutput {
   title: String!

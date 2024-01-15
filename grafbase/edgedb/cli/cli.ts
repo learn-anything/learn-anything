@@ -1,4 +1,4 @@
-import { addOrUpdatePersonalLink } from "../crud/global-link"
+import { getAllLinks } from "../crud/user"
 
 async function main() {
   const hankoId = process.env.LOCAL_USER_HANKO_ID!
@@ -10,19 +10,19 @@ async function main() {
   // const links = await getAllLinks(hankoId)
   // console.log(links)
 
-  const res = await addOrUpdatePersonalLink(
-    hankoId,
-    "https://github.com/ardeora/solid-toast",
-    "Customisable Toast Notifications for SolidJS",
-    "clean API",
-    "solid",
-    "Bookmark",
-    false
-  )
-  console.log(res, "res")
-  // const res = await getAllLinks(hankoId)
+  // const res = await addOrUpdatePersonalLink(
+  //   hankoId,
+  //   "https://github.com/ardeora/solid-toast",
+  //   "Customisable Toast Notifications for SolidJS",
+  //   "clean API",
+  //   "solid",
+  //   "Bookmark",
+  //   false
+  // )
+  // console.log(res, "res")
+  const res = await getAllLinks(hankoId)
   // const res = await getTopicsLearned(hankoId)
-  // console.log(res)
+  console.log(res)
   // const res = await getGlobalTopicDetails("physics", hankoId)
   // const res = await updateGlobalLinkProgress(
   //   hankoId,
