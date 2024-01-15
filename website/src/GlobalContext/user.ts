@@ -25,6 +25,17 @@ type Link = {
   year?: string
 }
 
+type MainTopicWithTitleAndPrettyName = {
+  name: string
+  prettyName: string
+}
+type PersonalLink = {
+  title: string | null
+  description: string | null
+  // mainTopic?: MainTopicWithTitleAndPrettyName
+  // globalLink: Link
+}
+
 type User = {
   username: string
   email: string
@@ -37,7 +48,7 @@ type User = {
   topicsLearning: Topic[]
   topicsToLearn: Topic[]
   topicsLearned: Topic[]
-  linksBookmarked?: Link[]
+  linksBookmarked?: PersonalLink[]
   linksInProgress?: Link[]
   linksCompleted?: Link[]
   linksLiked?: Link[]
@@ -166,7 +177,21 @@ export function createUserState(mobius: MobiusType) {
       },
       getAllLinks: {
         linksBookmarked: {
-          title: true
+          title: true,
+          description: true
+          // mainTopic: {
+          //   name: true,
+          //   prettyName: true
+          // },
+          // globalLink: {
+          //   id: true,
+          //   title: true,
+          //   url: true,
+          //   year: true,
+          //   protocol: true,
+          //   description: true,
+          //   mainTopic: { name: true, prettyName: true }
+          // }
         }
         // linksInProgress: {
         //   id: true,
@@ -190,8 +215,8 @@ export function createUserState(mobius: MobiusType) {
     setUser({
       topicsLearning: data?.getTopicsLearned.topicsLearning,
       topicsToLearn: data?.getTopicsLearned.topicsToLearn,
-      topicsLearned: data?.getTopicsLearned.topicsLearned
-      // linksBookmarked: data?.getAllLinks.linksBookmarked,
+      topicsLearned: data?.getTopicsLearned.topicsLearned,
+      linksBookmarked: data?.getAllLinks.linksBookmarked
       // linksInProgress: data?.getAllLinks.linksInProgress,
       // linksCompleted: data?.getAllLinks.linksCompleted,
       // linksLiked: data?.getAllLinks.linksLiked
