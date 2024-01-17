@@ -18,7 +18,7 @@ type Mutation {
   createProduct(name: String!, description: String, imageUrl: String, websiteUrl: String, priceInUsdCents: Int): String!
   deletePersonalLink(personalLinkId: String!): String!
   updateTopicLearningStatus(learningStatus: learningStatus!, topicName: String!, verifiedTopic: Boolean!): String!
-  updateGlobalLinkStatus(action: globalLinkAction!, globalLinkId: String!): String!
+  updatePersonalLinkStatus(action: personalLinkAction!, personalLinkId: String!): String!
   addPersonalLink(url: String!, title: String!, description: String!, mainTopic: String!, linkState: linkState!, liked: Boolean!): String!
   cancelStripe: String!
   renewStripe: String!
@@ -91,6 +91,9 @@ type latestGlobalGuide {
 }
 type outputOfGetAllLinks {
   linksBookmarked: [PersonalLink!]!
+  linksInProgress: [PersonalLink!]!
+  linksCompleted: [PersonalLink!]!
+  linksLiked: [PersonalLink!]!
 }
 type publicGetGlobalLinkOutput {
   title: String!
@@ -130,14 +133,6 @@ type topicToLearn {
   prettyName: String!
   verified: Boolean!
 }
-enum globalLinkAction {
-  removeProgress
-  bookmark
-  inProgress
-  complete
-  like
-  unlike
-}
 enum learningStatus {
   to_learn
   learning
@@ -149,6 +144,14 @@ enum linkState {
   InProgress
   Completed
   None
+}
+enum personalLinkAction {
+  removeProgress
+  bookmark
+  inProgress
+  complete
+  like
+  unlike
 }
 input section {
   title: String!

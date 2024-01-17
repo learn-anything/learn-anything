@@ -77,12 +77,12 @@ export async function getGlobalLink(id: string) {
 // TODO: maybe can be part of `updateGlobalLinkProgress` but keeping it like this for now
 export async function likeOrUnlikeGlobalLink(
   hankoId: string,
-  globalLinkId: string,
+  personalLinkId: string,
   action: "like" | "unlike"
 ) {
   const foundUser = foundUserByHankoId(hankoId)
-  const foundLink = e.select(e.GlobalLink, () => ({
-    filter_single: { id: globalLinkId }
+  const foundLink = e.select(e.PersonalLink, () => ({
+    filter_single: { id: personalLinkId }
   }))
 
   switch (action) {
@@ -118,12 +118,12 @@ export async function likeOrUnlikeGlobalLink(
 
 export async function updateGlobalLinkProgress(
   hankoId: string,
-  globalLinkId: string,
+  personalLinkId: string,
   action: "removeProgress" | "bookmark" | "inProgress" | "complete"
 ) {
   const foundUser = foundUserByHankoId(hankoId)
-  const foundLink = e.select(e.GlobalLink, () => ({
-    filter_single: { id: globalLinkId }
+  const foundLink = e.select(e.PersonalLink, () => ({
+    filter_single: { id: personalLinkId }
   }))
 
   switch (action) {

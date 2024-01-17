@@ -134,67 +134,67 @@ export async function getAllLinks(hankoId: string) {
             prettyName: true
           }
         }
+      },
+      linksInProgress: {
+        title: true,
+        description: true,
+        mainTopic: {
+          name: true,
+          prettyName: true
+        },
+        globalLink: {
+          id: true,
+          title: true,
+          url: true,
+          year: true,
+          protocol: true,
+          description: true,
+          mainTopic: {
+            name: true,
+            prettyName: true
+          }
+        }
+      },
+      linksCompleted: {
+        title: true,
+        description: true,
+        mainTopic: {
+          name: true,
+          prettyName: true
+        },
+        globalLink: {
+          id: true,
+          title: true,
+          url: true,
+          year: true,
+          protocol: true,
+          description: true,
+          mainTopic: {
+            name: true,
+            prettyName: true
+          }
+        }
+      },
+      linksLiked: {
+        title: true,
+        description: true,
+        mainTopic: {
+          name: true,
+          prettyName: true
+        },
+        globalLink: {
+          id: true,
+          title: true,
+          url: true,
+          year: true,
+          protocol: true,
+          description: true,
+          mainTopic: {
+            name: true,
+            prettyName: true
+          }
+        }
       }
-      // linksInProgress: {
-      //   title: true,
-      //   description: true,
-      //   mainTopic: {
-      //     name: true,
-      //     prettyName: true
-      //   },
-      //   globalLink: {
-      //     id: true,
-      //     title: true,
-      //     url: true,
-      //     year: true,
-      //     protocol: true,
-      //     description: true,
-      //     mainTopic: {
-      //       name: true,
-      //       prettyName: true
-      //     }
-      //   }
-      // },
-      // linksCompleted: {
-      //   title: true,
-      //   description: true,
-      //   mainTopic: {
-      //     name: true,
-      //     prettyName: true
-      //   },
-      //   globalLink: {
-      //     id: true,
-      //     title: true,
-      //     url: true,
-      //     year: true,
-      //     protocol: true,
-      //     description: true,
-      //     mainTopic: {
-      //       name: true,
-      //       prettyName: true
-      //     }
-      //   }
-      // },
-      // linksLiked: {
-      //   title: true,
-      //   description: true,
-      //   mainTopic: {
-      //     name: true,
-      //     prettyName: true
-      //   },
-      //   globalLink: {
-      //     id: true,
-      //     title: true,
-      //     url: true,
-      //     year: true,
-      //     protocol: true,
-      //     description: true,
-      //     mainTopic: {
-      //       name: true,
-      //       prettyName: true
-      //     }
-      //   }
-      // }
     }))
     .run(client)
 }

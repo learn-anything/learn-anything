@@ -6,7 +6,7 @@ import {
 import { hankoIdFromToken } from "../lib/hanko-validate"
 import { Resolver } from "@grafbase/generated"
 
-const updateGlobalLinkStatusResolver: Resolver["Mutation.updateGlobalLinkStatus"] =
+const updatePersonalLinkStatusResolver: Resolver["Mutation.updatePersonalLinkStatus"] =
   async (parent, args, context, info) => {
     try {
       const hankoId = await hankoIdFromToken(context)
@@ -14,7 +14,7 @@ const updateGlobalLinkStatusResolver: Resolver["Mutation.updateGlobalLinkStatus"
         if (args.action === "like" || args.action === "unlike") {
           const res = await likeOrUnlikeGlobalLink(
             hankoId,
-            args.globalLinkId,
+            args.personalLinkId,
             args.action
           )
           if (res === null) {
@@ -24,7 +24,7 @@ const updateGlobalLinkStatusResolver: Resolver["Mutation.updateGlobalLinkStatus"
         }
         const res = await updateGlobalLinkProgress(
           hankoId,
-          args.globalLinkId,
+          args.personalLinkId,
           args.action
         )
         if (res === null) {
@@ -40,4 +40,4 @@ const updateGlobalLinkStatusResolver: Resolver["Mutation.updateGlobalLinkStatus"
     }
   }
 
-export default updateGlobalLinkStatusResolver
+export default updatePersonalLinkStatusResolver

@@ -11,6 +11,8 @@ import { createStore } from "solid-js/store"
 import { useLocation } from "solid-start"
 import { MobiusType } from "../root"
 
+// TODO: below types are bs because our graphql client is trash
+// it should use codegen with urql or something and should be able to import the types for each of the queries..
 type Topic = {
   name: string
   prettyName: string
@@ -24,7 +26,15 @@ type Link = {
   url: string
   year?: string
 }
-
+type GlobalLink = {
+  id: string
+  title: string
+  url: string
+  // protocol: string
+  description: string | null
+  year: string | null
+  // mainTopic: MainTopicWithTitleAndPrettyName | null
+}
 type MainTopicWithTitleAndPrettyName = {
   name: string
   prettyName: string
@@ -32,8 +42,8 @@ type MainTopicWithTitleAndPrettyName = {
 type PersonalLink = {
   title: string | null
   description: string | null
-  // mainTopic?: MainTopicWithTitleAndPrettyName
-  // globalLink: Link
+  mainTopic: MainTopicWithTitleAndPrettyName | null
+  globalLink: GlobalLink
 }
 
 type User = {
@@ -49,9 +59,9 @@ type User = {
   topicsToLearn: Topic[]
   topicsLearned: Topic[]
   linksBookmarked?: PersonalLink[]
-  linksInProgress?: Link[]
-  linksCompleted?: Link[]
-  linksLiked?: Link[]
+  linksInProgress?: PersonalLink[]
+  linksCompleted?: PersonalLink[]
+  linksLiked?: PersonalLink[]
 }
 
 // global state of user
@@ -156,7 +166,6 @@ export function createUserState(mobius: MobiusType) {
   // always fetching this so it's available in global palette search etc.
   onMount(async () => {
     // if (!(location.pathname === "/profile")) return
-    console.log("runs..")
     const res = await mobius.query({
       getTopicsLearned: {
         topicsToLearn: {
@@ -178,25 +187,24 @@ export function createUserState(mobius: MobiusType) {
       getAllLinks: {
         linksBookmarked: {
           title: true,
-          description: true
-          // mainTopic: {
-          //   name: true,
-          //   prettyName: true
-          // },
-          // globalLink: {
-          //   id: true,
-          //   title: true,
-          //   url: true,
-          //   year: true,
-          //   protocol: true,
-          //   description: true,
-          //   mainTopic: { name: true, prettyName: true }
-          // }
+          description: true,
+          mainTopic: {
+            name: true,
+            prettyName: true
+          },
+          globalLink: {
+            id: true,
+            title: true,
+            url: true,
+            year: true,
+            protocol: true,
+            description: true,
+            mainTopic: { name: true, prettyName: true }
+          }
         }
         // linksInProgress: {
-        //   id: true,
         //   title: true,
-        //   url: true
+        //   description: true
         // }
         // linksCompleted: {
         //   id: true,

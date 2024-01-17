@@ -143,10 +143,10 @@ g.query("getAllLinks", {
   args: {},
   returns: g.ref(
     g.type("outputOfGetAllLinks", {
-      linksBookmarked: g.ref(PersonalLink).list()
-      // linksInProgress: g.ref(PersonalLink).list(),
-      // linksCompleted: g.ref(PersonalLink).list(),
-      // linksLiked: g.ref(PersonalLink).list()
+      linksBookmarked: g.ref(PersonalLink).list(),
+      linksInProgress: g.ref(PersonalLink).list(),
+      linksCompleted: g.ref(PersonalLink).list(),
+      linksLiked: g.ref(PersonalLink).list()
       // TODO: not yet implemented
       // otherLinks: g.ref(GlobalLink).list()
     })
@@ -295,7 +295,7 @@ g.mutation("updateTopicLearningStatus", {
   resolver: "updateTopicLearningStatus"
 })
 
-const globalLinkAction = g.enum("globalLinkAction", [
+const personalLinkAction = g.enum("personalLinkAction", [
   "removeProgress",
   "bookmark",
   "inProgress",
@@ -303,10 +303,10 @@ const globalLinkAction = g.enum("globalLinkAction", [
   "like",
   "unlike"
 ])
-g.mutation("updateGlobalLinkStatus", {
-  args: { action: g.enumRef(globalLinkAction), globalLinkId: g.string() },
+g.mutation("updatePersonalLinkStatus", {
+  args: { action: g.enumRef(personalLinkAction), personalLinkId: g.string() },
   returns: g.string(),
-  resolver: "updateGlobalLinkStatus"
+  resolver: "updatePersonalLinkStatus"
 })
 
 const linkState = g.enum("linkState", [
