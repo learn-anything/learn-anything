@@ -1,4 +1,10 @@
 import { CoreTypes, EventData, Image } from "@nativescript/core"
+import { Route, StackRouter } from "./router"
+import { Home } from "./Pages/Home"
+import { Settings } from "./Pages/Settings"
+import { SettingsProfile } from "./Pages/SettingsProfile"
+import { SettingsPreference } from "./Pages/SettingsPreference"
+import { SettingsMember } from "./Pages/SettingsMember"
 
 const App = () => {
   let logo: Image
@@ -37,32 +43,13 @@ const App = () => {
   // draft commit
   return (
     <>
-      <gridlayout rows="auto,*" class="bg-[#3c495e]">
-        <stacklayout class="bg-[#075B88]">
-          <label
-            text="Organize"
-            class="bg-[#43B3F4] h-[70] text-center text-white"
-          />
-          <label
-            text="world's"
-            height="70"
-            class="bg-[#1089CA]  h-[70] text-center text-white"
-          />
-          <label
-            text="knowledge"
-            height="70"
-            class="h-[70] text-center text-white"
-          />
-        </stacklayout>
-        <image
-          row="1"
-          src="~/assets/logo-white-512.png"
-          height="256"
-          width="256"
-          class="mt-8 rounded-2xl"
-          on:loaded={(e: any) => loadedLogo(e)}
-        />
-      </gridlayout>
+      <StackRouter initialRouteName="Settings">
+        <Route name="Home" component={Home} />
+        <Route name="Settings" component={Settings} />
+        <Route name="SettingsProfile" component={SettingsProfile} />
+        <Route name="SettingsPreference" component={SettingsPreference} />
+        <Route name="SettingsMember" component={SettingsMember} />
+      </StackRouter>
     </>
   )
 }
