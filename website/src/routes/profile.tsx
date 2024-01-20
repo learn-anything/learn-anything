@@ -647,12 +647,19 @@ export default function Profile() {
                       return (
                         <div class="[&>*]:border-none border rounded-[4px] dark:border-[#282828]  border-[#69696951]">
                           <GlobalGuideLink
-                            title={link.title}
-                            url={link.url}
-                            id={link.id}
-                            year={link.year}
+                            personalLinkId={link.id}
+                            title={
+                              link.title ? link.title : link.globalLink.title
+                            }
+                            url={link.globalLink.url}
+                            id={link.globalLink.id}
+                            year={link.globalLink.year}
                             protocol={"https"}
-                            description={link.description}
+                            description={
+                              link.description
+                                ? link.description
+                                : link.globalLink.description
+                            }
                           />
                         </div>
                       )
@@ -663,12 +670,19 @@ export default function Profile() {
                       return (
                         <div class="[&>*]:border-none border rounded-[4px] dark:border-[#282828]  border-[#69696951]">
                           <GlobalGuideLink
-                            title={link.title}
-                            url={link.url}
-                            id={link.id}
-                            year={link.year}
+                            personalLinkId={link.id}
+                            title={
+                              link.title ? link.title : link.globalLink.title
+                            }
+                            url={link.globalLink.url}
+                            id={link.globalLink.id}
+                            year={link.globalLink.year}
                             protocol={"https"}
-                            description={link.description}
+                            description={
+                              link.description
+                                ? link.description
+                                : link.globalLink.description
+                            }
                           />
                         </div>
                       )

@@ -148,7 +148,7 @@ export default function GlobalGuideLink(props: Props) {
                         updatePersonalLinkStatus: {
                           where: {
                             action: "removeProgress",
-                            personalLinkId: props.id
+                            personalLinkId: props.personalLinkId
                           },
                           select: true
                         }
@@ -364,7 +364,7 @@ export default function GlobalGuideLink(props: Props) {
                         updatePersonalLinkStatus: {
                           where: {
                             action: "removeProgress",
-                            personalLinkId: props.id
+                            personalLinkId: props.personalLinkId
                           },
                           select: true
                         }
@@ -385,7 +385,7 @@ export default function GlobalGuideLink(props: Props) {
                         updatePersonalLinkStatus: {
                           where: {
                             action: "complete",
-                            personalLinkId: props.id
+                            personalLinkId: props.personalLinkId
                           },
                           select: true
                         }
@@ -395,11 +395,20 @@ export default function GlobalGuideLink(props: Props) {
                         user.set("linksCompleted", [
                           ...(user.user.linksCompleted || []),
                           {
-                            id: props.id,
+                            id: props.personalLinkId,
                             title: props.title,
                             description: props.description,
-                            url: props.url,
-                            year: props.year
+                            globalLink: {
+                              id: props.id,
+                              title: props.title,
+                              description: props.description,
+                              url: props.url,
+                              year: props.year
+                            },
+                            mainTopic: {
+                              name: "",
+                              prettyName: ""
+                            }
                           }
                         ])
                         user.set(
@@ -467,7 +476,7 @@ export default function GlobalGuideLink(props: Props) {
                         updatePersonalLinkStatus: {
                           where: {
                             action: "unlike",
-                            personalLinkId: props.id
+                            personalLinkId: props.personalLinkId
                           },
                           select: true
                         }
@@ -488,7 +497,7 @@ export default function GlobalGuideLink(props: Props) {
                         updatePersonalLinkStatus: {
                           where: {
                             action: "like",
-                            personalLinkId: props.id
+                            personalLinkId: props.personalLinkId
                           },
                           select: true
                         }
@@ -498,11 +507,20 @@ export default function GlobalGuideLink(props: Props) {
                         user.set("linksLiked", [
                           ...(user.user.linksLiked || []),
                           {
-                            id: props.id,
+                            id: props.personalLinkId,
                             title: props.title,
                             description: props.description,
-                            url: props.url,
-                            year: props.year
+                            globalLink: {
+                              id: props.id,
+                              title: props.title,
+                              description: props.description,
+                              url: props.url,
+                              year: props.year
+                            },
+                            mainTopic: {
+                              name: "",
+                              prettyName: ""
+                            }
                           }
                         ])
                       }

@@ -272,9 +272,9 @@ export function createUserState(mobius: MobiusType) {
       topicsToLearn: data?.getTopicsLearned.topicsToLearn,
       topicsLearned: data?.getTopicsLearned.topicsLearned,
       linksBookmarked: data?.getAllLinks.linksBookmarked,
-      linksInProgress: data?.getAllLinks.linksInProgress
-      // linksCompleted: data?.getAllLinks.linksCompleted,
-      // linksLiked: data?.getAllLinks.linksLiked
+      linksInProgress: data?.getAllLinks.linksInProgress,
+      linksCompleted: data?.getAllLinks.linksCompleted,
+      linksLiked: data?.getAllLinks.linksLiked
     })
   })
 
