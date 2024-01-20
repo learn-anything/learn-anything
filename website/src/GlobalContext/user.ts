@@ -40,6 +40,7 @@ type MainTopicWithTitleAndPrettyName = {
   prettyName: string
 }
 type PersonalLink = {
+  id: string
   title: string | null
   description: string | null
   mainTopic: MainTopicWithTitleAndPrettyName | null
@@ -75,12 +76,16 @@ export function createUserState(mobius: MobiusType) {
     topicsToLearn: [],
     topicsLearning: [],
     topicsLearned: [],
-    linksLiked: [],
     stripePlan: "",
-    subscriptionStopped: true
+    subscriptionStopped: true,
+    linksBookmarked: [],
+    linksInProgress: [],
+    linksCompleted: [],
+    linksLiked: []
   })
 
   // TODO: find a faster/nicer way to do this..
+  // TODO:
   const linksLikedOnly = createMemo(() => {
     return user.linksLiked?.filter(
       (likedLink) =>
@@ -186,6 +191,61 @@ export function createUserState(mobius: MobiusType) {
       },
       getAllLinks: {
         linksBookmarked: {
+          id: true,
+          title: true,
+          description: true,
+          mainTopic: {
+            name: true,
+            prettyName: true
+          },
+          globalLink: {
+            id: true,
+            title: true,
+            url: true,
+            year: true,
+            protocol: true,
+            description: true,
+            mainTopic: { name: true, prettyName: true }
+          }
+        },
+        linksInProgress: {
+          id: true,
+          title: true,
+          description: true,
+          mainTopic: {
+            name: true,
+            prettyName: true
+          },
+          globalLink: {
+            id: true,
+            title: true,
+            url: true,
+            year: true,
+            protocol: true,
+            description: true,
+            mainTopic: { name: true, prettyName: true }
+          }
+        },
+        linksCompleted: {
+          id: true,
+          title: true,
+          description: true,
+          mainTopic: {
+            name: true,
+            prettyName: true
+          },
+          globalLink: {
+            id: true,
+            title: true,
+            url: true,
+            year: true,
+            protocol: true,
+            description: true,
+            mainTopic: { name: true, prettyName: true }
+          }
+        },
+        linksLiked: {
+          id: true,
           title: true,
           description: true,
           mainTopic: {
@@ -202,30 +262,17 @@ export function createUserState(mobius: MobiusType) {
             mainTopic: { name: true, prettyName: true }
           }
         }
-        // linksInProgress: {
-        //   title: true,
-        //   description: true
-        // }
-        // linksCompleted: {
-        //   id: true,
-        //   title: true,
-        //   url: true
-        // },
-        // linksLiked: {
-        //   id: true,
-        //   title: true,
-        //   url: true
-        // }
       }
     })
     const [data] = parseResponse(res)
-    console.log(data, "resp data")
+    console.log(data?.getAllLinks, "get all links")
+    console.log(data?.getTopicsLearned, "get topics learned")
     setUser({
       topicsLearning: data?.getTopicsLearned.topicsLearning,
       topicsToLearn: data?.getTopicsLearned.topicsToLearn,
       topicsLearned: data?.getTopicsLearned.topicsLearned,
-      linksBookmarked: data?.getAllLinks.linksBookmarked
-      // linksInProgress: data?.getAllLinks.linksInProgress,
+      linksBookmarked: data?.getAllLinks.linksBookmarked,
+      linksInProgress: data?.getAllLinks.linksInProgress
       // linksCompleted: data?.getAllLinks.linksCompleted,
       // linksLiked: data?.getAllLinks.linksLiked
     })

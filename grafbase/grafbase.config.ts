@@ -79,6 +79,7 @@ const GlobalLink = g.type("GlobalLink", {
   mainTopic: g.ref(MainTopicWithTitleAndPrettyName).optional()
 })
 const PersonalLink = g.type("PersonalLink", {
+  id: g.string(),
   title: g.string().optional(),
   description: g.string().optional(),
   mainTopic: g.ref(MainTopicWithTitleAndPrettyName).optional(),

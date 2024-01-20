@@ -60,6 +60,7 @@ export type Schema = {
   };
   'PersonalLink': {
     __typename?: 'PersonalLink';
+    id: string;
     title: string | null;
     description: string | null;
     mainTopic?: Schema['MainTopicWithTitleAndPrettyName'] | null;

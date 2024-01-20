@@ -14,6 +14,7 @@ interface Props {
   protocol: string
   year: string | null
   description: string | null
+  personalLinkId: string
   // progressState?: "Bookmark" | "InProgress" | "Completed" | null
   // liked: boolean
 }
@@ -168,7 +169,7 @@ export default function GlobalGuideLink(props: Props) {
                         updatePersonalLinkStatus: {
                           where: {
                             action: "bookmark",
-                            personalLinkId: props.id
+                            personalLinkId: props.personalLinkId
                           },
                           select: true
                         }
@@ -178,16 +179,16 @@ export default function GlobalGuideLink(props: Props) {
                         user.set("linksBookmarked", [
                           ...(user.user.linksBookmarked || []),
                           {
+                            id: props.personalLinkId,
+                            title: props.title,
+                            description: props.description,
                             globalLink: {
                               id: props.id,
                               title: props.title,
                               description: props.description,
                               url: props.url,
                               year: props.year
-                              // protocol: "https",
                             },
-                            title: props.title,
-                            description: props.description,
                             mainTopic: {
                               name: "",
                               prettyName: ""
@@ -258,7 +259,7 @@ export default function GlobalGuideLink(props: Props) {
                         updatePersonalLinkStatus: {
                           where: {
                             action: "removeProgress",
-                            personalLinkId: props.id
+                            personalLinkId: props.personalLinkId
                           },
                           select: true
                         }
@@ -279,33 +280,40 @@ export default function GlobalGuideLink(props: Props) {
                         updatePersonalLinkStatus: {
                           where: {
                             action: "inProgress",
-                            personalLinkId: props.id
+                            personalLinkId: props.personalLinkId
                           },
                           select: true
                         }
                       })
                       const [data] = parseResponse(res)
+                      console.log(data, "data")
                       if (data) {
                         user.set("linksInProgress", [
                           ...(user.user.linksInProgress || []),
                           {
-                            id: props.id,
-                            title: props.title,
-                            description: props.description,
-                            url: props.url,
-                            year: props.year
+                            id: props.personalLinkId,
+                            title: null,
+                            description: null,
+                            mainTopic: null,
+                            globalLink: {
+                              id: props.id,
+                              title: props.title,
+                              description: props.description,
+                              url: props.url,
+                              year: props.year
+                            }
                           }
                         ])
                         user.set(
                           "linksBookmarked",
                           user.user.linksBookmarked?.filter(
-                            (link) => link.id !== props.id
+                            (link) => link.globalLink.id !== props.id
                           )
                         )
                         user.set(
                           "linksCompleted",
                           user.user.linksCompleted?.filter(
-                            (link) => link.id !== props.id
+                            (link) => link.globalLink.id !== props.id
                           )
                         )
                       }

@@ -601,6 +601,7 @@ export default function Profile() {
                       return (
                         <div class="[&>*]:border-none border rounded-[4px] dark:border-[#282828]  border-[#69696951]">
                           <GlobalGuideLink
+                            personalLinkId={link.id}
                             title={
                               link.title ? link.title : link.globalLink.title
                             }
@@ -623,6 +624,7 @@ export default function Profile() {
                       return (
                         <div class="[&>*]:border-none border rounded-[4px] dark:border-[#282828]  border-[#69696951]">
                           <GlobalGuideLink
+                            personalLinkId={link.id}
                             title={
                               link.title ? link.title : link.globalLink.title
                             }

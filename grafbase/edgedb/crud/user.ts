@@ -116,6 +116,7 @@ export async function getAllLinks(hankoId: string) {
     .select(e.User, (user) => ({
       filter_single: e.op(user.hankoId, "=", hankoId),
       linksBookmarked: {
+        id: true,
         title: true,
         description: true,
         mainTopic: {
@@ -136,6 +137,7 @@ export async function getAllLinks(hankoId: string) {
         }
       },
       linksInProgress: {
+        id: true,
         title: true,
         description: true,
         mainTopic: {
@@ -156,6 +158,7 @@ export async function getAllLinks(hankoId: string) {
         }
       },
       linksCompleted: {
+        id: true,
         title: true,
         description: true,
         mainTopic: {
@@ -176,6 +179,7 @@ export async function getAllLinks(hankoId: string) {
         }
       },
       linksLiked: {
+        id: true,
         title: true,
         description: true,
         mainTopic: {

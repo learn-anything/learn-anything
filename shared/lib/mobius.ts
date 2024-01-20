@@ -29,6 +29,7 @@ type Mutation {
   internalAddGlobalLinkToSection(linkUrl: String!, topicName: String!, sectionName: String!): String!
 }
 type PersonalLink {
+  id: String!
   title: String
   description: String
   mainTopic: MainTopicWithTitleAndPrettyName
