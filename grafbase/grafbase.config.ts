@@ -76,7 +76,14 @@ const GlobalLink = g.type("GlobalLink", {
   year: g.string().optional(),
   protocol: g.string(),
   description: g.string().optional(),
-  mainTopic: g.ref(MainTopicWithTitleAndPrettyName)
+  mainTopic: g.ref(MainTopicWithTitleAndPrettyName).optional()
+})
+const PersonalLink = g.type("PersonalLink", {
+  id: g.string(),
+  title: g.string().optional(),
+  description: g.string().optional(),
+  mainTopic: g.ref(MainTopicWithTitleAndPrettyName).optional(),
+  globalLink: g.ref(GlobalLink)
 })
 const globalGuideSection = g.type("globalGuideSection", {
   summary: g.string().optional(),
@@ -137,10 +144,12 @@ g.query("getAllLinks", {
   args: {},
   returns: g.ref(
     g.type("outputOfGetAllLinks", {
-      linksBookmarked: g.ref(GlobalLink).list(),
-      linksInProgress: g.ref(GlobalLink).list(),
-      linksCompleted: g.ref(GlobalLink).list(),
-      linksLiked: g.ref(GlobalLink).list()
+      linksBookmarked: g.ref(PersonalLink).list(),
+      linksInProgress: g.ref(PersonalLink).list(),
+      linksCompleted: g.ref(PersonalLink).list(),
+      linksLiked: g.ref(PersonalLink).list()
+      // TODO: not yet implemented
+      // otherLinks: g.ref(GlobalLink).list()
     })
   ),
   resolver: "getAllLinks"
@@ -264,6 +273,7 @@ g.mutation("createProduct", {
   resolver: "createProduct"
 })
 
+// TODO: delete and make it `deleteUserGlobalLink`
 g.mutation("deletePersonalLink", {
   args: { personalLinkId: g.string() },
   returns: g.string(),
@@ -286,7 +296,7 @@ g.mutation("updateTopicLearningStatus", {
   resolver: "updateTopicLearningStatus"
 })
 
-const globalLinkAction = g.enum("globalLinkAction", [
+const personalLinkAction = g.enum("personalLinkAction", [
   "removeProgress",
   "bookmark",
   "inProgress",
@@ -294,17 +304,26 @@ const globalLinkAction = g.enum("globalLinkAction", [
   "like",
   "unlike"
 ])
-g.mutation("updateGlobalLinkStatus", {
-  args: { action: g.enumRef(globalLinkAction), globalLinkId: g.string() },
+g.mutation("updatePersonalLinkStatus", {
+  args: { action: g.enumRef(personalLinkAction), personalLinkId: g.string() },
   returns: g.string(),
-  resolver: "updateGlobalLinkStatus"
+  resolver: "updatePersonalLinkStatus"
 })
 
+const linkState = g.enum("linkState", [
+  "Bookmark",
+  "InProgress",
+  "Completed",
+  "None"
+])
 g.mutation("addPersonalLink", {
   args: {
-    title: g.string(),
     url: g.string(),
-    description: g.string().optional()
+    title: g.string(),
+    // description: g.string(),
+    // mainTopic: g.string(),
+    linkState: g.enumRef(linkState),
+    liked: g.boolean()
   },
   returns: g.string(),
   resolver: "addPersonalLink"

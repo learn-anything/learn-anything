@@ -13,7 +13,8 @@
 
 export type Schema = {
   'learningStatus': | 'to_learn'| 'learning'| 'learned'| 'none';
-  'globalLinkAction': | 'removeProgress'| 'bookmark'| 'inProgress'| 'complete'| 'like'| 'unlike';
+  'personalLinkAction': | 'removeProgress'| 'bookmark'| 'inProgress'| 'complete'| 'like'| 'unlike';
+  'linkState': | 'Bookmark'| 'InProgress'| 'Completed'| 'None';
   'section': {
     title: string;
     summary: string | null;
@@ -55,7 +56,15 @@ export type Schema = {
     year: string | null;
     protocol: string;
     description: string | null;
-    mainTopic?: Schema['MainTopicWithTitleAndPrettyName'];
+    mainTopic?: Schema['MainTopicWithTitleAndPrettyName'] | null;
+  };
+  'PersonalLink': {
+    __typename?: 'PersonalLink';
+    id: string;
+    title: string | null;
+    description: string | null;
+    mainTopic?: Schema['MainTopicWithTitleAndPrettyName'] | null;
+    globalLink?: Schema['GlobalLink'];
   };
   'globalGuideSection': {
     __typename?: 'globalGuideSection';
@@ -92,10 +101,10 @@ export type Schema = {
   };
   'outputOfGetAllLinks': {
     __typename?: 'outputOfGetAllLinks';
-    linksBookmarked?: Array<Schema['GlobalLink']>;
-    linksInProgress?: Array<Schema['GlobalLink']>;
-    linksCompleted?: Array<Schema['GlobalLink']>;
-    linksLiked?: Array<Schema['GlobalLink']>;
+    linksBookmarked?: Array<Schema['PersonalLink']>;
+    linksInProgress?: Array<Schema['PersonalLink']>;
+    linksCompleted?: Array<Schema['PersonalLink']>;
+    linksLiked?: Array<Schema['PersonalLink']>;
   };
   'topicToLearn': {
     __typename?: 'topicToLearn';
@@ -161,7 +170,7 @@ export type Schema = {
     createProduct?: string;
     deletePersonalLink?: string;
     updateTopicLearningStatus?: string;
-    updateGlobalLinkStatus?: string;
+    updatePersonalLinkStatus?: string;
     addPersonalLink?: string;
     cancelStripe?: string;
     renewStripe?: string;
@@ -197,8 +206,8 @@ export type Resolver = {
   'Mutation.createProduct': ResolverFn<Schema['Mutation'], { name: string, description: string | null, imageUrl: string | null, websiteUrl: string | null, priceInUsdCents: number | null,  }, string>
   'Mutation.deletePersonalLink': ResolverFn<Schema['Mutation'], { personalLinkId: string,  }, string>
   'Mutation.updateTopicLearningStatus': ResolverFn<Schema['Mutation'], { learningStatus: Schema['learningStatus'], topicName: string, verifiedTopic: boolean,  }, string>
-  'Mutation.updateGlobalLinkStatus': ResolverFn<Schema['Mutation'], { action: Schema['globalLinkAction'], globalLinkId: string,  }, string>
-  'Mutation.addPersonalLink': ResolverFn<Schema['Mutation'], { title: string, url: string, description: string | null,  }, string>
+  'Mutation.updatePersonalLinkStatus': ResolverFn<Schema['Mutation'], { action: Schema['personalLinkAction'], personalLinkId: string,  }, string>
+  'Mutation.addPersonalLink': ResolverFn<Schema['Mutation'], { url: string, title: string, linkState: Schema['linkState'], liked: boolean,  }, string>
   'Mutation.cancelStripe': ResolverFn<Schema['Mutation'], {  }, string>
   'Mutation.renewStripe': ResolverFn<Schema['Mutation'], {  }, string>
   'Mutation.updateStripePlan': ResolverFn<Schema['Mutation'], {  }, string>

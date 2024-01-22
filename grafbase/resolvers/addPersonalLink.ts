@@ -1,6 +1,6 @@
 import { Resolver } from "@grafbase/generated"
 import { GraphQLError } from "graphql"
-import { addPersonalLink } from "../edgedb/crud/global-link"
+import { addOrUpdatePersonalLink } from "../edgedb/crud/global-link"
 import { hankoIdFromToken } from "../lib/hanko-validate"
 
 const addPersonalLinkResolver: Resolver["Mutation.addPersonalLink"] = async (
@@ -12,7 +12,15 @@ const addPersonalLinkResolver: Resolver["Mutation.addPersonalLink"] = async (
   try {
     const hankoId = await hankoIdFromToken(context)
     if (hankoId) {
-      await addPersonalLink(args.url, args.title, hankoId, args.description)
+      await addOrUpdatePersonalLink(
+        hankoId,
+        args.url,
+        args.title,
+        // args.description,
+        // args.mainTopic,
+        args.linkState,
+        args.liked
+      )
       return "ok"
     } else {
       throw new GraphQLError("Missing or invalid Authorization header")

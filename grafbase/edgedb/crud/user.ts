@@ -110,6 +110,7 @@ export async function getLearningStatus(topicName: string, hankoId: string) {
   return res
 }
 
+// TODO: should return PersonalLink `description` etc. if it exists for the url
 export async function getAllLinks(hankoId: string) {
   return await e
     .select(e.User, (user) => ({
@@ -117,46 +118,85 @@ export async function getAllLinks(hankoId: string) {
       linksBookmarked: {
         id: true,
         title: true,
-        url: true,
-        year: true,
-        protocol: true,
         description: true,
         mainTopic: {
           name: true,
           prettyName: true
+        },
+        globalLink: {
+          id: true,
+          title: true,
+          url: true,
+          year: true,
+          protocol: true,
+          description: true,
+          mainTopic: {
+            name: true,
+            prettyName: true
+          }
         }
       },
       linksInProgress: {
         id: true,
         title: true,
-        url: true,
-        year: true,
-        protocol: true,
         description: true,
         mainTopic: {
           name: true,
           prettyName: true
+        },
+        globalLink: {
+          id: true,
+          title: true,
+          url: true,
+          year: true,
+          protocol: true,
+          description: true,
+          mainTopic: {
+            name: true,
+            prettyName: true
+          }
         }
       },
       linksCompleted: {
         id: true,
         title: true,
-        url: true,
-        year: true,
-        protocol: true,
         description: true,
         mainTopic: {
           name: true,
           prettyName: true
+        },
+        globalLink: {
+          id: true,
+          title: true,
+          url: true,
+          year: true,
+          protocol: true,
+          description: true,
+          mainTopic: {
+            name: true,
+            prettyName: true
+          }
         }
       },
       linksLiked: {
         id: true,
         title: true,
-        url: true,
+        description: true,
         mainTopic: {
           name: true,
           prettyName: true
+        },
+        globalLink: {
+          id: true,
+          title: true,
+          url: true,
+          year: true,
+          protocol: true,
+          description: true,
+          mainTopic: {
+            name: true,
+            prettyName: true
+          }
         }
       }
     }))

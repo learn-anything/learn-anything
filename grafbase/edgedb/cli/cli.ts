@@ -7,6 +7,19 @@ async function main() {
   //   "727a00a8-45e9-11ee-aedd-ab0e6a0e65eb",
   //   "like"
   // )
+  // const links = await getAllLinks(hankoId)
+  // console.log(links)
+
+  // const res = await addOrUpdatePersonalLink(
+  //   hankoId,
+  //   "https://github.com/ardeora/solid-toast",
+  //   "Customisable Toast Notifications for SolidJS",
+  //   "clean API",
+  //   "solid",
+  //   "Bookmark",
+  //   false
+  // )
+  // console.log(res, "res")
   const res = await getAllLinks(hankoId)
   // const res = await getTopicsLearned(hankoId)
   console.log(res)
