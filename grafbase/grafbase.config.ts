@@ -320,8 +320,8 @@ g.mutation("addPersonalLink", {
   args: {
     url: g.string(),
     title: g.string(),
-    description: g.string(),
-    mainTopic: g.string(),
+    // description: g.string(),
+    // mainTopic: g.string(),
     linkState: g.enumRef(linkState),
     liked: g.boolean()
   },

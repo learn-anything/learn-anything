@@ -24,8 +24,8 @@ import { parseResponse } from "@la/shared/lib"
 type NewLink = {
   url: string
   title: string
-  description: string
-  mainTopic: string
+  // description: string
+  // mainTopic: string
   linkState: "Bookmark" | "InProgress" | "Completed" | "None"
   liked: boolean
 }
@@ -41,7 +41,7 @@ const isUrlValid = (url: string) => {
 
 const NewLinkModal = (props: {
   onClose: () => void
-  onSubmit: (newLink: NewLink) => [done: any, error: any]
+  onSubmit: (newLink: NewLink) => Promise<[done: any, error: any]>
 }) => {
   const mobius = useMobius()
   const [title, setTitle] = createSignal("")
@@ -92,10 +92,10 @@ const NewLinkModal = (props: {
       toast("Need to enter title to save")
       return
     }
-    if (!mainTopic()) {
-      toast("Need to enter main topic to save")
-      return
-    }
+    // if (!mainTopic()) {
+    //   toast("Need to enter main topic to save")
+    //   return
+    // }
     if (!isUrlValid(url())) {
       toast("Invalid URL")
       return
@@ -104,8 +104,8 @@ const NewLinkModal = (props: {
     const newLink: NewLink = {
       url: url(),
       title: title(),
-      description: description(),
-      mainTopic: mainTopic(),
+      // description: description(),
+      // mainTopic: mainTopic(),
       linkState: linkState(),
       liked: liked()
     }
@@ -151,7 +151,7 @@ const NewLinkModal = (props: {
             }}
             class="bg-inherit pb-3 text-[20px] outline-none w-full px-2 font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[8px] p-1"
           />
-          <input
+          {/* <input
             type="text"
             placeholder="Description"
             value={description()}
@@ -164,9 +164,9 @@ const NewLinkModal = (props: {
               setDescription(str)
             }}
             class="bg-inherit text-[20px] px-2 outline-none w-full font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[8px] p-1 mb-4"
-          />
+          /> */}
           {/* TODO: add suggestions but allow custom input for topic (can be any topic) */}
-          <input
+          {/* <input
             type="text"
             placeholder="Main Topic"
             value={mainTopic()}
@@ -179,7 +179,7 @@ const NewLinkModal = (props: {
               setMainTopic(str)
             }}
             class="bg-inherit text-[20px] px-2 outline-none w-full font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[8px] p-1"
-          />
+          /> */}
         </div>
         <div class="flex justify-between flex-row-reverse w-full">
           <div class="flex gap-2 items-center">
@@ -216,7 +216,8 @@ const NewLinkModal = (props: {
               icon="Completed"
               activeIcon={linkState() === "Completed"}
             />
-            <IconButton
+            {/* TODO: add back */}
+            {/* <IconButton
               onClick={() => {
                 if (liked()) {
                   setLiked(false)
@@ -226,7 +227,7 @@ const NewLinkModal = (props: {
               }}
               icon="Liked"
               activeIcon={liked()}
-            />
+            /> */}
             <div
               onClick={submit}
               class="dark:bg-white bg-gray-200 px-[42px] hover:bg-opacity-90 transition-all p-2 text-black rounded-[8px] cursor-pointer"
@@ -265,8 +266,8 @@ export default function Profile() {
         where: {
           url: newLink.url,
           title: newLink.title,
-          description: newLink.description,
-          mainTopic: newLink.mainTopic,
+          // description: newLink.description,
+          // mainTopic: newLink.mainTopic,
           linkState: newLink.linkState,
           liked: newLink.liked
         },
@@ -275,6 +276,64 @@ export default function Profile() {
     })
     const [data, err] = parseResponse(res)
     if (data) {
+      switch (newLink.linkState) {
+        case "Bookmark":
+          user.set("linksBookmarked", [
+            ...(user.user.linksBookmarked || []),
+            {
+              id: "1",
+              title: null,
+              description: null,
+              mainTopic: null,
+              globalLink: {
+                id: "",
+                title: newLink.title,
+                description: "",
+                url: newLink.url,
+                year: null
+              }
+            }
+          ])
+          break
+        case "InProgress":
+          user.set("linksInProgress", [
+            ...(user.user.linksInProgress || []),
+            {
+              id: "1",
+              title: null,
+              description: null,
+              mainTopic: null,
+              globalLink: {
+                id: "",
+                title: newLink.title,
+                description: "",
+                url: newLink.url,
+                year: null
+              }
+            }
+          ])
+          break
+        case "Completed":
+          user.set("linksCompleted", [
+            ...(user.user.linksCompleted || []),
+            {
+              id: "1",
+              title: null,
+              description: null,
+              mainTopic: null,
+              globalLink: {
+                id: "",
+                title: newLink.title,
+                description: "",
+                url: newLink.url,
+                year: null
+              }
+            }
+          ])
+          break
+        default:
+          break
+      }
       return [true, null]
     } else {
       return [false, err]

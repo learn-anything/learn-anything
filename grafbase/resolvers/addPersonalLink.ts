@@ -16,8 +16,8 @@ const addPersonalLinkResolver: Resolver["Mutation.addPersonalLink"] = async (
         hankoId,
         args.url,
         args.title,
-        args.description,
-        args.mainTopic,
+        // args.description,
+        // args.mainTopic,
         args.linkState,
         args.liked
       )

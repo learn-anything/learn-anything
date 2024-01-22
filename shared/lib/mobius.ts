@@ -19,7 +19,7 @@ type Mutation {
   deletePersonalLink(personalLinkId: String!): String!
   updateTopicLearningStatus(learningStatus: learningStatus!, topicName: String!, verifiedTopic: Boolean!): String!
   updatePersonalLinkStatus(action: personalLinkAction!, personalLinkId: String!): String!
-  addPersonalLink(url: String!, title: String!, description: String!, mainTopic: String!, linkState: linkState!, liked: Boolean!): String!
+  addPersonalLink(url: String!, title: String!, linkState: linkState!, liked: Boolean!): String!
   cancelStripe: String!
   renewStripe: String!
   updateStripePlan: String!

@@ -418,8 +418,8 @@ export async function addOrUpdatePersonalLink(
   hankoId: string,
   url: string,
   title: string,
-  description: string,
-  mainTopic: string,
+  // description: string,
+  // mainTopic: string,
   linkState: "Bookmark" | "InProgress" | "Completed" | "None",
   liked: boolean
 ) {
@@ -451,45 +451,45 @@ export async function addOrUpdatePersonalLink(
         globalLink: e.select(e.GlobalLink, () => ({
           filter_single: { id: globalLink.id }
         })),
-        title: title,
-        description: description,
-        mainTopic: e
-          .insert(e.GlobalTopic, {
-            name: mainTopic.toLowerCase().replace(/\s+/g, "-"),
-            prettyName: mainTopic,
-            public: true,
-            verified: false
-          })
-          .unlessConflict((topic) => ({
-            on: topic.name,
-            else: e.select(e.GlobalTopic, () => ({
-              filter_single: {
-                name: mainTopic.toLowerCase().replace(/\s+/g, "-")
-              }
-            }))
-          }))
+        title: title
+        // description: description,
+        // mainTopic: e
+        //   .insert(e.GlobalTopic, {
+        //     name: mainTopic.toLowerCase().replace(/\s+/g, "-"),
+        //     prettyName: mainTopic,
+        //     public: true,
+        //     verified: false
+        //   })
+        //   .unlessConflict((topic) => ({
+        //     on: topic.name,
+        //     else: e.select(e.GlobalTopic, () => ({
+        //       filter_single: {
+        //         name: mainTopic.toLowerCase().replace(/\s+/g, "-")
+        //       }
+        //     }))
+        //   }))
       })
       .unlessConflict((pl) => ({
         on: pl.globalLink,
         else: e.update(pl, () => ({
           set: {
-            title: title,
-            description: description,
-            mainTopic: e
-              .insert(e.GlobalTopic, {
-                name: mainTopic.toLowerCase().replace(/\s+/g, "-"),
-                prettyName: mainTopic,
-                public: true,
-                verified: false
-              })
-              .unlessConflict((topic) => ({
-                on: topic.name,
-                else: e.select(e.GlobalTopic, () => ({
-                  filter_single: {
-                    name: mainTopic.toLowerCase().replace(/\s+/g, "-")
-                  }
-                }))
-              }))
+            title: title
+            // description: description,
+            // mainTopic: e
+            //   .insert(e.GlobalTopic, {
+            //     name: mainTopic.toLowerCase().replace(/\s+/g, "-"),
+            //     prettyName: mainTopic,
+            //     public: true,
+            //     verified: false
+            //   })
+            //   .unlessConflict((topic) => ({
+            //     on: topic.name,
+            //     else: e.select(e.GlobalTopic, () => ({
+            //       filter_single: {
+            //         name: mainTopic.toLowerCase().replace(/\s+/g, "-")
+            //       }
+            //     }))
+            //   }))
           }
         }))
       }))

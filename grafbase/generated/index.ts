@@ -207,7 +207,7 @@ export type Resolver = {
   'Mutation.deletePersonalLink': ResolverFn<Schema['Mutation'], { personalLinkId: string,  }, string>
   'Mutation.updateTopicLearningStatus': ResolverFn<Schema['Mutation'], { learningStatus: Schema['learningStatus'], topicName: string, verifiedTopic: boolean,  }, string>
   'Mutation.updatePersonalLinkStatus': ResolverFn<Schema['Mutation'], { action: Schema['personalLinkAction'], personalLinkId: string,  }, string>
-  'Mutation.addPersonalLink': ResolverFn<Schema['Mutation'], { url: string, title: string, description: string, mainTopic: string, linkState: Schema['linkState'], liked: boolean,  }, string>
+  'Mutation.addPersonalLink': ResolverFn<Schema['Mutation'], { url: string, title: string, linkState: Schema['linkState'], liked: boolean,  }, string>
   'Mutation.cancelStripe': ResolverFn<Schema['Mutation'], {  }, string>
   'Mutation.renewStripe': ResolverFn<Schema['Mutation'], {  }, string>
   'Mutation.updateStripePlan': ResolverFn<Schema['Mutation'], {  }, string>
