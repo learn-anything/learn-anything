@@ -1,5 +1,6 @@
 import SwiftUI
 
+
 @objc
 class TestViewProvider: UIViewController, SwiftUIProvider {
 
@@ -24,8 +25,7 @@ class TestViewProvider: UIViewController, SwiftUIProvider {
 
 
   func updateData(data: NSDictionary) {
-    print("Received data: \(data)")
-
+     setupSwiftUIView(content: swiftUIView)
   }
 
 
