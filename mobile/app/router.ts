@@ -1,4 +1,7 @@
 import { createStackRouter, RouteDefinition } from "solid-navigation"
+import { useGlobal } from "./Global/global"
+import { createSignal } from "solid-js"
+import { Label } from "@nativescript/core"
 
 declare module "solid-navigation" {
   export interface Routers {
@@ -8,6 +11,9 @@ declare module "solid-navigation" {
       SettingsPreference: RouteDefinition
       SettingsProfile: RouteDefinition
       SettingsMember: RouteDefinition
+      Notes: RouteDefinition<{
+        noteId?: string
+      }>
     }
   }
 }

@@ -1,14 +1,11 @@
 import { PageTransition, SharedTransition } from "@nativescript/core"
 import { useRouter } from "../router"
 import { For, createSignal } from "solid-js"
-import { Label } from "dominative/src/native-views"
+
+import { useGlobal } from "~/Global/global"
 
 export const Home = () => {
-  const [items, setItems] = createSignal([
-    "Do this",
-    "Do that",
-    "Do something else"
-  ])
+  const store = useGlobal()
   const router = useRouter()
   const goToPage = (name: "Home" | "Settings") => {
     // just showing ios shared transition with platform spring built in
@@ -30,9 +27,21 @@ export const Home = () => {
           class="text-[36px] font-bold text-purple-400 mb-[60px]"
         ></label>
         <flexboxlayout flexDirection="column" class="bg-neutral-900 rounded-xl">
-          <For each={items()}>
+          <For each={store.global.items}>
             {(item) => {
-              return <label text={item} class="p-[60px]"></label>
+              return (
+                <label
+                  text={item}
+                  on:tap={() => {
+                    router.navigate("Notes", {
+                      params: {
+                        noteId: item
+                      }
+                    })
+                  }}
+                  class="p-[60px]"
+                ></label>
+              )
             }}
           </For>
         </flexboxlayout>
