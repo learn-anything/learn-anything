@@ -25,7 +25,7 @@ class TestViewProvider: UIViewController, SwiftUIProvider {
 
 
   func updateData(data: NSDictionary) {
-     setupSwiftUIView(content: swiftUIView)
+
   }
 
 
