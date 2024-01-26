@@ -16,7 +16,7 @@ class TestViewProvider: UIViewController, SwiftUIProvider {
 
   public override func viewDidLoad() {
     super.viewDidLoad()
-    setupSwiftUIView(content: swiftUIView)
+
   }
 
 
@@ -25,7 +25,7 @@ class TestViewProvider: UIViewController, SwiftUIProvider {
 
 
   func updateData(data: NSDictionary) {
-
+    setupSwiftUIView(content: swiftUIView)
   }
 
 

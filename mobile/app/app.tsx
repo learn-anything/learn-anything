@@ -7,14 +7,7 @@ import { SettingsProfile } from "./Pages/SettingsProfile"
 import { SettingsPreference } from "./Pages/SettingsPreference"
 import { SettingsMember } from "./Pages/SettingsMember"
 import { GlobalProvider, createGlobalState } from "./Global/global"
-import { registerSwiftUI, UIDataDriver } from "@nativescript/swift-ui"
-
-declare const TestViewProvider: any
-
-registerSwiftUI(
-  "testView",
-  (view) => new UIDataDriver(TestViewProvider.alloc().init(), view)
-)
+import { registerSwiftUI, SwiftUI, UIDataDriver } from "@nativescript/swift-ui"
 
 const App = () => {
   const global = createGlobalState()
@@ -23,7 +16,7 @@ const App = () => {
   return (
     <>
       <stacklayout>
-        <sw:SwiftUI swiftId="testView" height="100" />
+        <swiftui swiftId="testView" />
       </stacklayout>
     </>
   )
