@@ -5,5 +5,5 @@ export const SettingsMember = () => {
         <label text="Member"></label>
       </stacklayout>
     </>
-  )
-}
+  );
+};

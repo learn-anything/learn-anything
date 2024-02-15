@@ -1,19 +1,22 @@
 {
   "name": "@la/mobile",
-  "main": "app/app.ts",
+  "main": "app/index.ts",
   "version": "0.0.1",
   "scripts": {
+    "android": "ns debug android --no-hmr",
+    "ios": "ns debug ios --no-hmr",
+    "format": "prettier --write '@(app|plugins)/**/*.@(css|ts|tsx|js)' './webpack.config.js' --ignore-path",
     "postinstall": "patch-package"
   },
   "dependencies": {
     "@nativescript-community/solid-js": "^0.0.5",
     "@nativescript/core": "~8.6.0",
-    "@nativescript/swift-ui": "^1.1.0",
-    "@nativescript/tailwind": "^2.0.1",
+    "@nativescript/iqkeyboardmanager": "~2.1.1",
+    "@nativescript/swift-ui": "^2.0.0",
+    "@nativescript/tailwind": "^2.1.0-rc.2",
     "dominative": "^0.1.1",
     "solid-js": "^1.8.5",
     "solid-navigation": "^1.0.0-alpha.11",
-    "tailwindcss": "~3.2.0",
     "undom-ng": "^1.0.10"
   },
   "devDependencies": {
@@ -24,12 +27,17 @@
     "@nativescript-dom/solidjs-types": "^1.0.19",
     "@nativescript/android": "~8.6.0",
     "@nativescript/ios": "~8.6.0",
+    "@nativescript/types": "~8.6.0",
     "@nativescript/webpack": "~5.0.18",
     "babel": "^6.23.0",
     "babel-loader": "^9.1.3",
     "babel-preset-solid": "^1.8.4",
+    "nativescript": "next",
     "patch-package": "^8.0.0",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.11",
     "solid-refresh": "^0.5.3",
+    "tailwindcss": "~3.4.0",
     "typescript": "~5.3.3"
   }
 }

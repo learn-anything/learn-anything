@@ -12,13 +12,25 @@ npm i
 
 Assuming you did [this setup](https://docs.nativescript.org/setup/macos#setting-up-macos-for-ios) and also ran `npm install -g nativescript`.
 
+### iOS
+
 And you downloaded and opened an iOS simulator (i.e. iPhone Pro 15).
 
 ```
-ns debug ios
+npm run ios
 ```
 
 For dev tools, can open `devtools://devtools/bundled/inspector.html?ws=localhost:41000` in chrome browser.
+
+### Android
+
+And you downloaded and opened an Android emulator
+
+```
+npm run android
+```
+
+For dev tools, can open `devtools://devtools/bundled/inspector.html?ws=localhost:40000` in chrome browser.
 
 ## Todo
 

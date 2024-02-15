@@ -16,6 +16,15 @@ export default {
         repositoryURL: "https://github.com/qeude/SwiftDown.git",
         version: "0.3.1"
       }
+      // Note: may consider using this as well
+      // {
+      //   name: "HighlightedTextEditor",
+      //   libs: ["HighlightedTextEditor"],
+      //   repositoryURL: "https://github.com/kyle-n/HighlightedTextEditor.git",
+      //   version: "2.1.2"
+      // }
+
+      
     ]
   }
 } as NativeScriptConfig

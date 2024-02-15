@@ -5,5 +5,5 @@ export const SettingsProfile = () => {
         <label text="Profile"></label>
       </stacklayout>
     </>
-  )
-}
+  );
+};

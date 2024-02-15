@@ -5,5 +5,5 @@ export const SettingsPreference = () => {
         <label text="Preference"></label>
       </stacklayout>
     </>
-  )
-}
+  );
+};

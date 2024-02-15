@@ -33,5 +33,6 @@
     "maxNodeModuleJsDepth": 5
   },
   "include": ["app"],
+  "files": ["./references.d.ts", "./custom_types/index.d.ts"],
   "exclude": ["node_modules", "platforms"]
 }

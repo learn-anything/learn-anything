@@ -1,0 +1,6 @@
+.DS_Store
+package-lock.json
+app/assets/**
+**/platforms/**
+**/App_Resources/**/*
+**/hooks/**/*

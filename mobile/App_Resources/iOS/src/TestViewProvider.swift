@@ -1,10 +1,8 @@
 import SwiftUI
 
-
 @objc
 class TestViewProvider: UIViewController, SwiftUIProvider {
-
-
+  private var swiftUIView = TestView()
 
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
@@ -16,18 +14,12 @@ class TestViewProvider: UIViewController, SwiftUIProvider {
 
   public override func viewDidLoad() {
     super.viewDidLoad()
-
-  }
-
-
-
-  private var swiftUIView = TestView()
-
-
-  func updateData(data: NSDictionary) {
     setupSwiftUIView(content: swiftUIView)
   }
 
+  func updateData(data: NSDictionary) {
+    
+  }
 
   var onEvent: ((NSDictionary) -> ())?
 }
