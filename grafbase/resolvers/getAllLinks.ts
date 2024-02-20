@@ -13,8 +13,10 @@ const getAllLinksResolver: Resolver["Query.getAllLinks"] = async (
     const hankoId = await hankoIdFromToken(context)
     if (hankoId) {
       const links = await getAllLinks(hankoId)
-      console.log(links, "links")
-      return links
+      if (links) {
+        return links
+      }
+      throw new GraphQLError("No links found")
     } else {
       throw new GraphQLError("Missing or invalid Authorization header")
     }

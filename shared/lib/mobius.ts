@@ -6,7 +6,7 @@ type GlobalLink {
   year: String
   protocol: String!
   description: String
-  mainTopic: MainTopicWithTitleAndPrettyName!
+  mainTopic: MainTopicWithTitleAndPrettyName
 }
 type MainTopicWithTitleAndPrettyName {
   name: String!
@@ -18,8 +18,8 @@ type Mutation {
   createProduct(name: String!, description: String, imageUrl: String, websiteUrl: String, priceInUsdCents: Int): String!
   deletePersonalLink(personalLinkId: String!): String!
   updateTopicLearningStatus(learningStatus: learningStatus!, topicName: String!, verifiedTopic: Boolean!): String!
-  updateGlobalLinkStatus(action: globalLinkAction!, globalLinkId: String!): String!
-  addPersonalLink(title: String!, url: String!, description: String): String!
+  updatePersonalLinkStatus(action: personalLinkAction!, personalLinkId: String!): String!
+  addPersonalLink(url: String!, title: String!, linkState: linkState!, liked: Boolean!): String!
   cancelStripe: String!
   renewStripe: String!
   updateStripePlan: String!
@@ -27,6 +27,13 @@ type Mutation {
   internalUpdateGrafbaseKv(topicsWithConnections: [updateGrafbaseKvOutput!]!): String!
   internalUpdateLatestGlobalGuide(topicName: String!, topicSummary: String!, sections: [section!]!): String!
   internalAddGlobalLinkToSection(linkUrl: String!, topicName: String!, sectionName: String!): String!
+}
+type PersonalLink {
+  id: String!
+  title: String
+  description: String
+  mainTopic: MainTopicWithTitleAndPrettyName
+  globalLink: GlobalLink!
 }
 type Query {
   publicGetTopicsWithConnections: [publicGetTopicsWithConnectionsOutput!]!
@@ -84,10 +91,10 @@ type latestGlobalGuide {
   sections: [globalGuideSection!]!
 }
 type outputOfGetAllLinks {
-  linksBookmarked: [GlobalLink!]!
-  linksInProgress: [GlobalLink!]!
-  linksCompleted: [GlobalLink!]!
-  linksLiked: [GlobalLink!]!
+  linksBookmarked: [PersonalLink!]!
+  linksInProgress: [PersonalLink!]!
+  linksCompleted: [PersonalLink!]!
+  linksLiked: [PersonalLink!]!
 }
 type publicGetGlobalLinkOutput {
   title: String!
@@ -127,19 +134,25 @@ type topicToLearn {
   prettyName: String!
   verified: Boolean!
 }
-enum globalLinkAction {
+enum learningStatus {
+  to_learn
+  learning
+  learned
+  none
+}
+enum linkState {
+  Bookmark
+  InProgress
+  Completed
+  None
+}
+enum personalLinkAction {
   removeProgress
   bookmark
   inProgress
   complete
   like
   unlike
-}
-enum learningStatus {
-  to_learn
-  learning
-  learned
-  none
 }
 input section {
   title: String!

@@ -72,15 +72,17 @@ export async function getGlobalLink(id: string) {
   return link
 }
 
+// TODO: make this return previous status of link
+// this way, in GlobalGuideLink, I can easily know what to update in local store
 // TODO: maybe can be part of `updateGlobalLinkProgress` but keeping it like this for now
 export async function likeOrUnlikeGlobalLink(
   hankoId: string,
-  globalLinkId: string,
+  personalLinkId: string,
   action: "like" | "unlike"
 ) {
   const foundUser = foundUserByHankoId(hankoId)
-  const foundLink = e.select(e.GlobalLink, () => ({
-    filter_single: { id: globalLinkId }
+  const foundLink = e.select(e.PersonalLink, () => ({
+    filter_single: { id: personalLinkId }
   }))
 
   switch (action) {
@@ -116,12 +118,12 @@ export async function likeOrUnlikeGlobalLink(
 
 export async function updateGlobalLinkProgress(
   hankoId: string,
-  globalLinkId: string,
+  personalLinkId: string,
   action: "removeProgress" | "bookmark" | "inProgress" | "complete"
 ) {
   const foundUser = foundUserByHankoId(hankoId)
-  const foundLink = e.select(e.GlobalLink, () => ({
-    filter_single: { id: globalLinkId }
+  const foundLink = e.select(e.PersonalLink, () => ({
+    filter_single: { id: personalLinkId }
   }))
 
   switch (action) {
@@ -412,48 +414,196 @@ export async function addGlobalLink(
   }
 }
 
-export async function addPersonalLink(
+export async function addOrUpdatePersonalLink(
+  hankoId: string,
   url: string,
   title: string,
-  hankoId: string,
-  description: string | null
+  // description: string,
+  // mainTopic: string,
+  linkState: "Bookmark" | "InProgress" | "Completed" | "None",
+  liked: boolean
 ) {
+  const foundUser = foundUserByHankoId(hankoId)
+
   const [urlWithoutProtocol, protocol] = splitUrlByProtocol(url)
   if (urlWithoutProtocol && protocol) {
-    const link = await e
-      .insert(e.PersonalLink, {
+    const globalLink = await e
+      .insert(e.GlobalLink, {
         url: urlWithoutProtocol,
         protocol: protocol,
         title: title,
-        description: description
+        verified: false,
+        // TODO: consider adding a switch on `add new link` to mark link public/private
+        public: true
+        // TODO: add main topic later
+        // mainTopic: e.select(e.GlobalTopic, () => ({
+        //   filter_single: { name: mainTopic! }
+        // }))
       })
       .unlessConflict((gl) => ({
         on: gl.url,
-        else: e.update(gl, () => ({
+        else: gl
+      }))
+      .run(client)
+
+    const personalLinkId = await e
+      .insert(e.PersonalLink, {
+        globalLink: e.select(e.GlobalLink, () => ({
+          filter_single: { id: globalLink.id }
+        })),
+        title: title
+        // description: description,
+        // mainTopic: e
+        //   .insert(e.GlobalTopic, {
+        //     name: mainTopic.toLowerCase().replace(/\s+/g, "-"),
+        //     prettyName: mainTopic,
+        //     public: true,
+        //     verified: false
+        //   })
+        //   .unlessConflict((topic) => ({
+        //     on: topic.name,
+        //     else: e.select(e.GlobalTopic, () => ({
+        //       filter_single: {
+        //         name: mainTopic.toLowerCase().replace(/\s+/g, "-")
+        //       }
+        //     }))
+        //   }))
+      })
+      .unlessConflict((pl) => ({
+        on: pl.globalLink,
+        else: e.update(pl, () => ({
           set: {
-            url: urlWithoutProtocol,
-            protocol: protocol,
-            title: title,
-            description: description
+            title: title
+            // description: description,
+            // mainTopic: e
+            //   .insert(e.GlobalTopic, {
+            //     name: mainTopic.toLowerCase().replace(/\s+/g, "-"),
+            //     prettyName: mainTopic,
+            //     public: true,
+            //     verified: false
+            //   })
+            //   .unlessConflict((topic) => ({
+            //     on: topic.name,
+            //     else: e.select(e.GlobalTopic, () => ({
+            //       filter_single: {
+            //         name: mainTopic.toLowerCase().replace(/\s+/g, "-")
+            //       }
+            //     }))
+            //   }))
           }
         }))
       }))
       .run(client)
 
-    await e
-      .update(e.User, () => ({
-        filter_single: { hankoId },
-        set: {
-          personalLinks: {
-            "+=": e.select(e.PersonalLink, () => ({
-              filter_single: { id: link.id }
-            }))
-          }
-        }
-      }))
-      .run(client)
+    // TODO: ideally it's done in 1 query, doing another query for now
+    // const globalLinkId = await e.select(e.GlobalLink, () => ({
+    //   filter_single: { url: urlWithoutProtocol }
+    // }))
+    const personalLink = await e.select(e.PersonalLink, () => ({
+      filter_single: { id: personalLinkId.id }
+    }))
+
+    switch (linkState) {
+      case "Bookmark":
+        await e
+          .update(foundUser, () => ({
+            set: {
+              linksBookmarked: { "+=": personalLink }
+            }
+          }))
+          .run(client)
+        break
+      case "InProgress":
+        await e
+          .update(foundUser, () => ({
+            set: {
+              linksInProgress: { "+=": personalLink }
+            }
+          }))
+          .run(client)
+        break
+      case "Completed":
+        await e
+          .update(foundUser, () => ({
+            set: {
+              linksCompleted: { "+=": personalLink }
+            }
+          }))
+          .run(client)
+        break
+      default:
+        break
+    }
+
+    switch (liked) {
+      case true:
+        await e
+          .update(foundUser, () => ({
+            set: {
+              linksLiked: { "+=": personalLink }
+            }
+          }))
+          .run(client)
+        break
+      case false:
+        await e
+          .update(foundUser, () => ({
+            set: {
+              linksLiked: { "-=": personalLink }
+            }
+          }))
+          .run(client)
+        break
+      default:
+        break
+    }
+    return personalLinkId
   }
 }
+
+// TODO: delete
+// export async function addPersonalLink(
+//   url: string,
+//   title: string,
+//   hankoId: string,
+//   description: string | null
+// ) {
+//   const [urlWithoutProtocol, protocol] = splitUrlByProtocol(url)
+//   if (urlWithoutProtocol && protocol) {
+//     const link = await e
+//       .insert(e.PersonalLink, {
+//         url: urlWithoutProtocol,
+//         protocol: protocol,
+//         title: title,
+//         description: description
+//       })
+//       .unlessConflict((gl) => ({
+//         on: gl.url,
+//         else: e.update(gl, () => ({
+//           set: {
+//             url: urlWithoutProtocol,
+//             protocol: protocol,
+//             title: title,
+//             description: description
+//           }
+//         }))
+//       }))
+//       .run(client)
+
+//     await e
+//       .update(e.User, () => ({
+//         filter_single: { hankoId },
+//         set: {
+//           personalLinks: {
+//             "+=": e.select(e.PersonalLink, () => ({
+//               filter_single: { id: link.id }
+//             }))
+//           }
+//         }
+//       }))
+//       .run(client)
+//   }
+// }
 
 export async function removeDuplicateUrls() {
   const links = await e

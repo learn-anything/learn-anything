@@ -40,22 +40,22 @@ module default {
     multi topicsLearned: GlobalTopic;
     property topicsTracked := count(.topicsToLearn) + count(.topicsLearning) + count(.topicsLearned);
     # links user wants to complete
-    multi linksBookmarked: GlobalLink;
+    multi linksBookmarked: PersonalLink;
     # links user is currently trying to complete
-    multi linksInProgress: GlobalLink;
+    multi linksInProgress: PersonalLink;
     # links user has completed
-    multi linksCompleted: GlobalLink;
+    multi linksCompleted: PersonalLink;
     # links user has liked
-    multi linksLiked: GlobalLink;
+    multi linksLiked: PersonalLink;
     property linksTracked := count(.linksBookmarked) + count(.linksInProgress) + count(.linksCompleted) + count(.linksLiked);
-    # links user has disliked (not used currently)
-    multi dislikedLinks: GlobalLink;
+    # links user has disliked (not sure if useful, but we need some way to give feedback to links more perhaps?)
+    # multi dislikedLinks: GlobalLink;
     # notes user has liked
     # TODO: what happens when user deletes note? should it be deleted from here too?
     # or moved to global note?
     multi likedNotes: Note;
-    # notes user has disliked
-    multi dislikedNotes: Note;
+    # notes user has disliked (same question as for `dislikedLinks`)
+    # multi dislikedNotes: Note;
     # list of topics user is moderating
     multi topicsModerated: GlobalTopic;
     # products user is selling
@@ -237,6 +237,14 @@ module default {
     # connected topics for this link
     multi link links := .<globalLink[is Link];
   }
+  type PersonalLink {
+    required link globalLink: GlobalLink {
+      constraint exclusive;
+    };
+    title: str;
+    description: str;
+    link mainTopic: GlobalTopic;
+  }
   type GlobalNote {
     required content: str;
     url: str;
@@ -252,7 +260,7 @@ module default {
     # pretty version of `name`, uppercased nicely, proper capitalisation i.e. Physics
     required prettyName: str;
     # detailed summary of the topic (in html, due to https://github.com/SaltyAom/mobius/issues/4)
-    required topicSummary: str;
+    topicSummary: str;
     # summary of the topic (short version)
     topicSummaryShort: str;
     # global guide for the topic, improved by community
@@ -260,9 +268,9 @@ module default {
     # true = topic is available to anyone to see
     # i.e. learn-anything.xyz/physics
     # false = not available for all to see
-    # global topics are first reviewed by LA before becoming public
+    # kept for future, needs more thinking, how it's different to `verified`
     required public: bool;
-    # true = topic was verified
+    # true = topic was verified (reviewed by LA and approved to be shown on LA)
     required verified: bool;
     # optional path of topic: /physics/quantum-physics where each GlobalTopic name is separated by /
     topicPath: str;

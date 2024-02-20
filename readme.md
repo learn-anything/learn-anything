@@ -242,13 +242,15 @@ Read instructions in [mobile](mobile)
 
 ## Contribute
 
-Current tasks to do are in [GitHub issues](../../issues) (organised with [labels](https://github.com/learn-anything/learn-anything.xyz/labels)). Tasks currently in focus are seen [here](https://github.com/learn-anything/learn-anything.xyz/labels/Current%20Month).
+Always open to useful ideas or fixes in form of issues or PRs.
 
-If task/bug is not mentioned there, open a [GitHub issue](../../issues) or [start discussion on GitHub](../../discussions) or [Discord](https://discord.com/invite/bxtD8x6aNF).
+Current [issues](../../issues) are organised with [labels](https://github.com/learn-anything/learn-anything.xyz/labels). Issues currently in focus are labeled with [Current Month](https://github.com/learn-anything/learn-anything.xyz/labels/Current%20Month) label.
 
-All PRs with improvements to docs/code or contributions to existing discussions/issues are welcome.
+If issue is not already present ([do search](../../issues) first), open [new issue](../../issues/new/choose), [start discussion](../../discussions) or ask about it on [Discord](https://discord.com/invite/bxtD8x6aNF).
 
-We want this project to have by far the best DX of any open source project on GitHub. We plan to do live streams of developing the code, various educational videos and a lot more in coming time.
+It's okay to submit draft PR as you can get help along the way to make it merge ready.
+
+We want this project to have by far the best DX of any open source project on GitHub. There will be live streams of developing the code, various educational videos and a lot more in coming time.
 
 ## Docs
 
@@ -300,12 +302,10 @@ Ran with `bun <Name>`
 | lint:types          | tsc --noEmit                                                                                                                                                |
 | lint                | bun lint:code && bun lint:types                                                                                                                             |
 
-### ♥️
+### 🖤
 
 Learn Anything logo by [NUMI](https://github.com/numi-hq/open-design):
 
 [<img src="https://raw.githubusercontent.com/numi-hq/open-design/main/assets/numi-lockup.png" alt="NUMI Logo" style="width: 200px;"/>](https://numi.tech/?ref=learn-anything)
 
-[![MIT License](http://bit.ly/mitbadge)](https://choosealicense.com/licenses/mit/)
-[![Discord](https://img.shields.io/badge/Discord-100000?style=flat&logo=discord&logoColor=white&labelColor=black&color=black)](https://discord.com/invite/bxtD8x6aNF)
-[![X](https://img.shields.io/badge/learnanything-100000?style=flat&logo=X&logoColor=white&labelColor=black&color=black)](https://twitter.com/learnanything_)
+[![Discord](https://img.shields.io/badge/Discord-100000?style=flat&logo=discord&logoColor=white&labelColor=black&color=black)](https://discord.com/invite/bxtD8x6aNF) [![X](https://img.shields.io/badge/learnanything-100000?logo=X&color=black)](https://twitter.com/learnanything_)

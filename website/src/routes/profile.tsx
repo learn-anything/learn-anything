@@ -15,16 +15,19 @@ import { A, useNavigate } from "solid-start"
 import toast, { Toaster } from "solid-toast"
 import { useGlobalState } from "../GlobalContext/global"
 import { useUser } from "../GlobalContext/user"
-import GuideNav from "../components/Topic/GuideNav"
-import ProfileGuideLink from "../components/Topic/ProfileGlobalLink"
-import { useMobius } from "../root"
 import GlobalGuideLink from "../components/Topic/GlobalGuideLink"
+import GuideNav from "../components/Topic/GuideNav"
+import { useMobius } from "../root"
+import { IconButton } from "@la/shared/ui"
+import { parseResponse } from "@la/shared/lib"
 
 type NewLink = {
   url: string
   title: string
-  description: string
-  mainTopic: string
+  // description: string
+  // mainTopic: string
+  linkState: "Bookmark" | "InProgress" | "Completed" | "None"
+  liked: boolean
 }
 
 const isUrlValid = (url: string) => {
@@ -38,12 +41,17 @@ const isUrlValid = (url: string) => {
 
 const NewLinkModal = (props: {
   onClose: () => void
-  onSubmit: (newLink: NewLink) => void
+  onSubmit: (newLink: NewLink) => Promise<[done: any, error: any]>
 }) => {
   const mobius = useMobius()
   const [title, setTitle] = createSignal("")
   const [url, setUrl] = createSignal("")
   const [description, setDescription] = createSignal("")
+  const [mainTopic, setMainTopic] = createSignal("")
+  const [linkState, setLinkState] = createSignal<
+    "Bookmark" | "InProgress" | "Completed" | "None"
+  >("Bookmark")
+  const [liked, setLiked] = createSignal(false)
 
   const updateProposedTitle = async (url_value: string) => {
     if (!isUrlValid(url_value)) return
@@ -75,33 +83,39 @@ const NewLinkModal = (props: {
     }
   }
 
-  const submit = () => {
-    const url_value = url()
-    const title_value = title()
-    const description_value = description()
-
-    if (!url_value) {
+  const submit = async () => {
+    if (!url()) {
       toast("Need to enter URL to save")
       return
     }
-    if (!title_value) {
+    if (!title()) {
       toast("Need to enter title to save")
       return
     }
-    if (!isUrlValid(url_value)) {
+    // if (!mainTopic()) {
+    //   toast("Need to enter main topic to save")
+    //   return
+    // }
+    if (!isUrlValid(url())) {
       toast("Invalid URL")
       return
     }
 
     const newLink: NewLink = {
-      url: url_value,
-      title: title_value,
-      description: description_value,
-      mainTopic: ""
+      url: url(),
+      title: title(),
+      // description: description(),
+      // mainTopic: mainTopic(),
+      linkState: linkState(),
+      liked: liked()
     }
 
-    props.onSubmit(newLink)
-    props.onClose()
+    const [done, err] = await props.onSubmit(newLink)
+    if (done) {
+      props.onClose()
+    } else {
+      toast(JSON.stringify(err))
+    }
   }
 
   return (
@@ -137,7 +151,7 @@ const NewLinkModal = (props: {
             }}
             class="bg-inherit pb-3 text-[20px] outline-none w-full px-2 font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[8px] p-1"
           />
-          <input
+          {/* <input
             type="text"
             placeholder="Description"
             value={description()}
@@ -149,15 +163,77 @@ const NewLinkModal = (props: {
               const str = (e.target as HTMLInputElement).value // TODO: make issue to solid
               setDescription(str)
             }}
-            class="text-[20px] bg-gray-200 dark:bg-neutral-700 px-2 outline-none w-full font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[8px] p-1"
-          />
+            class="bg-inherit text-[20px] px-2 outline-none w-full font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[8px] p-1 mb-4"
+          /> */}
+          {/* TODO: add suggestions but allow custom input for topic (can be any topic) */}
+          {/* <input
+            type="text"
+            placeholder="Main Topic"
+            value={mainTopic()}
+            onInput={(e) => {
+              const str = e.target.value
+              setMainTopic(str)
+            }}
+            onPaste={(e) => {
+              const str = (e.target as HTMLInputElement).value // TODO: make issue to solid
+              setMainTopic(str)
+            }}
+            class="bg-inherit text-[20px] px-2 outline-none w-full font-bold tracking-wide opacity-50 hover:opacity-70 focus:opacity-100  transition-all rounded-[8px] p-1"
+          /> */}
         </div>
         <div class="flex justify-between flex-row-reverse w-full">
-          <div
-            onClick={submit}
-            class="dark:bg-white bg-gray-200 px-[42px] hover:bg-opacity-90 transition-all p-2 text-black rounded-[8px] cursor-pointer"
-          >
-            Save
+          <div class="flex gap-2 items-center">
+            <IconButton
+              onClick={() => {
+                if (linkState() === "Bookmark") {
+                  setLinkState("None")
+                } else {
+                  setLinkState("Bookmark")
+                }
+              }}
+              icon="Bookmark"
+              activeIcon={linkState() === "Bookmark"}
+            />
+            <IconButton
+              onClick={() => {
+                if (linkState() === "InProgress") {
+                  setLinkState("None")
+                } else {
+                  setLinkState("InProgress")
+                }
+              }}
+              icon="In Progress"
+              activeIcon={linkState() === "InProgress"}
+            />
+            <IconButton
+              onClick={() => {
+                if (linkState() === "Completed") {
+                  setLinkState("None")
+                } else {
+                  setLinkState("Completed")
+                }
+              }}
+              icon="Completed"
+              activeIcon={linkState() === "Completed"}
+            />
+            {/* TODO: add back */}
+            {/* <IconButton
+              onClick={() => {
+                if (liked()) {
+                  setLiked(false)
+                } else {
+                  setLiked(true)
+                }
+              }}
+              icon="Liked"
+              activeIcon={liked()}
+            /> */}
+            <div
+              onClick={submit}
+              class="dark:bg-white bg-gray-200 px-[42px] hover:bg-opacity-90 transition-all p-2 text-black rounded-[8px] cursor-pointer"
+            >
+              Save
+            </div>
           </div>
           <div
             class=" px-4 border-light dark:border-dark p-2 rounded-[8px] cursor-pointer"
@@ -178,25 +254,90 @@ export default function Profile() {
   const mobius = useMobius()
   const global = useGlobalState()
   const navigate = useNavigate()
-  const [currentTab, setCurrentTab] = createSignal("Learning")
+  const [currentTab, setCurrentTab] = createSignal("Links")
   const [showAddLinkModal, setShowAddLinkModal] = createSignal(false)
   const [showHelpModal, setShowHelpModal] = createSignal(false)
   const [showFilter, setShowFilter] = createSignal(false)
   const [linkFilter, setLinkFilter] = createSignal("")
 
   const submitNewLink = async (newLink: NewLink) => {
-    // @ts-ignore
-    user.set("personalLinks", (currentLinks) => [...currentLinks, newLink])
-    await mobius.mutate({
+    const res = await mobius.mutate({
       addPersonalLink: {
         where: {
-          title: newLink.title,
           url: newLink.url,
-          description: newLink.description
+          title: newLink.title,
+          // description: newLink.description,
+          // mainTopic: newLink.mainTopic,
+          linkState: newLink.linkState,
+          liked: newLink.liked
         },
         select: true
       }
     })
+    const [data, err] = parseResponse(res)
+    if (data) {
+      switch (newLink.linkState) {
+        case "Bookmark":
+          user.set("linksBookmarked", [
+            ...(user.user.linksBookmarked || []),
+            {
+              id: "1",
+              title: null,
+              description: null,
+              mainTopic: null,
+              globalLink: {
+                id: "",
+                title: newLink.title,
+                description: "",
+                url: newLink.url,
+                year: null
+              }
+            }
+          ])
+          break
+        case "InProgress":
+          user.set("linksInProgress", [
+            ...(user.user.linksInProgress || []),
+            {
+              id: "1",
+              title: null,
+              description: null,
+              mainTopic: null,
+              globalLink: {
+                id: "",
+                title: newLink.title,
+                description: "",
+                url: newLink.url,
+                year: null
+              }
+            }
+          ])
+          break
+        case "Completed":
+          user.set("linksCompleted", [
+            ...(user.user.linksCompleted || []),
+            {
+              id: "1",
+              title: null,
+              description: null,
+              mainTopic: null,
+              globalLink: {
+                id: "",
+                title: newLink.title,
+                description: "",
+                url: newLink.url,
+                year: null
+              }
+            }
+          ])
+          break
+        default:
+          break
+      }
+      return [true, null]
+    } else {
+      return [false, err]
+    }
   }
 
   onMount(() => {
@@ -514,69 +655,98 @@ export default function Profile() {
               </Match>
               <Match when={currentTab() === "Links"}>
                 <div class="flex gap-3 flex-col">
-                  <For each={user.user.linksBookmarked}>
+                  <For each={user.user.linksInProgress}>
                     {(link) => {
                       return (
                         <div class="[&>*]:border-none border rounded-[4px] dark:border-[#282828]  border-[#69696951]">
                           <GlobalGuideLink
-                            title={link.title}
-                            url={link.url}
-                            id={link.id}
-                            year={link.year}
+                            personalLinkId={link.id}
+                            title={
+                              link.title ? link.title : link.globalLink.title
+                            }
+                            url={link.globalLink.url}
+                            id={link.globalLink.id}
+                            year={link.globalLink.year}
                             protocol={"https"}
-                            description={link.description}
+                            description={
+                              link.description
+                                ? link.description
+                                : link.globalLink.description
+                            }
                           />
                         </div>
                       )
                     }}
                   </For>
-                  {/* <For each={user.user.linksCompleted}>
+                  <For each={user.user.linksBookmarked}>
                     {(link) => {
                       return (
-                        <>
-                          <div class="flex items-center overflow-hidden rounded-[4px]  border-[0.5px] dark:border-[#282828]  border-[#69696951] p-4 px-4 justify-between">
-                            <div class="w-full  h-full flex justify-between items-center">
-                              <div class="w-fit flex gap-2 items-center">
-                                <div class="flex gap-3 items-center">
-                                  <ui.Icon name="UserProfile" />
-                                  <a
-                                    class="font-bold text-[#3B5CCC] dark:text-blue-400 cursor-pointer"
-                                    href={`https://${link.url}`}
-                                  >
-                                    {link.title}
-                                  </a>
-                                </div>
-                                <div class="font-light text-[12px] text-[#696969] text-ellipsis w-[250px] overflow-hidden whitespace-nowrap">
-                                  {link.url}
-                                </div>
-                              </div>
-                            </div>
-                            <div
-                              onClick={async () => {
-                                user.set(
-                                  "personalLinks",
-                                  user.user.personalLinks.filter(
-                                    (l) => l.id !== link.id
-                                  )
-                                )
-                                await mobius.mutate({
-                                  deletePersonalLink: {
-                                    where: {
-                                      personalLinkId: link.id
-                                    },
-                                    select: true
-                                  }
-                                })
-                              }}
-                              class="cursor-pointer"
-                            >
-                              <ui.Icon name="Trash" />
-                            </div>
-                          </div>
-                        </>
+                        <div class="[&>*]:border-none border rounded-[4px] dark:border-[#282828]  border-[#69696951]">
+                          <GlobalGuideLink
+                            personalLinkId={link.id}
+                            title={
+                              link.title ? link.title : link.globalLink.title
+                            }
+                            url={link.globalLink.url}
+                            id={link.globalLink.id}
+                            year={link.globalLink.year}
+                            protocol={"https"}
+                            description={
+                              link.description
+                                ? link.description
+                                : link.globalLink.description
+                            }
+                          />
+                        </div>
                       )
                     }}
-                  </For> */}
+                  </For>
+                  <For each={user.user.linksCompleted}>
+                    {(link) => {
+                      return (
+                        <div class="[&>*]:border-none border rounded-[4px] dark:border-[#282828]  border-[#69696951]">
+                          <GlobalGuideLink
+                            personalLinkId={link.id}
+                            title={
+                              link.title ? link.title : link.globalLink.title
+                            }
+                            url={link.globalLink.url}
+                            id={link.globalLink.id}
+                            year={link.globalLink.year}
+                            protocol={"https"}
+                            description={
+                              link.description
+                                ? link.description
+                                : link.globalLink.description
+                            }
+                          />
+                        </div>
+                      )
+                    }}
+                  </For>
+                  <For each={user.linksLikedOnly()}>
+                    {(link) => {
+                      return (
+                        <div class="[&>*]:border-none border rounded-[4px] dark:border-[#282828]  border-[#69696951]">
+                          <GlobalGuideLink
+                            personalLinkId={link.id}
+                            title={
+                              link.title ? link.title : link.globalLink.title
+                            }
+                            url={link.globalLink.url}
+                            id={link.globalLink.id}
+                            year={link.globalLink.year}
+                            protocol={"https"}
+                            description={
+                              link.description
+                                ? link.description
+                                : link.globalLink.description
+                            }
+                          />
+                        </div>
+                      )
+                    }}
+                  </For>
                 </div>
               </Match>
               <Match when={currentTab() === "Learning"}>

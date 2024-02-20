@@ -8,7 +8,7 @@ import YearlyPlan from "../components/Pricing/YearlyPlan"
 import { useMobius } from "../root"
 
 export default function Pricing() {
-  const [planChosen, setPlanChosen] = createSignal("monthly")
+  const [planChosen, setPlanChosen] = createSignal("yearly")
   const navigate = useNavigate()
   const user = useUser()
   const mobius = useMobius()
@@ -18,11 +18,13 @@ export default function Pricing() {
     createSignal(false)
 
   createEffect(() => {
-    if (user.user.stripePlan === "year") {
-      setPlanChosen("yearly")
-      return
+    if (user.user.stripePlan) {
+      if (user.user.stripePlan === "year") {
+        setPlanChosen("yearly")
+        return
+      }
+      setPlanChosen("monthly")
     }
-    setPlanChosen("monthly")
   })
   return (
     <>
@@ -124,7 +126,7 @@ export default function Pricing() {
         <div id="PayMain" class="h-full w-full px-[15%] flex flex-col gap-6">
           <div id="Plans" class="flex gap-4  justify-between">
             <div class="font-bold text-2xl px-1">Choose a plan</div>
-            <div class="flex w-fit dark:bg-neutral-800 bg-[#f2f2f2] p-0.5 rounded-full items-center gap-1 text-sm font-light">
+            <div class="flex w-fit dark:bg-neutral-800 bg-[#f2f2f2] p-1 rounded-full items-center gap-1 text-sm font-light">
               <div
                 class={clsx(
                   "p-0.5 px-2 rounded-full cursor-pointer",
@@ -148,7 +150,7 @@ export default function Pricing() {
                   setPlanChosen("yearly")
                 }}
               >
-                Yearly -11%
+                Yearly
               </div>
             </div>
           </div>

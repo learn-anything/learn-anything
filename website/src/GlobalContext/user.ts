@@ -1,10 +1,18 @@
 import { getHankoCookie, parseResponse } from "@la/shared/lib"
 import { UserClient } from "@teamhanko/hanko-frontend-sdk"
-import { createContext, createEffect, onMount, useContext } from "solid-js"
+import {
+  createContext,
+  createEffect,
+  createMemo,
+  onMount,
+  useContext
+} from "solid-js"
 import { createStore } from "solid-js/store"
 import { useLocation } from "solid-start"
 import { MobiusType } from "../root"
 
+// TODO: below types are bs because our graphql client is trash
+// it should use codegen with urql or something and should be able to import the types for each of the queries..
 type Topic = {
   name: string
   prettyName: string
@@ -17,6 +25,26 @@ type Link = {
   description?: string
   url: string
   year?: string
+}
+type GlobalLink = {
+  id: string
+  title: string
+  url: string
+  // protocol: string
+  description: string | null
+  year: string | null
+  // mainTopic: MainTopicWithTitleAndPrettyName | null
+}
+type MainTopicWithTitleAndPrettyName = {
+  name: string
+  prettyName: string
+}
+type PersonalLink = {
+  id: string
+  title: string | null
+  description: string | null
+  mainTopic: MainTopicWithTitleAndPrettyName | null
+  globalLink: GlobalLink
 }
 
 type User = {
@@ -31,10 +59,10 @@ type User = {
   topicsLearning: Topic[]
   topicsToLearn: Topic[]
   topicsLearned: Topic[]
-  linksBookmarked?: Link[]
-  linksInProgress?: Link[]
-  linksCompleted?: Link[]
-  linksLiked?: Link[]
+  linksBookmarked?: PersonalLink[]
+  linksInProgress?: PersonalLink[]
+  linksCompleted?: PersonalLink[]
+  linksLiked?: PersonalLink[]
 }
 
 // global state of user
@@ -48,9 +76,29 @@ export function createUserState(mobius: MobiusType) {
     topicsToLearn: [],
     topicsLearning: [],
     topicsLearned: [],
-    linksLiked: [],
     stripePlan: "",
-    subscriptionStopped: true
+    subscriptionStopped: true,
+    linksBookmarked: [],
+    linksInProgress: [],
+    linksCompleted: [],
+    linksLiked: []
+  })
+
+  // TODO: find a faster/nicer way to do this..
+  // TODO:
+  const linksLikedOnly = createMemo(() => {
+    return user.linksLiked?.filter(
+      (likedLink) =>
+        !user.linksBookmarked?.some(
+          (bookmarkedLink) => bookmarkedLink.id === likedLink.id
+        ) &&
+        !user.linksInProgress?.some(
+          (inProgressLink) => inProgressLink.id === likedLink.id
+        ) &&
+        !user.linksCompleted?.some(
+          (completedLink) => completedLink.id === likedLink.id
+        )
+    )
   })
 
   // createMemo(() => {
@@ -145,26 +193,80 @@ export function createUserState(mobius: MobiusType) {
         linksBookmarked: {
           id: true,
           title: true,
-          url: true
+          description: true,
+          mainTopic: {
+            name: true,
+            prettyName: true
+          },
+          globalLink: {
+            id: true,
+            title: true,
+            url: true,
+            year: true,
+            protocol: true,
+            description: true,
+            mainTopic: { name: true, prettyName: true }
+          }
         },
         linksInProgress: {
           id: true,
           title: true,
-          url: true
+          description: true,
+          mainTopic: {
+            name: true,
+            prettyName: true
+          },
+          globalLink: {
+            id: true,
+            title: true,
+            url: true,
+            year: true,
+            protocol: true,
+            description: true,
+            mainTopic: { name: true, prettyName: true }
+          }
         },
         linksCompleted: {
           id: true,
           title: true,
-          url: true
+          description: true,
+          mainTopic: {
+            name: true,
+            prettyName: true
+          },
+          globalLink: {
+            id: true,
+            title: true,
+            url: true,
+            year: true,
+            protocol: true,
+            description: true,
+            mainTopic: { name: true, prettyName: true }
+          }
         },
         linksLiked: {
           id: true,
           title: true,
-          url: true
+          description: true,
+          mainTopic: {
+            name: true,
+            prettyName: true
+          },
+          globalLink: {
+            id: true,
+            title: true,
+            url: true,
+            year: true,
+            protocol: true,
+            description: true,
+            mainTopic: { name: true, prettyName: true }
+          }
         }
       }
     })
     const [data] = parseResponse(res)
+    console.log(data?.getAllLinks, "get all links")
+    console.log(data?.getTopicsLearned, "get topics learned")
     setUser({
       topicsLearning: data?.getTopicsLearned.topicsLearning,
       topicsToLearn: data?.getTopicsLearned.topicsToLearn,
@@ -184,7 +286,8 @@ export function createUserState(mobius: MobiusType) {
     },
     setSignedIn: (state: boolean) => {
       return setUser({ signedIn: state })
-    }
+    },
+    linksLikedOnly
     // likedLinksSearch
   } as const
 }
