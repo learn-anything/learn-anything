@@ -29,7 +29,12 @@ const App = () => {
         <label row="0" class="my-4 ml-4 text-lg italic text-white">
           Try modifying markdown!
         </label>
-        if (__IOS__) {<swiftui row="1" swiftId="testView" class="h-full w-full" />} else {<label row="1" class="my-4 ml-4 text-lg italic text-white leading-3" textWrap="true">Can do something cool here - maybe even use react-native-live-markdown.</label>}
+        {__IOS__ && <swiftui row="1" swiftId="testView" class="h-full w-full" />}
+        {__ANDROID__ && (
+          <label row="1" class="my-4 ml-4 text-lg italic leading-3 text-white" textWrap="true">
+            Can do something cool here - maybe even use react-native-live-markdown.
+          </label>
+        )}
       </gridlayout>
     </>
   );
