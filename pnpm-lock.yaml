@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -218,6 +218,9 @@ importers:
       '@solidjs/start':
         specifier: ^1.0.0-rc.0
         version: 1.0.0-rc.0(solid-js@1.8.16)(vinxi@0.3.11)(vite@5.2.7)
+      '@teamhanko/hanko-elements':
+        specifier: ^0.10.1
+        version: 0.10.1
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.19(postcss@8.4.38)
@@ -1853,6 +1856,14 @@ packages:
     dependencies:
       '@deno/shim-deno-test': 0.5.0
       which: 4.0.0
+    dev: false
+
+  /@denysvuika/preact-translate@0.5.0(preact@10.20.1):
+    resolution: {integrity: sha512-hcWbmA5+05JRYGPhl64kDiJ+rWLOKe4tDi0y7cXVKe+hwu6H0KphyAwLvVbCSTTtnfXvAijnEZMOf/kCsdPFrQ==}
+    peerDependencies:
+      preact: '>=10.13.0'
+    dependencies:
+      preact: 10.20.1
     dev: false
 
   /@edgedb/generate@0.4.1(edgedb@1.4.1):
@@ -4216,6 +4227,30 @@ packages:
       '@tauri-apps/api': 2.0.0-beta.4
     dev: false
 
+  /@teamhanko/hanko-elements@0.10.1:
+    resolution: {integrity: sha512-4rkyzPJ3vRjsUSRxdIq31Qekusa9P2svmdCmPCVN5fnMsdU2++rIoRhyEvUHkrK6WIueuXG8S/9Lj61e9Acq4g==}
+    dependencies:
+      '@denysvuika/preact-translate': 0.5.0(preact@10.20.1)
+      '@teamhanko/hanko-frontend-sdk': 0.10.1
+      '@teamhanko/preact-custom-element': 4.2.2(preact@10.20.1)
+      classnames: 2.5.1
+      preact: 10.20.1
+    dev: false
+
+  /@teamhanko/hanko-frontend-sdk@0.10.1:
+    resolution: {integrity: sha512-i3m+1KC+WsiMLYvCGwb+Jn3aVHAnBJMFK8g8k+vXI72wz/GAj6Rnb+jB00p+VPygxJFdsAEUcpv96MPu8iWbJA==}
+    dependencies:
+      '@types/js-cookie': 3.0.6
+    dev: false
+
+  /@teamhanko/preact-custom-element@4.2.2(preact@10.20.1):
+    resolution: {integrity: sha512-3djCQr25IxQIgpidxD8J0fTQ7/hMuoa5Nmv7delQc6sX4kXgv9e/pE01cywpmGZLi69H1KUH4dmZ4cPPJQrsQQ==}
+    peerDependencies:
+      preact: 10.x
+    dependencies:
+      preact: 10.20.1
+    dev: false
+
   /@types/babel__core@7.20.5:
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
     dependencies:
@@ -4286,7 +4321,6 @@ packages:
 
   /@types/js-cookie@3.0.6:
     resolution: {integrity: sha512-wkw9yd1kEXOPnvEeEV1Go1MmxtBJL0RR79aOTAApecWFVu7w0NNXNqhcWgvw2YgZDYadliXkl14pa3WXw5jlCQ==}
-    dev: true
 
   /@types/json-schema@7.0.15:
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -5726,6 +5760,10 @@ packages:
     resolution: {integrity: sha512-tskPPKEs8D2KPafUypv2gxwJP8h/OaJmC82QQGGDQcHvXX43xF2VDACcJVmZ0EuSxkpO9Kc4MlrA3q0+FG58AQ==}
     dependencies:
       consola: 3.2.3
+    dev: false
+
+  /classnames@2.5.1:
+    resolution: {integrity: sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==}
     dev: false
 
   /clean-stack@2.2.0:
@@ -10655,6 +10693,10 @@ packages:
       nanoid: 3.3.7
       picocolors: 1.0.0
       source-map-js: 1.2.0
+
+  /preact@10.20.1:
+    resolution: {integrity: sha512-JIFjgFg9B2qnOoGiYMVBtrcFxHqn+dNXbq76bVmcaHYJFYR4lW67AOcXgAYQQTDYXDOg/kTZrKPNCdRgJ2UJmw==}
+    dev: false
 
   /prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}

@@ -1,6 +1,34 @@
+import { register, Hanko } from "@teamhanko/hanko-elements"
+import { useNavigate } from "@solidjs/router"
+import { onCleanup, onMount } from "solid-js"
+
+const hankoApi = import.meta.env.VITE_HANKO_API_URL
+
 export default function Auth() {
+	const navigate = useNavigate()
+	const hanko = new Hanko(hankoApi)
+
+	const redirectAfterLogin = () => {
+		navigate("/dashboard")
+	}
+
+	onMount(() => {
+		hanko.onAuthFlowCompleted(() => {
+			redirectAfterLogin()
+		})
+
+		register(hankoApi).catch((error) => {
+			// handle error
+		})
+	})
+
+	onCleanup(() => {
+		// cleanup logic if needed
+	})
+
 	return (
 		<div class="w-screen h-screen flex-center ">
+			<hanko-auth />
 			<div class="border border-[#191919] p-[30px] py-[50px] rounded-[7px] w-[400px] bg-[#0F0F0F] col-gap-[40px]">
 				<div class="text-[25px] text-center w-full">Welcome</div>
 				<div class="col-gap-[16px]">
@@ -26,14 +54,21 @@ export default function Auth() {
 						Sign in with passkey
 					</div>
 				</div>
-				<div class="text-[14px] text-white/30 text-center px-5">
-					By clicking on either button, you agree to the terms of service
-				</div>
 			</div>
 			<div class="absolute bottom-10 left-[50%] translate-x-[-50%] text-[14px] text-white/30">
-				<div>learn Anything</div>
+				<div>Learn Anything</div>
 				<div></div>
 			</div>
 		</div>
 	)
+}
+
+type GlobalJsx = JSX.IntrinsicElements
+
+declare module "solid-js" {
+	namespace JSX {
+		interface IntrinsicElements {
+			"hanko-auth": GlobalJsx["hanko-auth"]
+		}
+	}
 }

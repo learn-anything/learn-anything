@@ -9,6 +9,7 @@
   "dependencies": {
     "@solidjs/router": "^0.13.1",
     "@solidjs/start": "^1.0.0-rc.0",
+    "@teamhanko/hanko-elements": "^0.10.1",
     "autoprefixer": "^10.4.19",
     "clsx": "^2.1.0",
     "postcss": "^8.4.38",

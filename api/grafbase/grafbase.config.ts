@@ -24,7 +24,7 @@ const Link = g.type("Link", {
 	url: g.string(),
 })
 const User = g.type("User", {
-	name: g.string(),
+	username: g.string(),
 })
 const EditingLink = g.type("EditingLink", {
 	title: g.string(),

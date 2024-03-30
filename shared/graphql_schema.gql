@@ -6,7 +6,7 @@ type Query {
 	webIndex: webIndexOutput!
 }
 type User {
-	name: String!
+	username: String!
 }
 enum learningStatus {
 	Learn
