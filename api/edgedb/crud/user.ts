@@ -10,3 +10,13 @@ export async function getUser(email: string) {
 		.run(client)
 	return res
 }
+
+// TODO: check error
+export async function createUser(email: string) {
+	const res = await e
+		.insert(e.User, {
+			email,
+		})
+		.run(client)
+	return res
+}
