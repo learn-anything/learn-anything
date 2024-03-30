@@ -1,0 +1,21 @@
+type Mutation {
+	updatePersonalLink(linkId: String!, status: learningStatus!): Boolean!
+}
+type Query {
+	webIndex: webIndexOutput!
+}
+type User {
+	name: String!
+}
+enum learningStatus {
+	Learn
+	Learning
+	Learned
+}
+type webIndexOutput {
+	user: User!
+}
+schema {
+	query: Query
+	mutation: Mutation
+}
