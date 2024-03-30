@@ -1,7 +1,13 @@
 import * as child_process from "node:child_process"
+import * as path from "node:path"
 import { $ } from "bun"
 import Watcher from "watcher"
 import * as graphstate from "./graphstate/sdk.js"
+
+const filename  = new URL(import.meta.url).pathname
+const root_path = path.dirname(filename)
+const api_path  = path.join(root_path, "api")
+
 
 async function main() {
 	const args = Bun.argv
@@ -93,10 +99,12 @@ To regenerate this file, run \`bun graphql\`.
  * !__Needs `grafbase dev` running__!
  */
 function generate_graphql_client() {
-	const schema = child_process.execSync("cd api && grafbase introspect --dev")
+	const schema = child_process
+		.execSync("grafbase introspect --dev", {cwd: api_path})
+		.toString()
 	Bun.write("shared/graphql_schema.gql", schema)
 
-	const queries = graphstate.generate_queries(schema)
+	const queries = graphstate.cli_generate_queries(schema)
 	if (queries instanceof Error) {
 		console.error(queries)
 		return
