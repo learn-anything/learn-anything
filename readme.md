@@ -134,6 +134,12 @@ Run CLI to quickly execute TS code (run queries and more..).
 
 Open EdgeDB UI to run queries and more.
 
+### bun db:queries-generate
+
+> cd api/edgedb && bunx @edgedb/generate edgeql-js --target ts && bunx @edgedb/generate queries --target ts
+
+Generate [EdgeDB-JS](https://github.com/edgedb/edgedb-js) bindings from schema/queries.
+
 ### bun grafbase
 
 > bun cmd.ts grafbase
