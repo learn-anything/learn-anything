@@ -44,9 +44,10 @@ type ProfileData = {
 export default function Home() {
 	const [selectedTab, setSelectedTab] = useState("links")
 	const [isBottomSheetVisible, setBottomSheetVisible] = useState(false)
-	const [noteText, setNoteText] = useState("")
-	// const bottomSheetRef = useRef(null)
+	const [isFilterSheetVisible, setFilterSheetVisible] = useState(false)
+	const [noteText, setNoteText] = useState<{ [key: string]: string }>({})
 	const bottomSheetRef = useRef<BottomSheet>(null)
+	const filterSheetRef = useRef<BottomSheet>(null)
 	const [data, setData] = useState<ProfileData>({
 		links: [
 			{ id: "1", title: "Solid", topic: "Solid", url: "https://solidjs.com" },
@@ -110,11 +111,7 @@ export default function Home() {
 	} | null>(null)
 
 	const getLinkIcon = (url: string) => {
-		if (url.includes("solidjs")) {
-			return require("../../assets/solidjs.png")
-		} else {
-			return require("../../assets/favicon.png")
-		}
+		return require("../../assets/favicon.png")
 	}
 
 	const renderItem = ({
@@ -186,7 +183,7 @@ export default function Home() {
 							<Text style={styles.optionText}>Learning</Text>
 							<ArrowIcon />
 						</TouchableOpacity>
-						<TouchableOpacity style={styles.optionIcon}>
+						<TouchableOpacity style={styles.optionIcon} onPress={() => setFilterSheetVisible(true)}>
 							<Svg height="100" width="100" viewBox="0 0 100 100">
 								<Path
 									d="M10.6087 12.3272C10.8248 12.4993 11 12.861 11 13.1393V18.8843L13 17.8018V13.1338C13 12.8604 13.173 12.501 13.3913 12.3272L17.5707 9H6.42931L10.6087 12.3272ZM20 7L20 4.99791L4.00001 5L4.00003 7H20ZM15 18.0027C15 18.5535 14.6063 19.2126 14.1211 19.4747L10.7597 21.2904C9.78783 21.8154 9 21.3499 9 20.2429V13.6L2.78468 8.62775C2.35131 8.28105 2 7.54902 2 6.99573V4.99791C2 3.8945 2.89821 3 4.00001 3H20C21.1046 3 22 3.89826 22 4.99791V6.99573C22 7.55037 21.65 8.28003 21.2153 8.62775L15 13.6V18.0027Z"
@@ -212,6 +209,41 @@ export default function Home() {
 					<Ionicons name="person-outline" size={24} color="grey" />
 				</View>
 			</View>
+
+			{/* filter bottomsheet */}
+			<BottomSheet
+				ref={filterSheetRef}
+				index={isFilterSheetVisible ? 0 : -1}
+				snapPoints={["25%"]}
+				backgroundStyle={{ backgroundColor: "#171A21", borderRadius: 10 }}
+				onChange={(index) => {
+					if (index === -1) {
+						setFilterSheetVisible(false)
+					}
+				}}
+			>
+				<BottomSheetView style={styles.filterSheetContainer}>
+					<View style={{ alignSelf: "flex-start" }}>
+						<Text style={styles.filterSheetTitle}>Filters</Text>
+					</View>
+					<View style={styles.filterSheetView}>
+						<Text style={styles.filterSheetText}>Liked</Text>
+						<View style={styles.filterChooseTopic}>
+							<Text style={styles.filterSheetText}>Choose topic</Text>
+							<TouchableOpacity style={{ opacity: 0.5, width: 15, height: 15 }}>
+								<Svg height="100" width="100" viewBox="0 0 100 100">
+									<Path
+										d="M4.29031 2.38702C3.98656 2.06972 3.98656 1.55528 4.29031 1.23798C4.59405 0.920675 5.08651 0.920675 5.39025 1.23798L10.8347 6.92548C11.1384 7.24278 11.1384 7.75722 10.8347 8.07452L5.39025 13.762C5.08651 14.0793 4.59405 14.0793 4.29031 13.762C3.98656 13.4447 3.98656 12.9303 4.29031 12.613L9.18478 7.5L4.29031 2.38702Z"
+										fill="white"
+										strokeWidth="2"
+									/>
+								</Svg>
+							</TouchableOpacity>
+						</View>
+					</View>
+				</BottomSheetView>
+			</BottomSheet>
+
 			<BottomSheet
 				ref={bottomSheetRef}
 				index={isBottomSheetVisible ? 0 : -1}
@@ -225,6 +257,7 @@ export default function Home() {
 					}
 				}}
 			>
+				{/* renderitem bottomsheet */}
 				<BottomSheetView style={{ alignItems: "center" }}>
 					{selectedItem && (
 						<View>
@@ -318,10 +351,17 @@ export default function Home() {
 							</TouchableOpacity>
 							<TextInput
 								style={styles.sheetNoteText}
-								onChangeText={setNoteText}
-								value={noteText}
+								value={selectedItem ? noteText[selectedItem.id] || "" : ""}
 								placeholder="Take a note..."
 								placeholderTextColor="rgba(255, 255, 255, 0.9)"
+								onChangeText={(text) => {
+									if (selectedItem) {
+										setNoteText((notes) => ({
+											...notes,
+											[selectedItem.id]: text,
+										}))
+									}
+								}}
 							/>
 						</View>
 					</View>
@@ -557,5 +597,39 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		opacity: 0.2,
 		marginLeft: 5,
+	},
+	filterSheetContainer: {
+		alignItems: "center",
+	},
+	filterSheetTitle: {
+		color: "white",
+		fontSize: 16,
+		opacity: 0.7,
+		marginLeft: 10,
+		marginBottom: 13,
+	},
+	filterSheetView: {
+		height: 82,
+		flexDirection: "column",
+		alignItems: "flex-start",
+		backgroundColor: "#1d1f26",
+		borderRadius: 7,
+		borderColor: "rgba(55, 55, 55, 0.16)",
+		borderWidth: 1,
+		width: "95%",
+	},
+	filterChooseTopic: {
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+		width: "95%",
+	},
+	filterSheetText: {
+		color: "white",
+		fontSize: 16,
+		opacity: 0.7,
+		marginLeft: 10,
+		marginVertical: 8,
 	},
 })
