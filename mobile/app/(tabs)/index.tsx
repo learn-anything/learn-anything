@@ -1,5 +1,14 @@
 import React, { useState, useRef } from "react"
-import { View, FlatList, Text, TouchableOpacity, Image, StyleSheet, Dimensions } from "react-native"
+import {
+	View,
+	FlatList,
+	Text,
+	TouchableOpacity,
+	Image,
+	StyleSheet,
+	Dimensions,
+	TextInput,
+} from "react-native"
 import Svg, { Path } from "react-native-svg"
 import { Octicons, Ionicons, AntDesign } from "@expo/vector-icons"
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet"
@@ -35,6 +44,7 @@ type ProfileData = {
 export default function Home() {
 	const [selectedTab, setSelectedTab] = useState("links")
 	const [isBottomSheetVisible, setBottomSheetVisible] = useState(false)
+	const [noteText, setNoteText] = useState("")
 	// const bottomSheetRef = useRef(null)
 	const bottomSheetRef = useRef<BottomSheet>(null)
 	const [data, setData] = useState<ProfileData>({
@@ -297,7 +307,7 @@ export default function Home() {
 					)}
 					<View style={styles.sheetNoteContainer}>
 						<View style={styles.noteText}>
-							<TouchableOpacity style={{ marginLeft: 20, width: 20, height: 20 }}>
+							<TouchableOpacity style={{ marginLeft: 20, width: 20, height: 20, opacity: 0.3 }}>
 								<Svg height="100" width="100" viewBox="0 0 100 100">
 									<Path
 										d="M3.33408 14.2927L3.33532 15.0743C3.77266 14.9243 4.27659 15.0239 4.62554 15.3728C4.976 15.7233 5.07486 16.2301 4.92209 16.6687L5.69561 16.6707L6.98804 15.3783L4.61936 13.0096C3.84148 13.7862 3.33408 14.2927 3.33408 14.2927ZM12.6425 5.00085L15.0051 7.3612L8.16655 14.1998L5.79887 11.8321C8.55649 9.07914 12.6425 5.00085 12.6425 5.00085ZM15.4877 2.15567L17.8492 4.51715C18.5 5.16802 18.5008 6.22251 17.8503 6.87304L6.68573 18.0376C6.5235 18.1998 6.20677 18.3313 5.97268 18.3313H2.50085C2.04032 18.3313 1.66699 17.9606 1.66699 17.4976V14.0262C1.66699 13.7946 1.80042 13.4736 1.96088 13.3133L13.1312 2.154C13.7818 1.50405 14.8367 1.5047 15.4877 2.15567Z"
@@ -306,7 +316,13 @@ export default function Home() {
 									/>
 								</Svg>
 							</TouchableOpacity>
-							<Text style={styles.sheetNoteText}>Take a note...</Text>
+							<TextInput
+								style={styles.sheetNoteText}
+								onChangeText={setNoteText}
+								value={noteText}
+								placeholder="Take a note..."
+								placeholderTextColor="rgba(255, 255, 255, 0.9)"
+							/>
 						</View>
 					</View>
 				</BottomSheetView>
