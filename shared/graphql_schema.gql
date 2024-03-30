@@ -1,5 +1,6 @@
 type Mutation {
 	updatePersonalLink(linkId: String!, status: learningStatus!): Boolean!
+	createUser(email: String!): Boolean!
 }
 type Query {
 	webIndex: webIndexOutput!

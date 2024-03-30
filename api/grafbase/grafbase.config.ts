@@ -67,3 +67,11 @@ g.mutation("updatePersonalLink", {
 	returns: g.boolean(),
 	resolver: "mutations/updatePersonalLink",
 })
+
+g.mutation("createUser", {
+	args: {
+		email: g.string(),
+	},
+	returns: g.boolean(),
+	resolver: "mutations/createUser",
+})
