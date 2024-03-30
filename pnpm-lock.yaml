@@ -1,4 +1,4 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
 
 settings:
   autoInstallPeers: true
@@ -102,10 +102,10 @@ importers:
         version: 5.4.3
       vite:
         specifier: latest
-        version: 5.2.6
+        version: 5.2.7
       vite-plugin-solid:
         specifier: latest
-        version: 2.10.2(solid-js@1.8.16)(vite@5.2.6)
+        version: 2.10.2(solid-js@1.8.16)(vite@5.2.7)
 
   mobile:
     dependencies:
@@ -13158,7 +13158,7 @@ packages:
       - supports-color
     dev: false
 
-  /vite-plugin-solid@2.10.2(solid-js@1.8.16)(vite@5.2.6):
+  /vite-plugin-solid@2.10.2(solid-js@1.8.16)(vite@5.2.7):
     resolution: {integrity: sha512-AOEtwMe2baBSXMXdo+BUwECC8IFHcKS6WQV/1NEd+Q7vHPap5fmIhLcAzr+DUJ04/KHx/1UBU0l1/GWP+rMAPQ==}
     peerDependencies:
       '@testing-library/jest-dom': ^5.16.6 || ^5.17.0 || ^6.*
@@ -13174,8 +13174,8 @@ packages:
       merge-anything: 5.1.7
       solid-js: 1.8.16
       solid-refresh: 0.6.3(solid-js@1.8.16)
-      vite: 5.2.6
-      vitefu: 0.2.5(vite@5.2.6)
+      vite: 5.2.7
+      vitefu: 0.2.5(vite@5.2.7)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -13201,41 +13201,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: false
-
-  /vite@5.2.6:
-    resolution: {integrity: sha512-FPtnxFlSIKYjZ2eosBQamz4CbyrTizbZ3hnGJlh/wMtCrlp1Hah6AzBLjGI5I2urTfNnpovpHdrL6YRuBOPnCA==}
-    engines: {node: ^18.0.0 || >=20.0.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': ^18.0.0 || >=20.0.0
-      less: '*'
-      lightningcss: ^1.21.0
-      sass: '*'
-      stylus: '*'
-      sugarss: '*'
-      terser: ^5.4.0
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      less:
-        optional: true
-      lightningcss:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
-    dependencies:
-      esbuild: 0.20.2
-      postcss: 8.4.38
-      rollup: 4.13.1
-    optionalDependencies:
-      fsevents: 2.3.3
-    dev: true
 
   /vite@5.2.7:
     resolution: {integrity: sha512-k14PWOKLI6pMaSzAuGtT+Cf0YmIx12z9YGon39onaJNy8DLBfBJrzg9FQEmkAM5lpHBZs9wksWAsyF/HkpEwJA==}
@@ -13270,18 +13235,6 @@ packages:
       rollup: 4.13.1
     optionalDependencies:
       fsevents: 2.3.3
-    dev: false
-
-  /vitefu@0.2.5(vite@5.2.6):
-    resolution: {integrity: sha512-SgHtMLoqaeeGnd2evZ849ZbACbnwQCIwRH57t18FxcXoZop0uQu0uzlIhJBlF/eWVzuce0sHeqPcDo+evVcg8Q==}
-    peerDependencies:
-      vite: ^3.0.0 || ^4.0.0 || ^5.0.0
-    peerDependenciesMeta:
-      vite:
-        optional: true
-    dependencies:
-      vite: 5.2.6
-    dev: true
 
   /vitefu@0.2.5(vite@5.2.7):
     resolution: {integrity: sha512-SgHtMLoqaeeGnd2evZ849ZbACbnwQCIwRH57t18FxcXoZop0uQu0uzlIhJBlF/eWVzuce0sHeqPcDo+evVcg8Q==}
@@ -13292,7 +13245,6 @@ packages:
         optional: true
     dependencies:
       vite: 5.2.7
-    dev: false
 
   /vlq@1.0.1:
     resolution: {integrity: sha512-gQpnTgkubC6hQgdIcRdYGDSDc+SaujOdyesZQMv6JlfQee/9Mp0Qhnys6WxDWvQnL5WZdT7o2Ul187aSt0Rq+w==}
