@@ -137,11 +137,11 @@ export const learningStatus = /** @type {const} */({
  * Initial value: {@link initial_User}
  *
  * @typedef  {object} User
- * @property {String} name
+ * @property {String} username
  */
 /** @type {User} */
 export const initial_User = {
-	name: "",
+	username: "",
 }
 
 /**
@@ -172,7 +172,7 @@ QUERIES:
  * @param   {Vars_webIndex} vars
  * @returns {string} */
 export function query_get_body_webIndex(vars) {
-	return 'webIndex{user{name}}'
+	return 'webIndex{user{username}}'
 }
 
 /**
@@ -220,5 +220,33 @@ export const mutation_updatePersonalLink = /** @type {*} */({
 	name         : "updatePersonalLink",
 	kind         : "mutation",
 	get_body     : query_get_body_updatePersonalLink,
+	initial_value: false,
+})
+
+
+/**
+ * @typedef  {object} Vars_createUser
+ * @property {String} email
+ *
+ * @typedef  {Boolean} Value_createUser
+ */
+
+/**
+ * @param   {Vars_createUser} vars
+ * @returns {string} */
+export function query_get_body_createUser(vars) {
+	return 'createUser(email:'+JSON.stringify(vars.email)+')'
+}
+
+/**
+ * mutation: `createUser`\
+ * vars : {@link Vars_createUser }\
+ * value: {@link Value_createUser}
+ * @type  {Query_Data<Vars_createUser, Value_createUser>}
+ */
+export const mutation_createUser = /** @type {*} */({
+	name         : "createUser",
+	kind         : "mutation",
+	get_body     : query_get_body_createUser,
 	initial_value: false,
 })

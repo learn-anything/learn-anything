@@ -124,9 +124,9 @@ Run desktop app built with Tauri.
 
 ### bun cli
 
-> cd api/edgedb && bun --watch ../../cli/cli.ts
+> cd api/edgedb && bun --watch ../../cli/run.ts
 
-Run CLI to quickly execute TS code (run queries and more..).
+Run git ignored [CLI](cli) to quickly execute TS code (run queries and more..).
 
 ### bun db:ui
 

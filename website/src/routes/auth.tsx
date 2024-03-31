@@ -14,7 +14,7 @@ const hankoApi = import.meta.env.VITE_HANKO_API_URL
 // also offers to save passkey or login with passkey
 export default function Auth() {
 	const navigate = useNavigate()
-	const createUser = gql.useRequest(gql.mutation_updatePersonalLink)
+	const createUser = gql.useRequest(gql.mutation_createUser)
 
 	onMount(async () => {
 		// TODO: improve this to actually validate that hanko cookie is valid, if not, have users go through auth again
@@ -36,7 +36,12 @@ export default function Auth() {
 		})
 		const user = await userClient.getCurrent()
 		const email = user.email
-		console.log(email, "email")
+		const res = await createUser({ email })
+		if (res instanceof Error) {
+			console.error("Couldn't create a user:", res)
+		} else {
+			console.log("New user:", res)
+		}
 	})
 
 	return (

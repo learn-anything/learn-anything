@@ -21,3 +21,4 @@ api/edgedb/dbschema/edgeql-js
 bun.lockb
 package-lock.json
 .grafbase
+cli/run.ts
