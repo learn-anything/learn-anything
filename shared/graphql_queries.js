@@ -174,13 +174,13 @@ export const initial_webIndexReturnAuth = {
  * Initial value: {@link initial_webIndexOutput}
  *
  * @typedef  {object} webIndexOutput
- * @property {webIndexReturnPublic} public
- * @property {webIndexReturnAuth} auth
+ * @property {Maybe<webIndexReturnPublic>} public
+ * @property {Maybe<webIndexReturnAuth>} auth
  */
 /** @type {webIndexOutput} */
 export const initial_webIndexOutput = {
-	public: initial_webIndexReturnPublic,
-	auth: initial_webIndexReturnAuth,
+	public: null,
+	auth: null,
 }
 
 /*

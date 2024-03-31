@@ -1,4 +1,4 @@
-import { For, Match, Switch, createSignal } from "solid-js"
+import { For, Match, Switch, createSignal, onMount } from "solid-js"
 import Search from "../../../shared/components/Search"
 import Topbar from "../../../shared/components/Topbar"
 import * as gql from "../../../shared/graphql_client"
@@ -6,8 +6,11 @@ import Button from "../../../shared/components/Button"
 import ProfileLink from "../../../shared/components/ProfileLink"
 
 export default function Home() {
-	const [route, actions] = gql.useResource(gql.query_webIndex, {})
+	// const [public, actions] = gql.useResource(gql.query_webIndexPublic, {})
+	// const [auth, actions] = gql.useResource(gql.query_webIndexAuth, {})
 	const [authenticated, setAuthenticated] = createSignal(true)
+
+	onMount(() => {})
 
 	return (
 		<div class=" w-full h-screen">

@@ -59,8 +59,8 @@ g.query("webIndex", {
 	args: {},
 	returns: g.ref(
 		g.type("webIndexOutput", {
-			public: g.ref(webIndexReturnPublic),
-			auth: g.ref(webIndexReturnAuth),
+			public: g.ref(webIndexReturnPublic).optional(),
+			auth: g.ref(webIndexReturnAuth).optional(),
 		}),
 	),
 	resolver: "web/index",

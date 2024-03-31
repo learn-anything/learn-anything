@@ -15,8 +15,8 @@ enum learningStatus {
 	Learned
 }
 type webIndexOutput {
-	public: webIndexReturnPublic!
-	auth: webIndexReturnAuth!
+	public: webIndexReturnPublic
+	auth: webIndexReturnAuth
 }
 type webIndexReturnAuth {
 	topics: [String!]!
