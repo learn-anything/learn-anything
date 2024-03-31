@@ -1,13 +1,15 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect, useCallback, useMemo } from "react"
 import {
 	View,
-	FlatList,
-	Text,
-	TouchableOpacity,
-	Image,
 	StyleSheet,
 	Dimensions,
+	Animated,
+	Linking,
+	FlatList,
+	Text,
 	TextInput,
+	TouchableOpacity,
+	Image,
 } from "react-native"
 import Svg, { Path } from "react-native-svg"
 import { Octicons, Ionicons, AntDesign } from "@expo/vector-icons"
@@ -43,17 +45,24 @@ type ProfileData = {
 
 export default function Home() {
 	const [selectedTab, setSelectedTab] = useState("links")
+	const [noteText, setNoteText] = useState<{ [key: string]: string }>({})
+	const [showLearningButtons, setShowLearningButtons] = useState(false)
+	const [animationButtons, setAnimationButtons] = useState<Animated.Value[]>([])
+
+	// bottomsheets
+	const topicRef = useRef<BottomSheet>(null)
+	const filterRef = useRef<BottomSheet>(null)
+	const snapFilterPoints = useMemo(() => ["23%", "1%"], [])
+	const snapTopicPoints = useMemo(() => ["50%", "1%"], [])
 	const [isBottomSheetVisible, setBottomSheetVisible] = useState(false)
 	const [isFilterSheetVisible, setFilterSheetVisible] = useState(false)
-	const [noteText, setNoteText] = useState<{ [key: string]: string }>({})
-	const bottomSheetRef = useRef<BottomSheet>(null)
-	const filterSheetRef = useRef<BottomSheet>(null)
+
 	const [data, setData] = useState<ProfileData>({
 		links: [
-			{ id: "1", title: "Solid", topic: "Solid", url: "https://solidjs.com" },
+			{ id: "1", title: "Modern JavaScript Tutorial", topic: "Solid", url: "https://solidjs.com" },
 			{
 				id: "2",
-				title: "Learn Kubernetes with GoogleL",
+				title: "Learn Kubernetes with Google",
 				topic: "GraphQL",
 				url: "https://graphql.org",
 			},
@@ -63,46 +72,37 @@ export default function Home() {
 				topic: "Figma",
 				url: "https://figma.com",
 			},
-			{
-				id: "4",
-				title: "Modern JavaScript Tutorial",
-				topic: "Solid",
-				url: "https://solidjs.com",
-			},
-			{
-				id: "5",
-				title: "Modern JavaScript Tutorial",
-				topic: "Solid",
-				url: "https://solidjs.com",
-			},
-			{
-				id: "6",
-				title: "iOS 14 UI Kit",
-				topic: "Figma",
-				url: "https://figma.com",
-			},
-			{
-				id: "7",
-				title: "Learn Kubernetes with Google",
-				topic: "GraphQL",
-				url: "https://graphql.org",
-			},
-			{
-				id: "8",
-				title: "Modern JavaScript Tutorial",
-				topic: "Solid",
-				url: "https://solidjs.com",
-			},
 		],
 		showLinksStatus: "Learning",
 		filterOrder: "Custom",
 		filter: "None",
-		userTopics: ["Solid", "GraphQL"],
+		userTopics: ["Solid", "GraphQL", "Figma"],
 		user: {
 			email: "github@nikiv.dev",
 			name: "Nikita",
 		},
 	})
+
+	useEffect(() => {
+		setAnimationButtons([0, 1].map(() => new Animated.Value(0)))
+	}, [])
+
+	const showButtons = () => {
+		setShowLearningButtons(!showLearningButtons)
+
+		const animationsEnd = showLearningButtons ? 0 : 1
+
+		const staggeredAnimations = animationButtons.map((button) =>
+			Animated.timing(button, {
+				toValue: animationsEnd,
+				duration: 300,
+				useNativeDriver: true,
+			}),
+		)
+
+		Animated.parallel(staggeredAnimations).start()
+	}
+
 	const [selectedItem, setSelectedItem] = useState<{
 		title: string
 		topic: string
@@ -114,6 +114,35 @@ export default function Home() {
 		return require("../../assets/favicon.png")
 	}
 
+	const ArrowIcon = () => (
+		<Svg width="15" height="12">
+			<Path
+				d="M12.613 4.79031C12.9303 4.48656 13.4447 4.48656 13.762 4.79031C14.0793 5.09405 14.0793 5.58651 13.762 5.89025L8.07452 11.3347C7.75722 11.6384 7.24278 11.6384 6.92548 11.3347L1.23798 5.89025C0.920674 5.58651 0.920674 5.09405 1.23798 4.79031C1.55528 4.48656 2.06972 4.48656 2.38702 4.79031L7.5 9.68478L12.613 4.79031Z"
+				fill="grey"
+			/>
+		</Svg>
+	)
+
+	const openTopicSheet = useCallback(() => {
+		if (!isBottomSheetVisible) {
+			topicRef.current?.snapToIndex(0)
+			setBottomSheetVisible(true)
+		} else {
+			topicRef.current?.snapToIndex(-1)
+			setBottomSheetVisible(false)
+		}
+	}, [isBottomSheetVisible])
+
+	const openFilterSheet = useCallback(() => {
+		if (!isFilterSheetVisible) {
+			filterRef.current?.snapToIndex(0)
+			setFilterSheetVisible(true)
+		} else {
+			filterRef.current?.snapToIndex(-1)
+			setFilterSheetVisible(false)
+		}
+	}, [isFilterSheetVisible])
+
 	const renderItem = ({
 		item,
 	}: {
@@ -123,12 +152,15 @@ export default function Home() {
 			style={styles.itemContainer}
 			onPress={() => {
 				setSelectedItem(item)
-				setBottomSheetVisible(true)
+				openTopicSheet()
 			}}
 		>
 			<Image source={getLinkIcon(item.url)} style={styles.itemImage} />
 			<Text style={styles.itemTitle}>{item.title}</Text>
-			<TouchableOpacity style={{ marginLeft: 20, opacity: 0.2, width: 20, height: 20 }}>
+			<TouchableOpacity
+				style={{ marginLeft: 20, opacity: 0.2, width: 20, height: 20 }}
+				onPress={() => Linking.openURL(item.url)}
+			>
 				<Svg height="100" width="100" viewBox="0 0 100 100">
 					<Path
 						d="M12.6592 7.18364C12.9846 7.50908 12.9838 8.03753 12.6619 8.35944L7.94245 13.0789C7.61851 13.4028 7.09435 13.4039 6.76665 13.0762C6.44121 12.7508 6.44203 12.2223 6.76393 11.9004L11.4834 7.18093C11.8073 6.85699 12.3315 6.85593 12.6592 7.18364ZM6.76666 16.6117C5.79136 17.587 4.20579 17.5864 3.23111 16.6117C2.25561 15.6362 2.25611 14.0512 3.23112 13.0762L5.58813 10.7192C5.91357 10.3937 5.91357 9.8661 5.58813 9.54066C5.2627 9.21522 4.73506 9.21522 4.40962 9.54066L2.05261 11.8977C0.426886 13.5234 0.426063 16.1637 2.0526 17.7902C3.67795 19.4156 6.31879 19.4166 7.94517 17.7902L10.3022 15.4332C10.6276 15.1078 10.6276 14.5801 10.3022 14.2547C9.97674 13.9293 9.44911 13.9293 9.12367 14.2547L6.76666 16.6117ZM17.3732 8.36216C18.9996 6.73578 18.9986 4.09494 17.3732 2.46959C15.7467 0.843055 13.1064 0.843878 11.4807 2.46961L9.12367 4.82662C8.79823 5.15205 8.79823 5.67969 9.12367 6.00513C9.44911 6.33056 9.97674 6.33056 10.3022 6.00513L12.6592 3.64812C13.6342 2.6731 15.2192 2.6726 16.1947 3.6481C17.1694 4.62278 17.17 6.20835 16.1947 7.18365L13.8377 9.54066C13.5123 9.8661 13.5123 10.3937 13.8377 10.7192C14.1631 11.0446 14.6908 11.0446 15.0162 10.7192L17.3732 8.36216Z"
@@ -140,19 +172,6 @@ export default function Home() {
 			</TouchableOpacity>
 		</TouchableOpacity>
 	)
-
-	const ArrowIcon = () => (
-		<Svg width="15" height="12">
-			<Path
-				d="M12.613 4.79031C12.9303 4.48656 13.4447 4.48656 13.762 4.79031C14.0793 5.09405 14.0793 5.58651 13.762 5.89025L8.07452 11.3347C7.75722 11.6384 7.24278 11.6384 6.92548 11.3347L1.23798 5.89025C0.920674 5.58651 0.920674 5.09405 1.23798 4.79031C1.55528 4.48656 2.06972 4.48656 2.38702 4.79031L7.5 9.68478L12.613 4.79031Z"
-				fill="grey"
-			/>
-		</Svg>
-	)
-
-	const closeBottomSheet = () => {
-		setBottomSheetVisible(false)
-	}
 
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
@@ -179,11 +198,43 @@ export default function Home() {
 						</TouchableOpacity>
 					</View>
 					<View style={styles.optionsContainer}>
-						<TouchableOpacity style={styles.optionsButton}>
-							<Text style={styles.optionText}>Learning</Text>
-							<ArrowIcon />
-						</TouchableOpacity>
-						<TouchableOpacity style={styles.optionIcon} onPress={() => setFilterSheetVisible(true)}>
+						<View style={styles.learningButtonsContainer}>
+							<TouchableOpacity style={styles.learningButton} onPress={showButtons}>
+								<Text style={styles.learningText}>Learning</Text>
+								<ArrowIcon />
+							</TouchableOpacity>
+							{animationButtons.map((animationButton, index) => (
+								<Animated.View
+									key={index}
+									style={[
+										styles.learningButtonsDropdown,
+										{
+											opacity: animationButton,
+											transform: [
+												{
+													scale: animationButton.interpolate({
+														inputRange: [0, 1],
+														outputRange: [0.5, 1],
+													}),
+												},
+											],
+											top: 30 + index * 35,
+										},
+									]}
+								>
+									<TouchableOpacity style={styles.anotherLearningButton}>
+										<Text style={styles.learningText}>{["Learned", "To Learn"][index]}</Text>
+									</TouchableOpacity>
+								</Animated.View>
+							))}
+						</View>
+						{/* filter icon */}
+						<TouchableOpacity
+							style={styles.filterIcon}
+							onPress={() => {
+								openFilterSheet()
+							}}
+						>
 							<Svg height="100" width="100" viewBox="0 0 100 100">
 								<Path
 									d="M10.6087 12.3272C10.8248 12.4993 11 12.861 11 13.1393V18.8843L13 17.8018V13.1338C13 12.8604 13.173 12.501 13.3913 12.3272L17.5707 9H6.42931L10.6087 12.3272ZM20 7L20 4.99791L4.00001 5L4.00003 7H20ZM15 18.0027C15 18.5535 14.6063 19.2126 14.1211 19.4747L10.7597 21.2904C9.78783 21.8154 9 21.3499 9 20.2429V13.6L2.78468 8.62775C2.35131 8.28105 2 7.54902 2 6.99573V4.99791C2 3.8945 2.89821 3 4.00001 3H20C21.1046 3 22 3.89826 22 4.99791V6.99573C22 7.55037 21.65 8.28003 21.2153 8.62775L15 13.6V18.0027Z"
@@ -209,18 +260,14 @@ export default function Home() {
 					<Ionicons name="person-outline" size={24} color="grey" />
 				</View>
 			</View>
-
 			{/* filter bottomsheet */}
 			<BottomSheet
-				ref={filterSheetRef}
-				index={isFilterSheetVisible ? 0 : -1}
-				snapPoints={["25%"]}
+				ref={filterRef}
+				index={-1}
+				enableContentPanningGesture={true}
+				enableHandlePanningGesture={true}
+				snapPoints={snapFilterPoints}
 				backgroundStyle={{ backgroundColor: "#171A21", borderRadius: 10 }}
-				onChange={(index) => {
-					if (index === -1) {
-						setFilterSheetVisible(false)
-					}
-				}}
 			>
 				<BottomSheetView style={styles.filterSheetContainer}>
 					<View style={{ alignSelf: "flex-start" }}>
@@ -244,20 +291,15 @@ export default function Home() {
 				</BottomSheetView>
 			</BottomSheet>
 
+			{/* topic bottomsheet */}
 			<BottomSheet
-				ref={bottomSheetRef}
-				index={isBottomSheetVisible ? 0 : -1}
-				snapPoints={["50%"]}
+				ref={topicRef}
+				index={-1}
+				enableContentPanningGesture={true}
+				enableHandlePanningGesture={true}
+				snapPoints={snapTopicPoints}
 				backgroundStyle={{ backgroundColor: "#171A21", borderRadius: 10 }}
-				onChange={(index) => {
-					console.log("closing index:", index)
-					if (index === -1) {
-						console.log(index)
-						closeBottomSheet()
-					}
-				}}
 			>
-				{/* renderitem bottomsheet */}
 				<BottomSheetView style={{ alignItems: "center" }}>
 					{selectedItem && (
 						<View>
@@ -305,7 +347,7 @@ export default function Home() {
 									<Text style={styles.sheetButtonText}>{selectedItem.topic}</Text>
 								</TouchableOpacity>
 								<View style={styles.sheetHeartIconContainer}>
-									<TouchableOpacity // heart
+									<TouchableOpacity
 										style={{
 											marginRight: 10,
 											opacity: 0.4,
@@ -385,6 +427,7 @@ const styles = StyleSheet.create({
 		justifyContent: "space-between",
 		alignItems: "center",
 		width: "90%",
+		zIndex: 20,
 	},
 	tabContainer: {
 		flexDirection: "row",
@@ -410,7 +453,11 @@ const styles = StyleSheet.create({
 	optionsContainer: {
 		flexDirection: "row",
 	},
-	optionsButton: {
+	learningButtonsContainer: {
+		flexDirection: "column",
+		position: "relative",
+	},
+	learningButton: {
 		borderRadius: 7,
 		backgroundColor: "rgba(255, 255, 255, 0.05)",
 		shadowColor: "#000",
@@ -424,12 +471,39 @@ const styles = StyleSheet.create({
 		padding: 8,
 		marginRight: 8,
 	},
-	optionText: {
+	learningText: {
 		color: "white",
 		opacity: 0.7,
 		paddingRight: 5,
 	},
-	optionIcon: {
+	twoButtons: {
+		flexDirection: "column",
+	},
+	learningButtonsDropdown: {
+		position: "absolute",
+		zIndex: 10,
+		top: 27,
+		left: 0,
+		right: 0,
+		paddingVertical: 5,
+		borderRadius: 7,
+	},
+	anotherLearningButton: {
+		borderRadius: 7,
+		backgroundColor: "rgba(50, 50, 50, 0.2)",
+		opacity: 0.8,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.55,
+		shadowRadius: 1,
+		maxHeight: 34,
+		display: "flex",
+		flexDirection: "row",
+		alignItems: "center",
+		padding: 8,
+		marginRight: 8,
+	},
+	filterIcon: {
 		width: 16,
 		height: 16,
 	},
@@ -437,6 +511,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		margin: "auto",
 		width: "95%",
+		zIndex: 0,
 	},
 	itemContainer: {
 		padding: 8,
@@ -476,6 +551,9 @@ const styles = StyleSheet.create({
 		width: "100%",
 		height: "100%",
 	},
+
+	// topic bottomsheet
+
 	sheetTitleContainer: {
 		display: "flex",
 		flexDirection: "row",
@@ -598,6 +676,9 @@ const styles = StyleSheet.create({
 		opacity: 0.2,
 		marginLeft: 5,
 	},
+
+	// filter bottomsheet
+
 	filterSheetContainer: {
 		alignItems: "center",
 	},
