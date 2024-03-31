@@ -1,25 +1,13 @@
-import { Match, Switch, createSignal, onMount } from "solid-js"
+import { For, Match, Switch, createSignal } from "solid-js"
 import Search from "../../../shared/components/Search"
 import Topbar from "../../../shared/components/Topbar"
 import * as gql from "../../../shared/graphql_client"
+import Button from "../../../shared/components/Button"
+import ProfileLink from "../../../shared/components/ProfileLink"
 
 export default function Home() {
-	// const [route, actions] = gql.useResource(gql.query_webIndex, {})
+	const [route, actions] = gql.useResource(gql.query_webIndex, {})
 	const [authenticated, setAuthenticated] = createSignal(true)
-
-	// createEffect(() => {
-	// 	route().
-	// })
-
-	// const [linkExpand, setLinkExpand] = createSignal()
-	// const [editingLink, setEditingLink] = createSignal()
-	// // const [local, setLocal] = createSignal({
-	// // 	editingLinkId: "1",
-	// // })
-	// const updateLearningStatus = gql.useRequest(gql.mutation_updateTopicLearningStatus)
-	// // createEffect(() => {
-	// // 	console.log(route())
-	// // })
 
 	return (
 		<div class=" w-full h-screen">
@@ -36,7 +24,7 @@ export default function Home() {
 }
 
 function PublicRoute(route: any) {
-	return <></>
+	return <>Search with graph</>
 }
 
 function AuthenticatedRoute(route: any) {
@@ -61,9 +49,9 @@ function AuthenticatedRoute(route: any) {
 						// filterOrder={routeData()?.filterOrder}
 						// filter={routeData()?.filter}
 					/>
-					{/* <div class=" px-5 w-full bg-gray-200 col-gap-[4px]">
+					<div class=" px-5 w-full bg-gray-200 col-gap-[4px]">
 						<For each={route().links}>{(link) => <ProfileLink link={link} />}</For>
-					</div> */}
+					</div>
 				</div>
 				<Search links={route().links} />
 			</div>
@@ -73,26 +61,25 @@ function AuthenticatedRoute(route: any) {
 
 function Sidebar(props: { topics?: string[] }) {
 	return (
-		<></>
-		// <div class="fixed top-0 left-0 h-screen min-w-[200px] bg-dark text-textGray ">
-		// 	<div class="h-[40px] w-[40px] rounded-full bg-white m-[20px]"></div>
-		// 	<div class="col-gap-[8px] pl-2">
-		// 		<div class="w-full">
-		// 			<Button label="My Links" />
-		// 		</div>
-		// 		<div class="">
-		// 			<div class="text-white/20 text-[14px] px-3 p-2">My Topics</div>
-		// 			<For each={props.topics}>
-		// 				{(topic) => {
-		// 					return (
-		// 						<div class="text-white/60 px-3 p-2 cursor-pointer hover:bg-hoverDark rounded-[7px] transition-all">
-		// 							{topic}
-		// 						</div>
-		// 					)
-		// 				}}
-		// 			</For>
-		// 		</div>
-		// 	</div>
-		// </div>
+		<div class="fixed top-0 left-0 h-screen min-w-[200px] bg-dark text-textGray ">
+			<div class="h-[40px] w-[40px] rounded-full bg-white m-[20px]"></div>
+			<div class="col-gap-[8px] pl-2">
+				<div class="w-full">
+					<Button label="My Links" />
+				</div>
+				<div class="">
+					<div class="text-white/20 text-[14px] px-3 p-2">My Topics</div>
+					{/* <For each={props.topics}>
+						{(topic) => {
+							return (
+								<div class="text-white/60 px-3 p-2 cursor-pointer hover:bg-hoverDark rounded-[7px] transition-all">
+									{topic}
+								</div>
+							)
+						}}
+					</For> */}
+				</div>
+			</div>
+		</div>
 	)
 }
