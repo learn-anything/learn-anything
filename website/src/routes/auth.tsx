@@ -3,6 +3,7 @@ import { useNavigate } from "@solidjs/router"
 import { onCleanup, onMount } from "solid-js"
 import { getHankoCookie } from "../../../shared/auth"
 import { makeEventListener } from "@solid-primitives/event-listener"
+import * as gql from "../../../shared/graphql_client"
 
 const hankoApi = import.meta.env.VITE_HANKO_API_URL
 
@@ -13,6 +14,7 @@ const hankoApi = import.meta.env.VITE_HANKO_API_URL
 // also offers to save passkey or login with passkey
 export default function Auth() {
 	const navigate = useNavigate()
+	const createUser = gql.useRequest(gql.mutation_updatePersonalLink)
 
 	onMount(async () => {
 		// TODO: improve this to actually validate that hanko cookie is valid, if not, have users go through auth again
