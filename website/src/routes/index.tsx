@@ -1,4 +1,4 @@
-import { For, createSignal } from "solid-js"
+import { For, createEffect, createSignal } from "solid-js"
 import ProfileLink from "~/components/ProfileLink"
 import * as gql from "../../../shared/graphql_client"
 
@@ -29,7 +29,12 @@ export type ProfileData = {
 }
 
 export default function Home() {
-	// const [route, actions] = gql.useResource(gql.query_routesProfile, {})
+	const [route, actions] = gql.useResource(gql.query_webIndex, {})
+
+	createEffect(() => {
+		console.log(route())
+	})
+
 	// const [linkExpand, setLinkExpand] = createSignal()
 	// const [editingLink, setEditingLink] = createSignal()
 	// // const [local, setLocal] = createSignal({
@@ -41,34 +46,33 @@ export default function Home() {
 	// // })
 
 	return (
-		<></>
-		// <div class=" w-full h-screen">
-		// 	<Sidebar topics={route().userTopics} />
-		// 	{/* <Sidebar topics={store.userTopics} /> */}
-		// 	<div class="ml-[200px] h-full p-2 relative">
-		// 		<div class="border-[#191919] h-full border rounded-[7px]">
-		// 			<Topbar
-		// 				changeLearningStatus={async (status) => {
-		// 					const res = await updateLearningStatus({ topicName: "Solid", learningStatus: status })
-		// 					if (res instanceof Error) return
-		// 					actions.mutate((p) => ({
-		// 						...p,
-		// 						showLinksStatus: status,
-		// 					}))
-		// 					console.log(res, "res")
-		// 				}}
-		// 				showLinksStatus={route().showLinksStatus}
-		// 				// showLinksStatus={"Learning"}
-		// 				// filterOrder={routeData()?.filterOrder}
-		// 				// filter={routeData()?.filter}
-		// 			/>
-		// 			<div class=" px-5 w-full bg-gray-200 col-gap-[4px]">
-		// 				<For each={route().links}>{(link) => <ProfileLink link={link} />}</For>
-		// 			</div>
-		// 		</div>
-		// 		<Search links={route().links} />
-		// 	</div>
-		// </div>
+		<div class=" w-full h-screen">
+			<Sidebar topics={route().userTopics} />
+			{/* <Sidebar topics={store.userTopics} /> */}
+			<div class="ml-[200px] h-full p-2 relative">
+				<div class="border-[#191919] h-full border rounded-[7px]">
+					<Topbar
+						changeLearningStatus={async (status) => {
+							const res = await updateLearningStatus({ topicName: "Solid", learningStatus: status })
+							if (res instanceof Error) return
+							actions.mutate((p) => ({
+								...p,
+								showLinksStatus: status,
+							}))
+							console.log(res, "res")
+						}}
+						showLinksStatus={route().showLinksStatus}
+						// showLinksStatus={"Learning"}
+						// filterOrder={routeData()?.filterOrder}
+						// filter={routeData()?.filter}
+					/>
+					<div class=" px-5 w-full bg-gray-200 col-gap-[4px]">
+						<For each={route().links}>{(link) => <ProfileLink link={link} />}</For>
+					</div>
+				</div>
+				<Search links={route().links} />
+			</div>
+		</div>
 	)
 }
 

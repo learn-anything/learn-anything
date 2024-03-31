@@ -1,3 +1,7 @@
+type Link {
+	title: String!
+	url: String!
+}
 type Mutation {
 	updatePersonalLink(linkId: String!, status: learningStatus!): Boolean!
 	createUser(email: String!): Boolean!
@@ -5,16 +9,21 @@ type Mutation {
 type Query {
 	webIndex: webIndexOutput!
 }
-type User {
-	username: String!
-}
 enum learningStatus {
 	Learn
 	Learning
 	Learned
 }
 type webIndexOutput {
-	user: User!
+	public: webIndexReturnPublic!
+	auth: webIndexReturnAuth!
+}
+type webIndexReturnAuth {
+	topics: [String!]!
+}
+type webIndexReturnPublic {
+	username: String!
+	links: [Link!]!
 }
 schema {
 	query: Query

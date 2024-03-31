@@ -23,9 +23,9 @@ const Link = g.type("Link", {
 	title: g.string(),
 	url: g.string(),
 })
-const User = g.type("User", {
-	username: g.string(),
-})
+// const User = g.type("User", {
+// 	username: g.string(),
+// })
 const EditingLink = g.type("EditingLink", {
 	title: g.string(),
 	url: g.string(),
@@ -37,22 +37,31 @@ const EditingLink = g.type("EditingLink", {
 	addedAt: g.string().optional(),
 })
 
+const webIndexReturnPublic = g.type("webIndexReturnPublic", {
+	username: g.string(),
+	links: g.ref(Link).list(),
+	// showLinksStatus: g.enumRef(LearningStatus),
+	// filterOrder: g.enumRef(FilterOrder),
+	// filter: g.enumRef(Filter),
+	// filterTopic: g.string().optional(),
+	// userTopics: g.string().list(),
+	// editingLink: g.ref(EditingLink).optional(),
+	// linkToEdit: g.string().optional(),
+	// searchQuery: g.string().optional(),
+})
+
+const webIndexReturnAuth = g.type("webIndexReturnAuth", {
+	topics: g.string().list(),
+})
+
 // -- website queries
 // / = landing page
 g.query("webIndex", {
 	args: {},
 	returns: g.ref(
 		g.type("webIndexOutput", {
-			user: g.ref(User),
-			// links: g.ref(Link).list(),
-			// showLinksStatus: g.enumRef(LearningStatus),
-			// filterOrder: g.enumRef(FilterOrder),
-			// filter: g.enumRef(Filter),
-			// filterTopic: g.string().optional(),
-			// userTopics: g.string().list(),
-			// editingLink: g.ref(EditingLink).optional(),
-			// linkToEdit: g.string().optional(),
-			// searchQuery: g.string().optional(),
+			public: g.ref(webIndexReturnPublic),
+			auth: g.ref(webIndexReturnAuth),
 		}),
 	),
 	resolver: "web/index",

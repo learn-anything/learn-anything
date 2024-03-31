@@ -126,6 +126,19 @@ TYPES:
 */
 
 /**
+ * Initial value: {@link initial_Link}
+ *
+ * @typedef  {object} Link
+ * @property {String} title
+ * @property {String} url
+ */
+/** @type {Link} */
+export const initial_Link = {
+	title: "",
+	url: "",
+}
+
+/**
  * @enum {(typeof learningStatus)[keyof typeof learningStatus]} */
 export const learningStatus = /** @type {const} */({
 	Learn: "Learn",
@@ -134,25 +147,40 @@ export const learningStatus = /** @type {const} */({
 })
 
 /**
- * Initial value: {@link initial_User}
+ * Initial value: {@link initial_webIndexReturnPublic}
  *
- * @typedef  {object} User
+ * @typedef  {object} webIndexReturnPublic
  * @property {String} username
+ * @property {Array<Link>} links
  */
-/** @type {User} */
-export const initial_User = {
+/** @type {webIndexReturnPublic} */
+export const initial_webIndexReturnPublic = {
 	username: "",
+	links: [],
+}
+
+/**
+ * Initial value: {@link initial_webIndexReturnAuth}
+ *
+ * @typedef  {object} webIndexReturnAuth
+ * @property {Array<String>} topics
+ */
+/** @type {webIndexReturnAuth} */
+export const initial_webIndexReturnAuth = {
+	topics: [],
 }
 
 /**
  * Initial value: {@link initial_webIndexOutput}
  *
  * @typedef  {object} webIndexOutput
- * @property {User} user
+ * @property {webIndexReturnPublic} public
+ * @property {webIndexReturnAuth} auth
  */
 /** @type {webIndexOutput} */
 export const initial_webIndexOutput = {
-	user: initial_User,
+	public: initial_webIndexReturnPublic,
+	auth: initial_webIndexReturnAuth,
 }
 
 /*
@@ -172,7 +200,7 @@ QUERIES:
  * @param   {Vars_webIndex} vars
  * @returns {string} */
 export function query_get_body_webIndex(vars) {
-	return 'webIndex{user{username}}'
+	return 'webIndex{public{username links{title url}}auth{topics}}'
 }
 
 /**
