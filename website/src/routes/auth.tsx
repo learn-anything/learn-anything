@@ -7,22 +7,18 @@ import { makeEventListener } from "@solid-primitives/event-listener"
 const hankoApi = import.meta.env.VITE_HANKO_API_URL
 
 // uses https://hanko.io authentication
-// it renders hanko web components: https://github.com/teamhanko/hanko/blob/main/frontend/elements/README.md
-// on sign up, creates a user in DB or just logs in if user already exists
+// renders hanko web component: https://github.com/teamhanko/hanko/blob/main/frontend/elements/README.md
+// on sign up, creates a user in DB, then logs in
+// on sign in, logs in user, saves token in `hanko` cookie
+// also offers to save passkey or login with passkey
 export default function Auth() {
 	const navigate = useNavigate()
-	const hanko = new Hanko(hankoApi)
 
 	onMount(async () => {
 		// TODO: improve this to actually validate that hanko cookie is valid, if not, have users go through auth again
 		if (getHankoCookie()) {
 			navigate("/")
 		}
-		hanko.onAuthFlowCompleted(() => {
-			// TODO: should we save id we get in event to local storage?
-			// navigate("/")
-		})
-
 		register(hankoApi, {
 			shadow: true, // if true, can use this for styling: https://github.com/teamhanko/hanko/blob/main/frontend/elements/README.md#css-shadow-parts
 			injectStyles: true, // TODO: check if needed
@@ -30,13 +26,8 @@ export default function Auth() {
 			console.error({ error })
 		})
 	})
-
-	onCleanup(() => {
-		// cleanup logic if needed
-	})
 	makeEventListener(document, "hankoAuthSuccess", async (event) => {
-		console.log(event, "event..")
-		const userClient = new UserClient(import.meta.env.VITE_HANKO_API, {
+		const userClient = new UserClient(hankoApi, {
 			timeout: 0,
 			cookieName: "hanko",
 			localStorageKey: "hanko",
