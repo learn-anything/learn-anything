@@ -49,7 +49,6 @@ const webIndexReturnPublic = g.type("webIndexReturnPublic", {
 	// linkToEdit: g.string().optional(),
 	// searchQuery: g.string().optional(),
 })
-
 const webIndexReturnAuth = g.type("webIndexReturnAuth", {
 	topics: g.string().list(),
 })

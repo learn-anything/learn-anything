@@ -1,39 +1,15 @@
-import { For, createEffect, createSignal } from "solid-js"
-import ProfileLink from "~/components/ProfileLink"
+import { Match, Switch, createSignal, onMount } from "solid-js"
+import Search from "../../../shared/components/Search"
+import Topbar from "../../../shared/components/Topbar"
 import * as gql from "../../../shared/graphql_client"
 
-// TODO: here for reference, resolver returns the same structure now, remove after route works
-export type ProfileData = {
-	links: { title: string; url: string }[]
-	showLinksStatus: "Learning" | "To Learn" | "Learned"
-	filterOrder: "Custom" | "RecentlyAdded"
-	filter: "Liked" | "None" | "Topic"
-	filterTopic?: string // used when filter is set to "Topic"
-	userTopics: string[]
-	user: {
-		email: string
-		name: string
-	}
-	editingLink?: {
-		title: string
-		url: string
-		description?: string
-		status?: "Learning" | "To Learn" | "Learned"
-		topic?: string
-		note?: string
-		year?: number
-		addedAt?: string
-	}
-	linkToEdit?: string // TODO: id of link? how to know what link is opened for editing
-	searchQuery?: string // what is typed in the search input on bottom
-}
-
 export default function Home() {
-	const [route, actions] = gql.useResource(gql.query_webIndex, {})
+	// const [route, actions] = gql.useResource(gql.query_webIndex, {})
+	const [authenticated, setAuthenticated] = createSignal(true)
 
-	createEffect(() => {
-		console.log(route())
-	})
+	// createEffect(() => {
+	// 	route().
+	// })
 
 	// const [linkExpand, setLinkExpand] = createSignal()
 	// const [editingLink, setEditingLink] = createSignal()
@@ -47,32 +23,51 @@ export default function Home() {
 
 	return (
 		<div class=" w-full h-screen">
+			<Switch fallback={<div>loading</div>}>
+				<Match when={!authenticated()}>
+					<PublicRoute />
+				</Match>
+				<Match when={authenticated()}>
+					<AuthenticatedRoute />
+				</Match>
+			</Switch>
+		</div>
+	)
+}
+
+function PublicRoute(route: any) {
+	return <></>
+}
+
+function AuthenticatedRoute(route: any) {
+	return (
+		<>
 			<Sidebar topics={route().userTopics} />
-			{/* <Sidebar topics={store.userTopics} /> */}
 			<div class="ml-[200px] h-full p-2 relative">
 				<div class="border-[#191919] h-full border rounded-[7px]">
 					<Topbar
-						changeLearningStatus={async (status) => {
-							const res = await updateLearningStatus({ topicName: "Solid", learningStatus: status })
-							if (res instanceof Error) return
-							actions.mutate((p) => ({
-								...p,
-								showLinksStatus: status,
-							}))
-							console.log(res, "res")
-						}}
-						showLinksStatus={route().showLinksStatus}
-						// showLinksStatus={"Learning"}
+						// changeLearningStatus={async (status) => {
+						// 	const res = await updateLearningStatus({ topicName: "Solid", learningStatus: status })
+						// 	if (res instanceof Error) return
+						// 	actions.mutate((p) => ({
+						// 		...p,
+						// 		showLinksStatus: status,
+						// 	}))
+						// 	console.log(res, "res")
+						// }}
+						changeLearningStatus={async (status: any) => {}}
+						// showLinksStatus={route().showLinksStatus}
+						showLinksStatus={"Learning"}
 						// filterOrder={routeData()?.filterOrder}
 						// filter={routeData()?.filter}
 					/>
-					<div class=" px-5 w-full bg-gray-200 col-gap-[4px]">
+					{/* <div class=" px-5 w-full bg-gray-200 col-gap-[4px]">
 						<For each={route().links}>{(link) => <ProfileLink link={link} />}</For>
-					</div>
+					</div> */}
 				</div>
 				<Search links={route().links} />
 			</div>
-		</div>
+		</>
 	)
 }
 

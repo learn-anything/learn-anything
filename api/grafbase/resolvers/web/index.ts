@@ -27,3 +27,29 @@ const resolver: Resolver["Query.webIndex"] = async (parent, args, context, info)
 }
 
 export default resolver
+
+// TODO: move to grafbase config
+type ProfileDataForAuthenticatedPage = {
+	links: { title: string; url: string }[]
+	showLinksStatus: "Learning" | "To Learn" | "Learned"
+	filterOrder: "Custom" | "RecentlyAdded"
+	filter: "Liked" | "None" | "Topic"
+	filterTopic?: string // used when filter is set to "Topic"
+	userTopics: string[]
+	user: {
+		email: string
+		name: string
+	}
+	editingLink?: {
+		title: string
+		url: string
+		description?: string
+		status?: "Learning" | "To Learn" | "Learned"
+		topic?: string
+		note?: string
+		year?: number
+		addedAt?: string
+	}
+	linkToEdit?: string // TODO: id of link? how to know what link is opened for editing
+	searchQuery?: string // what is typed in the search input on bottom
+}
