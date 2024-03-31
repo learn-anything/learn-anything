@@ -126,8 +126,8 @@ TYPES:
 */
 
 /**
- * @enum {(typeof learningStatus)[keyof typeof learningStatus]} */
-export const learningStatus = /** @type {const} */({
+ * @enum {(typeof LearningStatus)[keyof typeof LearningStatus]} */
+export const LearningStatus = /** @type {const} */({
 	Learn: "Learn",
 	Learning: "Learning",
 	Learned: "Learned",
@@ -198,7 +198,7 @@ MUTATIONS:
 /**
  * @typedef  {object} Vars_updatePersonalLink
  * @property {String} linkId
- * @property {learningStatus} status
+ * @property {LearningStatus} status
  *
  * @typedef  {Boolean} Value_updatePersonalLink
  */

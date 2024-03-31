@@ -1,8 +1,9 @@
 import * as child_process from "node:child_process"
 import * as path from "node:path"
+import * as graphstate from "@nothing-but/graphstate"
+
 import { $ } from "bun"
 import Watcher from "watcher"
-import * as graphstate from "./graphstate/sdk.js"
 
 const filename  = new URL(import.meta.url).pathname
 const root_path = path.dirname(filename)
@@ -96,20 +97,37 @@ To regenerate this file, run \`bun graphql\`.
 
 /**
  * Generates a GraphQL client based on the schema from grafbase.
- * !__Needs `grafbase dev` running__!
  */
-function generate_graphql_client() {
+async function generate_graphql_client() {
 	const schema = child_process
 		.execSync("grafbase introspect --dev", {cwd: api_path})
 		.toString()
 	Bun.write("shared/graphql_schema.gql", schema)
 
-	const queries = graphstate.cli_generate_queries(schema)
+	const queries = await graphstate.wasm_generate_queries(schema)
 	if (queries instanceof Error) {
 		console.error(queries)
 		return
 	}
 	Bun.write("shared/graphql_queries.js", graphql_client_header + queries)
+}
+
+async function runGrafbase() {
+	await generate_graphql_client()
+
+	// rerun graphql client generation on changes in grafbase folder
+	const currentFilePath = import.meta.url.replace("file://", "")
+	const grafbaseWatchPath = `${currentFilePath.replace("cmd.ts", "api/grafbase")}`
+	const watcher = new Watcher(grafbaseWatchPath, { recursive: true })
+	watcher.on("change", async (event) => {
+		if (event.includes("grafbase.config.ts")) {
+			await generate_graphql_client()
+		}
+	})
+
+	// doing > /dev/stdout to get colored output on linux/mac at least, context: https://discord.com/channels/876711213126520882/876711213126520885/1221521173813268581
+	const res = await $`cd api && grafbase dev > /dev/stdout`
+	console.log(res)
 }
 
 // TODO: maybe have a way to setup full learn-anything workspace in Cursor for users
@@ -147,26 +165,6 @@ async function setupEdgeDb() {
 // reccomend to use Cursor as editor and setup it with necessary plugins (Biome) + set it as default formatter
 async function setupCursor() {
 	// TODO:
-}
-
-async function runGrafbase() {
-	// This is annoying during development
-	// You only need to run it when the schema changes
-	// await generate_graphql_client()
-
-	// rerun graphql client generation on changes in grafbase folder
-	const currentFilePath = import.meta.url.replace("file://", "")
-	const grafbaseWatchPath = `${currentFilePath.replace("cmd.ts", "api/grafbase")}`
-	const watcher = new Watcher(grafbaseWatchPath, { recursive: true })
-	watcher.on("change", async (event) => {
-		if (event.includes("grafbase.config.ts")) {
-			await generate_graphql_client()
-		}
-	})
-
-	// doing > /dev/stdout to get colored output on linux/mac at least, context: https://discord.com/channels/876711213126520882/876711213126520885/1221521173813268581
-	const res = await $`cd api && grafbase dev > /dev/stdout`
-	console.log(res)
 }
 
 async function run() {
