@@ -1,29 +1,19 @@
-type Link {
-	title: String!
-	url: String!
-}
-type Mutation {
-	updatePersonalLink(linkId: String!, status: learningStatus!): Boolean!
-	createUser(email: String!): Boolean!
-}
-type Query {
-	webIndex: webIndexOutput!
-}
-enum learningStatus {
+enum LearningStatus {
 	Learn
 	Learning
 	Learned
 }
+type Mutation {
+	updatePersonalLink(linkId: String!, status: LearningStatus!): Boolean!
+}
+type Query {
+	webIndex: webIndexOutput!
+}
+type User {
+	name: String!
+}
 type webIndexOutput {
-	public: webIndexReturnPublic
-	auth: webIndexReturnAuth
-}
-type webIndexReturnAuth {
-	topics: [String!]!
-}
-type webIndexReturnPublic {
-	username: String!
-	links: [Link!]!
+	user: User!
 }
 schema {
 	query: Query

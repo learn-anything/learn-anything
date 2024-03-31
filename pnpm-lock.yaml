@@ -42,6 +42,9 @@ importers:
       '@grafbase/sdk':
         specifier: ^0.19.0
         version: 0.19.0
+      '@nothing-but/graphstate':
+        specifier: ^0.0.0
+        version: 0.0.0
       '@types/js-cookie':
         specifier: ^3.0.6
         version: 3.0.6
@@ -3023,6 +3026,11 @@ packages:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
+
+  /@nothing-but/graphstate@0.0.0:
+    resolution: {integrity: sha512-AzBPt95yn+z8bCWwN9ecYI4EZ9olOYb6mZlPdbF/pzWcCfiwq82WV7GTx3axmOMNL3vv188RvRlYcuJ98FyFLg==}
+    engines: {node: '>=20'}
+    dev: true
 
   /@npmcli/fs@1.1.1:
     resolution: {integrity: sha512-8KG5RD0GVP4ydEzRn/I4BNDuxDtqVbOdm8675T49OIG/NGhaK0pjPX7ZcDlvKYbA+ulvVK3ztfcF4uBdOxuJbQ==}

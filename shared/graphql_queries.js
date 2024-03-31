@@ -126,61 +126,33 @@ TYPES:
 */
 
 /**
- * Initial value: {@link initial_Link}
- *
- * @typedef  {object} Link
- * @property {String} title
- * @property {String} url
- */
-/** @type {Link} */
-export const initial_Link = {
-	title: "",
-	url: "",
-}
-
-/**
- * @enum {(typeof learningStatus)[keyof typeof learningStatus]} */
-export const learningStatus = /** @type {const} */({
+ * @enum {(typeof LearningStatus)[keyof typeof LearningStatus]} */
+export const LearningStatus = /** @type {const} */({
 	Learn: "Learn",
 	Learning: "Learning",
 	Learned: "Learned",
 })
 
 /**
- * Initial value: {@link initial_webIndexReturnPublic}
+ * Initial value: {@link initial_User}
  *
- * @typedef  {object} webIndexReturnPublic
- * @property {String} username
- * @property {Array<Link>} links
+ * @typedef  {object} User
+ * @property {String} name
  */
-/** @type {webIndexReturnPublic} */
-export const initial_webIndexReturnPublic = {
-	username: "",
-	links: [],
-}
-
-/**
- * Initial value: {@link initial_webIndexReturnAuth}
- *
- * @typedef  {object} webIndexReturnAuth
- * @property {Array<String>} topics
- */
-/** @type {webIndexReturnAuth} */
-export const initial_webIndexReturnAuth = {
-	topics: [],
+/** @type {User} */
+export const initial_User = {
+	name: "",
 }
 
 /**
  * Initial value: {@link initial_webIndexOutput}
  *
  * @typedef  {object} webIndexOutput
- * @property {Maybe<webIndexReturnPublic>} public
- * @property {Maybe<webIndexReturnAuth>} auth
+ * @property {User} user
  */
 /** @type {webIndexOutput} */
 export const initial_webIndexOutput = {
-	public: null,
-	auth: null,
+	user: initial_User,
 }
 
 /*
@@ -200,7 +172,7 @@ QUERIES:
  * @param   {Vars_webIndex} vars
  * @returns {string} */
 export function query_get_body_webIndex(vars) {
-	return 'webIndex{public{username links{title url}}auth{topics}}'
+	return 'webIndex{user{name}}'
 }
 
 /**
@@ -226,7 +198,7 @@ MUTATIONS:
 /**
  * @typedef  {object} Vars_updatePersonalLink
  * @property {String} linkId
- * @property {learningStatus} status
+ * @property {LearningStatus} status
  *
  * @typedef  {Boolean} Value_updatePersonalLink
  */
@@ -248,33 +220,5 @@ export const mutation_updatePersonalLink = /** @type {*} */({
 	name         : "updatePersonalLink",
 	kind         : "mutation",
 	get_body     : query_get_body_updatePersonalLink,
-	initial_value: false,
-})
-
-
-/**
- * @typedef  {object} Vars_createUser
- * @property {String} email
- *
- * @typedef  {Boolean} Value_createUser
- */
-
-/**
- * @param   {Vars_createUser} vars
- * @returns {string} */
-export function query_get_body_createUser(vars) {
-	return 'createUser(email:'+JSON.stringify(vars.email)+')'
-}
-
-/**
- * mutation: `createUser`\
- * vars : {@link Vars_createUser }\
- * value: {@link Value_createUser}
- * @type  {Query_Data<Vars_createUser, Value_createUser>}
- */
-export const mutation_createUser = /** @type {*} */({
-	name         : "createUser",
-	kind         : "mutation",
-	get_body     : query_get_body_createUser,
 	initial_value: false,
 })
