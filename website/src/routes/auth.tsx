@@ -1,6 +1,6 @@
-import { register, Hanko, UserClient } from "@teamhanko/hanko-elements"
+import { register, UserClient } from "@teamhanko/hanko-elements"
 import { useNavigate } from "@solidjs/router"
-import { onCleanup, onMount } from "solid-js"
+import { onMount } from "solid-js"
 import { getHankoCookie } from "../../../shared/auth"
 import { makeEventListener } from "@solid-primitives/event-listener"
 import * as gql from "../../../shared/graphql_client"
