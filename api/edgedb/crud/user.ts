@@ -11,12 +11,20 @@ export async function getUser(email: string) {
 	return res
 }
 
-// TODO: check error
 export async function createUser(email: string) {
 	const res = await e
 		.insert(e.User, {
-			email,
+			email: email,
 		})
+		.run(client)
+	return res.id
+}
+
+export async function deleteUser(email: string) {
+	const res = await e
+		.delete(e.User, (user) => ({
+			filter: e.op(user.email, "=", email),
+		}))
 		.run(client)
 	return res
 }
