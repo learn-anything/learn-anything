@@ -1,65 +1,105 @@
-import { register, Hanko } from "@teamhanko/hanko-elements"
+import { register, Hanko, UserClient } from "@teamhanko/hanko-elements"
 import { useNavigate } from "@solidjs/router"
 import { onCleanup, onMount } from "solid-js"
+import { getHankoCookie } from "../../../shared/auth"
+import { makeEventListener } from "@solid-primitives/event-listener"
 
 const hankoApi = import.meta.env.VITE_HANKO_API_URL
 
+// uses https://hanko.io authentication
+// it renders hanko web components: https://github.com/teamhanko/hanko/blob/main/frontend/elements/README.md
+// on sign up, creates a user in DB or just logs in if user already exists
 export default function Auth() {
 	const navigate = useNavigate()
 	const hanko = new Hanko(hankoApi)
 
-	const redirectAfterLogin = () => {
-		navigate("/dashboard")
-	}
-
-	onMount(() => {
+	onMount(async () => {
+		// TODO: improve this to actually validate that hanko cookie is valid, if not, have users go through auth again
+		if (getHankoCookie()) {
+			navigate("/")
+		}
 		hanko.onAuthFlowCompleted(() => {
-			redirectAfterLogin()
+			// TODO: should we save id we get in event to local storage?
+			// navigate("/")
 		})
 
-		register(hankoApi).catch((error) => {
-			// handle error
+		register(hankoApi, {
+			shadow: true, // if true, can use this for styling: https://github.com/teamhanko/hanko/blob/main/frontend/elements/README.md#css-shadow-parts
+			injectStyles: true, // TODO: check if needed
+		}).catch((error) => {
+			console.error({ error })
 		})
 	})
 
 	onCleanup(() => {
 		// cleanup logic if needed
 	})
+	makeEventListener(document, "hankoAuthSuccess", async (event) => {
+		console.log(event, "event..")
+		const userClient = new UserClient(import.meta.env.VITE_HANKO_API, {
+			timeout: 0,
+			cookieName: "hanko",
+			localStorageKey: "hanko",
+		})
+		const user = await userClient.getCurrent()
+		const email = user.email
+		console.log(email, "email")
+	})
 
 	return (
-		<div class="w-screen h-screen flex-center ">
-			<hanko-auth />
-			<div class="border border-[#191919] p-[30px] py-[50px] rounded-[7px] w-[400px] bg-[#0F0F0F] col-gap-[40px]">
-				<div class="text-[25px] text-center w-full">Welcome</div>
-				<div class="col-gap-[16px]">
-					<input
-						type="text"
-						style={{
-							background:
-								"linear-gradient(0deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.03) 100%), #191919",
-							"box-shadow": "0px 4px 10px 0px rgba(0, 0, 0, 0.20)",
-						}}
-						placeholder="Enter Email"
-						class="border w-full outline-none p-[14px] rounded-[7px] text-center text-white/30 text-[14px] border-white/10"
-					/>
-					<div class="w-full text-center text-[14px] text-white/40">or</div>
-					<div
-						style={{
-							background:
-								"linear-gradient(0deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.03) 100%), #191919",
-							"box-shadow": "0px 4px 10px 0px rgba(0, 0, 0, 0.20)",
-						}}
-						class="border w-full outline-none p-[14px] rounded-[7px] text-center text-white/30 text-[14px] border-white/10"
-					>
-						Sign in with passkey
+		<>
+			<style>
+				{`
+        #Auth:hover {
+          transform: translateY(-4px);
+          transition: all 0.3s linear;
+        }
+        #Auth {
+          transition: all 0.3s linear
+        }
+        #text {
+          padding-top: 10px;
+          opacity: 0.7;
+          font-weight: bold;
+        }
+        hanko-auth, hanko-profile {
+          --color: #fff;
+          --color-shade-1: #989BA1;
+          --color-shade-2: #43464E;
+          --brand-color: #AEDFFF;
+          --brand-color-shade-1: #A1C9E7;
+          --brand-contrast-color: #0B0D0E;
+          --background-color: black;
+          --error-color: #FF2E4C;
+          --link-color: #AEDFFF;
+          --font-family: "Raleway";
+          --font-size: 1rem;
+          --font-weight: 400;
+          --headline1-font-size: 0px;
+          --headline1-font-weight: 600;
+          --headline2-font-size: 1rem;
+          --headline2-font-weight: 600;
+          --border-radius: 8px;
+          --item-height: 40px;
+          --item-margin: 18px 0px;
+          --container-padding: 20px 50px 50px 50px;
+          --container-max-width: 800px;
+          --headline1-margin: 0 0 1rem;
+          --headline2-margin: 1rem 0 .5rem;
+        }
+      `}
+			</style>
+			<div class="text-white bg-neutral-950">
+				<div class="">
+					<div class="flex flex-col items-center h-screen justify-center ">
+						<div class="flex flex-col items-center p-10 rounded-lg border bg-black border-gray-200">
+							<div class="text-xl font-bold">Sign in / up with</div>
+							<hanko-auth />
+						</div>
 					</div>
 				</div>
 			</div>
-			<div class="absolute bottom-10 left-[50%] translate-x-[-50%] text-[14px] text-white/30">
-				<div>Learn Anything</div>
-				<div></div>
-			</div>
-		</div>
+		</>
 	)
 }
 

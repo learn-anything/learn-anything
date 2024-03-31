@@ -212,6 +212,9 @@ importers:
 
   website:
     dependencies:
+      '@solid-primitives/event-listener':
+        specifier: ^2.3.3
+        version: 2.3.3(solid-js@1.8.16)
       '@solidjs/router':
         specifier: ^0.13.1
         version: 0.13.1(solid-js@1.8.16)
@@ -4032,6 +4035,15 @@ packages:
     resolution: {integrity: sha512-V4BG07kuYSUkTCSBHG8G8TNhM+F19jXFWnQtzj+we8DrkpSBCee9Z3Ms8yiGer/dlmhe35/Xdgyo3/0rQKg7YA==}
     dependencies:
       '@sinonjs/commons': 3.0.1
+    dev: false
+
+  /@solid-primitives/event-listener@2.3.3(solid-js@1.8.16):
+    resolution: {integrity: sha512-DAJbl+F0wrFW2xmcV8dKMBhk9QLVLuBSW+TR4JmIfTaObxd13PuL7nqaXnaYKDWOYa6otB00qcCUIGbuIhSUgQ==}
+    peerDependencies:
+      solid-js: ^1.6.12
+    dependencies:
+      '@solid-primitives/utils': 6.2.3(solid-js@1.8.16)
+      solid-js: 1.8.16
     dev: false
 
   /@solid-primitives/props@3.1.11(solid-js@1.8.16):
