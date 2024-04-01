@@ -1,4 +1,5 @@
 import { config, graph } from "@grafbase/sdk"
+import { define } from "@grafbase/sdk"
 
 const g = graph.Standalone()
 export default config({
@@ -13,6 +14,12 @@ export default config({
 		},
 	},
 })
+
+// useful to write shorter resolvers
+// won't work if you split config into multiple files: https://discord.com/channels/890534438151274507/1224299258686214144/1224322448837836861
+type TypeArguments = Parameters<typeof define.type>
+let count = 0
+const inline = (fields: TypeArguments[1]) => g.ref(g.type(`Inline${count++}`, fields))
 
 // -- definitions
 const LearningStatus = g.enum("LearningStatus", ["Learn", "Learning", "Learned"])
@@ -36,13 +43,6 @@ const EditingLink = g.type("EditingLink", {
 	year: g.int().optional(),
 	addedAt: g.string().optional(),
 })
-
-import { define } from "@grafbase/sdk"
-
-type TypeArguments = Parameters<typeof define.type>
-
-let count = 0
-const inline = (fields: TypeArguments[1]) => g.ref(g.type(`Inline${count++}`, fields))
 
 // -- website queries
 // / = landing page
