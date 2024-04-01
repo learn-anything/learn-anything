@@ -364,15 +364,9 @@ export default function Home() {
 										</Svg>
 									</TouchableOpacity>
 									<TouchableOpacity style={styles.sheetLearningButton}>
-										<TouchableOpacity style={{ width: 20, height: 20, marginRight: 6 }}>
-											<Svg height="100" width="100" viewBox="0 0 100 100">
-												<Path
-													d="M5.8139 14.2822C5.9787 14.4615 6.25896 14.7205 6.54299 14.909C7.38682 15.4692 8.51466 15.811 9.9837 15.811C11.4525 15.811 12.5789 15.4693 13.4206 14.9094C13.7039 14.7211 14.041 14.4504 14.1472 14.2831V10.7892L11.0902 12.2439C10.4487 12.5492 9.51229 12.5489 8.87278 12.2434L5.8139 10.782V14.2822ZM4.14724 9.98573L0.474098 8.23088C-0.158499 7.92866 -0.157899 7.02793 0.4751 6.72655L8.86989 2.72964C9.5112 2.4243 10.4485 2.42341 11.0892 2.72724L19.5214 6.726C20.1559 7.02692 20.1565 7.92968 19.5224 8.23144L19.1472 8.40996V12.3806C19.403 12.6095 19.5639 12.9421 19.5639 13.3123C19.5639 14.0026 19.0043 14.5623 18.3139 14.5623C17.6235 14.5623 17.0639 14.0026 17.0639 13.3123C17.0639 12.9421 17.2248 12.6095 17.4806 12.3806V9.20305L15.8139 9.99614V14.5488C15.8165 14.7007 15.7776 14.8552 15.693 14.9946C15.6269 15.1034 15.512 15.2599 15.3425 15.447C15.0765 15.7407 14.7452 16.0301 14.3437 16.2972C13.229 17.0386 11.7816 17.4776 9.9837 17.4776C8.18601 17.4776 6.73767 17.0387 5.62123 16.2976C5.21917 16.0307 4.88726 15.7415 4.62057 15.448C4.45065 15.261 4.33536 15.1048 4.26911 14.9962C4.18384 14.8564 4.14465 14.7014 4.14724 14.5489V9.98573ZM9.58636 4.23445L2.7649 7.47822L9.59125 10.7395C9.77692 10.8282 10.1862 10.8283 10.374 10.739L17.2178 7.48233L10.375 4.23315C10.1873 4.14409 9.77531 4.14449 9.58636 4.23445Z"
-													fill="#D29752"
-													strokeWidth="2"
-												/>
-											</Svg>
-										</TouchableOpacity>
+										<TouchableOpacity
+											style={{ width: 20, height: 20, marginRight: 6 }}
+										></TouchableOpacity>
 										<Text style={styles.sheetLearningText}>Learning</Text>
 										<ArrowIcon />
 									</TouchableOpacity>
@@ -431,20 +425,37 @@ const styles = StyleSheet.create({
 	},
 	tabContainer: {
 		flexDirection: "row",
+		overflow: "hidden",
+		backgroundColor: "#222222",
+		borderRadius: 10,
+		width: 136,
 	},
 	tab: {
 		backgroundColor: "#222222",
 		borderRadius: 8,
 		paddingHorizontal: 8,
 		paddingVertical: 8,
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
 	},
 	selectedTab: {
 		backgroundColor: "rgba(255, 255, 255, 0.04)",
-		height: 34,
+		borderRadius: 7,
+		borderColor: "#222222",
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.55,
+		shadowRadius: 1,
 	},
 	unselectedTab: {
 		backgroundColor: "rgba(255, 255, 255, 0.0)",
-		height: 34,
+		borderRadius: 7,
+		borderColor: "#222222",
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.55,
+		shadowRadius: 1,
 	},
 	tabText: {
 		color: "white",
@@ -458,16 +469,17 @@ const styles = StyleSheet.create({
 		position: "relative",
 	},
 	learningButton: {
+		display: "flex",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		paddingHorizontal: 11,
+		backgroundColor: "#232323",
 		borderRadius: 7,
-		backgroundColor: "rgba(255, 255, 255, 0.05)",
 		shadowColor: "#000",
 		shadowOffset: { width: 0, height: 1 },
 		shadowOpacity: 0.55,
 		shadowRadius: 1,
-		maxHeight: 34,
-		display: "flex",
-		flexDirection: "row",
-		alignItems: "center",
 		padding: 8,
 		marginRight: 8,
 	},
