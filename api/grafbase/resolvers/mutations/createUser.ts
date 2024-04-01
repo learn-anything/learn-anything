@@ -14,9 +14,8 @@ const resolver: Resolver["Mutation.createUser"] = async (parent, args, context, 
 		if (err instanceof Error) {
 			console.error(err.message, "error")
 			throw new GraphQLError(err.message)
-		} else {
-			throw new GraphQLError(JSON.stringify(err))
 		}
+		throw new GraphQLError(JSON.stringify(err))
 	}
 }
 

@@ -1,9 +1,9 @@
 import { client } from "../../client"
 import e from "../../dbschema/edgeql-js"
 
-export async function indexRoute() {
+export async function indexRoutePublic() {
 	const res = await e
-		.select(e.User, (user) => ({
+		.select(e.User, () => ({
 			username: true,
 			// topics:
 		}))
