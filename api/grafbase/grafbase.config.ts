@@ -37,31 +37,57 @@ const EditingLink = g.type("EditingLink", {
 	addedAt: g.string().optional(),
 })
 
-const webIndexReturnPublic = g.type("webIndexReturnPublic", {
-	topics: g.string().list(),
-})
-const webIndexReturnAuth = g.type("webIndexReturnAuth", {
-	username: g.string(),
-	links: g.ref(Link).list(),
-	// showLinksStatus: g.enumRef(LearningStatus),
-	// filterOrder: g.enumRef(FilterOrder),
-	// filter: g.enumRef(Filter),
-	// filterTopic: g.string().optional(),
-	// userTopics: g.string().list(),
-	// editingLink: g.ref(EditingLink).optional(),
-	// linkToEdit: g.string().optional(),
-	// searchQuery: g.string().optional(),
-})
+import { define } from "@grafbase/sdk"
+
+type TypeArguments = Parameters<typeof define.type>
+
+// const inline = (name: TypeArguments[0], fields: TypeArguments[1]) => define.ref(define.type(name, fields))
+let count = 0
+const inline = (fields: TypeArguments[1]) => define.ref(define.type(`Inline${count++}`, fields))
+
 // -- website queries
 // / = landing page
 g.query("webIndex", {
 	args: {},
-	returns: g.ref(
-		g.type("webIndexOutput", {
-			public: g.ref(webIndexReturnPublic).optional(),
-			auth: g.ref(webIndexReturnAuth).optional(),
-		}),
-	),
+	returns: inline({
+		public: inline({
+			topics: g.string().list(),
+		}).optional(),
+		// auth: inline(...).optional(),
+	}),
+	// returns: inline("webIndexOutput", {
+	// 		public:  inline("webIndexPublicOutput", {
+	// 			topics: g.string().list(),
+	// 		}).optional(),
+	// 		// auth: inline(...).optional(),
+	// })
+	// returns: g.ref(
+	// 	g.type("webIndexOutput", {
+	// 		public: g
+	// 			.ref(
+	// 				g.type("webIndexReturnPublic", {
+	// 					topics: g.string().list(),
+	// 				}),
+	// 			)
+	// 			.optional(),
+	// 		auth: g
+	// 			.ref(
+	// 				g.type("webIndexReturnAuth", {
+	// 					username: g.string(),
+	// 					links: g.ref(Link).list(),
+	// 					// showLinksStatus: g.enumRef(LearningStatus),
+	// 					// filterOrder: g.enumRef(FilterOrder),
+	// 					// filter: g.enumRef(Filter),
+	// 					// filterTopic: g.string().optional(),
+	// 					// userTopics: g.string().list(),
+	// 					// editingLink: g.ref(EditingLink).optional(),
+	// 					// linkToEdit: g.string().optional(),
+	// 					// searchQuery: g.string().optional(),
+	// 				}),
+	// 			)
+	// 			.optional(),
+	// 	}),
+	// ),
 	resolver: "web/index",
 })
 // TODO: would be nice to inline! but how? https://discord.com/channels/890534438151274507/1224299258686214144

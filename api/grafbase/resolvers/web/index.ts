@@ -1,24 +1,28 @@
 import { Resolver } from "@grafbase/generated"
 import { GraphQLError } from "graphql"
 import { emailFromHankoToken } from "../../../../shared/auth"
-import { indexRoute, indexRouteAuth } from "../../../edgedb/crud/routes/website"
+import { indexRouteAuth, indexRoutePublic } from "../../../edgedb/crud/routes/website"
 
-// @ts-ignore
 const resolver: Resolver["Query.webIndex"] = async (parent, args, context, info) => {
 	try {
-		const email = await emailFromHankoToken(context)
+		// const email = await emailFromHankoToken(context)
+		const email = ""
 		if (email) {
 			const res = await indexRouteAuth(email)
 			console.log(res)
 			return {
-				auth: {
-					res,
+				public: {
+					topics: ["test"],
 				},
 			}
 		} else {
-			// TODO: non authorised, return data to render landing page (topics + graph)
-			const res = await indexRoute()
+			const res = await indexRoutePublic()
 			console.log(res)
+			return {
+				public: {
+					topics: ["test"],
+				},
+			}
 		}
 	} catch (err) {
 		console.error(err)

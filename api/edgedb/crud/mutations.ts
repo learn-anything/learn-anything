@@ -18,3 +18,14 @@ export async function deleteUser(email: string) {
 		.run(client)
 	return res
 }
+
+// export async function updateLatestGlobalTopicGraph(topicGraph: string) {
+// 	const res = await e
+// 		.update(e.Other, (other) => ({
+// 			set: {
+// 				graph: topicGraph,
+// 			},
+// 		}))
+// 		.run(client)
+// 	return res
+// }
