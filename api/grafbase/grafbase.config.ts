@@ -38,6 +38,9 @@ const EditingLink = g.type("EditingLink", {
 })
 
 const webIndexReturnPublic = g.type("webIndexReturnPublic", {
+	topics: g.string().list(),
+})
+const webIndexReturnAuth = g.type("webIndexReturnAuth", {
 	username: g.string(),
 	links: g.ref(Link).list(),
 	// showLinksStatus: g.enumRef(LearningStatus),
@@ -49,10 +52,6 @@ const webIndexReturnPublic = g.type("webIndexReturnPublic", {
 	// linkToEdit: g.string().optional(),
 	// searchQuery: g.string().optional(),
 })
-const webIndexReturnAuth = g.type("webIndexReturnAuth", {
-	topics: g.string().list(),
-})
-
 // -- website queries
 // / = landing page
 g.query("webIndex", {
@@ -65,6 +64,21 @@ g.query("webIndex", {
 	),
 	resolver: "web/index",
 })
+// TODO: would be nice to inline! but how? https://discord.com/channels/890534438151274507/1224299258686214144
+// can't do optional on `g.type`
+// g.query("webIndex", {
+// 	args: {},
+// 	returns: g.ref(
+// 		g.type("webIndexOutput", {
+// 			public: g.type("webIndexReturnPublic", {
+// 				username: g.string(),
+// 				links: g.ref(Link).list(),
+// 			}).optional(),
+// 			auth: g.ref(webIndexReturnAuth).optional(),
+// 		}),
+// 	),
+// 	resolver: "web/index",
+// })
 
 // -- mutations (return `true` on success, throw error on failure)
 g.mutation("createUser", {

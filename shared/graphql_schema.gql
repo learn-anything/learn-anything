@@ -19,11 +19,11 @@ type webIndexOutput {
 	auth: webIndexReturnAuth
 }
 type webIndexReturnAuth {
-	topics: [String!]!
-}
-type webIndexReturnPublic {
 	username: String!
 	links: [Link!]!
+}
+type webIndexReturnPublic {
+	topics: [String!]!
 }
 schema {
 	query: Query

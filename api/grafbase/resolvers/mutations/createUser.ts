@@ -11,11 +11,12 @@ const resolver: Resolver["Mutation.createUser"] = async (parent, args, context, 
 			throw new GraphQLError("Failed to create user")
 		}
 	} catch (err) {
-		// TODO: pattern match and give good errors
-		// @ts-ignore
-		console.error(err?.message, "error")
-		// @ts-ignore
-		throw new GraphQLError(JSON.stringify(err?.message))
+		if (err instanceof Error) {
+			console.error(err.message, "error")
+			throw new GraphQLError(err.message)
+		} else {
+			throw new GraphQLError(JSON.stringify(err))
+		}
 	}
 }
 

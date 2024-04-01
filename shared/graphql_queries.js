@@ -150,24 +150,24 @@ export const initial_Link = {
  * Initial value: {@link initial_webIndexReturnPublic}
  *
  * @typedef  {object} webIndexReturnPublic
- * @property {String} username
- * @property {Array<Link>} links
+ * @property {Array<String>} topics
  */
 /** @type {webIndexReturnPublic} */
 export const initial_webIndexReturnPublic = {
-	username: "",
-	links: [],
+	topics: [],
 }
 
 /**
  * Initial value: {@link initial_webIndexReturnAuth}
  *
  * @typedef  {object} webIndexReturnAuth
- * @property {Array<String>} topics
+ * @property {String} username
+ * @property {Array<Link>} links
  */
 /** @type {webIndexReturnAuth} */
 export const initial_webIndexReturnAuth = {
-	topics: [],
+	username: "",
+	links: [],
 }
 
 /**
@@ -200,7 +200,7 @@ QUERIES:
  * @param   {Vars_webIndex} vars
  * @returns {string} */
 export function query_get_body_webIndex(vars) {
-	return 'webIndex{public{username links{title url}}auth{topics}}'
+	return 'webIndex{public{topics}auth{username links{title url}}}'
 }
 
 /**
