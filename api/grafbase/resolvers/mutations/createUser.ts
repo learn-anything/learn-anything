@@ -1,22 +1,21 @@
 import { GraphQLError } from "graphql"
 import { Resolver } from "@grafbase/generated"
-import { createUser } from "../../../edgedb/crud/user"
+import { createUser } from "../../../edgedb/crud/mutations"
 
-// @ts-ignore
 const resolver: Resolver["Mutation.createUser"] = async (parent, args, context, info) => {
 	try {
-		console.log("running resolver")
 		const res = await createUser(args.email)
-		console.log(res, "res")
-		// TODO: check error
 		if (res) {
 			return true
 		} else {
-			return false
+			throw new GraphQLError("Failed to create user")
 		}
 	} catch (err) {
-		console.error(err)
-		throw new GraphQLError(JSON.stringify(err))
+		// TODO: pattern match and give good errors
+		// @ts-ignore
+		console.error(err?.message, "error")
+		// @ts-ignore
+		throw new GraphQLError(JSON.stringify(err?.message))
 	}
 }
 

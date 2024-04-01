@@ -134,25 +134,53 @@ export const LearningStatus = /** @type {const} */({
 })
 
 /**
- * Initial value: {@link initial_User}
+ * Initial value: {@link initial_Link}
  *
- * @typedef  {object} User
- * @property {String} name
+ * @typedef  {object} Link
+ * @property {String} title
+ * @property {String} url
  */
-/** @type {User} */
-export const initial_User = {
-	name: "",
+/** @type {Link} */
+export const initial_Link = {
+	title: "",
+	url: "",
+}
+
+/**
+ * Initial value: {@link initial_webIndexReturnPublic}
+ *
+ * @typedef  {object} webIndexReturnPublic
+ * @property {String} username
+ * @property {Array<Link>} links
+ */
+/** @type {webIndexReturnPublic} */
+export const initial_webIndexReturnPublic = {
+	username: "",
+	links: [],
+}
+
+/**
+ * Initial value: {@link initial_webIndexReturnAuth}
+ *
+ * @typedef  {object} webIndexReturnAuth
+ * @property {Array<String>} topics
+ */
+/** @type {webIndexReturnAuth} */
+export const initial_webIndexReturnAuth = {
+	topics: [],
 }
 
 /**
  * Initial value: {@link initial_webIndexOutput}
  *
  * @typedef  {object} webIndexOutput
- * @property {User} user
+ * @property {Maybe<webIndexReturnPublic>} public
+ * @property {Maybe<webIndexReturnAuth>} auth
  */
 /** @type {webIndexOutput} */
 export const initial_webIndexOutput = {
-	user: initial_User,
+	public: null,
+	auth: null,
 }
 
 /*
@@ -172,7 +200,7 @@ QUERIES:
  * @param   {Vars_webIndex} vars
  * @returns {string} */
 export function query_get_body_webIndex(vars) {
-	return 'webIndex{user{name}}'
+	return 'webIndex{public{username links{title url}}auth{topics}}'
 }
 
 /**
@@ -193,6 +221,34 @@ export const query_webIndex = /** @type {*} */({
 MUTATIONS:
 
 */
+
+
+/**
+ * @typedef  {object} Vars_createUser
+ * @property {String} email
+ *
+ * @typedef  {Boolean} Value_createUser
+ */
+
+/**
+ * @param   {Vars_createUser} vars
+ * @returns {string} */
+export function query_get_body_createUser(vars) {
+	return 'createUser(email:'+JSON.stringify(vars.email)+')'
+}
+
+/**
+ * mutation: `createUser`\
+ * vars : {@link Vars_createUser }\
+ * value: {@link Value_createUser}
+ * @type  {Query_Data<Vars_createUser, Value_createUser>}
+ */
+export const mutation_createUser = /** @type {*} */({
+	name         : "createUser",
+	kind         : "mutation",
+	get_body     : query_get_body_createUser,
+	initial_value: false,
+})
 
 
 /**

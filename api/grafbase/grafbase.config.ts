@@ -66,7 +66,14 @@ g.query("webIndex", {
 	resolver: "web/index",
 })
 
-// -- mutations (return `true` on success)
+// -- mutations (return `true` on success, throw error on failure)
+g.mutation("createUser", {
+	args: {
+		email: g.string(),
+	},
+	returns: g.boolean(),
+	resolver: "mutations/createUser",
+})
 g.mutation("updatePersonalLink", {
 	args: {
 		linkId: g.string(),
@@ -74,12 +81,4 @@ g.mutation("updatePersonalLink", {
 	},
 	returns: g.boolean(),
 	resolver: "mutations/updatePersonalLink",
-})
-
-g.mutation("createUser", {
-	args: {
-		email: g.string(),
-	},
-	returns: g.boolean(),
-	resolver: "mutations/createUser",
 })

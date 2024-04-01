@@ -2,12 +2,11 @@ import { GraphQLError } from "graphql"
 import { Resolver } from "@grafbase/generated"
 import { emailFromHankoToken } from "../../../../shared/auth"
 
-// @ts-ignore
 const resolver: Resolver["Mutation.updatePersonalLink"] = async (parent, args, context, info) => {
 	try {
 		const email = await emailFromHankoToken(context)
 		if (email) {
-			// const user = await getUser(email)
+			// const res = await updatePersonalLinkStatus()
 			return true
 		} else {
 			throw new GraphQLError("Missing or invalid Authorization header")

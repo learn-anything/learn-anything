@@ -10,11 +10,11 @@ const resolver: Resolver["Query.webIndex"] = async (parent, args, context, info)
 		if (email) {
 			const res = await indexRouteAuth(email)
 			console.log(res)
-			// return {
-			// 	user: {
-			// 		...user,
-			// 	},
-			// }
+			return {
+				auth: {
+					res,
+				},
+			}
 		} else {
 			// TODO: non authorised, return data to render landing page (topics + graph)
 			const res = await indexRoute()
