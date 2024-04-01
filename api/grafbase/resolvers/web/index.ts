@@ -1,18 +1,17 @@
 import { Resolver } from "@grafbase/generated"
 import { GraphQLError } from "graphql"
-import { emailFromHankoToken } from "../../../../shared/auth"
 import { indexRouteAuth, indexRoutePublic } from "../../../edgedb/crud/routes/website"
 
 const resolver: Resolver["Query.webIndex"] = async (parent, args, context, info) => {
 	try {
 		// const email = await emailFromHankoToken(context)
-		const email = ""
+		const email = "wow"
 		if (email) {
 			const res = await indexRouteAuth(email)
 			console.log(res)
 			return {
-				public: {
-					topics: ["test"],
+				auth: {
+					username: "nikiv",
 				},
 			}
 		} else {
@@ -25,7 +24,10 @@ const resolver: Resolver["Query.webIndex"] = async (parent, args, context, info)
 			}
 		}
 	} catch (err) {
-		console.error(err)
+		if (err instanceof Error) {
+			console.error(err.message, "error")
+			throw new GraphQLError(err.message)
+		}
 		throw new GraphQLError(JSON.stringify(err))
 	}
 }

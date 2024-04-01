@@ -126,12 +126,15 @@ TYPES:
 */
 
 /**
- * @enum {(typeof LearningStatus)[keyof typeof LearningStatus]} */
-export const LearningStatus = /** @type {const} */({
-	Learn: "Learn",
-	Learning: "Learning",
-	Learned: "Learned",
-})
+ * Initial value: {@link initial_Inline0}
+ *
+ * @typedef  {object} Inline0
+ * @property {Array<String>} topics
+ */
+/** @type {Inline0} */
+export const initial_Inline0 = {
+	topics: [],
+}
 
 /**
  * Initial value: {@link initial_Link}
@@ -147,41 +150,38 @@ export const initial_Link = {
 }
 
 /**
- * Initial value: {@link initial_webIndexReturnPublic}
+ * Initial value: {@link initial_Inline1}
  *
- * @typedef  {object} webIndexReturnPublic
- * @property {Array<String>} topics
- */
-/** @type {webIndexReturnPublic} */
-export const initial_webIndexReturnPublic = {
-	topics: [],
-}
-
-/**
- * Initial value: {@link initial_webIndexReturnAuth}
- *
- * @typedef  {object} webIndexReturnAuth
+ * @typedef  {object} Inline1
  * @property {String} username
- * @property {Array<Link>} links
+ * @property {Maybe<Array<Link>>} links
  */
-/** @type {webIndexReturnAuth} */
-export const initial_webIndexReturnAuth = {
+/** @type {Inline1} */
+export const initial_Inline1 = {
 	username: "",
 	links: [],
 }
 
 /**
- * Initial value: {@link initial_webIndexOutput}
+ * Initial value: {@link initial_Inline2}
  *
- * @typedef  {object} webIndexOutput
- * @property {Maybe<webIndexReturnPublic>} public
- * @property {Maybe<webIndexReturnAuth>} auth
+ * @typedef  {object} Inline2
+ * @property {Maybe<Inline0>} public
+ * @property {Maybe<Inline1>} auth
  */
-/** @type {webIndexOutput} */
-export const initial_webIndexOutput = {
+/** @type {Inline2} */
+export const initial_Inline2 = {
 	public: null,
 	auth: null,
 }
+
+/**
+ * @enum {(typeof LearningStatus)[keyof typeof LearningStatus]} */
+export const LearningStatus = /** @type {const} */({
+	Learn: "Learn",
+	Learning: "Learning",
+	Learned: "Learned",
+})
 
 /*
 
@@ -193,7 +193,7 @@ QUERIES:
 /**
  * @typedef  {object} Vars_webIndex
  *
- * @typedef  {webIndexOutput} Value_webIndex
+ * @typedef  {Inline2} Value_webIndex
  */
 
 /**
@@ -213,7 +213,7 @@ export const query_webIndex = /** @type {*} */({
 	name         : "webIndex",
 	kind         : "query",
 	get_body     : query_get_body_webIndex,
-	initial_value: initial_webIndexOutput,
+	initial_value: initial_Inline2,
 })
 
 /*

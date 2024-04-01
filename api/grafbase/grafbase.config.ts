@@ -41,9 +41,8 @@ import { define } from "@grafbase/sdk"
 
 type TypeArguments = Parameters<typeof define.type>
 
-// const inline = (name: TypeArguments[0], fields: TypeArguments[1]) => define.ref(define.type(name, fields))
 let count = 0
-const inline = (fields: TypeArguments[1]) => define.ref(define.type(`Inline${count++}`, fields))
+const inline = (fields: TypeArguments[1]) => g.ref(g.type(`Inline${count++}`, fields))
 
 // -- website queries
 // / = landing page
@@ -53,7 +52,10 @@ g.query("webIndex", {
 		public: inline({
 			topics: g.string().list(),
 		}).optional(),
-		// auth: inline(...).optional(),
+		auth: inline({
+			username: g.string(),
+			links: g.ref(Link).list().optional(),
+		}).optional(),
 	}),
 	// returns: inline("webIndexOutput", {
 	// 		public:  inline("webIndexPublicOutput", {

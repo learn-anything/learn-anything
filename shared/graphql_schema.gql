@@ -1,3 +1,14 @@
+type Inline0 {
+	topics: [String!]!
+}
+type Inline1 {
+	username: String!
+	links: [Link!]
+}
+type Inline2 {
+	public: Inline0
+	auth: Inline1
+}
 enum LearningStatus {
 	Learn
 	Learning
@@ -12,18 +23,7 @@ type Mutation {
 	updatePersonalLink(linkId: String!, status: LearningStatus!): Boolean!
 }
 type Query {
-	webIndex: webIndexOutput!
-}
-type webIndexOutput {
-	public: webIndexReturnPublic
-	auth: webIndexReturnAuth
-}
-type webIndexReturnAuth {
-	username: String!
-	links: [Link!]!
-}
-type webIndexReturnPublic {
-	topics: [String!]!
+	webIndex: Inline2!
 }
 schema {
 	query: Query
