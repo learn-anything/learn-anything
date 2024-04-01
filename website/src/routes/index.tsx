@@ -1,6 +1,6 @@
 import { For, createSignal } from "solid-js"
 import ProfileLink from "~/components/ProfileLink"
-import * as gql from "../../../shared/graphql_client"
+import * as gql from "../../../shared/graphql_solid"
 
 // TODO: here for reference, resolver returns the same structure now, remove after route works
 export type ProfileData = {
