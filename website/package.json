@@ -3,7 +3,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vinxi dev",
-		"build": "echo $CF_PAGES_BRANCH && vinxi build",
+		"build": "vinxi build",
 		"start": "vinxi start"
 	},
 	"dependencies": {
