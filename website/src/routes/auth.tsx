@@ -20,7 +20,9 @@ export default function Auth() {
 		if (import.meta.env.VITE_ENV !== "prod" && import.meta.env.VITE_ENV !== "staging") {
 			return
 		}
-		console.log(import.meta.env.CF_PAGES_BRANCH, "branch")
+		// VITE_CF_PAGES_BRANCH
+		// console.log(import.meta.env.CF_PAGES_BRANCH, "branch")
+		console.log(import.meta.env.VITE_CF_PAGES_BRANCH, "branch")
 		if (import.meta.env.VITE_ENV === "staging") {
 			// TODO: get valid token from hanko safely as a dev
 		}
