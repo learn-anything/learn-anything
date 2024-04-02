@@ -1,11 +1,12 @@
 import { Resolver } from "@grafbase/generated"
 import { GraphQLError } from "graphql"
 import { indexRouteAuth, indexRoutePublic } from "../../../edgedb/crud/routes/website"
+import { emailFromHankoToken } from "../../../../shared/auth"
 
 const resolver: Resolver["Query.webIndex"] = async (parent, args, context, info) => {
 	try {
 		// const email = await emailFromHankoToken(context)
-		const email = "wow"
+		const email = "test"
 		if (email) {
 			const res = await indexRouteAuth(email)
 			console.log(res)
