@@ -16,6 +16,16 @@ export default function Auth() {
 	const navigate = useNavigate()
 	const createUser = gql.useRequest(gql.mutation_createUser)
 
+	onMount(() => {
+		if (import.meta.env.VITE_ENV !== "prod" && import.meta.env.VITE_ENV !== "staging") {
+			return
+		}
+		console.log(import.meta.env.CF_PAGES_BRANCH, "branch")
+		if (import.meta.env.VITE_ENV === "staging") {
+			// TODO: get valid token from hanko safely as a dev
+		}
+	})
+
 	onMount(async () => {
 		// TODO: improve this to actually validate that hanko cookie is valid, if not, have users go through auth again
 		if (getHankoCookie()) {
