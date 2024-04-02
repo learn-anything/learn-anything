@@ -3,7 +3,7 @@ import { useNavigate } from "@solidjs/router"
 import { onMount } from "solid-js"
 import { getHankoCookie } from "../../../shared/auth"
 import { makeEventListener } from "@solid-primitives/event-listener"
-import * as gql from "../../../shared/graphql_client"
+import * as gql from "../../../shared/graphql_solid"
 
 const hankoApi = import.meta.env.VITE_HANKO_API_URL
 
