@@ -1,26 +1,13 @@
-import * as s from "solid-js"
-
 import * as gql from "./graphql_queries.js"
-import { getHankoCookie } from "./auth.js"
 
-export * from "./graphql_queries.js"
-
-/**
- * GLOBAL URL
- */
-let request_url = ""
-
-export function set_request_url(url: string): void {
-	request_url = url
-}
+const graphql_url = "http://127.0.0.1:4000/graphql"
 
 async function raw_request<T = never>(query: string): Promise<T | Error> {
 	try {
-		const token = getHankoCookie()
-		const res = await fetch(request_url, {
+		const res = await fetch(graphql_url, {
 			method: "POST",
-			headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-			body: '{"query":' + JSON.stringify(query) + "}",
+			headers: { "Content-Type": "application/json" },
+			body: '{"query":'+JSON.stringify(query)+'}',
 		})
 		const json = await res.json()
 		if (json.errors) {
@@ -38,24 +25,25 @@ async function raw_request<T = never>(query: string): Promise<T | Error> {
 	}
 }
 
-export type GraphQLClient = {
-	onError: (err: Error) => void
-}
-
-const graphql_client_fallback: GraphQLClient = {
-	onError: (err: Error) => {
-		console.error(err)
-	},
-}
-export const GraphQLClientContext = s.createContext<GraphQLClient>(graphql_client_fallback)
-
+/*
+For now cache is a in-memory map
+Later it will be replaced by a IndexedDB store
+*/
 const cache = new Map<string, any>()
 
+export function cache_get<T>(query: string): T | undefined {
+	return cache.get(query)
+}
+
+export function cache_set<T>(query: string, value: T): void {
+	cache.set(query, value)
+}
+
 type Operation = {
-	name: string
-	kind: gql.Operation_Kind
-	query: string
-	resolve: (res: any) => void
+	name   : string,
+	kind   : gql.Operation_Kind,
+	query  : string,
+	resolve: (res: any) => void,
 }
 
 const operations_pending = new Map<string, Operation[]>()
@@ -65,7 +53,7 @@ async function flush_operations(): Promise<void> {
 	operations_scheduled = false
 
 	const body = {
-		query: "",
+		query   : "",
 		mutation: "",
 	}
 	const operations_copy: Operation[] = []
@@ -92,9 +80,9 @@ async function flush_operations(): Promise<void> {
 	operations_pending.clear()
 
 	let query = ""
-	if (body.query) query += "query" + "{" + body.query + "}"
-	if (body.mutation) query += "mutation" + "{" + body.mutation + "}"
-
+	if (body.query)    query += "query"   +"{"+body.query   +"}"
+	if (body.mutation) query += "mutation"+"{"+body.mutation+"}"
+	
 	const res = await raw_request<Record<string, any>>(query)
 	if (res instanceof Error) {
 		for (const operation of operations_copy) {
@@ -108,15 +96,15 @@ async function flush_operations(): Promise<void> {
 	}
 }
 
-function schedule_operation<TValue>(
-	name: string,
-	kind: gql.Operation_Kind,
+export function schedule_operation<TValue>(
+	name : string,
+	kind : gql.Operation_Kind,
 	query: string,
 ): Promise<TValue> {
 	let resolve!: (res: TValue) => void
-	const promise = new Promise<TValue>((res) => (resolve = res))
+	const promise = new Promise<TValue>((res) => resolve = res)
 
-	const operation: Operation = { name, kind, query, resolve }
+	const operation: Operation = {name, kind, query, resolve}
 
 	const pending = operations_pending.get(name)
 	if (pending) {
@@ -132,76 +120,4 @@ function schedule_operation<TValue>(
 	}
 
 	return promise
-}
-
-/**
- * @example
- * ```tsx
- * const [links] = gql.useResource(gql.query_routesProfile, {email: "example@fake.com"})
- *
- * <For each={links()}>
- *     {(link) => <a href={link.url}>{link.title}</a>}
- * </For>
- * ```
- */
-export function useResource<TVars, TValue>(
-	query_data: gql.Query_Data<TVars, TValue>,
-	vars: TVars, // Vars cannot be reactive, because they are used as a cache key
-): s.InitializedResourceReturn<TValue> {
-	const client = s.useContext(GraphQLClientContext)
-
-	const query = query_data.get_body(vars)
-	const cached = cache.get(query) as TValue | undefined
-	const initial_value = cached ?? query_data.initial_value
-
-	return s.createResource(
-		async () => {
-			const res = await schedule_operation<TValue>(query_data.name, query_data.kind, query)
-			if (res instanceof Error) {
-				client.onError(res)
-				throw res
-			}
-			cache.set(query, res)
-			return res
-		},
-		{
-			initialValue: initial_value,
-		},
-	) as any
-}
-
-export async function request<TVars, TValue>(
-	client: GraphQLClient,
-	query_data: gql.Query_Data<TVars, TValue>,
-	vars: TVars,
-): Promise<TValue | Error> {
-	const res = await schedule_operation<TValue>(
-		query_data.name,
-		query_data.kind,
-		query_data.get_body(vars),
-	)
-	if (res instanceof Error) {
-		client.onError(res)
-	}
-	return res
-}
-
-/**
- * @example
- * ```tsx
- * const createUser = gql.useRequest(gql.mutation_createUser)
- *
- * const res = await createUser({email: "example@fake.com"})
- * if (res instanceof Error) {
- *     console.error("Couldn't create a user:", res)
- * } else {
- *     console.log("New user:", res)
- * }
- * ```
- */
-export function useRequest<TVars, TValue>(
-	query_data: gql.Query_Data<TVars, TValue>,
-): (vars: TVars) => Promise<TValue | Error> {
-	const client = s.useContext(GraphQLClientContext)
-	return (vars) => request(client, query_data, vars)
 }

@@ -2,7 +2,7 @@ import { Router } from "@solidjs/router"
 import { FileRoutes } from "@solidjs/start/router"
 import { ErrorBoundary, For, Suspense, createSignal } from "solid-js"
 import "./app.css"
-import * as gql from "../../shared/graphql_client"
+import * as gql from "../../shared/graphql_solid"
 
 export default function App() {
 	const [errors, setErrors] = createSignal<Error[]>([])
@@ -17,7 +17,6 @@ export default function App() {
 	const gql_client: gql.GraphQLClient = {
 		onError: addError,
 	}
-	gql.set_request_url("http://127.0.0.1:4000/graphql")
 
 	return (
 		<ErrorBoundary fallback={(err, reset) => (
