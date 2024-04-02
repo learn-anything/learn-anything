@@ -1,6 +1,6 @@
 import { For, Match, Switch, createSignal, onMount } from "solid-js"
 import Search from "../../../shared/components/Search"
-import Topbar from "../../../shared/components/Topbar"
+// import Topbar from "../../../shared/components/Topbar"
 import * as gql from "../../../shared/graphql_client"
 import Button from "../../../shared/components/Button"
 import ProfileLink from "../../../shared/components/ProfileLink"
@@ -36,7 +36,7 @@ function AuthenticatedRoute(route: any) {
 			<Sidebar topics={route().userTopics} />
 			<div class="ml-[200px] h-full p-2 relative">
 				<div class="border-[#191919] h-full border rounded-[7px]">
-					<Topbar
+					{/* <Topbar
 						// changeLearningStatus={async (status) => {
 						// 	const res = await updateLearningStatus({ topicName: "Solid", learningStatus: status })
 						// 	if (res instanceof Error) return
@@ -51,12 +51,12 @@ function AuthenticatedRoute(route: any) {
 						showLinksStatus={"Learning"}
 						// filterOrder={routeData()?.filterOrder}
 						// filter={routeData()?.filter}
-					/>
-					<div class=" px-5 w-full bg-gray-200 col-gap-[4px]">
+					/> */}
+					{/* <div class=" px-5 w-full bg-gray-200 col-gap-[4px]">
 						<For each={route().links}>{(link) => <ProfileLink link={link} />}</For>
-					</div>
+					</div> */}
 				</div>
-				<Search links={route().links} />
+				{/* <Search links={route().links} /> */}
 			</div>
 		</>
 	)

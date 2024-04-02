@@ -1,6 +1,6 @@
 import { For, Show, createEffect, createSignal } from "solid-js"
-import { Icon } from "./Icon"
 import { Motion, Presence } from "solid-motionone"
+// import { Icon } from "./Icon"
 
 export default function Search(props: {
 	links: { title: string; url: string }[]
