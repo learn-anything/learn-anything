@@ -71,42 +71,61 @@ function TabBarIcon(props: {
 		const iconName = props.name.replace("octicon-", "") as React.ComponentProps<
 			typeof Octicons
 		>["name"]
-		return <Octicons name={iconName} size={28} style={styles.tabBarIcon} color={props.color} />
+		return (
+			<Octicons
+				name={iconName}
+				size={28}
+				style={styles.tabBarIcon}
+				color={props.color}
+			/>
+		)
 	} else if (props.name.startsWith("antdesign-")) {
-		const iconName = props.name.replace("antdesign-", "") as React.ComponentProps<
-			typeof AntDesign
-		>["name"]
-		return <AntDesign name={iconName} size={28} style={styles.tabBarIcon} color={props.color} />
+		const iconName = props.name.replace(
+			"antdesign-",
+			"",
+		) as React.ComponentProps<typeof AntDesign>["name"]
+		return (
+			<AntDesign
+				name={iconName}
+				size={28}
+				style={styles.tabBarIcon}
+				color={props.color}
+			/>
+		)
 	}
 }
 
 export default function TabLayout() {
 	return (
 		<Tabs
-			screenOptions={{
-				tabBarActiveTintColor: "black",
-			}}
+		// screenOptions={{
+		// 	tabBarActiveTintColor: "black",
+		// }}
 		>
 			<Tabs.Screen
 				name="index"
-				options={{
-					title: "Tab One",
-					tabBarIcon: ({ color }) => <TabBarIcon name="code" color={"#151515"} />,
-					headerRight: () => (
-						<Link href="/modal" asChild>
-							<Pressable>
-								{({ pressed }) => (
-									<Octicons
-										name="list-unordered"
-										size={24}
-										color="gray"
-										style={[styles.headerRight, { opacity: pressed ? 0.5 : 1 }]}
-									/>
-								)}
-							</Pressable>
-						</Link>
-					),
-				}}
+				options={
+					{
+						// title: "Tab One",
+						// tabBarIcon: ({ color }) => (
+						// 	<TabBarIcon name="code" color={"#151515"} />
+						// ),
+						// headerRight: () => (
+						// 	<Link href="/modal" asChild>
+						// 		<Pressable>
+						// 			{({ pressed }) => (
+						// 				<Octicons
+						// 					name="list-unordered"
+						// 					size={24}
+						// 					color="gray"
+						// 					style={[styles.headerRight, { opacity: pressed ? 0.5 : 1 }]}
+						// 				/>
+						// 			)}
+						// 		</Pressable>
+						// 	</Link>
+						// ),
+					}
+				}
 			/>
 			<Tabs.Screen
 				name="two"
