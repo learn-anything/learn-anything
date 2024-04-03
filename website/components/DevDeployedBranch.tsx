@@ -7,7 +7,7 @@ export default function DevDeployedBranch() {
 
 	onMount(() => {
 		if (import.meta.env.VITE_ENV === "dev" && import.meta.env.VITE_CF_PAGES_BRANCH) {
-			setShowDeployedBranch(`Deployed branch: ${import.meta.env.VITE_CF_PAGES_BRANCH}`)
+			setShowDeployedBranch(import.meta.env.VITE_CF_PAGES_BRANCH)
 			return
 		}
 	})
@@ -21,12 +21,9 @@ export default function DevDeployedBranch() {
 				}}
 				class="absolute top-5 right-5 bg-hoverDark p-2 px-4 rounded-[7px] text-white/50"
 			>
-				<a
-					href={`https://github.com/learn-anything/learn-anything.xyz/pull/${
-						import.meta.env.VITE_CF_PAGES_BRANCH
-					}`}
-				></a>
-				Deployed branch: {deployedBranch()}
+				<a href={`https://github.com/learn-anything/learn-anything.xyz/pull/${deployedBranch()}`}>
+					Deployed branch: {deployedBranch()}
+				</a>
 			</Motion.div>
 		</Show>
 	)
