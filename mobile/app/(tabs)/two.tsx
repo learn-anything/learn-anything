@@ -23,9 +23,9 @@ import Svg, {
 const { width } = Dimensions.get("window")
 
 const isValidEmail = (email: string): boolean => {
-	const re =
+	const emailattern =
 		/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-	return re.test(email.toLowerCase())
+	return emailattern.test(email.toLowerCase())
 }
 const useDebounce = (value: any, delay: number) => {
 	const [debouncedValue, setDebouncedValue] = useState(value)
@@ -166,7 +166,8 @@ export default function TabTwoScreen() {
 						placeholder="Enter email"
 						textAlign="center"
 						placeholderTextColor="rgba(255, 255, 255, 0.2)"
-						onChangeText={(text) => setEmail(text)}
+						autoCapitalize="none"
+						onChangeText={(text) => setEmail(text.toLowerCase())}
 					/>
 					{isValidEmail(debouncedEmail) && (
 						<TouchableOpacity style={styles.continueButton}>
