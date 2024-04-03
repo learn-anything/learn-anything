@@ -4,6 +4,7 @@
 	"scripts": {
 		"dev": "vinxi dev",
 		"build": "vinxi build",
+		"deploy:staging": "git push --force origin HEAD:staging",
 		"start": "vinxi start"
 	},
 	"dependencies": {
