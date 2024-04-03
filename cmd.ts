@@ -13,33 +13,36 @@ async function main() {
 	const args = Bun.argv
 	const command = args[2]
 	switch (command) {
-		// fully sets up LA for development (website, desktop, mobile, api, ..)
 		case "setup":
-			await setupEnvFiles()
-			await setupFloxWithDependencies()
-			await setupEdgeDb()
-			await setupCursor()
+			await setup()
 			break
 		case "run":
 			await run()
 			break
-		case "grafbase":
+		case "runGrafbase":
 			await runGrafbase()
 			break
-		case "graphql":
-			generate_graphql_client()
+		case "generateGraphqlClient":
+			generateGraphqlClient()
 			break
-		case "website:deploy-dev":
+		case "websiteDeployDev":
 			websiteDeployDev()
 			break
 		case undefined:
-			// TODO: move to https://github.com/nikitavoloboev/ts/blob/main/cli/cli.ts
 			console.log("No command provided")
 			break
 		default:
 			console.log("Unknown command")
 			break
 	}
+}
+
+// fully sets up LA for development (website, desktop, mobile, api, ..)
+async function setup() {
+	await setupEnvFiles()
+	await setupFloxWithDependencies()
+	await setupEdgeDb()
+	await setupCursor()
 }
 
 // creates necessary .env files and fills it with default values to run LA locally
@@ -100,7 +103,7 @@ To regenerate this file, run \`bun graphql\`.
 /**
  * Generates a GraphQL client based on the schema from grafbase.
  */
-async function generate_graphql_client() {
+async function generateGraphqlClient() {
 	const schema = child_process.execSync("grafbase introspect --dev", { cwd: api_path }).toString()
 	Bun.write("shared/graphql_schema.gql", schema)
 
@@ -113,7 +116,7 @@ async function generate_graphql_client() {
 }
 
 async function runGrafbase() {
-	await generate_graphql_client()
+	await generateGraphqlClient()
 
 	// rerun graphql client generation on changes in grafbase folder
 	const currentFilePath = import.meta.url.replace("file://", "")
@@ -121,7 +124,7 @@ async function runGrafbase() {
 	const watcher = new Watcher(grafbaseWatchPath, { recursive: true })
 	watcher.on("change", async (event) => {
 		if (event.includes("grafbase.config.ts")) {
-			await generate_graphql_client()
+			await generateGraphqlClient()
 		}
 	})
 
@@ -168,8 +171,9 @@ async function setupCursor() {
 }
 
 async function websiteDeployDev() {
-	const currentBranch = await $`git branch --show-current`
-	const tempBranch = `temp-deploy-${Date.now()}`
+	const currentBranch = await $`git branch --show-current`.toString().trim()
+	console.log(currentBranch, "cur")
+	return
 
 	// Create deploy-details file
 	await $`echo "branch-pushed-from=${currentBranch}" > deploy-details`
@@ -180,17 +184,11 @@ async function websiteDeployDev() {
 	// Commit deploy-details file
 	await $`git commit -m "update deploy-details with branch name"`
 
-	// Push current branch to temporary branch
-	await $`git push -f origin ${currentBranch}:${tempBranch}`
-
-	// Push temporary branch to deploy-website-dev
-	await $`git push -f origin ${tempBranch}:deploy-website-dev`
+	// Push current branch to deploy-website-dev
+	await $`git push -f origin HEAD:deploy-website-dev`
 
 	// Remove deploy-details file and commit
 	await $`git reset HEAD~ && git checkout -- deploy-details && rm deploy-details`
-
-	// Delete temporary branch
-	await $`git push origin --delete ${tempBranch}`
 }
 
 async function run() {
