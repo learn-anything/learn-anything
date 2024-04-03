@@ -171,22 +171,45 @@ async function setupCursor() {
 }
 
 async function websiteDeployDev() {
-	const currentBranch = (await $`git branch --show-current`.text()).toString().trim()
+	try {
+		// check for unstaged changes
+		const status = (await $`git status --porcelain`).toString().trim()
+		if (status) {
+			// stash unstaged changes to ensure a clean working directory
+			await $`git stash push -m "Temp stash for deploy"`
+		}
 
-	// create deploy-details file with current branch name
-	await $`echo "branch-pushed-from=${currentBranch}" > deploy-details`
+		const currentBranch = (await $`git branch --show-current`).text().toString().trim()
 
-	// stage deploy-details file
-	await $`git add deploy-details`
+		// create deploy-details file with current branch name
+		await $`echo "branch-pushed-from=${currentBranch}" > deploy-details`
 
-	// commit deploy-details file
-	await $`git commit -m "create deploy-details with branch name"`
+		// stage deploy-details file
+		await $`git add deploy-details`
 
-	// push current branch to deploy-website-dev
-	await $`git push -f origin HEAD:deploy-website-dev`
+		// commit deploy-details file
+		await $`git commit -m "create deploy-details with branch name"`
 
-	// remote deploy-details file and commit
-	await $`git reset HEAD~ && git checkout -- deploy-details && rm deploy-details`
+		// push current branch to deploy-website-dev
+		await $`git push -f origin HEAD:deploy-website-dev`
+
+		// reset the last commit to remove the deploy-details file addition
+		await $`git reset --hard HEAD~1`
+
+		// if we stashed changes at the beginning, pop the stash
+		if (status) {
+			await $`git stash pop`
+		}
+	} catch (error) {
+		console.error("Deployment failed:", error)
+
+		// attempt to restore from stash on error
+		try {
+			await $`git stash pop`
+		} catch (restoreError) {
+			console.error("Failed to restore stashed changes:", restoreError)
+		}
+	}
 }
 
 async function run() {
