@@ -16,24 +16,6 @@ const hankoApi = import.meta.env.VITE_HANKO_API_URL
 export default function Auth() {
 	const navigate = useNavigate()
 	const createUser = gql.useRequest(gql.mutation_createUser)
-	const [showDeployedBranch, setShowDeployedBranch] = createSignal(
-		"Deployed branch: feature/la-130-new-website-design",
-	)
-
-	onMount(() => {
-		console.log(import.meta.env.VITE_ENV, "ENV")
-		if (import.meta.env.VITE_ENV === "staging") {
-			setShowDeployedBranch("Deployed branch: feature/la-130-new-website-design")
-			return
-		}
-		// if (import.meta.env.VITE_ENV !== "prod" && import.meta.env.VITE_ENV !== "staging") {
-		// 	return
-		// }
-		// console.log(import.meta.env.VITE_CF_PAGES_BRANCH, "branch")
-		// if (import.meta.env.VITE_ENV === "staging") {
-		// 	// TODO: get valid token from hanko safely as a dev
-		// }
-	})
 
 	onMount(async () => {
 		// TODO: improve this to actually validate that hanko cookie is valid, if not, have users go through auth again
@@ -118,18 +100,7 @@ export default function Auth() {
 					"justify-content": "center",
 				}}
 			>
-				<Show when={showDeployedBranch()}>
-					<Motion.div
-						animate={{
-							opacity: [0, 1],
-							transform: ["translate(20px, -20px) scale(0.9)", "translate(0, 0) scale(1)"],
-						}}
-						class="absolute top-5 right-5 bg-hoverDark p-2 px-4 rounded-[7px] text-white/50"
-					>
-						{showDeployedBranch()}
-					</Motion.div>
-				</Show>
-				<div class="">
+				<div>
 					<div class="flex flex-col items-center h-screen justify-center ">
 						<div class="flex flex-col items-center p-10 w-[400px] bg-[#0F0F0F] rounded-lg border bg-black border-white/20">
 							<div
@@ -150,17 +121,6 @@ export default function Auth() {
 					<div>Learn Anything</div>
 				</div>
 			</div>
-			<Show when={showDeployedBranch()}>
-				<Motion.div
-					animate={{
-						opacity: [0, 1],
-						transform: ["translate(20px, -20px) scale(0.9)", "translate(0, 0) scale(1)"],
-					}}
-					class="absolute top-5 right-5 bg-hoverDark p-2 px-4 rounded-[7px] text-white/50"
-				>
-					{showDeployedBranch()}
-				</Motion.div>
-			</Show>
 		</>
 	)
 }
