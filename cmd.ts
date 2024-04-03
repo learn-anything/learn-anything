@@ -200,6 +200,7 @@ async function websiteDeployDev() {
 		if (status) {
 			await $`git stash pop`
 		}
+		console.log("Deployed succesfully. Will be up on https://dev.learn-anything.xyz briefly.")
 	} catch (error) {
 		console.error("Deployment failed:", error)
 
