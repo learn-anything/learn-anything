@@ -28,18 +28,10 @@ export default function Auth() {
 		// if (import.meta.env.VITE_ENV !== "prod" && import.meta.env.VITE_ENV !== "staging") {
 		// 	return
 		// }
-<<<<<<< HEAD
 		// console.log(import.meta.env.VITE_CF_PAGES_BRANCH, "branch")
 		// if (import.meta.env.VITE_ENV === "staging") {
 		// 	// TODO: get valid token from hanko safely as a dev
 		// }
-=======
-		console.log(import.meta.env.VITE_CF_PAGES_BRANCH, "branch")
-		if (import.meta.env.VITE_ENV === "staging") {
-			// TODO: get valid token from hanko safely as a dev
-			setShowDeployedBranch("Deployed branch: feature/la-130-new-website-design")
-		}
->>>>>>> 5aee9f4 (auth tooltip)
 	})
 
 	onMount(async () => {
