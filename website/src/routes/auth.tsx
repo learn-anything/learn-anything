@@ -1,9 +1,10 @@
 import { register, UserClient } from "@teamhanko/hanko-elements"
 import { useNavigate } from "@solidjs/router"
-import { onMount } from "solid-js"
+import { createSignal, onMount, Show } from "solid-js"
 import { getHankoCookie } from "../../../shared/auth"
 import { makeEventListener } from "@solid-primitives/event-listener"
 import * as gql from "../../../shared/graphql_solid"
+import { Motion } from "solid-motionone"
 
 const hankoApi = import.meta.env.VITE_HANKO_API_URL
 
@@ -15,10 +16,11 @@ const hankoApi = import.meta.env.VITE_HANKO_API_URL
 export default function Auth() {
 	const navigate = useNavigate()
 	const createUser = gql.useRequest(gql.mutation_createUser)
+	const [showDeployedBranch, setShowDeployedBranch] = createSignal("")
 
 	onMount(() => {
-		if (import.meta.env.VITE_ENV !== "staging") {
-			// TODO: show tooltip with deployed branch name
+		if (import.meta.env.VITE_ENV === "staging") {
+			setShowDeployedBranch("Deployed branch: feature/la-130-new-website-design")
 			return
 		}
 		// if (import.meta.env.VITE_ENV !== "prod" && import.meta.env.VITE_ENV !== "staging") {
@@ -62,45 +64,43 @@ export default function Auth() {
 		<>
 			<style>
 				{`
-        #Auth:hover {
-          transform: translateY(-4px);
-          transition: all 0.3s linear;
-        }
-        #Auth {
-          transition: all 0.3s linear
-        }
-        #text {
-          padding-top: 10px;
-          opacity: 0.7;
-          font-weight: bold;
-        }
-
-        hanko-auth, hanko-profile {
-          --color: rgba(255, 255, 255, 0.35);
-          --color-shade-1: rgba(255, 255, 255, 0.35);
-          --color-shade-2: #43464E;
-          --brand-color: #AEDFFF;
-          --brand-color-shade-1: #A1C9E7;
-          --brand-contrast-color: #0B0D0E;
-          --background-color: transparent;
-          --error-color: #FF2E4C;
-          --link-color: #AEDFFF;
-          --font-family: "sans-serif";
-          --font-size: 0.87rem;
-          --font-weight: 400;
-          --headline1-font-size: 0px;
-          --headline1-font-weight: 600;
-          --headline2-font-size: 1rem;
-          --headline2-font-weight: 600;
-          --border-radius: 8px;
-          --item-height: 40px;
-          --item-margin: 18px 0px;
-          --container-padding: 0px 0px 0px 0px;
-          --container-max-width: 800px;
-          --headline1-margin: 0 0 1rem;
-          --headline2-margin: 1rem 0 .5rem;
-        }
-
+				#Auth:hover {
+					transform: translateY(-4px);
+					transition: all 0.3s linear;
+				}
+				#Auth {
+					transition: all 0.3s linear
+				}
+				#text {
+					padding-top: 10px;
+					opacity: 0.7;
+					font-weight: bold;
+				}
+				hanko-auth, hanko-profile {
+					--color: rgba(255, 255, 255, 0.60);
+					--color-shade-1: rgba(255, 255, 255, 0.60);
+					--color-shade-2: #43464E;
+					--brand-color: #AEDFFF;
+					--brand-color-shade-1: #A1C9E7;
+					--brand-contrast-color: #0B0D0E;
+					--background-color: transparent;
+					--error-color: #FF2E4C;
+					--link-color: #AEDFFF;
+					--font-family: "sans-serif";
+					--font-size: 0.87rem;
+					--font-weight: 400;
+					--headline1-font-size: 0px;
+					--headline1-font-weight: 600;
+					--headline2-font-size: 1rem;
+					--headline2-font-weight: 600;
+					--border-radius: 8px;
+					--item-height: 40px;
+					--item-margin: 18px 0px;
+					--container-padding: 0px 0px 0px 0px;
+					--container-max-width: 800px;
+					--headline1-margin: 0 0 1rem;
+					--headline2-margin: 1rem 0 .5rem;
+				}
       `}
 			</style>
 			<div
@@ -109,7 +109,6 @@ export default function Auth() {
 					background:
 						"radial-gradient(ellipse 190% 90% at top, rgba(25, 53, 92, 1) 0%, rgba(15, 15, 15, 0.8) 32%)",
 					color: "white",
-
 					display: "flex",
 					"flex-direction": "column",
 					"align-items": "center",
@@ -137,6 +136,17 @@ export default function Auth() {
 					<div>Learn Anything</div>
 				</div>
 			</div>
+			<Show when={showDeployedBranch()}>
+				<Motion.div
+					animate={{
+						opacity: [0, 1],
+						transform: ["translate(20px, -20px) scale(0.9)", "translate(0, 0) scale(1)"],
+					}}
+					class="absolute top-5 right-5 bg-hoverDark p-2 px-4 rounded-[7px] text-white/50"
+				>
+					{showDeployedBranch()}
+				</Motion.div>
+			</Show>
 		</>
 	)
 }
