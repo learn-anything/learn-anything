@@ -6,8 +6,8 @@ export default function DevDeployedBranch() {
 	const [deployedBranch, setShowDeployedBranch] = createSignal("")
 
 	onMount(() => {
-		if (import.meta.env.VITE_ENV === "dev" || true) {
-			setShowDeployedBranch("Deployed branch: feature/la-130-new-website-design")
+		if (import.meta.env.VITE_ENV === "dev" && import.meta.env.VITE_CF_PAGES_BRANCH) {
+			setShowDeployedBranch(`Deployed branch: ${import.meta.env.VITE_CF_PAGES_BRANCH}`)
 			return
 		}
 	})
@@ -21,6 +21,11 @@ export default function DevDeployedBranch() {
 				}}
 				class="absolute top-5 right-5 bg-hoverDark p-2 px-4 rounded-[7px] text-white/50"
 			>
+				<a
+					href={`https://github.com/learn-anything/learn-anything.xyz/pull/${
+						import.meta.env.VITE_CF_PAGES_BRANCH
+					}`}
+				></a>
 				Deployed branch: {deployedBranch()}
 			</Motion.div>
 		</Show>
