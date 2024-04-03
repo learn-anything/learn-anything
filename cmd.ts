@@ -171,9 +171,6 @@ async function websiteDeployDev() {
 	const currentBranch = await $`git branch --show-current`
 	const tempBranch = `temp-deploy-${Date.now()}`
 
-	// Create temporary branch
-	await $`git checkout -b ${tempBranch}`
-
 	// Create deploy-details file
 	await $`echo "branch-pushed-from=${currentBranch}" > deploy-details`
 
@@ -183,12 +180,17 @@ async function websiteDeployDev() {
 	// Commit deploy-details file
 	await $`git commit -m "update deploy-details with branch name"`
 
-	// Push temporary branch to deploy-website-dev
-	await $`git push --force origin ${tempBranch}:deploy-website-dev`
+	// Push current branch to temporary branch
+	await $`git push -f origin ${currentBranch}:${tempBranch}`
 
-	// Remove temporary branch & go back to current branch
-	await $`git checkout ${currentBranch}`
-	await $`git branch -D ${tempBranch}`
+	// Push temporary branch to deploy-website-dev
+	await $`git push -f origin ${tempBranch}:deploy-website-dev`
+
+	// Remove deploy-details file and commit
+	await $`git reset HEAD~ && git checkout -- deploy-details && rm deploy-details`
+
+	// Delete temporary branch
+	await $`git push origin --delete ${tempBranch}`
 }
 
 async function run() {
