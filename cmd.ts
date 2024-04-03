@@ -12,28 +12,32 @@ const api_path = path.join(root_path, "api")
 async function main() {
 	const args = Bun.argv
 	const command = args[2]
-	switch (command) {
-		case "setup":
-			await setup()
-			break
-		case "run":
-			await run()
-			break
-		case "runGrafbase":
-			await runGrafbase()
-			break
-		case "generateGraphqlClient":
-			generateGraphqlClient()
-			break
-		case "websiteDeployDev":
-			websiteDeployDev()
-			break
-		case undefined:
-			console.log("No command provided")
-			break
-		default:
-			console.log("Unknown command")
-			break
+	try {
+		switch (command) {
+			case "setup":
+				await setup()
+				break
+			case "run":
+				await run()
+				break
+			case "runGrafbase":
+				await runGrafbase()
+				break
+			case "generateGraphqlClient":
+				await generateGraphqlClient()
+				break
+			case "websiteDeployDev":
+				await websiteDeployDev()
+				break
+			case undefined:
+				console.log("No command provided")
+				break
+			default:
+				console.log("Unknown command")
+				break
+		}
+	} catch (err) {
+		console.error("Error occurred:", err)
 	}
 }
 
@@ -170,16 +174,19 @@ async function setupCursor() {
 	// TODO:
 }
 
+// can run from any branch, will deploy current state of `website` to `dev.learn-anything.xyz`
 async function websiteDeployDev() {
 	try {
+		const status = await $`git status --porcelain`.text()
 		// check for unstaged changes
-		const status = (await $`git status --porcelain`).toString().trim()
 		if (status) {
 			// stash unstaged changes to ensure a clean working directory
-			await $`git stash push -m "Temp stash for deploy"`
+			await $`git stash push -m "temp stash for deploy"`
 		}
 
 		const currentBranch = (await $`git branch --show-current`).text().toString().trim()
+		console.log(currentBranch, "current")
+		return
 
 		// create deploy-details file with current branch name
 		await $`echo "branch-pushed-from=${currentBranch}" > deploy-details`
@@ -205,11 +212,11 @@ async function websiteDeployDev() {
 		console.error("Deployment failed:", error)
 
 		// attempt to restore from stash on error
-		try {
-			await $`git stash pop`
-		} catch (restoreError) {
-			console.error("Failed to restore stashed changes:", restoreError)
-		}
+		// try {
+		// 	await $`git stash pop`
+		// } catch (restoreError) {
+		// 	console.error("Failed to restore stashed changes:", restoreError)
+		// }
 	}
 }
 
