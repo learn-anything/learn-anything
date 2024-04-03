@@ -171,23 +171,21 @@ async function setupCursor() {
 }
 
 async function websiteDeployDev() {
-	const currentBranch = await $`git branch --show-current`.toString().trim()
-	console.log(currentBranch, "cur")
-	return
+	const currentBranch = (await $`git branch --show-current`.text()).toString().trim()
 
-	// Create deploy-details file
+	// create deploy-details file with current branch name
 	await $`echo "branch-pushed-from=${currentBranch}" > deploy-details`
 
-	// Stage deploy-details file
+	// stage deploy-details file
 	await $`git add deploy-details`
 
-	// Commit deploy-details file
-	await $`git commit -m "update deploy-details with branch name"`
+	// commit deploy-details file
+	await $`git commit -m "create deploy-details with branch name"`
 
-	// Push current branch to deploy-website-dev
+	// push current branch to deploy-website-dev
 	await $`git push -f origin HEAD:deploy-website-dev`
 
-	// Remove deploy-details file and commit
+	// remote deploy-details file and commit
 	await $`git reset HEAD~ && git checkout -- deploy-details && rm deploy-details`
 }
 
