@@ -17,14 +17,17 @@ export default function Auth() {
 	const createUser = gql.useRequest(gql.mutation_createUser)
 
 	onMount(() => {
-		console.log(hankoApi, "hanko api test")
+		if (import.meta.env.VITE_ENV !== "staging") {
+			// TODO: show tooltip with deployed branch name
+			return
+		}
 		// if (import.meta.env.VITE_ENV !== "prod" && import.meta.env.VITE_ENV !== "staging") {
 		// 	return
 		// }
-		console.log(import.meta.env.VITE_CF_PAGES_BRANCH, "branch")
-		if (import.meta.env.VITE_ENV === "staging") {
-			// TODO: get valid token from hanko safely as a dev
-		}
+		// console.log(import.meta.env.VITE_CF_PAGES_BRANCH, "branch")
+		// if (import.meta.env.VITE_ENV === "staging") {
+		// 	// TODO: get valid token from hanko safely as a dev
+		// }
 	})
 
 	onMount(async () => {
