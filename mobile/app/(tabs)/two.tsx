@@ -1,5 +1,5 @@
 //auth
-import React from "react"
+import React, { useState, useEffect } from "react"
 import {
 	View,
 	StyleSheet,
@@ -22,7 +22,31 @@ import Svg, {
 
 const { width } = Dimensions.get("window")
 
+const isValidEmail = (email: string): boolean => {
+	const re =
+		/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+	return re.test(email.toLowerCase())
+}
+const useDebounce = (value: any, delay: number) => {
+	const [debouncedValue, setDebouncedValue] = useState(value)
+
+	useEffect(() => {
+		const handler = setTimeout(() => {
+			setDebouncedValue(value)
+		}, delay)
+
+		return () => {
+			clearTimeout(handler)
+		}
+	}, [value, delay])
+
+	return debouncedValue
+}
+
 export default function TabTwoScreen() {
+	const [email, setEmail] = useState("")
+	const debouncedEmail = useDebounce(email, 500)
+
 	return (
 		<View style={styles.container}>
 			<Svg
@@ -121,7 +145,7 @@ export default function TabTwoScreen() {
 									<Stop stopColor="white" />
 									<Stop
 										offset="1"
-										stopColor="rgba(35, 88, 224, 0.32)"
+										stopColor="rgb(183 204 249)"
 										stopOpacity={0.01}
 									/>
 								</SvgLinearGradient>
@@ -142,7 +166,14 @@ export default function TabTwoScreen() {
 						placeholder="Enter email"
 						textAlign="center"
 						placeholderTextColor="rgba(255, 255, 255, 0.2)"
+						onChangeText={(text) => setEmail(text)}
 					/>
+					{isValidEmail(debouncedEmail) && (
+						<TouchableOpacity style={styles.continueButton}>
+							<Text style={styles.continueText}>Continue</Text>
+						</TouchableOpacity>
+					)}
+
 					<Text
 						style={{ color: "rgba(255, 255, 255, 0.3)", marginVertical: 15 }}
 					>
@@ -278,5 +309,19 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "center",
 		marginTop: 15,
+	},
+	continueButton: {
+		backgroundColor: "#191919",
+		padding: 11,
+		borderRadius: 7,
+		borderWidth: 1,
+		borderColor: "rgba(255, 255, 255, 0.10)",
+	},
+	continueText: {
+		color: "rgba(255, 255, 255, 1)",
+		opacity: 0.7,
+		fontSize: 16,
+		fontWeight: "500",
+		textAlign: "center",
 	},
 })
