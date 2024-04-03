@@ -16,20 +16,41 @@ import Svg, {
 	Stop,
 	ClipPath,
 	Rect,
+	RadialGradient,
+	Circle,
 } from "react-native-svg"
-import LinearGradient from "react-native-linear-gradient"
 
 const { width } = Dimensions.get("window")
 
 export default function TabTwoScreen() {
 	return (
-		// <LinearGradient
-		// 	colors={["rgb(25, 53, 92)", "rgba(15, 15, 15, 0.8)"]}
-		// 	start={{ x: 0.5, y: 0 }}
-		// 	end={{ x: 0.5, y: 1 }}
-		// 	style={styles.container}
-		// >
 		<View style={styles.container}>
+			<Svg
+				height="25%"
+				width="100%"
+				style={styles.svgBackground}
+				viewBox="0 0 100 25"
+			>
+				<Defs>
+					<RadialGradient
+						id="grad"
+						cx="50"
+						cy="0"
+						rx="190"
+						ry="90"
+						gradientUnits="userSpaceOnUse"
+					>
+						<Stop offset="0" stopColor="rgb(25, 53, 92)" stopOpacity="0.5" />
+						<Stop
+							offset="0.32"
+							stopColor="rgba(15, 15, 15, 0.5)"
+							stopOpacity="0.3"
+						/>
+					</RadialGradient>
+				</Defs>
+				<Circle cx="50" cy="0" r="90" fill="url(#grad)" />
+			</Svg>
+
 			<TouchableOpacity style={{ marginTop: 28 }}>
 				<Svg width="30" height="30" viewBox="0 0 30 30" fill="none">
 					<Defs>
@@ -98,7 +119,11 @@ export default function TabTwoScreen() {
 									gradientUnits="userSpaceOnUse"
 								>
 									<Stop stopColor="white" />
-									<Stop offset="1" stopColor="#2358E0" stopOpacity={0.1} />
+									<Stop
+										offset="1"
+										stopColor="rgba(35, 88, 224, 0.32)"
+										stopOpacity={0.01}
+									/>
 								</SvgLinearGradient>
 							</Defs>
 							<Path
@@ -109,7 +134,7 @@ export default function TabTwoScreen() {
 							/>
 						</Svg>
 					</TouchableOpacity>
-					<Text style={styles.title}>Welcome</Text>
+					<Text style={styles.welcomeTitle}>Welcome</Text>
 				</View>
 				<View style={styles.inputContainer}>
 					<TextInput
@@ -163,7 +188,6 @@ export default function TabTwoScreen() {
 				</View>
 			</View>
 		</View>
-		// </LinearGradient>
 	)
 }
 
@@ -173,16 +197,13 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		width,
 		backgroundColor: "#0F0F0F",
+		position: "relative",
 	},
-	// linear gradient
-	// container: {
-	// 	flex: 1,
-	// 	alignItems: "center",
-	// 	width: "100%",
-	// 	color: "white",
-	// 	display: "flex",
-	// 	flexDirection: "column",
-	// },
+	svgBackground: {
+		position: "absolute",
+		top: 0,
+		left: 0,
+	},
 	authContainer: {
 		flexDirection: `column`,
 		alignItems: `center`,
@@ -201,7 +222,7 @@ const styles = StyleSheet.create({
 		alignItems: `center`,
 		width,
 	},
-	title: {
+	welcomeTitle: {
 		fontSize: 20,
 		fontWeight: `bold`,
 		color: "#fff",
