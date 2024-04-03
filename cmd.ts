@@ -5,10 +5,9 @@ import * as graphstate from "@nothing-but/graphstate"
 import { $ } from "bun"
 import Watcher from "watcher"
 
-const filename  = new URL(import.meta.url).pathname
+const filename = new URL(import.meta.url).pathname
 const root_path = path.dirname(filename)
-const api_path  = path.join(root_path, "api")
-
+const api_path = path.join(root_path, "api")
 
 async function main() {
 	const args = Bun.argv
@@ -29,6 +28,9 @@ async function main() {
 			break
 		case "graphql":
 			generate_graphql_client()
+			break
+		case "website:deploy-dev":
+			websiteDeployDev()
 			break
 		case undefined:
 			// TODO: move to https://github.com/nikitavoloboev/ts/blob/main/cli/cli.ts
@@ -99,9 +101,7 @@ To regenerate this file, run \`bun graphql\`.
  * Generates a GraphQL client based on the schema from grafbase.
  */
 async function generate_graphql_client() {
-	const schema = child_process
-		.execSync("grafbase introspect --dev", {cwd: api_path})
-		.toString()
+	const schema = child_process.execSync("grafbase introspect --dev", { cwd: api_path }).toString()
 	Bun.write("shared/graphql_schema.gql", schema)
 
 	const queries = await graphstate.wasm_generate_queries(schema)
@@ -165,6 +165,30 @@ async function setupEdgeDb() {
 // reccomend to use Cursor as editor and setup it with necessary plugins (Biome) + set it as default formatter
 async function setupCursor() {
 	// TODO:
+}
+
+async function websiteDeployDev() {
+	const currentBranch = await $`git branch --show-current`
+	const tempBranch = `temp-deploy-${Date.now()}`
+
+	// Create temporary branch
+	await $`git checkout -b ${tempBranch}`
+
+	// Create deploy-details file
+	await $`echo "branch-pushed-from=${currentBranch}" > deploy-details`
+
+	// Stage deploy-details file
+	await $`git add deploy-details`
+
+	// Commit deploy-details file
+	await $`git commit -m "update deploy-details with branch name"`
+
+	// Push temporary branch to deploy-website-dev
+	await $`git push --force origin ${tempBranch}:deploy-website-dev`
+
+	// Remove temporary branch & go back to current branch
+	await $`git checkout ${currentBranch}`
+	await $`git branch -D ${tempBranch}`
 }
 
 async function run() {

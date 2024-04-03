@@ -1,7 +1,6 @@
 import { Show, createSignal, onMount } from "solid-js"
 import { Motion } from "solid-motionone"
 
-// TODO: make `Deployed branch: {deployedBranch()}` link to branch name / PR on GitHub
 export default function DevDeployedBranch() {
 	const [deployedBranch, setShowDeployedBranch] = createSignal("")
 
