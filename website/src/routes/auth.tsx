@@ -5,6 +5,7 @@ import { getHankoCookie } from "../../../shared/auth"
 import { makeEventListener } from "@solid-primitives/event-listener"
 import * as gql from "../../../shared/graphql_solid"
 import { Motion } from "solid-motionone"
+import DevDeployedBranch from "../../components/DevDeployedBranch"
 
 const hankoApi = import.meta.env.VITE_HANKO_API_URL
 
@@ -100,27 +101,26 @@ export default function Auth() {
 					"justify-content": "center",
 				}}
 			>
-				<div>
-					<div class="flex flex-col items-center h-screen justify-center ">
-						<div class="flex flex-col items-center p-10 w-[400px] bg-[#0F0F0F] rounded-lg border bg-black border-white/20">
-							<div
-								class="text-xl font-bold text-white/20"
-								style={{
-									background: "linear-gradient(#ffffff, #2358E0)",
+				<div class="flex flex-col items-center h-screen justify-center ">
+					<div class="flex flex-col items-center p-10 w-[400px] bg-[#0F0F0F] rounded-lg border bg-black border-white/20">
+						<div
+							class="text-xl font-bold text-white/20"
+							style={{
+								background: "linear-gradient(#ffffff, #2358E0)",
 
-									"background-clip": "text",
-								}}
-							>
-								Welcome
-							</div>
-							<hanko-auth />
+								"background-clip": "text",
+							}}
+						>
+							Welcome
 						</div>
+						<hanko-auth />
 					</div>
 				</div>
 				<div class="absolute bottom-5 left-[50%] translate-x-[-50%] text-[14px] opacity-20">
 					<div>Learn Anything</div>
 				</div>
 			</div>
+			<DevDeployedBranch />
 		</>
 	)
 }
