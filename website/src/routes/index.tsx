@@ -1,9 +1,10 @@
 import { Match, Switch, createSignal, onMount } from "solid-js"
 import Button from "../../../shared/components/Button"
+import * as gql from "../../../shared/graphql_solid"
 
 export default function Home() {
-	// const [public, actions] = gql.useResource(gql.query_webIndexPublic, {})
-	// const [auth, actions] = gql.useResource(gql.query_webIndexAuth, {})
+	const [data, actions] = gql.useResource(gql.query_webIndex, {})
+
 	const [authenticated, setAuthenticated] = createSignal(true)
 
 	onMount(() => {})
