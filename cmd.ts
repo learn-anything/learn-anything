@@ -178,45 +178,45 @@ async function setupCursor() {
 async function websiteDeployDev() {
 	try {
 		const status = await $`git status --porcelain`.text()
-		// check for unstaged changes
+		let stashCreated = false
+
 		if (status) {
-			// stash unstaged changes to ensure a clean working directory
+			console.log("Stashing unstaged changes...")
 			await $`git stash push -m "temp stash for deploy"`
+			stashCreated = true
 		}
 
-		const currentBranch = (await $`git branch --show-current`).text().toString().trim()
-		console.log(currentBranch, "current")
-		return
+		const currentBranch = (await $`git branch --show-current`).text().trim()
+		console.log(`Deploying from branch: ${currentBranch}`)
 
-		// create deploy-details file with current branch name
 		await $`echo "branch-pushed-from=${currentBranch}" > deploy-details`
-
-		// stage deploy-details file
 		await $`git add deploy-details`
-
-		// commit deploy-details file
 		await $`git commit -m "create deploy-details with branch name"`
 
-		// push current branch to deploy-website-dev
+		console.log("Deploying to dev.learn-anything.xyz...")
 		await $`git push -f origin HEAD:deploy-website-dev`
 
-		// reset the last commit to remove the deploy-details file addition
+		console.log("Resetting repository to its previous state...")
 		await $`git reset --hard HEAD~1`
 
-		// if we stashed changes at the beginning, pop the stash
-		if (status) {
+		if (stashCreated) {
+			console.log("Restoring stashed changes...")
 			await $`git stash pop`
 		}
-		console.log("Deployed succesfully. Will be up on https://dev.learn-anything.xyz briefly.")
+
+		console.log("Deployed successfully. Will be up on https://dev.learn-anything.xyz shortly.")
 	} catch (error) {
 		console.error("Deployment failed:", error)
 
-		// attempt to restore from stash on error
-		// try {
-		// 	await $`git stash pop`
-		// } catch (restoreError) {
-		// 	console.error("Failed to restore stashed changes:", restoreError)
-		// }
+		// Attempt to restore from stash on error
+		try {
+			if (stashCreated) {
+				console.log("Restoring stashed changes...")
+				await $`git stash pop`
+			}
+		} catch (restoreError) {
+			console.error("Failed to restore stashed changes:", restoreError)
+		}
 	}
 }
 
