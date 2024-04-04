@@ -176,9 +176,9 @@ async function setupCursor() {
 
 // can run from any branch, will deploy current state of `website` to `dev.learn-anything.xyz`
 async function websiteDeployDev() {
+	let stashCreated = false
 	try {
 		const status = await $`git status --porcelain`.text()
-		let stashCreated = false
 
 		if (status) {
 			console.log("Stashing unstaged changes...")
