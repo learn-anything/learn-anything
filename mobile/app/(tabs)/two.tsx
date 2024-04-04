@@ -1,4 +1,3 @@
-//auth
 import React, { useState, useEffect } from "react"
 import {
 	View,
@@ -23,9 +22,9 @@ import Svg, {
 const { width } = Dimensions.get("window")
 
 const isValidEmail = (email: string): boolean => {
-	const emailattern =
+	const emailPattern =
 		/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-	return emailattern.test(email.toLowerCase())
+	return emailPattern.test(email.toLowerCase())
 }
 const useDebounce = (value: any, delay: number) => {
 	const [debouncedValue, setDebouncedValue] = useState(value)
@@ -45,7 +44,7 @@ const useDebounce = (value: any, delay: number) => {
 
 export default function TabTwoScreen() {
 	const [email, setEmail] = useState("")
-	const debouncedEmail = useDebounce(email, 500)
+	const debouncedEmail = useDebounce(email, 300)
 
 	return (
 		<View style={styles.container}>
@@ -89,8 +88,8 @@ export default function TabTwoScreen() {
 							y2="27.3127"
 							gradientUnits="userSpaceOnUse"
 						>
-							<Stop stopColor="white" stopOpacity="0" />
-							<Stop offset="1" stopColor="#2358E0" />
+							<Stop stopColor="#fff" stopOpacity="0" />
+							<Stop offset="1" stopColor="#87CEEB" />
 						</SvgLinearGradient>
 					</Defs>
 					<G clip-path="url(#clip0_6171_11647)">
@@ -160,20 +159,36 @@ export default function TabTwoScreen() {
 					</TouchableOpacity>
 					<Text style={styles.welcomeTitle}>Welcome</Text>
 				</View>
+
 				<View style={styles.inputContainer}>
-					<TextInput
-						style={styles.input}
-						placeholder="Enter email"
-						textAlign="center"
-						placeholderTextColor="rgba(255, 255, 255, 0.2)"
-						autoCapitalize="none"
-						onChangeText={(text) => setEmail(text.toLowerCase())}
-					/>
-					{isValidEmail(debouncedEmail) && (
-						<TouchableOpacity style={styles.continueButton}>
-							<Text style={styles.continueText}>Continue</Text>
-						</TouchableOpacity>
-					)}
+					<View
+						style={{
+							flexDirection: "row",
+							alignItems: "center",
+							justifyContent: "center",
+							height: 50,
+							marginTop: 30,
+							width: "95%",
+						}}
+					>
+						<TextInput
+							style={[
+								styles.input,
+								email.trim() !== "" ? styles.inputActive : {},
+								isValidEmail(email) ? styles.inputValid : {},
+							]}
+							placeholder="Enter email"
+							textAlign="center"
+							placeholderTextColor="rgba(255, 255, 255, 0.2)"
+							autoCapitalize="none"
+							onChangeText={(text) => setEmail(text.toLowerCase())}
+						/>
+						{isValidEmail(email) && (
+							<TouchableOpacity style={styles.continueButton}>
+								<Text style={styles.continueText}>Continue</Text>
+							</TouchableOpacity>
+						)}
+					</View>
 
 					<Text
 						style={{ color: "rgba(255, 255, 255, 0.3)", marginVertical: 15 }}
@@ -190,8 +205,9 @@ export default function TabTwoScreen() {
 						style={{
 							textDecorationLine: "underline",
 							textDecorationStyle: "solid",
-							paddingBottom: 2,
+							paddingBottom: 2, // wtf doesnt work
 							borderBottomWidth: 1,
+							lineHeight: 24,
 						}}
 					>
 						Terms of Service
@@ -256,7 +272,7 @@ const styles = StyleSheet.create({
 	},
 	welcomeTitle: {
 		fontSize: 20,
-		fontWeight: `bold`,
+		fontWeight: "800",
 		color: "#fff",
 	},
 	inputContainer: {
@@ -267,7 +283,6 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		width: 340,
-		marginTop: 30,
 		fontSize: 16,
 		backgroundColor: "#191919",
 		padding: 13,
@@ -275,14 +290,26 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		borderColor: "rgba(255, 255, 255, 0.10)",
 		color: "white",
+		fontWeight: "500",
+		height: 50,
+	},
+	inputActive: {
+		backgroundColor: "#111318",
+	},
+	inputValid: {
+		width: 220,
+		marginRight: 10,
 	},
 	passkeyButton: {
 		width: 340,
-		backgroundColor: "#191919",
 		padding: 11,
-		borderRadius: 7,
 		borderWidth: 1,
-		borderColor: "rgba(255, 255, 255, 0.10)",
+		backgroundColor: "#232323",
+		borderRadius: 7,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.55,
+		shadowRadius: 1,
 	},
 	passkeyText: {
 		color: "rgba(255, 255, 255, 1)",
@@ -295,9 +322,10 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		color: "white",
 		opacity: 0.3,
-		width: "70%",
+		width: 260,
 		textAlign: "center",
 		marginBottom: 30,
+		lineHeight: 22,
 	},
 	linkContainer: {
 		flexDirection: "column",
@@ -312,11 +340,21 @@ const styles = StyleSheet.create({
 		marginTop: 15,
 	},
 	continueButton: {
-		backgroundColor: "#191919",
-		padding: 11,
-		borderRadius: 7,
-		borderWidth: 1,
 		borderColor: "rgba(255, 255, 255, 0.10)",
+		display: "flex",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		paddingHorizontal: 11,
+		backgroundColor: "#232323",
+		borderRadius: 7,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.55,
+		shadowRadius: 1,
+		padding: 11,
+		height: 50,
+		width: 110,
 	},
 	continueText: {
 		color: "rgba(255, 255, 255, 1)",
