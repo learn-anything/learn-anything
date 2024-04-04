@@ -3,6 +3,7 @@ import clsx from "clsx"
 
 import Search from "../../../shared/components/Search"
 import Icon from "../../../shared/components/Icon"
+import { Motion } from "solid-motionone"
 
 export default function Pricing() {
 	return (
@@ -24,7 +25,15 @@ export default function Pricing() {
 			</div>
 			<div class="w-full h-full flex flex-col items-center md:p-[90px] p-[14px] py-[40px] gap-[30px]">
 				<div class="flex flex-col gap-2 items-center justify-center">
-					<div
+					<Motion.div
+						animate={{
+							opacity: [0, 1],
+							transform: ["translateY(10px) scale(0.98)", "translateY(0) scale(1)"],
+						}}
+						transition={{
+							duration: 0.5,
+							easing: "ease-out",
+						}}
 						class="md:text-[40px] text-[20px] font-bold text-opacity-[0.32] text-white"
 						style={{
 							background: "linear-gradient(#ffffff, #2358E0)",
@@ -33,10 +42,20 @@ export default function Pricing() {
 						}}
 					>
 						Become a member
-					</div>
-					<div class="opacity-40 mb-10 md:text-[16px] text-[14px] text-center px-[26px]">
+					</Motion.div>
+					<Motion.div
+						animate={{
+							opacity: [0, 1],
+							transform: ["translateY(10px) scale(0.98)", "translateY(0) scale(1)"],
+						}}
+						transition={{
+							duration: 0.8,
+							easing: "ease-out",
+						}}
+						class="opacity-40 mb-10 md:text-[16px] text-[14px] text-center px-[26px]"
+					>
 						Unlock premium features and help us build the future of education together
-					</div>
+					</Motion.div>
 				</div>
 				<Card />
 				<div class="bg-white/5 mt-[80px] md:w-[500px] w-full rounded-[20px] p-[28px] col-gap-[24px]">
@@ -55,7 +74,15 @@ export default function Pricing() {
 function Card() {
 	const [shownPlan, setShownPlan] = createSignal("Monthly")
 	return (
-		<div
+		<Motion.div
+			animate={{
+				opacity: [0, 1],
+				transform: ["translate(10px, 5px) scale(0.9)", "scale(1.01)", "translate(0, 0) scale(1)"],
+			}}
+			transition={{
+				duration: 0.9,
+				easing: "ease-out",
+			}}
 			class="md:w-[500px] w-full p-[2px] rounded-[20px]"
 			style={{
 				background: "linear-gradient(rgba(35, 88, 224, 0.32), rgba(255, 255, 255, 0.32))",
@@ -131,6 +158,6 @@ function Card() {
 					<div class="text-[14px] opacity-40 font-light w-full flex-center">Refund Policy</div>
 				</div>
 			</div>
-		</div>
+		</Motion.div>
 	)
 }
