@@ -5,7 +5,7 @@
 		"android": "expo start --android",
 		"format": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix && prettier \"**/*.{js,jsx,ts,tsx,json}\" --write",
 		"ios": "expo start --ios",
-		"start": "expo start",
+		"start": "expo start --tunnel",
 		"web": "expo start --web"
 	},
 	"dependencies": {
