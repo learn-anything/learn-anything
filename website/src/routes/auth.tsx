@@ -120,6 +120,7 @@ export default function Auth() {
 					<div>Learn Anything</div>
 				</div>
 				{/* TODO: maybe move it to show in all pages in dev. (put it in app.tsx?) */}
+				{/* test */}
 				<DevDeployedBranch />
 			</div>
 		</>
