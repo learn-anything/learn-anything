@@ -119,6 +119,7 @@ export default function Auth() {
 				<div class="absolute bottom-5 left-[50%] translate-x-[-50%] text-[14px] opacity-20">
 					<div>Learn Anything</div>
 				</div>
+				{/* TODO: maybe move it to show in all pages in dev. (put it in app.tsx?) */}
 				<DevDeployedBranch />
 			</div>
 		</>
