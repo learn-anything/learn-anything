@@ -3,7 +3,7 @@
 	"scripts": {
 		"setup": "bun cmd.ts setup",
 		"web": "cd website && bun dev",
-		"web:deploy-dev": "bun cmd.ts websiteDeployDev",
+		"web:deploy-dev": "bun --watch cmd.ts websiteDeployDev",
 		"app": "cd app && bun tauri:dev",
 		"cli": "cd api/edgedb && bun --watch ../../cli/run.ts",
 		"db:ui": "cd api/edgedb && edgedb ui",
