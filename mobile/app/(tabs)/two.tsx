@@ -236,7 +236,9 @@ export default function TabTwoScreen() {
 						<TouchableOpacity style={styles.resendCodeButton}>
 							<Text style={styles.resendCodeText}>Resend code</Text>
 						</TouchableOpacity>
-						<Text style={styles.backText}>Back</Text>
+						<TouchableOpacity onPress={() => setIsSubmitted(false)}>
+							<Text style={styles.backText}>Back</Text>
+						</TouchableOpacity>
 					</>
 				) : (
 					<>
