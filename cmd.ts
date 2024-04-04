@@ -208,7 +208,6 @@ async function websiteDeployDev() {
 	} catch (error) {
 		console.error("Deployment failed:", error)
 
-		// Attempt to restore from stash on error
 		try {
 			if (stashCreated) {
 				console.log("Restoring stashed changes...")
