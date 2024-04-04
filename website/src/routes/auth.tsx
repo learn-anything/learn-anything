@@ -1,10 +1,9 @@
-import { register, UserClient } from "@teamhanko/hanko-elements"
-import { useNavigate } from "@solidjs/router"
-import { createSignal, onMount, Show } from "solid-js"
-import { getHankoCookie } from "../../../shared/auth"
 import { makeEventListener } from "@solid-primitives/event-listener"
+import { useNavigate } from "@solidjs/router"
+import { register, UserClient } from "@teamhanko/hanko-elements"
+import { onMount } from "solid-js"
+import { getHankoCookie } from "../../../shared/auth"
 import * as gql from "../../../shared/graphql_solid"
-import { Motion } from "solid-motionone"
 import DevDeployedBranch from "../../components/DevDeployedBranch"
 
 const hankoApi = import.meta.env.VITE_HANKO_API_URL
@@ -18,7 +17,7 @@ export default function Auth() {
 	const navigate = useNavigate()
 	const createUser = gql.useRequest(gql.mutation_createUser)
 
-	onMount(async () => {
+	onMount(() => {
 		// TODO: improve this to actually validate that hanko cookie is valid, if not, have users go through auth again
 		if (getHankoCookie()) {
 			navigate("/")
@@ -31,6 +30,7 @@ export default function Auth() {
 		})
 	})
 	makeEventListener(document, "hankoAuthSuccess", async (event) => {
+		console.log(event, "event")
 		const userClient = new UserClient(hankoApi, {
 			timeout: 0,
 			cookieName: "hanko",
