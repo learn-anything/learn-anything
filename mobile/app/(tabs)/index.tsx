@@ -263,14 +263,14 @@ export default function Home() {
 					style={styles.list}
 				/>
 			</SafeAreaView>
-			<View style={styles.bottomBar}>
+			{/* <View style={styles.bottomBar}>
 				<View style={styles.bottomFrame}>
 					<Octicons name="list-unordered" size={24} color="grey" />
 					<AntDesign name="search1" size={24} color="grey" />
 					<AntDesign name="pluscircleo" size={24} color="grey" />
 					<Ionicons name="person-outline" size={24} color="grey" />
 				</View>
-			</View>
+			</View> */}
 			{/* filter bottomsheet */}
 			<BottomSheet
 				ref={filterRef}
@@ -558,22 +558,22 @@ const styles = StyleSheet.create({
 		fontWeight: "500",
 		width: 280, // ?
 	},
-	bottomBar: {
-		backgroundColor: "#151515",
-		display: "flex",
-		justifyContent: "space-between",
-		alignItems: "center",
-		width: width,
-		height: 82,
-		paddingHorizontal: 15,
-	},
-	bottomFrame: {
-		flexDirection: "row",
-		justifyContent: "space-around",
-		alignItems: "center",
-		width: "100%",
-		height: "100%",
-	},
+	// bottomBar: {
+	// 	backgroundColor: "#151515",
+	// 	display: "flex",
+	// 	justifyContent: "space-between",
+	// 	alignItems: "center",
+	// 	width: width,
+	// 	height: 82,
+	// 	paddingHorizontal: 15,
+	// },
+	// bottomFrame: {
+	// 	flexDirection: "row",
+	// 	justifyContent: "space-around",
+	// 	alignItems: "center",
+	// 	width: "100%",
+	// 	height: "100%",
+	// },
 
 	// topic bottomsheet
 
