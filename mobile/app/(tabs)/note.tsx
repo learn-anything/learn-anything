@@ -8,6 +8,7 @@ import {
 	TouchableOpacity,
 	TextInput,
 } from "react-native"
+import { Feather } from "@expo/vector-icons"
 
 const { width } = Dimensions.get("window")
 const { height } = Dimensions.get("window")
@@ -23,28 +24,30 @@ export default function Note() {
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.noteContainer}>
-				<TextInput
-					ref={inputRef}
-					style={styles.input}
-					multiline
-					placeholder="Enter your note..."
-					placeholderTextColor="rgba(255, 255, 255, 0.2)"
-					value={text}
-					onChangeText={setText}
-				/>
-				<View
-					style={{
-						display: "flex",
-						flexDirection: "row",
-					}}
-				>
-					<TouchableOpacity style={styles.createButton} onPress={() => console.log(text)}>
-						<Text style={styles.buttonText}>Create</Text>
-					</TouchableOpacity>
+				<View style={styles.inputContainer}>
+					<TextInput
+						ref={inputRef}
+						style={styles.input}
+						multiline
+						placeholder="Enter your note..."
+						placeholderTextColor="rgba(255, 255, 255, 0.2)"
+						value={text}
+						onChangeText={setText}
+					/>
 					<TouchableOpacity style={styles.clearButton} onPress={() => setText("")}>
-						<Text style={styles.buttonText}>Clear</Text>
+						<Feather name="delete" size={24} color="gray" />
 					</TouchableOpacity>
 				</View>
+				<TouchableOpacity
+					style={[styles.createButton, text ? {} : styles.disabledButton]}
+					onPress={() => {
+						console.log(text)
+						setText("")
+					}}
+					disabled={!text}
+				>
+					<Text style={styles.buttonText}>Create</Text>
+				</TouchableOpacity>
 			</View>
 		</SafeAreaView>
 	)
@@ -60,7 +63,10 @@ const styles = StyleSheet.create({
 		marginTop: 40,
 		marginHorizontal: width * 0.05,
 		width: "90%",
-		flexDirection: "column",
+		position: "relative",
+	},
+	inputContainer: {
+		position: "relative",
 	},
 	input: {
 		fontSize: 16,
@@ -73,6 +79,7 @@ const styles = StyleSheet.create({
 		maxHeight: height * 0.9,
 		paddingTop: 15,
 		lineHeight: 20,
+		paddingRight: width * 0.06,
 	},
 	createButton: {
 		alignItems: "center",
@@ -89,21 +96,24 @@ const styles = StyleSheet.create({
 		marginTop: 15,
 		marginRight: 10,
 	},
+	disabledButton: {
+		opacity: 0.5,
+	},
 	clearButton: {
-		display: "flex",
-		flexDirection: "row",
+		position: "absolute",
+		top: 0,
+		right: -15,
 		alignItems: "center",
 		justifyContent: "center",
 		width: "20%",
 		paddingHorizontal: 11,
-		backgroundColor: "#232323",
+		backgroundColor: "transparent",
 		borderRadius: 7,
 		shadowColor: "#000",
 		shadowOffset: { width: 0, height: 1 },
 		shadowOpacity: 0.55,
 		shadowRadius: 1,
 		padding: 8,
-		marginTop: 15,
 	},
 	buttonText: {
 		color: "white",
