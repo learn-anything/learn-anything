@@ -126,34 +126,34 @@ TYPES:
 */
 
 /**
+ * Initial value: {@link initial_Inline0}
+ *
+ * @typedef  {object} Inline0
+ * @property {String} filterStatus
+ */
+/** @type {Inline0} */
+export const initial_Inline0 = {
+	filterStatus: "",
+}
+
+/**
+ * Initial value: {@link initial_Inline1}
+ *
+ * @typedef  {object} Inline1
+ * @property {Maybe<Inline0>} auth
+ */
+/** @type {Inline1} */
+export const initial_Inline1 = {
+	auth: null,
+}
+
+/**
  * @enum {(typeof LearningStatus)[keyof typeof LearningStatus]} */
 export const LearningStatus = /** @type {const} */({
 	Learn: "Learn",
 	Learning: "Learning",
 	Learned: "Learned",
 })
-
-/**
- * Initial value: {@link initial_User}
- *
- * @typedef  {object} User
- * @property {String} name
- */
-/** @type {User} */
-export const initial_User = {
-	name: "",
-}
-
-/**
- * Initial value: {@link initial_webIndexOutput}
- *
- * @typedef  {object} webIndexOutput
- * @property {User} user
- */
-/** @type {webIndexOutput} */
-export const initial_webIndexOutput = {
-	user: initial_User,
-}
 
 /*
 
@@ -163,29 +163,29 @@ QUERIES:
 
 
 /**
- * @typedef  {object} Vars_webIndex
+ * @typedef  {object} Vars_mobileIndex
  *
- * @typedef  {webIndexOutput} Value_webIndex
+ * @typedef  {Inline1} Value_mobileIndex
  */
 
 /**
- * @param   {Vars_webIndex} vars
+ * @param   {Vars_mobileIndex} vars
  * @returns {string} */
-export function query_get_body_webIndex(vars) {
-	return 'webIndex{user{name}}'
+export function query_get_body_mobileIndex(vars) {
+	return 'mobileIndex{auth{filterStatus}}'
 }
 
 /**
- * query: `webIndex`\
- * vars : {@link Vars_webIndex }\
- * value: {@link Value_webIndex}
- * @type  {Query_Data<Vars_webIndex, Value_webIndex>}
+ * query: `mobileIndex`\
+ * vars : {@link Vars_mobileIndex }\
+ * value: {@link Value_mobileIndex}
+ * @type  {Query_Data<Vars_mobileIndex, Value_mobileIndex>}
  */
-export const query_webIndex = /** @type {*} */({
-	name         : "webIndex",
+export const query_mobileIndex = /** @type {*} */({
+	name         : "mobileIndex",
 	kind         : "query",
-	get_body     : query_get_body_webIndex,
-	initial_value: initial_webIndexOutput,
+	get_body     : query_get_body_mobileIndex,
+	initial_value: initial_Inline1,
 })
 
 /*
@@ -193,6 +193,34 @@ export const query_webIndex = /** @type {*} */({
 MUTATIONS:
 
 */
+
+
+/**
+ * @typedef  {object} Vars_createUser
+ * @property {String} email
+ *
+ * @typedef  {Boolean} Value_createUser
+ */
+
+/**
+ * @param   {Vars_createUser} vars
+ * @returns {string} */
+export function query_get_body_createUser(vars) {
+	return 'createUser(email:'+JSON.stringify(vars.email)+')'
+}
+
+/**
+ * mutation: `createUser`\
+ * vars : {@link Vars_createUser }\
+ * value: {@link Value_createUser}
+ * @type  {Query_Data<Vars_createUser, Value_createUser>}
+ */
+export const mutation_createUser = /** @type {*} */({
+	name         : "createUser",
+	kind         : "mutation",
+	get_body     : query_get_body_createUser,
+	initial_value: false,
+})
 
 
 /**

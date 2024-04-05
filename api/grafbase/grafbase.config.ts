@@ -1,4 +1,5 @@
 import { config, graph } from "@grafbase/sdk"
+import { define } from "@grafbase/sdk"
 
 const g = graph.Standalone()
 export default config({
@@ -14,6 +15,12 @@ export default config({
 	},
 })
 
+// useful to write shorter resolvers
+// won't work if you split config into multiple files: https://discord.com/channels/890534438151274507/1224299258686214144/1224322448837836861
+type TypeArguments = Parameters<typeof define.type>
+let count = 0
+const inline = (fields: TypeArguments[1]) => g.ref(g.type(`Inline${count++}`, fields))
+
 // -- definitions
 const LearningStatus = g.enum("LearningStatus", ["Learn", "Learning", "Learned"])
 // const LearningStatusNullable = g.enum("learningStatus", ["Learn", "Learning", "Learned", "None"])
@@ -23,9 +30,9 @@ const Link = g.type("Link", {
 	title: g.string(),
 	url: g.string(),
 })
-const User = g.type("User", {
-	name: g.string(),
-})
+// const User = g.type("User", {
+//  username: g.string(),
+// })
 const EditingLink = g.type("EditingLink", {
 	title: g.string(),
 	url: g.string(),
@@ -37,28 +44,25 @@ const EditingLink = g.type("EditingLink", {
 	addedAt: g.string().optional(),
 })
 
-// -- website queries
-// / = landing page
-g.query("webIndex", {
+// -- mobile queries
+g.query("mobileIndex", {
 	args: {},
-	returns: g.ref(
-		g.type("webIndexOutput", {
-			user: g.ref(User),
-			// links: g.ref(Link).list(),
-			// showLinksStatus: g.enumRef(LearningStatus),
-			// filterOrder: g.enumRef(FilterOrder),
-			// filter: g.enumRef(Filter),
-			// filterTopic: g.string().optional(),
-			// userTopics: g.string().list(),
-			// editingLink: g.ref(EditingLink).optional(),
-			// linkToEdit: g.string().optional(),
-			// searchQuery: g.string().optional(),
-		}),
-	),
-	resolver: "web/index",
+	returns: inline({
+		auth: inline({
+			filterStatus: g.string(),
+		}).optional(),
+	}),
+	resolver: "mobile/index",
 })
 
-// -- mutations (return `true` on success)
+// -- mutations (return `true` on success, throw error on failure)
+g.mutation("createUser", {
+	args: {
+		email: g.string(),
+	},
+	returns: g.boolean(),
+	resolver: "mutations/createUser",
+})
 g.mutation("updatePersonalLink", {
 	args: {
 		linkId: g.string(),

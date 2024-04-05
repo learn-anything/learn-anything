@@ -133,6 +133,9 @@ importers:
       expo-constants:
         specifier: ~15.4.5
         version: 15.4.5(expo@50.0.14)
+      expo-linear-gradient:
+        specifier: ^12.7.2
+        version: 12.7.2(expo@50.0.14)
       expo-linking:
         specifier: ~6.2.2
         version: 6.2.2(expo@50.0.14)
@@ -166,9 +169,6 @@ importers:
       react-native-gesture-handler:
         specifier: ~2.14.1
         version: 2.14.1(react-native@0.73.6)(react@18.2.0)
-      react-native-linear-gradient:
-        specifier: ^2.8.3
-        version: 2.8.3(react-native@0.73.6)(react@18.2.0)
       react-native-reanimated:
         specifier: ~3.6.3
         version: 3.6.3(@babel/core@7.24.3)(@babel/plugin-proposal-nullish-coalescing-operator@7.18.6)(@babel/plugin-proposal-optional-chaining@7.21.0)(@babel/plugin-transform-arrow-functions@7.24.1)(@babel/plugin-transform-shorthand-properties@7.24.1)(@babel/plugin-transform-template-literals@7.24.1)(react-native@0.73.6)(react@18.2.0)
@@ -220,7 +220,7 @@ importers:
         version: 0.13.1(solid-js@1.8.16)
       '@solidjs/start':
         specifier: ^1.0.0-rc.0
-        version: 1.0.0-rc.0(solid-js@1.8.16)(vinxi@0.3.11)(vite@5.2.7)
+        version: 1.0.0-rc.0(solid-js@1.8.16)(vinxi@0.3.11)(vite@5.2.8)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.19(postcss@8.4.38)
@@ -4073,7 +4073,7 @@ packages:
       solid-js: 1.8.16
     dev: false
 
-  /@solidjs/start@1.0.0-rc.0(solid-js@1.8.16)(vinxi@0.3.11)(vite@5.2.7):
+  /@solidjs/start@1.0.0-rc.0(solid-js@1.8.16)(vinxi@0.3.11)(vite@5.2.8):
     resolution: {integrity: sha512-wimF6eqYx8L1XC1MMxwruOgS+BGmv6nEnCa1Fd/VPcYaSF8BKBvgIQYNJALl8QUjfJ7lMK4b41uKAXz451vNNA==}
     dependencies:
       '@vinxi/plugin-directives': 0.3.1(vinxi@0.3.11)
@@ -4089,8 +4089,8 @@ packages:
       shikiji: 0.9.19
       source-map-js: 1.2.0
       terracotta: 1.0.5(solid-js@1.8.16)
-      vite-plugin-inspect: 0.7.42(vite@5.2.7)
-      vite-plugin-solid: 2.9.1(solid-js@1.8.16)(vite@5.2.7)
+      vite-plugin-inspect: 0.7.42(vite@5.2.8)
+      vite-plugin-solid: 2.9.1(solid-js@1.8.16)(vite@5.2.8)
     transitivePeerDependencies:
       - '@nuxt/kit'
       - '@testing-library/jest-dom'
@@ -7220,6 +7220,14 @@ packages:
 
   /expo-keep-awake@12.8.2(expo@50.0.14):
     resolution: {integrity: sha512-uiQdGbSX24Pt8nGbnmBtrKq6xL/Tm3+DuDRGBk/3ZE/HlizzNosGRIufIMJ/4B4FRw4dw8KU81h2RLuTjbay6g==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      expo: 50.0.14(@babel/core@7.24.3)(@react-native/babel-preset@0.73.21)
+    dev: false
+
+  /expo-linear-gradient@12.7.2(expo@50.0.14):
+    resolution: {integrity: sha512-Wwb2EF18ywgrlTodcXJ6Yt/UEcKitRMdXPNyP/IokmeKh4emoq9DxZJpZdkXm3HUTLlbRpi6/t32jrFVqXB9AQ==}
     peerDependencies:
       expo: '*'
     dependencies:
@@ -11048,16 +11056,6 @@ packages:
       react-native: 0.73.6(@babel/core@7.24.3)(@babel/preset-env@7.24.3)(react@18.2.0)
     dev: false
 
-  /react-native-linear-gradient@2.8.3(react-native@0.73.6)(react@18.2.0):
-    resolution: {integrity: sha512-KflAXZcEg54PXkLyflaSZQ3PJp4uC4whM7nT/Uot9m0e/qxFV3p6uor1983D1YOBJbJN7rrWdqIjq0T42jOJyA==}
-    peerDependencies:
-      react: '*'
-      react-native: '*'
-    dependencies:
-      react: 18.2.0
-      react-native: 0.73.6(@babel/core@7.24.3)(@babel/preset-env@7.24.3)(react@18.2.0)
-    dev: false
-
   /react-native-ratings@8.1.0(react-native@0.73.6)(react@18.2.0):
     resolution: {integrity: sha512-+QOJ4G3NjVkI1D+tk4EGx1dCvVfbD2nQdkrj9cXrcAoEiwmbep4z4bZbCKmWMpQ5h2dqbxABU8/eBnbDmvAc3g==}
     peerDependencies:
@@ -13142,7 +13140,7 @@ packages:
       - xml2js
     dev: false
 
-  /vite-plugin-inspect@0.7.42(vite@5.2.7):
+  /vite-plugin-inspect@0.7.42(vite@5.2.8):
     resolution: {integrity: sha512-JCyX86wr3siQc+p9Kd0t8VkFHAJag0RaQVIpdFGSv5FEaePEVB6+V/RGtz2dQkkGSXQzRWrPs4cU3dRKg32bXw==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -13160,7 +13158,7 @@ packages:
       open: 9.1.0
       picocolors: 1.0.0
       sirv: 2.0.4
-      vite: 5.2.7
+      vite: 5.2.8
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -13188,7 +13186,7 @@ packages:
       - supports-color
     dev: true
 
-  /vite-plugin-solid@2.9.1(solid-js@1.8.16)(vite@5.2.7):
+  /vite-plugin-solid@2.9.1(solid-js@1.8.16)(vite@5.2.8):
     resolution: {integrity: sha512-RC4hj+lbvljw57BbMGDApvEOPEh14lwrr/GeXRLNQLcR1qnOdzOwwTSFy13Gj/6FNIZpBEl0bWPU+VYFawrqUw==}
     peerDependencies:
       '@testing-library/jest-dom': ^5.16.6 || ^5.17.0 || ^6.*
@@ -13204,8 +13202,8 @@ packages:
       merge-anything: 5.1.7
       solid-js: 1.8.16
       solid-refresh: 0.6.3(solid-js@1.8.16)
-      vite: 5.2.7
-      vitefu: 0.2.5(vite@5.2.7)
+      vite: 5.2.8
+      vitefu: 0.2.5(vite@5.2.8)
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -13280,6 +13278,41 @@ packages:
       fsevents: 2.3.3
     dev: false
 
+  /vite@5.2.8:
+    resolution: {integrity: sha512-OyZR+c1CE8yeHw5V5t59aXsUPPVTHMDjEZz8MgguLL/Q7NblxhZUlTu9xSPqlsUO/y+X7dlU05jdhvyycD55DA==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': ^18.0.0 || >=20.0.0
+      less: '*'
+      lightningcss: ^1.21.0
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      lightningcss:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      esbuild: 0.20.2
+      postcss: 8.4.38
+      rollup: 4.13.1
+    optionalDependencies:
+      fsevents: 2.3.3
+    dev: false
+
   /vitefu@0.2.5(vite@5.2.6):
     resolution: {integrity: sha512-SgHtMLoqaeeGnd2evZ849ZbACbnwQCIwRH57t18FxcXoZop0uQu0uzlIhJBlF/eWVzuce0sHeqPcDo+evVcg8Q==}
     peerDependencies:
@@ -13291,7 +13324,7 @@ packages:
       vite: 5.2.6
     dev: true
 
-  /vitefu@0.2.5(vite@5.2.7):
+  /vitefu@0.2.5(vite@5.2.8):
     resolution: {integrity: sha512-SgHtMLoqaeeGnd2evZ849ZbACbnwQCIwRH57t18FxcXoZop0uQu0uzlIhJBlF/eWVzuce0sHeqPcDo+evVcg8Q==}
     peerDependencies:
       vite: ^3.0.0 || ^4.0.0 || ^5.0.0
@@ -13299,7 +13332,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 5.2.7
+      vite: 5.2.8
     dev: false
 
   /vlq@1.0.1:

@@ -6,6 +6,7 @@ import {
 	Animated,
 	Linking,
 	FlatList,
+	SafeAreaView,
 	Text,
 	TextInput,
 	TouchableOpacity,
@@ -15,6 +16,7 @@ import Svg, { Path } from "react-native-svg"
 import { Octicons, Ionicons, AntDesign } from "@expo/vector-icons"
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
+// import * as gql from "../../../shared/graphql_react"
 
 const { width } = Dimensions.get("window")
 
@@ -54,8 +56,12 @@ export default function Home() {
 	const filterRef = useRef<BottomSheet>(null)
 	const snapFilterPoints = useMemo(() => ["23%", "1%"], [])
 	const snapTopicPoints = useMemo(() => ["50%", "1%"], [])
+	// bottomsheet states
 	const [isBottomSheetVisible, setBottomSheetVisible] = useState(false)
 	const [isFilterSheetVisible, setFilterSheetVisible] = useState(false)
+
+	// const gqlData = gql.useResource(gql.query_mobileIndex, {})
+	// console.log(gqlData, "gql data")
 
 	const [data, setData] = useState<ProfileData>({
 		links: [
@@ -180,15 +186,13 @@ export default function Home() {
 
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
-			<View style={styles.container}>
+			<SafeAreaView style={styles.container}>
 				<View style={styles.header}>
 					<View style={styles.tabContainer}>
 						<TouchableOpacity
 							style={[
 								styles.tab,
-								selectedTab === "links"
-									? styles.selectedTab
-									: styles.unselectedTab,
+								selectedTab === "links" ? styles.selectedTab : styles.unselectedTab,
 							]}
 							onPress={() => setSelectedTab("links")}
 						>
@@ -197,9 +201,7 @@ export default function Home() {
 						<TouchableOpacity
 							style={[
 								styles.tab,
-								selectedTab === "topics"
-									? styles.selectedTab
-									: styles.unselectedTab,
+								selectedTab === "topics" ? styles.selectedTab : styles.unselectedTab,
 							]}
 							onPress={() => setSelectedTab("topics")}
 						>
@@ -208,10 +210,7 @@ export default function Home() {
 					</View>
 					<View style={styles.optionsContainer}>
 						<View style={styles.learningButtonsContainer}>
-							<TouchableOpacity
-								style={styles.learningButton}
-								onPress={showButtons}
-							>
+							<TouchableOpacity style={styles.learningButton} onPress={showButtons}>
 								<Text style={styles.learningText}>Learning</Text>
 								<ArrowIcon />
 							</TouchableOpacity>
@@ -235,9 +234,7 @@ export default function Home() {
 									]}
 								>
 									<TouchableOpacity style={styles.anotherLearningButton}>
-										<Text style={styles.learningText}>
-											{["Learned", "To Learn"][index]}
-										</Text>
+										<Text style={styles.learningText}>{["Learned", "To Learn"][index]}</Text>
 									</TouchableOpacity>
 								</Animated.View>
 							))}
@@ -265,7 +262,7 @@ export default function Home() {
 					keyExtractor={(item) => item.id}
 					style={styles.list}
 				/>
-			</View>
+			</SafeAreaView>
 			<View style={styles.bottomBar}>
 				<View style={styles.bottomFrame}>
 					<Octicons name="list-unordered" size={24} color="grey" />
@@ -319,10 +316,7 @@ export default function Home() {
 						<View>
 							<View style={styles.sheetTitleContainer}>
 								<View style={styles.titleContainer}>
-									<Image
-										source={getLinkIcon(selectedItem.url)}
-										style={styles.itemImage}
-									/>
+									<Image source={getLinkIcon(selectedItem.url)} style={styles.itemImage} />
 									<Text
 										style={{
 											color: "white",
@@ -339,9 +333,7 @@ export default function Home() {
 								</TouchableOpacity>
 							</View>
 							<View style={styles.sheetLinkContainer}>
-								<TouchableOpacity
-									style={{ width: 20, height: 20, marginRight: 5 }}
-								>
+								<TouchableOpacity style={{ width: 20, height: 20, marginRight: 5 }}>
 									<Svg height="100" width="100" viewBox="0 0 100 100">
 										<Path
 											d="M12.6592 7.18364C12.9846 7.50908 12.9838 8.03753 12.6619 8.35944L7.94245 13.0789C7.61851 13.4028 7.09435 13.4039 6.76665 13.0762C6.44121 12.7508 6.44203 12.2223 6.76393 11.9004L11.4834 7.18093C11.8073 6.85699 12.3315 6.85593 12.6592 7.18364ZM6.76666 16.6117C5.79136 17.587 4.20579 17.5864 3.23111 16.6117C2.25561 15.6362 2.25611 14.0512 3.23112 13.0762L5.58813 10.7192C5.91357 10.3937 5.91357 9.8661 5.58813 9.54066C5.2627 9.21522 4.73506 9.21522 4.40962 9.54066L2.05261 11.8977C0.426886 13.5234 0.426063 16.1637 2.0526 17.7902C3.67795 19.4156 6.31879 19.4166 7.94517 17.7902L10.3022 15.4332C10.6276 15.1078 10.6276 14.5801 10.3022 14.2547C9.97674 13.9293 9.44911 13.9293 9.12367 14.2547L6.76666 16.6117ZM17.3732 8.36216C18.9996 6.73578 18.9986 4.09494 17.3732 2.46959C15.7467 0.843055 13.1064 0.843878 11.4807 2.46961L9.12367 4.82662C8.79823 5.15205 8.79823 5.67969 9.12367 6.00513C9.44911 6.33056 9.97674 6.33056 10.3022 6.00513L12.6592 3.64812C13.6342 2.6731 15.2192 2.6726 16.1947 3.6481C17.1694 4.62278 17.17 6.20835 16.1947 7.18365L13.8377 9.54066C13.5123 9.8661 13.5123 10.3937 13.8377 10.7192C14.1631 11.0446 14.6908 11.0446 15.0162 10.7192L17.3732 8.36216Z"
@@ -356,16 +348,14 @@ export default function Home() {
 
 							<View style={styles.sheetDescriptionContainer}>
 								<Text style={styles.sheetInfo}>
-									The installation of Nix on macOS Catalina has faced challenges
-									due to the root file system becoming read-only
+									The installation of Nix on macOS Catalina has faced challenges due to the root
+									file system becoming read-only
 								</Text>
 								<Text style={styles.sheetDate}>2023 · Added: Mar 20, 2024</Text>
 							</View>
 							<View style={styles.sheetStatusContainer}>
 								<TouchableOpacity style={styles.sheetTopicButton}>
-									<Text style={styles.sheetButtonText}>
-										{selectedItem.topic}
-									</Text>
+									<Text style={styles.sheetButtonText}>{selectedItem.topic}</Text>
 								</TouchableOpacity>
 								<View style={styles.sheetHeartIconContainer}>
 									<TouchableOpacity
@@ -397,9 +387,7 @@ export default function Home() {
 					)}
 					<View style={styles.sheetNoteContainer}>
 						<View style={styles.noteText}>
-							<TouchableOpacity
-								style={{ marginLeft: 20, width: 20, height: 20, opacity: 0.3 }}
-							>
+							<TouchableOpacity style={{ marginLeft: 20, width: 20, height: 20, opacity: 0.3 }}>
 								<Svg height="100" width="100" viewBox="0 0 100 100">
 									<Path
 										d="M3.33408 14.2927L3.33532 15.0743C3.77266 14.9243 4.27659 15.0239 4.62554 15.3728C4.976 15.7233 5.07486 16.2301 4.92209 16.6687L5.69561 16.6707L6.98804 15.3783L4.61936 13.0096C3.84148 13.7862 3.33408 14.2927 3.33408 14.2927ZM12.6425 5.00085L15.0051 7.3612L8.16655 14.1998L5.79887 11.8321C8.55649 9.07914 12.6425 5.00085 12.6425 5.00085ZM15.4877 2.15567L17.8492 4.51715C18.5 5.16802 18.5008 6.22251 17.8503 6.87304L6.68573 18.0376C6.5235 18.1998 6.20677 18.3313 5.97268 18.3313H2.50085C2.04032 18.3313 1.66699 17.9606 1.66699 17.4976V14.0262C1.66699 13.7946 1.80042 13.4736 1.96088 13.3133L13.1312 2.154C13.7818 1.50405 14.8367 1.5047 15.4877 2.15567Z"
