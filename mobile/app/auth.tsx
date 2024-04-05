@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, KeyboardEvent, ChangeEvent } from "react"
+import React, { useState, useRef } from "react"
 import { View, StyleSheet, Dimensions, Text, TouchableOpacity, TextInput } from "react-native"
 import Svg, {
 	G,
@@ -197,7 +197,12 @@ export default function TabTwoScreen() {
 						<TouchableOpacity style={styles.resendCodeButton}>
 							<Text style={styles.resendCodeText}>Resend code</Text>
 						</TouchableOpacity>
-						<TouchableOpacity onPress={() => setIsSubmitted(false)}>
+						<TouchableOpacity
+							onPress={() => {
+								setIsSubmitted(false)
+								setEmail("")
+							}}
+						>
 							<Text style={styles.backText}>Back</Text>
 						</TouchableOpacity>
 					</>

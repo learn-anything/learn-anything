@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
 		position: "relative",
 	},
 	placeholderStyle: {
-		fontSize: 20,
+		fontSize: 21,
 	},
 	smallPlaceholderStyle: {
 		fontSize: 15,
@@ -96,12 +96,11 @@ const styles = StyleSheet.create({
 	input: {
 		fontSize: 18,
 		fontWeight: "500",
-		color: "white",
+		color: "rgba(255, 255, 255, 0.5)",
 		paddingTop: 25,
 		paddingHorizontal: 11,
 		borderRadius: 10,
-		backgroundColor: "rgba(31, 31, 31, 0.2)",
-		// minHeight: height * 0.1,
+		backgroundColor: "transparent",
 		maxHeight: height * 0.2,
 		lineHeight: 20,
 		paddingRight: width * 0.06,
@@ -109,11 +108,11 @@ const styles = StyleSheet.create({
 	secondInput: {
 		fontSize: 14,
 		fontWeight: "400",
-		color: "white",
+		color: "rgba(255, 255, 255, 0.7)",
 		paddingTop: 15,
 		paddingHorizontal: 11,
 		borderRadius: 10,
-		backgroundColor: "rgba(31, 31, 31, 0.2)",
+		backgroundColor: "transparent",
 		minHeight: height * 0.1,
 		maxHeight: height * 0.9,
 		lineHeight: 20,
