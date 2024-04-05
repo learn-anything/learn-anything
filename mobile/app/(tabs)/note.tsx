@@ -59,7 +59,9 @@ export default function Note() {
 					style={[styles.createButton, text ? {} : styles.disabledButton]}
 					onPress={() => {
 						console.log(text)
+						console.log(secondText)
 						setText("")
+						setSecondText("")
 					}}
 					disabled={!text}
 				>
@@ -92,7 +94,7 @@ const styles = StyleSheet.create({
 		fontSize: 15,
 	},
 	input: {
-		fontSize: 16,
+		fontSize: 18,
 		fontWeight: "500",
 		color: "white",
 		paddingTop: 25,

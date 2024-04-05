@@ -40,13 +40,13 @@ export default function TabLayout() {
 			}}
 		>
 			<Tabs.Screen
-				name="index"
+				name="list"
 				options={{
 					headerShown: false,
-					title: "learning",
+					title: "list",
 					tabBarIcon: ({ color }) => <Octicons name="list-unordered" size={24} color="grey" />,
 					headerRight: () => (
-						<Link href="/search" asChild>
+						<Link href="/list" asChild>
 							<Pressable>
 								{({ pressed }) => (
 									<Octicons
@@ -62,7 +62,7 @@ export default function TabLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name="two"
+				name="search"
 				options={{
 					headerShown: false,
 					title: "search",
@@ -107,13 +107,13 @@ export default function TabLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name="four"
+				name="personal"
 				options={{
 					headerShown: false,
 					title: "Tab",
 					tabBarIcon: ({ color }) => <Ionicons name="person-outline" size={24} color="grey" />,
 					headerRight: () => (
-						<Link href="/four" asChild>
+						<Link href="/personal" asChild>
 							<Pressable>
 								{({ pressed }) => (
 									<Ionicons
