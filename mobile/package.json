@@ -9,6 +9,7 @@
 		"web": "expo start --web"
 	},
 	"dependencies": {
+		"@expo/ngrok": "^4.1.0",
 		"@expo/vector-icons": "^14.0.0",
 		"@gorhom/bottom-sheet": "^4.6.1",
 		"@react-native-community/blur": "^4.4.0",
