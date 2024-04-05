@@ -15,7 +15,7 @@ export default config({
 })
 
 // -- definitions
-const LearningStatus = g.enum("learningStatus", ["Learn", "Learning", "Learned"])
+const LearningStatus = g.enum("LearningStatus", ["Learn", "Learning", "Learned"])
 // const LearningStatusNullable = g.enum("learningStatus", ["Learn", "Learning", "Learned", "None"])
 const FilterOrder = g.enum("FilterOrder", ["custom", "recently_added", "none"])
 const Filter = g.enum("filter", ["liked", "topic", "none"])
