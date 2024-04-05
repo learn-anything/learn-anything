@@ -1,6 +1,6 @@
-import { Octicons, AntDesign, Ionicons } from "@expo/vector-icons"
 import { Link, Tabs } from "expo-router"
 import { StyleSheet, Pressable } from "react-native"
+import { Octicons, AntDesign, Ionicons } from "@expo/vector-icons"
 
 function TabBarIcon(props: {
 	name:
@@ -61,10 +61,10 @@ export default function TabLayout() {
 					),
 				}}
 			/>
-
 			<Tabs.Screen
 				name="two"
 				options={{
+					headerShown: false,
 					title: "search",
 					tabBarIcon: ({ color }) => <AntDesign name="search1" size={24} color="grey" />,
 					headerRight: () => (
@@ -85,12 +85,13 @@ export default function TabLayout() {
 			/>
 			{/* another tabs  */}
 			<Tabs.Screen
-				name="three"
+				name="note"
 				options={{
-					title: "Tab",
+					headerShown: false,
+					title: "add note",
 					tabBarIcon: ({ color }) => <AntDesign name="pluscircleo" size={24} color="grey" />,
 					headerRight: () => (
-						<Link href="/index" asChild>
+						<Link href="/note" asChild>
 							<Pressable>
 								{({ pressed }) => (
 									<AntDesign
@@ -105,14 +106,14 @@ export default function TabLayout() {
 					),
 				}}
 			/>
-
 			<Tabs.Screen
 				name="four"
 				options={{
+					headerShown: false,
 					title: "Tab",
 					tabBarIcon: ({ color }) => <Ionicons name="person-outline" size={24} color="grey" />,
 					headerRight: () => (
-						<Link href="/index" asChild>
+						<Link href="/four" asChild>
 							<Pressable>
 								{({ pressed }) => (
 									<Ionicons

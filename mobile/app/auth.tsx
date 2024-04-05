@@ -1,13 +1,5 @@
-import React, { useState, useRef } from "react"
-import {
-	SafeAreaView,
-	View,
-	StyleSheet,
-	Dimensions,
-	Text,
-	TouchableOpacity,
-	TextInput,
-} from "react-native"
+import React, { useState, useEffect, useRef, KeyboardEvent, ChangeEvent } from "react"
+import { View, StyleSheet, Dimensions, Text, TouchableOpacity, TextInput } from "react-native"
 import Svg, {
 	G,
 	Path,
@@ -100,7 +92,7 @@ export default function TabTwoScreen() {
 	const [isSubmitted, setIsSubmitted] = useState(false)
 
 	return (
-		<SafeAreaView style={styles.container}>
+		<View style={styles.container}>
 			<Svg height="25%" width="100%" style={styles.svgBackground} viewBox="0 0 100 25">
 				<Defs>
 					<RadialGradient id="grad" cx="50" cy="0" rx="190" ry="90" gradientUnits="userSpaceOnUse">
@@ -294,7 +286,7 @@ export default function TabTwoScreen() {
 					</Svg>
 				</View>
 			</View>
-		</SafeAreaView>
+		</View>
 	)
 }
 
