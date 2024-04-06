@@ -40,13 +40,13 @@ export default function TabLayout() {
 			}}
 		>
 			<Tabs.Screen
-				name="list"
+				name="index"
 				options={{
 					headerShown: false,
-					title: "list",
+					title: "index",
 					tabBarIcon: ({ color }) => <Octicons name="list-unordered" size={24} color="grey" />,
 					headerRight: () => (
-						<Link href="/list" asChild>
+						<Link href="/index" asChild>
 							<Pressable>
 								{({ pressed }) => (
 									<Octicons

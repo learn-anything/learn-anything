@@ -431,7 +431,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
-		width: "95%",
+		width: "90%",
 		zIndex: 20,
 	},
 	tabContainer: {

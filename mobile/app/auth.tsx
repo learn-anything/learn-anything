@@ -442,8 +442,8 @@ const styles = StyleSheet.create({
 		backgroundColor: "#181a1f",
 	},
 	resendCodeButton: {
-		width: 122,
-		padding: 11,
+		width: "35%",
+		padding: 8,
 		borderWidth: 1,
 		backgroundColor: "#232323",
 		borderRadius: 7,
