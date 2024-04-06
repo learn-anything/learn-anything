@@ -16,7 +16,6 @@
 	},
 	"workspaces": [
 		"app",
-		"mobile",
 		"website"
 	],
 	"dependencies": {
