@@ -8,7 +8,14 @@ import {
 	TouchableOpacity,
 	TextInput,
 } from "react-native"
-import { Feather, FontAwesome, AntDesign, Ionicons, Foundation } from "@expo/vector-icons"
+import {
+	Feather,
+	FontAwesome,
+	AntDesign,
+	Ionicons,
+	Foundation,
+	MaterialIcons,
+} from "@expo/vector-icons"
 
 const { width } = Dimensions.get("window")
 const { height } = Dimensions.get("window")
@@ -18,54 +25,115 @@ export default function Note() {
 	const [secondText, setSecondText] = useState("")
 	const inputRef = useRef<TextInput>(null)
 	const [isFocused, setIsFocused] = useState(false)
+	const [showComment, setShowComment] = useState(false)
 	//buttons
 	const [noteType, setNoteType] = useState("private")
+	const [showOptions, setShowOptions] = useState(false)
+
+	const toggleOptions = () => {
+		setShowOptions(!showOptions)
+	}
+
+	const selectNoteType = (type: string) => {
+		setNoteType(type)
+		setShowOptions(false)
+	}
 
 	useEffect(() => {
 		inputRef.current?.focus()
 	}, [])
 
-	const handlePress = (type: string) => {
-		setNoteType(type === "private" ? "public" : "private")
+	const handleCommentPress = () => {
+		setShowComment(!showComment)
 	}
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<View style={styles.addContainer}>
-				<Text style={styles.addText}>add to:</Text>
-				{/* <View style={styles.buttonContainer}> */}
-				{noteType !== "public" ? (
-					<TouchableOpacity style={styles.selectButton} onPress={() => handlePress("private")}>
-						<View style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-							<FontAwesome name="lock" size={18} color="gray" style={{ marginRight: 5 }} />
-							<Text style={styles.selectText}>private notes</Text>
-						</View>
-					</TouchableOpacity>
-				) : (
-					<TouchableOpacity style={styles.selectButton} onPress={() => handlePress("public")}>
-						<View style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-							<AntDesign name="eye" size={18} color="gray" style={{ marginRight: 5 }} />
-							<Text style={styles.selectText}>public notes</Text>
-						</View>
-					</TouchableOpacity>
-				)}
-				{/* </View> */}
+			<View
+				style={{ flexDirection: "row", alignItems: "center", paddingTop: 10 }}
+			>
+				<Text style={styles.addText}>Add to:</Text>
+				<View style={styles.addContainer}>
+					<View style={styles.buttonContainer}>
+						<TouchableOpacity
+							style={styles.selectButton}
+							onPress={toggleOptions}
+						>
+							<View style={styles.button}>
+								{noteType === "private" ? (
+									<>
+										<FontAwesome name="lock" size={18} color="gray" />
+										<Text style={styles.selectText}>Private Notes</Text>
+									</>
+								) : (
+									<>
+										<AntDesign name="eye" size={18} color="gray" />
+										<Text style={styles.selectText}>Public Notes</Text>
+									</>
+								)}
+							</View>
+						</TouchableOpacity>
+						{showOptions && (
+							<TouchableOpacity
+								style={[styles.selectButton, styles.optionButton]}
+								onPress={() =>
+									selectNoteType(noteType === "private" ? "public" : "private")
+								}
+							>
+								<View style={styles.button}>
+									{noteType === "private" ? (
+										<>
+											<AntDesign name="eye" size={18} color="gray" />
+											<Text style={styles.selectText}>Public Notes</Text>
+										</>
+									) : (
+										<>
+											<FontAwesome name="lock" size={18} color="gray" />
+											<Text style={styles.selectText}>Private Notes</Text>
+										</>
+									)}
+								</View>
+							</TouchableOpacity>
+						)}
+					</View>
+				</View>
 			</View>
+
 			<View style={styles.optionContainer}>
 				<TouchableOpacity style={styles.option}>
 					<Ionicons name="image" size={16} color="gray" />
 					<Text style={styles.optionText}>add cover</Text>
 				</TouchableOpacity>
-				<TouchableOpacity style={styles.option}>
-					<Foundation name="comments" size={16} color="gray" />
-					<Text style={styles.optionText}>add comment</Text>
+				<TouchableOpacity style={styles.option} onPress={handleCommentPress}>
+					{showComment ? (
+						<>
+							<FontAwesome name="remove" size={16} color="gray" />
+							<Text style={styles.optionText}>cancel comment</Text>
+						</>
+					) : (
+						<>
+							<Foundation name="comments" size={16} color="gray" />
+							<Text style={styles.optionText}>add comment</Text>
+						</>
+					)}
 				</TouchableOpacity>
 			</View>
+
 			<View style={styles.noteContainer}>
+				{showComment && (
+					<TextInput
+						placeholder="Add a comment..."
+						placeholderTextColor="rgba(255, 255, 255, 0.3)"
+						style={styles.commentInput}
+					></TextInput>
+				)}
 				<View style={styles.inputContainer}>
 					<TextInput
 						ref={inputRef}
-						style={[styles.input, !text && !isFocused ? styles.placeholderStyle : {}]}
+						style={[
+							styles.input,
+							!text && !isFocused ? styles.placeholderStyle : {},
+						]}
 						multiline
 						placeholder="Untitled"
 						placeholderTextColor="rgba(255, 255, 255, 0.3)"
@@ -74,7 +142,10 @@ export default function Note() {
 					/>
 					<TextInput
 						ref={inputRef}
-						style={[styles.secondInput, !text && !isFocused ? styles.smallPlaceholderStyle : {}]}
+						style={[
+							styles.secondInput,
+							!text && !isFocused ? styles.smallPlaceholderStyle : {},
+						]}
 						multiline
 						placeholder="tap here to add a note..."
 						placeholderTextColor="rgba(255, 255, 255, 0.3)"
@@ -209,18 +280,21 @@ const styles = StyleSheet.create({
 	},
 	addText: {
 		color: "rgba(255, 255, 255, 0.6)",
+		position: "absolute",
+		left: 10,
+		top: 20,
 	},
-	// buttonContainer: {
-	// 	marginLeft: 40,
-	// 	display: "flex",
-	// 	flexDirection: "column",
-	// 	alignItems: "flex-start",
-	// },
+	buttonContainer: {
+		marginLeft: 20,
+		display: "flex",
+		flexDirection: "column",
+		alignItems: "flex-start",
+	},
 	selectButton: {
-		marginLeft: 40,
+		width: 150,
+		marginLeft: 50,
 		alignItems: "center",
 		justifyContent: "center",
-		paddingHorizontal: 8,
 		backgroundColor: "#232323",
 		borderRadius: 7,
 		shadowColor: "#000",
@@ -233,6 +307,7 @@ const styles = StyleSheet.create({
 	selectText: {
 		color: "rgba(255, 255, 255, 0.7)",
 		fontSize: 16,
+		marginLeft: 5,
 		fontWeight: "400",
 	},
 	optionContainer: {
@@ -254,5 +329,18 @@ const styles = StyleSheet.create({
 		marginLeft: 5,
 		fontSize: 14,
 		color: "rgba(255, 255, 255, 0.5)",
+	},
+	commentInput: {
+		width: "50%",
+		color: "rgba(255, 255, 255, 0.7)",
+	},
+	optionButton: {
+		marginTop: 5,
+	},
+	button: {
+		display: "flex",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
 	},
 })
