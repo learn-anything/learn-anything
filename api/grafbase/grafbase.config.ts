@@ -31,7 +31,7 @@ const Link = g.type("Link", {
 	url: g.string(),
 })
 // const User = g.type("User", {
-// 	username: g.string(),
+//  username: g.string(),
 // })
 const EditingLink = g.type("EditingLink", {
 	title: g.string(),
@@ -44,69 +44,16 @@ const EditingLink = g.type("EditingLink", {
 	addedAt: g.string().optional(),
 })
 
-// -- website queries
-// / = landing page
-g.query("webIndex", {
+// -- mobile queries
+g.query("mobileIndex", {
 	args: {},
 	returns: inline({
-		public: inline({
-			topics: g.string().list(),
-		}).optional(),
 		auth: inline({
-			username: g.string(),
-			links: g.ref(Link).list().optional(),
+			filterStatus: g.string(),
 		}).optional(),
 	}),
-	// returns: inline("webIndexOutput", {
-	// 		public:  inline("webIndexPublicOutput", {
-	// 			topics: g.string().list(),
-	// 		}).optional(),
-	// 		// auth: inline(...).optional(),
-	// })
-	// returns: g.ref(
-	// 	g.type("webIndexOutput", {
-	// 		public: g
-	// 			.ref(
-	// 				g.type("webIndexReturnPublic", {
-	// 					topics: g.string().list(),
-	// 				}),
-	// 			)
-	// 			.optional(),
-	// 		auth: g
-	// 			.ref(
-	// 				g.type("webIndexReturnAuth", {
-	// 					username: g.string(),
-	// 					links: g.ref(Link).list(),
-	// 					// showLinksStatus: g.enumRef(LearningStatus),
-	// 					// filterOrder: g.enumRef(FilterOrder),
-	// 					// filter: g.enumRef(Filter),
-	// 					// filterTopic: g.string().optional(),
-	// 					// userTopics: g.string().list(),
-	// 					// editingLink: g.ref(EditingLink).optional(),
-	// 					// linkToEdit: g.string().optional(),
-	// 					// searchQuery: g.string().optional(),
-	// 				}),
-	// 			)
-	// 			.optional(),
-	// 	}),
-	// ),
-	resolver: "web/index",
+	resolver: "mobile/index",
 })
-// TODO: would be nice to inline! but how? https://discord.com/channels/890534438151274507/1224299258686214144
-// can't do optional on `g.type`
-// g.query("webIndex", {
-// 	args: {},
-// 	returns: g.ref(
-// 		g.type("webIndexOutput", {
-// 			public: g.type("webIndexReturnPublic", {
-// 				username: g.string(),
-// 				links: g.ref(Link).list(),
-// 			}).optional(),
-// 			auth: g.ref(webIndexReturnAuth).optional(),
-// 		}),
-// 	),
-// 	resolver: "web/index",
-// })
 
 // -- mutations (return `true` on success, throw error on failure)
 g.mutation("createUser", {

@@ -1,29 +1,20 @@
 type Inline0 {
-	topics: [String!]!
+	filterStatus: String!
 }
 type Inline1 {
-	username: String!
-	links: [Link!]
-}
-type Inline2 {
-	public: Inline0
-	auth: Inline1
+	auth: Inline0
 }
 enum LearningStatus {
 	Learn
 	Learning
 	Learned
 }
-type Link {
-	title: String!
-	url: String!
-}
 type Mutation {
 	createUser(email: String!): Boolean!
 	updatePersonalLink(linkId: String!, status: LearningStatus!): Boolean!
 }
 type Query {
-	webIndex: Inline2!
+	mobileIndex: Inline1!
 }
 schema {
 	query: Query

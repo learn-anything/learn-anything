@@ -129,49 +129,21 @@ TYPES:
  * Initial value: {@link initial_Inline0}
  *
  * @typedef  {object} Inline0
- * @property {Array<String>} topics
+ * @property {String} filterStatus
  */
 /** @type {Inline0} */
 export const initial_Inline0 = {
-	topics: [],
-}
-
-/**
- * Initial value: {@link initial_Link}
- *
- * @typedef  {object} Link
- * @property {String} title
- * @property {String} url
- */
-/** @type {Link} */
-export const initial_Link = {
-	title: "",
-	url: "",
+	filterStatus: "",
 }
 
 /**
  * Initial value: {@link initial_Inline1}
  *
  * @typedef  {object} Inline1
- * @property {String} username
- * @property {Maybe<Array<Link>>} links
+ * @property {Maybe<Inline0>} auth
  */
 /** @type {Inline1} */
 export const initial_Inline1 = {
-	username: "",
-	links: [],
-}
-
-/**
- * Initial value: {@link initial_Inline2}
- *
- * @typedef  {object} Inline2
- * @property {Maybe<Inline0>} public
- * @property {Maybe<Inline1>} auth
- */
-/** @type {Inline2} */
-export const initial_Inline2 = {
-	public: null,
 	auth: null,
 }
 
@@ -191,29 +163,29 @@ QUERIES:
 
 
 /**
- * @typedef  {object} Vars_webIndex
+ * @typedef  {object} Vars_mobileIndex
  *
- * @typedef  {Inline2} Value_webIndex
+ * @typedef  {Inline1} Value_mobileIndex
  */
 
 /**
- * @param   {Vars_webIndex} vars
+ * @param   {Vars_mobileIndex} vars
  * @returns {string} */
-export function query_get_body_webIndex(vars) {
-	return 'webIndex{public{topics}auth{username links{title url}}}'
+export function query_get_body_mobileIndex(vars) {
+	return 'mobileIndex{auth{filterStatus}}'
 }
 
 /**
- * query: `webIndex`\
- * vars : {@link Vars_webIndex }\
- * value: {@link Value_webIndex}
- * @type  {Query_Data<Vars_webIndex, Value_webIndex>}
+ * query: `mobileIndex`\
+ * vars : {@link Vars_mobileIndex }\
+ * value: {@link Value_mobileIndex}
+ * @type  {Query_Data<Vars_mobileIndex, Value_mobileIndex>}
  */
-export const query_webIndex = /** @type {*} */({
-	name         : "webIndex",
+export const query_mobileIndex = /** @type {*} */({
+	name         : "mobileIndex",
 	kind         : "query",
-	get_body     : query_get_body_webIndex,
-	initial_value: initial_Inline2,
+	get_body     : query_get_body_mobileIndex,
+	initial_value: initial_Inline1,
 })
 
 /*
