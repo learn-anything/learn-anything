@@ -1,10 +1,10 @@
 {
 	"compilerOptions": {
-		"lib": ["ESNext", "dom"],
-		"module": "esnext",
-		"target": "esnext",
-		"moduleResolution": "bundler",
-		"moduleDetection": "force",
+		// "lib": ["ESNext", "dom"],
+		// "module": "esnext",
+		// "target": "esnext",
+		// "moduleResolution": "bundler",
+		// "moduleDetection": "force",
 		"allowImportingTsExtensions": true,
 		"noEmit": true,
 		"composite": true,

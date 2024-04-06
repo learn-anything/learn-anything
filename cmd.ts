@@ -225,4 +225,4 @@ async function run() {
 	// only commit functions/commands that are useful to the project
 }
 
-main()
+await main()

@@ -36,10 +36,10 @@ It is fully open source project with active community on [Discord](https://disco
 
 ## Setup
 
-[PNPM](https://pnpm.io) is used to manage dependencies. [Bun](https://bun.sh) is used to run things.
+[Bun](https://bun.sh) is used to run/install things.
 
 ```
-pnpm i
+bun i
 bun setup
 ```
 
