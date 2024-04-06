@@ -8,7 +8,7 @@ import { Context } from "@grafbase/sdk"
 // otherwise it throws with GraphQLError (to be used inside grafbase resolvers)
 export async function emailFromHankoToken(context: Context) {
 	if (process.env.GRAFBASE_ENV === "dev") {
-		return process.env.LOCAL_USER_EMAIL!
+		return process.env.EMAIL!
 	}
 
 	const authHeader = context.request.headers["authorization"]
