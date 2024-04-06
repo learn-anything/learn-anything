@@ -6,6 +6,7 @@ import { emailFromHankoToken } from "../../../../shared/auth"
 const resolver: Resolver["Query.webIndex"] = async (parent, args, context, info) => {
 	try {
 		const email = await emailFromHankoToken(context)
+		console.log(email, "email")
 		// const email = "test"
 		if (email) {
 			const res = await indexRouteAuth(email)
@@ -16,8 +17,8 @@ const resolver: Resolver["Query.webIndex"] = async (parent, args, context, info)
 				},
 			}
 		} else {
-			const res = await indexRoutePublic()
-			console.log(res)
+			// const res = await indexRoutePublic()
+			// console.log(res)
 			return {
 				public: {
 					topics: ["test"],
