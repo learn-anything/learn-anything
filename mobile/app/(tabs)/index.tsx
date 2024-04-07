@@ -5,7 +5,6 @@ import {
 	Dimensions,
 	Animated,
 	Linking,
-	FlatList,
 	SafeAreaView,
 	Text,
 	TextInput,
@@ -15,6 +14,7 @@ import {
 import Svg, { Path } from "react-native-svg"
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
+import DraggableFlatList from "react-native-draggable-flatlist"
 // import * as gql from "../../../shared/graphql_react"
 
 const { width } = Dimensions.get("window")
@@ -155,11 +155,17 @@ export default function Home() {
 
 	const renderItem = ({
 		item,
+		drag,
+		isActive,
 	}: {
-		item: { title: string; topic: string; url: string; id: string }
+		item: any
+		drag: any
+		isActive: boolean
 	}) => (
 		<TouchableOpacity
 			style={styles.itemContainer}
+			onLongPress={drag}
+			disabled={isActive}
 			onPress={() => {
 				setSelectedItem(item)
 				openTopicSheet()
@@ -264,21 +270,18 @@ export default function Home() {
 						</TouchableOpacity>
 					</View>
 				</View>
-				<FlatList
-					data={data.links}
-					renderItem={renderItem}
-					keyExtractor={(item) => item.id}
-					style={styles.list}
-				/>
-			</SafeAreaView>
-			{/* <View style={styles.bottomBar}>
-				<View style={styles.bottomFrame}>
-					<Octicons name="list-unordered" size={24} color="grey" />
-					<AntDesign name="search1" size={24} color="grey" />
-					<AntDesign name="pluscircleo" size={24} color="grey" />
-					<Ionicons name="person-outline" size={24} color="grey" />
+				<View style={{ flex: 1 }}>
+					<DraggableFlatList
+						data={data.links}
+						renderItem={renderItem}
+						keyExtractor={(item) => item.id}
+						onDragEnd={({ data }) =>
+							setData((prevState) => ({ ...prevState, links: data }))
+						}
+						style={styles.list}
+					/>
 				</View>
-			</View> */}
+			</SafeAreaView>
 			{/* filter bottomsheet */}
 			<BottomSheet
 				ref={filterRef}
@@ -309,7 +312,6 @@ export default function Home() {
 					</View>
 				</BottomSheetView>
 			</BottomSheet>
-
 			{/* topic bottomsheet */}
 			<BottomSheet
 				ref={topicRef}
