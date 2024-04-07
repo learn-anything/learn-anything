@@ -158,7 +158,7 @@ export default function Home() {
 		drag,
 		isActive,
 	}: {
-		item: any
+		item: { title: string; topic: string; url: string; id: string }
 		drag: any
 		isActive: boolean
 	}) => (
@@ -270,17 +270,15 @@ export default function Home() {
 						</TouchableOpacity>
 					</View>
 				</View>
-				<View style={{ flex: 1 }}>
-					<DraggableFlatList
-						data={data.links}
-						renderItem={renderItem}
-						keyExtractor={(item) => item.id}
-						onDragEnd={({ data }) =>
-							setData((prevState) => ({ ...prevState, links: data }))
-						}
-						style={styles.list}
-					/>
-				</View>
+				<DraggableFlatList
+					data={data.links}
+					renderItem={renderItem}
+					keyExtractor={(item) => item.id}
+					onDragEnd={({ data }) =>
+						setData((prevState) => ({ ...prevState, links: data }))
+					}
+					style={styles.list}
+				/>
 			</SafeAreaView>
 			{/* filter bottomsheet */}
 			<BottomSheet
