@@ -8,14 +8,7 @@ import {
 	TouchableOpacity,
 	TextInput,
 } from "react-native"
-import {
-	Feather,
-	FontAwesome,
-	AntDesign,
-	Ionicons,
-	Foundation,
-	MaterialIcons,
-} from "@expo/vector-icons"
+import { Feather, FontAwesome, AntDesign } from "@expo/vector-icons"
 
 const { width } = Dimensions.get("window")
 const { height } = Dimensions.get("window")
@@ -25,7 +18,7 @@ export default function Note() {
 	const [secondText, setSecondText] = useState("")
 	const inputRef = useRef<TextInput>(null)
 	const [isFocused, setIsFocused] = useState(false)
-	const [showComment, setShowComment] = useState(false)
+
 	//buttons
 	const [noteType, setNoteType] = useState("private")
 	const [showOptions, setShowOptions] = useState(false)
@@ -42,10 +35,6 @@ export default function Note() {
 	useEffect(() => {
 		inputRef.current?.focus()
 	}, [])
-
-	const handleCommentPress = () => {
-		setShowComment(!showComment)
-	}
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -99,13 +88,6 @@ export default function Note() {
 				</View>
 			</View>
 			<View style={styles.noteContainer}>
-				{showComment && (
-					<TextInput
-						placeholder="Add a comment..."
-						placeholderTextColor="rgba(255, 255, 255, 0.3)"
-						style={styles.commentInput}
-					></TextInput>
-				)}
 				<View style={styles.inputContainer}>
 					<TextInput
 						ref={inputRef}
@@ -288,11 +270,6 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		marginLeft: 5,
 		fontWeight: "400",
-	},
-
-	commentInput: {
-		width: "50%",
-		color: "rgba(255, 255, 255, 0.7)",
 	},
 	optionButton: {
 		marginTop: 5,
