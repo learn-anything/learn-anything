@@ -98,27 +98,6 @@ export default function Note() {
 					</View>
 				</View>
 			</View>
-
-			<View style={styles.optionContainer}>
-				<TouchableOpacity style={styles.option}>
-					<Ionicons name="image" size={16} color="gray" />
-					<Text style={styles.optionText}>add cover</Text>
-				</TouchableOpacity>
-				<TouchableOpacity style={styles.option} onPress={handleCommentPress}>
-					{showComment ? (
-						<>
-							<FontAwesome name="remove" size={16} color="gray" />
-							<Text style={styles.optionText}>cancel comment</Text>
-						</>
-					) : (
-						<>
-							<Foundation name="comments" size={16} color="gray" />
-							<Text style={styles.optionText}>add comment</Text>
-						</>
-					)}
-				</TouchableOpacity>
-			</View>
-
 			<View style={styles.noteContainer}>
 				{showComment && (
 					<TextInput
@@ -187,7 +166,7 @@ const styles = StyleSheet.create({
 	noteContainer: {
 		width: "90%",
 		display: "flex",
-		marginTop: 40,
+		marginTop: 20,
 		marginHorizontal: width * 0.05,
 		position: "relative",
 	},
@@ -310,26 +289,7 @@ const styles = StyleSheet.create({
 		marginLeft: 5,
 		fontWeight: "400",
 	},
-	optionContainer: {
-		display: "flex",
-		flexDirection: "row",
-		justifyContent: "space-around",
-		alignItems: "center",
-		marginTop: 15,
-		width: "60%",
-	},
-	option: {
-		backgroundColor: "transparent",
-		display: "flex",
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-	},
-	optionText: {
-		marginLeft: 5,
-		fontSize: 14,
-		color: "rgba(255, 255, 255, 0.5)",
-	},
+
 	commentInput: {
 		width: "50%",
 		color: "rgba(255, 255, 255, 0.7)",
