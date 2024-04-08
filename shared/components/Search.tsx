@@ -2,9 +2,11 @@ import { For, Show, createEffect, createSignal } from "solid-js"
 import { Motion, Presence } from "solid-motionone"
 // import { Icon } from "./Icon"
 
-export default function Search(props: {
+interface SearchProps {
 	links: { title: string; url: string }[]
-}) {
+}
+
+export default function Search(props: SearchProps) {
 	const [isFocused, setIsFocused] = createSignal(false)
 	const [focusedTimer, setFocusedTimer] = createSignal(false)
 	let inputRef: any
@@ -31,7 +33,11 @@ export default function Search(props: {
 				<Show when={isFocused()}>
 					<Motion.div
 						exit={{ width: "400px", height: "56px" }}
-						animate={{ opacity: [0, 1], width: ["400px", "700px"], height: ["56px", "500px"] }}
+						animate={{
+							opacity: [0, 1],
+							width: ["400px", "700px"],
+							height: ["56px", "500px"],
+						}}
 						transition={{ duration: 0.3, easing: "ease-in" }}
 						class="absolute bottom-2 left-[50%] translate-x-[-50%] w-[400px] rounded-[7px] p-5 bg-[#171A21] border border-[#191919]"
 					>

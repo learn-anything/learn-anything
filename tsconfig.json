@@ -7,6 +7,8 @@
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
 		"resolveJsonModule": true,
+		"jsx": "preserve",
+		"jsxImportSource": "solid-js",
 		"strict": true,
 		"forceConsistentCasingInFileNames": true,
 		"skipLibCheck": true,
@@ -20,7 +22,7 @@
 		"composite": true,
 		"downlevelIteration": true,
 		"noUncheckedIndexedAccess": true,
-		"types": ["bun-types"]
+		"types": ["bun-types", "vinxi/client", "vite/client", "@solidjs/start/env"]
 	},
 	"include": ["**/*.ts", "**/*.tsx", "**/*.js"]
 }

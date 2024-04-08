@@ -18,14 +18,19 @@ export default config({
 // useful to write shorter resolvers, won't work if you split config into multiple files: https://discord.com/channels/890534438151274507/1224299258686214144/1224322448837836861
 type TypeArguments = Parameters<typeof define.type>
 let count = 0
-const inline = (fields: TypeArguments[1]) => g.ref(g.type(`Inline${count++}`, fields))
+const inline = (fields: TypeArguments[1]) =>
+	g.ref(g.type(`Inline${count++}`, fields))
 
 // -- definitions
 const Link = g.type("Link", {
 	title: g.string(),
 	url: g.string(),
 })
-const LearningStatus = g.enum("LearningStatus", ["Learn", "Learning", "Learned"])
+const LearningStatus = g.enum("LearningStatus", [
+	"Learn",
+	"Learning",
+	"Learned",
+])
 // const LearningStatusNullable = g.enum("learningStatus", ["Learn", "Learning", "Learned", "None"])
 // const FilterOrder = g.enum("FilterOrder", ["custom", "recently_added", "none"])
 // const Filter = g.enum("filter", ["liked", "topic", "none"])
