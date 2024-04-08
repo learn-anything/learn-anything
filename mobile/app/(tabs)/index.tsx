@@ -59,6 +59,8 @@ export default function Home() {
 	const [isBottomSheetVisible, setBottomSheetVisible] = useState(false)
 	const [isFilterSheetVisible, setFilterSheetVisible] = useState(false)
 
+	const [learningStatus, setLearningStatus] = useState("Learning")
+
 	// const gqlData = gql.useResource(gql.query_mobileIndex, {})
 	// console.log(gqlData, "gql data")
 
@@ -94,14 +96,17 @@ export default function Home() {
 	})
 
 	useEffect(() => {
-		setAnimationButtons([0, 1].map(() => new Animated.Value(0)))
+		setAnimationButtons([new Animated.Value(0), new Animated.Value(0)])
 	}, [])
 
-	const showButtons = () => {
+	const showButtons = (nextStatus?: string) => {
 		setShowLearningButtons(!showLearningButtons)
 
-		const animationsEnd = showLearningButtons ? 0 : 1
+		if (nextStatus) {
+			setLearningStatus(nextStatus)
+		}
 
+		const animationsEnd = showLearningButtons ? 0 : 1
 		const staggeredAnimations = animationButtons.map((button) =>
 			Animated.timing(button, {
 				toValue: animationsEnd,
@@ -221,39 +226,45 @@ export default function Home() {
 						<View style={styles.learningButtonsContainer}>
 							<TouchableOpacity
 								style={styles.learningButton}
-								onPress={showButtons}
+								onPress={() => showButtons()}
 							>
-								<Text style={styles.learningText}>Learning</Text>
+								<Text style={styles.learningText}>{learningStatus}</Text>
 								<ArrowIcon />
 							</TouchableOpacity>
-							{animationButtons.map((animationButton, index) => (
-								<Animated.View
-									key={index}
-									style={[
-										styles.learningButtonsDropdown,
-										{
-											opacity: animationButton,
-											transform: [
+							{["Learning", "Learned", "To Learn"]
+								.filter((s) => s !== learningStatus)
+								.map((status, index) =>
+									animationButtons[index] ? (
+										<Animated.View
+											key={index}
+											style={[
+												styles.learningButtonsDropdown,
 												{
-													scale: animationButton.interpolate({
-														inputRange: [0, 1],
-														outputRange: [0.5, 1],
-													}),
+													opacity: animationButtons[index],
+													transform: [
+														{
+															scale: animationButtons[index].interpolate({
+																inputRange: [0, 1],
+																outputRange: [0.5, 1],
+															}),
+														},
+													],
+													top: 30 + index * 35,
 												},
-											],
-											top: 30 + index * 35,
-										},
-									]}
-								>
-									<TouchableOpacity style={styles.anotherLearningButton}>
-										<Text style={styles.learningText}>
-											{["Learned", "To Learn"][index]}
-										</Text>
-									</TouchableOpacity>
-								</Animated.View>
-							))}
+											]}
+										>
+											<TouchableOpacity
+												style={styles.anotherLearningButton}
+												onPress={() => showButtons(status)}
+											>
+												<Text style={[styles.learningText, { lineHeight: 20 }]}>
+													{status}
+												</Text>
+											</TouchableOpacity>
+										</Animated.View>
+									) : null,
+								)}
 						</View>
-						{/* filter icon */}
 						<TouchableOpacity
 							style={styles.filterIcon}
 							onPress={() => {
@@ -456,13 +467,13 @@ const styles = StyleSheet.create({
 		overflow: "hidden",
 		backgroundColor: "#222222",
 		borderRadius: 10,
-		width: 136,
+		width: 150,
 	},
 	tab: {
 		backgroundColor: "#222222",
 		borderRadius: 8,
 		paddingHorizontal: 8,
-		paddingVertical: 8,
+		paddingVertical: 10,
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
@@ -501,14 +512,14 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
-		paddingHorizontal: 11,
+		paddingHorizontal: 10,
+		paddingVertical: 10,
 		backgroundColor: "#232323",
 		borderRadius: 7,
 		shadowColor: "#000",
 		shadowOffset: { width: 0, height: 1 },
 		shadowOpacity: 0.55,
 		shadowRadius: 1,
-		padding: 8,
 		marginRight: 8,
 	},
 	learningText: {
@@ -540,7 +551,8 @@ const styles = StyleSheet.create({
 		display: "flex",
 		flexDirection: "row",
 		alignItems: "center",
-		padding: 8,
+		paddingVertical: 8,
+		paddingHorizontal: 10,
 		marginRight: 8,
 	},
 	filterIcon: {
@@ -575,23 +587,6 @@ const styles = StyleSheet.create({
 		fontWeight: "500",
 		width: 280, // ?
 	},
-	// bottomBar: {
-	// 	backgroundColor: "#151515",
-	// 	display: "flex",
-	// 	justifyContent: "space-between",
-	// 	alignItems: "center",
-	// 	width: width,
-	// 	height: 82,
-	// 	paddingHorizontal: 15,
-	// },
-	// bottomFrame: {
-	// 	flexDirection: "row",
-	// 	justifyContent: "space-around",
-	// 	alignItems: "center",
-	// 	width: "100%",
-	// 	height: "100%",
-	// },
-
 	// topic bottomsheet
 
 	sheetTitleContainer: {
