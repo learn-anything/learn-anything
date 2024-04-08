@@ -37,7 +37,6 @@ export default function Search() {
 	const suggestionHeight = 50
 	const suggestionsMaxHeight = 200
 
-	// animate suggestions
 	const dynamicHeight = Math.min(
 		filteredSuggestions.length * suggestionHeight,
 		suggestionsMaxHeight,
@@ -49,6 +48,18 @@ export default function Search() {
 			duration: 700,
 			useNativeDriver: false,
 		}).start()
+	}, [showSuggestions, searchQuery, filteredSuggestions.length])
+
+	useEffect(() => {
+		if (searchQuery === "") {
+			animations.setValue(0)
+		} else {
+			Animated.timing(animations, {
+				toValue: showSuggestions && searchQuery ? dynamicHeight : 0,
+				duration: 700,
+				useNativeDriver: false,
+			}).start()
+		}
 	}, [showSuggestions, searchQuery, filteredSuggestions.length])
 
 	return (
