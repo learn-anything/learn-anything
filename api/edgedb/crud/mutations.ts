@@ -23,19 +23,32 @@ export async function deleteUser(email: string) {
 export async function createOther() {
 	const res = await e
 		.insert(e.Other, {
-			latestGlobalTopicGraph: {},
+			latestGlobalTopicGraph: e.insert(e.GlobalTopicGraph, {
+				name: "test",
+			}),
 		})
 		.run(client)
 	return res
 }
 
-export async function updateLatestGlobalTopicGraph(topicGraph: string) {
-	const res = await e
-		.update(e.Other, () => ({
+type TopicGraph = {
+	name: string
+	prettyName: string
+	connections: string[]
+}
+export async function updateLatestGlobalTopicGraph(topicGraph: TopicGraph) {
+	const res = e
+		.update(e.GlobalTopicGraph, (tg) => ({
 			set: {
-				latestGlobalTopicGraph: topicGraph,
+				name: topicGraph.name,
+				prettyName: topicGraph.prettyName,
+				connections: topicGraph.connections,
 			},
-			filter_single: { id: foundOtherObjectId() },
+			filter_single: e.op(
+				tg["<latestGlobalTopicGraph[is Other]"].id,
+				"=",
+				foundOtherObjectId(),
+			),
 		}))
 		.run(client)
 	return res
