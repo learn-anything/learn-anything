@@ -21,9 +21,11 @@ export async function deleteUser(email: string) {
 }
 
 export async function createOther() {
-	const res = await e.insert(e.Other, {
-		latestGlobalTopicGraph: {}
-	}).run(client)
+	const res = await e
+		.insert(e.Other, {
+			latestGlobalTopicGraph: {},
+		})
+		.run(client)
 	return res
 }
 
@@ -33,7 +35,7 @@ export async function updateLatestGlobalTopicGraph(topicGraph: string) {
 			set: {
 				latestGlobalTopicGraph: topicGraph,
 			},
-			filter_single: foundOtherObjectId()
+			filter_single: { id: foundOtherObjectId() },
 		}))
 		.run(client)
 	return res
