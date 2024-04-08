@@ -1,4 +1,4 @@
-CREATE MIGRATION m1bink6yophhzflrtcuudqiwejscjwfvlxjyyd2v2zjkco5e5xlzba
+CREATE MIGRATION m1q3cjyo5xgwozd3hhnhbyn3on5wjamvbxxfsxucvxj6tqrfklblba
     ONTO initial
 {
   CREATE ABSTRACT TYPE default::WithCreatedAt {
@@ -86,7 +86,12 @@ CREATE MIGRATION m1bink6yophhzflrtcuudqiwejscjwfvlxjyyd2v2zjkco5e5xlzba
           CREATE CONSTRAINT std::exclusive;
       };
   };
+  CREATE TYPE default::GlobalTopicGraph {
+      CREATE MULTI PROPERTY connections: std::str;
+      CREATE PROPERTY name: std::str;
+      CREATE PROPERTY prettyName: std::str;
+  };
   CREATE TYPE default::Other EXTENDING default::WithCreatedAt {
-      CREATE PROPERTY latestGlobalTopicGraph: std::json;
+      CREATE LINK latestGlobalTopicGraph: default::GlobalTopicGraph;
   };
 };
