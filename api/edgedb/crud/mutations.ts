@@ -1,3 +1,4 @@
+import { foundOtherObjectId } from "../../../shared/edgedb"
 import { client } from "../client"
 import e from "../dbschema/edgeql-js"
 
@@ -32,6 +33,7 @@ export async function updateLatestGlobalTopicGraph(topicGraph: string) {
 			set: {
 				latestGlobalTopicGraph: topicGraph,
 			},
+			filter_single: foundOtherObjectId()
 		}))
 		.run(client)
 	return res
