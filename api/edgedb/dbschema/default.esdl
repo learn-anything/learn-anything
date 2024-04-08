@@ -128,16 +128,21 @@ module default {
       order: int16;
     };
   }
-  # everything else (within reason, logs are in ClickHouse, etc.)
-  type Other extending WithCreatedAt {
-    latestGlobalTopicGraph: json;
-  }
   # tracking all mutations (with hope to potentially be able to reverse mutations in future), etc.
   type Events extending WithCreatedAt {
     # for now as json, structure can be changed in future
     # {"mutationName": "..", "mutationArgs": {"..": ".."}}
     # can sort by `created_at` later to get order of mutations
     mutation: json;
+  }
+  # everything else (within reason, logs are in ClickHouse, etc.)
+  type Other extending WithCreatedAt {
+    latestGlobalTopicGraph: GlobalTopicGraph;
+  }
+  type GlobalTopicGraph {
+    name: str;
+    prettyName: str;
+    multi connections: str;
   }
   # attaches `created_at` field to objects that extend it
   # https://docs.edgedb.com/database/datamodel/objects#abstract-types
