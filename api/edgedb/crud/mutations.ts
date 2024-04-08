@@ -19,13 +19,20 @@ export async function deleteUser(email: string) {
 	return res
 }
 
-// export async function updateLatestGlobalTopicGraph(topicGraph: string) {
-// 	const res = await e
-// 		.update(e.Other, (other) => ({
-// 			set: {
-// 				graph: topicGraph,
-// 			},
-// 		}))
-// 		.run(client)
-// 	return res
-// }
+export async function createOther() {
+	const res = await e.insert(e.Other, {
+		latestGlobalTopicGraph: {}
+	}).run(client)
+	return res
+}
+
+export async function updateLatestGlobalTopicGraph(topicGraph: string) {
+	const res = await e
+		.update(e.Other, () => ({
+			set: {
+				latestGlobalTopicGraph: topicGraph,
+			},
+		}))
+		.run(client)
+	return res
+}
