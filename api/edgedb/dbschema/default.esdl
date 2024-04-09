@@ -10,6 +10,7 @@ module default {
     username: str {
       constraint exclusive;
     };
+    bio: str;
     # TODO: should enforce usernames to be lowercase
     # fails now: https://discord.com/channels/841451783728529451/1223277097020030977/1223280398398918837
     # constraint username on str_trim(str_lower(.username));

@@ -7,8 +7,8 @@ type Inline1 {
 	latestGlobalTopicGraph: [Inline0!]!
 }
 type Inline2 {
-	username: String!
-	links: [Link!]
+	username: String
+	links: [Link!]!
 }
 type Inline3 {
 	public: Inline1
@@ -20,11 +20,12 @@ enum LearningStatus {
 	Learned
 }
 type Link {
-	title: String!
-	url: String!
+	title: String
+	url: String
 }
 type Mutation {
 	createUser(email: String!): Boolean!
+	updateUserBio(bio: String!): Boolean!
 	updatePersonalLink(linkId: String!, status: LearningStatus!): Boolean!
 }
 type Query {

@@ -1,12 +1,9 @@
-import { Resolver } from "@grafbase/generated"
 import { GraphQLError } from "graphql"
+import { Resolver } from "@grafbase/generated"
+import { createUser, updateUserBio } from "../../../edgedb/crud/mutations"
 import { emailFromHankoToken } from "../../../../shared/auth"
-import {
-	indexRouteAuth,
-	indexRoutePublic,
-} from "../../../edgedb/crud/routes/website"
 
-const resolver: Resolver["Query.webIndex"] = async (
+const resolver: Resolver["Mutation.updateUserBio"] = async (
 	parent,
 	args,
 	context,
@@ -14,18 +11,11 @@ const resolver: Resolver["Query.webIndex"] = async (
 ) => {
 	try {
 		const email = await emailFromHankoToken(context)
-		if (email) {
-			const res = await indexRouteAuth(email)
-			return {
-				auth: res,
-			}
+		const res = await updateUserBio(email, args.bio)
+		if (res) {
+			return true
 		} else {
-			const res = await indexRoutePublic()
-			return {
-				public: {
-					latestGlobalTopicGraph: res,
-				},
-			}
+			throw new GraphQLError("Failed to update user bio")
 		}
 	} catch (err) {
 		if (err instanceof Error) {

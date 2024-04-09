@@ -11,6 +11,17 @@ export async function createUser(email: string) {
 	return res.id
 }
 
+export async function updateUserBio(email: string, bio: string) {
+	return await e
+		.update(e.User, () => ({
+			filter_single: { email: email! },
+			set: {
+				bio: bio,
+			},
+		}))
+		.run(client)
+}
+
 export async function deleteUser(email: string) {
 	return await e
 		.delete(e.User, (user) => ({

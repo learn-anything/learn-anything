@@ -23,8 +23,8 @@ const inline = (fields: TypeArguments[1]) =>
 
 // -- definitions
 const Link = g.type("Link", {
-	title: g.string(),
-	url: g.string(),
+	title: g.string().optional(),
+	url: g.string().optional(),
 })
 const LearningStatus = g.enum("LearningStatus", [
 	"Learn",
@@ -58,8 +58,8 @@ g.query("webIndex", {
 			}).list(),
 		}).optional(),
 		auth: inline({
-			username: g.string(),
-			links: g.ref(Link).list().optional(),
+			username: g.string().optional(),
+			links: g.ref(Link).list(),
 		}).optional(),
 	}),
 	resolver: "web/index",
@@ -72,6 +72,13 @@ g.mutation("createUser", {
 	},
 	returns: g.boolean(),
 	resolver: "mutations/createUser",
+})
+g.mutation("updateUserBio", {
+	args: {
+		bio: g.string(),
+	},
+	returns: g.boolean(),
+	resolver: "mutations/updateUserBio",
 })
 g.mutation("updatePersonalLink", {
 	args: {

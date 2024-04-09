@@ -155,25 +155,25 @@ export const initial_Inline1 = {
  * Initial value: {@link initial_Link}
  *
  * @typedef  {object} Link
- * @property {String} title
- * @property {String} url
+ * @property {Maybe<String>} title
+ * @property {Maybe<String>} url
  */
 /** @type {Link} */
 export const initial_Link = {
-	title: "",
-	url: "",
+	title: null,
+	url: null,
 }
 
 /**
  * Initial value: {@link initial_Inline2}
  *
  * @typedef  {object} Inline2
- * @property {String} username
- * @property {Maybe<Array<Link>>} links
+ * @property {Maybe<String>} username
+ * @property {Array<Link>} links
  */
 /** @type {Inline2} */
 export const initial_Inline2 = {
-	username: "",
+	username: null,
 	links: [],
 }
 
@@ -262,6 +262,34 @@ export const mutation_createUser = /** @type {*} */({
 	name         : "createUser",
 	kind         : "mutation",
 	get_body     : query_get_body_createUser,
+	initial_value: false,
+})
+
+
+/**
+ * @typedef  {object} Vars_updateUserBio
+ * @property {String} bio
+ *
+ * @typedef  {Boolean} Value_updateUserBio
+ */
+
+/**
+ * @param   {Vars_updateUserBio} vars
+ * @returns {string} */
+export function query_get_body_updateUserBio(vars) {
+	return 'updateUserBio(bio:'+JSON.stringify(vars.bio)+')'
+}
+
+/**
+ * mutation: `updateUserBio`\
+ * vars : {@link Vars_updateUserBio }\
+ * value: {@link Value_updateUserBio}
+ * @type  {Query_Data<Vars_updateUserBio, Value_updateUserBio>}
+ */
+export const mutation_updateUserBio = /** @type {*} */({
+	name         : "updateUserBio",
+	kind         : "mutation",
+	get_body     : query_get_body_updateUserBio,
 	initial_value: false,
 })
 

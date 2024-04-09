@@ -2,6 +2,7 @@ import { For, Match, Switch, createEffect, createSignal } from "solid-js"
 import Button from "../../../shared/components/Button"
 import * as gql from "../../../shared/graphql_solid"
 import ProfileLink from "../../components/ProfileLink"
+import UserBio from "../../components/UserBio"
 
 export default function Home() {
 	const [data, actions] = gql.useResource(gql.query_webIndex, {})
@@ -36,30 +37,38 @@ function PublicRoute(data: any) {
 }
 
 function AuthenticatedRoute(data: any) {
-	const [route, setRoute] = createSignal({
-		userTopics: ["games", "phyiscs", "math", "sports"],
-		links: [
-			{
-				title: "games",
-				url: "https://store.epicgames.com/en-US/",
-			},
-			{
-				title: "math",
-				url: "https://store.epicgames.com/en-US/",
-			},
-			{
-				title: "sports",
-				url: "https://store.epicgames.com/en-US/",
-			},
-		],
-	})
-	const [linkExpanded, setLinkExpanded] = createSignal("")
+	const updateUserBio = gql.useRequest(gql.mutation_updateUserBio)
+
+	// const [route, setRoute] = createSignal({
+	// 	userTopics: ["games", "phyiscs", "math", "sports"],
+	// 	links: [
+	// 		{
+	// 			title: "games",
+	// 			url: "https://store.epicgames.com/en-US/",
+	// 		},
+	// 		{
+	// 			title: "math",
+	// 			url: "https://store.epicgames.com/en-US/",
+	// 		},
+	// 		{
+	// 			title: "sports",
+	// 			url: "https://store.epicgames.com/en-US/",
+	// 		},
+	// 	],
+	// })
+	// const [linkExpanded, setLinkExpanded] = createSignal("")
 
 	return (
 		<>
-			<Sidebar topics={route().userTopics} />
+			{/* <Sidebar topics={route().userTopics} /> */}
 			<div class="ml-[200px] h-full p-2 relative">
 				<div class="border-[#191919]  h-full border rounded-[7px]">
+					<UserBio
+						bio={data.bio}
+						updateBio={async (newBio) => {
+							await updateUserBio({ bio: newBio })
+						}}
+					/>
 					{/* <Topbar
 						// changeLearningStatus={async (status) => {
 						// 	const res = await updateLearningStatus({ topicName: "Solid", learningStatus: status })
@@ -76,7 +85,7 @@ function AuthenticatedRoute(data: any) {
 						// filterOrder={routeData()?.filterOrder}
 						// filter={routeData()?.filter}
 					/> */}
-					<div class=" px-5 w-full bg-gray-200 col-gap-[4px]">
+					{/* <div class=" px-5 w-full bg-gray-200 col-gap-[4px]">
 						<For each={route().links}>
 							{(link) => (
 								<ProfileLink
@@ -86,7 +95,7 @@ function AuthenticatedRoute(data: any) {
 								/>
 							)}
 						</For>
-					</div>
+					</div> */}
 				</div>
 				{/* <Search links={route().links} /> */}
 			</div>
