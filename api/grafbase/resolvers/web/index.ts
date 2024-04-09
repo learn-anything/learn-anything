@@ -14,7 +14,7 @@ const resolver: Resolver["Query.webIndex"] = async (
 ) => {
 	try {
 		// const email = await emailFromHankoToken(context)
-		const email = ""
+		const email = "nikita@nikiv.dev"
 		if (email) {
 			const res = await indexRouteAuth(email)
 			console.log(res, "auth res")
