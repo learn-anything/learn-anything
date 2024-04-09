@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import {
 	View,
 	SafeAreaView,
@@ -7,8 +7,9 @@ import {
 	Text,
 	TouchableOpacity,
 	Image,
+	Alert,
 } from "react-native"
-import ImagePicker from "expo-image-picker"
+import * as ImagePicker from "expo-image-picker"
 import { SimpleLineIcons } from "@expo/vector-icons"
 
 const { width } = Dimensions.get("window")
@@ -16,13 +17,22 @@ const { width } = Dimensions.get("window")
 export default function Personal() {
 	const [avatarUrl, setAvatarUrl] = useState<string | undefined>(undefined)
 
+	useEffect(() => {
+		;(async () => {
+			const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
+			if (status !== "granted") {
+				Alert.alert("we need camera roll permissions to pick an image")
+			}
+		})()
+	}, [])
+
 	const pickImage = async () => {
 		const result = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ImagePicker.MediaTypeOptions.Images,
 			allowsEditing: true,
+			aspect: [4, 3],
 			quality: 1,
 		})
-
 		if (!result.canceled) {
 			setAvatarUrl(result.assets[0].uri)
 		}
