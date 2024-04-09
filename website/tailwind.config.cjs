@@ -3,8 +3,7 @@ const plugin = require("tailwindcss/plugin");
 module.exports = {
 	// TODO: tailwind doesn't work in /shared/components https://discord.com/channels/722131463138705510/910635844119982080/1227339671332192256
 	// content: ["./src/**/*.{html,js,jsx,ts,tsx}", "./components/**/*.{html,js,jsx,ts,tsx}"],
-	content: ["./src/**/*.{html,js,jsx,ts,tsx}", "./components/**/*.{html,js,jsx,ts,tsx}"],
-	// content: ["./src/**/*.{html,js,jsx,ts,tsx}", "./components/**/*.{html,js,jsx,ts,tsx}", "../shared/components/**/*.tsx"],
+	content: ["./src/**/*.{html,js,jsx,ts,tsx}", "./components/**/*.{html,js,jsx,ts,tsx}", "../shared/components/**/*.tsx"],
 	// content: ["./src/**/*.{html,js,jsx,ts,tsx}", "../packages/*/dev/*.{ts,tsx}"],
 	theme: {
 		colors: {
