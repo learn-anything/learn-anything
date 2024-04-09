@@ -6,17 +6,17 @@ module.exports = {
 	content: ["./src/**/*.{html,js,jsx,ts,tsx}", "./components/**/*.{html,js,jsx,ts,tsx}", "../shared/components/**/*.tsx"],
 	// content: ["./src/**/*.{html,js,jsx,ts,tsx}", "../packages/*/dev/*.{ts,tsx}"],
 	theme: {
-		colors: {
-			white: "#ffffff",
-			dark: "#0f0f0f",
-			darkText: "#f9f9f9",
-			softDarkText: "#e4e4e4",
-			softDark: "#121212",
-			hoverDark: "#1b1b1b",
-		},
 		extend: {
+			colors: {
+				white: "#ffffff",
+				dark: "#0f0f0f",
+				darkText: "#f9f9f9",
+				softDarkText: "#e4e4e4",
+				softDark: "#121212",
+				hoverDark: "#1b1b1b",
+			},
 			keyframes: {},
-		},
+		}
 	},
 	plugins: [
 		function ({ addUtilities }) {
