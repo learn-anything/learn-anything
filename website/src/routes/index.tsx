@@ -1,4 +1,11 @@
-import { For, Match, Switch, createSignal, onMount } from "solid-js"
+import {
+	For,
+	Match,
+	Switch,
+	createEffect,
+	createSignal,
+	onMount,
+} from "solid-js"
 import Button from "../../../shared/components/Button"
 import * as gql from "../../../shared/graphql_solid"
 import Search from "../../../shared/components/Search"
@@ -9,14 +16,21 @@ import ProfileLink from "../../components/ProfileLink"
 export default function Home() {
 	const [data, actions] = gql.useResource(gql.query_webIndex, {})
 
-	const [authenticated, setAuthenticated] = createSignal(true)
+	const [authenticated, setAuthenticated] = createSignal(false)
+	const [queryLoaded, setQueryLoaded] = createSignal(false)
 
-	onMount(() => {})
+	createEffect(() => {
+		if (data()?.auth) {
+			setAuthenticated(true)
+		} else if (data()?.public) {
+			setQueryLoaded(true)
+		}
+	})
 
 	return (
-		<div class=" w-full h-screen">
+		<div class="w-full h-screen">
 			<Switch fallback={<div>loading</div>}>
-				<Match when={!authenticated()}>
+				<Match when={queryLoaded() && !authenticated()}>
 					<PublicRoute />
 				</Match>
 				<Match when={authenticated()}>
