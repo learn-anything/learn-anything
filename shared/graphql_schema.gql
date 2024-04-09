@@ -14,6 +14,22 @@ type Inline3 {
 	public: Inline1
 	auth: Inline2
 }
+type Inline4 {
+	name: String!
+	prettyName: String!
+	connections: [String!]!
+}
+type Inline5 {
+	latestGlobalTopicGraph: [Inline4!]!
+}
+type Inline6 {
+	username: String
+	links: [Link!]!
+}
+type Inline7 {
+	public: Inline5
+	auth: Inline6
+}
 enum LearningStatus {
 	Learn
 	Learning
@@ -30,6 +46,7 @@ type Mutation {
 }
 type Query {
 	webIndex: Inline3!
+	webIndexProfile: Inline7!
 }
 schema {
 	query: Query

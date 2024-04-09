@@ -1,8 +1,9 @@
-import { For, Match, Switch, createEffect, createSignal } from "solid-js"
+import { useNavigate } from "@solidjs/router"
+import { Match, Switch, createEffect, createSignal } from "solid-js"
 import Button from "../../../shared/components/Button"
 import * as gql from "../../../shared/graphql_solid"
-import ProfileLink from "../../components/ProfileLink"
 import UserBio from "../../components/UserBio"
+import { ForceGraph } from "../../../shared/components/ForceGraph/ForceGraph"
 
 export default function Home() {
 	const [data, actions] = gql.useResource(gql.query_webIndex, {})
@@ -22,21 +23,47 @@ export default function Home() {
 		<div class="w-full h-screen">
 			<Switch fallback={<div>loading</div>}>
 				<Match when={queryLoaded() && !authenticated()}>
-					<PublicRoute props={data()?.public} />
+					<PublicRoute props={data()?.public} actions={actions} />
 				</Match>
 				<Match when={authenticated()}>
-					<AuthenticatedRoute props={data()?.auth} />
+					<AuthenticatedRoute props={data()?.auth} actions={actions} />
 				</Match>
 			</Switch>
 		</div>
 	)
 }
 
-function PublicRoute(data: any) {
-	return <>Search with graph</>
+// function PublicRouteProfile(data: gql.Inline7) {}
+
+function PublicRoute(data: gql.Inline1) {
+	const navigate = useNavigate()
+
+	// const search_state = ui.createSearchState({
+	//   searchResults,
+	//   onSelect: ({ name }) => {
+	//     const foundTopic = global.state.topicsWithConnections.find(
+	//       (t) => t.prettyName === name
+	//     )!
+	//     navigate(`/${foundTopic.name}`)
+	//     logUntracked("Topic searched", search_state.query)
+	//   }
+	// })
+
+	return (
+		<>
+			{/* <ForceGraph
+				onNodeClick={(name) => {
+					navigate(`/${name}`)
+				}}
+				// filterQuery={() => search_state.query}
+				raw_nodes={data.latestGlobalTopicGraph}
+				// raw_nodes={global.state.topicsWithConnections}
+			/> */}
+		</>
+	)
 }
 
-function AuthenticatedRoute(data: any) {
+function AuthenticatedRoute(data: any, actions: any) {
 	const updateUserBio = gql.useRequest(gql.mutation_updateUserBio)
 
 	// const [route, setRoute] = createSignal({
@@ -67,6 +94,7 @@ function AuthenticatedRoute(data: any) {
 						bio={data.bio}
 						updateBio={async (newBio) => {
 							await updateUserBio({ bio: newBio })
+							actions.update
 						}}
 					/>
 					{/* <Topbar

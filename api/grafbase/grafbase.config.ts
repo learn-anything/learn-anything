@@ -65,6 +65,30 @@ g.query("webIndex", {
 	resolver: "web/index",
 })
 
+// g.query("webIndex", {
+// 	args: {},
+// 	returns: g.ref()
+// 	resolver: "web/index",
+// })
+
+g.query("webIndexProfile", {
+	args: {},
+	returns: inline({
+		public: inline({
+			latestGlobalTopicGraph: inline({
+				name: g.string(),
+				prettyName: g.string(),
+				connections: g.string().list(),
+			}).list(),
+		}).optional(),
+		auth: inline({
+			username: g.string().optional(),
+			links: g.ref(Link).list(),
+		}).optional(),
+	}),
+	resolver: "web/index",
+})
+
 // -- mutations (return `true` on success, throw error on failure)
 g.mutation("createUser", {
 	args: {

@@ -191,6 +191,58 @@ export const initial_Inline3 = {
 }
 
 /**
+ * Initial value: {@link initial_Inline4}
+ *
+ * @typedef  {object} Inline4
+ * @property {String} name
+ * @property {String} prettyName
+ * @property {Array<String>} connections
+ */
+/** @type {Inline4} */
+export const initial_Inline4 = {
+	name: "",
+	prettyName: "",
+	connections: [],
+}
+
+/**
+ * Initial value: {@link initial_Inline5}
+ *
+ * @typedef  {object} Inline5
+ * @property {Array<Inline4>} latestGlobalTopicGraph
+ */
+/** @type {Inline5} */
+export const initial_Inline5 = {
+	latestGlobalTopicGraph: [],
+}
+
+/**
+ * Initial value: {@link initial_Inline6}
+ *
+ * @typedef  {object} Inline6
+ * @property {Maybe<String>} username
+ * @property {Array<Link>} links
+ */
+/** @type {Inline6} */
+export const initial_Inline6 = {
+	username: null,
+	links: [],
+}
+
+/**
+ * Initial value: {@link initial_Inline7}
+ *
+ * @typedef  {object} Inline7
+ * @property {Maybe<Inline5>} public
+ * @property {Maybe<Inline6>} auth
+ */
+/** @type {Inline7} */
+export const initial_Inline7 = {
+	public: null,
+	auth: null,
+}
+
+/**
  * @enum {(typeof LearningStatus)[keyof typeof LearningStatus]} */
 export const LearningStatus = /** @type {const} */({
 	Learn: "Learn",
@@ -229,6 +281,33 @@ export const query_webIndex = /** @type {*} */({
 	kind         : "query",
 	get_body     : query_get_body_webIndex,
 	initial_value: initial_Inline3,
+})
+
+
+/**
+ * @typedef  {object} Vars_webIndexProfile
+ *
+ * @typedef  {Inline7} Value_webIndexProfile
+ */
+
+/**
+ * @param   {Vars_webIndexProfile} vars
+ * @returns {string} */
+export function query_get_body_webIndexProfile(vars) {
+	return 'webIndexProfile{public{latestGlobalTopicGraph{name prettyName connections}}auth{username links{title url}}}'
+}
+
+/**
+ * query: `webIndexProfile`\
+ * vars : {@link Vars_webIndexProfile }\
+ * value: {@link Value_webIndexProfile}
+ * @type  {Query_Data<Vars_webIndexProfile, Value_webIndexProfile>}
+ */
+export const query_webIndexProfile = /** @type {*} */({
+	name         : "webIndexProfile",
+	kind         : "query",
+	get_body     : query_get_body_webIndexProfile,
+	initial_value: initial_Inline7,
 })
 
 /*

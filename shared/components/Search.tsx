@@ -17,6 +17,7 @@ export default function Search(props: SearchProps) {
 			inputRef.focus()
 		}
 	})
+
 	return (
 		<div class="">
 			<Presence>
