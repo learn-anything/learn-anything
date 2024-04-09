@@ -55,9 +55,14 @@ function PublicRoute(data: any) {
 	return (
 		<>
 			<Button label="Why tailwind is broken? Should be red button. :(" />
-			<div class="bg-red-200 inline-flex w-full cursor-pointer active:scale-[0.9] transition-all h-[34px] px-[11px] items-center gap-[6px] shrink-0 rounded-[7px] dark:text-white/70">
-				This button is not red too, not sure why.. tailwind config is wrong or
-				what?
+			<div class="">
+				<div
+					// style={{ color: "red" }}
+					class="text-red-200 inline-flex w-full cursor-pointer active:scale-[0.9] transition-all h-[34px] px-[11px] items-center gap-[6px] shrink-0 rounded-[7px] dark:text-white/70"
+				>
+					This button should have red text but doesn't. If you uncomment `style`
+					it will change though. Tailwind is breaking somehow..
+				</div>
 			</div>
 			{/* <ForceGraph
 				onNodeClick={(name) => {

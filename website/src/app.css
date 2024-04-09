@@ -7,9 +7,6 @@
   --dark: #0f0f0f;
   --text-grey: #f9f9f9;
 }
-
-
-
 html {
   background-color: var(--dark);
   color: var(--text-grey)
