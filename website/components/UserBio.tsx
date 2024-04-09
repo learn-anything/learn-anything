@@ -1,5 +1,6 @@
 import { createSignal } from "solid-js"
-import Button from "../../shared/components/Button"
+import Button from "./Button"
+// import Button from "../../shared/components/Button"
 
 export default function UserBio(props: {
 	bio: string
