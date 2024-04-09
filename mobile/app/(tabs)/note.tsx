@@ -252,11 +252,11 @@ const styles = StyleSheet.create({
 	addText: {
 		color: "rgba(255, 255, 255, 0.6)",
 		position: "absolute",
-		left: 10,
+		left: 30,
 		top: 20,
 	},
 	buttonContainer: {
-		marginLeft: 20,
+		marginLeft: 50,
 		display: "flex",
 		flexDirection: "column",
 		alignItems: "flex-start",

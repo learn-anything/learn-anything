@@ -26,7 +26,7 @@ export default function Search() {
 	}
 
 	const filteredSuggestions = suggestions.filter((suggestion: string) =>
-		suggestion.toLowerCase().startsWith(searchQuery.toLowerCase()),
+		suggestion.toUpperCase().startsWith(searchQuery.toUpperCase()),
 	)
 
 	const handleSuggestionClick = (suggestion: string) => {
@@ -43,20 +43,12 @@ export default function Search() {
 	)
 
 	useEffect(() => {
-		Animated.timing(animations, {
-			toValue: showSuggestions && searchQuery ? dynamicHeight : 0,
-			duration: 700,
-			useNativeDriver: false,
-		}).start()
-	}, [showSuggestions, searchQuery, filteredSuggestions.length])
-
-	useEffect(() => {
 		if (searchQuery === "") {
 			animations.setValue(0)
 		} else {
 			Animated.timing(animations, {
 				toValue: showSuggestions && searchQuery ? dynamicHeight : 0,
-				duration: 700,
+				duration: 200,
 				useNativeDriver: false,
 			}).start()
 		}
@@ -101,7 +93,9 @@ export default function Search() {
 								style={styles.suggestionTopic}
 								onPress={() => handleSuggestionClick(suggestion)}
 							>
-								<Text style={styles.suggestionText}>{suggestion}</Text>
+								<Text style={styles.suggestionText}>
+									{suggestion.charAt(0).toUpperCase() + suggestion.slice(1)}
+								</Text>
 							</TouchableOpacity>
 						))}
 					</ScrollView>
