@@ -1,13 +1,18 @@
 type Inline0 {
-	topics: [String!]!
+	name: String!
+	prettyName: String!
+	connections: [String!]!
 }
 type Inline1 {
+	latestGlobalTopicGraph: [Inline0!]!
+}
+type Inline2 {
 	username: String!
 	links: [Link!]
 }
-type Inline2 {
-	public: Inline0
-	auth: Inline1
+type Inline3 {
+	public: Inline1
+	auth: Inline2
 }
 enum LearningStatus {
 	Learn
@@ -23,7 +28,7 @@ type Mutation {
 	updatePersonalLink(linkId: String!, status: LearningStatus!): Boolean!
 }
 type Query {
-	webIndex: Inline2!
+	webIndex: Inline3!
 }
 schema {
 	query: Query

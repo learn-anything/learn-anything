@@ -129,11 +129,26 @@ TYPES:
  * Initial value: {@link initial_Inline0}
  *
  * @typedef  {object} Inline0
- * @property {Array<String>} topics
+ * @property {String} name
+ * @property {String} prettyName
+ * @property {Array<String>} connections
  */
 /** @type {Inline0} */
 export const initial_Inline0 = {
-	topics: [],
+	name: "",
+	prettyName: "",
+	connections: [],
+}
+
+/**
+ * Initial value: {@link initial_Inline1}
+ *
+ * @typedef  {object} Inline1
+ * @property {Array<Inline0>} latestGlobalTopicGraph
+ */
+/** @type {Inline1} */
+export const initial_Inline1 = {
+	latestGlobalTopicGraph: [],
 }
 
 /**
@@ -150,27 +165,27 @@ export const initial_Link = {
 }
 
 /**
- * Initial value: {@link initial_Inline1}
+ * Initial value: {@link initial_Inline2}
  *
- * @typedef  {object} Inline1
+ * @typedef  {object} Inline2
  * @property {String} username
  * @property {Maybe<Array<Link>>} links
  */
-/** @type {Inline1} */
-export const initial_Inline1 = {
+/** @type {Inline2} */
+export const initial_Inline2 = {
 	username: "",
 	links: [],
 }
 
 /**
- * Initial value: {@link initial_Inline2}
+ * Initial value: {@link initial_Inline3}
  *
- * @typedef  {object} Inline2
- * @property {Maybe<Inline0>} public
- * @property {Maybe<Inline1>} auth
+ * @typedef  {object} Inline3
+ * @property {Maybe<Inline1>} public
+ * @property {Maybe<Inline2>} auth
  */
-/** @type {Inline2} */
-export const initial_Inline2 = {
+/** @type {Inline3} */
+export const initial_Inline3 = {
 	public: null,
 	auth: null,
 }
@@ -193,14 +208,14 @@ QUERIES:
 /**
  * @typedef  {object} Vars_webIndex
  *
- * @typedef  {Inline2} Value_webIndex
+ * @typedef  {Inline3} Value_webIndex
  */
 
 /**
  * @param   {Vars_webIndex} vars
  * @returns {string} */
 export function query_get_body_webIndex(vars) {
-	return 'webIndex{public{topics}auth{username links{title url}}}'
+	return 'webIndex{public{latestGlobalTopicGraph{name prettyName connections}}auth{username links{title url}}}'
 }
 
 /**
@@ -213,7 +228,7 @@ export const query_webIndex = /** @type {*} */({
 	name         : "webIndex",
 	kind         : "query",
 	get_body     : query_get_body_webIndex,
-	initial_value: initial_Inline2,
+	initial_value: initial_Inline3,
 })
 
 /*

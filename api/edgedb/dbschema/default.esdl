@@ -140,9 +140,9 @@ module default {
     latestGlobalTopicGraph: GlobalTopicGraph;
   }
   type GlobalTopicGraph {
-    name: str;
-    prettyName: str;
-    multi connections: str;
+    required name: str;
+    required prettyName: str;
+    required multi connections: str;
   }
   # attaches `created_at` field to objects that extend it
   # https://docs.edgedb.com/database/datamodel/objects#abstract-types

@@ -51,7 +51,11 @@ g.query("webIndex", {
 	args: {},
 	returns: inline({
 		public: inline({
-			topics: g.string().list(),
+			latestGlobalTopicGraph: inline({
+				name: g.string(),
+				prettyName: g.string(),
+				connections: g.string().list(),
+			}).list(),
 		}).optional(),
 		auth: inline({
 			username: g.string(),

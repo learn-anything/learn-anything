@@ -12,23 +12,21 @@ export async function createUser(email: string) {
 }
 
 export async function deleteUser(email: string) {
-	const res = await e
+	return await e
 		.delete(e.User, (user) => ({
 			filter: e.op(user.email, "=", email),
 		}))
 		.run(client)
-	return res
 }
 
 export async function createOther() {
-	const res = await e
+	return await e
 		.insert(e.Other, {
 			latestGlobalTopicGraph: e.insert(e.GlobalTopicGraph, {
 				name: "test",
 			}),
 		})
 		.run(client)
-	return res
 }
 
 type TopicGraph = {
@@ -37,7 +35,7 @@ type TopicGraph = {
 	connections: string[]
 }
 export async function updateLatestGlobalTopicGraph(topicGraph: TopicGraph) {
-	const res = e
+	return e
 		.update(e.GlobalTopicGraph, (tg) => ({
 			set: {
 				name: topicGraph.name,
@@ -51,5 +49,4 @@ export async function updateLatestGlobalTopicGraph(topicGraph: TopicGraph) {
 			),
 		}))
 		.run(client)
-	return res
 }

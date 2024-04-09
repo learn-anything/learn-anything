@@ -1,11 +1,20 @@
 import { Resolver } from "@grafbase/generated"
 import { GraphQLError } from "graphql"
 import { emailFromHankoToken } from "../../../../shared/auth"
-import { indexRouteAuth, indexRoutePublic } from "../../../edgedb/crud/routes/website"
+import {
+	indexRouteAuth,
+	indexRoutePublic,
+} from "../../../edgedb/crud/routes/website"
 
-const resolver: Resolver["Query.webIndex"] = async (parent, args, context, info) => {
+const resolver: Resolver["Query.webIndex"] = async (
+	parent,
+	args,
+	context,
+	info,
+) => {
 	try {
-		const email = await emailFromHankoToken(context)
+		// const email = await emailFromHankoToken(context)
+		const email = ""
 		if (email) {
 			const res = await indexRouteAuth(email)
 			console.log(res, "auth res")
@@ -19,7 +28,7 @@ const resolver: Resolver["Query.webIndex"] = async (parent, args, context, info)
 			console.log(res, "public res")
 			return {
 				public: {
-					topics: ["test"],
+					latestGlobalTopicGraph: res,
 				},
 			}
 		}

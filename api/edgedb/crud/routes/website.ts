@@ -2,17 +2,17 @@ import { client } from "../../client"
 import e from "../../dbschema/edgeql-js"
 
 export async function indexRoutePublic() {
-	const res = await e
-		.select(e.User, () => ({
-			username: true,
-			// topics:
+	return await e
+		.select(e.GlobalTopicGraph, () => ({
+			name: true,
+			prettyName: true,
+			connections: true,
 		}))
 		.run(client)
-	return res
 }
 
 export async function indexRouteAuth(email: string) {
-	const res = await e
+	return await e
 		.select(e.User, (user) => ({
 			username: true,
 			links: e.select(e.PersonalLink, (pl) => ({
@@ -22,5 +22,4 @@ export async function indexRouteAuth(email: string) {
 			filter_single: e.op(user.email, "=", email),
 		}))
 		.run(client)
-	return res
 }
