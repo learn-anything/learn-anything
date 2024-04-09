@@ -1,16 +1,6 @@
-import {
-	For,
-	Match,
-	Switch,
-	createEffect,
-	createSignal,
-	onMount,
-} from "solid-js"
+import { For, Match, Switch, createEffect, createSignal } from "solid-js"
 import Button from "../../../shared/components/Button"
 import * as gql from "../../../shared/graphql_solid"
-import Search from "../../../shared/components/Search"
-
-import Topbar from "../../../shared/components/Topbar"
 import ProfileLink from "../../components/ProfileLink"
 
 export default function Home() {
@@ -31,21 +21,21 @@ export default function Home() {
 		<div class="w-full h-screen">
 			<Switch fallback={<div>loading</div>}>
 				<Match when={queryLoaded() && !authenticated()}>
-					<PublicRoute />
+					<PublicRoute props={data()?.public} />
 				</Match>
 				<Match when={authenticated()}>
-					<AuthenticatedRoute />
+					<AuthenticatedRoute props={data()?.auth} />
 				</Match>
 			</Switch>
 		</div>
 	)
 }
 
-function PublicRoute(route: any) {
+function PublicRoute(data: any) {
 	return <>Search with graph</>
 }
 
-function AuthenticatedRoute() {
+function AuthenticatedRoute(data: any) {
 	const [route, setRoute] = createSignal({
 		userTopics: ["games", "phyiscs", "math", "sports"],
 		links: [
