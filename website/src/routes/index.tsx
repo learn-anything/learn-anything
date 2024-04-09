@@ -6,36 +6,39 @@ import UserBio from "../../components/UserBio"
 import { ForceGraph } from "../../../shared/components/ForceGraph/ForceGraph"
 
 export default function Home() {
-	const [data, actions] = gql.useResource(gql.query_webIndex, {})
+	// const [data, actions] = gql.useResource(gql.query_webIndex, {})
 
 	const [authenticated, setAuthenticated] = createSignal(false)
 	const [queryLoaded, setQueryLoaded] = createSignal(false)
 
-	createEffect(() => {
-		if (data()?.auth) {
-			setAuthenticated(true)
-		} else if (data()?.public) {
-			setQueryLoaded(true)
-		}
-	})
+	// createEffect(() => {
+	// 	if (data()?.auth) {
+	// 		setAuthenticated(true)
+	// 	} else if (data()?.public) {
+	// 		setQueryLoaded(true)
+	// 	}
+	// })
 
 	return (
 		<div class="w-full h-screen">
-			<Switch fallback={<div>loading</div>}>
+			<PublicRoute />
+			{/* <Switch fallback={<div>loading</div>}> */}
+			{/* <Switch fallback={<div>loading</div>}>
 				<Match when={queryLoaded() && !authenticated()}>
 					<PublicRoute props={data()?.public} actions={actions} />
 				</Match>
 				<Match when={authenticated()}>
 					<AuthenticatedRoute props={data()?.auth} actions={actions} />
 				</Match>
-			</Switch>
+			</Switch> */}
 		</div>
 	)
 }
 
 // function PublicRouteProfile(data: gql.Inline7) {}
 
-function PublicRoute(data: gql.Inline1) {
+// function PublicRoute(data: gql.Inline1) {
+function PublicRoute(data: any) {
 	const navigate = useNavigate()
 
 	// const search_state = ui.createSearchState({
@@ -51,6 +54,7 @@ function PublicRoute(data: gql.Inline1) {
 
 	return (
 		<>
+			<Button label="Why tailwind is broken? Should be red button. :(" />
 			{/* <ForceGraph
 				onNodeClick={(name) => {
 					navigate(`/${name}`)
