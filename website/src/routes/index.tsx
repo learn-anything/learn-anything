@@ -1,6 +1,10 @@
-import { Match, Switch, createSignal, onMount } from "solid-js"
+import { For, Match, Switch, createSignal, onMount } from "solid-js"
 import Button from "../../../shared/components/Button"
 import * as gql from "../../../shared/graphql_solid"
+import Search from "../../../shared/components/Search"
+
+import Topbar from "../../../shared/components/Topbar"
+import ProfileLink from "../../components/ProfileLink"
 
 export default function Home() {
 	const [data, actions] = gql.useResource(gql.query_webIndex, {})
@@ -27,12 +31,31 @@ function PublicRoute(route: any) {
 	return <>Search with graph</>
 }
 
-function AuthenticatedRoute(route: any) {
+function AuthenticatedRoute() {
+	const [route, setRoute] = createSignal({
+		userTopics: ["games", "phyiscs", "math", "sports"],
+		links: [
+			{
+				title: "games",
+				url: "https://store.epicgames.com/en-US/",
+			},
+			{
+				title: "math",
+				url: "https://store.epicgames.com/en-US/",
+			},
+			{
+				title: "sports",
+				url: "https://store.epicgames.com/en-US/",
+			},
+		],
+	})
+	const [linkExpanded, setLinkExpanded] = createSignal("")
+
 	return (
 		<>
 			<Sidebar topics={route().userTopics} />
 			<div class="ml-[200px] h-full p-2 relative">
-				<div class="border-[#191919] h-full border rounded-[7px]">
+				<div class="border-[#191919]  h-full border rounded-[7px]">
 					{/* <Topbar
 						// changeLearningStatus={async (status) => {
 						// 	const res = await updateLearningStatus({ topicName: "Solid", learningStatus: status })
@@ -49,9 +72,17 @@ function AuthenticatedRoute(route: any) {
 						// filterOrder={routeData()?.filterOrder}
 						// filter={routeData()?.filter}
 					/> */}
-					{/* <div class=" px-5 w-full bg-gray-200 col-gap-[4px]">
-						<For each={route().links}>{(link) => <ProfileLink link={link} />}</For>
-					</div> */}
+					<div class=" px-5 w-full bg-gray-200 col-gap-[4px]">
+						<For each={route().links}>
+							{(link) => (
+								<ProfileLink
+									link={link}
+									setLinkExpanded={setLinkExpanded}
+									linkExpanded={linkExpanded()}
+								/>
+							)}
+						</For>
+					</div>
 				</div>
 				{/* <Search links={route().links} /> */}
 			</div>

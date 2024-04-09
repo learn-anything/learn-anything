@@ -1,6 +1,6 @@
 import { For, Show, createSignal } from "solid-js"
 import Button from "../../../shared/components/Button"
-import { Motion } from "solid-motionone"
+import { Motion, Presence } from "solid-motionone"
 
 export default function Topic() {
 	return (
@@ -40,49 +40,49 @@ function Sidebar(props: { topics?: string[] }) {
 					</div>
 				</div>
 			</div>
-			<div class="relative">
-				<div
-					onClick={() => {
-						setExpanded(!expanded())
-					}}
-					onMouseLeave={() => {
-						setExpandTimer(true)
-						setTimeout(() => {
-							if (expandTimer()) {
-								setExpanded(false)
-							}
-						}, 500)
-					}}
-					onMouseEnter={() => {
-						setExpandTimer(false)
-					}}
-					class="p-4"
-				>
-					Profile
-				</div>
-				<Show when={expanded()}>
-					<Motion.div
-						exit={{ opacity: 0, scale: 0.8 }}
-						animate={{ scale: [0.8, 1.1, 1], opacity: [0, 1] }}
-						transition={{ duration: 0.2, easing: "ease-in" }}
-						class="absolute bottom-12 w-full min-w-fit left-[6px] bg-hoverDark p-1 rounded-[7px]"
-						style={{
-							border: "1px solid #1E1E1E",
-							background: "rgba(55, 55, 55, 0.40)",
-							"backdrop-filter": "blur(8.5px)",
-						}}
-					>
-						<div class="rounded-[7px] h-[34px] cursor-pointer whitespace-nowrap px-[11px] flex items-center hover:bg-softDarkText/10 text-white/60">
-							Settings
-						</div>
-						<div class="rounded-[7px] h-[34px] cursor-pointer whitespace-nowrap px-[11px] flex items-center hover:bg-softDarkText/10 text-white/60">
-							Support
-						</div>
-						<div class="rounded-[7px] h-[34px] cursor-pointer whitespace-nowrap px-[11px] flex items-center hover:bg-softDarkText/10 text-white/60">
-							Sign out
-						</div>
-					</Motion.div>
-				</Show>
+			<div
+				class="relative"
+				onClick={() => {
+					setExpanded(!expanded())
+				}}
+				onMouseLeave={() => {
+					setExpandTimer(true)
+					setTimeout(() => {
+						if (expandTimer()) {
+							setExpanded(false)
+						}
+					}, 500)
+				}}
+				onMouseEnter={() => {
+					setExpandTimer(false)
+				}}
+			>
+				<div class="p-4">Profile</div>
+				<Presence>
+					<Show when={expanded()}>
+						<Motion.div
+							exit={{ opacity: 0, scale: 0.8 }}
+							animate={{ scale: [0.8, 1.1, 1], opacity: [0, 1] }}
+							transition={{ duration: 0.2, easing: "ease-in" }}
+							class="absolute bottom-12 w-full min-w-fit left-[6px] bg-hoverDark p-1 rounded-[7px]"
+							style={{
+								border: "1px solid #1E1E1E",
+								background: "rgba(55, 55, 55, 0.40)",
+								"backdrop-filter": "blur(8.5px)",
+							}}
+						>
+							<div class="rounded-[7px] h-[34px] cursor-pointer whitespace-nowrap px-[11px] flex items-center hover:bg-softDarkText/10 text-white/60">
+								Settings
+							</div>
+							<div class="rounded-[7px] h-[34px] cursor-pointer whitespace-nowrap px-[11px] flex items-center hover:bg-softDarkText/10 text-white/60">
+								Support
+							</div>
+							<div class="rounded-[7px] h-[34px] cursor-pointer whitespace-nowrap px-[11px] flex items-center hover:bg-softDarkText/10 text-white/60">
+								Sign out
+							</div>
+						</Motion.div>
+					</Show>
+				</Presence>
 			</div>
 		</div>
 	)

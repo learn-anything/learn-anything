@@ -1,5 +1,6 @@
 import { For, Show, createEffect, createSignal } from "solid-js"
 import { Motion, Presence } from "solid-motionone"
+import Icon from "./Icon"
 // import { Icon } from "./Icon"
 
 interface SearchProps {

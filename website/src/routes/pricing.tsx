@@ -80,7 +80,7 @@ function Card() {
 				transform: ["translate(10px, 5px) scale(0.9)", "scale(1.01)", "translate(0, 0) scale(1)"],
 			}}
 			transition={{
-				duration: 0.9,
+				duration: 1.2,
 				easing: "ease-out",
 			}}
 			class="md:w-[500px] w-full p-[2px] rounded-[20px]"
