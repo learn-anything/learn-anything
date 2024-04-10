@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback, useMemo } from "react"
+import React, { useState, useRef, useEffect, useMemo } from "react"
 import {
 	View,
 	StyleSheet,
@@ -49,20 +49,7 @@ export default function Home() {
 	const [noteText, setNoteText] = useState<{ [key: string]: string }>({})
 	const [showLearningButtons, setShowLearningButtons] = useState(false)
 	const [animationButtons, setAnimationButtons] = useState<Animated.Value[]>([])
-
-	// bottomsheets
-	const topicRef = useRef<BottomSheet>(null)
-	const filterRef = useRef<BottomSheet>(null)
-	const snapFilterPoints = useMemo(() => ["23%", "1%"], [])
-	const snapTopicPoints = useMemo(() => ["50%", "1%"], [])
-	// bottomsheet states
-	const [isBottomSheetVisible, setBottomSheetVisible] = useState(false)
-	const [isFilterSheetVisible, setFilterSheetVisible] = useState(false)
-
 	const [learningStatus, setLearningStatus] = useState("Learning")
-
-	// const gqlData = gql.useResource(gql.query_mobileIndex, {})
-	// console.log(gqlData, "gql data")
 
 	const [data, setData] = useState<ProfileData>({
 		links: [
@@ -94,6 +81,25 @@ export default function Home() {
 			name: "Nikita",
 		},
 	})
+
+	// bottomsheets
+	const topicRef = useRef<BottomSheet>(null)
+	const filterRef = useRef<BottomSheet>(null)
+	const snapFilterPoints = useMemo(() => ["23%"], [])
+	const snapTopicPoints = useMemo(() => ["45%"], [])
+	const [topicSheetIndex, setTopicSheetIndex] = useState(-1)
+	const [filterBottomSheetIndex, setFilterBottomSheetIndex] = useState(-1)
+
+	// const gqlData = gql.useResource(gql.query_mobileIndex, {})
+	// console.log(gqlData, "gql data")
+
+	const openTopicSheet = () => {
+		setTopicSheetIndex(0)
+	}
+
+	const openFilterSheet = () => {
+		setFilterBottomSheetIndex(0)
+	}
 
 	useEffect(() => {
 		setAnimationButtons([new Animated.Value(0), new Animated.Value(0)])
@@ -137,26 +143,6 @@ export default function Home() {
 			/>
 		</Svg>
 	)
-
-	const openTopicSheet = useCallback(() => {
-		if (!isBottomSheetVisible) {
-			topicRef.current?.snapToIndex(0)
-			setBottomSheetVisible(true)
-		} else {
-			topicRef.current?.snapToIndex(-1)
-			setBottomSheetVisible(false)
-		}
-	}, [isBottomSheetVisible])
-
-	const openFilterSheet = useCallback(() => {
-		if (!isFilterSheetVisible) {
-			filterRef.current?.snapToIndex(0)
-			setFilterSheetVisible(true)
-		} else {
-			filterRef.current?.snapToIndex(-1)
-			setFilterSheetVisible(false)
-		}
-	}, [isFilterSheetVisible])
 
 	const renderItem = ({
 		item,
@@ -267,9 +253,7 @@ export default function Home() {
 						</View>
 						<TouchableOpacity
 							style={styles.filterIcon}
-							onPress={() => {
-								openFilterSheet()
-							}}
+							onPress={openFilterSheet}
 						>
 							<Svg height="100" width="100" viewBox="0 0 100 100">
 								<Path
@@ -291,13 +275,18 @@ export default function Home() {
 					style={styles.list}
 				/>
 			</SafeAreaView>
-			{/* filter bottomsheet */}
+			{/* filter bottomsheet  */}
 			<BottomSheet
 				ref={filterRef}
-				index={-1}
+				index={filterBottomSheetIndex}
+				snapPoints={snapFilterPoints}
+				onChange={(index) => {
+					console.log(index, "index")
+					setFilterBottomSheetIndex(index)
+				}}
+				enablePanDownToClose={true}
 				enableContentPanningGesture={true}
 				enableHandlePanningGesture={true}
-				snapPoints={snapFilterPoints}
 				backgroundStyle={{ backgroundColor: "#171A21", borderRadius: 10 }}
 			>
 				<BottomSheetView style={styles.filterSheetContainer}>
@@ -324,10 +313,12 @@ export default function Home() {
 			{/* topic bottomsheet */}
 			<BottomSheet
 				ref={topicRef}
-				index={-1}
+				index={topicSheetIndex}
+				snapPoints={snapTopicPoints}
+				onChange={(index) => setTopicSheetIndex(index)}
+				enablePanDownToClose={true}
 				enableContentPanningGesture={true}
 				enableHandlePanningGesture={true}
-				snapPoints={snapTopicPoints}
 				backgroundStyle={{ backgroundColor: "#171A21", borderRadius: 10 }}
 			>
 				<BottomSheetView style={{ alignItems: "center" }}>
