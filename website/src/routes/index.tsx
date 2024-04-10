@@ -27,36 +27,38 @@ export default function Home() {
 		<div class="w-full h-screen">
 			<Switch fallback={<div>loading</div>}>
 				<Match when={data().auth}>
-					{auth => <>
-						<div>User bio: {data().auth?.bio}</div>
-						<input
-							style={{ color: "black" }}
-							type="text"
-							placeholder="Change bio"
-							onChange={(e) => setNewBio(e.target.value)}
-						/>
-						<Button label="Testing wat" />
-						<button
-							onClick={() => {
-								updateUserBio({ bio: newBio() })
+					{(auth) => (
+						<>
+							<div>User bio: {auth().bio}</div>
+							<input
+								style={{ color: "black" }}
+								type="text"
+								placeholder="Change bio"
+								onChange={(e) => setNewBio(e.target.value)}
+							/>
+							<button
+								onClick={() => {
+									updateUserBio({ bio: newBio() })
 
-								actions.mutate((p) => ({
-									...p,
-									auth: {
-										...auth(),
-										bio: newBio()
-									},
-								}))
-							}}
-						>
-							Update bio
-						</button>
-					</>
-					}
+									actions.mutate((p) => ({
+										...p,
+										auth: {
+											...auth(),
+											bio: newBio(),
+										},
+									}))
+								}}
+							>
+								Update bio
+							</button>
+						</>
+					)}
 					{/* <AuthenticatedRoute props={data()?.auth} actions={actions} /> */}
 				</Match>
 				<Match when={data().public}>
-					{dataPublic => <PublicRoute props={dataPublic()} actions={actions} />}
+					{(dataPublic) => (
+						<PublicRoute props={dataPublic()} actions={actions} />
+					)}
 				</Match>
 			</Switch>
 		</div>
