@@ -91,7 +91,7 @@ export default function ProfileLink(props: Props) {
 						<input
 							type="text"
 							placeholder="Take a note..."
-							class=" text-[14px] text-white/40 pl-2 outline-none"
+							class="text-[14px] text-white/40 pl-2 outline-none bg-dark/20"
 						/>
 						<div
 							class="w-fit"
