@@ -19,29 +19,15 @@ import UserBio from "../../components/UserBio"
 
 export default function Home() {
 	const [data, actions] = gql.useResource(gql.query_webIndex, {})
-
-	const [authenticated, setAuthenticated] = createSignal(false)
-	const [queryLoaded, setQueryLoaded] = createSignal(false)
 	const updateUserBio = gql.useRequest(gql.mutation_updateUserBio)
 
-	createEffect(() => {
-		console.log(data(), "data")
-		if (data()?.auth) {
-			setAuthenticated(true)
-		} else if (data()?.public) {
-			setQueryLoaded(true)
-		}
-	})
-
 	const [newBio, setNewBio] = createSignal("")
+
 	return (
 		<div class="w-full h-screen">
 			<Switch fallback={<div>loading</div>}>
-				<Match when={queryLoaded() && !authenticated()}>
-					<PublicRoute props={data()?.public} actions={actions} />
-				</Match>
-				<Match when={authenticated()}>
-					<>
+				<Match when={data().auth}>
+					{auth => <>
 						<div>User bio: {data().auth?.bio}</div>
 						<input
 							style={{ color: "black" }}
@@ -53,32 +39,24 @@ export default function Home() {
 						<button
 							onClick={() => {
 								updateUserBio({ bio: newBio() })
-								// actions.mutate("auth", "bio", newBio())
 
-								// actions.mutate((p) => ({
-								// 	...p,
-								// 	auth: {
-								// 		...p.auth,
-								// 		bio: newBio(),
-								// 		username: p.auth?.username
-								// 	},
-								// }))
-
-								// actions.mutate(
-								// 	(p): gql.Inline3 => ({
-								// 		...p,
-								// 		auth: {
-								// 			...p.auth,
-								// 			bio: newBio(),
-								// 		},
-								// 	}),
-								// )
+								actions.mutate((p) => ({
+									...p,
+									auth: {
+										...auth(),
+										bio: newBio()
+									},
+								}))
 							}}
 						>
 							Update bio
 						</button>
 					</>
+					}
 					{/* <AuthenticatedRoute props={data()?.auth} actions={actions} /> */}
+				</Match>
+				<Match when={data().public}>
+					{dataPublic => <PublicRoute props={dataPublic()} actions={actions} />}
 				</Match>
 			</Switch>
 		</div>
