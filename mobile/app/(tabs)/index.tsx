@@ -45,11 +45,8 @@ type ProfileData = {
 }
 
 export default function Home() {
-	const [selectedTab, setSelectedTab] = useState("links")
-	const [noteText, setNoteText] = useState<{ [key: string]: string }>({})
-	const [showLearningButtons, setShowLearningButtons] = useState(false)
-	const [animationButtons, setAnimationButtons] = useState<Animated.Value[]>([])
-	const [learningStatus, setLearningStatus] = useState("Learning")
+	// const gqlData = gql.useResource(gql.query_mobileIndex, {})
+	// console.log(gqlData, "gql data")
 
 	const [data, setData] = useState<ProfileData>({
 		links: [
@@ -82,6 +79,12 @@ export default function Home() {
 		},
 	})
 
+	const [selectedTab, setSelectedTab] = useState("links")
+	const [noteText, setNoteText] = useState<{ [key: string]: string }>({})
+	const [showLearningButtons, setShowLearningButtons] = useState(false)
+	const [animationButtons, setAnimationButtons] = useState<Animated.Value[]>([])
+	const [learningStatus, setLearningStatus] = useState("Learning")
+
 	// bottomsheets
 	const topicRef = useRef<BottomSheet>(null)
 	const filterRef = useRef<BottomSheet>(null)
@@ -90,15 +93,13 @@ export default function Home() {
 	const [topicSheetIndex, setTopicSheetIndex] = useState(-1)
 	const [filterBottomSheetIndex, setFilterBottomSheetIndex] = useState(-1)
 
-	// const gqlData = gql.useResource(gql.query_mobileIndex, {})
-	// console.log(gqlData, "gql data")
-
 	const openTopicSheet = () => {
 		setTopicSheetIndex(0)
+		filterRef.current?.close()
 	}
-
 	const openFilterSheet = () => {
 		setFilterBottomSheetIndex(0)
+		topicRef.current?.close()
 	}
 
 	useEffect(() => {
@@ -251,11 +252,8 @@ export default function Home() {
 									) : null,
 								)}
 						</View>
-						<TouchableOpacity
-							style={styles.filterIcon}
-							onPress={openFilterSheet}
-						>
-							<Svg height="100" width="100" viewBox="0 0 100 100">
+						<TouchableOpacity onPress={openFilterSheet}>
+							<Svg height="30" width="30" viewBox="0 0 30 30">
 								<Path
 									d="M10.6087 12.3272C10.8248 12.4993 11 12.861 11 13.1393V18.8843L13 17.8018V13.1338C13 12.8604 13.173 12.501 13.3913 12.3272L17.5707 9H6.42931L10.6087 12.3272ZM20 7L20 4.99791L4.00001 5L4.00003 7H20ZM15 18.0027C15 18.5535 14.6063 19.2126 14.1211 19.4747L10.7597 21.2904C9.78783 21.8154 9 21.3499 9 20.2429V13.6L2.78468 8.62775C2.35131 8.28105 2 7.54902 2 6.99573V4.99791C2 3.8945 2.89821 3 4.00001 3H20C21.1046 3 22 3.89826 22 4.99791V6.99573C22 7.55037 21.65 8.28003 21.2153 8.62775L15 13.6V18.0027Z"
 									fill="grey"
@@ -281,7 +279,6 @@ export default function Home() {
 				index={filterBottomSheetIndex}
 				snapPoints={snapFilterPoints}
 				onChange={(index) => {
-					console.log(index, "index")
 					setFilterBottomSheetIndex(index)
 				}}
 				enablePanDownToClose={true}
@@ -545,10 +542,6 @@ const styles = StyleSheet.create({
 		paddingVertical: 8,
 		paddingHorizontal: 10,
 		marginRight: 8,
-	},
-	filterIcon: {
-		width: 16,
-		height: 16,
 	},
 	list: {
 		flex: 1,

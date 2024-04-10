@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import {
 	View,
 	SafeAreaView,
@@ -17,22 +17,20 @@ const { width } = Dimensions.get("window")
 export default function Personal() {
 	const [avatarUrl, setAvatarUrl] = useState<string | undefined>(undefined)
 
-	useEffect(() => {
-		;(async () => {
-			const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
-			if (status !== "granted") {
-				Alert.alert("we need camera roll permissions to pick an image")
-			}
-		})()
-	}, [])
-
 	const pickImage = async () => {
+		const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
+		if (status !== "granted") {
+			Alert.alert("We need camera roll permissions to pick an image")
+			return
+		}
+
 		const result = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ImagePicker.MediaTypeOptions.Images,
 			allowsEditing: true,
 			aspect: [1, 1],
 			quality: 1,
 		})
+
 		if (!result.canceled) {
 			setAvatarUrl(result.assets[0].uri)
 		}
@@ -139,16 +137,16 @@ const styles = StyleSheet.create({
 		paddingTop: 5,
 	},
 	placeholderAvatar: {
-		width: 70,
-		height: 70,
+		width: 75,
+		height: 75,
 		borderRadius: 50,
 		backgroundColor: "rgba(255, 255, 255, 0.1)",
 		alignItems: "center",
 		justifyContent: "center",
 	},
 	personalAvatar: {
-		width: 50,
-		height: 50,
+		width: 75,
+		height: 75,
 		borderRadius: 50,
 	},
 })
