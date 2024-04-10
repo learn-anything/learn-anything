@@ -20,6 +20,7 @@ import Svg, {
 	RadialGradient,
 	Circle,
 } from "react-native-svg"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 const { width } = Dimensions.get("window")
 
@@ -29,7 +30,6 @@ const isValidEmail = (email: string): boolean => {
 	return emailPattern.test(email.toLowerCase())
 }
 
-// pass code
 type InputProps = {
 	length?: number
 	onComplete: (pin: string) => void
@@ -105,7 +105,7 @@ export default function TabTwoScreen() {
 	const [isSubmitted, setIsSubmitted] = useState(false)
 
 	return (
-		<View style={styles.container}>
+		<SafeAreaView style={styles.container}>
 			<Svg
 				height="25%"
 				width="100%"
@@ -217,9 +217,7 @@ export default function TabTwoScreen() {
 					</TouchableOpacity>
 					<Text style={styles.welcomeTitle}>Welcome</Text>
 				</View>
-
 				{/* number box */}
-
 				{isSubmitted ? (
 					<>
 						<OTPInput
@@ -328,7 +326,7 @@ export default function TabTwoScreen() {
 					</Svg>
 				</View>
 			</View>
-		</View>
+		</SafeAreaView>
 	)
 }
 
@@ -354,7 +352,7 @@ const styles = StyleSheet.create({
 		borderRadius: 7,
 		borderWidth: 1,
 		borderColor: "#191919",
-		height: "53%",
+		height: "50%",
 		marginTop: 35,
 	},
 	titleContainer: {
