@@ -41,12 +41,12 @@ export default function Home() {
 							<div class="ml-[200px] h-full p-2 relative">
 								<div class="border-[#191919]  h-full border rounded-[7px]">
 									{/* <UserBio
-			 bio={data.bio}
-			 updateBio={async (newBio) => {
-				await updateUserBio({ bio: newBio })
-				actions.update
-			 }}
-			/> */}
+    bio={data.bio}
+    updateBio={async (newBio) => {
+    await updateUserBio({ bio: newBio })
+    actions.update
+    }}
+   /> */}
 									<Topbar
 										// changeLearningStatus={async (status) => {
 										//  const res = await updateLearningStatus({ topicName: "Solid", learningStatus: status })

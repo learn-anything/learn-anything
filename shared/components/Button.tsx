@@ -13,7 +13,7 @@ export default function Button(props: Props) {
 			}}
 			class="inline-flex w-full cursor-pointer active:scale-[0.9] transition-all h-[34px] px-[11px] items-center gap-[6px] shrink-0 rounded-[7px] dark:text-white/70"
 		>
-			{props.label} and wat
+			{props.label}
 		</div>
 	)
 }
