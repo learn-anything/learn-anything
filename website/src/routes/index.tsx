@@ -1,21 +1,8 @@
 import { useNavigate } from "@solidjs/router"
-import { Match, Switch, createEffect, createSignal } from "solid-js"
+import { Match, Switch, createSignal } from "solid-js"
 import Button from "../../../shared/components/Button"
 import * as gql from "../../../shared/graphql_solid"
 import UserBio from "../../components/UserBio"
-
-// async function fetchData(source, { value, refetching }) {
-// 	return new Promise((resolve) => {
-// 		setTimeout(() => {
-// 			resolve({ message: "Hello" })
-// 		}, 1000) // Delay of 2000 milliseconds
-// 	})
-// Fetch the data and return a value.
-//`source` tells you the current value of the source signal;
-//`value` tells you the last returned value of the fetcher;
-//`refetching` is true when the fetcher is triggered by calling `refetch()`,
-// or equal to the optional data passed: `refetch(info)`
-// }
 
 export default function Home() {
 	const [data, actions] = gql.useResource(gql.query_webIndex, {})
