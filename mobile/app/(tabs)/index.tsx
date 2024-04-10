@@ -1,11 +1,10 @@
-import React, { useState, useRef, useEffect, useCallback, useMemo } from "react"
+import React, { useState, useRef, useEffect, useMemo } from "react"
 import {
 	View,
 	StyleSheet,
 	Dimensions,
 	Animated,
 	Linking,
-	FlatList,
 	SafeAreaView,
 	Text,
 	TextInput,
@@ -15,6 +14,7 @@ import {
 import Svg, { Path } from "react-native-svg"
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
+import DraggableFlatList from "react-native-draggable-flatlist"
 // import * as gql from "../../../shared/graphql_react"
 
 const { width } = Dimensions.get("window")
@@ -49,18 +49,7 @@ export default function Home() {
 	const [noteText, setNoteText] = useState<{ [key: string]: string }>({})
 	const [showLearningButtons, setShowLearningButtons] = useState(false)
 	const [animationButtons, setAnimationButtons] = useState<Animated.Value[]>([])
-
-	// bottomsheets
-	const topicRef = useRef<BottomSheet>(null)
-	const filterRef = useRef<BottomSheet>(null)
-	const snapFilterPoints = useMemo(() => ["23%", "1%"], [])
-	const snapTopicPoints = useMemo(() => ["50%", "1%"], [])
-	// bottomsheet states
-	const [isBottomSheetVisible, setBottomSheetVisible] = useState(false)
-	const [isFilterSheetVisible, setFilterSheetVisible] = useState(false)
-
-	// const gqlData = gql.useResource(gql.query_mobileIndex, {})
-	// console.log(gqlData, "gql data")
+	const [learningStatus, setLearningStatus] = useState("Learning")
 
 	const [data, setData] = useState<ProfileData>({
 		links: [
@@ -93,15 +82,37 @@ export default function Home() {
 		},
 	})
 
+	// bottomsheets
+	const topicRef = useRef<BottomSheet>(null)
+	const filterRef = useRef<BottomSheet>(null)
+	const snapFilterPoints = useMemo(() => ["23%"], [])
+	const snapTopicPoints = useMemo(() => ["45%"], [])
+	const [topicSheetIndex, setTopicSheetIndex] = useState(-1)
+	const [filterBottomSheetIndex, setFilterBottomSheetIndex] = useState(-1)
+
+	// const gqlData = gql.useResource(gql.query_mobileIndex, {})
+	// console.log(gqlData, "gql data")
+
+	const openTopicSheet = () => {
+		setTopicSheetIndex(0)
+	}
+
+	const openFilterSheet = () => {
+		setFilterBottomSheetIndex(0)
+	}
+
 	useEffect(() => {
-		setAnimationButtons([0, 1].map(() => new Animated.Value(0)))
+		setAnimationButtons([new Animated.Value(0), new Animated.Value(0)])
 	}, [])
 
-	const showButtons = () => {
+	const showButtons = (nextStatus?: string) => {
 		setShowLearningButtons(!showLearningButtons)
 
-		const animationsEnd = showLearningButtons ? 0 : 1
+		if (nextStatus) {
+			setLearningStatus(nextStatus)
+		}
 
+		const animationsEnd = showLearningButtons ? 0 : 1
 		const staggeredAnimations = animationButtons.map((button) =>
 			Animated.timing(button, {
 				toValue: animationsEnd,
@@ -133,33 +144,19 @@ export default function Home() {
 		</Svg>
 	)
 
-	const openTopicSheet = useCallback(() => {
-		if (!isBottomSheetVisible) {
-			topicRef.current?.snapToIndex(0)
-			setBottomSheetVisible(true)
-		} else {
-			topicRef.current?.snapToIndex(-1)
-			setBottomSheetVisible(false)
-		}
-	}, [isBottomSheetVisible])
-
-	const openFilterSheet = useCallback(() => {
-		if (!isFilterSheetVisible) {
-			filterRef.current?.snapToIndex(0)
-			setFilterSheetVisible(true)
-		} else {
-			filterRef.current?.snapToIndex(-1)
-			setFilterSheetVisible(false)
-		}
-	}, [isFilterSheetVisible])
-
 	const renderItem = ({
 		item,
+		drag,
+		isActive,
 	}: {
 		item: { title: string; topic: string; url: string; id: string }
+		drag: any
+		isActive: boolean
 	}) => (
 		<TouchableOpacity
 			style={styles.itemContainer}
+			onLongPress={drag}
+			disabled={isActive}
 			onPress={() => {
 				setSelectedItem(item)
 				openTopicSheet()
@@ -215,44 +212,48 @@ export default function Home() {
 						<View style={styles.learningButtonsContainer}>
 							<TouchableOpacity
 								style={styles.learningButton}
-								onPress={showButtons}
+								onPress={() => showButtons()}
 							>
-								<Text style={styles.learningText}>Learning</Text>
+								<Text style={styles.learningText}>{learningStatus}</Text>
 								<ArrowIcon />
 							</TouchableOpacity>
-							{animationButtons.map((animationButton, index) => (
-								<Animated.View
-									key={index}
-									style={[
-										styles.learningButtonsDropdown,
-										{
-											opacity: animationButton,
-											transform: [
+							{["Learning", "Learned", "To Learn"]
+								.filter((s) => s !== learningStatus)
+								.map((status, index) =>
+									animationButtons[index] ? (
+										<Animated.View
+											key={index}
+											style={[
+												styles.learningButtonsDropdown,
 												{
-													scale: animationButton.interpolate({
-														inputRange: [0, 1],
-														outputRange: [0.5, 1],
-													}),
+													opacity: animationButtons[index],
+													transform: [
+														{
+															scale: animationButtons[index].interpolate({
+																inputRange: [0, 1],
+																outputRange: [0.5, 1],
+															}),
+														},
+													],
+													top: 30 + index * 35,
 												},
-											],
-											top: 30 + index * 35,
-										},
-									]}
-								>
-									<TouchableOpacity style={styles.anotherLearningButton}>
-										<Text style={styles.learningText}>
-											{["Learned", "To Learn"][index]}
-										</Text>
-									</TouchableOpacity>
-								</Animated.View>
-							))}
+											]}
+										>
+											<TouchableOpacity
+												style={styles.anotherLearningButton}
+												onPress={() => showButtons(status)}
+											>
+												<Text style={[styles.learningText, { lineHeight: 20 }]}>
+													{status}
+												</Text>
+											</TouchableOpacity>
+										</Animated.View>
+									) : null,
+								)}
 						</View>
-						{/* filter icon */}
 						<TouchableOpacity
 							style={styles.filterIcon}
-							onPress={() => {
-								openFilterSheet()
-							}}
+							onPress={openFilterSheet}
 						>
 							<Svg height="100" width="100" viewBox="0 0 100 100">
 								<Path
@@ -264,28 +265,28 @@ export default function Home() {
 						</TouchableOpacity>
 					</View>
 				</View>
-				<FlatList
+				<DraggableFlatList
 					data={data.links}
 					renderItem={renderItem}
 					keyExtractor={(item) => item.id}
+					onDragEnd={({ data }) =>
+						setData((prevState) => ({ ...prevState, links: data }))
+					}
 					style={styles.list}
 				/>
 			</SafeAreaView>
-			{/* <View style={styles.bottomBar}>
-				<View style={styles.bottomFrame}>
-					<Octicons name="list-unordered" size={24} color="grey" />
-					<AntDesign name="search1" size={24} color="grey" />
-					<AntDesign name="pluscircleo" size={24} color="grey" />
-					<Ionicons name="person-outline" size={24} color="grey" />
-				</View>
-			</View> */}
-			{/* filter bottomsheet */}
+			{/* filter bottomsheet  */}
 			<BottomSheet
 				ref={filterRef}
-				index={-1}
+				index={filterBottomSheetIndex}
+				snapPoints={snapFilterPoints}
+				onChange={(index) => {
+					console.log(index, "index")
+					setFilterBottomSheetIndex(index)
+				}}
+				enablePanDownToClose={true}
 				enableContentPanningGesture={true}
 				enableHandlePanningGesture={true}
-				snapPoints={snapFilterPoints}
 				backgroundStyle={{ backgroundColor: "#171A21", borderRadius: 10 }}
 			>
 				<BottomSheetView style={styles.filterSheetContainer}>
@@ -309,14 +310,15 @@ export default function Home() {
 					</View>
 				</BottomSheetView>
 			</BottomSheet>
-
 			{/* topic bottomsheet */}
 			<BottomSheet
 				ref={topicRef}
-				index={-1}
+				index={topicSheetIndex}
+				snapPoints={snapTopicPoints}
+				onChange={(index) => setTopicSheetIndex(index)}
+				enablePanDownToClose={true}
 				enableContentPanningGesture={true}
 				enableHandlePanningGesture={true}
-				snapPoints={snapTopicPoints}
 				backgroundStyle={{ backgroundColor: "#171A21", borderRadius: 10 }}
 			>
 				<BottomSheetView style={{ alignItems: "center" }}>
@@ -456,13 +458,13 @@ const styles = StyleSheet.create({
 		overflow: "hidden",
 		backgroundColor: "#222222",
 		borderRadius: 10,
-		width: 136,
+		width: 150,
 	},
 	tab: {
 		backgroundColor: "#222222",
 		borderRadius: 8,
 		paddingHorizontal: 8,
-		paddingVertical: 8,
+		paddingVertical: 10,
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
@@ -501,14 +503,14 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
-		paddingHorizontal: 11,
+		paddingHorizontal: 10,
+		paddingVertical: 10,
 		backgroundColor: "#232323",
 		borderRadius: 7,
 		shadowColor: "#000",
 		shadowOffset: { width: 0, height: 1 },
 		shadowOpacity: 0.55,
 		shadowRadius: 1,
-		padding: 8,
 		marginRight: 8,
 	},
 	learningText: {
@@ -540,7 +542,8 @@ const styles = StyleSheet.create({
 		display: "flex",
 		flexDirection: "row",
 		alignItems: "center",
-		padding: 8,
+		paddingVertical: 8,
+		paddingHorizontal: 10,
 		marginRight: 8,
 	},
 	filterIcon: {
@@ -575,23 +578,6 @@ const styles = StyleSheet.create({
 		fontWeight: "500",
 		width: 280, // ?
 	},
-	// bottomBar: {
-	// 	backgroundColor: "#151515",
-	// 	display: "flex",
-	// 	justifyContent: "space-between",
-	// 	alignItems: "center",
-	// 	width: width,
-	// 	height: 82,
-	// 	paddingHorizontal: 15,
-	// },
-	// bottomFrame: {
-	// 	flexDirection: "row",
-	// 	justifyContent: "space-around",
-	// 	alignItems: "center",
-	// 	width: "100%",
-	// 	height: "100%",
-	// },
-
 	// topic bottomsheet
 
 	sheetTitleContainer: {

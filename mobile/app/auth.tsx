@@ -1,5 +1,14 @@
 import React, { useState, useRef } from "react"
-import { View, StyleSheet, Dimensions, Text, TouchableOpacity, TextInput } from "react-native"
+import {
+	View,
+	StyleSheet,
+	Dimensions,
+	Text,
+	TouchableOpacity,
+	TextInput,
+	Keyboard,
+	TouchableWithoutFeedback,
+} from "react-native"
 import Svg, {
 	G,
 	Path,
@@ -66,24 +75,28 @@ const OTPInput = ({ length = 6, onComplete }: InputProps) => {
 	}
 
 	return (
-		<View style={styles.numberBoxContainer}>
-			{Array.from({ length }, (_, index) => (
-				<TextInput
-					key={index}
-					keyboardType="numeric"
-					maxLength={1}
-					onChangeText={(text) => handleTextChange(text, index)}
-					onKeyPress={(e) => handleKeyPress({ nativeEvent: e.nativeEvent, index })}
-					onFocus={() => setCurrentInput(index)}
-					style={[
-						styles.numberBox,
-						index !== length - 1 ? { marginRight: 10 } : {},
-						currentInput === index ? styles.currentInputColor : {},
-					]}
-					ref={(el) => (inputRef.current[index] = el)}
-				/>
-			))}
-		</View>
+		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+			<View style={styles.numberBoxContainer}>
+				{Array.from({ length }, (_, index) => (
+					<TextInput
+						key={index}
+						keyboardType="numeric"
+						maxLength={1}
+						onChangeText={(text) => handleTextChange(text, index)}
+						onKeyPress={(e) =>
+							handleKeyPress({ nativeEvent: e.nativeEvent, index })
+						}
+						onFocus={() => setCurrentInput(index)}
+						style={[
+							styles.numberBox,
+							index !== length - 1 ? { marginRight: 10 } : {},
+							currentInput === index ? styles.currentInputColor : {},
+						]}
+						ref={(el) => (inputRef.current[index] = el)}
+					/>
+				))}
+			</View>
+		</TouchableWithoutFeedback>
 	)
 }
 
@@ -93,11 +106,27 @@ export default function TabTwoScreen() {
 
 	return (
 		<View style={styles.container}>
-			<Svg height="25%" width="100%" style={styles.svgBackground} viewBox="0 0 100 25">
+			<Svg
+				height="25%"
+				width="100%"
+				style={styles.svgBackground}
+				viewBox="0 0 100 25"
+			>
 				<Defs>
-					<RadialGradient id="grad" cx="50" cy="0" rx="190" ry="90" gradientUnits="userSpaceOnUse">
+					<RadialGradient
+						id="grad"
+						cx="50"
+						cy="0"
+						rx="190"
+						ry="90"
+						gradientUnits="userSpaceOnUse"
+					>
 						<Stop offset="0" stopColor="rgb(25, 53, 92)" stopOpacity="0.5" />
-						<Stop offset="0.32" stopColor="rgba(15, 15, 15, 0.5)" stopOpacity="0.3" />
+						<Stop
+							offset="0.32"
+							stopColor="rgba(15, 15, 15, 0.5)"
+							stopOpacity="0.3"
+						/>
 					</RadialGradient>
 				</Defs>
 				<Circle cx="50" cy="0" r="90" fill="url(#grad)" />
@@ -157,7 +186,9 @@ export default function TabTwoScreen() {
 			</TouchableOpacity>
 			<View style={styles.authContainer}>
 				<View style={styles.titleContainer}>
-					<TouchableOpacity style={{ marginTop: 30, marginBottom: 15, width: 20, height: 25 }}>
+					<TouchableOpacity
+						style={{ marginTop: 30, marginBottom: 15, width: 20, height: 25 }}
+					>
 						<Svg height="25" width="20" viewBox="0 0 20 25" fill="none">
 							<Defs>
 								<SvgLinearGradient
@@ -169,7 +200,11 @@ export default function TabTwoScreen() {
 									gradientUnits="userSpaceOnUse"
 								>
 									<Stop stopColor="white" />
-									<Stop offset="1" stopColor="rgb(183 204 249)" stopOpacity={0.01} />
+									<Stop
+										offset="1"
+										stopColor="rgb(183 204 249)"
+										stopOpacity={0.01}
+									/>
 								</SvgLinearGradient>
 							</Defs>
 							<Path
@@ -193,7 +228,9 @@ export default function TabTwoScreen() {
 								console.log("Entered PIN:", pin)
 							}}
 						/>
-						<Text style={styles.textWarning}>Enter the code that was sent to user.Email</Text>
+						<Text style={styles.textWarning}>
+							Enter the code that was sent to user.Email
+						</Text>
 						<TouchableOpacity style={styles.resendCodeButton}>
 							<Text style={styles.resendCodeText}>Resend code</Text>
 						</TouchableOpacity>
