@@ -59,6 +59,7 @@ g.query("webIndex", {
 		}).optional(),
 		auth: inline({
 			username: g.string().optional(),
+			bio: g.string().optional(),
 			links: g.ref(Link).list(),
 		}).optional(),
 	}),

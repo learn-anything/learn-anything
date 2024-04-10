@@ -22,6 +22,17 @@ export async function updateUserBio(email: string, bio: string) {
 		.run(client)
 }
 
+export async function updateUserUsername(email: string, username: string) {
+	return await e
+		.update(e.User, () => ({
+			filter_single: { email: email! },
+			set: {
+				username: username,
+			},
+		}))
+		.run(client)
+}
+
 export async function deleteUser(email: string) {
 	return await e
 		.delete(e.User, (user) => ({
@@ -30,34 +41,34 @@ export async function deleteUser(email: string) {
 		.run(client)
 }
 
-export async function createOther() {
-	return await e
-		.insert(e.Other, {
-			latestGlobalTopicGraph: e.insert(e.GlobalTopicGraph, {
-				name: "test",
-			}),
-		})
-		.run(client)
-}
+// export async function createOther() {
+// 	return await e
+// 		.insert(e.Other, {
+// 			latestGlobalTopicGraph: e.insert(e.GlobalTopicGraph, {
+// 				name: "test",
+// 			}),
+// 		})
+// 		.run(client)
+// }
 
-type TopicGraph = {
-	name: string
-	prettyName: string
-	connections: string[]
-}
-export async function updateLatestGlobalTopicGraph(topicGraph: TopicGraph) {
-	return e
-		.update(e.GlobalTopicGraph, (tg) => ({
-			set: {
-				name: topicGraph.name,
-				prettyName: topicGraph.prettyName,
-				connections: topicGraph.connections,
-			},
-			filter_single: e.op(
-				tg["<latestGlobalTopicGraph[is Other]"].id,
-				"=",
-				foundOtherObjectId(),
-			),
-		}))
-		.run(client)
-}
+// type TopicGraph = {
+// 	name: string
+// 	prettyName: string
+// 	connections: string[]
+// }
+// export async function updateLatestGlobalTopicGraph(topicGraph: TopicGraph) {
+// 	return e
+// 		.update(e.GlobalTopicGraph, (tg) => ({
+// 			set: {
+// 				name: topicGraph.name,
+// 				prettyName: topicGraph.prettyName,
+// 				connections: topicGraph.connections,
+// 			},
+// 			filter_single: e.op(
+// 				tg["<latestGlobalTopicGraph[is Other]"].id,
+// 				"=",
+// 				foundOtherObjectId(),
+// 			),
+// 		}))
+// 		.run(client)
+// }

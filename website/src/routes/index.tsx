@@ -3,34 +3,84 @@ import { Match, Switch, createEffect, createSignal } from "solid-js"
 import Button from "../../../shared/components/Button"
 import * as gql from "../../../shared/graphql_solid"
 import UserBio from "../../components/UserBio"
-import { ForceGraph } from "../../../shared/components/ForceGraph/ForceGraph"
+
+// async function fetchData(source, { value, refetching }) {
+// 	return new Promise((resolve) => {
+// 		setTimeout(() => {
+// 			resolve({ message: "Hello" })
+// 		}, 1000) // Delay of 2000 milliseconds
+// 	})
+// Fetch the data and return a value.
+//`source` tells you the current value of the source signal;
+//`value` tells you the last returned value of the fetcher;
+//`refetching` is true when the fetcher is triggered by calling `refetch()`,
+// or equal to the optional data passed: `refetch(info)`
+// }
 
 export default function Home() {
-	// const [data, actions] = gql.useResource(gql.query_webIndex, {})
+	const [data, actions] = gql.useResource(gql.query_webIndex, {})
 
 	const [authenticated, setAuthenticated] = createSignal(false)
 	const [queryLoaded, setQueryLoaded] = createSignal(false)
+	const updateUserBio = gql.useRequest(gql.mutation_updateUserBio)
 
-	// createEffect(() => {
-	// 	if (data()?.auth) {
-	// 		setAuthenticated(true)
-	// 	} else if (data()?.public) {
-	// 		setQueryLoaded(true)
-	// 	}
-	// })
+	createEffect(() => {
+		console.log(data(), "data")
+		if (data()?.auth) {
+			setAuthenticated(true)
+		} else if (data()?.public) {
+			setQueryLoaded(true)
+		}
+	})
 
+	const [newBio, setNewBio] = createSignal("")
 	return (
 		<div class="w-full h-screen">
-			<PublicRoute />
-			{/* <Switch fallback={<div>loading</div>}> */}
-			{/* <Switch fallback={<div>loading</div>}>
+			<Switch fallback={<div>loading</div>}>
 				<Match when={queryLoaded() && !authenticated()}>
 					<PublicRoute props={data()?.public} actions={actions} />
 				</Match>
 				<Match when={authenticated()}>
-					<AuthenticatedRoute props={data()?.auth} actions={actions} />
+					<>
+						<div>User bio: {data().auth?.bio}</div>
+						<input
+							style={{ color: "black" }}
+							type="text"
+							placeholder="Change bio"
+							onChange={(e) => setNewBio(e.target.value)}
+						/>
+						<Button label="Testing wat" />
+						<button
+							onClick={() => {
+								updateUserBio({ bio: newBio() })
+								// actions.mutate("auth", "bio", newBio())
+
+								// actions.mutate((p) => ({
+								// 	...p,
+								// 	auth: {
+								// 		...p.auth,
+								// 		bio: newBio(),
+								// 		username: p.auth?.username
+								// 	},
+								// }))
+
+								// actions.mutate(
+								// 	(p): gql.Inline3 => ({
+								// 		...p,
+								// 		auth: {
+								// 			...p.auth,
+								// 			bio: newBio(),
+								// 		},
+								// 	}),
+								// )
+							}}
+						>
+							Update bio
+						</button>
+					</>
+					{/* <AuthenticatedRoute props={data()?.auth} actions={actions} /> */}
 				</Match>
-			</Switch> */}
+			</Switch>
 		</div>
 	)
 }
@@ -107,7 +157,7 @@ function AuthenticatedRoute(data: any, actions: any) {
 						bio={data.bio}
 						updateBio={async (newBio) => {
 							await updateUserBio({ bio: newBio })
-							actions.update
+							// actions.update
 						}}
 					/>
 					{/* <Topbar
