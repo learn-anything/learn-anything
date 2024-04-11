@@ -9,19 +9,19 @@ const resolver: Resolver["Query.mobileIndex"] = async (
 ) => {
 	try {
 		return {
-			showLinksStatus: "Learning",
 			user: {
 				email: "github@nikiv.dev",
 				name: "Nikita",
 			},
-			// links: [
-			// 	{
-			// 		id: "1",
-			// 		url: "https://solidjs.com",
-			// 		title: "Modern JavaScript Tutorial",
-			// 		topic: "Solid",
-			// 	},
-			// ],
+			links: [
+				{
+					id: "1",
+					url: "https://solidjs.com",
+					title: "Modern JavaScript Tutorial",
+					topic: "Solid",
+				},
+			],
+			showLinksStatus: "Learning",
 			filterOrder: "Custom",
 			filter: "None",
 			userTopics: ["Solid", "GraphQL", "Figma"],

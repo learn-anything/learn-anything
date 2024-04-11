@@ -223,39 +223,24 @@ export const initial_Inline5 = {
 }
 
 /**
- * Initial value: {@link initial_User}
- *
- * @typedef  {object} User
- * @property {String} email
- * @property {String} name
- */
-/** @type {User} */
-export const initial_User = {
-	email: "",
-	name: "",
-}
-
-/**
  * Initial value: {@link initial_Inline6}
  *
  * @typedef  {object} Inline6
- * @property {String} showLinksStatus
- * @property {Maybe<Inline4>} user
+ * @property {Inline4} user
  * @property {Array<Inline5>} links
+ * @property {String} showLinksStatus
  * @property {String} filterOrder
  * @property {String} filter
  * @property {Array<String>} userTopics
- * @property {User} userTest
  */
 /** @type {Inline6} */
 export const initial_Inline6 = {
-	showLinksStatus: "",
-	user: null,
+	user: initial_Inline4,
 	links: [],
+	showLinksStatus: "",
 	filterOrder: "",
 	filter: "",
 	userTopics: [],
-	userTest: initial_User,
 }
 
 /**
@@ -310,7 +295,7 @@ export const query_webIndex = /** @type {*} */({
  * @param   {Vars_mobileIndex} vars
  * @returns {string} */
 export function query_get_body_mobileIndex(vars) {
-	return 'mobileIndex{showLinksStatus user{email name}links{id url title topic}filterOrder filter userTopics userTest{email name}}'
+	return 'mobileIndex{user{email name}links{id url title topic}showLinksStatus filterOrder filter userTopics}'
 }
 
 /**

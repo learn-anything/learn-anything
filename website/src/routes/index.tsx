@@ -1,5 +1,5 @@
 import { useNavigate } from "@solidjs/router"
-import { For, Match, Switch, createSignal } from "solid-js"
+import { For, Match, Switch, createEffect, createSignal } from "solid-js"
 import Button from "../../../shared/components/Button"
 import Topbar from "../../../shared/components/Topbar"
 import ProfileLink from "../../../shared/components/ProfileLink"
@@ -8,7 +8,12 @@ import Search from "../../../shared/components/Search"
 
 export default function Home() {
 	const [data, actions] = gql.useResource(gql.query_webIndex, {})
+	const [mobile] = gql.useResource(gql.query_mobileIndex, {})
 	const updateUserBio = gql.useRequest(gql.mutation_updateUserBio)
+
+	createEffect(() => {
+		console.log(mobile().links)
+	})
 
 	const [newBio, setNewBio] = createSignal("")
 

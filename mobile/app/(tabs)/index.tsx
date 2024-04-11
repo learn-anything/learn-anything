@@ -48,6 +48,8 @@ export default function Home() {
 	// const gqlData = gql.useResource(gql.query_mobileIndex, {})
 	// console.log(gqlData, "gql data")
 
+	// const [serverData]
+
 	const [data, setData] = useState<ProfileData>({
 		links: [
 			{

@@ -71,26 +71,20 @@ g.query("webIndex", {
 g.query("mobileIndex", {
 	args: {},
 	returns: inline({
-		showLinksStatus: g.string(),
 		user: inline({
 			email: g.string(),
 			name: g.string(),
-		}).optional(),
+		}),
 		links: inline({
 			id: g.string().optional(),
 			url: g.string().optional(),
 			title: g.string().optional(),
 			topic: g.string().optional(),
 		}).list(),
+		showLinksStatus: g.string(),
 		filterOrder: g.string(),
 		filter: g.string(),
 		userTopics: g.string().list(),
-		userTest: g.ref(
-			g.type("User", {
-				email: g.string(),
-				name: g.string(),
-			}),
-		),
 	}),
 	resolver: "mobile/index",
 })

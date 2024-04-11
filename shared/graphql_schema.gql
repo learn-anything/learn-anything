@@ -26,13 +26,12 @@ type Inline5 {
 	topic: String
 }
 type Inline6 {
-	showLinksStatus: String!
-	user: Inline4
+	user: Inline4!
 	links: [Inline5!]!
+	showLinksStatus: String!
 	filterOrder: String!
 	filter: String!
 	userTopics: [String!]!
-	userTest: User!
 }
 enum LearningStatus {
 	Learn
@@ -51,10 +50,6 @@ type Mutation {
 type Query {
 	webIndex: Inline3!
 	mobileIndex: Inline6!
-}
-type User {
-	email: String!
-	name: String!
 }
 schema {
 	query: Query
