@@ -15,7 +15,7 @@ import Svg, { G, Path } from "react-native-svg"
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import DraggableFlatList from "react-native-draggable-flatlist"
-// import * as gql from "../../../shared/graphql_react"
+import * as gql from "../../graphql_react"
 
 const { width } = Dimensions.get("window")
 
@@ -45,10 +45,8 @@ type ProfileData = {
 }
 
 export default function Home() {
-	// const gqlData = gql.useResource(gql.query_mobileIndex, {})
-	// console.log(gqlData, "gql data")
-
-	// const [serverData]
+	const serverData = gql.useResource(gql.query_webIndex, {})
+	console.log(serverData)
 
 	const [data, setData] = useState<ProfileData>({
 		links: [
