@@ -35,52 +35,59 @@ export default function Home() {
 		<div class="w-full h-screen">
 			<Switch fallback={<div>loading</div>}>
 				<Match when={data().auth}>
-					{(auth) => (
-						<>
-							<Sidebar topics={route().userTopics} />
-							<div class="ml-[200px] h-full p-2 relative">
-								<div class="border-[#191919]  h-full border rounded-[7px]">
-									{/* <UserBio
-    bio={data.bio}
-    updateBio={async (newBio) => {
-    await updateUserBio({ bio: newBio })
-    actions.update
-    }}
-   /> */}
-									<Topbar
-										// changeLearningStatus={async (status) => {
-										//  const res = await updateLearningStatus({ topicName: "Solid", learningStatus: status })
-										//  if (res instanceof Error) return
-										//  actions.mutate((p) => ({
-										//   ...p,
-										//   showLinksStatus: status,
-										//  }))
-										//  console.log(res, "res")
-										// }}
-										changeLearningStatus={async (status: any) => {}}
-										// showLinksStatus={route().showLinksStatus}
-										showLinksStatus={"Learning"}
-										// filterOrder={routeData()?.filterOrder}
-										// filter={routeData()?.filter}
-									/>
-									<div class=" px-5 w-full  col-gap-[4px]">
-										<For each={route().links}>
-											{(link) => (
-												<ProfileLink
-													link={link}
-													setLinkExpanded={setLinkExpanded}
-													linkExpanded={linkExpanded()}
-												/>
-											)}
-										</For>
+					{(authData) => {
+						return (
+							<>
+								<Sidebar topics={route().userTopics} />
+								<div class="ml-[200px] h-full p-2 relative">
+									<div class="border-[#191919]  h-full border rounded-[7px]">
+										{/* <UserBio
+			 bio={data.bio}
+			 updateBio={async (newBio) => {
+				await updateUserBio({ bio: newBio })
+				actions.update
+			 }}
+			/> */}
+										<Topbar
+											// changeLearningStatus={async (status) => {
+											//  const res = await updateLearningStatus({ topicName: "Solid", learningStatus: status })
+											//  if (res instanceof Error) return
+											//  actions.mutate((p) => ({
+											//   ...p,
+											//   showLinksStatus: status,
+											//  }))
+											//  console.log(res, "res")
+											// }}
+											changeLearningStatus={async (status: any) => {}}
+											// showLinksStatus={route().showLinksStatus}
+											showLinksStatus={"Learning"}
+											// filterOrder={routeData()?.filterOrder}
+											// filter={routeData()?.filter}
+										/>
+										<div class=" px-5 w-full  col-gap-[4px]">
+											<For each={route().links}>
+												{(link) => (
+													<ProfileLink
+														link={link}
+														setLinkExpanded={setLinkExpanded}
+														linkExpanded={linkExpanded()}
+													/>
+												)}
+											</For>
+										</div>
 									</div>
+									<Search links={route().links} />
 								</div>
-								<Search links={route().links} />
-							</div>
-						</>
-					)}
+							</>
+						)
+					}}
 				</Match>
-				<Match when={data().public}>{(dataPublic) => <>Force Graph</>}</Match>
+				<Match when={data().public}>
+					{(publicData) => {
+						const navigate = useNavigate()
+						return <>Force Graph</>
+					}}
+				</Match>
 			</Switch>
 		</div>
 	)

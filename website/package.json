@@ -8,9 +8,9 @@
 	},
 	"dependencies": {
 		"@solid-primitives/event-listener": "^2.3.3",
-		"@solidjs/router": "^0.13.1",
+		"@solidjs/router": "^0.13.2",
 		"@solidjs/start": "^1.0.0-rc.0",
-		"@teamhanko/hanko-elements": "^0.10.1",
+		"@teamhanko/hanko-elements": "^0.10.2",
 		"autoprefixer": "^10.4.19",
 		"clsx": "^2.1.0",
 		"postcss": "^8.4.38",
