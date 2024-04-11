@@ -1,9 +1,19 @@
-import React, { useState } from "react"
-import { Modal, StyleSheet, Text, Pressable, View } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
+import React, { useState, useEffect } from "react"
+import { Modal, StyleSheet, Text, Pressable, View, Linking } from "react-native"
 
 const CustomAlertModal = () => {
 	const [modalVisible, setModalVisible] = useState(false)
+	useEffect(() => {
+		let timerId: NodeJS.Timeout | null = null
+		if (modalVisible) {
+			timerId = setTimeout(() => {
+				setModalVisible(false)
+			}, 5000)
+		}
+		return () => {
+			if (timerId) clearTimeout(timerId)
+		}
+	}, [modalVisible])
 
 	return (
 		<View style={styles.centeredView}>
@@ -17,21 +27,25 @@ const CustomAlertModal = () => {
 			>
 				<View style={styles.centeredView}>
 					<View style={styles.modalView}>
-						<Text style={styles.modalText}>
-							We need camera roll permissions to pick an image
+						<Text style={styles.modalWarning}>
+							Learn Anything would like to access Your Photos.
 						</Text>
-						<Pressable onPress={() => setModalVisible(!modalVisible)}>
-							<Text style={styles.textStyle}>Hide Modal</Text>
-						</Pressable>
+						<Text style={[styles.modalWarning, { fontSize: 12 }]}>
+							Open the app settings and allow photo sharing.
+						</Text>
+						<View
+							style={{ flexDirection: "row", justifyContent: "space-around" }}
+						>
+							<Pressable onPress={() => setModalVisible(!modalVisible)}>
+								<Text style={styles.textStyle}>Ok</Text>
+							</Pressable>
+							<Pressable onPress={() => Linking.openURL("app-settings:")}>
+								<Text style={styles.textStyle}>Open settings</Text>
+							</Pressable>
+						</View>
 					</View>
 				</View>
 			</Modal>
-			<Pressable
-				style={[styles.button, styles.buttonOpen]}
-				onPress={() => setModalVisible(true)}
-			>
-				<Ionicons name="close-outline" size={24} color="white" />
-			</Pressable>
 		</View>
 	)
 }
@@ -58,21 +72,15 @@ const styles = StyleSheet.create({
 		shadowRadius: 4,
 		elevation: 5,
 	},
-	button: {
-		borderRadius: 20,
-		padding: 10,
-		elevation: 2,
-	},
-	buttonOpen: {
-		backgroundColor: "#F194FF",
-	},
 	textStyle: {
 		color: "white",
 		fontWeight: "bold",
 		textAlign: "center",
 	},
-	modalText: {
-		marginBottom: 15,
+	modalWarning: {
+		marginBottom: 10,
+		color: "black",
+		fontSize: 16,
 		textAlign: "center",
 	},
 })

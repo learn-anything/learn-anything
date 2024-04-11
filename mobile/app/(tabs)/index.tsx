@@ -167,8 +167,10 @@ export default function Home() {
 	} | null>(null)
 
 	const handleLikedPress = () => {
-		setFilterTitle("Filters 1")
-		setLikedSelected(true)
+		setFilterTitle((currentTitle) =>
+			currentTitle === "Filters" ? "Filters 1" : "Filters",
+		)
+		setLikedSelected((currentValue) => !currentValue)
 	}
 
 	const getLinkIcon = (url: string) => {
@@ -661,7 +663,7 @@ const styles = StyleSheet.create({
 	},
 	anotherLearningButton: {
 		borderRadius: 7,
-		backgroundColor: "rgba(50, 50, 50, 0.2)",
+		backgroundColor: "rgba(50, 50, 50, 0.5)",
 		opacity: 0.8,
 		shadowColor: "#000",
 		shadowOffset: { width: 0, height: 1 },
