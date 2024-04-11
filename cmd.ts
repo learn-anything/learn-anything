@@ -67,7 +67,9 @@ INTERNAL_SECRET=secret`,
 		console.log(`File: ${grafbaseEnvPath} already exists`)
 	}
 	const grafbaseEdgedbEnvPath = `${currentFilePath.replace("cmd.ts", "grafbase/edgedb/.env")}`
-	const grafbaseEdgedbEnvFileExists = await Bun.file(grafbaseEdgedbEnvPath).exists()
+	const grafbaseEdgedbEnvFileExists = await Bun.file(
+		grafbaseEdgedbEnvPath,
+	).exists()
 	if (!grafbaseEdgedbEnvFileExists) {
 		Bun.write(
 			grafbaseEdgedbEnvPath,
@@ -108,8 +110,11 @@ To regenerate this file, run \`bun graphql\`.
  * Generates a GraphQL client based on the schema from grafbase.
  */
 async function generateGraphqlClient() {
-	const schema = child_process.execSync("grafbase introspect --dev", { cwd: api_path }).toString()
+	const schema = child_process
+		.execSync("grafbase introspect --dev", { cwd: api_path })
+		.toString()
 	Bun.write("shared/graphql_schema.gql", schema)
+	Bun.write("mobile/graphql_schema.gql", schema)
 
 	const queries = await graphstate.wasm_generate_queries(schema)
 	if (queries instanceof Error) {
@@ -117,6 +122,7 @@ async function generateGraphqlClient() {
 		return
 	}
 	Bun.write("shared/graphql_queries.js", graphql_client_header + queries)
+	Bun.write("mobile/graphql_queries.js", graphql_client_header + queries)
 }
 
 async function runGrafbase() {
@@ -204,7 +210,9 @@ async function websiteDeployDev() {
 			await $`git stash pop`
 		}
 
-		console.log("Deployed successfully. Will be up on https://dev.learn-anything.xyz shortly.")
+		console.log(
+			"Deployed successfully. Will be up on https://dev.learn-anything.xyz shortly.",
+		)
 	} catch (error) {
 		console.error("Deployment failed:", error)
 

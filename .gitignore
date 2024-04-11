@@ -16,6 +16,8 @@ graphstate.bin
 # generated
 api/grafbase/generated
 api/edgedb/dbschema/edgeql-js
+mobile/graphql_queries.js
+mobile/graphql_schema.gql
 
 # other
 bun.lockb
