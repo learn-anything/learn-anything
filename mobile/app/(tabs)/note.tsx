@@ -34,10 +34,6 @@ export default function Note() {
 		setShowOptions(false)
 	}
 
-	useEffect(() => {
-		inputRef.current?.focus()
-	}, [])
-
 	return (
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
 			<SafeAreaView style={styles.container}>
