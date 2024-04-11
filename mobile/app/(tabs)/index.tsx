@@ -11,7 +11,7 @@ import {
 	TouchableOpacity,
 	Image,
 } from "react-native"
-import Svg, { Path } from "react-native-svg"
+import Svg, { G, Path } from "react-native-svg"
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import DraggableFlatList from "react-native-draggable-flatlist"
@@ -86,6 +86,9 @@ export default function Home() {
 	const [learningStatus, setLearningStatus] = useState("Learning")
 
 	// bottomsheets
+	const [filterTitle, setFilterTitle] = useState("Filters")
+	const [likedSelected, setLikedSelected] = useState(false)
+
 	const topicRef = useRef<BottomSheet>(null)
 	const filterRef = useRef<BottomSheet>(null)
 	const snapFilterPoints = useMemo(() => ["23%"], [])
@@ -162,6 +165,11 @@ export default function Home() {
 		url: string
 		id: string
 	} | null>(null)
+
+	const handleLikedPress = () => {
+		setFilterTitle("Filters 1")
+		setLikedSelected(true)
+	}
 
 	const getLinkIcon = (url: string) => {
 		return require("../../assets/favicon.png")
@@ -319,11 +327,54 @@ export default function Home() {
 			>
 				<BottomSheetView style={styles.filterSheetContainer}>
 					<View style={{ alignSelf: "flex-start" }}>
-						<Text style={styles.filterSheetTitle}>Filters</Text>
+						<Text style={styles.filterSheetTitle}>{filterTitle}</Text>
 					</View>
-					<View style={styles.filterSheetView}>
-						<Text style={styles.filterSheetText}>Liked</Text>
-						<View style={styles.filterChooseTopic}>
+					<View
+						style={
+							likedSelected
+								? styles.filterSheetView
+								: [styles.filterSheetView, styles.filterBorder]
+						}
+					>
+						<TouchableOpacity
+							onPress={handleLikedPress}
+							style={likedSelected ? styles.likedButtonSelected : {}}
+						>
+							<Text style={styles.filterSheetText}>Liked</Text>
+							{likedSelected && (
+								<Svg
+									style={{ marginLeft: 10 }}
+									width="15"
+									height="16"
+									viewBox="0 0 15 16"
+									fill="none"
+								>
+									<G opacity="0.4">
+										<Path
+											d="M12.3169 4.06695C12.561 3.82288 12.561 3.42715 12.3169 3.18307C12.0729 2.93898 11.6771 2.93898 11.4331 3.18305L7.5 7.11598L3.56693 3.18305C3.32285 2.93898 2.92712 2.93898 2.68305 3.18307C2.43898 3.42715 2.43898 3.82288 2.68307 4.06695L6.6161 7.99985L2.68307 11.9327C2.43898 12.1768 2.43898 12.5725 2.68305 12.8166C2.92712 13.0607 3.32285 13.0607 3.56693 12.8166L7.5 8.88372L11.4331 12.8166C11.6771 13.0607 12.0729 13.0607 12.3169 12.8166C12.561 12.5725 12.561 12.1768 12.3169 11.9327L8.3839 7.99985L12.3169 4.06695Z"
+											fill="white"
+										/>
+									</G>
+								</Svg>
+							)}
+						</TouchableOpacity>
+						<View
+							style={
+								likedSelected
+									? [
+											styles.filterChooseTopic,
+											{
+												marginTop: 10,
+												paddingRight: 5,
+												backgroundColor: "#1d1f26",
+												borderRadius: 7,
+												borderColor: "rgba(55, 55, 55, 0.16)",
+												borderWidth: 1,
+											},
+										]
+									: styles.filterChooseTopic
+							}
+						>
 							<Text style={styles.filterSheetText}>Choose topic</Text>
 							<TouchableOpacity style={{ opacity: 0.5, width: 15, height: 15 }}>
 								<Svg height="100" width="100" viewBox="0 0 100 100">
@@ -815,6 +866,8 @@ const styles = StyleSheet.create({
 		height: 82,
 		flexDirection: "column",
 		alignItems: "flex-start",
+	},
+	filterBorder: {
 		backgroundColor: "#1d1f26",
 		borderRadius: 7,
 		borderColor: "rgba(55, 55, 55, 0.16)",
@@ -826,13 +879,24 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
+		alignSelf: "flex-start",
 		width: "95%",
 	},
 	filterSheetText: {
 		color: "white",
 		fontSize: 16,
+		fontWeight: "300",
 		opacity: 0.7,
 		marginLeft: 10,
 		marginVertical: 8,
+	},
+	likedButtonSelected: {
+		backgroundColor: "rgba(255, 255, 255, 0.04)",
+		display: "flex",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		borderRadius: 7,
+		paddingHorizontal: 8,
 	},
 })
