@@ -93,6 +93,37 @@ export default function Home() {
 	const [topicSheetIndex, setTopicSheetIndex] = useState(-1)
 	const [filterBottomSheetIndex, setFilterBottomSheetIndex] = useState(-1)
 
+	//bottomsheet learning button
+	const [showSheetLearningButtons, setShowSheetLearningButtons] =
+		useState(false)
+	const [sheetAnimationButtons, setSheetAnimationButtons] = useState<
+		Animated.Value[]
+	>([])
+	const [sheetLearningStatus, setSheetLearningStatus] = useState("Learning")
+
+	useEffect(() => {
+		setSheetAnimationButtons([new Animated.Value(0), new Animated.Value(0)])
+	}, [])
+
+	const showSheetButtons = (nextStatus?: string) => {
+		setShowSheetLearningButtons(!showSheetLearningButtons)
+
+		if (nextStatus) {
+			setSheetLearningStatus(nextStatus)
+		}
+
+		const sheetAnimationsEnd = showSheetLearningButtons ? 0 : 1
+		const staggeredSheetAnimations = sheetAnimationButtons.map((button) =>
+			Animated.timing(button, {
+				toValue: sheetAnimationsEnd,
+				duration: 200,
+				useNativeDriver: true,
+			}),
+		)
+
+		Animated.parallel(staggeredSheetAnimations).start()
+	}
+
 	const openTopicSheet = () => {
 		setTopicSheetIndex(0)
 		filterRef.current?.close()
@@ -137,7 +168,7 @@ export default function Home() {
 	}
 
 	const ArrowIcon = () => (
-		<Svg width="15" height="12">
+		<Svg width="14" height="14" viewBox="0 0 14 14" fill="none">
 			<Path
 				d="M12.613 4.79031C12.9303 4.48656 13.4447 4.48656 13.762 4.79031C14.0793 5.09405 14.0793 5.58651 13.762 5.89025L8.07452 11.3347C7.75722 11.6384 7.24278 11.6384 6.92548 11.3347L1.23798 5.89025C0.920674 5.58651 0.920674 5.09405 1.23798 4.79031C1.55528 4.48656 2.06972 4.48656 2.38702 4.79031L7.5 9.68478L12.613 4.79031Z"
 				fill="grey"
@@ -388,13 +419,63 @@ export default function Home() {
 											/>
 										</Svg>
 									</TouchableOpacity>
-									<TouchableOpacity style={styles.sheetLearningButton}>
+									<View
+										style={{
+											position: "relative",
+											flexDirection: "column",
+											alignItems: "center",
+										}}
+									>
 										<TouchableOpacity
-											style={{ width: 20, height: 20, marginRight: 6 }}
-										></TouchableOpacity>
-										<Text style={styles.sheetLearningText}>Learning</Text>
-										<ArrowIcon />
-									</TouchableOpacity>
+											style={[styles.sheetLearningButton, { paddingLeft: 15 }]}
+											onPress={() => showSheetButtons()}
+										>
+											<Text style={styles.sheetLearningText}>
+												{sheetLearningStatus}
+											</Text>
+											<ArrowIcon />
+										</TouchableOpacity>
+										{["Learning", "Learned", "To Learn"]
+											.filter((s) => s !== sheetLearningStatus)
+											.map((status, index) =>
+												sheetAnimationButtons[index] ? (
+													<Animated.View
+														key={index}
+														style={[
+															styles.sheetLearningButtonsDropdown,
+															{
+																opacity: sheetAnimationButtons[index],
+																transform: [
+																	{
+																		scale: sheetAnimationButtons[
+																			index
+																		].interpolate({
+																			inputRange: [0, 1],
+																			outputRange: [0.5, 1],
+																		}),
+																	},
+																],
+																top: 30 + index * 35,
+															},
+														]}
+													>
+														<TouchableOpacity
+															style={styles.sheetAnotherLearningButton}
+															onPress={() => showSheetButtons(status)}
+														>
+															<Text
+																style={[
+																	styles.sheetLearningText,
+																	{ lineHeight: 20 },
+																]}
+															>
+																{status}
+															</Text>
+														</TouchableOpacity>
+													</Animated.View>
+												) : null,
+											)}
+									</View>
 								</View>
 							</View>
 						</View>
@@ -665,17 +746,39 @@ const styles = StyleSheet.create({
 		shadowOffset: { width: 0, height: 1 },
 		shadowOpacity: 0.55,
 		shadowRadius: 1,
-		maxHeight: 34,
+		paddingVertical: 8,
+		width: 105,
 		display: "flex",
 		flexDirection: "row",
 		alignItems: "center",
-		padding: 8,
 		marginRight: 8,
 	},
 	sheetLearningText: {
 		color: "#D29752",
-		paddingRight: 5,
 		marginRight: 6,
+		alignItems: "center",
+	},
+	sheetLearningButtonsDropdown: {
+		position: "absolute",
+		top: 27,
+		left: 0,
+		right: 0,
+		paddingVertical: 2,
+		borderRadius: 7,
+	},
+	sheetAnotherLearningButton: {
+		borderRadius: 7,
+		backgroundColor: "rgba(255, 255, 255, 0.05)",
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.55,
+		shadowRadius: 1,
+		paddingVertical: 8,
+		width: 105,
+		display: "flex",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
 	},
 	sheetNoteContainer: {
 		width,

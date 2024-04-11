@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
 	},
 	numbers: {
 		position: "absolute",
-		top: 100,
+		top: 80,
 		left: "10%",
 		width: "80%",
 		display: "flex",
