@@ -16,20 +16,23 @@ type Inline3 {
 	auth: Inline2
 }
 type Inline4 {
+	email: String!
 	name: String!
-	prettyName: String!
-	connections: [String!]!
 }
 type Inline5 {
-	latestGlobalTopicGraph: [Inline4!]!
+	id: String
+	url: String
+	title: String
+	topic: String
 }
 type Inline6 {
-	username: String
-	links: [Link!]!
-}
-type Inline7 {
-	public: Inline5
-	auth: Inline6
+	showLinksStatus: String!
+	user: Inline4
+	links: [Inline5!]!
+	filterOrder: String!
+	filter: String!
+	userTopics: [String!]!
+	userTest: User!
 }
 enum LearningStatus {
 	Learn
@@ -47,7 +50,11 @@ type Mutation {
 }
 type Query {
 	webIndex: Inline3!
-	webIndexProfile: Inline7!
+	mobileIndex: Inline6!
+}
+type User {
+	email: String!
+	name: String!
 }
 schema {
 	query: Query

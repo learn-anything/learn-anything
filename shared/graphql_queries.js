@@ -196,52 +196,66 @@ export const initial_Inline3 = {
  * Initial value: {@link initial_Inline4}
  *
  * @typedef  {object} Inline4
+ * @property {String} email
  * @property {String} name
- * @property {String} prettyName
- * @property {Array<String>} connections
  */
 /** @type {Inline4} */
 export const initial_Inline4 = {
+	email: "",
 	name: "",
-	prettyName: "",
-	connections: [],
 }
 
 /**
  * Initial value: {@link initial_Inline5}
  *
  * @typedef  {object} Inline5
- * @property {Array<Inline4>} latestGlobalTopicGraph
+ * @property {Maybe<String>} id
+ * @property {Maybe<String>} url
+ * @property {Maybe<String>} title
+ * @property {Maybe<String>} topic
  */
 /** @type {Inline5} */
 export const initial_Inline5 = {
-	latestGlobalTopicGraph: [],
+	id: null,
+	url: null,
+	title: null,
+	topic: null,
+}
+
+/**
+ * Initial value: {@link initial_User}
+ *
+ * @typedef  {object} User
+ * @property {String} email
+ * @property {String} name
+ */
+/** @type {User} */
+export const initial_User = {
+	email: "",
+	name: "",
 }
 
 /**
  * Initial value: {@link initial_Inline6}
  *
  * @typedef  {object} Inline6
- * @property {Maybe<String>} username
- * @property {Array<Link>} links
+ * @property {String} showLinksStatus
+ * @property {Maybe<Inline4>} user
+ * @property {Array<Inline5>} links
+ * @property {String} filterOrder
+ * @property {String} filter
+ * @property {Array<String>} userTopics
+ * @property {User} userTest
  */
 /** @type {Inline6} */
 export const initial_Inline6 = {
-	username: null,
+	showLinksStatus: "",
+	user: null,
 	links: [],
-}
-
-/**
- * Initial value: {@link initial_Inline7}
- *
- * @typedef  {object} Inline7
- * @property {Maybe<Inline5>} public
- * @property {Maybe<Inline6>} auth
- */
-/** @type {Inline7} */
-export const initial_Inline7 = {
-	public: null,
-	auth: null,
+	filterOrder: "",
+	filter: "",
+	userTopics: [],
+	userTest: initial_User,
 }
 
 /**
@@ -287,29 +301,29 @@ export const query_webIndex = /** @type {*} */({
 
 
 /**
- * @typedef  {object} Vars_webIndexProfile
+ * @typedef  {object} Vars_mobileIndex
  *
- * @typedef  {Inline7} Value_webIndexProfile
+ * @typedef  {Inline6} Value_mobileIndex
  */
 
 /**
- * @param   {Vars_webIndexProfile} vars
+ * @param   {Vars_mobileIndex} vars
  * @returns {string} */
-export function query_get_body_webIndexProfile(vars) {
-	return 'webIndexProfile{public{latestGlobalTopicGraph{name prettyName connections}}auth{username links{title url}}}'
+export function query_get_body_mobileIndex(vars) {
+	return 'mobileIndex{showLinksStatus user{email name}links{id url title topic}filterOrder filter userTopics userTest{email name}}'
 }
 
 /**
- * query: `webIndexProfile`\
- * vars : {@link Vars_webIndexProfile }\
- * value: {@link Value_webIndexProfile}
- * @type  {Query_Data<Vars_webIndexProfile, Value_webIndexProfile>}
+ * query: `mobileIndex`\
+ * vars : {@link Vars_mobileIndex }\
+ * value: {@link Value_mobileIndex}
+ * @type  {Query_Data<Vars_mobileIndex, Value_mobileIndex>}
  */
-export const query_webIndexProfile = /** @type {*} */({
-	name         : "webIndexProfile",
+export const query_mobileIndex = /** @type {*} */({
+	name         : "mobileIndex",
 	kind         : "query",
-	get_body     : query_get_body_webIndexProfile,
-	initial_value: initial_Inline7,
+	get_body     : query_get_body_mobileIndex,
+	initial_value: initial_Inline6,
 })
 
 /*

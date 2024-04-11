@@ -1,13 +1,30 @@
 import { Resolver } from "@grafbase/generated"
 import { GraphQLError } from "graphql"
 
-// @ts-ignore
-const resolver: Resolver["Query.mobileIndex"] = async (parent, args, context, info) => {
+const resolver: Resolver["Query.mobileIndex"] = async (
+	parent,
+	args,
+	context,
+	info,
+) => {
 	try {
 		return {
-			auth: {
-				filterStatus: "learning",
+			showLinksStatus: "Learning",
+			user: {
+				email: "github@nikiv.dev",
+				name: "Nikita",
 			},
+			// links: [
+			// 	{
+			// 		id: "1",
+			// 		url: "https://solidjs.com",
+			// 		title: "Modern JavaScript Tutorial",
+			// 		topic: "Solid",
+			// 	},
+			// ],
+			filterOrder: "Custom",
+			filter: "None",
+			userTopics: ["Solid", "GraphQL", "Figma"],
 		}
 	} catch (err) {
 		console.error(err)

@@ -66,28 +66,33 @@ g.query("webIndex", {
 	resolver: "web/index",
 })
 
-// g.query("webIndex", {
-// 	args: {},
-// 	returns: g.ref()
-// 	resolver: "web/index",
-// })
-
-g.query("webIndexProfile", {
+// -- mobile queries
+// / = home feed (list of links)
+g.query("mobileIndex", {
 	args: {},
 	returns: inline({
-		public: inline({
-			latestGlobalTopicGraph: inline({
+		showLinksStatus: g.string(),
+		user: inline({
+			email: g.string(),
+			name: g.string(),
+		}).optional(),
+		links: inline({
+			id: g.string().optional(),
+			url: g.string().optional(),
+			title: g.string().optional(),
+			topic: g.string().optional(),
+		}).list(),
+		filterOrder: g.string(),
+		filter: g.string(),
+		userTopics: g.string().list(),
+		userTest: g.ref(
+			g.type("User", {
+				email: g.string(),
 				name: g.string(),
-				prettyName: g.string(),
-				connections: g.string().list(),
-			}).list(),
-		}).optional(),
-		auth: inline({
-			username: g.string().optional(),
-			links: g.ref(Link).list(),
-		}).optional(),
+			}),
+		),
 	}),
-	resolver: "web/index",
+	resolver: "mobile/index",
 })
 
 // -- mutations (return `true` on success, throw error on failure)
