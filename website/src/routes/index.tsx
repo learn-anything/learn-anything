@@ -1,10 +1,10 @@
 import { useNavigate } from "@solidjs/router"
 import { For, Match, Switch, createEffect, createSignal } from "solid-js"
 import Button from "../../../shared/components/Button"
-import Topbar from "../../../shared/components/Topbar"
 import ProfileLink from "../../../shared/components/ProfileLink"
-import * as gql from "../../../shared/graphql_solid"
 import Search from "../../../shared/components/Search"
+import Topbar from "../../../shared/components/Topbar"
+import * as gql from "../../../shared/graphql_solid"
 
 export default function Home() {
 	const [data, actions] = gql.useResource(gql.query_webIndex, {})

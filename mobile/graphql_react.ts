@@ -1,7 +1,7 @@
 import * as react from "react"
 import * as gql from "./graphql_queries.js"
 
-import { cache_get, cache_set, schedule_operation } from "./graphql_client.js"
+import { cache_get, cache_set, schedule_operation } from "./graphql_client"
 
 export * from "./graphql_queries.js"
 
