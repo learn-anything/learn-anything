@@ -1,10 +1,11 @@
 import { useNavigate } from "@solidjs/router"
-import { For, Match, Switch, createEffect, createSignal } from "solid-js"
+import { For, Match, Show, Switch, createEffect, createSignal } from "solid-js"
 import Button from "../../../shared/components/Button"
 import ProfileLink from "../../../shared/components/ProfileLink"
 import Search from "../../../shared/components/Search"
 import Topbar from "../../../shared/components/Topbar"
 import * as gql from "../../../shared/graphql_solid"
+import clsx from "clsx"
 
 export default function Home() {
 	const [data, actions] = gql.useResource(gql.query_webIndex, {})
@@ -19,6 +20,7 @@ export default function Home() {
 
 	const [route, setRoute] = createSignal({
 		userTopics: ["games", "phyiscs", "math", "sports"],
+		shownTopic: "games",
 		links: [
 			{
 				title: "games",
@@ -35,6 +37,7 @@ export default function Home() {
 		],
 	})
 	const [linkExpanded, setLinkExpanded] = createSignal("")
+	const [showSearch, setShowSearch] = createSignal(false)
 
 	return (
 		<div class="w-full h-screen">
@@ -43,7 +46,12 @@ export default function Home() {
 					{(authData) => {
 						return (
 							<>
-								<Sidebar topics={route().userTopics} />
+								<Sidebar
+									topics={route().userTopics}
+									setShowSearch={setShowSearch}
+									showSearch={showSearch()}
+									shownTopic={route().shownTopic}
+								/>
 								<div class="ml-[200px] h-full p-2 relative">
 									<div class="border-[#191919]  h-full border rounded-[7px]">
 										{/* <UserBio
@@ -81,7 +89,13 @@ export default function Home() {
 											</For>
 										</div>
 									</div>
-									<Search links={route().links} />
+									<Show when={showSearch()}>
+										<Search
+											links={route().links}
+											setShowSearch={setShowSearch}
+											showSearch={showSearch()}
+										/>
+									</Show>
 								</div>
 							</>
 						)
@@ -98,20 +112,45 @@ export default function Home() {
 	)
 }
 
-function Sidebar(props: { topics?: string[] }) {
+function Sidebar(props: {
+	topics?: string[]
+	setShowSearch: (value: boolean) => void
+	showSearch: boolean
+	shownTopic: string
+}) {
 	return (
 		<div class="fixed top-0 left-0 h-screen min-w-[200px] bg-dark text-textGray ">
-			<div class="h-[40px] w-[40px] rounded-full bg-white m-[20px]"></div>
+			<div class="flex-between m-[20px] mr-[2px]">
+				<div class="h-[40px] w-[40px] rounded-full bg-white"></div>
+				<div
+					class="px-[15px] h-[40px] flex-center rounded-[7px] text-white/30 bg-hoverDark "
+					onClick={() => {
+						props.setShowSearch(!props.showSearch)
+					}}
+				>
+					{props.showSearch ? "Back" : "Search"}
+				</div>
+			</div>
 			<div class="col-gap-[8px] pl-2">
-				<div class="w-full">
-					<Button label="My Links" />
+				<div
+					class={clsx(
+						"cursor-pointer px-3 text-white/60 p-[6px] rounded-[7px] transition-all",
+						props.shownTopic === "MyLinks" && "button",
+					)}
+				>
+					My Links
 				</div>
 				<div class="">
 					<div class="text-white/20 text-[14px] px-3 p-2">My Topics</div>
 					<For each={props.topics}>
 						{(topic) => {
 							return (
-								<div class="text-white/60 px-3 p-2 cursor-pointer hover:bg-hoverDark rounded-[7px] transition-all">
+								<div
+									class={clsx(
+										"text-white/60 px-3 p-[6px] cursor-pointer mb-[2px] hover:bg-hoverDark rounded-[7px] transition-all",
+										props.shownTopic === topic && "button",
+									)}
+								>
 									{topic}
 								</div>
 							)
