@@ -15,7 +15,7 @@ import {
 import AntDesign from "@expo/vector-icons/AntDesign"
 import suggestions from "../constants/suggestions"
 
-const { width } = Dimensions.get("window")
+const { width, height } = Dimensions.get("window")
 
 export default function Search() {
 	const [searchQuery, setSearchQuery] = useState("")
@@ -66,8 +66,8 @@ export default function Search() {
 				<View style={styles.searchContainer}>
 					<TextInput
 						style={styles.searchInput}
-						placeholder="search or enter topic name..."
-						placeholderTextColor="rgba(255, 255, 255, 0.5)"
+						placeholder="Search or Paste a link"
+						placeholderTextColor="rgba(255, 255, 255, 0.1)"
 						value={searchQuery}
 						onChangeText={(text) => {
 							setSearchQuery(text)
@@ -78,13 +78,16 @@ export default function Search() {
 					<TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
 						<AntDesign
 							name="search1"
-							size={18}
-							color="rgba(255, 255, 255, 0.8)"
+							size={20}
+							color="rgba(255, 255, 255, 0.4)"
 						/>
 					</TouchableOpacity>
 				</View>
 				<Animated.View
-					style={[styles.suggestionsContainer, { height: animations }]}
+					style={[
+						styles.suggestionContainer,
+						{ height: animations, top: height * 0.1 },
+					]}
 				>
 					<ScrollView>
 						{filteredSuggestions.map((suggestion: string, index: number) => (
@@ -113,40 +116,39 @@ const styles = StyleSheet.create({
 		backgroundColor: "#0F0F0F",
 	},
 	searchContainer: {
-		width: width * 0.9,
+		width: "100%",
+		paddingHorizontal: 15,
 		flexDirection: "row",
 		alignItems: "center",
 		position: "absolute",
-		top: 250,
+		top: height - 140,
 		zIndex: 1,
+		backgroundColor: "#111318",
 	},
 	searchInput: {
 		flex: 1,
 		marginVertical: 10,
-		borderColor: "#DDD",
+		borderColor: "rgba(255, 255, 255, 0.15)",
 		borderWidth: 1,
 		borderRadius: 5,
 		padding: 10,
-		color: "rgba(255, 255, 255, 0.8)",
+		color: "rgba(255, 255, 255, 0.6)",
+		paddingRight: 40,
+		justifyContent: "center",
 	},
 	searchButton: {
-		marginLeft: 5,
-		alignItems: "center",
 		justifyContent: "center",
-		backgroundColor: "#232323",
-		borderRadius: 7,
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 1 },
-		shadowOpacity: 0.55,
-		shadowRadius: 1,
-		padding: 10,
-	},
-	suggestionsContainer: {
-		marginTop: 10,
-		width: width * 0.9,
-		height: 100,
 		position: "absolute",
-		top: 300,
+		right: 25,
+		top: "50%",
+		transform: [{ translateY: -9 }],
+	},
+	suggestionContainer: {
+		width: width * 0.9,
+		position: "absolute",
+		borderRadius: 5,
+		overflow: "hidden",
+		zIndex: 0,
 	},
 	suggestionTopic: {
 		padding: 10,

@@ -7,16 +7,16 @@ import {
 	Text,
 	TouchableOpacity,
 	Image,
-	Alert,
-	Modal,
 } from "react-native"
 import * as ImagePicker from "expo-image-picker"
 import { SimpleLineIcons } from "@expo/vector-icons"
+import CustomAlertModal from "../components/CustomAlert"
 
 const { width } = Dimensions.get("window")
 
 export default function Personal() {
 	const [avatarUrl, setAvatarUrl] = useState<string | undefined>(undefined)
+	const [isCustomAlertVisible, setIsCustomAlertVisible] = useState(false)
 
 	const sections = [
 		{ key: "Links", title: "Links" },
@@ -27,7 +27,7 @@ export default function Personal() {
 	const pickImage = async () => {
 		const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
 		if (status !== "granted") {
-			Alert.alert("We need camera roll permissions to pick an image")
+			setIsCustomAlertVisible(true)
 			return
 		}
 
@@ -104,6 +104,10 @@ export default function Personal() {
 					))}
 				</View>
 			</View>
+			<CustomAlertModal
+				modalVisible={isCustomAlertVisible}
+				setModalVisible={setIsCustomAlertVisible}
+			/>
 		</SafeAreaView>
 	)
 }

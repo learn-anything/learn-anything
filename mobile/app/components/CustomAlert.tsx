@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from "react"
 import { Modal, StyleSheet, Text, Pressable, View, Linking } from "react-native"
 
-const CustomAlertModal = () => {
-	const [modalVisible, setModalVisible] = useState(false)
+interface CustomAlertModalProps {
+	modalVisible: boolean
+	setModalVisible: (visible: boolean) => void
+}
+
+const CustomAlertModal = ({
+	modalVisible,
+	setModalVisible,
+}: CustomAlertModalProps) => {
 	useEffect(() => {
 		let timerId: NodeJS.Timeout | null = null
 		if (modalVisible) {
 			timerId = setTimeout(() => {
 				setModalVisible(false)
-			}, 5000)
+			}, 9000)
 		}
 		return () => {
 			if (timerId) clearTimeout(timerId)
@@ -21,9 +28,7 @@ const CustomAlertModal = () => {
 				animationType="slide"
 				transparent={true}
 				visible={modalVisible}
-				onRequestClose={() => {
-					setModalVisible(!modalVisible)
-				}}
+				onRequestClose={() => setModalVisible(!modalVisible)}
 			>
 				<View style={styles.centeredView}>
 					<View style={styles.modalView}>
@@ -36,7 +41,10 @@ const CustomAlertModal = () => {
 						<View
 							style={{ flexDirection: "row", justifyContent: "space-around" }}
 						>
-							<Pressable onPress={() => setModalVisible(!modalVisible)}>
+							<Pressable
+								onPress={() => setModalVisible(!modalVisible)}
+								style={{ marginRight: 10 }}
+							>
 								<Text style={styles.textStyle}>Ok</Text>
 							</Pressable>
 							<Pressable onPress={() => Linking.openURL("app-settings:")}>
