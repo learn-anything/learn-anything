@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useRef } from "react"
 import {
 	SafeAreaView,
 	View,
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
 	noteContainer: {
 		width: "90%",
 		display: "flex",
-		marginTop: 20,
+		marginTop: 80,
 		marginHorizontal: width * 0.05,
 		position: "relative",
 	},
@@ -252,10 +252,10 @@ const styles = StyleSheet.create({
 		top: 20,
 	},
 	buttonContainer: {
-		marginLeft: 50,
-		display: "flex",
-		flexDirection: "column",
-		alignItems: "flex-start",
+		position: "absolute",
+		top: 0,
+		left: 10,
+		right: 0,
 	},
 	selectButton: {
 		width: 150,
