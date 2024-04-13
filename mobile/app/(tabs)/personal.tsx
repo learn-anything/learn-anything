@@ -56,12 +56,12 @@ export default function Personal() {
 								/>
 							) : (
 								<View style={styles.placeholderAvatar}>
-									<SimpleLineIcons name="paper-clip" size={20} color="white" />
+									<SimpleLineIcons name="paper-clip" size={17} color="white" />
 								</View>
 							)}
 						</TouchableOpacity>
 						<View>
-							<Text style={styles.personalName}>My Name</Text>
+							<Text style={styles.personalName}>Profile Name</Text>
 							<Text style={styles.personalUsername}>@username</Text>
 						</View>
 					</View>

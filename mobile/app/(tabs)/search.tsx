@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		top: height - 140,
 		zIndex: 1,
-		backgroundColor: "#111318",
+		backgroundColor: "#171A21",
 	},
 	searchInput: {
 		flex: 1,
@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
 		color: "rgba(255, 255, 255, 0.6)",
 		paddingRight: 40,
 		justifyContent: "center",
+		backgroundColor: "#131519",
 	},
 	searchButton: {
 		justifyContent: "center",
