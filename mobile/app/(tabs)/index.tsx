@@ -91,12 +91,12 @@ export default function Home() {
 	// bottomsheets
 	const [filterTitle, setFilterTitle] = useState("Filters")
 	const [likedSelected, setLikedSelected] = useState(false)
-	const [isTopicClicked, setIsTopicClicked] = useState(false)
+	const [topicClicked, setTopicClicked] = useState(false)
 	const topicRef = useRef<BottomSheet>(null)
 	const filterRef = useRef<BottomSheet>(null)
 	const snapFilterPoints = useMemo(
-		() => (isTopicClicked ? ["50%"] : ["20%"]),
-		[isTopicClicked],
+		() => (topicClicked ? ["45%"] : ["20%"]),
+		[topicClicked],
 	)
 	const snapTopicPoints = useMemo(() => ["45%"], [])
 	const [topicSheetIndex, setTopicSheetIndex] = useState(-1)
@@ -139,7 +139,7 @@ export default function Home() {
 	}
 	const openFilterSheet = () => {
 		setFilterBottomSheetIndex(0)
-		setIsTopicClicked(false)
+		setTopicClicked(false)
 		topicRef.current?.close()
 	}
 
@@ -355,7 +355,7 @@ export default function Home() {
 			>
 				<BottomSheetView style={styles.filterSheetContainer}>
 					<View style={{ alignSelf: "flex-start" }}>
-						{!isTopicClicked && (
+						{!topicClicked && (
 							<Text style={styles.filterSheetTitle}>{filterTitle}</Text>
 						)}
 					</View>
@@ -363,12 +363,12 @@ export default function Home() {
 						style={
 							likedSelected
 								? styles.filterSheetView
-								: isTopicClicked
+								: topicClicked
 									? [styles.filterActiveSearch, styles.filterBorder]
 									: [styles.filterSheetView, styles.filterBorder]
 						}
 					>
-						{!isTopicClicked && (
+						{!topicClicked && (
 							<TouchableOpacity
 								onPress={handleLikedPress}
 								style={likedSelected ? styles.likedButtonSelected : {}}
@@ -409,7 +409,7 @@ export default function Home() {
 									: styles.filterChooseTopic
 							}
 						>
-							{!isTopicClicked ? (
+							{!topicClicked ? (
 								<View
 									style={{
 										width: "100%",
@@ -418,12 +418,12 @@ export default function Home() {
 										justifyContent: "space-between",
 									}}
 								>
-									<TouchableOpacity onPress={() => setIsTopicClicked(true)}>
+									<TouchableOpacity onPress={() => setTopicClicked(true)}>
 										<Text style={styles.filterSheetText}>Choose topic</Text>
 									</TouchableOpacity>
 									<TouchableOpacity
 										style={{ opacity: 0.5 }}
-										onPress={() => setIsTopicClicked(true)}
+										onPress={() => setTopicClicked(true)}
 									>
 										<Svg height="15" width="15" viewBox="0 0 15 15">
 											<Path
