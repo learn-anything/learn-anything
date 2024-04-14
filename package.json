@@ -13,7 +13,7 @@
 		"graphql": "bun cmd.ts graphql",
 		"graphstate-run": "cat shared/graphql_schema.gql | odin run graphstate > shared/graphql_queries.js",
 		"cmd": "bun --watch cmd.ts",
-		"seed": "bun --watch cmd.ts",
+		"seed": "cd api/edgedb && bun --watch ../../cli/seed.ts",
 		"ios": "cd mobile && pnpm run ios"
 	},
 	"workspaces": [

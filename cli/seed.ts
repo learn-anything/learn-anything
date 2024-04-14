@@ -23,6 +23,7 @@ async function seed() {
 
 async function webIndex() {
 	// clear first
+	console.log("test")
 }
 
 async function mobileIndex() {
