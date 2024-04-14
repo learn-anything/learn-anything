@@ -86,7 +86,7 @@ export default function Search() {
 				<Animated.View
 					style={[
 						styles.suggestionContainer,
-						{ height: animations, top: height * 0.1 },
+						{ height: animations, top: height * 0.16 },
 					]}
 				>
 					<ScrollView>
@@ -121,7 +121,8 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		position: "absolute",
-		top: height - 150,
+		bottom: height - 210,
+		// top: height - 150,
 		zIndex: 1,
 		backgroundColor: "#171A21",
 		justifyContent: "center",
@@ -148,7 +149,7 @@ const styles = StyleSheet.create({
 		transform: [{ translateY: -9 }],
 	},
 	suggestionContainer: {
-		width: width * 0.9,
+		width: width * 0.98,
 		position: "absolute",
 		borderRadius: 5,
 		overflow: "hidden",

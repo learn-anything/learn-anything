@@ -15,6 +15,9 @@ import Svg, { G, Path, Rect } from "react-native-svg"
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import DraggableFlatList from "react-native-draggable-flatlist"
+import { BlurView } from "expo-blur"
+import { AntDesign } from "@expo/vector-icons"
+
 // import * as gql from "../../../shared/graphql_react"
 
 const { width } = Dimensions.get("window")
@@ -88,10 +91,13 @@ export default function Home() {
 	// bottomsheets
 	const [filterTitle, setFilterTitle] = useState("Filters")
 	const [likedSelected, setLikedSelected] = useState(false)
-
+	const [isTopicClicked, setIsTopicClicked] = useState(false)
 	const topicRef = useRef<BottomSheet>(null)
 	const filterRef = useRef<BottomSheet>(null)
-	const snapFilterPoints = useMemo(() => ["20%"], [])
+	const snapFilterPoints = useMemo(
+		() => (isTopicClicked ? ["50%"] : ["20%"]),
+		[isTopicClicked],
+	)
 	const snapTopicPoints = useMemo(() => ["45%"], [])
 	const [topicSheetIndex, setTopicSheetIndex] = useState(-1)
 	const [filterBottomSheetIndex, setFilterBottomSheetIndex] = useState(-1)
@@ -133,6 +139,7 @@ export default function Home() {
 	}
 	const openFilterSheet = () => {
 		setFilterBottomSheetIndex(0)
+		setIsTopicClicked(false)
 		topicRef.current?.close()
 	}
 
@@ -225,6 +232,9 @@ export default function Home() {
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
 			<SafeAreaView style={styles.container}>
+				{filterBottomSheetIndex !== -1 || topicSheetIndex !== -1 ? (
+					<BlurView intensity={80} tint={"light"} />
+				) : null}
 				<View style={styles.header}>
 					<View style={styles.tabContainer}>
 						<TouchableOpacity
@@ -345,37 +355,43 @@ export default function Home() {
 			>
 				<BottomSheetView style={styles.filterSheetContainer}>
 					<View style={{ alignSelf: "flex-start" }}>
-						<Text style={styles.filterSheetTitle}>{filterTitle}</Text>
+						{!isTopicClicked && (
+							<Text style={styles.filterSheetTitle}>{filterTitle}</Text>
+						)}
 					</View>
 					<View
 						style={
 							likedSelected
 								? styles.filterSheetView
-								: [styles.filterSheetView, styles.filterBorder]
+								: isTopicClicked
+									? [styles.filterActiveSearch, styles.filterBorder]
+									: [styles.filterSheetView, styles.filterBorder]
 						}
 					>
-						<TouchableOpacity
-							onPress={handleLikedPress}
-							style={likedSelected ? styles.likedButtonSelected : {}}
-						>
-							<Text style={styles.filterSheetText}>Liked</Text>
-							{likedSelected && (
-								<Svg
-									style={{ marginLeft: 10 }}
-									width="15"
-									height="16"
-									viewBox="0 0 15 16"
-									fill="none"
-								>
-									<G opacity="0.4">
-										<Path
-											d="M12.3169 4.06695C12.561 3.82288 12.561 3.42715 12.3169 3.18307C12.0729 2.93898 11.6771 2.93898 11.4331 3.18305L7.5 7.11598L3.56693 3.18305C3.32285 2.93898 2.92712 2.93898 2.68305 3.18307C2.43898 3.42715 2.43898 3.82288 2.68307 4.06695L6.6161 7.99985L2.68307 11.9327C2.43898 12.1768 2.43898 12.5725 2.68305 12.8166C2.92712 13.0607 3.32285 13.0607 3.56693 12.8166L7.5 8.88372L11.4331 12.8166C11.6771 13.0607 12.0729 13.0607 12.3169 12.8166C12.561 12.5725 12.561 12.1768 12.3169 11.9327L8.3839 7.99985L12.3169 4.06695Z"
-											fill="white"
-										/>
-									</G>
-								</Svg>
-							)}
-						</TouchableOpacity>
+						{!isTopicClicked && (
+							<TouchableOpacity
+								onPress={handleLikedPress}
+								style={likedSelected ? styles.likedButtonSelected : {}}
+							>
+								<Text style={styles.filterSheetText}>Liked</Text>
+								{likedSelected && (
+									<Svg
+										style={{ marginLeft: 10 }}
+										width="15"
+										height="16"
+										viewBox="0 0 15 16"
+										fill="none"
+									>
+										<G opacity="0.4">
+											<Path
+												d="M12.3169 4.06695C12.561 3.82288 12.561 3.42715 12.3169 3.18307C12.0729 2.93898 11.6771 2.93898 11.4331 3.18305L7.5 7.11598L3.56693 3.18305C3.32285 2.93898 2.92712 2.93898 2.68305 3.18307C2.43898 3.42715 2.43898 3.82288 2.68307 4.06695L6.6161 7.99985L2.68307 11.9327C2.43898 12.1768 2.43898 12.5725 2.68305 12.8166C2.92712 13.0607 3.32285 13.0607 3.56693 12.8166L7.5 8.88372L11.4331 12.8166C11.6771 13.0607 12.0729 13.0607 12.3169 12.8166C12.561 12.5725 12.561 12.1768 12.3169 11.9327L8.3839 7.99985L12.3169 4.06695Z"
+												fill="white"
+											/>
+										</G>
+									</Svg>
+								)}
+							</TouchableOpacity>
+						)}
 						<View
 							style={
 								likedSelected
@@ -393,16 +409,66 @@ export default function Home() {
 									: styles.filterChooseTopic
 							}
 						>
-							<Text style={styles.filterSheetText}>Choose topic</Text>
-							<TouchableOpacity style={{ opacity: 0.5, width: 15, height: 15 }}>
-								<Svg height="100" width="100" viewBox="0 0 100 100">
-									<Path
-										d="M4.29031 2.38702C3.98656 2.06972 3.98656 1.55528 4.29031 1.23798C4.59405 0.920675 5.08651 0.920675 5.39025 1.23798L10.8347 6.92548C11.1384 7.24278 11.1384 7.75722 10.8347 8.07452L5.39025 13.762C5.08651 14.0793 4.59405 14.0793 4.29031 13.762C3.98656 13.4447 3.98656 12.9303 4.29031 12.613L9.18478 7.5L4.29031 2.38702Z"
-										fill="white"
-										strokeWidth="2"
+							{!isTopicClicked ? (
+								<View
+									style={{
+										width: "100%",
+										alignItems: "center",
+										flexDirection: "row",
+										justifyContent: "space-between",
+									}}
+								>
+									<TouchableOpacity onPress={() => setIsTopicClicked(true)}>
+										<Text style={styles.filterSheetText}>Choose topic</Text>
+									</TouchableOpacity>
+									<TouchableOpacity
+										style={{ opacity: 0.5 }}
+										onPress={() => setIsTopicClicked(true)}
+									>
+										<Svg height="15" width="15" viewBox="0 0 15 15">
+											<Path
+												d="M4.29031 2.38702C3.98656 2.06972 3.98656 1.55528 4.29031 1.23798C4.59405 0.920675 5.08651 0.920675 5.39025 1.23798L10.8347 6.92548C11.1384 7.24278 11.1384 7.75722 10.8347 8.07452L5.39025 13.762C5.08651 14.0793 4.59405 14.0793 4.29031 13.762C3.98656 13.4447 3.98656 12.9303 4.29031 12.613L9.18478 7.5L4.29031 2.38702Z"
+												fill="white"
+												strokeWidth="2"
+											/>
+										</Svg>
+									</TouchableOpacity>
+								</View>
+							) : (
+								<View
+									style={{
+										flexDirection: "row",
+										alignItems: "center",
+										width: "100%",
+										height: 35,
+									}}
+								>
+									<TouchableOpacity
+										style={{
+											justifyContent: "center",
+											position: "absolute",
+											left: 5,
+											top: "50%",
+											transform: [{ translateY: -9 }],
+										}}
+									>
+										<AntDesign
+											name="search1"
+											size={15}
+											color="rgba(255, 255, 255, 0.4)"
+										/>
+									</TouchableOpacity>
+									<TextInput
+										style={
+											(styles.filterSheetText,
+											{ paddingLeft: 30, color: "white", fontSize: 16 })
+										}
+										placeholder="Search topic"
+										placeholderTextColor={"rgba(255, 255, 255, 0.4)"}
+										autoFocus={true}
 									/>
-								</Svg>
-							</TouchableOpacity>
+								</View>
+							)}
 						</View>
 					</View>
 				</BottomSheetView>
@@ -885,6 +951,12 @@ const styles = StyleSheet.create({
 		flexDirection: "column",
 		alignItems: "flex-start",
 	},
+	filterActiveSearch: {
+		height: 35,
+		flexDirection: "column",
+		alignItems: "flex-start",
+	},
+
 	filterBorder: {
 		backgroundColor: "#1d1f26",
 		borderRadius: 7,
