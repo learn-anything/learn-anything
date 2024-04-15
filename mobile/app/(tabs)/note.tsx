@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react"
 import {
+	Animated,
 	SafeAreaView,
 	View,
 	StyleSheet,
@@ -21,9 +22,9 @@ export default function Note() {
 	const inputRef = useRef<TextInput>(null)
 	const [isFocused, setIsFocused] = useState(false)
 	const [selectedTab, setSelectedTab] = useState("Page")
-
 	const [searchQuery, setSearchQuery] = useState("")
 	const [isInputFocused, setIsInputFocused] = useState(false)
+	const position = useRef(new Animated.Value(0)).current
 
 	const handleSearch = () => {
 		console.log("search:", searchQuery)
@@ -31,93 +32,113 @@ export default function Note() {
 
 	return (
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-			<SafeAreaView style={styles.container}>
-				<View style={styles.tabContainer}>
-					<TouchableOpacity
-						style={[
-							styles.tab,
-							selectedTab === "Page"
-								? styles.selectedTab
-								: styles.unselectedTab,
-						]}
-						onPress={() => setSelectedTab("Page")}
-					>
-						<Text style={styles.tabText}>Page</Text>
-					</TouchableOpacity>
-					<TouchableOpacity
-						style={[
-							styles.tab,
-							selectedTab === "link"
-								? styles.selectedTab
-								: styles.unselectedTab,
-						]}
-						onPress={() => setSelectedTab("link")}
-					>
-						<Text style={styles.tabText}>Link</Text>
-					</TouchableOpacity>
-				</View>
-
-				<View style={styles.noteContainer}>
-					<View style={styles.inputContainer}>
-						<TextInput
-							ref={inputRef}
-							style={[
-								styles.input,
-								!text && !isFocused ? styles.placeholderStyle : {},
-							]}
-							multiline
-							placeholder="New Page"
-							placeholderTextColor="rgba(255, 255, 255, 0.3)"
-							value={text}
-							onChangeText={setText}
-						/>
-						<TextInput
-							ref={inputRef}
-							style={[
-								styles.secondInput,
-								!text && !isFocused ? styles.smallPlaceholderStyle : {},
-							]}
-							multiline
-							placeholder="Take a note..."
-							placeholderTextColor="rgba(255, 255, 255, 0.3)"
-							value={secondText}
-							onChangeText={setSecondText}
-						/>
+			{isInputFocused ? (
+				<SafeAreaView style={styles.container}>
+					<View style={{ flex: 1 }}>
+						<View style={styles.searchContainerOnly}>
+							<TextInput
+								style={[styles.searchInputOnly, styles.focusedInput]}
+								placeholder="Search for existing page"
+								placeholderTextColor="rgba(255, 255, 255, 0.1)"
+								value={searchQuery}
+								onChangeText={(text) => {
+									setSearchQuery(text)
+								}}
+								onBlur={() => setIsInputFocused(false)}
+							/>
+						</View>
 					</View>
-					<View style={styles.buttonContainer}>
-						<TouchableOpacity style={styles.privateButton}>
-							<MaterialCommunityIcons
-								name="eye-off-outline"
-								size={22}
-								color="rgba(255, 255, 255, 0.4)"
-							/>
+				</SafeAreaView>
+			) : (
+				<SafeAreaView style={styles.container}>
+					<View style={styles.tabContainer}>
+						<TouchableOpacity
+							style={[
+								styles.tab,
+								selectedTab === "Page"
+									? styles.selectedTab
+									: styles.unselectedTab,
+							]}
+							onPress={() => setSelectedTab("Page")}
+						>
+							<Text style={styles.tabText}>Page</Text>
 						</TouchableOpacity>
-						<TouchableOpacity style={styles.settingsButton}>
-							<MaterialCommunityIcons
-								name="dots-horizontal"
-								size={24}
-								color="rgba(255, 255, 255, 0.4)"
-							/>
+						<TouchableOpacity
+							style={[
+								styles.tab,
+								selectedTab === "link"
+									? styles.selectedTab
+									: styles.unselectedTab,
+							]}
+							onPress={() => setSelectedTab("link")}
+						>
+							<Text style={styles.tabText}>Link</Text>
 						</TouchableOpacity>
 					</View>
-				</View>
 
-				<View style={styles.searchContainer}>
-					<TextInput
-						style={[
-							styles.searchInput,
-							isInputFocused ? styles.focusedInput : styles.unfocusedInput,
-						]}
-						placeholder="Search for existing page"
-						placeholderTextColor="rgba(255, 255, 255, 0.1)"
-						value={searchQuery}
-						onChangeText={(text) => {
-							setSearchQuery(text)
-						}}
-						onBlur={() => setIsInputFocused(false)}
-					/>
-				</View>
-			</SafeAreaView>
+					<View style={styles.noteContainer}>
+						<View style={styles.inputContainer}>
+							<TextInput
+								ref={inputRef}
+								style={[
+									styles.input,
+									!text && !isFocused ? styles.placeholderStyle : {},
+								]}
+								multiline
+								placeholder="New Page"
+								placeholderTextColor="rgba(255, 255, 255, 0.3)"
+								value={text}
+								onChangeText={setText}
+							/>
+							<TextInput
+								ref={inputRef}
+								style={[
+									styles.secondInput,
+									!text && !isFocused ? styles.smallPlaceholderStyle : {},
+								]}
+								multiline
+								placeholder="Take a note..."
+								placeholderTextColor="rgba(255, 255, 255, 0.3)"
+								value={secondText}
+								onChangeText={setSecondText}
+							/>
+						</View>
+						<View style={styles.buttonContainer}>
+							<TouchableOpacity style={styles.privateButton}>
+								<MaterialCommunityIcons
+									name="eye-off-outline"
+									size={22}
+									color="rgba(255, 255, 255, 0.4)"
+								/>
+							</TouchableOpacity>
+							<TouchableOpacity style={styles.settingsButton}>
+								<MaterialCommunityIcons
+									name="dots-horizontal"
+									size={24}
+									color="rgba(255, 255, 255, 0.4)"
+								/>
+							</TouchableOpacity>
+						</View>
+					</View>
+
+					<Animated.View style={styles.searchContainer}>
+						<TextInput
+							style={[
+								styles.searchInput,
+								isInputFocused ? styles.focusedInput : styles.unfocusedInput,
+							]}
+							placeholder="Search for existing page"
+							placeholderTextColor="rgba(255, 255, 255, 0.1)"
+							value={searchQuery}
+							onChangeText={(text) => {
+								setSearchQuery(text)
+							}}
+							onFocus={() => setIsInputFocused(true)}
+							onBlur={() => setIsInputFocused(false)}
+						/>
+					</Animated.View>
+				</SafeAreaView>
+			)}
 		</TouchableWithoutFeedback>
 	)
 }
@@ -188,7 +209,7 @@ const styles = StyleSheet.create({
 	input: {
 		fontSize: 22,
 		fontWeight: "700",
-		color: "rgba(255, 255, 255, 0.5)",
+		color: "rgba(255, 255, 255, 1)",
 		paddingTop: 25,
 		paddingHorizontal: 11,
 		borderRadius: 10,
@@ -200,7 +221,7 @@ const styles = StyleSheet.create({
 	secondInput: {
 		fontSize: 14,
 		fontWeight: "400",
-		color: "rgba(255, 255, 255, 0.7)",
+		color: "rgba(255, 255, 255, 0.9)",
 		paddingTop: 20,
 		paddingHorizontal: 11,
 		borderRadius: 10,
@@ -272,6 +293,15 @@ const styles = StyleSheet.create({
 		bottom: 2,
 		justifyContent: "center",
 	},
+	searchContainerOnly: {
+		width: "100%",
+		position: "absolute",
+		top: 0,
+		paddingHorizontal: 6,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+	},
 	searchInput: {
 		flex: 1,
 		marginVertical: 10,
@@ -280,7 +310,21 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		paddingVertical: 14,
 		paddingHorizontal: 15,
-		color: "rgba(255, 255, 255, 0.6)",
+		color: "rgba(255, 255, 255, 1)",
+		fontSize: 16,
+		paddingRight: 40,
+		justifyContent: "center",
+		backgroundColor: "#131519",
+	},
+	searchInputOnly: {
+		flex: 1,
+		marginVertical: 10,
+		borderColor: "rgba(255, 255, 255, 0.15)",
+		borderWidth: 1,
+		borderRadius: 10,
+		paddingVertical: 14,
+		paddingHorizontal: 15,
+		color: "rgba(255, 255, 255, 1)",
 		fontSize: 16,
 		paddingRight: 40,
 		justifyContent: "center",

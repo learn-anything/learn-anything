@@ -22,6 +22,7 @@ export default function Search() {
 	const [isInputFocused, setIsInputFocused] = useState(false)
 	const [showSuggestions, setShowSuggestions] = useState(false)
 	const animations = useRef(new Animated.Value(0)).current
+
 	const handleSearch = () => {
 		console.log("search:", searchQuery)
 	}
@@ -129,8 +130,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		position: "absolute",
-		bottom: height - 210,
-		// top: height - 150,
+		top: 60,
 		zIndex: 1,
 		justifyContent: "center",
 	},
