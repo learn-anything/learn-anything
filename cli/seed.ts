@@ -3,6 +3,9 @@ async function seed() {
 	const command = args[2]
 	try {
 		switch (command) {
+			case "base":
+				await base()
+				break
 			case "webIndex":
 				await webIndex()
 				break
@@ -19,6 +22,11 @@ async function seed() {
 	} catch (err) {
 		console.error("Error occurred:", err)
 	}
+}
+
+async function base() {
+	// clear first
+	console.log("test")
 }
 
 async function webIndex() {
