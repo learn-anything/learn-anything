@@ -1,24 +1,37 @@
 import { Resolver } from "@grafbase/generated"
 import { GraphQLError } from "graphql"
-import { getUser } from "../../../edgedb/crud/user"
 import { emailFromHankoToken } from "../../../../shared/auth"
+import {
+	indexRouteAuth,
+	indexRoutePublic,
+} from "../../../edgedb/crud/routes/website"
 
-// @ts-ignore
-const resolver: Resolver["Query.webIndex"] = async (parent, args, context, info) => {
+const resolver: Resolver["Query.webIndex"] = async (
+	parent,
+	args,
+	context,
+	info,
+) => {
 	try {
 		const email = await emailFromHankoToken(context)
 		if (email) {
-			const user = await getUser(email)
+			const res = await indexRouteAuth(email)
 			return {
-				user: {
-					...user,
-				},
+				auth: res,
 			}
 		} else {
-			// TODO: non authorised, return data to render landing page (topics + graph)
+			const res = await indexRoutePublic()
+			return {
+				public: {
+					latestGlobalTopicGraph: res,
+				},
+			}
 		}
 	} catch (err) {
-		console.error(err)
+		if (err instanceof Error) {
+			console.error(err.message, "error")
+			throw new GraphQLError(err.message)
+		}
 		throw new GraphQLError(JSON.stringify(err))
 	}
 }

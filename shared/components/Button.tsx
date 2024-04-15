@@ -6,7 +6,8 @@ export default function Button(props: Props) {
 	return (
 		<div
 			style={{
-				background: "linear-gradient(180deg, #232323 0%, #222 100%), rgba(255, 255, 255, 0.04)",
+				background:
+					"linear-gradient(180deg, #232323 0%, #222 100%), rgba(255, 255, 255, 0.04)",
 				"box-shadow":
 					"0px 1px 1px 0px rgba(0, 0, 0, 0.55), 0px 1px 1px 0px rgba(255, 255, 255, 0.05) inset",
 			}}

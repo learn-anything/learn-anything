@@ -1,13 +1,15 @@
 import * as gql from "./graphql_queries.js"
+import { getHankoCookie } from "./auth.js"
 
 const graphql_url = "http://127.0.0.1:4000/graphql"
 
 async function raw_request<T = never>(query: string): Promise<T | Error> {
 	try {
+		const token = getHankoCookie()
 		const res = await fetch(graphql_url, {
 			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: '{"query":'+JSON.stringify(query)+'}',
+			headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+			body: '{"query":' + JSON.stringify(query) + "}",
 		})
 		const json = await res.json()
 		if (json.errors) {
@@ -40,10 +42,10 @@ export function cache_set<T>(query: string, value: T): void {
 }
 
 type Operation = {
-	name   : string,
-	kind   : gql.Operation_Kind,
-	query  : string,
-	resolve: (res: any) => void,
+	name: string
+	kind: gql.Operation_Kind
+	query: string
+	resolve: (res: any) => void
 }
 
 const operations_pending = new Map<string, Operation[]>()
@@ -53,7 +55,7 @@ async function flush_operations(): Promise<void> {
 	operations_scheduled = false
 
 	const body = {
-		query   : "",
+		query: "",
 		mutation: "",
 	}
 	const operations_copy: Operation[] = []
@@ -80,9 +82,9 @@ async function flush_operations(): Promise<void> {
 	operations_pending.clear()
 
 	let query = ""
-	if (body.query)    query += "query"   +"{"+body.query   +"}"
-	if (body.mutation) query += "mutation"+"{"+body.mutation+"}"
-	
+	if (body.query) query += "query" + "{" + body.query + "}"
+	if (body.mutation) query += "mutation" + "{" + body.mutation + "}"
+
 	const res = await raw_request<Record<string, any>>(query)
 	if (res instanceof Error) {
 		for (const operation of operations_copy) {
@@ -97,14 +99,14 @@ async function flush_operations(): Promise<void> {
 }
 
 export function schedule_operation<TValue>(
-	name : string,
-	kind : gql.Operation_Kind,
+	name: string,
+	kind: gql.Operation_Kind,
 	query: string,
 ): Promise<TValue> {
 	let resolve!: (res: TValue) => void
-	const promise = new Promise<TValue>((res) => resolve = res)
+	const promise = new Promise<TValue>((res) => (resolve = res))
 
-	const operation: Operation = {name, kind, query, resolve}
+	const operation: Operation = { name, kind, query, resolve }
 
 	const pending = operations_pending.get(name)
 	if (pending) {

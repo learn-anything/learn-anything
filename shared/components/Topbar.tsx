@@ -1,6 +1,5 @@
-import Button from "./Button"
 import clsx from "clsx"
-import { Icon } from "./Icon"
+import Icon from "./Icon"
 import { For, Show, createSignal } from "solid-js"
 import { Motion, Presence } from "solid-motionone"
 
@@ -14,7 +13,11 @@ export default function Topbar(props: {
 		<div class="flex-between p-5">
 			<div class="flex [&>*]:h-full bg-hoverDark [&>*]:flex-center h-[34px] items-center">
 				<div
-					class={clsx("px-[11px]", props.showLinksStatus === "Learning", "button")}
+					class={clsx(
+						"px-[11px]",
+						props.showLinksStatus === "Learning",
+						"button",
+					)}
 					onClick={() => {}}
 				>
 					Learning
@@ -26,7 +29,11 @@ export default function Topbar(props: {
 					To Learn
 				</div>
 				<button
-					class={clsx("px-[11px]", props.showLinksStatus === "Learned", "button")}
+					class={clsx(
+						"px-[11px]",
+						props.showLinksStatus === "Learned",
+						"button",
+					)}
 					onClick={() => {
 						props.changeLearningStatus("Learned")
 					}}
@@ -42,9 +49,7 @@ export default function Topbar(props: {
 	)
 }
 
-function LinkOrder(props: {
-	filterOrder?: "Custom" | "RecentlyAdded"
-}) {
+function LinkOrder(props: { filterOrder?: "Custom" | "RecentlyAdded" }) {
 	const [expanded, setExpanded] = createSignal(false)
 	const [filterOrder, setFilterOrder] = createSignal("Recently Added")
 	const [expandTimer, setExpandTimer] = createSignal(false)
@@ -110,9 +115,7 @@ function LinkOrder(props: {
 	)
 }
 
-function Filter(props: {
-	filter?: string[]
-}) {
+function Filter(props: { filter?: string[] }) {
 	const [filters, setFilters] = createSignal(["Liked", "Topic"])
 	const [appliedFilters, setAppliedFilters] = createSignal([])
 	const [expanded, setExpanded] = createSignal(false)

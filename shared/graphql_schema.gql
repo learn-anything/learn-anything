@@ -1,19 +1,55 @@
+type Inline0 {
+	name: String!
+	prettyName: String!
+	connections: [String!]!
+}
+type Inline1 {
+	latestGlobalTopicGraph: [Inline0!]!
+}
+type Inline2 {
+	username: String
+	bio: String
+	links: [Link!]!
+}
+type Inline3 {
+	public: Inline1
+	auth: Inline2
+}
+type Inline4 {
+	email: String!
+	name: String!
+}
+type Inline5 {
+	id: String
+	url: String
+	title: String
+	topic: String
+}
+type Inline6 {
+	user: Inline4!
+	links: [Inline5!]!
+	showLinksStatus: String!
+	filterOrder: String!
+	filter: String!
+	userTopics: [String!]!
+}
 enum LearningStatus {
 	Learn
 	Learning
 	Learned
 }
+type Link {
+	title: String
+	url: String
+}
 type Mutation {
+	createUser(email: String!): Boolean!
+	updateUserBio(bio: String!): Boolean!
 	updatePersonalLink(linkId: String!, status: LearningStatus!): Boolean!
 }
 type Query {
-	webIndex: webIndexOutput!
-}
-type User {
-	name: String!
-}
-type webIndexOutput {
-	user: User!
+	webIndex: Inline3!
+	mobileIndex: Inline6!
 }
 schema {
 	query: Query
