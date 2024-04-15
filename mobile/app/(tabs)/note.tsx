@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import {
 	Animated,
 	SafeAreaView,
@@ -24,18 +24,41 @@ export default function Note() {
 	const [selectedTab, setSelectedTab] = useState("Page")
 	const [searchQuery, setSearchQuery] = useState("")
 	const [isInputFocused, setIsInputFocused] = useState(false)
-	const position = useRef(new Animated.Value(0)).current
 
-	const handleSearch = () => {
-		console.log("search:", searchQuery)
+	const position = useRef(new Animated.Value(height - 100)).current
+
+	const animateToTop = () => {
+		Animated.timing(position, {
+			toValue: 0,
+			duration: 300,
+			useNativeDriver: false,
+		}).start()
 	}
+
+	const animateToBottom = () => {
+		Animated.timing(position, {
+			toValue: height - 115,
+			duration: 300,
+			useNativeDriver: false,
+		}).start()
+	}
+
+	useEffect(() => {
+		if (isInputFocused) {
+			animateToTop()
+		} else {
+			animateToBottom()
+		}
+	}, [isInputFocused])
 
 	return (
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
 			{isInputFocused ? (
 				<SafeAreaView style={styles.container}>
 					<View style={{ flex: 1 }}>
-						<View style={styles.searchContainerOnly}>
+						<Animated.View
+							style={[styles.searchContainerOnly, { top: position }]}
+						>
 							<TextInput
 								style={[styles.searchInputOnly, styles.focusedInput]}
 								placeholder="Search for existing page"
@@ -46,7 +69,7 @@ export default function Note() {
 								}}
 								onBlur={() => setIsInputFocused(false)}
 							/>
-						</View>
+						</Animated.View>
 					</View>
 				</SafeAreaView>
 			) : (
@@ -121,7 +144,7 @@ export default function Note() {
 						</View>
 					</View>
 
-					<Animated.View style={styles.searchContainer}>
+					<Animated.View style={[styles.searchContainer, { top: position }]}>
 						<TextInput
 							style={[
 								styles.searchInput,
@@ -290,7 +313,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		position: "absolute",
-		bottom: 2,
+		bottom: 40,
 		justifyContent: "center",
 	},
 	searchContainerOnly: {
@@ -308,7 +331,7 @@ const styles = StyleSheet.create({
 		borderColor: "rgba(255, 255, 255, 0.15)",
 		borderWidth: 1,
 		borderRadius: 10,
-		paddingVertical: 14,
+		paddingVertical: 22,
 		paddingHorizontal: 15,
 		color: "rgba(255, 255, 255, 1)",
 		fontSize: 16,
