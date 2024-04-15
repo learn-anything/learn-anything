@@ -19,8 +19,10 @@ const { width, height } = Dimensions.get("window")
 
 export default function Search() {
 	const [searchQuery, setSearchQuery] = useState("")
+	const [isInputFocused, setIsInputFocused] = useState(false)
 	const [showSuggestions, setShowSuggestions] = useState(false)
 	const animations = useRef(new Animated.Value(0)).current
+
 	const handleSearch = () => {
 		console.log("search:", searchQuery)
 	}
@@ -65,7 +67,10 @@ export default function Search() {
 			<SafeAreaView style={styles.container}>
 				<View style={styles.searchContainer}>
 					<TextInput
-						style={styles.searchInput}
+						style={[
+							styles.searchInput,
+							isInputFocused ? styles.focusedInput : styles.unfocusedInput,
+						]}
 						placeholder="Search or Paste a link"
 						placeholderTextColor="rgba(255, 255, 255, 0.1)"
 						value={searchQuery}
@@ -73,7 +78,11 @@ export default function Search() {
 							setSearchQuery(text)
 							setShowSuggestions(true)
 						}}
-						onFocus={() => setShowSuggestions(true)}
+						onFocus={() => {
+							setShowSuggestions(true)
+							setIsInputFocused(true)
+						}}
+						onBlur={() => setIsInputFocused(false)}
 					/>
 					<TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
 						<AntDesign
@@ -86,7 +95,7 @@ export default function Search() {
 				<Animated.View
 					style={[
 						styles.suggestionContainer,
-						{ height: animations, top: height * 0.1 },
+						{ height: animations, top: height * 0.16 },
 					]}
 				>
 					<ScrollView>
@@ -117,35 +126,44 @@ const styles = StyleSheet.create({
 	},
 	searchContainer: {
 		width: "100%",
-		paddingHorizontal: 15,
+		paddingHorizontal: 6,
 		flexDirection: "row",
 		alignItems: "center",
 		position: "absolute",
-		top: height - 140,
+		top: 60,
 		zIndex: 1,
-		backgroundColor: "#171A21",
+		justifyContent: "center",
 	},
 	searchInput: {
 		flex: 1,
 		marginVertical: 10,
 		borderColor: "rgba(255, 255, 255, 0.15)",
 		borderWidth: 1,
-		borderRadius: 5,
-		padding: 10,
+		borderRadius: 10,
+		paddingVertical: 14,
+		paddingHorizontal: 15,
 		color: "rgba(255, 255, 255, 0.6)",
+		fontSize: 16,
 		paddingRight: 40,
 		justifyContent: "center",
 		backgroundColor: "#131519",
 	},
+	focusedInput: {
+		textAlign: "left",
+	},
+	unfocusedInput: {
+		textAlign: "center",
+		backgroundColor: "#191919",
+	},
 	searchButton: {
 		justifyContent: "center",
 		position: "absolute",
-		right: 25,
+		right: 20,
 		top: "50%",
 		transform: [{ translateY: -9 }],
 	},
 	suggestionContainer: {
-		width: width * 0.9,
+		width: width * 0.98,
 		position: "absolute",
 		borderRadius: 5,
 		overflow: "hidden",

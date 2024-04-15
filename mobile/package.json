@@ -9,13 +9,14 @@
 		"web": "expo start --web"
 	},
 	"dependencies": {
+		"@candlefinance/blur-view": "^0.5.3",
 		"@expo/ngrok": "^4.1.0",
 		"@expo/vector-icons": "^14.0.0",
 		"@gorhom/bottom-sheet": "^4.6.1",
-		"@react-native-community/blur": "^4.4.0",
 		"@react-navigation/native": "^6.1.7",
 		"@rneui/themed": "4.0.0-rc.8",
 		"expo": "~50.0.5",
+		"expo-blur": "^12.9.2",
 		"expo-constants": "~15.4.5",
 		"expo-image-picker": "^14.7.1",
 		"expo-linear-gradient": "^12.7.2",
@@ -25,6 +26,7 @@
 		"expo-system-ui": "~2.9.3",
 		"expo-web-browser": "~12.8.2",
 		"nativewind": "^4.0.1",
+		"pod-install": "^0.2.0",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
 		"react-native": "0.73.6",

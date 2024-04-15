@@ -7,10 +7,12 @@ import {
 	Text,
 	TouchableOpacity,
 	Image,
+	ScrollView,
 } from "react-native"
 import * as ImagePicker from "expo-image-picker"
 import { SimpleLineIcons } from "@expo/vector-icons"
 import CustomAlertModal from "../components/CustomAlert"
+import { LinkIcon, JobIcon, LeftArrowIcon } from "../../assets/svg/icons"
 
 const { width } = Dimensions.get("window")
 
@@ -20,8 +22,16 @@ export default function Personal() {
 
 	const sections = [
 		{ key: "Links", title: "Links" },
-		{ key: "Pages", title: "Pages" },
-		{ key: "Courses", title: "Courses" },
+		{ key: "Pages", title: "Ableton 12" },
+		{ key: "Courses", title: "ADHD" },
+		{ key: "A", title: "Householding" },
+	]
+
+	const links = [
+		{ key: "w", title: "Links" },
+		{ key: "s", title: "Ableton 12" },
+		{ key: "c", title: "ADHD" },
+		{ key: "v", title: "Householding" },
 	]
 
 	const pickImage = async () => {
@@ -45,69 +55,105 @@ export default function Personal() {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<View style={styles.personalContainer}>
-				<View style={styles.personalInfo}>
-					<View style={styles.personalAvatarName}>
-						<TouchableOpacity onPress={pickImage}>
-							{avatarUrl ? (
-								<Image
-									source={{ uri: avatarUrl }}
-									style={styles.personalAvatar}
-								/>
-							) : (
-								<View style={styles.placeholderAvatar}>
-									<SimpleLineIcons name="paper-clip" size={17} color="white" />
+			<ScrollView>
+				<View style={styles.personalContainer}>
+					<View style={styles.personalInfo}>
+						<Text style={styles.personalUsername}>@username</Text>
+						<View style={styles.personalAvatarName}>
+							<TouchableOpacity onPress={pickImage}>
+								{avatarUrl ? (
+									<Image
+										source={{ uri: avatarUrl }}
+										style={styles.personalAvatar}
+									/>
+								) : (
+									<View style={styles.placeholderAvatar}>
+										<SimpleLineIcons
+											name="paper-clip"
+											size={17}
+											color="white"
+										/>
+									</View>
+								)}
+							</TouchableOpacity>
+							<View style={styles.personalInformation}>
+								<Text style={styles.personalName}>Profile Name</Text>
+								<View
+									style={{
+										flexDirection: "row",
+										alignItems: "center",
+										height: 25,
+									}}
+								>
+									<JobIcon />
+									<Text style={styles.personalJob}>Figma expert</Text>
 								</View>
-							)}
+
+								<View
+									style={{
+										flexDirection: "row",
+										alignItems: "center",
+										height: 25,
+										marginTop: 10,
+									}}
+								>
+									<LinkIcon />
+									<Text style={styles.personalSite}>example@gmail.com</Text>
+								</View>
+							</View>
+						</View>
+					</View>
+					<View style={styles.settingsContainer}>
+						<TouchableOpacity>
+							<SimpleLineIcons
+								name="settings"
+								size={18}
+								color="rgba(255, 255, 255, 0.8)"
+							/>
 						</TouchableOpacity>
-						<View>
-							<Text style={styles.personalName}>Profile Name</Text>
-							<Text style={styles.personalUsername}>@username</Text>
+					</View>
+					<View style={styles.numbers}>
+						<View style={styles.numberContainer}>
+							<Text style={styles.numberQuantity}>32</Text>
+							<Text style={styles.numberText}>Learning</Text>
+						</View>
+						<View style={styles.numberContainer}>
+							<Text style={styles.numberQuantity}>43</Text>
+							<Text style={styles.numberText}>To Learn</Text>
+						</View>
+						<View style={styles.numberContainer}>
+							<Text style={styles.numberQuantity}>3</Text>
+							<Text style={styles.numberText}>Learned</Text>
 						</View>
 					</View>
-				</View>
-				<View style={styles.settingsContainer}>
-					{/* <TouchableOpacity>
-						<SimpleLineIcons
-							name="share-alt"
-							size={18}
-							color="rgba(255, 255, 255, 1)"
-						/>
-					</TouchableOpacity> */}
-					<TouchableOpacity>
-						<SimpleLineIcons
-							name="settings"
-							size={18}
-							color="rgba(255, 255, 255, 0.8)"
-						/>
-					</TouchableOpacity>
-				</View>
-				<View style={styles.numbers}>
-					<View style={styles.numberContainer}>
-						<Text style={styles.numberQuantity}>32</Text>
-						<Text style={styles.numberText}>Learning</Text>
+					<View style={styles.section}>
+						<Text style={styles.sectionTitle}>Public Pages</Text>
+						{sections.map((section) => (
+							<View key={section.key} style={styles.sectionTitleContainer}>
+								<Text style={styles.sectionText}>{section.title}</Text>
+								<TouchableOpacity>
+									<LeftArrowIcon />
+								</TouchableOpacity>
+							</View>
+						))}
 					</View>
-					<View style={styles.numberContainer}>
-						<Text style={styles.numberQuantity}>43</Text>
-						<Text style={styles.numberText}>To Learn</Text>
-					</View>
-					<View style={styles.numberContainer}>
-						<Text style={styles.numberQuantity}>3</Text>
-						<Text style={styles.numberText}>Learned</Text>
+					<View style={styles.link}>
+						<Text style={styles.sectionTitle}>Public Links</Text>
+						{links.map((link) => (
+							<View key={link.key} style={styles.sectionTitleContainer}>
+								<Text style={styles.sectionText}>{link.title}</Text>
+								<TouchableOpacity>
+									<LeftArrowIcon />
+								</TouchableOpacity>
+							</View>
+						))}
 					</View>
 				</View>
-				<View style={styles.section}>
-					{sections.map((section) => (
-						<View key={section.key} style={styles.sectionTitleContainer}>
-							<Text style={styles.sectionText}>{section.title}</Text>
-						</View>
-					))}
-				</View>
-			</View>
-			<CustomAlertModal
-				modalVisible={isCustomAlertVisible}
-				setModalVisible={setIsCustomAlertVisible}
-			/>
+				<CustomAlertModal
+					modalVisible={isCustomAlertVisible}
+					setModalVisible={setIsCustomAlertVisible}
+				/>
+			</ScrollView>
 		</SafeAreaView>
 	)
 }
@@ -120,8 +166,8 @@ const styles = StyleSheet.create({
 	},
 	settingsContainer: {
 		position: "absolute",
-		top: 10,
-		right: -20,
+		top: 0,
+		right: -15,
 		display: "flex",
 		flexDirection: "row",
 		justifyContent: "space-between",
@@ -139,6 +185,9 @@ const styles = StyleSheet.create({
 		justifyContent: "space-between",
 		marginTop: 20,
 		alignItems: "center",
+		paddingBottom: 20,
+		borderBottomColor: "rgba(255, 255, 255, 0.1)",
+		borderBottomWidth: 1,
 	},
 	personalInfo: {
 		display: "flex",
@@ -151,40 +200,57 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "flex-start",
 	},
+	personalInformation: {
+		display: "flex",
+		flexDirection: "column",
+		alignItems: "flex-start",
+		paddingLeft: 15,
+	},
 	personalName: {
 		color: "white",
-		fontSize: 18,
+		fontSize: 25,
 		alignSelf: "flex-start",
-		paddingLeft: 10,
-		fontWeight: "300",
+		fontWeight: "700",
 		paddingTop: 10,
+		paddingBottom: 20,
+	},
+	personalJob: {
+		color: "rgba(255, 255, 255, 1)",
+		fontSize: 16,
+		alignSelf: "flex-start",
+		paddingBottom: 15,
+	},
+	personalSite: {
+		color: "rgba(255, 255, 255, 0.5)",
+		fontSize: 16,
+		alignSelf: "flex-start",
+		paddingBottom: 10,
 	},
 	personalUsername: {
-		color: "rgba(255, 255, 255, 0.6)",
+		color: "rgba(255, 255, 255, 1)",
 		fontSize: 14,
 		alignSelf: "flex-start",
-		paddingLeft: 10,
-		fontWeight: "400",
-		paddingTop: 5,
+		paddingBottom: 10,
+		fontWeight: "600",
 	},
 	placeholderAvatar: {
 		marginTop: 10,
-		width: 40,
-		height: 40,
-		borderRadius: 50,
+		width: 100,
+		height: 100,
+		borderRadius: 12.5,
 		backgroundColor: "rgba(255, 255, 255, 0.1)",
 		alignItems: "center",
 		justifyContent: "center",
 	},
 	personalAvatar: {
 		marginTop: 10,
-		width: 40,
-		height: 40,
-		borderRadius: 50,
+		width: 100,
+		height: 100,
+		borderRadius: 12.5,
 	},
 	numbers: {
 		position: "absolute",
-		top: 80,
+		top: 180,
 		left: "10%",
 		width: "80%",
 		display: "flex",
@@ -208,11 +274,19 @@ const styles = StyleSheet.create({
 	},
 	section: {
 		position: "absolute",
-		top: 180,
+		top: 280,
 		display: "flex",
 		flexDirection: "column",
 		alignItems: "center",
 		width: "100%",
+	},
+	sectionTitle: {
+		color: "rgba(255, 255, 255, 0.5)",
+		fontSize: 14,
+		alignSelf: "flex-start",
+		fontStyle: "normal",
+		fontWeight: "400",
+		paddingBottom: 5,
 	},
 	sectionTitleContainer: {
 		borderColor: "#121212",
@@ -222,12 +296,22 @@ const styles = StyleSheet.create({
 		marginVertical: 0.5,
 		paddingHorizontal: 5,
 		width: width * 0.95,
+		flexDirection: "row",
+		justifyContent: "space-between",
 	},
 	sectionText: {
 		color: "white",
-		fontSize: 18,
-		fontWeight: "700",
+		fontSize: 16,
+		fontWeight: "500",
 		paddingVertical: 10,
 		alignSelf: "flex-start",
+	},
+	link: {
+		position: "absolute",
+		bottom: -550,
+		display: "flex",
+		flexDirection: "column",
+		alignItems: "center",
+		width: "100%",
 	},
 })
