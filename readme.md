@@ -36,10 +36,10 @@ It is fully open source project with active community on [Discord](https://disco
 
 ## Setup
 
-[PNPM](https://pnpm.io) is used to manage dependencies. [Bun](https://bun.sh) is used to run things.
+[Bun](https://bun.sh) is used to run/install things.
 
 ```
-pnpm i
+bun i
 bun setup
 ```
 
@@ -124,15 +124,21 @@ Run desktop app built with Tauri.
 
 ### bun cli
 
-> cd api/edgedb && bun --watch ../../cli/cli.ts
+> cd api/edgedb && bun --watch ../../cli/run.ts
 
-Run CLI to quickly execute TS code (run queries and more..).
+Run git ignored [CLI](cli) to quickly execute TS code (run queries and more..).
 
 ### bun db:ui
 
 > cd grafbase/edgedb && edgedb ui
 
 Open EdgeDB UI to run queries and more.
+
+### bun db:queries-generate
+
+> cd api/edgedb && bunx @edgedb/generate edgeql-js --target ts && bunx @edgedb/generate queries --target ts
+
+Generate [EdgeDB-JS](https://github.com/edgedb/edgedb-js) bindings from schema/queries.
 
 ### bun grafbase
 

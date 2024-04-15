@@ -571,6 +571,6 @@ export interface IconProps extends BaseIconProps {
 	name: keyof typeof icons
 }
 
-export function Icon(props: IconProps): s.JSXElement {
+export default function Icon(props: IconProps): s.JSXElement {
 	return <>{icons[props.name](props)}</>
 }

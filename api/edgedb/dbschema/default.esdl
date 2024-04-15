@@ -10,7 +10,10 @@ module default {
     username: str {
       constraint exclusive;
     };
-    constraint username on str_trim(str_lower(.username));
+    bio: str;
+    # TODO: should enforce usernames to be lowercase
+    # fails now: https://discord.com/channels/841451783728529451/1223277097020030977/1223280398398918837
+    # constraint username on str_trim(str_lower(.username));
     # custom display name user can choose for themselves similar to X/GitHub
     displayName: str;
     # cloudflare R2 url with image
@@ -125,6 +128,22 @@ module default {
     multi links: GlobalLink {
       order: int16;
     };
+  }
+  # tracking all mutations (with hope to potentially be able to reverse mutations in future), etc.
+  type Events extending WithCreatedAt {
+    # for now as json, structure can be changed in future
+    # {"mutationName": "..", "mutationArgs": {"..": ".."}}
+    # can sort by `created_at` later to get order of mutations
+    mutation: json;
+  }
+  # everything else (within reason, logs are in ClickHouse, etc.)
+  type Other extending WithCreatedAt {
+    latestGlobalTopicGraph: GlobalTopicGraph;
+  }
+  type GlobalTopicGraph {
+    required name: str;
+    required prettyName: str;
+    required multi connections: str;
   }
   # attaches `created_at` field to objects that extend it
   # https://docs.edgedb.com/database/datamodel/objects#abstract-types

@@ -1,33 +1,86 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome"
+import React from "react"
 import { Link, Tabs } from "expo-router"
-import { Pressable, StyleSheet } from "react-native"
+import { StyleSheet, Pressable } from "react-native"
+import { Octicons, AntDesign, Ionicons } from "@expo/vector-icons"
 
 function TabBarIcon(props: {
-	name: React.ComponentProps<typeof FontAwesome>["name"]
+	name:
+		| React.ComponentProps<typeof Octicons>["name"]
+		| React.ComponentProps<typeof AntDesign>["name"]
+		| React.ComponentProps<typeof Ionicons>["name"]
 	color: string
 }) {
-	return <FontAwesome size={28} style={styles.tabBarIcon} {...props} />
+	if (props.name.startsWith("octicon-")) {
+		const iconName = props.name.replace("octicon-", "") as React.ComponentProps<
+			typeof Octicons
+		>["name"]
+		return (
+			<Octicons
+				name={iconName}
+				size={28}
+				style={styles.tabBarIcon}
+				color={props.color}
+			/>
+		)
+	} else if (props.name.startsWith("antdesign-")) {
+		const iconName = props.name.replace(
+			"antdesign-",
+			"",
+		) as React.ComponentProps<typeof AntDesign>["name"]
+		return (
+			<AntDesign
+				name={iconName}
+				size={24}
+				style={styles.tabBarIcon}
+				color={props.color}
+			/>
+		)
+	} else if (props.name.startsWith("ionicon-")) {
+		const iconName = props.name.replace("ionicon-", "") as React.ComponentProps<
+			typeof Ionicons
+		>["name"]
+		return (
+			<Ionicons
+				name={iconName}
+				size={24}
+				style={styles.tabBarIcon}
+				color={props.color}
+			/>
+		)
+	}
 }
 
 export default function TabLayout() {
 	return (
 		<Tabs
 			screenOptions={{
-				tabBarActiveTintColor: "black",
+				tabBarStyle: {
+					backgroundColor: "#151515",
+					paddingHorizontal: 15,
+					height: 82,
+				},
+				tabBarShowLabel: false,
 			}}
 		>
 			<Tabs.Screen
 				name="index"
 				options={{
-					title: "Tab One",
-					tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+					headerShown: false,
+					title: "index",
+					tabBarIcon: ({ color, focused }) => (
+						<Octicons
+							name="list-unordered"
+							size={24}
+							color={focused ? "white" : color}
+						/>
+					),
 					headerRight: () => (
-						<Link href="/modal" asChild>
+						<Link href="/index" asChild>
 							<Pressable>
 								{({ pressed }) => (
-									<FontAwesome
-										name="info-circle"
-										size={25}
+									<Octicons
+										name="list-unordered"
+										size={24}
 										color="gray"
 										style={[styles.headerRight, { opacity: pressed ? 0.5 : 1 }]}
 									/>
@@ -38,10 +91,87 @@ export default function TabLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name="two"
+				name="search"
 				options={{
-					title: "Tab Two",
-					tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+					headerShown: false,
+					title: "search",
+					tabBarIcon: ({ color, focused }) => (
+						<AntDesign
+							name="search1"
+							size={24}
+							color={focused ? "white" : color}
+						/>
+					),
+					headerRight: () => (
+						<Link href="/search" asChild>
+							<Pressable>
+								{({ pressed }) => (
+									<AntDesign
+										name="search1"
+										size={24}
+										color="gray"
+										style={[styles.headerRight, { opacity: pressed ? 0.5 : 1 }]}
+									/>
+								)}
+							</Pressable>
+						</Link>
+					),
+				}}
+			/>
+			<Tabs.Screen
+				name="note"
+				options={{
+					headerShown: false,
+					title: "add note",
+					tabBarIcon: ({ color, focused }) => (
+						<AntDesign
+							name="pluscircleo"
+							size={24}
+							color={focused ? "white" : color}
+						/>
+					),
+					headerRight: () => (
+						<Link href="/note" asChild>
+							<Pressable>
+								{({ pressed }) => (
+									<AntDesign
+										name="pluscircleo"
+										size={24}
+										color="gray"
+										style={[styles.headerRight, { opacity: pressed ? 0.5 : 1 }]}
+									/>
+								)}
+							</Pressable>
+						</Link>
+					),
+				}}
+			/>
+			<Tabs.Screen
+				name="personal"
+				options={{
+					headerShown: false,
+					title: "Tab",
+					tabBarIcon: ({ color, focused }) => (
+						<Ionicons
+							name="person-outline"
+							size={24}
+							color={focused ? "white" : color}
+						/>
+					),
+					headerRight: () => (
+						<Link href="/personal" asChild>
+							<Pressable>
+								{({ pressed }) => (
+									<Ionicons
+										name="person-outline"
+										size={24}
+										color="gray"
+										style={[styles.headerRight, { opacity: pressed ? 0.5 : 1 }]}
+									/>
+								)}
+							</Pressable>
+						</Link>
+					),
 				}}
 			/>
 		</Tabs>
