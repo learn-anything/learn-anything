@@ -95,7 +95,7 @@ export default function Home() {
 	const topicRef = useRef<BottomSheet>(null)
 	const filterRef = useRef<BottomSheet>(null)
 	const snapFilterPoints = useMemo(
-		() => (topicClicked ? ["45%"] : ["20%"]),
+		() => (topicClicked ? ["40%"] : ["20%"]),
 		[topicClicked],
 	)
 	const snapTopicPoints = useMemo(() => ["45%"], [])
@@ -236,32 +236,45 @@ export default function Home() {
 					<BlurView intensity={80} tint={"light"} />
 				) : null}
 				<View style={styles.header}>
-					<View style={styles.tabContainer}>
-						<TouchableOpacity
-							style={[
-								styles.tab,
-								selectedTab === "links"
-									? styles.selectedTab
-									: styles.unselectedTab,
-							]}
-							onPress={() => setSelectedTab("links")}
-						>
-							<Text style={styles.tabText}>Links</Text>
-						</TouchableOpacity>
-						<TouchableOpacity
-							style={[
-								styles.tab,
-								selectedTab === "topics"
-									? styles.selectedTab
-									: styles.unselectedTab,
-							]}
-							onPress={() => setSelectedTab("topics")}
-						>
-							<Text style={styles.tabText}>Topics</Text>
-						</TouchableOpacity>
+					<View style={styles.parentContainer}>
+						<View style={styles.tabContainer}>
+							<TouchableOpacity
+								style={[
+									styles.tab,
+									selectedTab === "links"
+										? styles.selectedTab
+										: styles.unselectedTab,
+								]}
+								onPress={() => setSelectedTab("links")}
+							>
+								<Text style={styles.tabText}>Links</Text>
+							</TouchableOpacity>
+							<TouchableOpacity
+								style={[
+									styles.tab,
+									selectedTab === "pages"
+										? styles.selectedTab
+										: styles.unselectedTab,
+								]}
+								onPress={() => setSelectedTab("pages")}
+							>
+								<Text style={styles.tabText}>Pages</Text>
+							</TouchableOpacity>
+							<TouchableOpacity
+								style={[
+									styles.tab,
+									selectedTab === "topics"
+										? styles.selectedTab
+										: styles.unselectedTab,
+								]}
+								onPress={() => setSelectedTab("topics")}
+							>
+								<Text style={styles.tabText}>Topics</Text>
+							</TouchableOpacity>
+						</View>
 					</View>
 					<View style={styles.optionsContainer}>
-						<View style={styles.learningButtonsContainer}>
+						{/* <View style={styles.learningButtonsContainer}>
 							<TouchableOpacity
 								style={styles.learningButton}
 								onPress={() => showButtons()}
@@ -302,7 +315,7 @@ export default function Home() {
 										</Animated.View>
 									) : null,
 								)}
-						</View>
+						</View> */}
 						<TouchableOpacity
 							onPress={openFilterSheet}
 							style={{ padding: 3, position: "relative" }}
@@ -370,7 +383,10 @@ export default function Home() {
 					>
 						{!topicClicked && (
 							<TouchableOpacity
-								onPress={handleLikedPress}
+								onPress={() => {
+									handleLikedPress()
+									filterRef.current?.close()
+								}}
 								style={likedSelected ? styles.likedButtonSelected : {}}
 							>
 								<Text style={styles.filterSheetText}>Liked</Text>
@@ -666,12 +682,18 @@ const styles = StyleSheet.create({
 		width: "90%",
 		zIndex: 20,
 	},
+	parentContainer: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+		width: "100%",
+	},
 	tabContainer: {
 		flexDirection: "row",
 		overflow: "hidden",
 		backgroundColor: "#222222",
 		borderRadius: 10,
-		width: 150,
+		width: 206,
 	},
 	tab: {
 		backgroundColor: "#222222",

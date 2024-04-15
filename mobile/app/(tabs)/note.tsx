@@ -10,7 +10,7 @@ import {
 	Keyboard,
 	TouchableWithoutFeedback,
 } from "react-native"
-import { Feather, FontAwesome, AntDesign } from "@expo/vector-icons"
+import { MaterialCommunityIcons, AntDesign } from "@expo/vector-icons"
 
 const { width } = Dimensions.get("window")
 const { height } = Dimensions.get("window")
@@ -20,78 +20,43 @@ export default function Note() {
 	const [secondText, setSecondText] = useState("")
 	const inputRef = useRef<TextInput>(null)
 	const [isFocused, setIsFocused] = useState(false)
+	const [selectedTab, setSelectedTab] = useState("Page")
 
-	//buttons
-	const [noteType, setNoteType] = useState("private")
-	const [showOptions, setShowOptions] = useState(false)
+	const [searchQuery, setSearchQuery] = useState("")
+	const [isInputFocused, setIsInputFocused] = useState(false)
 
-	const toggleOptions = () => {
-		setShowOptions(!showOptions)
-	}
-
-	const selectNoteType = (type: string) => {
-		setNoteType(type)
-		setShowOptions(false)
+	const handleSearch = () => {
+		console.log("search:", searchQuery)
 	}
 
 	return (
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
 			<SafeAreaView style={styles.container}>
-				<View
-					style={{ flexDirection: "row", alignItems: "center", paddingTop: 10 }}
-				>
-					<Text style={styles.addText}>Add to:</Text>
-					<View style={styles.addContainer}>
-						<View style={styles.buttonContainer}>
-							<TouchableOpacity
-								style={styles.selectButton}
-								onPress={toggleOptions}
-							>
-								<View style={styles.button}>
-									{noteType === "private" ? (
-										<>
-											<FontAwesome name="lock" size={18} color="gray" />
-											<Text style={styles.selectText}>Private Notes</Text>
-										</>
-									) : (
-										<>
-											<AntDesign name="eye" size={18} color="gray" />
-											<Text style={styles.selectText}>Public Notes</Text>
-										</>
-									)}
-								</View>
-							</TouchableOpacity>
-							{showOptions && (
-								<TouchableOpacity
-									style={[styles.selectButton, styles.optionButton]}
-									onPress={() =>
-										selectNoteType(
-											noteType === "private" ? "public" : "private",
-										)
-									}
-								>
-									<View style={styles.button}>
-										{noteType === "private" ? (
-											<>
-												<AntDesign name="eye" size={18} color="#303030" />
-												<Text style={styles.secondSelectText}>
-													Public Notes
-												</Text>
-											</>
-										) : (
-											<>
-												<FontAwesome name="lock" size={18} color="#303030" />
-												<Text style={styles.secondSelectText}>
-													Private Notes
-												</Text>
-											</>
-										)}
-									</View>
-								</TouchableOpacity>
-							)}
-						</View>
-					</View>
+				<View style={styles.tabContainer}>
+					<TouchableOpacity
+						style={[
+							styles.tab,
+							selectedTab === "Page"
+								? styles.selectedTab
+								: styles.unselectedTab,
+						]}
+						onPress={() => setSelectedTab("Page")}
+					>
+						<Text style={styles.tabText}>Page</Text>
+					</TouchableOpacity>
+					<TouchableOpacity
+						style={[
+							styles.tab,
+							selectedTab === "link"
+								? styles.selectedTab
+								: styles.unselectedTab,
+						]}
+						onPress={() => setSelectedTab("link")}
+					>
+						<Text style={styles.tabText}>Link</Text>
+					</TouchableOpacity>
 				</View>
+
 				<View style={styles.noteContainer}>
 					<View style={styles.inputContainer}>
 						<TextInput
@@ -101,7 +66,7 @@ export default function Note() {
 								!text && !isFocused ? styles.placeholderStyle : {},
 							]}
 							multiline
-							placeholder="Untitled"
+							placeholder="New Page"
 							placeholderTextColor="rgba(255, 255, 255, 0.3)"
 							value={text}
 							onChangeText={setText}
@@ -113,33 +78,44 @@ export default function Note() {
 								!text && !isFocused ? styles.smallPlaceholderStyle : {},
 							]}
 							multiline
-							placeholder="tap here to add a note..."
+							placeholder="Take a note..."
 							placeholderTextColor="rgba(255, 255, 255, 0.3)"
 							value={secondText}
 							onChangeText={setSecondText}
 						/>
-						<TouchableOpacity
-							style={styles.clearButton}
-							onPress={() => {
-								setText("")
-								setSecondText("")
-							}}
-						>
-							<Feather name="delete" size={24} color="gray" />
+					</View>
+					<View style={styles.buttonContainer}>
+						<TouchableOpacity style={styles.privateButton}>
+							<MaterialCommunityIcons
+								name="eye-off-outline"
+								size={22}
+								color="rgba(255, 255, 255, 0.4)"
+							/>
+						</TouchableOpacity>
+						<TouchableOpacity style={styles.settingsButton}>
+							<MaterialCommunityIcons
+								name="dots-horizontal"
+								size={24}
+								color="rgba(255, 255, 255, 0.4)"
+							/>
 						</TouchableOpacity>
 					</View>
-					<TouchableOpacity
-						style={[styles.createButton, text ? {} : styles.disabledButton]}
-						onPress={() => {
-							console.log(text)
-							console.log(secondText)
-							setText("")
-							setSecondText("")
+				</View>
+
+				<View style={styles.searchContainer}>
+					<TextInput
+						style={[
+							styles.searchInput,
+							isInputFocused ? styles.focusedInput : styles.unfocusedInput,
+						]}
+						placeholder="Search for existing page"
+						placeholderTextColor="rgba(255, 255, 255, 0.1)"
+						value={searchQuery}
+						onChangeText={(text) => {
+							setSearchQuery(text)
 						}}
-						disabled={!text}
-					>
-						<Text style={styles.buttonText}>Create</Text>
-					</TouchableOpacity>
+						onBlur={() => setIsInputFocused(false)}
+					/>
 				</View>
 			</SafeAreaView>
 		</TouchableWithoutFeedback>
@@ -151,10 +127,52 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: "#0F0F0F",
 	},
+
+	tabContainer: {
+		alignSelf: "center",
+		flexDirection: "row",
+		overflow: "hidden",
+		backgroundColor: "#222222",
+		borderRadius: 10,
+		width: 120,
+	},
+	tab: {
+		backgroundColor: "#222222",
+		borderRadius: 8,
+		paddingHorizontal: 8,
+		paddingVertical: 10,
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	selectedTab: {
+		backgroundColor: "rgba(255, 255, 255, 0.04)",
+		borderRadius: 7,
+		borderColor: "#222222",
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.55,
+		shadowRadius: 1,
+	},
+	unselectedTab: {
+		backgroundColor: "rgba(255, 255, 255, 0.0)",
+		borderRadius: 7,
+		borderColor: "#222222",
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.55,
+		shadowRadius: 1,
+	},
+	tabText: {
+		fontSize: 16,
+		color: "white",
+		opacity: 0.7,
+	},
+
 	noteContainer: {
 		width: "90%",
 		display: "flex",
-		marginTop: 80,
+		marginTop: 25,
 		marginHorizontal: width * 0.05,
 		position: "relative",
 	},
@@ -168,8 +186,8 @@ const styles = StyleSheet.create({
 		fontSize: 15,
 	},
 	input: {
-		fontSize: 18,
-		fontWeight: "500",
+		fontSize: 22,
+		fontWeight: "700",
 		color: "rgba(255, 255, 255, 0.5)",
 		paddingTop: 25,
 		paddingHorizontal: 11,
@@ -183,7 +201,7 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		fontWeight: "400",
 		color: "rgba(255, 255, 255, 0.7)",
-		paddingTop: 15,
+		paddingTop: 20,
 		paddingHorizontal: 11,
 		borderRadius: 10,
 		backgroundColor: "transparent",
@@ -192,44 +210,28 @@ const styles = StyleSheet.create({
 		lineHeight: 20,
 		paddingRight: width * 0.06,
 	},
-	createButton: {
-		alignItems: "center",
-		justifyContent: "center",
-		width: "20%",
-		marginLeft: 10,
-		backgroundColor: "#232323",
-		borderRadius: 7,
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 1 },
-		shadowOpacity: 0.55,
-		shadowRadius: 1,
-		padding: 8,
-		marginTop: 15,
-		marginRight: 10,
-	},
-	disabledButton: {
-		opacity: 0.5,
-	},
-	clearButton: {
+	buttonContainer: {
 		position: "absolute",
+		flexDirection: "row",
 		top: 0,
-		right: -15,
-		alignItems: "center",
-		justifyContent: "center",
+		left: 0,
+		right: 20,
+	},
+	privateButton: {
+		position: "absolute",
+		top: 10,
+		right: -10,
 		width: "20%",
-		paddingHorizontal: 11,
 		backgroundColor: "transparent",
-		borderRadius: 7,
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 1 },
-		shadowOpacity: 0.55,
-		shadowRadius: 1,
 		padding: 8,
 	},
-	buttonText: {
-		color: "white",
-		opacity: 0.7,
-		paddingRight: 5,
+	settingsButton: {
+		position: "absolute",
+		top: 10,
+		right: -50,
+		width: "20%",
+		backgroundColor: "transparent",
+		padding: 8,
 	},
 	borderContainer: {
 		width: "100%",
@@ -251,38 +253,6 @@ const styles = StyleSheet.create({
 		left: 30,
 		top: 20,
 	},
-	buttonContainer: {
-		position: "absolute",
-		top: 0,
-		left: 10,
-		right: 0,
-	},
-	selectButton: {
-		width: 150,
-		marginLeft: 50,
-		alignItems: "center",
-		justifyContent: "center",
-		backgroundColor: "#232323",
-		borderRadius: 7,
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 1 },
-		shadowOpacity: 0.55,
-		shadowRadius: 1,
-		padding: 8,
-		marginBottom: 5,
-	},
-	selectText: {
-		color: "rgba(255, 255, 255, 0.7)",
-		fontSize: 16,
-		marginLeft: 5,
-		fontWeight: "400",
-	},
-	secondSelectText: {
-		color: "rgba(255, 255, 255, 0.2)",
-		fontSize: 16,
-		marginLeft: 5,
-		fontWeight: "400",
-	},
 	optionButton: {
 		marginTop: 5,
 	},
@@ -292,5 +262,35 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "space-between",
 		color: "#1c1c1c",
+	},
+	searchContainer: {
+		width: "100%",
+		paddingHorizontal: 6,
+		flexDirection: "row",
+		alignItems: "center",
+		position: "absolute",
+		bottom: 2,
+		justifyContent: "center",
+	},
+	searchInput: {
+		flex: 1,
+		marginVertical: 10,
+		borderColor: "rgba(255, 255, 255, 0.15)",
+		borderWidth: 1,
+		borderRadius: 10,
+		paddingVertical: 14,
+		paddingHorizontal: 15,
+		color: "rgba(255, 255, 255, 0.6)",
+		fontSize: 16,
+		paddingRight: 40,
+		justifyContent: "center",
+		backgroundColor: "#131519",
+	},
+	focusedInput: {
+		textAlign: "left",
+	},
+	unfocusedInput: {
+		textAlign: "center",
+		backgroundColor: "#191919",
 	},
 })

@@ -47,6 +47,7 @@ export default function Personal() {
 		<SafeAreaView style={styles.container}>
 			<View style={styles.personalContainer}>
 				<View style={styles.personalInfo}>
+					<Text style={styles.personalUsername}>@username</Text>
 					<View style={styles.personalAvatarName}>
 						<TouchableOpacity onPress={pickImage}>
 							{avatarUrl ? (
@@ -60,20 +61,14 @@ export default function Personal() {
 								</View>
 							)}
 						</TouchableOpacity>
-						<View>
+						<View style={styles.personalInformation}>
 							<Text style={styles.personalName}>Profile Name</Text>
-							<Text style={styles.personalUsername}>@username</Text>
+							<Text style={styles.personalJob}>Figma expert</Text>
+							<Text style={styles.personalSite}>example@gmail.com</Text>
 						</View>
 					</View>
 				</View>
 				<View style={styles.settingsContainer}>
-					{/* <TouchableOpacity>
-						<SimpleLineIcons
-							name="share-alt"
-							size={18}
-							color="rgba(255, 255, 255, 1)"
-						/>
-					</TouchableOpacity> */}
 					<TouchableOpacity>
 						<SimpleLineIcons
 							name="settings"
@@ -120,8 +115,8 @@ const styles = StyleSheet.create({
 	},
 	settingsContainer: {
 		position: "absolute",
-		top: 10,
-		right: -20,
+		top: 0,
+		right: -15,
 		display: "flex",
 		flexDirection: "row",
 		justifyContent: "space-between",
@@ -139,6 +134,9 @@ const styles = StyleSheet.create({
 		justifyContent: "space-between",
 		marginTop: 20,
 		alignItems: "center",
+		paddingBottom: 20,
+		borderBottomColor: "rgba(255, 255, 255, 0.1)",
+		borderBottomWidth: 1,
 	},
 	personalInfo: {
 		display: "flex",
@@ -151,40 +149,57 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "flex-start",
 	},
+	personalInformation: {
+		display: "flex",
+		flexDirection: "column",
+		alignItems: "flex-start",
+		paddingLeft: 15,
+	},
 	personalName: {
 		color: "white",
-		fontSize: 18,
+		fontSize: 25,
 		alignSelf: "flex-start",
-		paddingLeft: 10,
-		fontWeight: "300",
+		fontWeight: "700",
 		paddingTop: 10,
+		paddingBottom: 20,
 	},
-	personalUsername: {
+	personalJob: {
+		color: "rgba(255, 255, 255, 0.9)",
+		fontSize: 16,
+		alignSelf: "flex-start",
+		paddingBottom: 15,
+	},
+	personalSite: {
 		color: "rgba(255, 255, 255, 0.6)",
 		fontSize: 14,
 		alignSelf: "flex-start",
-		paddingLeft: 10,
-		fontWeight: "400",
-		paddingTop: 5,
+		paddingBottom: 10,
+	},
+	personalUsername: {
+		color: "rgba(255, 255, 255, 1)",
+		fontSize: 14,
+		alignSelf: "flex-start",
+		paddingBottom: 10,
+		fontWeight: "600",
 	},
 	placeholderAvatar: {
 		marginTop: 10,
-		width: 40,
-		height: 40,
-		borderRadius: 50,
+		width: 100,
+		height: 100,
+		borderRadius: 12.5,
 		backgroundColor: "rgba(255, 255, 255, 0.1)",
 		alignItems: "center",
 		justifyContent: "center",
 	},
 	personalAvatar: {
 		marginTop: 10,
-		width: 40,
-		height: 40,
-		borderRadius: 50,
+		width: 100,
+		height: 100,
+		borderRadius: 12.5,
 	},
 	numbers: {
 		position: "absolute",
-		top: 80,
+		top: 180,
 		left: "10%",
 		width: "80%",
 		display: "flex",
@@ -208,7 +223,7 @@ const styles = StyleSheet.create({
 	},
 	section: {
 		position: "absolute",
-		top: 180,
+		top: 300,
 		display: "flex",
 		flexDirection: "column",
 		alignItems: "center",

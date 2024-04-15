@@ -19,6 +19,7 @@ const { width, height } = Dimensions.get("window")
 
 export default function Search() {
 	const [searchQuery, setSearchQuery] = useState("")
+	const [isInputFocused, setIsInputFocused] = useState(false)
 	const [showSuggestions, setShowSuggestions] = useState(false)
 	const animations = useRef(new Animated.Value(0)).current
 	const handleSearch = () => {
@@ -65,7 +66,10 @@ export default function Search() {
 			<SafeAreaView style={styles.container}>
 				<View style={styles.searchContainer}>
 					<TextInput
-						style={styles.searchInput}
+						style={[
+							styles.searchInput,
+							isInputFocused ? styles.focusedInput : styles.unfocusedInput,
+						]}
 						placeholder="Search or Paste a link"
 						placeholderTextColor="rgba(255, 255, 255, 0.1)"
 						value={searchQuery}
@@ -73,7 +77,11 @@ export default function Search() {
 							setSearchQuery(text)
 							setShowSuggestions(true)
 						}}
-						onFocus={() => setShowSuggestions(true)}
+						onFocus={() => {
+							setShowSuggestions(true)
+							setIsInputFocused(true)
+						}}
+						onBlur={() => setIsInputFocused(false)}
 					/>
 					<TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
 						<AntDesign
@@ -124,7 +132,6 @@ const styles = StyleSheet.create({
 		bottom: height - 210,
 		// top: height - 150,
 		zIndex: 1,
-		backgroundColor: "#171A21",
 		justifyContent: "center",
 	},
 	searchInput: {
@@ -140,6 +147,13 @@ const styles = StyleSheet.create({
 		paddingRight: 40,
 		justifyContent: "center",
 		backgroundColor: "#131519",
+	},
+	focusedInput: {
+		textAlign: "left",
+	},
+	unfocusedInput: {
+		textAlign: "center",
+		backgroundColor: "#191919",
 	},
 	searchButton: {
 		justifyContent: "center",
