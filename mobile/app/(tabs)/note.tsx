@@ -52,7 +52,14 @@ export default function Note() {
 	}, [isInputFocused])
 
 	return (
-		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+		<TouchableWithoutFeedback
+			onPress={() => {
+				Keyboard.dismiss()
+				setSearchQuery("")
+				setIsInputFocused(false)
+			}}
+			accessible={false}
+		>
 			{isInputFocused ? (
 				<SafeAreaView style={styles.container}>
 					<View style={{ flex: 1 }}>

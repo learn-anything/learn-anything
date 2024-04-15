@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
 	},
 	link: {
 		position: "absolute",
-		bottom: -550,
+		bottom: -520,
 		display: "flex",
 		flexDirection: "column",
 		alignItems: "center",
