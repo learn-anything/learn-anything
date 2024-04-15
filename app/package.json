@@ -16,9 +16,6 @@
 		"solid-js": "latest",
 		"tailwindcss": "latest"
 	},
-	"prettier": {
-		"semi": false
-	},
 	"devDependencies": {
 		"@tauri-apps/cli": "2.0.0-beta.9",
 		"autoprefixer": "^10.4.19",
