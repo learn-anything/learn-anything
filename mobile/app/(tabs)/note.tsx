@@ -10,7 +10,7 @@ import {
 	Keyboard,
 	TouchableWithoutFeedback,
 } from "react-native"
-import { MaterialCommunityIcons, AntDesign } from "@expo/vector-icons"
+import { MaterialCommunityIcons } from "@expo/vector-icons"
 
 const { width } = Dimensions.get("window")
 const { height } = Dimensions.get("window")
