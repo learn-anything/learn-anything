@@ -1,6 +1,6 @@
 import clsx from "clsx"
 import { Setter, Show, createEffect, createSignal } from "solid-js"
-import { Icon } from "./Icon"
+import Icon from "./Icon"
 import Button from "./Button"
 import { Motion, Presence } from "solid-motionone"
 
@@ -39,12 +39,15 @@ export default function ProfileLink(props: Props) {
 			}}
 			class={clsx(
 				"rounded-lg hover:bg-hoverDark bg-softDark p-2 pl-3 h-[54px] transition-all",
-				props.linkExpanded === props.link.title && "h-full transition-all !bg-[#171A21]",
+				props.linkExpanded === props.link.title &&
+					"h-full transition-all !bg-[#171A21]",
 			)}
 		>
 			<div class="flex-between">
 				<div class="flex gap-2 items-center">
-					<div class="bg-softDark rounded-md flex-center w-[20px] h-[20px] text-softDark">.</div>
+					<div class="bg-softDark rounded-md flex-center w-[20px] h-[20px] text-softDark">
+						.
+					</div>
 					<div>{props.link.title}</div>
 					<div class="text-[14px] text-softDarkText/40 hover:text-softDarkText/70 transition-all font-light">
 						{props.link.url}
@@ -54,7 +57,10 @@ export default function ProfileLink(props: Props) {
 					<Show when={hovered() || props.linkExpanded === props.link.title}>
 						<div class="flex-center gap-2">
 							<Motion.div
-								animate={{ transform: ["translateX(5px)", "translateX(0)"], opacity: [0, 0.6] }}
+								animate={{
+									transform: ["translateX(5px)", "translateX(0)"],
+									opacity: [0, 0.6],
+								}}
 								transition={{ duration: 0.3 }}
 								class="opacity-60 flex-center"
 							>
@@ -74,9 +80,10 @@ export default function ProfileLink(props: Props) {
 				<Motion.div class="w-full h-full flex flex-col justify-between">
 					<div class="pl-7 flex-col flex justify-between gap-2 p-2 text-[14px]">
 						<div class=" text-white/50 w-[700px]">
-							Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta, officia. Delectus in
-							dolor quam praesentium laborum velit iusto aut saepe quibusdam, quia, nihil omnis odit
-							dignissimos tenetur incidunt placeat fuga.
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta,
+							officia. Delectus in dolor quam praesentium laborum velit iusto
+							aut saepe quibusdam, quia, nihil omnis odit dignissimos tenetur
+							incidunt placeat fuga.
 						</div>
 						<div class="text-white/10">2024</div>
 					</div>
@@ -84,7 +91,7 @@ export default function ProfileLink(props: Props) {
 						<input
 							type="text"
 							placeholder="Take a note..."
-							class="bg-dark/0 text-[14px] text-white/40 pl-2 outline-none"
+							class="text-[14px] text-white/40 pl-2 outline-none bg-dark/20"
 						/>
 						<div
 							class="w-fit"
@@ -107,7 +114,10 @@ function Status() {
 	const [expandTimer, setExpandTimer] = createSignal(false)
 	return (
 		<Motion.div
-			animate={{ transform: ["translateX(5px)", "translateX(0)"], opacity: [0, 1] }}
+			animate={{
+				transform: ["translateX(5px)", "translateX(0)"],
+				opacity: [0, 1],
+			}}
 			transition={{ duration: 0.5 }}
 			class="relative"
 			onMouseLeave={() => {
