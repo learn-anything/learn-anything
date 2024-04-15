@@ -1,4 +1,4 @@
-import { foundOtherObjectId } from "../../../shared/edgedb"
+// all functions here start with either: create, update, delete
 import { client } from "../client"
 import e from "../dbschema/edgeql-js"
 

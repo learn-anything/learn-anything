@@ -31,17 +31,16 @@ async function seed() {
 
 async function base() {
 	await deleteUser(email)
-	const res = await createUser(process.env.email!)
-	console.log(res, "res")
+	await createUser(process.env.email!)
 }
 
 async function webIndex() {
-	// clear first
-	console.log("test")
+	await base()
+	console.log("run")
 }
 
 async function mobileIndex() {
-	// clear first
+	await base()
 }
 
 function checkSeedDbConnection() {
