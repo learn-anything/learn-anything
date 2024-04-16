@@ -12,6 +12,14 @@ import {
 	TouchableWithoutFeedback,
 } from "react-native"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
+import {
+	LeftArrowIcon,
+	LinkIcon,
+	ArrowIcon,
+	HeartIcon,
+	NoteIcon,
+	FlagIcon,
+} from "../../assets/svg/icons"
 
 const { width } = Dimensions.get("window")
 const { height } = Dimensions.get("window")
@@ -75,6 +83,30 @@ export default function Note() {
 		>
 			{isInputFocused ? (
 				<SafeAreaView style={styles.container}>
+					<View style={styles.tabContainer}>
+						<TouchableOpacity
+							style={[
+								styles.tab,
+								selectedTab === "Page"
+									? styles.selectedTab
+									: styles.unselectedTab,
+							]}
+							onPress={() => setSelectedTab("Page")}
+						>
+							<Text style={styles.tabText}>Page</Text>
+						</TouchableOpacity>
+						<TouchableOpacity
+							style={[
+								styles.tab,
+								selectedTab === "link"
+									? styles.selectedTab
+									: styles.unselectedTab,
+							]}
+							onPress={() => setSelectedTab("link")}
+						>
+							<Text style={styles.tabText}>Link</Text>
+						</TouchableOpacity>
+					</View>
 					<View style={{ flex: 1, display: "flex", flexDirection: "column" }}>
 						<Animated.View
 							style={[styles.searchContainerOnly, { top: position }]}
@@ -91,18 +123,94 @@ export default function Note() {
 								onBlur={() => setIsInputFocused(false)}
 							/>
 						</Animated.View>
-						<View style={styles.searchSuggestions}>
-							<Text style={{ color: "rgba(255, 255, 255, 0.5)", padding: 10 }}>
-								{selectedTab === "Page" ? "Pages" : "Links"}
-							</Text>
-							{Array.from({ length: 3 }, (_, i) => (
-								<TouchableOpacity key={i} style={styles.suggestionElement}>
-									<Text style={styles.suggestionElementText}>
-										{selectedTab === "Page" ? `Page ${i + 1}` : `Link ${i + 1}`}
-									</Text>
-								</TouchableOpacity>
-							))}
-						</View>
+						{selectedTab === "Page" ? (
+							<View style={styles.searchSuggestions}>
+								<Text
+									style={{ color: "rgba(255, 255, 255, 0.5)", padding: 10 }}
+								>
+									Pages
+								</Text>
+								{Array.from({ length: 3 }, (_, i) => (
+									<TouchableOpacity key={i} style={styles.suggestionElement}>
+										<Text style={styles.suggestionElementText}>
+											Page {i + 1}
+										</Text>
+										<LeftArrowIcon />
+									</TouchableOpacity>
+								))}
+							</View>
+						) : (
+							<View style={styles.linkContainer}>
+								<View>
+									<View style={styles.sheetTitleContainer}>
+										<View style={styles.titleContainer}>
+											<Text
+												style={{
+													color: "white",
+													fontSize: 16,
+													fontWeight: "500",
+													marginLeft: 8,
+												}}
+											>
+												Sample Title
+											</Text>
+										</View>
+										<View style={styles.sheetButton}>
+											<Text style={styles.sheetButtonText}>Open</Text>
+										</View>
+									</View>
+									<View style={styles.sheetLinkContainer}>
+										<View style={{ marginRight: 5 }}>
+											<LinkIcon />
+										</View>
+										<Text style={styles.sheetLink}>www.example.com</Text>
+									</View>
+
+									<View style={styles.sheetDescriptionContainer}>
+										<Text style={styles.sheetInfo}>
+											Description text goes here.
+										</Text>
+										<Text style={styles.sheetDate}>Year · Date</Text>
+									</View>
+									<View style={styles.sheetStatusContainer}>
+										<View style={styles.sheetTopicButton}>
+											<Text style={styles.sheetButtonText}>Topic Name</Text>
+										</View>
+										<View style={styles.sheetHeartIconContainer}>
+											<View style={{ marginRight: 10, opacity: 0.4 }}>
+												<HeartIcon />
+											</View>
+											<View
+												style={{
+													position: "relative",
+													flexDirection: "column",
+													alignItems: "center",
+												}}
+											>
+												<View style={styles.sheetLearningButton}>
+													<FlagIcon />
+													<Text style={styles.sheetLearningText}>To Learn</Text>
+													<ArrowIcon />
+												</View>
+											</View>
+										</View>
+									</View>
+								</View>
+								<View style={styles.sheetNoteContainer}>
+									<View style={styles.noteText}>
+										<View style={{ marginLeft: 20, opacity: 0.3 }}>
+											<NoteIcon />
+										</View>
+										<TextInput
+											style={styles.sheetNoteText}
+											value=""
+											placeholder="Take a note..."
+											placeholderTextColor="rgba(255, 255, 255, 0.9)"
+										/>
+									</View>
+								</View>
+							</View>
+						)}
 					</View>
 				</SafeAreaView>
 			) : (
@@ -417,10 +525,171 @@ const styles = StyleSheet.create({
 		marginBottom: 2,
 		borderRadius: 5,
 		backgroundColor: "#121212",
+		flexDirection: "row",
+		justifyContent: "space-between",
 	},
 	suggestionElementText: {
 		color: "rgba(255, 255, 255, 1)",
 		fontSize: 16,
 		fontWeight: "500",
+	},
+	linkContainer: {
+		paddingTop: 20,
+		position: "absolute",
+		top: 100,
+		left: 0,
+		right: 0,
+		backgroundColor: "#171A21",
+		borderRadius: 10,
+		alignItems: "center",
+		justifyContent: "center",
+		width: width * 0.95,
+		marginHorizontal: width * 0.025,
+	},
+	sheetTitleContainer: {
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "space-between",
+		width: "90%",
+	},
+	titleContainer: {
+		display: "flex",
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	sheetButton: {
+		height: 34,
+		alignItems: "center",
+		justifyContent: "center",
+		paddingHorizontal: 11,
+		backgroundColor: "#232323",
+		borderRadius: 7,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.55,
+		shadowRadius: 1,
+	},
+	sheetButtonText: {
+		textAlign: "center",
+		color: "white",
+		fontSize: 16,
+		opacity: 0.7,
+	},
+	sheetLinkContainer: {
+		display: "flex",
+		flexDirection: "row",
+		alignItems: "center",
+		marginTop: 0,
+		marginBottom: 20,
+	},
+	sheetLink: {
+		color: "white",
+		fontSize: 16,
+		opacity: 0.4,
+	},
+	sheetDescriptionContainer: {
+		marginTop: 10,
+		marginBottom: 20,
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "space-between",
+		width: "90%",
+	},
+	sheetInfo: {
+		color: "white",
+		fontSize: 16,
+		opacity: 0.7,
+		marginBottom: 10,
+	},
+	sheetDate: {
+		color: "white",
+		fontSize: 16,
+		opacity: 0.1,
+		fontWeight: "400",
+		lineHeight: 24,
+	},
+	sheetStatusContainer: {
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "space-between",
+		width: "90%",
+		paddingBottom: 20,
+		borderBottomWidth: 1,
+		borderBottomColor: "rgba(255, 255, 255, 0.1)",
+		alignItems: "center",
+	},
+	sheetTopicButton: {
+		height: 34,
+		alignItems: "center",
+		justifyContent: "center",
+		paddingHorizontal: 11,
+		backgroundColor: "rgba(31, 34, 41, 255)",
+		borderRadius: 7,
+	},
+	sheetHeartIconContainer: {
+		display: "flex",
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	sheetLearningButton: {
+		borderRadius: 7,
+		backgroundColor: "rgba(255, 255, 255, 0.05)",
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.55,
+		shadowRadius: 1,
+		paddingVertical: 8,
+		paddingHorizontal: 5,
+		width: 110,
+		display: "flex",
+		flexDirection: "row",
+		alignItems: "center",
+		marginRight: 8,
+	},
+	sheetLearningText: {
+		color: "rgba(255, 255, 255, 0.5)",
+		paddingLeft: 5,
+		marginRight: 6,
+		alignItems: "center",
+	},
+	sheetLearningButtonsDropdown: {
+		position: "absolute",
+		top: 27,
+		left: 0,
+		right: 0,
+		paddingVertical: 2,
+		borderRadius: 7,
+	},
+	sheetAnotherLearningButton: {
+		borderRadius: 7,
+		backgroundColor: "rgba(255, 255, 255, 0.05)",
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.55,
+		shadowRadius: 1,
+		paddingVertical: 8,
+		width: 105,
+		display: "flex",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+	},
+	sheetNoteContainer: {
+		width,
+		display: "flex",
+		flexDirection: "row",
+		paddingTop: 12,
+		paddingBottom: 12,
+	},
+	noteText: {
+		display: "flex",
+		flexDirection: "row",
+		flex: 1,
+	},
+	sheetNoteText: {
+		color: "white",
+		fontSize: 16,
+		opacity: 0.2,
+		marginLeft: 5,
 	},
 })
