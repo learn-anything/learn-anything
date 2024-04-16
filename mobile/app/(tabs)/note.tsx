@@ -24,6 +24,8 @@ export default function Note() {
 	const [selectedTab, setSelectedTab] = useState("Page")
 	const [searchQuery, setSearchQuery] = useState("")
 	const [isInputFocused, setIsInputFocused] = useState(false)
+	const [typing, setTyping] = useState(false)
+	const typingTimeoutRef = useRef(null)
 
 	const position = useRef(new Animated.Value(height - 100)).current
 
@@ -50,6 +52,17 @@ export default function Note() {
 			animateToBottom()
 		}
 	}, [isInputFocused])
+
+	const handleTextChange = (text: string) => {
+		setSecondText(text)
+		setTyping(true)
+		if (typingTimeoutRef.current) {
+			clearTimeout(typingTimeoutRef.current as NodeJS.Timeout)
+		}
+		typingTimeoutRef.current = setTimeout(() => {
+			setTyping(false)
+		}, 1500) as unknown as null
+	}
 
 	return (
 		<TouchableWithoutFeedback
@@ -130,8 +143,11 @@ export default function Note() {
 								placeholder="Take a note..."
 								placeholderTextColor="rgba(255, 255, 255, 0.3)"
 								value={secondText}
-								onChangeText={setSecondText}
+								onChangeText={handleTextChange}
 							/>
+							{secondText && !typing ? (
+								<Text style={styles.commandsText}>Type / to see commands</Text>
+							) : null}
 						</View>
 						<View style={styles.buttonContainer}>
 							<TouchableOpacity style={styles.privateButton}>
@@ -260,6 +276,12 @@ const styles = StyleSheet.create({
 		maxHeight: height * 0.9,
 		lineHeight: 20,
 		paddingRight: width * 0.06,
+	},
+	commandsText: {
+		color: "rgba(255, 255, 255, 0.3)",
+		fontSize: 16,
+		paddingTop: 2,
+		paddingLeft: 11,
 	},
 	buttonContainer: {
 		position: "absolute",

@@ -7,7 +7,6 @@ import {
 	Text,
 	TouchableOpacity,
 	Image,
-	ScrollView,
 	TextInput,
 } from "react-native"
 import { SimpleLineIcons } from "@expo/vector-icons"
@@ -15,7 +14,7 @@ import * as ImagePicker from "expo-image-picker"
 
 const { width } = Dimensions.get("window")
 
-export default function Personal() {
+export default function Registration() {
 	const [name, setName] = useState("")
 	const [avatar, setAvatar] = useState<string | undefined>(undefined)
 	const [username, setUsername] = useState("")
