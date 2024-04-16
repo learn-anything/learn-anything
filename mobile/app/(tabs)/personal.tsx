@@ -12,7 +12,11 @@ import {
 import * as ImagePicker from "expo-image-picker"
 import { SimpleLineIcons } from "@expo/vector-icons"
 import CustomAlertModal from "../components/CustomAlert"
-import { LinkIcon, JobIcon, LeftArrowIcon } from "../../assets/svg/icons"
+import {
+	PersonalLinkIcon,
+	JobIcon,
+	LeftArrowIcon,
+} from "../../assets/svg/icons"
 
 const { width } = Dimensions.get("window")
 
@@ -67,13 +71,7 @@ export default function Personal() {
 										style={styles.personalAvatar}
 									/>
 								) : (
-									<View style={styles.placeholderAvatar}>
-										<SimpleLineIcons
-											name="paper-clip"
-											size={17}
-											color="white"
-										/>
-									</View>
+									<View style={styles.placeholderAvatar}></View>
 								)}
 							</TouchableOpacity>
 							<View style={styles.personalInformation}>
@@ -83,6 +81,7 @@ export default function Personal() {
 										flexDirection: "row",
 										alignItems: "center",
 										height: 25,
+										marginBottom: 10,
 									}}
 								>
 									<JobIcon />
@@ -93,11 +92,10 @@ export default function Personal() {
 									style={{
 										flexDirection: "row",
 										alignItems: "center",
-										height: 25,
-										marginTop: 10,
+										height: 20,
 									}}
 								>
-									<LinkIcon />
+									<PersonalLinkIcon />
 									<Text style={styles.personalSite}>example@gmail.com</Text>
 								</View>
 							</View>
@@ -131,7 +129,7 @@ export default function Personal() {
 						{sections.map((section) => (
 							<View key={section.key} style={styles.sectionTitleContainer}>
 								<Text style={styles.sectionText}>{section.title}</Text>
-								<TouchableOpacity>
+								<TouchableOpacity style={{ alignSelf: "center" }}>
 									<LeftArrowIcon />
 								</TouchableOpacity>
 							</View>
@@ -142,7 +140,7 @@ export default function Personal() {
 						{links.map((link) => (
 							<View key={link.key} style={styles.sectionTitleContainer}>
 								<Text style={styles.sectionText}>{link.title}</Text>
-								<TouchableOpacity>
+								<TouchableOpacity style={{ alignSelf: "center" }}>
 									<LeftArrowIcon />
 								</TouchableOpacity>
 							</View>
