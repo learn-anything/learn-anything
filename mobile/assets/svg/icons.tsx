@@ -1,5 +1,5 @@
 import React from "react"
-import Svg, { Path, G, Circle, Rect } from "react-native-svg"
+import Svg, { Path, G, Rect } from "react-native-svg"
 
 export const ArrowIcon = () => (
 	<Svg width="14" height="14" viewBox="0 0 14 14" fill="none">

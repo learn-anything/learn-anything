@@ -35,6 +35,37 @@ export default function Note() {
 	const [typing, setTyping] = useState(false)
 	const typingTimeoutRef = useRef(null)
 
+	//learning buttons
+	const [showSheetLearningButtons, setShowSheetLearningButtons] =
+		useState(false)
+	const [sheetAnimationButtons, setSheetAnimationButtons] = useState<
+		Animated.Value[]
+	>([])
+	const [sheetLearningStatus, setSheetLearningStatus] = useState("To Learn")
+
+	useEffect(() => {
+		setSheetAnimationButtons([new Animated.Value(0), new Animated.Value(0)])
+	}, [])
+
+	const showSheetButtons = (nextStatus?: string) => {
+		setShowSheetLearningButtons(!showSheetLearningButtons)
+
+		if (nextStatus) {
+			setSheetLearningStatus(nextStatus)
+		}
+
+		const sheetAnimationsEnd = showSheetLearningButtons ? 0 : 1
+		const staggeredSheetAnimations = sheetAnimationButtons.map((button) =>
+			Animated.timing(button, {
+				toValue: sheetAnimationsEnd,
+				duration: 200,
+				useNativeDriver: true,
+			}),
+		)
+
+		Animated.parallel(staggeredSheetAnimations).start()
+	}
+
 	const position = useRef(new Animated.Value(height - 100)).current
 
 	const animateToTop = () => {
@@ -116,7 +147,7 @@ export default function Note() {
 								placeholder={
 									selectedTab === "Page"
 										? "Search for existing page"
-										: "Search for existing link"
+										: "Paste a link"
 								}
 								value={searchQuery}
 								onChangeText={setSearchQuery}
@@ -187,12 +218,73 @@ export default function Note() {
 													alignItems: "center",
 												}}
 											>
+												<TouchableOpacity
+													style={[
+														styles.sheetLearningButton,
+														{ paddingLeft: 15 },
+													]}
+													onPress={() => showSheetButtons()}
+												>
+													<FlagIcon />
+													<Text style={styles.sheetLearningText}>
+														{sheetLearningStatus}
+													</Text>
+													<ArrowIcon />
+												</TouchableOpacity>
+												{["Learning", "Learned", "To Learn"]
+													.filter((s) => s !== sheetLearningStatus)
+													.map((status, index) =>
+														sheetAnimationButtons[index] ? (
+															<Animated.View
+																key={index}
+																style={[
+																	styles.sheetLearningButtonsDropdown,
+																	{
+																		opacity: sheetAnimationButtons[index],
+																		transform: [
+																			{
+																				scale: sheetAnimationButtons[
+																					index
+																				].interpolate({
+																					inputRange: [0, 1],
+																					outputRange: [0.5, 1],
+																				}),
+																			},
+																		],
+																		top: 30 + index * 35,
+																	},
+																]}
+															>
+																<TouchableOpacity
+																	style={styles.sheetAnotherLearningButton}
+																	onPress={() => showSheetButtons(status)}
+																>
+																	<Text
+																		style={[
+																			styles.sheetLearningText,
+																			{ lineHeight: 20 },
+																		]}
+																	>
+																		{status}
+																	</Text>
+																</TouchableOpacity>
+															</Animated.View>
+														) : null,
+													)}
+											</View>
+											{/* <View
+												style={{
+													position: "relative",
+													flexDirection: "column",
+													alignItems: "center",
+												}}
+											>
 												<View style={styles.sheetLearningButton}>
 													<FlagIcon />
 													<Text style={styles.sheetLearningText}>To Learn</Text>
 													<ArrowIcon />
 												</View>
-											</View>
+											</View> */}
 										</View>
 									</View>
 								</View>
@@ -644,7 +736,6 @@ const styles = StyleSheet.create({
 		display: "flex",
 		flexDirection: "row",
 		alignItems: "center",
-		marginRight: 8,
 	},
 	sheetLearningText: {
 		color: "rgba(255, 255, 255, 0.5)",
