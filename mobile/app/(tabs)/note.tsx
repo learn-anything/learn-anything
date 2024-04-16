@@ -75,21 +75,34 @@ export default function Note() {
 		>
 			{isInputFocused ? (
 				<SafeAreaView style={styles.container}>
-					<View style={{ flex: 1 }}>
+					<View style={{ flex: 1, display: "flex", flexDirection: "column" }}>
 						<Animated.View
 							style={[styles.searchContainerOnly, { top: position }]}
 						>
 							<TextInput
-								style={[styles.searchInputOnly, styles.focusedInput]}
-								placeholder="Search for existing page"
-								placeholderTextColor="rgba(255, 255, 255, 0.1)"
+								style={styles.searchInputOnly}
+								placeholder={
+									selectedTab === "Page"
+										? "Search for existing page"
+										: "Search for existing link"
+								}
 								value={searchQuery}
-								onChangeText={(text) => {
-									setSearchQuery(text)
-								}}
+								onChangeText={setSearchQuery}
 								onBlur={() => setIsInputFocused(false)}
 							/>
 						</Animated.View>
+						<View style={styles.searchSuggestions}>
+							<Text style={{ color: "rgba(255, 255, 255, 0.5)", padding: 10 }}>
+								{selectedTab === "Page" ? "Pages" : "Links"}
+							</Text>
+							{Array.from({ length: 3 }, (_, i) => (
+								<TouchableOpacity key={i} style={styles.suggestionElement}>
+									<Text style={styles.suggestionElementText}>
+										{selectedTab === "Page" ? `Page ${i + 1}` : `Link ${i + 1}`}
+									</Text>
+								</TouchableOpacity>
+							))}
+						</View>
 					</View>
 				</SafeAreaView>
 			) : (
@@ -118,7 +131,6 @@ export default function Note() {
 							<Text style={styles.tabText}>Link</Text>
 						</TouchableOpacity>
 					</View>
-
 					<View style={styles.noteContainer}>
 						<View style={styles.inputContainer}>
 							<TextInput
@@ -173,7 +185,11 @@ export default function Note() {
 								styles.searchInput,
 								isInputFocused ? styles.focusedInput : styles.unfocusedInput,
 							]}
-							placeholder="Search for existing page"
+							placeholder={
+								selectedTab === "Page"
+									? "Search for existing page"
+									: "Search for existing link"
+							}
 							placeholderTextColor="rgba(255, 255, 255, 0.1)"
 							value={searchQuery}
 							onChangeText={(text) => {
@@ -388,5 +404,23 @@ const styles = StyleSheet.create({
 	unfocusedInput: {
 		textAlign: "center",
 		backgroundColor: "#191919",
+	},
+	searchSuggestions: {
+		width: "100%",
+		position: "absolute",
+		top: 90,
+		flexDirection: "column",
+		justifyContent: "space-between",
+	},
+	suggestionElement: {
+		padding: 10,
+		marginBottom: 2,
+		borderRadius: 5,
+		backgroundColor: "#121212",
+	},
+	suggestionElementText: {
+		color: "rgba(255, 255, 255, 1)",
+		fontSize: 16,
+		fontWeight: "500",
 	},
 })
