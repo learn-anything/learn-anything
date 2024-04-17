@@ -20,6 +20,7 @@ import {
 	NoteIcon,
 	FlagIcon,
 } from "../../assets/svg/icons"
+import { AntDesign } from "@expo/vector-icons"
 
 const { width } = Dimensions.get("window")
 const { height } = Dimensions.get("window")
@@ -77,11 +78,7 @@ export default function Note() {
 	}
 
 	const animateToBottom = () => {
-		Animated.timing(position, {
-			toValue: height - 115,
-			duration: 300,
-			useNativeDriver: false,
-		}).start()
+		position.setValue(height - 115)
 	}
 
 	useEffect(() => {
@@ -142,17 +139,54 @@ export default function Note() {
 						<Animated.View
 							style={[styles.searchContainerOnly, { top: position }]}
 						>
+							{selectedTab === "Page" ? (
+								<AntDesign
+									name="search1"
+									size={18}
+									color="rgba(255, 255, 255, 0.3)"
+									style={{
+										position: "absolute",
+										left: 20,
+										top: 25,
+										zIndex: 3,
+									}}
+								/>
+							) : null}
 							<TextInput
-								style={styles.searchInputOnly}
+								style={[
+									styles.searchInputOnly,
+									selectedTab === "Link" ? { paddingLeft: 20 } : {},
+								]}
 								placeholder={
 									selectedTab === "Page"
 										? "Search for existing page"
 										: "Paste a link"
 								}
+								placeholderTextColor="rgba(255, 255, 255, 0.1)"
 								value={searchQuery}
-								onChangeText={setSearchQuery}
+								onChangeText={(text) => {
+									if (selectedTab === "Link") {
+										const filteredText = text
+											.replace(/[^a-z]/g, "")
+											.toLowerCase()
+										setSearchQuery(filteredText)
+									} else {
+										setSearchQuery(text)
+									}
+								}}
+								autoCapitalize="none"
 								onBlur={() => setIsInputFocused(false)}
 							/>
+							{selectedTab === "Page" ||
+							(selectedTab === "link" && searchQuery) ? (
+								<AntDesign
+									name="close"
+									size={14}
+									color="rgba(255, 255, 255, 0.2)"
+									style={{ position: "absolute", right: 18, top: 28 }}
+									onPress={() => setIsInputFocused(false)}
+								/>
+							) : null}
 						</Animated.View>
 						{selectedTab === "Page" ? (
 							<View style={styles.searchSuggestions}>
@@ -221,7 +255,7 @@ export default function Note() {
 												<TouchableOpacity
 													style={[
 														styles.sheetLearningButton,
-														{ paddingLeft: 15 },
+														{ paddingLeft: 3 },
 													]}
 													onPress={() => showSheetButtons()}
 												>
@@ -272,19 +306,6 @@ export default function Note() {
 														) : null,
 													)}
 											</View>
-											{/* <View
-												style={{
-													position: "relative",
-													flexDirection: "column",
-													alignItems: "center",
-												}}
-											>
-												<View style={styles.sheetLearningButton}>
-													<FlagIcon />
-													<Text style={styles.sheetLearningText}>To Learn</Text>
-													<ArrowIcon />
-												</View>
-											</View> */}
 										</View>
 									</View>
 								</View>
@@ -380,24 +401,37 @@ export default function Note() {
 					</View>
 
 					<Animated.View style={[styles.searchContainer, { top: position }]}>
-						<TextInput
-							style={[
-								styles.searchInput,
-								isInputFocused ? styles.focusedInput : styles.unfocusedInput,
-							]}
-							placeholder={
-								selectedTab === "Page"
-									? "Search for existing page"
-									: "Search for existing link"
-							}
-							placeholderTextColor="rgba(255, 255, 255, 0.1)"
-							value={searchQuery}
-							onChangeText={(text) => {
-								setSearchQuery(text)
-							}}
-							onFocus={() => setIsInputFocused(true)}
-							onBlur={() => setIsInputFocused(false)}
-						/>
+						<View style={{ position: "relative" }}>
+							<AntDesign
+								name="search1"
+								size={18}
+								color="rgba(255, 255, 255, 0.3)"
+								style={{
+									position: "absolute",
+									left: 65,
+									top: 24,
+									zIndex: 3,
+								}}
+							/>
+							<TextInput
+								style={[
+									styles.searchInput,
+									isInputFocused ? styles.focusedInput : styles.unfocusedInput,
+								]}
+								placeholder={
+									selectedTab === "Page"
+										? "Search for existing page"
+										: "Search or Paste a link"
+								}
+								placeholderTextColor="rgba(255, 255, 255, 0.1)"
+								value={searchQuery}
+								onChangeText={(text) => {
+									setSearchQuery(text)
+								}}
+								onFocus={() => setIsInputFocused(true)}
+								onBlur={() => setIsInputFocused(false)}
+							/>
+						</View>
 					</Animated.View>
 				</SafeAreaView>
 			)}
@@ -562,6 +596,7 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 	},
 	searchContainerOnly: {
+		zIndex: 2,
 		width: "100%",
 		position: "absolute",
 		top: 0,
@@ -594,7 +629,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 15,
 		color: "rgba(255, 255, 255, 1)",
 		fontSize: 16,
-		paddingRight: 40,
+		paddingLeft: 40,
 		justifyContent: "center",
 		backgroundColor: "#131519",
 	},
@@ -608,7 +643,7 @@ const styles = StyleSheet.create({
 	searchSuggestions: {
 		width: "100%",
 		position: "absolute",
-		top: 90,
+		top: 70,
 		flexDirection: "column",
 		justifyContent: "space-between",
 	},
@@ -731,11 +766,11 @@ const styles = StyleSheet.create({
 		shadowOpacity: 0.55,
 		shadowRadius: 1,
 		paddingVertical: 8,
-		paddingHorizontal: 5,
+		paddingHorizontal: 10,
 		width: 110,
 		display: "flex",
 		flexDirection: "row",
-		alignItems: "center",
+		alignItems: "flex-start",
 	},
 	sheetLearningText: {
 		color: "rgba(255, 255, 255, 0.5)",
