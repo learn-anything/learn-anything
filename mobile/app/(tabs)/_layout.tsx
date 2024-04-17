@@ -1,6 +1,7 @@
 import React from "react"
 import { Link, Tabs } from "expo-router"
 import { StyleSheet, Pressable } from "react-native"
+import { StatusBar } from "expo-status-bar"
 import { Octicons, AntDesign, Ionicons } from "@expo/vector-icons"
 
 function TabBarIcon(props: {
@@ -52,129 +53,144 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
 	return (
-		<Tabs
-			screenOptions={{
-				tabBarStyle: {
-					backgroundColor: "#151515",
-					paddingHorizontal: 15,
-					height: 82,
-				},
-				tabBarShowLabel: false,
-			}}
-		>
-			<Tabs.Screen
-				name="index"
-				options={{
-					headerShown: false,
-					title: "index",
-					tabBarIcon: ({ color, focused }) => (
-						<Octicons
-							name="list-unordered"
-							size={24}
-							color={focused ? "white" : color}
-						/>
-					),
-					headerRight: () => (
-						<Link href="/index" asChild>
-							<Pressable>
-								{({ pressed }) => (
-									<Octicons
-										name="list-unordered"
-										size={24}
-										color="gray"
-										style={[styles.headerRight, { opacity: pressed ? 0.5 : 1 }]}
-									/>
-								)}
-							</Pressable>
-						</Link>
-					),
+		<>
+			<StatusBar style="light" />
+			<Tabs
+				screenOptions={{
+					tabBarStyle: {
+						backgroundColor: "#151515",
+						paddingHorizontal: 15,
+						height: 82,
+					},
+					tabBarShowLabel: false,
 				}}
-			/>
-			<Tabs.Screen
-				name="search"
-				options={{
-					headerShown: false,
-					title: "search",
-					tabBarIcon: ({ color, focused }) => (
-						<AntDesign
-							name="search1"
-							size={24}
-							color={focused ? "white" : color}
-						/>
-					),
-					headerRight: () => (
-						<Link href="/search" asChild>
-							<Pressable>
-								{({ pressed }) => (
-									<AntDesign
-										name="search1"
-										size={24}
-										color="gray"
-										style={[styles.headerRight, { opacity: pressed ? 0.5 : 1 }]}
-									/>
-								)}
-							</Pressable>
-						</Link>
-					),
-				}}
-			/>
-			<Tabs.Screen
-				name="note"
-				options={{
-					headerShown: false,
-					title: "add note",
-					tabBarIcon: ({ color, focused }) => (
-						<AntDesign
-							name="pluscircleo"
-							size={24}
-							color={focused ? "white" : color}
-						/>
-					),
-					headerRight: () => (
-						<Link href="/note" asChild>
-							<Pressable>
-								{({ pressed }) => (
-									<AntDesign
-										name="pluscircleo"
-										size={24}
-										color="gray"
-										style={[styles.headerRight, { opacity: pressed ? 0.5 : 1 }]}
-									/>
-								)}
-							</Pressable>
-						</Link>
-					),
-				}}
-			/>
-			<Tabs.Screen
-				name="personal"
-				options={{
-					headerShown: false,
-					title: "Tab",
-					tabBarIcon: ({ color, focused }) => (
-						<Ionicons
-							name="person-outline"
-							size={24}
-							color={focused ? "white" : color}
-						/>
-					),
-					headerRight: () => (
-						<Link href="/personal" asChild>
-							<Pressable>
-								{({ pressed }) => (
-									<Ionicons
-										name="person-outline"
-										size={24}
-										color="gray"
-										style={[styles.headerRight, { opacity: pressed ? 0.5 : 1 }]}
-									/>
-								)}
-							</Pressable>
-						</Link>
-					),
-				}}
-			/>
-		</Tabs>
+			>
+				<Tabs.Screen
+					name="index"
+					options={{
+						headerShown: false,
+						title: "index",
+						tabBarIcon: ({ color, focused }) => (
+							<Octicons
+								name="list-unordered"
+								size={24}
+								color={focused ? "white" : color}
+							/>
+						),
+						headerRight: () => (
+							<Link href="/index" asChild>
+								<Pressable>
+									{({ pressed }) => (
+										<Octicons
+											name="list-unordered"
+											size={24}
+											color="gray"
+											style={[
+												styles.headerRight,
+												{ opacity: pressed ? 0.5 : 1 },
+											]}
+										/>
+									)}
+								</Pressable>
+							</Link>
+						),
+					}}
+				/>
+				<Tabs.Screen
+					name="search"
+					options={{
+						headerShown: false,
+						title: "search",
+						tabBarIcon: ({ color, focused }) => (
+							<AntDesign
+								name="search1"
+								size={24}
+								color={focused ? "white" : color}
+							/>
+						),
+						headerRight: () => (
+							<Link href="/search" asChild>
+								<Pressable>
+									{({ pressed }) => (
+										<AntDesign
+											name="search1"
+											size={24}
+											color="gray"
+											style={[
+												styles.headerRight,
+												{ opacity: pressed ? 0.5 : 1 },
+											]}
+										/>
+									)}
+								</Pressable>
+							</Link>
+						),
+					}}
+				/>
+				<Tabs.Screen
+					name="note"
+					options={{
+						headerShown: false,
+						title: "add note",
+						tabBarIcon: ({ color, focused }) => (
+							<AntDesign
+								name="pluscircleo"
+								size={24}
+								color={focused ? "white" : color}
+							/>
+						),
+						headerRight: () => (
+							<Link href="/note" asChild>
+								<Pressable>
+									{({ pressed }) => (
+										<AntDesign
+											name="pluscircleo"
+											size={24}
+											color="gray"
+											style={[
+												styles.headerRight,
+												{ opacity: pressed ? 0.5 : 1 },
+											]}
+										/>
+									)}
+								</Pressable>
+							</Link>
+						),
+					}}
+				/>
+				<Tabs.Screen
+					name="personal"
+					options={{
+						headerShown: false,
+						title: "Tab",
+						tabBarIcon: ({ color, focused }) => (
+							<Ionicons
+								name="person-outline"
+								size={24}
+								color={focused ? "white" : color}
+							/>
+						),
+						headerRight: () => (
+							<Link href="/personal" asChild>
+								<Pressable>
+									{({ pressed }) => (
+										<Ionicons
+											name="person-outline"
+											size={24}
+											color="gray"
+											style={[
+												styles.headerRight,
+												{ opacity: pressed ? 0.5 : 1 },
+											]}
+										/>
+									)}
+								</Pressable>
+							</Link>
+						),
+					}}
+				/>
+			</Tabs>
+		</>
 	)
 }
 

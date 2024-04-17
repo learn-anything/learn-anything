@@ -220,11 +220,6 @@ const styles = StyleSheet.create({
 		backgroundColor: "#0F0F0F",
 		position: "relative",
 	},
-	svgBackground: {
-		position: "absolute",
-		top: 0,
-		left: 0,
-	},
 	authContainer: {
 		flexDirection: `column`,
 		alignItems: `center`,
