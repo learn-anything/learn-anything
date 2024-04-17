@@ -126,11 +126,11 @@ export default function Note() {
 						<TouchableOpacity
 							style={[
 								styles.tab,
-								selectedTab === "link"
+								selectedTab === "Link"
 									? styles.selectedTab
 									: styles.unselectedTab,
 							]}
-							onPress={() => setSelectedTab("link")}
+							onPress={() => setSelectedTab("Link")}
 						>
 							<Text style={styles.tabText}>Link</Text>
 						</TouchableOpacity>
@@ -167,7 +167,7 @@ export default function Note() {
 								onChangeText={(text) => {
 									if (selectedTab === "Link") {
 										const filteredText = text
-											.replace(/[^a-z]/g, "")
+											.replace(/[^a-zA-Z0-9@.:/\-_+=%&?]/g, "")
 											.toLowerCase()
 										setSearchQuery(filteredText)
 									} else {
@@ -178,7 +178,7 @@ export default function Note() {
 								onBlur={() => setIsInputFocused(false)}
 							/>
 							{selectedTab === "Page" ||
-							(selectedTab === "link" && searchQuery) ? (
+							(selectedTab === "Link" && searchQuery) ? (
 								<AntDesign
 									name="close"
 									size={14}
@@ -343,11 +343,11 @@ export default function Note() {
 						<TouchableOpacity
 							style={[
 								styles.tab,
-								selectedTab === "link"
+								selectedTab === "Link"
 									? styles.selectedTab
 									: styles.unselectedTab,
 							]}
-							onPress={() => setSelectedTab("link")}
+							onPress={() => setSelectedTab("Link")}
 						>
 							<Text style={styles.tabText}>Link</Text>
 						</TouchableOpacity>
