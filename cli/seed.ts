@@ -1,4 +1,10 @@
-import { createUser, deleteUser } from "../api/edgedb/crud/mutations"
+import {
+	createPersonalLink,
+	createUser,
+	deleteAllGlobalLinks,
+	deleteAllPersonalLinks,
+	deleteUser,
+} from "../api/edgedb/crud/mutations"
 
 const email = process.env.email!
 
@@ -35,8 +41,15 @@ async function base() {
 }
 
 async function webIndex() {
-	await base()
-	console.log("run")
+	// await base()
+	await deleteAllPersonalLinks()
+	await deleteAllGlobalLinks()
+	const res = await createPersonalLink(
+		email,
+		"https://learn-anything.xyz",
+		"NoLearningStatus",
+	)
+	console.log(res, "res")
 }
 
 async function mobileIndex() {

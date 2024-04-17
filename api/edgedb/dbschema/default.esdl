@@ -27,11 +27,21 @@ module default {
     # total number of topics user is tracking
     property topicsTracked := count(.topicsToLearn) + count(.topicsLearning) + count(.topicsLearned);
     # links user wants to complete
-    multi linksToComplete: PersonalLink;
+    multi linksToComplete: PersonalLink {
+      on target delete allow;
+    };
     # links user is currently trying to complete
-    multi linksInProgress: PersonalLink;
+    multi linksInProgress: PersonalLink {
+      on target delete allow;
+    };
     # links user has completed
-    multi linksCompleted: PersonalLink;
+    multi linksCompleted: PersonalLink {
+      on target delete allow;
+    };
+    # links without any learning status
+    multi linksWithoutLearningStatus: PersonalLink {
+      on target delete allow;
+    };
     # links user has liked
     multi linksLiked: PersonalLink;
     # total number of links user is interacting with
