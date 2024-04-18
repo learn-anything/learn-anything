@@ -13,54 +13,54 @@ import {
 	Animated,
 } from "react-native"
 import AntDesign from "@expo/vector-icons/AntDesign"
-import suggestions from "../constants/suggestions"
+// import suggestions from "../constants/suggestions"
 
 const { width, height } = Dimensions.get("window")
 
 export default function Search() {
 	const [searchQuery, setSearchQuery] = useState("")
 	const [isInputFocused, setIsInputFocused] = useState(false)
-	const [showSuggestions, setShowSuggestions] = useState(false)
-	const animations = useRef(new Animated.Value(0)).current
+	// const [showSuggestions, setShowSuggestions] = useState(false)
+	// const animations = useRef(new Animated.Value(0)).current
 
 	const handleSearch = () => {
 		console.log("search:", searchQuery)
 	}
 
-	const filteredSuggestions = suggestions.filter((suggestion: string) =>
-		suggestion.toUpperCase().startsWith(searchQuery.toUpperCase()),
-	)
+	// const filteredSuggestions = suggestions.filter((suggestion: string) =>
+	// 	suggestion.toUpperCase().startsWith(searchQuery.toUpperCase()),
+	// )
 
-	const handleSuggestionClick = (suggestion: string) => {
-		setSearchQuery(suggestion)
-		setShowSuggestions(false)
-	}
+	// const handleSuggestionClick = (suggestion: string) => {
+	// 	setSearchQuery(suggestion)
+	// 	setShowSuggestions(false)
+	// }
 
-	const suggestionHeight = 50
-	const suggestionsMaxHeight = 200
+	// const suggestionHeight = 50
+	// const suggestionsMaxHeight = 200
 
-	const dynamicHeight = Math.min(
-		filteredSuggestions.length * suggestionHeight,
-		suggestionsMaxHeight,
-	)
+	// const dynamicHeight = Math.min(
+	// 	filteredSuggestions.length * suggestionHeight,
+	// 	suggestionsMaxHeight,
+	// )
 
-	useEffect(() => {
-		if (searchQuery === "") {
-			animations.setValue(0)
-		} else {
-			Animated.timing(animations, {
-				toValue: showSuggestions && searchQuery ? dynamicHeight : 0,
-				duration: 200,
-				useNativeDriver: false,
-			}).start()
-		}
-	}, [showSuggestions, searchQuery, filteredSuggestions.length])
+	// useEffect(() => {
+	// 	if (searchQuery === "") {
+	// 		animations.setValue(0)
+	// 	} else {
+	// 		Animated.timing(animations, {
+	// 			toValue: showSuggestions && searchQuery ? dynamicHeight : 0,
+	// 			duration: 200,
+	// 			useNativeDriver: false,
+	// 		}).start()
+	// 	}
+	// }, [showSuggestions, searchQuery, filteredSuggestions.length])
 
 	return (
 		<TouchableWithoutFeedback
 			onPress={() => {
 				Keyboard.dismiss()
-				setShowSuggestions(false)
+				// setShowSuggestions(false)
 			}}
 			accessible={false}
 		>
@@ -76,15 +76,22 @@ export default function Search() {
 						value={searchQuery}
 						onChangeText={(text) => {
 							setSearchQuery(text)
-							setShowSuggestions(true)
+							// setShowSuggestions(true)
 						}}
 						onFocus={() => {
-							setShowSuggestions(true)
+							// setShowSuggestions(true)
 							setIsInputFocused(true)
 						}}
 						onBlur={() => setIsInputFocused(false)}
 					/>
-					<TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
+					<TouchableOpacity
+						style={[
+							isInputFocused
+								? styles.focusedSearchButton
+								: styles.unfocusedSearchButton,
+						]}
+						onPress={handleSearch}
+					>
 						<AntDesign
 							name="search1"
 							size={20}
@@ -92,7 +99,7 @@ export default function Search() {
 						/>
 					</TouchableOpacity>
 				</View>
-				<Animated.View
+				{/* <Animated.View
 					style={[
 						styles.suggestionContainer,
 						{ height: animations, top: height * 0.16 },
@@ -111,7 +118,7 @@ export default function Search() {
 							</TouchableOpacity>
 						))}
 					</ScrollView>
-				</Animated.View>
+				</Animated.View> */}
 			</SafeAreaView>
 		</TouchableWithoutFeedback>
 	)
@@ -150,16 +157,24 @@ const styles = StyleSheet.create({
 	},
 	focusedInput: {
 		textAlign: "left",
+		paddingLeft: 40,
 	},
 	unfocusedInput: {
 		textAlign: "center",
 		backgroundColor: "#191919",
 	},
-	searchButton: {
+	focusedSearchButton: {
 		justifyContent: "center",
 		position: "absolute",
-		right: 20,
 		top: "50%",
+		left: "5%",
+		transform: [{ translateY: -9 }],
+	},
+	unfocusedSearchButton: {
+		justifyContent: "center",
+		position: "absolute",
+		top: "50%",
+		left: "20%",
 		transform: [{ translateY: -9 }],
 	},
 	suggestionContainer: {

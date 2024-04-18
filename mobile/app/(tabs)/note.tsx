@@ -10,12 +10,13 @@ import {
 	TextInput,
 	Keyboard,
 	TouchableWithoutFeedback,
+	Image,
 } from "react-native"
-import {
-	useEditorBridge,
-	RichText,
-	TenTapStartKit,
-} from "@10play/tentap-editor"
+// import {
+// 	useEditorBridge,
+// 	RichText,
+// 	TenTapStartKit,
+// } from "@10play/tentap-editor"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import {
 	LeftArrowIcon,
@@ -33,7 +34,6 @@ const { height } = Dimensions.get("window")
 export default function Note() {
 	const [text, setText] = useState("")
 	// const [secondText, setSecondText] = useState("")
-	const [isRichTextFocused, setIsRichTextFocused] = useState(false)
 	const inputRef = useRef<TextInput>(null)
 	const [isFocused, setIsFocused] = useState(false)
 	const [selectedTab, setSelectedTab] = useState("Page")
@@ -95,25 +95,18 @@ export default function Note() {
 		}
 	}, [isInputFocused])
 
-	// const editor = useEditorBridge({
-	// 	bridgeExtensions: TenTapStartKit,
-	// 	autofocus: true,
-	// 	avoidIosKeyboard: true,
-	// })
-
-	// const handleTextChange = (text: string) => {
-	// 	setIsRichTextFocused(true)
-	// 	setTyping(true)
-	// 	if (typingTimeoutRef.current) {
-	// 		clearTimeout(typingTimeoutRef.current as NodeJS.Timeout)
-	// 	}
-	// 	typingTimeoutRef.current = setTimeout(() => {
-	// 		setTyping(false)
-	// 	}, 1500) as unknown as null
-	// }
+	useEffect(() => {
+		if (isInputFocused) {
+			inputRef.current?.focus()
+		}
+	}, [isInputFocused])
 
 	const handleRichTextChange = (newText: string) => {
 		setRichTextContent(newText)
+	}
+
+	const getLinkIcon = (url: string) => {
+		return require("../../assets/favicon.png")
 	}
 
 	return (
@@ -146,7 +139,9 @@ export default function Note() {
 									? styles.selectedTab
 									: styles.unselectedTab,
 							]}
-							onPress={() => setSelectedTab("Link")}
+							onPress={() => {
+								setSelectedTab("Link")
+							}}
 						>
 							<Text style={styles.tabText}>Link</Text>
 						</TouchableOpacity>
@@ -169,6 +164,7 @@ export default function Note() {
 								/>
 							) : null}
 							<TextInput
+								ref={inputRef}
 								style={[
 									styles.searchInputOnly,
 									selectedTab === "Link" ? { paddingLeft: 20 } : {},
@@ -213,9 +209,15 @@ export default function Note() {
 								</Text>
 								{Array.from({ length: 3 }, (_, i) => (
 									<TouchableOpacity key={i} style={styles.suggestionElement}>
-										<Text style={styles.suggestionElementText}>
-											Page {i + 1}
-										</Text>
+										<View style={styles.suggestinLeftContent}>
+											<Image
+												source={getLinkIcon("url")}
+												style={styles.suggestionImage}
+											/>
+											<Text style={styles.suggestionElementText}>
+												Page {i + 1}
+											</Text>
+										</View>
 										<LeftArrowIcon />
 									</TouchableOpacity>
 								))}
@@ -368,62 +370,64 @@ export default function Note() {
 							<Text style={styles.tabText}>Link</Text>
 						</TouchableOpacity>
 					</View>
-					<View style={styles.noteContainer}>
-						<View style={styles.inputContainer}>
-							<TextInput
-								ref={inputRef}
-								style={[
-									styles.input,
-									!text && !isFocused ? styles.placeholderStyle : {},
-								]}
-								multiline
-								placeholder="New Page"
-								placeholderTextColor="rgba(255, 255, 255, 0.3)"
-								value={text}
-								onChangeText={setText}
-							/>
+					{selectedTab === "Page" ? (
+						<View style={styles.noteContainer}>
+							<View style={styles.inputContainer}>
+								<TextInput
+									ref={inputRef}
+									style={[
+										styles.input,
+										!text && !isFocused ? styles.placeholderStyle : {},
+									]}
+									multiline
+									placeholder="New Page"
+									placeholderTextColor="rgba(255, 255, 255, 0.3)"
+									value={text}
+									onChangeText={setText}
+								/>
 
-							<View style={{ flex: 1 }}>
-								{/* {isRichTextFocused ? ( */}
-								<View>
-									<TextInput
-										ref={inputRef}
-										style={[
-											styles.secondInput,
-											!text && !isFocused ? styles.smallPlaceholderStyle : {},
-										]}
-										multiline
-										placeholder="Take a note..."
-										placeholderTextColor="rgba(255, 255, 255, 0.3)"
-										value={richTextContent}
-										onChangeText={handleRichTextChange}
-									/>
-									{!typing ? (
-										<Text style={styles.commandsText}>
-											Type / to see commands
-										</Text>
-									) : null}
+								<View style={{ flex: 1 }}>
+									{/* {isRichTextFocused ? ( */}
+									<View>
+										<TextInput
+											ref={inputRef}
+											style={[
+												styles.secondInput,
+												!text && !isFocused ? styles.smallPlaceholderStyle : {},
+											]}
+											multiline
+											placeholder="Take a note..."
+											placeholderTextColor="rgba(255, 255, 255, 0.3)"
+											value={richTextContent}
+											onChangeText={handleRichTextChange}
+										/>
+										{!typing ? (
+											<Text style={styles.commandsText}>
+												Type / to see commands
+											</Text>
+										) : null}
+									</View>
+									{/* )} */}
 								</View>
-								{/* )} */}
+							</View>
+							<View style={styles.buttonContainer}>
+								<TouchableOpacity style={styles.privateButton}>
+									<MaterialCommunityIcons
+										name="eye-off-outline"
+										size={22}
+										color="rgba(255, 255, 255, 0.4)"
+									/>
+								</TouchableOpacity>
+								<TouchableOpacity style={styles.settingsButton}>
+									<MaterialCommunityIcons
+										name="dots-horizontal"
+										size={24}
+										color="rgba(255, 255, 255, 0.4)"
+									/>
+								</TouchableOpacity>
 							</View>
 						</View>
-						<View style={styles.buttonContainer}>
-							<TouchableOpacity style={styles.privateButton}>
-								<MaterialCommunityIcons
-									name="eye-off-outline"
-									size={22}
-									color="rgba(255, 255, 255, 0.4)"
-								/>
-							</TouchableOpacity>
-							<TouchableOpacity style={styles.settingsButton}>
-								<MaterialCommunityIcons
-									name="dots-horizontal"
-									size={24}
-									color="rgba(255, 255, 255, 0.4)"
-								/>
-							</TouchableOpacity>
-						</View>
-					</View>
+					) : null}
 
 					<Animated.View style={[styles.searchContainer, { top: position }]}>
 						<View style={{ position: "relative" }}>
@@ -678,11 +682,23 @@ const styles = StyleSheet.create({
 		borderRadius: 5,
 		backgroundColor: "#121212",
 		flexDirection: "row",
+		alignItems: "flex-start",
 		justifyContent: "space-between",
+	},
+	suggestinLeftContent: {
+		flexDirection: "row",
+		textAlign: "left",
+	},
+	suggestionImage: {
+		width: 16,
+		height: 16,
+		marginRight: 10,
 	},
 	suggestionElementText: {
 		color: "rgba(255, 255, 255, 1)",
 		fontSize: 16,
+		alignItems: "flex-start",
+		textAlign: "left",
 		fontWeight: "500",
 	},
 	linkContainer: {

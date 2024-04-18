@@ -59,10 +59,19 @@ export default function Personal() {
 
 	return (
 		<SafeAreaView style={styles.container}>
+			<View style={styles.fixedBar}>
+				<Text style={styles.personalUsername}>@username</Text>
+				<TouchableOpacity>
+					<SimpleLineIcons
+						name="settings"
+						size={18}
+						color="rgba(255, 255, 255, 0.5)"
+					/>
+				</TouchableOpacity>
+			</View>
 			<ScrollView>
 				<View style={styles.personalContainer}>
 					<View style={styles.personalInfo}>
-						<Text style={styles.personalUsername}>@username</Text>
 						<View style={styles.personalAvatarName}>
 							<TouchableOpacity onPress={pickImage}>
 								{avatarUrl ? (
@@ -101,15 +110,15 @@ export default function Personal() {
 							</View>
 						</View>
 					</View>
-					<View style={styles.settingsContainer}>
+					{/* <View style={styles.settingsContainer}>
 						<TouchableOpacity>
 							<SimpleLineIcons
 								name="settings"
 								size={18}
-								color="rgba(255, 255, 255, 0.8)"
+								color="rgba(255, 255, 255, 0.5)"
 							/>
 						</TouchableOpacity>
-					</View>
+					</View> */}
 					<View style={styles.numbers}>
 						<View style={styles.numberContainer}>
 							<Text style={styles.numberQuantity}>32</Text>
@@ -192,6 +201,18 @@ const styles = StyleSheet.create({
 		flexDirection: "column",
 		alignItems: "center",
 		paddingLeft: 10,
+	},
+	fixedBar: {
+		width: width * 0.9,
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "space-between",
+		position: "absolute",
+		top: 30,
+		left: "5%",
+		right: "5%",
+		marginTop: 30,
+		marginBottom: 40,
 	},
 	personalAvatarName: {
 		display: "flex",
@@ -306,7 +327,7 @@ const styles = StyleSheet.create({
 	},
 	link: {
 		position: "absolute",
-		bottom: -520,
+		bottom: -550,
 		display: "flex",
 		flexDirection: "column",
 		alignItems: "center",

@@ -10,7 +10,10 @@ import {
 	TextInput,
 	TouchableOpacity,
 	Image,
+	Keyboard,
+	TouchableWithoutFeedback,
 } from "react-native"
+
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import DraggableFlatList from "react-native-draggable-flatlist"
@@ -93,6 +96,7 @@ export default function Home() {
 	const [showLearningButtons, setShowLearningButtons] = useState(false)
 	const [animationButtons, setAnimationButtons] = useState<Animated.Value[]>([])
 	const [learningStatus, setLearningStatus] = useState("Learning")
+	const [searchTopicInputFocused, setSearchTopicInputFocused] = useState(false)
 
 	// bottomsheets
 	const [filterTitle, setFilterTitle] = useState("Filters")
@@ -100,10 +104,11 @@ export default function Home() {
 	const [topicClicked, setTopicClicked] = useState(false)
 	const topicRef = useRef<BottomSheet>(null)
 	const filterRef = useRef<BottomSheet>(null)
-	const snapFilterPoints = useMemo(
-		() => (topicClicked ? ["40%"] : ["20%"]),
-		[topicClicked],
-	)
+
+	const snapFilterPoints = useMemo(() => {
+		return topicClicked ? ["90%"] : ["20%"]
+	}, [topicClicked])
+
 	const snapTopicPoints = useMemo(() => ["45%"], [])
 	const [topicSheetIndex, setTopicSheetIndex] = useState(-1)
 	const [filterBottomSheetIndex, setFilterBottomSheetIndex] = useState(-1)
@@ -152,25 +157,6 @@ export default function Home() {
 	useEffect(() => {
 		setAnimationButtons([new Animated.Value(0), new Animated.Value(0)])
 	}, [])
-
-	const showButtons = (nextStatus?: string) => {
-		setShowLearningButtons(!showLearningButtons)
-
-		if (nextStatus) {
-			setLearningStatus(nextStatus)
-		}
-
-		const animationsEnd = showLearningButtons ? 0 : 1
-		const staggeredAnimations = animationButtons.map((button) =>
-			Animated.timing(button, {
-				toValue: animationsEnd,
-				duration: 300,
-				useNativeDriver: true,
-			}),
-		)
-
-		Animated.parallel(staggeredAnimations).start()
-	}
 
 	const [selectedItem, setSelectedItem] = useState<{
 		title: string
@@ -292,6 +278,7 @@ export default function Home() {
 				snapPoints={snapFilterPoints}
 				onChange={(index) => {
 					setFilterBottomSheetIndex(index)
+					if (index === -1) Keyboard.dismiss()
 				}}
 				enablePanDownToClose={true}
 				enableContentPanningGesture={true}
@@ -385,15 +372,22 @@ export default function Home() {
 											color="rgba(255, 255, 255, 0.4)"
 										/>
 									</TouchableOpacity>
-									<TextInput
-										style={
-											(styles.filterSheetText,
-											{ paddingLeft: 30, color: "white", fontSize: 16 })
-										}
-										placeholder="Search topic"
-										placeholderTextColor={"rgba(255, 255, 255, 0.4)"}
-										autoFocus={true}
-									/>
+									<TouchableWithoutFeedback
+										onPress={Keyboard.dismiss}
+										accessible={false}
+									>
+										<TextInput
+											style={
+												(styles.filterSheetText,
+												{ paddingLeft: 30, color: "white", fontSize: 16 })
+											}
+											placeholder="Search topic"
+											placeholderTextColor={"rgba(255, 255, 255, 0.4)"}
+											autoFocus={false}
+											onPressIn={() => setSearchTopicInputFocused(true)}
+											onBlur={() => setSearchTopicInputFocused(false)}
+										/>
+									</TouchableWithoutFeedback>
 								</View>
 							)}
 						</View>
