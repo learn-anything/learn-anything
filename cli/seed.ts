@@ -44,12 +44,16 @@ async function webIndex() {
 	// await base()
 	await deleteAllPersonalLinks()
 	await deleteAllGlobalLinks()
-	const res = await createPersonalLink(
+	await createPersonalLink(
 		email,
 		"https://learn-anything.xyz",
 		"NoLearningStatus",
 	)
-	console.log(res, "res")
+	await createPersonalLink(
+		email,
+		"https://twitter.com/rasbt/status/1779894720291856492",
+		"ToComplete",
+	)
 }
 
 async function mobileIndex() {
