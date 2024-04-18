@@ -11,6 +11,11 @@ import {
 	Keyboard,
 	TouchableWithoutFeedback,
 } from "react-native"
+import {
+	useEditorBridge,
+	RichText,
+	TenTapStartKit,
+} from "@10play/tentap-editor"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import {
 	LeftArrowIcon,
@@ -27,14 +32,15 @@ const { height } = Dimensions.get("window")
 
 export default function Note() {
 	const [text, setText] = useState("")
-	const [secondText, setSecondText] = useState("")
+	// const [secondText, setSecondText] = useState("")
+	const [isRichTextFocused, setIsRichTextFocused] = useState(false)
 	const inputRef = useRef<TextInput>(null)
 	const [isFocused, setIsFocused] = useState(false)
 	const [selectedTab, setSelectedTab] = useState("Page")
 	const [searchQuery, setSearchQuery] = useState("")
 	const [isInputFocused, setIsInputFocused] = useState(false)
 	const [typing, setTyping] = useState(false)
-	const typingTimeoutRef = useRef(null)
+	const [richTextContent, setRichTextContent] = useState("")
 
 	//learning buttons
 	const [showSheetLearningButtons, setShowSheetLearningButtons] =
@@ -89,15 +95,25 @@ export default function Note() {
 		}
 	}, [isInputFocused])
 
-	const handleTextChange = (text: string) => {
-		setSecondText(text)
-		setTyping(true)
-		if (typingTimeoutRef.current) {
-			clearTimeout(typingTimeoutRef.current as NodeJS.Timeout)
-		}
-		typingTimeoutRef.current = setTimeout(() => {
-			setTyping(false)
-		}, 1500) as unknown as null
+	// const editor = useEditorBridge({
+	// 	bridgeExtensions: TenTapStartKit,
+	// 	autofocus: true,
+	// 	avoidIosKeyboard: true,
+	// })
+
+	// const handleTextChange = (text: string) => {
+	// 	setIsRichTextFocused(true)
+	// 	setTyping(true)
+	// 	if (typingTimeoutRef.current) {
+	// 		clearTimeout(typingTimeoutRef.current as NodeJS.Timeout)
+	// 	}
+	// 	typingTimeoutRef.current = setTimeout(() => {
+	// 		setTyping(false)
+	// 	}, 1500) as unknown as null
+	// }
+
+	const handleRichTextChange = (newText: string) => {
+		setRichTextContent(newText)
 	}
 
 	return (
@@ -366,21 +382,30 @@ export default function Note() {
 								value={text}
 								onChangeText={setText}
 							/>
-							<TextInput
-								ref={inputRef}
-								style={[
-									styles.secondInput,
-									!text && !isFocused ? styles.smallPlaceholderStyle : {},
-								]}
-								multiline
-								placeholder="Take a note..."
-								placeholderTextColor="rgba(255, 255, 255, 0.3)"
-								value={secondText}
-								onChangeText={handleTextChange}
-							/>
-							{secondText && !typing ? (
-								<Text style={styles.commandsText}>Type / to see commands</Text>
-							) : null}
+
+							<View style={{ flex: 1 }}>
+								{/* {isRichTextFocused ? ( */}
+								<View>
+									<TextInput
+										ref={inputRef}
+										style={[
+											styles.secondInput,
+											!text && !isFocused ? styles.smallPlaceholderStyle : {},
+										]}
+										multiline
+										placeholder="Take a note..."
+										placeholderTextColor="rgba(255, 255, 255, 0.3)"
+										value={richTextContent}
+										onChangeText={handleRichTextChange}
+									/>
+									{!typing ? (
+										<Text style={styles.commandsText}>
+											Type / to see commands
+										</Text>
+									) : null}
+								</View>
+								{/* )} */}
+							</View>
 						</View>
 						<View style={styles.buttonContainer}>
 							<TouchableOpacity style={styles.privateButton}>
