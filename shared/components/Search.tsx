@@ -5,8 +5,8 @@ import Icon from "./Icon"
 
 interface SearchProps {
 	links: { title: string; url: string }[]
-	setShowSearch: (value: boolean) => void
-	showSearch: boolean
+	setMode: (value: string) => void
+	mode: string
 }
 
 export default function Search(props: SearchProps) {
@@ -15,7 +15,7 @@ export default function Search(props: SearchProps) {
 	let inputRef: any
 
 	createEffect(() => {
-		if (props.showSearch) {
+		if (props.mode === "Search") {
 			inputRef.focus()
 		}
 	})
@@ -27,11 +27,11 @@ export default function Search(props: SearchProps) {
 				animate={{ opacity: [0, 1] }}
 				transition={{ duration: 0.4 }}
 				id="backdropBlur"
-				class="absolute top-0 left-0 w-full h-full backdrop-blur-sm transition-all"
+				class="absolute top-0 left-0 w-full h-full bg-dark transition-all"
 			></Motion.div>
 
 			<Presence>
-				<Show when={props.showSearch}>
+				<Show when={props.mode === "Search"}>
 					<Motion.div
 						exit={{ width: "800px", height: "56px" }}
 						animate={{
@@ -40,7 +40,7 @@ export default function Search(props: SearchProps) {
 							height: ["56px", "500px"],
 						}}
 						transition={{ duration: 0.3, easing: "ease-in" }}
-						class="absolute top-[75px] left-[50%] translate-x-[-50%] w-[600px] rounded-[7px] p-5 bg-[#171A21] border border-[#191919]"
+						class="absolute top-[75px] left-[50%] translate-x-[-50%] w-full max-w-[600px] rounded-[7px] p-5 bg-[#171A21] border border-[#191919]"
 					>
 						<div class="col-gap-[20px]">
 							<div class="text-[14px] text-white/60">Recent topics</div>
@@ -66,7 +66,7 @@ export default function Search(props: SearchProps) {
 				</Show>
 			</Presence>
 			<div
-				class="absolute top-3 cursor-pointer left-[50%] text-white/20 translate-x-[-50%] flex-between rounded-[10px] w-[800px] p-[13px] px-[14px]"
+				class="absolute top-3 cursor-pointer left-[50%] text-white/20 translate-x-[-50%] flex-between rounded-[10px] w-full max-w-[800px] p-[13px] px-[14px]"
 				style={{
 					border: "1px solid rgba(255, 255, 255, 0.10)",
 					background:
@@ -87,7 +87,7 @@ export default function Search(props: SearchProps) {
 							setFocusedTimer(true)
 							setTimeout(() => {
 								if (focusedTimer()) {
-									props.setShowSearch(false)
+									props.setMode("Topic")
 								}
 							}, 500)
 						}}
