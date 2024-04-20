@@ -13,6 +13,7 @@ import {
 	Keyboard,
 	TouchableWithoutFeedback,
 } from "react-native"
+import { PanGestureHandler } from "react-native-gesture-handler"
 
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
@@ -29,8 +30,6 @@ import {
 	HeartIcon,
 	NoteIcon,
 } from "../../assets/svg/icons"
-
-// import * as gql from "../../../shared/graphql_react"
 
 const { width } = Dimensions.get("window")
 
@@ -93,9 +92,7 @@ export default function Home() {
 
 	const [selectedTab, setSelectedTab] = useState("links")
 	const [noteText, setNoteText] = useState<{ [key: string]: string }>({})
-	const [showLearningButtons, setShowLearningButtons] = useState(false)
 	const [animationButtons, setAnimationButtons] = useState<Animated.Value[]>([])
-	const [learningStatus, setLearningStatus] = useState("Learning")
 	const [searchTopicInputFocused, setSearchTopicInputFocused] = useState(false)
 
 	// bottomsheets

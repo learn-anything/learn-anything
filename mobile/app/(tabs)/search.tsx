@@ -62,13 +62,13 @@ export default function Search() {
 		<View>
 			{isInputFocused ? (
 				<>
-					{renderSection("Popular Topics", "Topic title", true)}
-					{renderSection("Popular Links", "Link title", true)}
+					{renderSection("Recent Pages", "Page title", false, 4)}
+					{renderSection("Recent Topics", "Topic title", true)}
 				</>
 			) : (
 				<>
-					{renderSection("Recent Pages", "Page title", false, 4)}
-					{renderSection("Recent Topics", "Topic title", true)}
+					{renderSection("Popular Topics", "Topic title", true)}
+					{renderSection("Popular Links", "Link title", true)}
 				</>
 			)}
 		</View>
