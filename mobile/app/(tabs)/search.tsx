@@ -1,66 +1,83 @@
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState } from "react"
 import {
 	SafeAreaView,
 	View,
 	StyleSheet,
-	Dimensions,
+	Image,
 	Text,
 	TouchableOpacity,
 	TextInput,
 	Keyboard,
 	TouchableWithoutFeedback,
-	ScrollView,
-	Animated,
 } from "react-native"
 import AntDesign from "@expo/vector-icons/AntDesign"
-import suggestions from "../constants/suggestions"
-
-const { width, height } = Dimensions.get("window")
+import { LeftArrowIcon, LinkIcon } from "../../assets/svg/icons"
 
 export default function Search() {
 	const [searchQuery, setSearchQuery] = useState("")
 	const [isInputFocused, setIsInputFocused] = useState(false)
-	const [showSuggestions, setShowSuggestions] = useState(false)
-	const animations = useRef(new Animated.Value(0)).current
+
+	const getLinkIcon = (url: string) => {
+		return require("../../assets/favicon.png")
+	}
 
 	const handleSearch = () => {
 		console.log("search:", searchQuery)
 	}
 
-	const filteredSuggestions = suggestions.filter((suggestion: string) =>
-		suggestion.toUpperCase().startsWith(searchQuery.toUpperCase()),
+	const renderSection = (
+		title: string,
+		linkType: string,
+		isFocused: boolean,
+		length: number = 5,
+	) => (
+		<>
+			<View style={styles.titleContainer}>
+				<Text style={styles.searchTitle}>{title}</Text>
+				{title !== "Recent Pages" && (
+					<TouchableOpacity>
+						<Text style={styles.showmore}>Show more</Text>
+					</TouchableOpacity>
+				)}
+			</View>
+			<View style={styles.element}>
+				{Array.from({ length }, (_, i) => (
+					<TouchableOpacity key={i} style={styles.elementContainer}>
+						<View style={styles.leftContent}>
+							{isFocused && (
+								<Image source={getLinkIcon(linkType)} style={styles.icon} />
+							)}
+							<Text style={styles.elementText}>
+								{linkType} {i + 1}
+							</Text>
+						</View>
+						{title === "Popular Links" ? <LinkIcon /> : <LeftArrowIcon />}
+					</TouchableOpacity>
+				))}
+			</View>
+		</>
 	)
 
-	const handleSuggestionClick = (suggestion: string) => {
-		setSearchQuery(suggestion)
-		setShowSuggestions(false)
-	}
-
-	const suggestionHeight = 50
-	const suggestionsMaxHeight = 200
-
-	const dynamicHeight = Math.min(
-		filteredSuggestions.length * suggestionHeight,
-		suggestionsMaxHeight,
+	const renderContent = (isInputFocused: boolean) => (
+		<View>
+			{isInputFocused ? (
+				<>
+					{renderSection("Recent Pages", "Page title", false, 4)}
+					{renderSection("Recent Topics", "Topic title", true)}
+				</>
+			) : (
+				<>
+					{renderSection("Popular Topics", "Topic title", true)}
+					{renderSection("Popular Links", "Link title", true)}
+				</>
+			)}
+		</View>
 	)
-
-	useEffect(() => {
-		if (searchQuery === "") {
-			animations.setValue(0)
-		} else {
-			Animated.timing(animations, {
-				toValue: showSuggestions && searchQuery ? dynamicHeight : 0,
-				duration: 200,
-				useNativeDriver: false,
-			}).start()
-		}
-	}, [showSuggestions, searchQuery, filteredSuggestions.length])
 
 	return (
 		<TouchableWithoutFeedback
 			onPress={() => {
 				Keyboard.dismiss()
-				setShowSuggestions(false)
 			}}
 			accessible={false}
 		>
@@ -76,15 +93,20 @@ export default function Search() {
 						value={searchQuery}
 						onChangeText={(text) => {
 							setSearchQuery(text)
-							setShowSuggestions(true)
 						}}
 						onFocus={() => {
-							setShowSuggestions(true)
 							setIsInputFocused(true)
 						}}
 						onBlur={() => setIsInputFocused(false)}
 					/>
-					<TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
+					<TouchableOpacity
+						style={[
+							isInputFocused
+								? styles.focusedSearchButton
+								: styles.unfocusedSearchButton,
+						]}
+						onPress={handleSearch}
+					>
 						<AntDesign
 							name="search1"
 							size={20}
@@ -92,26 +114,10 @@ export default function Search() {
 						/>
 					</TouchableOpacity>
 				</View>
-				<Animated.View
-					style={[
-						styles.suggestionContainer,
-						{ height: animations, top: height * 0.16 },
-					]}
-				>
-					<ScrollView>
-						{filteredSuggestions.map((suggestion: string, index: number) => (
-							<TouchableOpacity
-								key={index}
-								style={styles.suggestionTopic}
-								onPress={() => handleSuggestionClick(suggestion)}
-							>
-								<Text style={styles.suggestionText}>
-									{suggestion.charAt(0).toUpperCase() + suggestion.slice(1)}
-								</Text>
-							</TouchableOpacity>
-						))}
-					</ScrollView>
-				</Animated.View>
+
+				<View style={styles.pageContainer}>
+					{renderContent(isInputFocused)}
+				</View>
 			</SafeAreaView>
 		</TouchableWithoutFeedback>
 	)
@@ -121,7 +127,6 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		alignItems: "center",
-		justifyContent: "center",
 		backgroundColor: "#0F0F0F",
 	},
 	searchContainer: {
@@ -150,34 +155,80 @@ const styles = StyleSheet.create({
 	},
 	focusedInput: {
 		textAlign: "left",
+		paddingLeft: 40,
 	},
 	unfocusedInput: {
 		textAlign: "center",
 		backgroundColor: "#191919",
 	},
-	searchButton: {
+	focusedSearchButton: {
 		justifyContent: "center",
 		position: "absolute",
-		right: 20,
 		top: "50%",
+		left: "5%",
 		transform: [{ translateY: -9 }],
 	},
-	suggestionContainer: {
-		width: width * 0.98,
+	unfocusedSearchButton: {
+		justifyContent: "center",
 		position: "absolute",
-		borderRadius: 5,
-		overflow: "hidden",
-		zIndex: 0,
+		top: "50%",
+		left: "20%",
+		transform: [{ translateY: -9 }],
 	},
-	suggestionTopic: {
+	pageContainer: {
+		position: "absolute",
+		top: 130,
+		display: "flex",
+		flexDirection: "column",
+		width: "100%",
+		alignSelf: "center",
+	},
+	titleContainer: {
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+		alignSelf: "center",
+		width: "90%",
+	},
+	searchTitle: {
+		color: "rgba(255, 255, 255, 0.6)",
+		fontWeight: "400",
+		fontSize: 14,
+	},
+	showmore: {
+		color: "rgba(255, 255, 255, 0.3)",
+		fontWeight: "400",
+		fontSize: 14,
+	},
+	element: {
+		marginVertical: 15,
+		width: " 95%",
+		alignSelf: "center",
+	},
+	elementContainer: {
 		padding: 10,
-		borderColor: "#333",
-		borderWidth: 1,
-		borderRadius: 7,
 		marginBottom: 2,
+		borderRadius: 5,
+		backgroundColor: "#121212",
+		flexDirection: "row",
+		alignItems: "flex-start",
+		justifyContent: "space-between",
 	},
-	suggestionText: {
-		color: "rgba(255, 255, 255, 0.8)",
+	leftContent: {
+		flexDirection: "row",
+		textAlign: "left",
+	},
+	icon: {
+		width: 16,
+		height: 16,
+		marginRight: 10,
+	},
+	elementText: {
+		color: "rgba(255, 255, 255, 1)",
 		fontSize: 16,
+		alignItems: "flex-start",
+		textAlign: "left",
+		fontWeight: "500",
 	},
 })
