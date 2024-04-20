@@ -13,7 +13,12 @@ import {
 	Keyboard,
 	TouchableWithoutFeedback,
 } from "react-native"
-import { PanGestureHandler } from "react-native-gesture-handler"
+import {
+	PanGestureHandler,
+	State,
+	HandlerStateChangeEvent,
+	PanGestureHandlerEventPayload,
+} from "react-native-gesture-handler"
 
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
@@ -201,6 +206,69 @@ export default function Home() {
 			</TouchableOpacity>
 		</TouchableOpacity>
 	)
+
+	// const renderItem = ({
+	// 	item,
+	// 	drag,
+	// 	isActive,
+	// }: {
+	// 	item: { title: string; topic: string; url: string; id: string }
+	// 	drag: any
+	// 	isActive: boolean
+	// }) => {
+	// 	const translateX = new Animated.Value(0)
+
+	// 	const onGestureEvent = Animated.event(
+	// 		[{ nativeEvent: { translationX: translateX } }],
+	// 		{ useNativeDriver: true },
+	// 	)
+
+	// 	type Event = HandlerStateChangeEvent<PanGestureHandlerEventPayload>
+
+	// 	const onHandlerStateChange = (event: Event) => {
+	// 		if (event.nativeEvent.oldState === State.ACTIVE) {
+	// 			Animated.spring(translateX, {
+	// 				toValue: 0,
+	// 				stiffness: 150,
+	// 				damping: 20,
+	// 				mass: 1,
+	// 				useNativeDriver: true,
+	// 			}).start()
+	// 		}
+	// 	}
+
+	// 	return (
+	// 		<PanGestureHandler
+	// 			onGestureEvent={onGestureEvent}
+	// 			onHandlerStateChange={onHandlerStateChange}
+	// 		>
+	// 			<Animated.View
+	// 				style={[
+	// 					styles.itemContainer,
+	// 					{
+	// 						transform: [{ translateX }],
+	// 					},
+	// 				]}
+	// 			>
+	// 				<TouchableOpacity
+	// 					style={{ flex: 1 }}
+	// 					onLongPress={drag}
+	// 					disabled={isActive}
+	// 					onPress={() => {}}
+	// 				>
+	// 					<Image source={getLinkIcon(item.url)} style={styles.itemImage} />
+	// 					<Text style={styles.itemTitle}>{item.title}</Text>
+	// 					<TouchableOpacity
+	// 						style={{ marginLeft: 20, opacity: 0.2 }}
+	// 						onPress={() => Linking.openURL(item.url)}
+	// 					>
+	// 						<LinkIcon />
+	// 					</TouchableOpacity>
+	// 				</TouchableOpacity>
+	// 			</Animated.View>
+	// 		</PanGestureHandler>
+	// 	)
+	// }
 
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
