@@ -30,6 +30,7 @@ async function seed() {
 				console.log("Unknown command")
 				break
 		}
+		console.log("done")
 	} catch (err) {
 		console.error("Error occurred:", err)
 	}
@@ -67,6 +68,10 @@ async function mobileIndex() {
 		"https://learn-anything.xyz",
 		"NoLearningStatus",
 		"Learn Anything",
+		"Organize world's knowledge, explore connections and curate learning paths",
+		"Check it out",
+		true,
+		2023,
 	)
 	await createPersonalLink(
 		email,

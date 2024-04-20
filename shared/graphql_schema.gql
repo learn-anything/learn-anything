@@ -6,14 +6,6 @@ type Inline0 {
 type Inline1 {
 	latestGlobalTopicGraph: [Inline0!]!
 }
-type Inline10 {
-	user: Inline8!
-	links: [Inline9!]!
-	showLinksStatus: String!
-	filterOrder: String!
-	filter: String!
-	userTopics: [String!]!
-}
 type Inline2 {
 	title: String!
 	pageUrl: String!
@@ -43,14 +35,15 @@ type Inline7 {
 	auth: Inline6
 }
 type Inline8 {
-	email: String!
-	name: String!
-}
-type Inline9 {
 	id: String
 	url: String
 	title: String
-	topic: String
+	description: String
+	year: Int
+	note: String
+}
+type Inline9 {
+	personalLinks: [Inline8!]!
 }
 enum LearningStatus {
 	Learn
@@ -70,7 +63,7 @@ type Mutation {
 }
 type Query {
 	webIndex: Inline7!
-	mobileIndex: Inline10!
+	mobileIndex: Inline9!
 }
 schema {
 	query: Query

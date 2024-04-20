@@ -152,57 +152,6 @@ export const initial_Inline1 = {
 }
 
 /**
- * Initial value: {@link initial_Inline8}
- *
- * @typedef  {object} Inline8
- * @property {String} email
- * @property {String} name
- */
-/** @type {Inline8} */
-export const initial_Inline8 = {
-	email: "",
-	name: "",
-}
-
-/**
- * Initial value: {@link initial_Inline9}
- *
- * @typedef  {object} Inline9
- * @property {Maybe<String>} id
- * @property {Maybe<String>} url
- * @property {Maybe<String>} title
- * @property {Maybe<String>} topic
- */
-/** @type {Inline9} */
-export const initial_Inline9 = {
-	id: null,
-	url: null,
-	title: null,
-	topic: null,
-}
-
-/**
- * Initial value: {@link initial_Inline10}
- *
- * @typedef  {object} Inline10
- * @property {Inline8} user
- * @property {Array<Inline9>} links
- * @property {String} showLinksStatus
- * @property {String} filterOrder
- * @property {String} filter
- * @property {Array<String>} userTopics
- */
-/** @type {Inline10} */
-export const initial_Inline10 = {
-	user: initial_Inline8,
-	links: [],
-	showLinksStatus: "",
-	filterOrder: "",
-	filter: "",
-	userTopics: [],
-}
-
-/**
  * Initial value: {@link initial_Inline2}
  *
  * @typedef  {object} Inline2
@@ -306,6 +255,38 @@ export const initial_Inline7 = {
 }
 
 /**
+ * Initial value: {@link initial_Inline8}
+ *
+ * @typedef  {object} Inline8
+ * @property {Maybe<String>} id
+ * @property {Maybe<String>} url
+ * @property {Maybe<String>} title
+ * @property {Maybe<String>} description
+ * @property {Maybe<Int>} year
+ * @property {Maybe<String>} note
+ */
+/** @type {Inline8} */
+export const initial_Inline8 = {
+	id: null,
+	url: null,
+	title: null,
+	description: null,
+	year: null,
+	note: null,
+}
+
+/**
+ * Initial value: {@link initial_Inline9}
+ *
+ * @typedef  {object} Inline9
+ * @property {Array<Inline8>} personalLinks
+ */
+/** @type {Inline9} */
+export const initial_Inline9 = {
+	personalLinks: [],
+}
+
+/**
  * @enum {(typeof LearningStatus)[keyof typeof LearningStatus]} */
 export const LearningStatus = /** @type {const} */({
 	Learn: "Learn",
@@ -350,14 +331,14 @@ export const query_webIndex = /** @type {*} */({
 /**
  * @typedef  {object} Vars_mobileIndex
  *
- * @typedef  {Inline10} Value_mobileIndex
+ * @typedef  {Inline9} Value_mobileIndex
  */
 
 /**
  * @param   {Vars_mobileIndex} vars
  * @returns {string} */
 export function query_get_body_mobileIndex(vars) {
-	return 'mobileIndex{user{email name}links{id url title topic}showLinksStatus filterOrder filter userTopics}'
+	return 'mobileIndex{personalLinks{id url title description year note}}'
 }
 
 /**
@@ -370,7 +351,7 @@ export const query_mobileIndex = /** @type {*} */({
 	name         : "mobileIndex",
 	kind         : "query",
 	get_body     : query_get_body_mobileIndex,
-	initial_value: initial_Inline10,
+	initial_value: initial_Inline9,
 })
 
 /*

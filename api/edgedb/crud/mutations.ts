@@ -55,6 +55,9 @@ export async function createPersonalLink(
 	description?: string,
 	note?: string,
 	liked?: boolean,
+	year?: number,
+	// TODO: should probably be datetime
+	dateAdded?: string,
 ) {
 	const foundUser = foundUserByEmail(email)
 
@@ -79,8 +82,9 @@ export async function createPersonalLink(
 							linksWithoutLearningStatus: e.insert(e.PersonalLink, {
 								globalLink,
 								...(title && { title }),
-								// description: description,
-								// note: note,
+								...(description && { description }),
+								...(note && { note }),
+								...(year && { year }),
 							}),
 						},
 					}))
@@ -92,8 +96,9 @@ export async function createPersonalLink(
 							linksCompleted: e.insert(e.PersonalLink, {
 								globalLink,
 								...(title && { title }),
-								// description: description,
-								// note: note,
+								...(description && { description }),
+								...(note && { note }),
+								...(year && { year }),
 							}),
 						},
 					}))
@@ -105,8 +110,9 @@ export async function createPersonalLink(
 							linksInProgress: e.insert(e.PersonalLink, {
 								globalLink,
 								...(title && { title }),
-								// description: description,
-								// note: note,
+								...(description && { description }),
+								...(note && { note }),
+								...(year && { year }),
 							}),
 						},
 					}))
@@ -118,8 +124,9 @@ export async function createPersonalLink(
 							linksCompleted: e.insert(e.PersonalLink, {
 								globalLink,
 								...(title && { title }),
-								// description: description,
-								// note: note,
+								...(description && { description }),
+								...(note && { note }),
+								...(year && { year }),
 							}),
 						},
 					}))

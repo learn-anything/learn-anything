@@ -1,4 +1,3 @@
-import { client } from "../api/edgedb/client"
 import e from "../api/edgedb/dbschema/edgeql-js"
 
 export function foundUserByEmail(email: string) {
