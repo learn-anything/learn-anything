@@ -25,6 +25,8 @@ const inline = (fields: TypeArguments[1]) =>
 const Link = g.type("Link", {
 	title: g.string().optional(),
 	url: g.string().optional(),
+	description: g.string().optional(),
+	note: g.string().optional(),
 })
 const LearningStatus = g.enum("LearningStatus", [
 	"Learn",
@@ -58,9 +60,24 @@ g.query("webIndex", {
 			}).list(),
 		}).optional(),
 		auth: inline({
-			username: g.string().optional(),
-			bio: g.string().optional(),
 			links: g.ref(Link).list(),
+			personalPages: inline({
+				title: g.string(),
+				pageUrl: g.string(),
+			}).list(),
+			topicsToLearn: inline({
+				name: g.string(),
+				prettyName: g.string(),
+			}).list(),
+			topicsLearning: inline({
+				name: g.string(),
+				prettyName: g.string(),
+			}).list(),
+			topicsLearned: inline({
+				name: g.string(),
+				prettyName: g.string(),
+			}).list(),
+			username: g.string().optional(),
 		}).optional(),
 	}),
 	resolver: "web/index",

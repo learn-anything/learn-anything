@@ -6,32 +6,51 @@ type Inline0 {
 type Inline1 {
 	latestGlobalTopicGraph: [Inline0!]!
 }
-type Inline2 {
-	username: String
-	bio: String
-	links: [Link!]!
-}
-type Inline3 {
-	public: Inline1
-	auth: Inline2
-}
-type Inline4 {
-	email: String!
-	name: String!
-}
-type Inline5 {
-	id: String
-	url: String
-	title: String
-	topic: String
-}
-type Inline6 {
-	user: Inline4!
-	links: [Inline5!]!
+type Inline10 {
+	user: Inline8!
+	links: [Inline9!]!
 	showLinksStatus: String!
 	filterOrder: String!
 	filter: String!
 	userTopics: [String!]!
+}
+type Inline2 {
+	title: String!
+	pageUrl: String!
+}
+type Inline3 {
+	name: String!
+	prettyName: String!
+}
+type Inline4 {
+	name: String!
+	prettyName: String!
+}
+type Inline5 {
+	name: String!
+	prettyName: String!
+}
+type Inline6 {
+	links: [Link!]!
+	personalPages: [Inline2!]!
+	topicsToLearn: [Inline3!]!
+	topicsLearning: [Inline4!]!
+	topicsLearned: [Inline5!]!
+	username: String
+}
+type Inline7 {
+	public: Inline1
+	auth: Inline6
+}
+type Inline8 {
+	email: String!
+	name: String!
+}
+type Inline9 {
+	id: String
+	url: String
+	title: String
+	topic: String
 }
 enum LearningStatus {
 	Learn
@@ -41,6 +60,8 @@ enum LearningStatus {
 type Link {
 	title: String
 	url: String
+	description: String
+	note: String
 }
 type Mutation {
 	createUser(email: String!): Boolean!
@@ -48,8 +69,8 @@ type Mutation {
 	updatePersonalLink(linkId: String!, status: LearningStatus!): Boolean!
 }
 type Query {
-	webIndex: Inline3!
-	mobileIndex: Inline6!
+	webIndex: Inline7!
+	mobileIndex: Inline10!
 }
 schema {
 	query: Query

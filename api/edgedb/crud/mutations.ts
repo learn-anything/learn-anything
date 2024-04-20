@@ -64,7 +64,7 @@ export async function createPersonalLink(
 			.insert(e.GlobalLink, {
 				url: urlWithoutProtocol,
 				protocol: protocol,
-				title: title,
+				...(title && { title }),
 			})
 			.unlessConflict((gl) => ({
 				on: gl.url,
@@ -78,10 +78,10 @@ export async function createPersonalLink(
 						set: {
 							linksWithoutLearningStatus: e.insert(e.PersonalLink, {
 								globalLink,
+								...(title && { title }),
+								// description: description,
+								// note: note,
 							}),
-							...(title && { title }),
-							// description: description,
-							// note: note,
 						},
 					}))
 					.run(client)
@@ -91,10 +91,10 @@ export async function createPersonalLink(
 						set: {
 							linksCompleted: e.insert(e.PersonalLink, {
 								globalLink,
+								...(title && { title }),
+								// description: description,
+								// note: note,
 							}),
-							...(title && { title }),
-							// description: description,
-							// note: note,
 						},
 					}))
 					.run(client)
@@ -104,10 +104,10 @@ export async function createPersonalLink(
 						set: {
 							linksInProgress: e.insert(e.PersonalLink, {
 								globalLink,
+								...(title && { title }),
+								// description: description,
+								// note: note,
 							}),
-							...(title && { title }),
-							// description: description,
-							// note: note,
 						},
 					}))
 					.run(client)
@@ -117,10 +117,10 @@ export async function createPersonalLink(
 						set: {
 							linksCompleted: e.insert(e.PersonalLink, {
 								globalLink,
+								...(title && { title }),
+								// description: description,
+								// note: note,
 							}),
-							...(title && { title }),
-							// description: description,
-							// note: note,
 						},
 					}))
 					.run(client)

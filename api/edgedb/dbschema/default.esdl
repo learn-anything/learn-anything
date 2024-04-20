@@ -44,6 +44,10 @@ module default {
     };
     # links user has liked
     multi linksLiked: PersonalLink;
+    # personal pages user has created
+    multi personalPages: PersonalPage {
+      on target delete allow;
+    };
     # total number of links user is interacting with
     # property linksTracked := count(.linksBookmarked) + count(.linksInProgress) + count(.linksCompleted) + count(.linksLiked);
     # date until user has paid membership for
@@ -101,6 +105,22 @@ module default {
     year: int16;
     # custom main topic for link set by User
     link mainTopic: GlobalTopic;
+  }
+  # PersonalPage is a page of content (ala Notion page)
+  type PersonalPage extending WithCreatedAt {
+    # title of page as entered by user
+    required title: str;
+    # unique path to the page
+    required pageUrl: str {
+      constraint exclusive;
+    }
+    # true = page is available for all to see/search. false = page is private
+    required public: bool {
+      default := false;
+    }
+    # content of the page
+    required content: str;
+    # TODO: map it to GlobalTopic
   }
   # GlobalTopic is a topic that is available to all users
   # It has name, related links, study guide, similar topics etc.

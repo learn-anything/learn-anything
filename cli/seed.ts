@@ -48,16 +48,38 @@ async function webIndex() {
 		email,
 		"https://learn-anything.xyz",
 		"NoLearningStatus",
+		"Learn Anything",
 	)
 	await createPersonalLink(
 		email,
 		"https://twitter.com/rasbt/status/1779894720291856492",
 		"ToComplete",
+		"Build an LLM from Scratch: Chapter 5",
+	)
+	await createPersonalLink(
+		email,
+		"https://learn-anything.xyz",
+		"NoLearningStatus",
+		"Learn Anything",
 	)
 }
 
 async function mobileIndex() {
 	await base()
+	await deleteAllPersonalLinks()
+	await deleteAllGlobalLinks()
+	await createPersonalLink(
+		email,
+		"https://learn-anything.xyz",
+		"NoLearningStatus",
+		"Learn Anything",
+	)
+	await createPersonalLink(
+		email,
+		"https://twitter.com/rasbt/status/1779894720291856492",
+		"ToComplete",
+		"Build an LLM from Scratch: Chapter 5",
+	)
 }
 
 function checkSeedDbConnection() {

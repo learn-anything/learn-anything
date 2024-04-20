@@ -152,70 +152,29 @@ export const initial_Inline1 = {
 }
 
 /**
- * Initial value: {@link initial_Link}
+ * Initial value: {@link initial_Inline8}
  *
- * @typedef  {object} Link
- * @property {Maybe<String>} title
- * @property {Maybe<String>} url
- */
-/** @type {Link} */
-export const initial_Link = {
-	title: null,
-	url: null,
-}
-
-/**
- * Initial value: {@link initial_Inline2}
- *
- * @typedef  {object} Inline2
- * @property {Maybe<String>} username
- * @property {Maybe<String>} bio
- * @property {Array<Link>} links
- */
-/** @type {Inline2} */
-export const initial_Inline2 = {
-	username: null,
-	bio: null,
-	links: [],
-}
-
-/**
- * Initial value: {@link initial_Inline3}
- *
- * @typedef  {object} Inline3
- * @property {Maybe<Inline1>} public
- * @property {Maybe<Inline2>} auth
- */
-/** @type {Inline3} */
-export const initial_Inline3 = {
-	public: null,
-	auth: null,
-}
-
-/**
- * Initial value: {@link initial_Inline4}
- *
- * @typedef  {object} Inline4
+ * @typedef  {object} Inline8
  * @property {String} email
  * @property {String} name
  */
-/** @type {Inline4} */
-export const initial_Inline4 = {
+/** @type {Inline8} */
+export const initial_Inline8 = {
 	email: "",
 	name: "",
 }
 
 /**
- * Initial value: {@link initial_Inline5}
+ * Initial value: {@link initial_Inline9}
  *
- * @typedef  {object} Inline5
+ * @typedef  {object} Inline9
  * @property {Maybe<String>} id
  * @property {Maybe<String>} url
  * @property {Maybe<String>} title
  * @property {Maybe<String>} topic
  */
-/** @type {Inline5} */
-export const initial_Inline5 = {
+/** @type {Inline9} */
+export const initial_Inline9 = {
 	id: null,
 	url: null,
 	title: null,
@@ -223,24 +182,127 @@ export const initial_Inline5 = {
 }
 
 /**
- * Initial value: {@link initial_Inline6}
+ * Initial value: {@link initial_Inline10}
  *
- * @typedef  {object} Inline6
- * @property {Inline4} user
- * @property {Array<Inline5>} links
+ * @typedef  {object} Inline10
+ * @property {Inline8} user
+ * @property {Array<Inline9>} links
  * @property {String} showLinksStatus
  * @property {String} filterOrder
  * @property {String} filter
  * @property {Array<String>} userTopics
  */
-/** @type {Inline6} */
-export const initial_Inline6 = {
-	user: initial_Inline4,
+/** @type {Inline10} */
+export const initial_Inline10 = {
+	user: initial_Inline8,
 	links: [],
 	showLinksStatus: "",
 	filterOrder: "",
 	filter: "",
 	userTopics: [],
+}
+
+/**
+ * Initial value: {@link initial_Inline2}
+ *
+ * @typedef  {object} Inline2
+ * @property {String} title
+ * @property {String} pageUrl
+ */
+/** @type {Inline2} */
+export const initial_Inline2 = {
+	title: "",
+	pageUrl: "",
+}
+
+/**
+ * Initial value: {@link initial_Inline3}
+ *
+ * @typedef  {object} Inline3
+ * @property {String} name
+ * @property {String} prettyName
+ */
+/** @type {Inline3} */
+export const initial_Inline3 = {
+	name: "",
+	prettyName: "",
+}
+
+/**
+ * Initial value: {@link initial_Inline4}
+ *
+ * @typedef  {object} Inline4
+ * @property {String} name
+ * @property {String} prettyName
+ */
+/** @type {Inline4} */
+export const initial_Inline4 = {
+	name: "",
+	prettyName: "",
+}
+
+/**
+ * Initial value: {@link initial_Inline5}
+ *
+ * @typedef  {object} Inline5
+ * @property {String} name
+ * @property {String} prettyName
+ */
+/** @type {Inline5} */
+export const initial_Inline5 = {
+	name: "",
+	prettyName: "",
+}
+
+/**
+ * Initial value: {@link initial_Link}
+ *
+ * @typedef  {object} Link
+ * @property {Maybe<String>} title
+ * @property {Maybe<String>} url
+ * @property {Maybe<String>} description
+ * @property {Maybe<String>} note
+ */
+/** @type {Link} */
+export const initial_Link = {
+	title: null,
+	url: null,
+	description: null,
+	note: null,
+}
+
+/**
+ * Initial value: {@link initial_Inline6}
+ *
+ * @typedef  {object} Inline6
+ * @property {Array<Link>} links
+ * @property {Array<Inline2>} personalPages
+ * @property {Array<Inline3>} topicsToLearn
+ * @property {Array<Inline4>} topicsLearning
+ * @property {Array<Inline5>} topicsLearned
+ * @property {Maybe<String>} username
+ */
+/** @type {Inline6} */
+export const initial_Inline6 = {
+	links: [],
+	personalPages: [],
+	topicsToLearn: [],
+	topicsLearning: [],
+	topicsLearned: [],
+	username: null,
+}
+
+/**
+ * Initial value: {@link initial_Inline7}
+ *
+ * @typedef  {object} Inline7
+ * @property {Maybe<Inline1>} public
+ * @property {Maybe<Inline6>} auth
+ */
+/** @type {Inline7} */
+export const initial_Inline7 = {
+	public: null,
+	auth: null,
 }
 
 /**
@@ -261,14 +323,14 @@ QUERIES:
 /**
  * @typedef  {object} Vars_webIndex
  *
- * @typedef  {Inline3} Value_webIndex
+ * @typedef  {Inline7} Value_webIndex
  */
 
 /**
  * @param   {Vars_webIndex} vars
  * @returns {string} */
 export function query_get_body_webIndex(vars) {
-	return 'webIndex{public{latestGlobalTopicGraph{name prettyName connections}}auth{username bio links{title url}}}'
+	return 'webIndex{public{latestGlobalTopicGraph{name prettyName connections}}auth{links{title url description note}personalPages{title pageUrl}topicsToLearn{name prettyName}topicsLearning{name prettyName}topicsLearned{name prettyName}username}}'
 }
 
 /**
@@ -281,14 +343,14 @@ export const query_webIndex = /** @type {*} */({
 	name         : "webIndex",
 	kind         : "query",
 	get_body     : query_get_body_webIndex,
-	initial_value: initial_Inline3,
+	initial_value: initial_Inline7,
 })
 
 
 /**
  * @typedef  {object} Vars_mobileIndex
  *
- * @typedef  {Inline6} Value_mobileIndex
+ * @typedef  {Inline10} Value_mobileIndex
  */
 
 /**
@@ -308,7 +370,7 @@ export const query_mobileIndex = /** @type {*} */({
 	name         : "mobileIndex",
 	kind         : "query",
 	get_body     : query_get_body_mobileIndex,
-	initial_value: initial_Inline6,
+	initial_value: initial_Inline10,
 })
 
 /*
