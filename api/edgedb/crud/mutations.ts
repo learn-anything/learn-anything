@@ -74,7 +74,7 @@ export async function createPersonalLink(
 		switch (learningStatus) {
 			case "NoLearningStatus":
 				return e
-					.update(foundUser, (user) => ({
+					.update(foundUser, () => ({
 						set: {
 							linksWithoutLearningStatus: e.insert(e.PersonalLink, {
 								globalLink,
@@ -87,7 +87,7 @@ export async function createPersonalLink(
 					.run(client)
 			case "ToComplete":
 				return e
-					.update(foundUser, (user) => ({
+					.update(foundUser, () => ({
 						set: {
 							linksCompleted: e.insert(e.PersonalLink, {
 								globalLink,
@@ -100,7 +100,7 @@ export async function createPersonalLink(
 					.run(client)
 			case "InProgress":
 				return e
-					.update(foundUser, (user) => ({
+					.update(foundUser, () => ({
 						set: {
 							linksInProgress: e.insert(e.PersonalLink, {
 								globalLink,
@@ -113,7 +113,7 @@ export async function createPersonalLink(
 					.run(client)
 			case "Completed":
 				return e
-					.update(foundUser, (user) => ({
+					.update(foundUser, () => ({
 						set: {
 							linksCompleted: e.insert(e.PersonalLink, {
 								globalLink,

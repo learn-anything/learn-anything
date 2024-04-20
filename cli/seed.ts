@@ -56,16 +56,10 @@ async function webIndex() {
 		"ToComplete",
 		"Build an LLM from Scratch: Chapter 5",
 	)
-	await createPersonalLink(
-		email,
-		"https://learn-anything.xyz",
-		"NoLearningStatus",
-		"Learn Anything",
-	)
 }
 
 async function mobileIndex() {
-	await base()
+	// await base()
 	await deleteAllPersonalLinks()
 	await deleteAllGlobalLinks()
 	await createPersonalLink(
