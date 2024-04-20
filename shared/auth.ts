@@ -8,36 +8,41 @@ import { Context } from "@grafbase/sdk"
 // otherwise it throws with GraphQLError (to be used inside grafbase resolvers)
 export async function emailFromHankoToken(context: Context) {
 	if (process.env.GRAFBASE_ENV === "dev") {
-		return process.env.LOCAL_USER_EMAIL
+		return process.env.EMAIL!
 	}
+
 	const authHeader = context.request.headers["authorization"]
 	if (!authHeader || !authHeader.startsWith("Bearer ")) {
 		throw new GraphQLError("Missing or invalid Authorization header")
 	}
-	const JWKS = createRemoteJWKSet(
-		new URL(`${process.env.PUBLIC_HANKO_API_URL}/.well-known/jwks.json`),
-	)
+
 	const hankoToken = authHeader.split(" ")[1]
+	if (!hankoToken) {
+		throw new GraphQLError("Missing token in Authorization header")
+	}
+
 	try {
-		const verifiedJWT = await jwtVerify(hankoToken ?? "", JWKS)
-		// TODO: change for email
-		const hankoId = verifiedJWT.payload.sub
+		const JWKS = createRemoteJWKSet(
+			new URL(`${process.env.PUBLIC_HANKO_API_URL}/.well-known/jwks.json`),
+		)
+
+		const verifiedJWT = await jwtVerify(hankoToken, JWKS)
+
+		const email = verifiedJWT.payload.email as string
+		if (!email) {
+			throw new GraphQLError("Email not found in token payload")
+		}
 
 		// Check if the token is expired
-		const currentUnixTimestamp = Math.floor(Date.now() / 1000)
-		console.log(currentUnixTimestamp, "current")
-
-		if (verifiedJWT.payload.exp && verifiedJWT.payload.exp < currentUnixTimestamp) {
-			throw new Error("Token expired")
-		}
-		return hankoId
-	} catch (err) {
-		console.log(err, "err")
-		if (err instanceof Error && err.message.includes("Token expired")) {
+		const expirationTime = verifiedJWT.payload.exp
+		if (expirationTime && expirationTime < Math.floor(Date.now() / 1000)) {
 			throw new GraphQLError("Token expired")
-		} else {
-			throw new GraphQLError("Verification failed")
 		}
+
+		return email
+	} catch (err) {
+		console.error("Token verification failed:", err)
+		throw new GraphQLError("Token verification failed")
 	}
 }
 

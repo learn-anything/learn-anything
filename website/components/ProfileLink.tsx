@@ -1,7 +1,7 @@
 import clsx from "clsx"
 import { Setter, Show, createEffect, createSignal } from "solid-js"
-import Icon from "./Icon"
-import Button from "./Button"
+import Icon from "../../shared/components/Icon"
+import Button from "../../shared/components/Button"
 import { Motion, Presence } from "solid-motionone"
 
 interface Props {
@@ -91,7 +91,7 @@ export default function ProfileLink(props: Props) {
 						<input
 							type="text"
 							placeholder="Take a note..."
-							class="text-[14px] text-white/40 pl-2 outline-none bg-dark/20"
+							class="bg-dark/20 text-[14px] text-white/40 pl-2 outline-none"
 						/>
 						<div
 							class="w-fit"

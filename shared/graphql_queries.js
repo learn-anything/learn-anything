@@ -129,22 +129,161 @@ TYPES:
  * Initial value: {@link initial_Inline0}
  *
  * @typedef  {object} Inline0
- * @property {String} filterStatus
+ * @property {String} name
+ * @property {String} prettyName
+ * @property {Array<String>} connections
  */
 /** @type {Inline0} */
 export const initial_Inline0 = {
-	filterStatus: "",
+	name: "",
+	prettyName: "",
+	connections: [],
 }
 
 /**
  * Initial value: {@link initial_Inline1}
  *
  * @typedef  {object} Inline1
- * @property {Maybe<Inline0>} auth
+ * @property {Array<Inline0>} latestGlobalTopicGraph
  */
 /** @type {Inline1} */
 export const initial_Inline1 = {
+	latestGlobalTopicGraph: [],
+}
+
+/**
+ * Initial value: {@link initial_Inline2}
+ *
+ * @typedef  {object} Inline2
+ * @property {String} title
+ * @property {String} pageUrl
+ */
+/** @type {Inline2} */
+export const initial_Inline2 = {
+	title: "",
+	pageUrl: "",
+}
+
+/**
+ * Initial value: {@link initial_Inline3}
+ *
+ * @typedef  {object} Inline3
+ * @property {String} name
+ * @property {String} prettyName
+ */
+/** @type {Inline3} */
+export const initial_Inline3 = {
+	name: "",
+	prettyName: "",
+}
+
+/**
+ * Initial value: {@link initial_Inline4}
+ *
+ * @typedef  {object} Inline4
+ * @property {String} name
+ * @property {String} prettyName
+ */
+/** @type {Inline4} */
+export const initial_Inline4 = {
+	name: "",
+	prettyName: "",
+}
+
+/**
+ * Initial value: {@link initial_Inline5}
+ *
+ * @typedef  {object} Inline5
+ * @property {String} name
+ * @property {String} prettyName
+ */
+/** @type {Inline5} */
+export const initial_Inline5 = {
+	name: "",
+	prettyName: "",
+}
+
+/**
+ * Initial value: {@link initial_Link}
+ *
+ * @typedef  {object} Link
+ * @property {Maybe<String>} title
+ * @property {Maybe<String>} url
+ * @property {Maybe<String>} description
+ * @property {Maybe<String>} note
+ */
+/** @type {Link} */
+export const initial_Link = {
+	title: null,
+	url: null,
+	description: null,
+	note: null,
+}
+
+/**
+ * Initial value: {@link initial_Inline6}
+ *
+ * @typedef  {object} Inline6
+ * @property {Array<Link>} links
+ * @property {Array<Inline2>} personalPages
+ * @property {Array<Inline3>} topicsToLearn
+ * @property {Array<Inline4>} topicsLearning
+ * @property {Array<Inline5>} topicsLearned
+ * @property {Maybe<String>} username
+ */
+/** @type {Inline6} */
+export const initial_Inline6 = {
+	links: [],
+	personalPages: [],
+	topicsToLearn: [],
+	topicsLearning: [],
+	topicsLearned: [],
+	username: null,
+}
+
+/**
+ * Initial value: {@link initial_Inline7}
+ *
+ * @typedef  {object} Inline7
+ * @property {Maybe<Inline1>} public
+ * @property {Maybe<Inline6>} auth
+ */
+/** @type {Inline7} */
+export const initial_Inline7 = {
+	public: null,
 	auth: null,
+}
+
+/**
+ * Initial value: {@link initial_Inline8}
+ *
+ * @typedef  {object} Inline8
+ * @property {Maybe<String>} id
+ * @property {Maybe<String>} url
+ * @property {Maybe<String>} title
+ * @property {Maybe<String>} description
+ * @property {Maybe<Int>} year
+ * @property {Maybe<String>} note
+ */
+/** @type {Inline8} */
+export const initial_Inline8 = {
+	id: null,
+	url: null,
+	title: null,
+	description: null,
+	year: null,
+	note: null,
+}
+
+/**
+ * Initial value: {@link initial_Inline9}
+ *
+ * @typedef  {object} Inline9
+ * @property {Array<Inline8>} personalLinks
+ */
+/** @type {Inline9} */
+export const initial_Inline9 = {
+	personalLinks: [],
 }
 
 /**
@@ -163,16 +302,43 @@ QUERIES:
 
 
 /**
+ * @typedef  {object} Vars_webIndex
+ *
+ * @typedef  {Inline7} Value_webIndex
+ */
+
+/**
+ * @param   {Vars_webIndex} vars
+ * @returns {string} */
+export function query_get_body_webIndex(vars) {
+	return 'webIndex{public{latestGlobalTopicGraph{name prettyName connections}}auth{links{title url description note}personalPages{title pageUrl}topicsToLearn{name prettyName}topicsLearning{name prettyName}topicsLearned{name prettyName}username}}'
+}
+
+/**
+ * query: `webIndex`\
+ * vars : {@link Vars_webIndex }\
+ * value: {@link Value_webIndex}
+ * @type  {Query_Data<Vars_webIndex, Value_webIndex>}
+ */
+export const query_webIndex = /** @type {*} */({
+	name         : "webIndex",
+	kind         : "query",
+	get_body     : query_get_body_webIndex,
+	initial_value: initial_Inline7,
+})
+
+
+/**
  * @typedef  {object} Vars_mobileIndex
  *
- * @typedef  {Inline1} Value_mobileIndex
+ * @typedef  {Inline9} Value_mobileIndex
  */
 
 /**
  * @param   {Vars_mobileIndex} vars
  * @returns {string} */
 export function query_get_body_mobileIndex(vars) {
-	return 'mobileIndex{auth{filterStatus}}'
+	return 'mobileIndex{personalLinks{id url title description year note}}'
 }
 
 /**
@@ -185,7 +351,7 @@ export const query_mobileIndex = /** @type {*} */({
 	name         : "mobileIndex",
 	kind         : "query",
 	get_body     : query_get_body_mobileIndex,
-	initial_value: initial_Inline1,
+	initial_value: initial_Inline9,
 })
 
 /*
@@ -219,6 +385,34 @@ export const mutation_createUser = /** @type {*} */({
 	name         : "createUser",
 	kind         : "mutation",
 	get_body     : query_get_body_createUser,
+	initial_value: false,
+})
+
+
+/**
+ * @typedef  {object} Vars_updateUserBio
+ * @property {String} bio
+ *
+ * @typedef  {Boolean} Value_updateUserBio
+ */
+
+/**
+ * @param   {Vars_updateUserBio} vars
+ * @returns {string} */
+export function query_get_body_updateUserBio(vars) {
+	return 'updateUserBio(bio:'+JSON.stringify(vars.bio)+')'
+}
+
+/**
+ * mutation: `updateUserBio`\
+ * vars : {@link Vars_updateUserBio }\
+ * value: {@link Value_updateUserBio}
+ * @type  {Query_Data<Vars_updateUserBio, Value_updateUserBio>}
+ */
+export const mutation_updateUserBio = /** @type {*} */({
+	name         : "updateUserBio",
+	kind         : "mutation",
+	get_body     : query_get_body_updateUserBio,
 	initial_value: false,
 })
 

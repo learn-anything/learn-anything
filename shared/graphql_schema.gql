@@ -1,20 +1,69 @@
 type Inline0 {
-	filterStatus: String!
+	name: String!
+	prettyName: String!
+	connections: [String!]!
 }
 type Inline1 {
-	auth: Inline0
+	latestGlobalTopicGraph: [Inline0!]!
+}
+type Inline2 {
+	title: String!
+	pageUrl: String!
+}
+type Inline3 {
+	name: String!
+	prettyName: String!
+}
+type Inline4 {
+	name: String!
+	prettyName: String!
+}
+type Inline5 {
+	name: String!
+	prettyName: String!
+}
+type Inline6 {
+	links: [Link!]!
+	personalPages: [Inline2!]!
+	topicsToLearn: [Inline3!]!
+	topicsLearning: [Inline4!]!
+	topicsLearned: [Inline5!]!
+	username: String
+}
+type Inline7 {
+	public: Inline1
+	auth: Inline6
+}
+type Inline8 {
+	id: String
+	url: String
+	title: String
+	description: String
+	year: Int
+	note: String
+}
+type Inline9 {
+	personalLinks: [Inline8!]!
 }
 enum LearningStatus {
 	Learn
 	Learning
 	Learned
 }
+type Link {
+	title: String
+	url: String
+	description: String
+	note: String
+}
 type Mutation {
 	createUser(email: String!): Boolean!
+	updateUserBio(bio: String!): Boolean!
 	updatePersonalLink(linkId: String!, status: LearningStatus!): Boolean!
 }
 type Query {
-	mobileIndex: Inline1!
+	webIndex: Inline7!
+	mobileIndex: Inline9!
 }
 schema {
 	query: Query

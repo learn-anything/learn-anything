@@ -5,39 +5,48 @@ import * as graphstate from "@nothing-but/graphstate"
 import { $ } from "bun"
 import Watcher from "watcher"
 
-const filename  = new URL(import.meta.url).pathname
+const filename = new URL(import.meta.url).pathname
 const root_path = path.dirname(filename)
-const api_path  = path.join(root_path, "api")
-
+const api_path = path.join(root_path, "api")
 
 async function main() {
 	const args = Bun.argv
 	const command = args[2]
-	switch (command) {
-		// fully sets up LA for development (website, desktop, mobile, api, ..)
-		case "setup":
-			await setupEnvFiles()
-			await setupFloxWithDependencies()
-			await setupEdgeDb()
-			await setupCursor()
-			break
-		case "run":
-			await run()
-			break
-		case "grafbase":
-			await runGrafbase()
-			break
-		case "graphql":
-			generate_graphql_client()
-			break
-		case undefined:
-			// TODO: move to https://github.com/nikitavoloboev/ts/blob/main/cli/cli.ts
-			console.log("No command provided")
-			break
-		default:
-			console.log("Unknown command")
-			break
+	try {
+		switch (command) {
+			case "setup":
+				await setup()
+				break
+			case "run":
+				await run()
+				break
+			case "runGrafbase":
+				await runGrafbase()
+				break
+			case "generateGraphqlClient":
+				await generateGraphqlClient()
+				break
+			case "websiteDeployDev":
+				await websiteDeployDev()
+				break
+			case undefined:
+				console.log("No command provided")
+				break
+			default:
+				console.log("Unknown command")
+				break
+		}
+	} catch (err) {
+		console.error("Error occurred:", err)
 	}
+}
+
+// fully sets up LA for development (website, desktop, mobile, api, ..)
+async function setup() {
+	await setupEnvFiles()
+	await setupFloxWithDependencies()
+	await setupEdgeDb()
+	await setupCursor()
 }
 
 // creates necessary .env files and fills it with default values to run LA locally
@@ -58,7 +67,9 @@ INTERNAL_SECRET=secret`,
 		console.log(`File: ${grafbaseEnvPath} already exists`)
 	}
 	const grafbaseEdgedbEnvPath = `${currentFilePath.replace("cmd.ts", "grafbase/edgedb/.env")}`
-	const grafbaseEdgedbEnvFileExists = await Bun.file(grafbaseEdgedbEnvPath).exists()
+	const grafbaseEdgedbEnvFileExists = await Bun.file(
+		grafbaseEdgedbEnvPath,
+	).exists()
 	if (!grafbaseEdgedbEnvFileExists) {
 		Bun.write(
 			grafbaseEdgedbEnvPath,
@@ -98,11 +109,12 @@ To regenerate this file, run \`bun graphql\`.
 /**
  * Generates a GraphQL client based on the schema from grafbase.
  */
-async function generate_graphql_client() {
+async function generateGraphqlClient() {
 	const schema = child_process
-		.execSync("grafbase introspect --dev", {cwd: api_path})
+		.execSync("grafbase introspect --dev", { cwd: api_path })
 		.toString()
 	Bun.write("shared/graphql_schema.gql", schema)
+	Bun.write("mobile/graphql_schema.gql", schema)
 
 	const queries = await graphstate.wasm_generate_queries(schema)
 	if (queries instanceof Error) {
@@ -110,10 +122,11 @@ async function generate_graphql_client() {
 		return
 	}
 	Bun.write("shared/graphql_queries.js", graphql_client_header + queries)
+	Bun.write("mobile/graphql_queries.js", graphql_client_header + queries)
 }
 
 async function runGrafbase() {
-	await generate_graphql_client()
+	await generateGraphqlClient()
 
 	// rerun graphql client generation on changes in grafbase folder
 	const currentFilePath = import.meta.url.replace("file://", "")
@@ -121,7 +134,7 @@ async function runGrafbase() {
 	const watcher = new Watcher(grafbaseWatchPath, { recursive: true })
 	watcher.on("change", async (event) => {
 		if (event.includes("grafbase.config.ts")) {
-			await generate_graphql_client()
+			await generateGraphqlClient()
 		}
 	})
 
@@ -167,10 +180,57 @@ async function setupCursor() {
 	// TODO:
 }
 
+// can run from any branch, will deploy current state of `website` to `dev.learn-anything.xyz`
+async function websiteDeployDev() {
+	let stashCreated = false
+	try {
+		const status = await $`git status --porcelain`.text()
+
+		if (status) {
+			console.log("Stashing unstaged changes...")
+			await $`git stash push -m "temp stash for deploy"`
+			stashCreated = true
+		}
+
+		const currentBranch = (await $`git branch --show-current`).text().trim()
+		console.log(`Deploying from branch: ${currentBranch}`)
+
+		await $`echo "branch-pushed-from=${currentBranch}" > deploy-details`
+		await $`git add deploy-details`
+		await $`git commit -m "create deploy-details with branch name"`
+
+		console.log("Deploying to dev.learn-anything.xyz...")
+		await $`git push -f origin HEAD:deploy-website-dev`
+
+		console.log("Resetting repository to its previous state...")
+		await $`git reset --hard HEAD~1`
+
+		if (stashCreated) {
+			console.log("Restoring stashed changes...")
+			await $`git stash pop`
+		}
+
+		console.log(
+			"Deployed successfully. Will be up on https://dev.learn-anything.xyz shortly.",
+		)
+	} catch (error) {
+		console.error("Deployment failed:", error)
+
+		try {
+			if (stashCreated) {
+				console.log("Restoring stashed changes...")
+				await $`git stash pop`
+			}
+		} catch (restoreError) {
+			console.error("Failed to restore stashed changes:", restoreError)
+		}
+	}
+}
+
 async function run() {
 	// can use this function to quickly run/test out TS code in scope of project (quick experiments)
 	// can run it with `bun ts`
 	// only commit functions/commands that are useful to the project
 }
 
-main()
+await main()

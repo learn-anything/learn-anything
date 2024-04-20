@@ -1,14 +1,12 @@
 import * as gql from "./graphql_queries.js"
-import { getHankoCookie } from "./auth.js"
 
 const graphql_url = "http://127.0.0.1:4000/graphql"
 
 async function raw_request<T = never>(query: string): Promise<T | Error> {
 	try {
-		const token = getHankoCookie()
 		const res = await fetch(graphql_url, {
 			method: "POST",
-			headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+			headers: { "Content-Type": "application/json" },
 			body: '{"query":' + JSON.stringify(query) + "}",
 		})
 		const json = await res.json()

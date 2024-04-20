@@ -10,7 +10,10 @@ module default {
     username: str {
       constraint exclusive;
     };
-    constraint username on str_trim(str_lower(.username));
+    bio: str;
+    # TODO: should enforce usernames to be lowercase
+    # fails now: https://discord.com/channels/841451783728529451/1223277097020030977/1223280398398918837
+    # constraint username on str_trim(str_lower(.username));
     # custom display name user can choose for themselves similar to X/GitHub
     displayName: str;
     # cloudflare R2 url with image
@@ -24,13 +27,27 @@ module default {
     # total number of topics user is tracking
     property topicsTracked := count(.topicsToLearn) + count(.topicsLearning) + count(.topicsLearned);
     # links user wants to complete
-    multi linksToComplete: PersonalLink;
+    multi linksToComplete: PersonalLink {
+      on target delete allow;
+    };
     # links user is currently trying to complete
-    multi linksInProgress: PersonalLink;
+    multi linksInProgress: PersonalLink {
+      on target delete allow;
+    };
     # links user has completed
-    multi linksCompleted: PersonalLink;
+    multi linksCompleted: PersonalLink {
+      on target delete allow;
+    };
+    # links without any learning status
+    multi linksWithoutLearningStatus: PersonalLink {
+      on target delete allow;
+    };
     # links user has liked
     multi linksLiked: PersonalLink;
+    # personal pages user has created
+    multi personalPages: PersonalPage {
+      on target delete allow;
+    };
     # total number of links user is interacting with
     # property linksTracked := count(.linksBookmarked) + count(.linksInProgress) + count(.linksCompleted) + count(.linksLiked);
     # date until user has paid membership for
@@ -89,6 +106,22 @@ module default {
     # custom main topic for link set by User
     link mainTopic: GlobalTopic;
   }
+  # PersonalPage is a page of content (ala Notion page)
+  type PersonalPage extending WithCreatedAt {
+    # title of page as entered by user
+    required title: str;
+    # unique path to the page
+    required pageUrl: str {
+      constraint exclusive;
+    }
+    # true = page is available for all to see/search. false = page is private
+    required public: bool {
+      default := false;
+    }
+    # content of the page
+    required content: str;
+    # TODO: map it to GlobalTopic
+  }
   # GlobalTopic is a topic that is available to all users
   # It has name, related links, study guide, similar topics etc.
   type GlobalTopic extending WithCreatedAt {
@@ -125,6 +158,22 @@ module default {
     multi links: GlobalLink {
       order: int16;
     };
+  }
+  # tracking all mutations (with hope to potentially be able to reverse mutations in future), etc.
+  type Events extending WithCreatedAt {
+    # for now as json, structure can be changed in future
+    # {"mutationName": "..", "mutationArgs": {"..": ".."}}
+    # can sort by `created_at` later to get order of mutations
+    mutation: json;
+  }
+  # everything else (within reason, logs are in ClickHouse, etc.)
+  type Other extending WithCreatedAt {
+    latestGlobalTopicGraph: GlobalTopicGraph;
+  }
+  type GlobalTopicGraph {
+    required name: str;
+    required prettyName: str;
+    required multi connections: str;
   }
   # attaches `created_at` field to objects that extend it
   # https://docs.edgedb.com/database/datamodel/objects#abstract-types

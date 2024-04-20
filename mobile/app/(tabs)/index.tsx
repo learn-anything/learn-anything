@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from "react"
+import * as gql from "../../graphql_react"
 import {
 	View,
 	StyleSheet,
@@ -64,7 +65,9 @@ type ProfileData = {
 }
 
 export default function Home() {
-	const [data, setData] = useState<ProfileData>({
+	const data = gql.useResource(gql.query_mobileIndex, {})
+	console.log(data, "data back")
+	const [local, setLocal] = useState<ProfileData>({
 		links: [
 			{
 				id: "1",
@@ -327,11 +330,11 @@ export default function Home() {
 					</View>
 				</View>
 				<DraggableFlatList
-					data={data.links}
+					data={local.links}
 					renderItem={renderItem}
 					keyExtractor={(item) => item.id}
 					onDragEnd={({ data }) =>
-						setData((prevState) => ({ ...prevState, links: data }))
+						setLocal((prevState) => ({ ...prevState, links: data }))
 					}
 					style={styles.list}
 				/>
