@@ -24,7 +24,6 @@ import {
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import DraggableFlatList from "react-native-draggable-flatlist"
-import { BlurView } from "expo-blur"
 import { AntDesign } from "@expo/vector-icons"
 import {
 	ArrowIcon,
@@ -102,6 +101,7 @@ export default function Home() {
 	const [noteText, setNoteText] = useState<{ [key: string]: string }>({})
 	const [animationButtons, setAnimationButtons] = useState<Animated.Value[]>([])
 	const [searchTopicInputFocused, setSearchTopicInputFocused] = useState(false)
+	const [takeNoteInputFocused, setTakeNoteInputFocused] = useState(false)
 
 	// bottomsheets
 	const [filterTitle, setFilterTitle] = useState("Filters")
@@ -109,12 +109,6 @@ export default function Home() {
 	const [topicClicked, setTopicClicked] = useState(false)
 	const topicRef = useRef<BottomSheet>(null)
 	const filterRef = useRef<BottomSheet>(null)
-
-	const snapFilterPoints = useMemo(() => {
-		return topicClicked ? ["90%"] : ["20%"]
-	}, [topicClicked])
-
-	const snapTopicPoints = useMemo(() => ["45%"], [])
 	const [topicSheetIndex, setTopicSheetIndex] = useState(-1)
 	const [filterBottomSheetIndex, setFilterBottomSheetIndex] = useState(-1)
 
@@ -149,6 +143,20 @@ export default function Home() {
 		Animated.parallel(staggeredSheetAnimations).start()
 	}
 
+	const snapFilterPoints = useMemo(() => {
+		return topicClicked ? ["90%"] : ["20%"]
+	}, [topicClicked])
+
+	const snapTopicPoints = useMemo(() => {
+		return takeNoteInputFocused ? ["90%"] : ["45%"]
+	}, [takeNoteInputFocused])
+
+	useEffect(() => {
+		if (topicSheetIndex === 0) {
+			setTakeNoteInputFocused(false)
+		}
+	}, [topicSheetIndex])
+
 	const openTopicSheet = () => {
 		setTopicSheetIndex(0)
 		filterRef.current?.close()
@@ -157,6 +165,10 @@ export default function Home() {
 		setFilterBottomSheetIndex(0)
 		setTopicClicked(false)
 		topicRef.current?.close()
+	}
+
+	function formatText(text: string, maxLength: number = 30): string {
+		return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text
 	}
 
 	useEffect(() => {
@@ -209,76 +221,9 @@ export default function Home() {
 			</TouchableOpacity>
 		</TouchableOpacity>
 	)
-
-	// const renderItem = ({
-	// 	item,
-	// 	drag,
-	// 	isActive,
-	// }: {
-	// 	item: { title: string; topic: string; url: string; id: string }
-	// 	drag: any
-	// 	isActive: boolean
-	// }) => {
-	// 	const translateX = new Animated.Value(0)
-
-	// 	const onGestureEvent = Animated.event(
-	// 		[{ nativeEvent: { translationX: translateX } }],
-	// 		{ useNativeDriver: true },
-	// 	)
-
-	// 	type Event = HandlerStateChangeEvent<PanGestureHandlerEventPayload>
-
-	// 	const onHandlerStateChange = (event: Event) => {
-	// 		if (event.nativeEvent.oldState === State.ACTIVE) {
-	// 			Animated.spring(translateX, {
-	// 				toValue: 0,
-	// 				stiffness: 150,
-	// 				damping: 20,
-	// 				mass: 1,
-	// 				useNativeDriver: true,
-	// 			}).start()
-	// 		}
-	// 	}
-
-	// 	return (
-	// 		<PanGestureHandler
-	// 			onGestureEvent={onGestureEvent}
-	// 			onHandlerStateChange={onHandlerStateChange}
-	// 		>
-	// 			<Animated.View
-	// 				style={[
-	// 					styles.itemContainer,
-	// 					{
-	// 						transform: [{ translateX }],
-	// 					},
-	// 				]}
-	// 			>
-	// 				<TouchableOpacity
-	// 					style={{ flex: 1 }}
-	// 					onLongPress={drag}
-	// 					disabled={isActive}
-	// 					onPress={() => {}}
-	// 				>
-	// 					<Image source={getLinkIcon(item.url)} style={styles.itemImage} />
-	// 					<Text style={styles.itemTitle}>{item.title}</Text>
-	// 					<TouchableOpacity
-	// 						style={{ marginLeft: 20, opacity: 0.2 }}
-	// 						onPress={() => Linking.openURL(item.url)}
-	// 					>
-	// 						<LinkIcon />
-	// 					</TouchableOpacity>
-	// 				</TouchableOpacity>
-	// 			</Animated.View>
-	// 		</PanGestureHandler>
-	// 	)
-	// }
-
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
 			<SafeAreaView style={styles.container}>
-				{filterBottomSheetIndex !== -1 || topicSheetIndex !== -1 ? (
-					<BlurView intensity={80} tint={"light"} />
-				) : null}
 				<View style={styles.header}>
 					<View style={styles.parentContainer}>
 						<View style={styles.tabContainer}>
@@ -473,142 +418,140 @@ export default function Home() {
 				enableHandlePanningGesture={true}
 				backgroundStyle={{ backgroundColor: "#171A21", borderRadius: 10 }}
 			>
-				<BottomSheetView style={{ alignItems: "center" }}>
-					{selectedItem && (
-						<View>
-							<View style={styles.sheetTitleContainer}>
-								<View style={styles.titleContainer}>
-									<Image
-										source={getLinkIcon(selectedItem.url)}
-										style={styles.itemImage}
-									/>
-									<Text
-										style={{
-											color: "white",
-											fontSize: 16,
-											fontWeight: "500",
-											marginLeft: 8,
+				{selectedItem ? (
+					<BottomSheetView style={{ alignItems: "center" }}>
+						{takeNoteInputFocused ? (
+							<View style={styles.sheetNoteContainer}>
+								<View style={styles.noteText}>
+									<TouchableOpacity style={{ marginLeft: 20, opacity: 0.3 }}>
+										<NoteIcon />
+									</TouchableOpacity>
+									<TextInput
+										style={styles.sheetNoteTextFocused}
+										value={selectedItem ? noteText[selectedItem.id] || "" : ""}
+										placeholder="Take a note..."
+										multiline={true}
+										placeholderTextColor="rgba(255, 255, 255, 0.9)"
+										autoFocus={false}
+										onFocus={() => setTakeNoteInputFocused(true)}
+										onBlur={() => setTakeNoteInputFocused(false)}
+										onChangeText={(text) => {
+											if (selectedItem) {
+												setNoteText((notes) => ({
+													...notes,
+													[selectedItem.id]: text,
+												}))
+											}
 										}}
-									>
-										{selectedItem.title}
+									/>
+								</View>
+							</View>
+						) : (
+							<>
+								<View style={styles.sheetTitleContainer}>
+									<View style={styles.titleContainer}>
+										<Image
+											source={getLinkIcon(selectedItem.url)}
+											style={styles.itemImage}
+										/>
+										<Text
+											style={{
+												color: "white",
+												fontSize: 16,
+												fontWeight: "500",
+												marginLeft: 8,
+											}}
+										>
+											{selectedItem.title}
+										</Text>
+									</View>
+									<TouchableOpacity style={styles.sheetButton}>
+										<Text style={styles.sheetButtonText}>Open</Text>
+									</TouchableOpacity>
+								</View>
+								<View style={styles.sheetLinkContainer}>
+									<TouchableOpacity style={{ marginRight: 5 }}>
+										<LinkIcon />
+									</TouchableOpacity>
+									<Text style={styles.sheetLink}>{selectedItem.url}</Text>
+								</View>
+								<View style={styles.sheetDescriptionContainer}>
+									<Text style={styles.sheetInfo}>
+										The installation of Nix on macOS Catalina has faced
+										challenges due to the root file system becoming read-only
+									</Text>
+									<Text style={styles.sheetDate}>
+										2023 · Added: Mar 20, 2024
 									</Text>
 								</View>
-								<TouchableOpacity style={styles.sheetButton}>
-									<Text style={styles.sheetButtonText}>Open</Text>
-								</TouchableOpacity>
-							</View>
-							<View style={styles.sheetLinkContainer}>
-								<TouchableOpacity style={{ marginRight: 5 }}>
-									<LinkIcon />
-								</TouchableOpacity>
-								<Text style={styles.sheetLink}>{selectedItem.url}</Text>
-							</View>
-
-							<View style={styles.sheetDescriptionContainer}>
-								<Text style={styles.sheetInfo}>
-									The installation of Nix on macOS Catalina has faced challenges
-									due to the root file system becoming read-only
-								</Text>
-								<Text style={styles.sheetDate}>2023 · Added: Mar 20, 2024</Text>
-							</View>
-							<View style={styles.sheetStatusContainer}>
-								<TouchableOpacity style={styles.sheetTopicButton}>
-									<Text style={styles.sheetButtonText}>
-										{selectedItem.topic}
-									</Text>
-								</TouchableOpacity>
-								<View style={styles.sheetHeartIconContainer}>
-									<TouchableOpacity
-										style={{
-											marginRight: 10,
-											opacity: 0.4,
-										}}
-									>
-										<HeartIcon />
+								<View style={styles.sheetStatusContainer}>
+									<TouchableOpacity style={styles.sheetTopicButton}>
+										<Text style={styles.sheetButtonText}>
+											{selectedItem.topic}
+										</Text>
 									</TouchableOpacity>
-									<View
-										style={{
-											position: "relative",
-											flexDirection: "column",
-											alignItems: "center",
-										}}
-									>
+									<View style={styles.sheetHeartIconContainer}>
 										<TouchableOpacity
-											style={[styles.sheetLearningButton, { paddingLeft: 15 }]}
-											onPress={() => showSheetButtons()}
+											style={{
+												marginRight: 10,
+												opacity: 0.4,
+											}}
 										>
-											<Text style={styles.sheetLearningText}>
-												{sheetLearningStatus}
-											</Text>
-											<ArrowIcon />
+											<HeartIcon />
 										</TouchableOpacity>
-										{["Learning", "Learned", "To Learn"]
-											.filter((s) => s !== sheetLearningStatus)
-											.map((status, index) =>
-												sheetAnimationButtons[index] ? (
-													<Animated.View
-														key={index}
-														style={[
-															styles.sheetLearningButtonsDropdown,
-															{
-																opacity: sheetAnimationButtons[index],
-																transform: [
-																	{
-																		scale: sheetAnimationButtons[
-																			index
-																		].interpolate({
-																			inputRange: [0, 1],
-																			outputRange: [0.5, 1],
-																		}),
-																	},
-																],
-																top: 30 + index * 35,
-															},
-														]}
-													>
-														<TouchableOpacity
-															style={styles.sheetAnotherLearningButton}
-															onPress={() => showSheetButtons(status)}
-														>
-															<Text
-																style={[
-																	styles.sheetLearningText,
-																	{ lineHeight: 20 },
-																]}
-															>
-																{status}
-															</Text>
-														</TouchableOpacity>
-													</Animated.View>
-												) : null,
-											)}
+										<View
+											style={{
+												position: "relative",
+												flexDirection: "column",
+												alignItems: "center",
+											}}
+										>
+											<TouchableOpacity
+												style={[
+													styles.sheetLearningButton,
+													{ paddingLeft: 15 },
+												]}
+												onPress={() => showSheetButtons()}
+											>
+												<Text style={styles.sheetLearningText}>
+													{sheetLearningStatus}
+												</Text>
+												<ArrowIcon />
+											</TouchableOpacity>
+										</View>
 									</View>
 								</View>
-							</View>
-						</View>
-					)}
-					<View style={styles.sheetNoteContainer}>
-						<View style={styles.noteText}>
-							<TouchableOpacity style={{ marginLeft: 20, opacity: 0.3 }}>
-								<NoteIcon />
-							</TouchableOpacity>
-							<TextInput
-								style={styles.sheetNoteText}
-								value={selectedItem ? noteText[selectedItem.id] || "" : ""}
-								placeholder="Take a note..."
-								placeholderTextColor="rgba(255, 255, 255, 0.9)"
-								onChangeText={(text) => {
-									if (selectedItem) {
-										setNoteText((notes) => ({
-											...notes,
-											[selectedItem.id]: text,
-										}))
-									}
-								}}
-							/>
-						</View>
-					</View>
-				</BottomSheetView>
+								<View style={styles.sheetNoteContainer}>
+									<View style={styles.noteText}>
+										<TouchableOpacity style={{ marginLeft: 20, opacity: 0.3 }}>
+											<NoteIcon />
+										</TouchableOpacity>
+										<TextInput
+											style={styles.sheetNoteText}
+											value={
+												selectedItem ? noteText[selectedItem.id] || "" : ""
+											}
+											placeholder="Take a note..."
+											multiline={true}
+											placeholderTextColor="rgba(255, 255, 255, 0.9)"
+											autoFocus={false}
+											onFocus={() => setTakeNoteInputFocused(true)}
+											onBlur={() => setTakeNoteInputFocused(false)}
+											onChangeText={(text) => {
+												if (selectedItem) {
+													setNoteText((notes) => ({
+														...notes,
+														[selectedItem.id]: text,
+													}))
+												}
+											}}
+										/>
+									</View>
+								</View>
+							</>
+						)}
+					</BottomSheetView>
+				) : null}
 			</BottomSheet>
 		</GestureHandlerRootView>
 	)
@@ -902,6 +845,14 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		opacity: 0.2,
 		marginLeft: 5,
+		minHeight: 20,
+	},
+	sheetNoteTextFocused: {
+		color: "white",
+		fontSize: 16,
+		opacity: 0.8,
+		marginLeft: 5,
+		minHeight: 20,
 	},
 
 	// filter bottomsheet
