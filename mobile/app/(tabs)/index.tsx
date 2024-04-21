@@ -14,12 +14,13 @@ import {
 	Keyboard,
 	TouchableWithoutFeedback,
 } from "react-native"
-import {
-	PanGestureHandler,
-	State,
-	HandlerStateChangeEvent,
-	PanGestureHandlerEventPayload,
-} from "react-native-gesture-handler"
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
+// import {
+// 	PanGestureHandler,
+// 	State,
+// 	HandlerStateChangeEvent,
+// 	PanGestureHandlerEventPayload,
+// } from "react-native-gesture-handler"
 
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
@@ -111,6 +112,7 @@ export default function Home() {
 	const filterRef = useRef<BottomSheet>(null)
 	const [topicSheetIndex, setTopicSheetIndex] = useState(-1)
 	const [filterBottomSheetIndex, setFilterBottomSheetIndex] = useState(-1)
+	const [firstNoteSentence, setFirstNoteSentence] = useState("")
 
 	//bottomsheet learning button
 	const [showSheetLearningButtons, setShowSheetLearningButtons] =
@@ -161,6 +163,7 @@ export default function Home() {
 		setTopicSheetIndex(0)
 		filterRef.current?.close()
 	}
+
 	const openFilterSheet = () => {
 		setFilterBottomSheetIndex(0)
 		setTopicClicked(false)
@@ -412,7 +415,11 @@ export default function Home() {
 				ref={topicRef}
 				index={topicSheetIndex}
 				snapPoints={snapTopicPoints}
-				onChange={(index) => setTopicSheetIndex(index)}
+				onChange={(index) => {
+					setTopicSheetIndex(index)
+					if (index === -1) Keyboard.dismiss()
+				}}
+				onClose={() => Keyboard.dismiss()}
 				enablePanDownToClose={true}
 				enableContentPanningGesture={true}
 				enableHandlePanningGesture={true}
@@ -426,24 +433,36 @@ export default function Home() {
 									<TouchableOpacity style={{ marginLeft: 20, opacity: 0.3 }}>
 										<NoteIcon />
 									</TouchableOpacity>
-									<TextInput
-										style={styles.sheetNoteTextFocused}
-										value={selectedItem ? noteText[selectedItem.id] || "" : ""}
-										placeholder="Take a note..."
-										multiline={true}
-										placeholderTextColor="rgba(255, 255, 255, 0.9)"
-										autoFocus={false}
-										onFocus={() => setTakeNoteInputFocused(true)}
-										onBlur={() => setTakeNoteInputFocused(false)}
-										onChangeText={(text) => {
-											if (selectedItem) {
-												setNoteText((notes) => ({
-													...notes,
-													[selectedItem.id]: text,
-												}))
-											}
+									<KeyboardAwareScrollView
+										contentContainerStyle={{
+											height: Dimensions.get("window").height / 2,
 										}}
-									/>
+									>
+										<TextInput
+											style={[
+												styles.sheetNoteTextFocused,
+												{ height: Dimensions.get("window").height / 2 },
+											]}
+											value={
+												selectedItem ? noteText[selectedItem.id] || "" : ""
+											}
+											placeholder="Take a note..."
+											autoFocus={true}
+											multiline={true}
+											placeholderTextColor="rgba(255, 255, 255, 0.3)"
+											onFocus={() => setTakeNoteInputFocused(true)}
+											onBlur={() => setTakeNoteInputFocused(false)}
+											onChangeText={(text) => {
+												setFirstNoteSentence(text.split("\n")[0])
+												if (selectedItem) {
+													setNoteText((notes) => ({
+														...notes,
+														[selectedItem.id]: text,
+													}))
+												}
+											}}
+										/>
+									</KeyboardAwareScrollView>
 								</View>
 							</View>
 						) : (
@@ -531,7 +550,7 @@ export default function Home() {
 											value={
 												selectedItem ? noteText[selectedItem.id] || "" : ""
 											}
-											placeholder="Take a note..."
+											placeholder={firstNoteSentence || "Take a note..."}
 											multiline={true}
 											placeholderTextColor="rgba(255, 255, 255, 0.9)"
 											autoFocus={false}
@@ -853,6 +872,7 @@ const styles = StyleSheet.create({
 		opacity: 0.8,
 		marginLeft: 5,
 		minHeight: 20,
+		paddingBottom: 60,
 	},
 
 	// filter bottomsheet
