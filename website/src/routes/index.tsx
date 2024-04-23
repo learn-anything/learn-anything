@@ -1,7 +1,6 @@
 import { useNavigate } from "@solidjs/router"
-import { Match, Switch, createEffect, createSignal } from "solid-js"
+import { Match, Switch, createSignal } from "solid-js"
 import * as gql from "../../../shared/graphql_solid"
-import { Sidebar } from "../../components/Sidebar"
 
 interface Local {
 	learningStatusFilter: "learning" | "toLearn" | "learned" | "all"
@@ -17,15 +16,16 @@ export default function Home() {
 		sortBy: "custom",
 	})
 
-	createEffect(() => {
-		console.log(data().auth, "auth data")
-	})
+	// createEffect(() => {
+	// 	console.log(data().auth, "auth data")
+	// })
 
 	return (
 		<div class="w-full h-screen">
 			<Switch fallback={<div>loading</div>}>
 				<Match when={data().auth}>
 					{(authData) => {
+						console.log(authData())
 						return (
 							<>
 								{/* <Sidebar
@@ -80,6 +80,8 @@ export default function Home() {
 				</Match>
 				<Match when={data().public}>
 					{(publicData) => {
+						console.log(publicData())
+						return <>public page</>
 						const navigate = useNavigate()
 						return <>Force Graph</>
 					}}

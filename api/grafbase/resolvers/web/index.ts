@@ -1,10 +1,7 @@
 import { Resolver } from "@grafbase/generated"
 import { GraphQLError } from "graphql"
 import { emailFromHankoToken } from "../../../../shared/auth"
-import {
-	indexRouteAuth,
-	indexRoutePublic,
-} from "../../../edgedb/crud/routes/website"
+import { indexRouteAuth, indexRoutePublic } from "../../../edgedb/crud/website"
 
 const resolver: Resolver["Query.webIndex"] = async (
 	parent,

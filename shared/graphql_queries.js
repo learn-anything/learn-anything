@@ -165,45 +165,6 @@ export const initial_Inline2 = {
 }
 
 /**
- * Initial value: {@link initial_Inline3}
- *
- * @typedef  {object} Inline3
- * @property {String} name
- * @property {String} prettyName
- */
-/** @type {Inline3} */
-export const initial_Inline3 = {
-	name: "",
-	prettyName: "",
-}
-
-/**
- * Initial value: {@link initial_Inline4}
- *
- * @typedef  {object} Inline4
- * @property {String} name
- * @property {String} prettyName
- */
-/** @type {Inline4} */
-export const initial_Inline4 = {
-	name: "",
-	prettyName: "",
-}
-
-/**
- * Initial value: {@link initial_Inline5}
- *
- * @typedef  {object} Inline5
- * @property {String} name
- * @property {String} prettyName
- */
-/** @type {Inline5} */
-export const initial_Inline5 = {
-	name: "",
-	prettyName: "",
-}
-
-/**
  * Initial value: {@link initial_Link}
  *
  * @typedef  {object} Link
@@ -221,43 +182,37 @@ export const initial_Link = {
 }
 
 /**
- * Initial value: {@link initial_Inline6}
+ * Initial value: {@link initial_Inline3}
  *
- * @typedef  {object} Inline6
+ * @typedef  {object} Inline3
  * @property {Array<Link>} links
  * @property {Array<Inline2>} personalPages
- * @property {Array<Inline3>} topicsToLearn
- * @property {Array<Inline4>} topicsLearning
- * @property {Array<Inline5>} topicsLearned
  * @property {Maybe<String>} username
  */
-/** @type {Inline6} */
-export const initial_Inline6 = {
+/** @type {Inline3} */
+export const initial_Inline3 = {
 	links: [],
 	personalPages: [],
-	topicsToLearn: [],
-	topicsLearning: [],
-	topicsLearned: [],
 	username: null,
 }
 
 /**
- * Initial value: {@link initial_Inline7}
+ * Initial value: {@link initial_Inline4}
  *
- * @typedef  {object} Inline7
+ * @typedef  {object} Inline4
  * @property {Maybe<Inline1>} public
- * @property {Maybe<Inline6>} auth
+ * @property {Maybe<Inline3>} auth
  */
-/** @type {Inline7} */
-export const initial_Inline7 = {
+/** @type {Inline4} */
+export const initial_Inline4 = {
 	public: null,
 	auth: null,
 }
 
 /**
- * Initial value: {@link initial_Inline8}
+ * Initial value: {@link initial_Inline5}
  *
- * @typedef  {object} Inline8
+ * @typedef  {object} Inline5
  * @property {Maybe<String>} id
  * @property {Maybe<String>} url
  * @property {Maybe<String>} title
@@ -265,8 +220,8 @@ export const initial_Inline7 = {
  * @property {Maybe<Int>} year
  * @property {Maybe<String>} note
  */
-/** @type {Inline8} */
-export const initial_Inline8 = {
+/** @type {Inline5} */
+export const initial_Inline5 = {
 	id: null,
 	url: null,
 	title: null,
@@ -276,13 +231,13 @@ export const initial_Inline8 = {
 }
 
 /**
- * Initial value: {@link initial_Inline9}
+ * Initial value: {@link initial_Inline6}
  *
- * @typedef  {object} Inline9
- * @property {Array<Inline8>} personalLinks
+ * @typedef  {object} Inline6
+ * @property {Array<Inline5>} personalLinks
  */
-/** @type {Inline9} */
-export const initial_Inline9 = {
+/** @type {Inline6} */
+export const initial_Inline6 = {
 	personalLinks: [],
 }
 
@@ -304,14 +259,14 @@ QUERIES:
 /**
  * @typedef  {object} Vars_webIndex
  *
- * @typedef  {Inline7} Value_webIndex
+ * @typedef  {Inline4} Value_webIndex
  */
 
 /**
  * @param   {Vars_webIndex} vars
  * @returns {string} */
 export function query_get_body_webIndex(vars) {
-	return 'webIndex{public{latestGlobalTopicGraph{name prettyName connections}}auth{links{title url description note}personalPages{title pageUrl}topicsToLearn{name prettyName}topicsLearning{name prettyName}topicsLearned{name prettyName}username}}'
+	return 'webIndex{public{latestGlobalTopicGraph{name prettyName connections}}auth{links{title url description note}personalPages{title pageUrl}username}}'
 }
 
 /**
@@ -324,14 +279,14 @@ export const query_webIndex = /** @type {*} */({
 	name         : "webIndex",
 	kind         : "query",
 	get_body     : query_get_body_webIndex,
-	initial_value: initial_Inline7,
+	initial_value: initial_Inline4,
 })
 
 
 /**
  * @typedef  {object} Vars_mobileIndex
  *
- * @typedef  {Inline9} Value_mobileIndex
+ * @typedef  {Inline6} Value_mobileIndex
  */
 
 /**
@@ -351,7 +306,7 @@ export const query_mobileIndex = /** @type {*} */({
 	name         : "mobileIndex",
 	kind         : "query",
 	get_body     : query_get_body_mobileIndex,
-	initial_value: initial_Inline9,
+	initial_value: initial_Inline6,
 })
 
 /*

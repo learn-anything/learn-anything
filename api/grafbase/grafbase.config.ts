@@ -65,18 +65,6 @@ g.query("webIndex", {
 				title: g.string(),
 				pageUrl: g.string(),
 			}).list(),
-			topicsToLearn: inline({
-				name: g.string(),
-				prettyName: g.string(),
-			}).list(),
-			topicsLearning: inline({
-				name: g.string(),
-				prettyName: g.string(),
-			}).list(),
-			topicsLearned: inline({
-				name: g.string(),
-				prettyName: g.string(),
-			}).list(),
 			username: g.string().optional(),
 		}).optional(),
 	}),
@@ -97,6 +85,18 @@ g.query("mobileIndex", {
 			note: g.string().optional(),
 			// TODO: add..
 			// topic: g.string().optional(),
+			// topicsToLearn: inline({
+			// 	name: g.string(),
+			// 	prettyName: g.string(),
+			// }).list(),
+			// topicsLearning: inline({
+			// 	name: g.string(),
+			// 	prettyName: g.string(),
+			// }).list(),
+			// topicsLearned: inline({
+			// 	name: g.string(),
+			// 	prettyName: g.string(),
+			// }).list(),
 		}).list(),
 		// user: inline({
 		// 	email: g.string(),

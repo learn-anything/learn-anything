@@ -11,30 +11,15 @@ type Inline2 {
 	pageUrl: String!
 }
 type Inline3 {
-	name: String!
-	prettyName: String!
-}
-type Inline4 {
-	name: String!
-	prettyName: String!
-}
-type Inline5 {
-	name: String!
-	prettyName: String!
-}
-type Inline6 {
 	links: [Link!]!
 	personalPages: [Inline2!]!
-	topicsToLearn: [Inline3!]!
-	topicsLearning: [Inline4!]!
-	topicsLearned: [Inline5!]!
 	username: String
 }
-type Inline7 {
+type Inline4 {
 	public: Inline1
-	auth: Inline6
+	auth: Inline3
 }
-type Inline8 {
+type Inline5 {
 	id: String
 	url: String
 	title: String
@@ -42,8 +27,8 @@ type Inline8 {
 	year: Int
 	note: String
 }
-type Inline9 {
-	personalLinks: [Inline8!]!
+type Inline6 {
+	personalLinks: [Inline5!]!
 }
 enum LearningStatus {
 	Learn
@@ -62,8 +47,8 @@ type Mutation {
 	updatePersonalLink(linkId: String!, status: LearningStatus!): Boolean!
 }
 type Query {
-	webIndex: Inline7!
-	mobileIndex: Inline9!
+	webIndex: Inline4!
+	mobileIndex: Inline6!
 }
 schema {
 	query: Query
