@@ -61,6 +61,7 @@ g.query("webIndex", {
 		}).optional(),
 		auth: inline({
 			links: g.ref(Link).list(),
+			bio: g.string().optional(),
 			personalPages: inline({
 				title: g.string(),
 				pageUrl: g.string(),

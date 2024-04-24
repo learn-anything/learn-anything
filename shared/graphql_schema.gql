@@ -12,6 +12,7 @@ type Inline2 {
 }
 type Inline3 {
 	links: [Link!]!
+	bio: String
 	personalPages: [Inline2!]!
 	username: String
 }

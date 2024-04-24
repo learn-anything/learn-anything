@@ -4,6 +4,7 @@ import {
 	deleteAllGlobalLinks,
 	deleteAllPersonalLinks,
 	deleteUser,
+	updateUserBio,
 } from "../api/edgedb/crud/mutations"
 
 const email = process.env.email!
@@ -57,6 +58,7 @@ async function webIndex() {
 		"ToComplete",
 		"Build an LLM from Scratch: Chapter 5",
 	)
+	await updateUserBio(email, "Make learn-anything.xyz")
 }
 
 async function mobileIndex() {

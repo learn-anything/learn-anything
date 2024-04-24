@@ -186,12 +186,14 @@ export const initial_Link = {
  *
  * @typedef  {object} Inline3
  * @property {Array<Link>} links
+ * @property {Maybe<String>} bio
  * @property {Array<Inline2>} personalPages
  * @property {Maybe<String>} username
  */
 /** @type {Inline3} */
 export const initial_Inline3 = {
 	links: [],
+	bio: null,
 	personalPages: [],
 	username: null,
 }
@@ -266,7 +268,7 @@ QUERIES:
  * @param   {Vars_webIndex} vars
  * @returns {string} */
 export function query_get_body_webIndex(vars) {
-	return 'webIndex{public{latestGlobalTopicGraph{name prettyName connections}}auth{links{title url description note}personalPages{title pageUrl}username}}'
+	return 'webIndex{public{latestGlobalTopicGraph{name prettyName connections}}auth{links{title url description note}bio personalPages{title pageUrl}username}}'
 }
 
 /**

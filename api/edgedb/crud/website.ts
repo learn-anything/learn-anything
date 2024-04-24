@@ -25,6 +25,7 @@ export async function indexRouteAuth(email: string) {
 				pageUrl: true,
 			},
 			username: true,
+			bio: true,
 			filter_single: e.op(user.email, "=", email),
 		}))
 		.run(client)

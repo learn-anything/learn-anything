@@ -1,6 +1,7 @@
 import { useNavigate } from "@solidjs/router"
 import { Match, Switch, createSignal } from "solid-js"
 import * as gql from "../../../shared/graphql_solid"
+import UserBio from "../../components/UserBio"
 
 interface Local {
 	learningStatusFilter: "learning" | "toLearn" | "learned" | "all"
@@ -16,18 +17,24 @@ export default function Home() {
 		sortBy: "custom",
 	})
 
-	// createEffect(() => {
-	// 	console.log(data().auth, "auth data")
-	// })
-
 	return (
 		<div class="w-full h-screen">
 			<Switch fallback={<div>loading</div>}>
 				<Match when={data().auth}>
 					{(authData) => {
-						console.log(authData())
+						console.log(authData().bio)
 						return (
 							<>
+								<UserBio
+									bio={authData().bio!}
+									updateBio={async (newBio) => {
+										const updateUserBio = gql.useRequest(
+											gql.mutation_updateUserBio,
+										)
+										await updateUserBio({ bio: newBio })
+									}}
+								/>
+								{/* <Button label="Update user bio" onChange={async () => {}} /> */}
 								{/* <Sidebar
 									topics={authData().topicsLearned}
 									pages={route().userPages}
