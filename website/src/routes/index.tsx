@@ -32,6 +32,16 @@ export default function Home() {
 											gql.mutation_updateUserBio,
 										)
 										await updateUserBio({ bio: newBio })
+										actions.mutate((p) => {
+											if (!p.auth) return p
+											return {
+												...p,
+												auth: {
+													...p.auth,
+													bio: newBio,
+												},
+											}
+										})
 									}}
 								/>
 								{/* <Button label="Update user bio" onChange={async () => {}} /> */}
