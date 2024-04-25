@@ -1,15 +1,19 @@
 import { For, Show, createSignal } from "solid-js"
 import Button from "../../../shared/components/Button"
 import { Motion, Presence } from "solid-motionone"
+import { createEditor, EditorContent } from "tiptap-solid"
+import StarterKit from "@tiptap/starter-kit"
 
 export default function Topic() {
+	const textEditor = createEditor({
+		content: `Hello world!`,
+		extensions: [StarterKit],
+	})
 	return (
 		<div class="ml-[200px] p-3 h-screen">
 			<Sidebar />
 			<div class=" border border-[#191919] rounded-[7px] h-full">
-				<div>
-					<div>Title</div>
-				</div>
+				<EditorContent editor={textEditor()} />
 			</div>
 		</div>
 	)

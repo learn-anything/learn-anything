@@ -1,19 +1,29 @@
-import { Show } from "solid-js"
+import { Show, createEffect } from "solid-js"
+import { Motion } from "solid-motionone"
 
 export default function Page(props: {
-	page:
-		| {
-				title: string
-				description: string
-		  }
-		| undefined
+	page?: {
+		title: string
+		description: string
+	}
 }) {
 	return (
 		<div class="">
 			<div class="flex-between  h-[74px] p-[20px] pr-[25px]">
 				<Show
-					when={props.page.title === undefined}
-					fallback={<div class="text-[25px] font-bold">{props.page.title}</div>}
+					when={!props.page}
+					fallback={
+						<Motion.div
+							animate={{
+								opacity: [0, 1],
+								transform: ["translateX(10px)", "translateX(0)"],
+							}}
+							transition={{ duration: 1 }}
+							class="text-[25px] font-bold"
+						>
+							{props.page?.title}
+						</Motion.div>
+					}
 				>
 					<input
 						type="text"
