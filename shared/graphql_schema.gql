@@ -31,6 +31,16 @@ type Inline5 {
 type Inline6 {
 	personalLinks: [Inline5!]!
 }
+type Inline7 {
+	message: String!
+}
+type Inline8 {
+	bio: String
+}
+type Inline9 {
+	public: Inline7
+	auth: Inline8
+}
 enum LearningStatus {
 	Learn
 	Learning
@@ -50,6 +60,7 @@ type Mutation {
 type Query {
 	webIndex: Inline4!
 	mobileIndex: Inline6!
+	localTest: Inline9!
 }
 schema {
 	query: Query

@@ -134,3 +134,18 @@ g.mutation("updatePersonalLink", {
 	returns: g.boolean(),
 	resolver: "mutations/updatePersonalLink",
 })
+
+// -- local queries (only available locally)
+// /local/test = test route
+g.query("localTest", {
+	args: {},
+	returns: inline({
+		public: inline({
+			message: g.string(),
+		}).optional(),
+		auth: inline({
+			bio: g.string().optional(),
+		}).optional(),
+	}),
+	resolver: "local/test",
+})

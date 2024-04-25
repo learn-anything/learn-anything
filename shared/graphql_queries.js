@@ -244,6 +244,41 @@ export const initial_Inline6 = {
 }
 
 /**
+ * Initial value: {@link initial_Inline7}
+ *
+ * @typedef  {object} Inline7
+ * @property {String} message
+ */
+/** @type {Inline7} */
+export const initial_Inline7 = {
+	message: "",
+}
+
+/**
+ * Initial value: {@link initial_Inline8}
+ *
+ * @typedef  {object} Inline8
+ * @property {Maybe<String>} bio
+ */
+/** @type {Inline8} */
+export const initial_Inline8 = {
+	bio: null,
+}
+
+/**
+ * Initial value: {@link initial_Inline9}
+ *
+ * @typedef  {object} Inline9
+ * @property {Maybe<Inline7>} public
+ * @property {Maybe<Inline8>} auth
+ */
+/** @type {Inline9} */
+export const initial_Inline9 = {
+	public: null,
+	auth: null,
+}
+
+/**
  * @enum {(typeof LearningStatus)[keyof typeof LearningStatus]} */
 export const LearningStatus = /** @type {const} */({
 	Learn: "Learn",
@@ -309,6 +344,33 @@ export const query_mobileIndex = /** @type {*} */({
 	kind         : "query",
 	get_body     : query_get_body_mobileIndex,
 	initial_value: initial_Inline6,
+})
+
+
+/**
+ * @typedef  {object} Vars_localTest
+ *
+ * @typedef  {Inline9} Value_localTest
+ */
+
+/**
+ * @param   {Vars_localTest} vars
+ * @returns {string} */
+export function query_get_body_localTest(vars) {
+	return 'localTest{public{message}auth{bio}}'
+}
+
+/**
+ * query: `localTest`\
+ * vars : {@link Vars_localTest }\
+ * value: {@link Value_localTest}
+ * @type  {Query_Data<Vars_localTest, Value_localTest>}
+ */
+export const query_localTest = /** @type {*} */({
+	name         : "localTest",
+	kind         : "query",
+	get_body     : query_get_body_localTest,
+	initial_value: initial_Inline9,
 })
 
 /*
