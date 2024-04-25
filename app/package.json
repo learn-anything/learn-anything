@@ -25,7 +25,7 @@
 		"internal-ip": "^8.0.0",
 		"postcss": "^8.4.38",
 		"prettier": "^3.2.5",
-		"prettier-plugin-tailwindcss": "^0.5.13",
+		"prettier-plugin-tailwindcss": "^0.5.14",
 		"typescript": "latest",
 		"vite": "latest",
 		"vite-plugin-solid": "latest"
