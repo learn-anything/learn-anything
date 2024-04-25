@@ -139,11 +139,11 @@ export async function createPersonalLink(
 export async function deleteAllPersonalLinks() {
 	return await e.delete(e.PersonalLink).run(client)
 }
-
 export async function deleteAllGlobalLinks() {
 	return await e.delete(e.GlobalLink).run(client)
 }
 
+// -- past (non working)
 // export async function createOther() {
 // 	return await e
 // 		.insert(e.Other, {
@@ -153,7 +153,6 @@ export async function deleteAllGlobalLinks() {
 // 		})
 // 		.run(client)
 // }
-
 // type TopicGraph = {
 // 	name: string
 // 	prettyName: string

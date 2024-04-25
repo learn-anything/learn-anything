@@ -1,11 +1,13 @@
 import { Match, Switch, createSignal } from "solid-js"
 import * as gql from "../../../shared/graphql_solid"
+import { Sidebar } from "../../components/Sidebar"
 
 interface Local {
 	learningStatusFilter: "learning" | "toLearn" | "learned" | "all"
 	filterByLiked: boolean
 	sortBy: "custom" | "recentlyAdded"
 	filterByTopic?: string
+	payPlsModal: boolean
 }
 export default function Home() {
 	const [data, actions] = gql.useResource(gql.query_webIndex, {})
@@ -13,6 +15,7 @@ export default function Home() {
 		learningStatusFilter: "learning",
 		filterByLiked: false,
 		sortBy: "custom",
+		payPlsModal: false,
 	})
 
 	return (
@@ -20,18 +23,17 @@ export default function Home() {
 			<Switch fallback={<div>loading</div>}>
 				<Match when={data().auth}>
 					{(authData) => {
+						console.log(authData())
 						return (
 							<>
-								{/* <Button label="Update user bio" onChange={async () => {}} /> */}
-								{/* <Sidebar
-									topics={authData().topicsLearned}
-									pages={route().userPages}
-									setMode={setMode}
-									mode={mode()}
-									currentPage={currentPage()}
-									setCurrentPage={setCurrentPage}
+								<Sidebar
+									personalPages={authData().personalPages}
+									// currentPage={currentPage()}
+									// setCurrentPage={setCurrentPage}
+									// setMode={setMode}
+									// mode={mode()}
 								/>
-								<div class="ml-[200px] h-full p-2 relative">
+								{/* <div class="ml-[200px] h-full p-2 relative">
 									<div class="border-[#191919]  h-full border rounded-[7px]">
 										<Switch>
 											<Match when={mode() === "Topic"}>

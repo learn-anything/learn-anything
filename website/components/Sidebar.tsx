@@ -4,12 +4,11 @@ import Icon from "../../shared/components/Icon"
 import { Motion, Presence } from "solid-motionone"
 
 export function Sidebar(props: {
-	topics?: string[]
-	pages: string[]
-	setMode: (value: string) => void
-	mode: string
-	currentPage: string
-	setCurrentPage: (value: string) => void
+	personalPages: { title: string; pageUrl: string }[]
+	// setMode: (value: string) => void
+	// mode: string
+	// currentPage: string
+	// setCurrentPage: (value: string) => void
 }) {
 	const [expanded, setExpanded] = createSignal(false)
 	const [expandTimer, setExpandTimer] = createSignal(false)
@@ -22,71 +21,50 @@ export function Sidebar(props: {
 					<div
 						class="px-[15px] h-[40px] flex-center rounded-[7px] text-white/30 bg-hoverDark "
 						onClick={() => {
-							props.setMode("Search")
+							// props.setMode("Search")
 						}}
 					>
-						{props.mode === "Search" ? "Back" : "Search"}
+						{/* {props.mode === "Search" ? "Back" : "Search"} */}
 					</div>
 				</div>
 				<div class="col-gap-[8px] pl-2">
 					<div
 						class={clsx(
 							"cursor-pointer px-3 text-white/60 p-[6px] rounded-[7px] transition-all",
-							props.currentPage === "MyLinks" && "button",
+							// props.currentPage === "MyLinks" && "button",
 						)}
 						onClick={() => {
-							props.setCurrentPage("MyLinks")
+							// props.setCurrentPage("MyLinks")
 						}}
 					>
-						My Links
+						Links
 					</div>
 					<div class="">
 						<div class="flex-between text-white/40">
 							<div class="text-white/20 text-[14px] px-3 p-2">Pages</div>
 							<div
 								onClick={() => {
-									props.setMode("Page")
-									props.setCurrentPage("")
+									// props.setMode("Page")
+									// props.setCurrentPage("")
 								}}
 							>
 								<Icon name="Plus" />
 							</div>
 						</div>
-						<For each={props.pages}>
+						<For each={props.personalPages}>
 							{(page) => {
 								return (
 									<div
 										onClick={() => {
-											props.setCurrentPage(page)
-											props.setMode("Page")
+											// props.setCurrentPage(page)
+											// props.setMode("Page")
 										}}
 										class={clsx(
 											"text-white/60 px-3 p-[6px] cursor-pointer mb-[2px] hover:bg-hoverDark rounded-[7px] transition-all",
-											props.currentPage === page && "button",
+											// props.currentPage === page && "button",
 										)}
 									>
-										{page}
-									</div>
-								)
-							}}
-						</For>
-					</div>
-					<div class="">
-						<div class="text-white/20 text-[14px] px-3 p-2">Topics</div>
-						<For each={props.topics}>
-							{(topic) => {
-								return (
-									<div
-										onClick={() => {
-											props.setMode("Topic")
-											props.setCurrentPage(topic)
-										}}
-										class={clsx(
-											"text-white/60 px-3 p-[6px] cursor-pointer mb-[2px] hover:bg-hoverDark rounded-[7px] transition-all",
-											props.currentPage === topic && "button",
-										)}
-									>
-										{topic}
+										{page.title}
 									</div>
 								)
 							}}
@@ -127,7 +105,7 @@ export function Sidebar(props: {
 						>
 							<div
 								onClick={() => {
-									props.setMode("Profile")
+									// props.setMode("Profile")
 									// props.setCurrentPage("Profile")
 								}}
 								class="rounded-[7px] h-[34px] cursor-pointer whitespace-nowrap px-[11px] flex items-center hover:bg-softDarkText/10 text-white/60"
