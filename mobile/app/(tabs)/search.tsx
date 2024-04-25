@@ -1,13 +1,14 @@
 import React, { useState } from "react"
 import {
-	SafeAreaView,
 	View,
-	StyleSheet,
-	Image,
 	Text,
-	TouchableOpacity,
+	Image,
 	TextInput,
 	Keyboard,
+	StyleSheet,
+	ScrollView,
+	SafeAreaView,
+	TouchableOpacity,
 	TouchableWithoutFeedback,
 } from "react-native"
 import AntDesign from "@expo/vector-icons/AntDesign"
@@ -16,6 +17,16 @@ import { LeftArrowIcon, LinkIcon } from "../../assets/svg/icons"
 export default function Search() {
 	const [searchQuery, setSearchQuery] = useState("")
 	const [isInputFocused, setIsInputFocused] = useState(false)
+	const [showMoreTopics, setShowMoreTopics] = useState(false)
+	const [showMoreLinks, setShowMoreLinks] = useState(false)
+
+	const toggleShowMoreTopics = () => {
+		setShowMoreTopics(!showMoreTopics)
+	}
+
+	const toggleShowMoreLinks = () => {
+		setShowMoreLinks(!showMoreLinks)
+	}
 
 	const getLinkIcon = (url: string) => {
 		return require("../../assets/favicon.png")
@@ -29,33 +40,53 @@ export default function Search() {
 		title: string,
 		linkType: string,
 		isFocused: boolean,
-		length: number = 5,
+		defaultLength: number = 5,
 	) => (
-		<>
+		<ScrollView>
 			<View style={styles.titleContainer}>
 				<Text style={styles.searchTitle}>{title}</Text>
-				{title !== "Recent Pages" && (
-					<TouchableOpacity>
-						<Text style={styles.showmore}>Show more</Text>
+				{title === "Popular Topics" && (
+					<TouchableOpacity onPress={toggleShowMoreTopics}>
+						<Text style={styles.showmore}>
+							{showMoreTopics ? "Show less" : "Show more"}
+						</Text>
+					</TouchableOpacity>
+				)}
+				{title === "Popular Links" && (
+					<TouchableOpacity onPress={toggleShowMoreLinks}>
+						<Text style={styles.showmore}>
+							{showMoreLinks ? "Show less" : "Show more"}
+						</Text>
 					</TouchableOpacity>
 				)}
 			</View>
 			<View style={styles.element}>
-				{Array.from({ length }, (_, i) => (
-					<TouchableOpacity key={i} style={styles.elementContainer}>
-						<View style={styles.leftContent}>
-							{isFocused && (
-								<Image source={getLinkIcon(linkType)} style={styles.icon} />
-							)}
-							<Text style={styles.elementText}>
-								{linkType} {i + 1}
-							</Text>
-						</View>
-						{title === "Popular Links" ? <LinkIcon /> : <LeftArrowIcon />}
-					</TouchableOpacity>
-				))}
+				{Array.from(
+					{
+						length: title.includes("Topic")
+							? showMoreTopics
+								? 12
+								: defaultLength
+							: showMoreLinks
+								? 12
+								: defaultLength,
+					},
+					(_, i) => (
+						<TouchableOpacity key={i} style={styles.elementContainer}>
+							<View style={styles.leftContent}>
+								{isFocused && (
+									<Image source={getLinkIcon(linkType)} style={styles.icon} />
+								)}
+								<Text style={styles.elementText}>
+									{linkType} {i + 1}
+								</Text>
+							</View>
+							{title === "Popular Links" ? <LinkIcon /> : <LeftArrowIcon />}
+						</TouchableOpacity>
+					),
+				)}
 			</View>
-		</>
+		</ScrollView>
 	)
 
 	const renderContent = (isInputFocused: boolean) => (
@@ -81,7 +112,7 @@ export default function Search() {
 			}}
 			accessible={false}
 		>
-			<SafeAreaView style={styles.container}>
+			<ScrollView style={styles.container}>
 				<View style={styles.searchContainer}>
 					<TextInput
 						style={[
@@ -118,7 +149,7 @@ export default function Search() {
 				<View style={styles.pageContainer}>
 					{renderContent(isInputFocused)}
 				</View>
-			</SafeAreaView>
+			</ScrollView>
 		</TouchableWithoutFeedback>
 	)
 }
@@ -126,7 +157,7 @@ export default function Search() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		alignItems: "center",
+		// alignItems: "center",
 		backgroundColor: "#0F0F0F",
 	},
 	searchContainer: {
