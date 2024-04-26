@@ -7,7 +7,6 @@ import {
 	Keyboard,
 	StyleSheet,
 	ScrollView,
-	SafeAreaView,
 	TouchableOpacity,
 	TouchableWithoutFeedback,
 } from "react-native"
@@ -42,7 +41,7 @@ export default function Search() {
 		isFocused: boolean,
 		defaultLength: number = 5,
 	) => (
-		<ScrollView>
+		<View>
 			<View style={styles.titleContainer}>
 				<Text style={styles.searchTitle}>{title}</Text>
 				{title === "Popular Topics" && (
@@ -86,7 +85,7 @@ export default function Search() {
 					),
 				)}
 			</View>
-		</ScrollView>
+		</View>
 	)
 
 	const renderContent = (isInputFocused: boolean) => (
@@ -112,7 +111,7 @@ export default function Search() {
 			}}
 			accessible={false}
 		>
-			<ScrollView style={styles.container}>
+			<View style={styles.container}>
 				<View style={styles.searchContainer}>
 					<TextInput
 						style={[
@@ -145,11 +144,10 @@ export default function Search() {
 						/>
 					</TouchableOpacity>
 				</View>
-
-				<View style={styles.pageContainer}>
+				<ScrollView style={styles.pageContainer}>
 					{renderContent(isInputFocused)}
-				</View>
-			</ScrollView>
+				</ScrollView>
+			</View>
 		</TouchableWithoutFeedback>
 	)
 }

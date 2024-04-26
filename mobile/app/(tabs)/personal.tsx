@@ -17,7 +17,7 @@ import {
 	JobIcon,
 	LeftArrowIcon,
 } from "../../assets/svg/icons"
-// import Rive from "rive-react-native"
+import Rive from "rive-react-native"
 
 const { width } = Dimensions.get("window")
 
@@ -68,12 +68,6 @@ export default function Personal() {
 						size={18}
 						color="rgba(255, 255, 255, 0.5)"
 					/>
-					{/* <Rive
-						url="https://public.rive.app/community/runtime-files/2195-4346-avatar-pack-use-case.riv"
-						artboardName="Avatar 1"
-						stateMachineName="avatar"
-						style={{ width: 400, height: 400 }}
-					/> */}
 				</TouchableOpacity>
 			</View>
 			<ScrollView>
@@ -111,7 +105,13 @@ export default function Personal() {
 										height: 20,
 									}}
 								>
-									<PersonalLinkIcon />
+									{/* <PersonalLinkIcon /> */}
+									<Rive
+										url="https://public.rive.app/community/runtime-files/2195-4346-avatar-pack-use-case.riv"
+										artboardName="Avatar 1"
+										stateMachineName="avatar"
+										style={{ width: 400, height: 400 }}
+									/>
 									<Text style={styles.personalSite}>example@gmail.com</Text>
 								</View>
 							</View>
