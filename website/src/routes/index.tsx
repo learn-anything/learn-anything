@@ -23,7 +23,6 @@ export default function Home() {
 			<Switch fallback={<div>loading</div>}>
 				<Match when={data().auth}>
 					{(authData) => {
-						console.log(authData())
 						return (
 							<>
 								<Sidebar

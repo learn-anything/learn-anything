@@ -2,6 +2,7 @@ import clsx from "clsx"
 import { For, Show, createSignal } from "solid-js"
 import Icon from "../../shared/components/Icon"
 import { Motion, Presence } from "solid-motionone"
+import { useNavigate } from "@solidjs/router"
 
 export function Sidebar(props: {
 	personalPages: { title: string; pageUrl: string }[]
@@ -12,6 +13,7 @@ export function Sidebar(props: {
 }) {
 	const [expanded, setExpanded] = createSignal(false)
 	const [expandTimer, setExpandTimer] = createSignal(false)
+	const navigate = useNavigate()
 
 	return (
 		<div class="fixed top-0 left-0 flex flex-col justify-between h-screen min-w-[200px] bg-dark text-textGray ">

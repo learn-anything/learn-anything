@@ -6,13 +6,26 @@ type Inline0 {
 type Inline1 {
 	latestGlobalTopicGraph: [Inline0!]!
 }
+type Inline10 {
+	personalLinks: [Inline9!]!
+}
+type Inline11 {
+	message: String!
+}
+type Inline12 {
+	bio: String
+}
+type Inline13 {
+	public: Inline11
+	auth: Inline12
+}
 type Inline2 {
 	title: String!
 	pageUrl: String!
 }
 type Inline3 {
-	links: [Link!]!
 	bio: String
+	personalLinks: [Link!]!
 	personalPages: [Inline2!]!
 	username: String
 }
@@ -21,25 +34,27 @@ type Inline4 {
 	auth: Inline3
 }
 type Inline5 {
+	empty: Boolean!
+}
+type Inline6 {
+	title: String!
+	pageUrl: String!
+}
+type Inline7 {
+	personalLinks: [Link!]!
+	personalPages: [Inline6!]!
+}
+type Inline8 {
+	public: Inline5
+	auth: Inline7
+}
+type Inline9 {
 	id: String
 	url: String
 	title: String
 	description: String
 	year: Int
 	note: String
-}
-type Inline6 {
-	personalLinks: [Inline5!]!
-}
-type Inline7 {
-	message: String!
-}
-type Inline8 {
-	bio: String
-}
-type Inline9 {
-	public: Inline7
-	auth: Inline8
 }
 enum LearningStatus {
 	Learn
@@ -59,8 +74,9 @@ type Mutation {
 }
 type Query {
 	webIndex: Inline4!
-	mobileIndex: Inline6!
-	localTest: Inline9!
+	webSearch: Inline8!
+	mobileIndex: Inline10!
+	localTest: Inline13!
 }
 schema {
 	query: Query

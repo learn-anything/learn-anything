@@ -152,6 +152,73 @@ export const initial_Inline1 = {
 }
 
 /**
+ * Initial value: {@link initial_Inline9}
+ *
+ * @typedef  {object} Inline9
+ * @property {Maybe<String>} id
+ * @property {Maybe<String>} url
+ * @property {Maybe<String>} title
+ * @property {Maybe<String>} description
+ * @property {Maybe<Int>} year
+ * @property {Maybe<String>} note
+ */
+/** @type {Inline9} */
+export const initial_Inline9 = {
+	id: null,
+	url: null,
+	title: null,
+	description: null,
+	year: null,
+	note: null,
+}
+
+/**
+ * Initial value: {@link initial_Inline10}
+ *
+ * @typedef  {object} Inline10
+ * @property {Array<Inline9>} personalLinks
+ */
+/** @type {Inline10} */
+export const initial_Inline10 = {
+	personalLinks: [],
+}
+
+/**
+ * Initial value: {@link initial_Inline11}
+ *
+ * @typedef  {object} Inline11
+ * @property {String} message
+ */
+/** @type {Inline11} */
+export const initial_Inline11 = {
+	message: "",
+}
+
+/**
+ * Initial value: {@link initial_Inline12}
+ *
+ * @typedef  {object} Inline12
+ * @property {Maybe<String>} bio
+ */
+/** @type {Inline12} */
+export const initial_Inline12 = {
+	bio: null,
+}
+
+/**
+ * Initial value: {@link initial_Inline13}
+ *
+ * @typedef  {object} Inline13
+ * @property {Maybe<Inline11>} public
+ * @property {Maybe<Inline12>} auth
+ */
+/** @type {Inline13} */
+export const initial_Inline13 = {
+	public: null,
+	auth: null,
+}
+
+/**
  * Initial value: {@link initial_Inline2}
  *
  * @typedef  {object} Inline2
@@ -185,15 +252,15 @@ export const initial_Link = {
  * Initial value: {@link initial_Inline3}
  *
  * @typedef  {object} Inline3
- * @property {Array<Link>} links
  * @property {Maybe<String>} bio
+ * @property {Array<Link>} personalLinks
  * @property {Array<Inline2>} personalPages
  * @property {Maybe<String>} username
  */
 /** @type {Inline3} */
 export const initial_Inline3 = {
-	links: [],
 	bio: null,
+	personalLinks: [],
 	personalPages: [],
 	username: null,
 }
@@ -215,65 +282,48 @@ export const initial_Inline4 = {
  * Initial value: {@link initial_Inline5}
  *
  * @typedef  {object} Inline5
- * @property {Maybe<String>} id
- * @property {Maybe<String>} url
- * @property {Maybe<String>} title
- * @property {Maybe<String>} description
- * @property {Maybe<Int>} year
- * @property {Maybe<String>} note
+ * @property {Boolean} empty
  */
 /** @type {Inline5} */
 export const initial_Inline5 = {
-	id: null,
-	url: null,
-	title: null,
-	description: null,
-	year: null,
-	note: null,
+	empty: false,
 }
 
 /**
  * Initial value: {@link initial_Inline6}
  *
  * @typedef  {object} Inline6
- * @property {Array<Inline5>} personalLinks
+ * @property {String} title
+ * @property {String} pageUrl
  */
 /** @type {Inline6} */
 export const initial_Inline6 = {
-	personalLinks: [],
+	title: "",
+	pageUrl: "",
 }
 
 /**
  * Initial value: {@link initial_Inline7}
  *
  * @typedef  {object} Inline7
- * @property {String} message
+ * @property {Array<Link>} personalLinks
+ * @property {Array<Inline6>} personalPages
  */
 /** @type {Inline7} */
 export const initial_Inline7 = {
-	message: "",
+	personalLinks: [],
+	personalPages: [],
 }
 
 /**
  * Initial value: {@link initial_Inline8}
  *
  * @typedef  {object} Inline8
- * @property {Maybe<String>} bio
+ * @property {Maybe<Inline5>} public
+ * @property {Maybe<Inline7>} auth
  */
 /** @type {Inline8} */
 export const initial_Inline8 = {
-	bio: null,
-}
-
-/**
- * Initial value: {@link initial_Inline9}
- *
- * @typedef  {object} Inline9
- * @property {Maybe<Inline7>} public
- * @property {Maybe<Inline8>} auth
- */
-/** @type {Inline9} */
-export const initial_Inline9 = {
 	public: null,
 	auth: null,
 }
@@ -303,7 +353,7 @@ QUERIES:
  * @param   {Vars_webIndex} vars
  * @returns {string} */
 export function query_get_body_webIndex(vars) {
-	return 'webIndex{public{latestGlobalTopicGraph{name prettyName connections}}auth{links{title url description note}bio personalPages{title pageUrl}username}}'
+	return 'webIndex{public{latestGlobalTopicGraph{name prettyName connections}}auth{bio personalLinks{title url description note}personalPages{title pageUrl}username}}'
 }
 
 /**
@@ -321,9 +371,36 @@ export const query_webIndex = /** @type {*} */({
 
 
 /**
+ * @typedef  {object} Vars_webSearch
+ *
+ * @typedef  {Inline8} Value_webSearch
+ */
+
+/**
+ * @param   {Vars_webSearch} vars
+ * @returns {string} */
+export function query_get_body_webSearch(vars) {
+	return 'webSearch{public{empty}auth{personalLinks{title url description note}personalPages{title pageUrl}}}'
+}
+
+/**
+ * query: `webSearch`\
+ * vars : {@link Vars_webSearch }\
+ * value: {@link Value_webSearch}
+ * @type  {Query_Data<Vars_webSearch, Value_webSearch>}
+ */
+export const query_webSearch = /** @type {*} */({
+	name         : "webSearch",
+	kind         : "query",
+	get_body     : query_get_body_webSearch,
+	initial_value: initial_Inline8,
+})
+
+
+/**
  * @typedef  {object} Vars_mobileIndex
  *
- * @typedef  {Inline6} Value_mobileIndex
+ * @typedef  {Inline10} Value_mobileIndex
  */
 
 /**
@@ -343,14 +420,14 @@ export const query_mobileIndex = /** @type {*} */({
 	name         : "mobileIndex",
 	kind         : "query",
 	get_body     : query_get_body_mobileIndex,
-	initial_value: initial_Inline6,
+	initial_value: initial_Inline10,
 })
 
 
 /**
  * @typedef  {object} Vars_localTest
  *
- * @typedef  {Inline9} Value_localTest
+ * @typedef  {Inline13} Value_localTest
  */
 
 /**
@@ -370,7 +447,7 @@ export const query_localTest = /** @type {*} */({
 	name         : "localTest",
 	kind         : "query",
 	get_body     : query_get_body_localTest,
-	initial_value: initial_Inline9,
+	initial_value: initial_Inline13,
 })
 
 /*

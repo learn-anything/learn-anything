@@ -60,8 +60,8 @@ g.query("webIndex", {
 			}).list(),
 		}).optional(),
 		auth: inline({
-			links: g.ref(Link).list(),
 			bio: g.string().optional(),
+			personalLinks: g.ref(Link).list(),
 			personalPages: inline({
 				title: g.string(),
 				pageUrl: g.string(),
@@ -70,6 +70,25 @@ g.query("webIndex", {
 		}).optional(),
 	}),
 	resolver: "web/index",
+})
+
+g.query("webSearch", {
+	args: {},
+	returns: inline({
+		public: inline({
+			// TODO: fields can't be empty, how to do this nicely?
+			empty: g.boolean(),
+		}).optional(),
+		auth: inline({
+			personalLinks: g.ref(Link).list(),
+			// TODO: add globalLinks
+			personalPages: inline({
+				title: g.string(),
+				pageUrl: g.string(),
+			}).list(),
+		}).optional(),
+	}),
+	resolver: "web/search",
 })
 
 // -- mobile queries

@@ -9,6 +9,7 @@ export default function Topic() {
 		content: `Hello world!`,
 		extensions: [StarterKit],
 	})
+
 	return (
 		<div class="ml-[200px] p-3 h-screen">
 			<Sidebar />
