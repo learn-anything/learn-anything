@@ -12,7 +12,11 @@ import {
 import * as ImagePicker from "expo-image-picker"
 import { SimpleLineIcons } from "@expo/vector-icons"
 import CustomAlertModal from "../components/CustomAlert"
-import { LinkIcon, JobIcon, LeftArrowIcon } from "../../assets/svg/icons"
+import {
+	PersonalLinkIcon,
+	JobIcon,
+	LeftArrowIcon,
+} from "../../assets/svg/icons"
 
 const { width } = Dimensions.get("window")
 
@@ -55,10 +59,19 @@ export default function Personal() {
 
 	return (
 		<SafeAreaView style={styles.container}>
+			<View style={styles.fixedBar}>
+				<Text style={styles.personalUsername}>@username</Text>
+				<TouchableOpacity>
+					<SimpleLineIcons
+						name="settings"
+						size={18}
+						color="rgba(255, 255, 255, 0.5)"
+					/>
+				</TouchableOpacity>
+			</View>
 			<ScrollView>
 				<View style={styles.personalContainer}>
 					<View style={styles.personalInfo}>
-						<Text style={styles.personalUsername}>@username</Text>
 						<View style={styles.personalAvatarName}>
 							<TouchableOpacity onPress={pickImage}>
 								{avatarUrl ? (
@@ -67,13 +80,7 @@ export default function Personal() {
 										style={styles.personalAvatar}
 									/>
 								) : (
-									<View style={styles.placeholderAvatar}>
-										<SimpleLineIcons
-											name="paper-clip"
-											size={17}
-											color="white"
-										/>
-									</View>
+									<View style={styles.placeholderAvatar}></View>
 								)}
 							</TouchableOpacity>
 							<View style={styles.personalInformation}>
@@ -83,6 +90,7 @@ export default function Personal() {
 										flexDirection: "row",
 										alignItems: "center",
 										height: 25,
+										marginBottom: 10,
 									}}
 								>
 									<JobIcon />
@@ -93,25 +101,24 @@ export default function Personal() {
 									style={{
 										flexDirection: "row",
 										alignItems: "center",
-										height: 25,
-										marginTop: 10,
+										height: 20,
 									}}
 								>
-									<LinkIcon />
+									<PersonalLinkIcon />
 									<Text style={styles.personalSite}>example@gmail.com</Text>
 								</View>
 							</View>
 						</View>
 					</View>
-					<View style={styles.settingsContainer}>
+					{/* <View style={styles.settingsContainer}>
 						<TouchableOpacity>
 							<SimpleLineIcons
 								name="settings"
 								size={18}
-								color="rgba(255, 255, 255, 0.8)"
+								color="rgba(255, 255, 255, 0.5)"
 							/>
 						</TouchableOpacity>
-					</View>
+					</View> */}
 					<View style={styles.numbers}>
 						<View style={styles.numberContainer}>
 							<Text style={styles.numberQuantity}>32</Text>
@@ -131,7 +138,7 @@ export default function Personal() {
 						{sections.map((section) => (
 							<View key={section.key} style={styles.sectionTitleContainer}>
 								<Text style={styles.sectionText}>{section.title}</Text>
-								<TouchableOpacity>
+								<TouchableOpacity style={{ alignSelf: "center" }}>
 									<LeftArrowIcon />
 								</TouchableOpacity>
 							</View>
@@ -142,7 +149,7 @@ export default function Personal() {
 						{links.map((link) => (
 							<View key={link.key} style={styles.sectionTitleContainer}>
 								<Text style={styles.sectionText}>{link.title}</Text>
-								<TouchableOpacity>
+								<TouchableOpacity style={{ alignSelf: "center" }}>
 									<LeftArrowIcon />
 								</TouchableOpacity>
 							</View>
@@ -164,6 +171,20 @@ const styles = StyleSheet.create({
 		backgroundColor: "#0F0F0F",
 		alignItems: "center",
 	},
+	fixedBar: {
+		width: width * 0.9,
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "space-between",
+		position: "absolute",
+		top: 25,
+		left: "5%",
+		right: "5%",
+		marginTop: 30,
+		marginBottom: 40,
+		backgroundColor: "#0F0F0F",
+		zIndex: 1,
+	},
 	settingsContainer: {
 		position: "absolute",
 		top: 0,
@@ -183,7 +204,7 @@ const styles = StyleSheet.create({
 		display: "flex",
 		flexDirection: "row",
 		justifyContent: "space-between",
-		marginTop: 20,
+		marginTop: 18,
 		alignItems: "center",
 		paddingBottom: 20,
 		borderBottomColor: "rgba(255, 255, 255, 0.1)",

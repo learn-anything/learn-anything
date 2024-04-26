@@ -152,95 +152,180 @@ export const initial_Inline1 = {
 }
 
 /**
- * Initial value: {@link initial_Link}
+ * Initial value: {@link initial_Inline9}
  *
- * @typedef  {object} Link
- * @property {Maybe<String>} title
+ * @typedef  {object} Inline9
+ * @property {Maybe<String>} id
  * @property {Maybe<String>} url
+ * @property {Maybe<String>} title
+ * @property {Maybe<String>} description
+ * @property {Maybe<Int>} year
+ * @property {Maybe<String>} note
  */
-/** @type {Link} */
-export const initial_Link = {
-	title: null,
+/** @type {Inline9} */
+export const initial_Inline9 = {
+	id: null,
 	url: null,
+	title: null,
+	description: null,
+	year: null,
+	note: null,
+}
+
+/**
+ * Initial value: {@link initial_Inline10}
+ *
+ * @typedef  {object} Inline10
+ * @property {Array<Inline9>} personalLinks
+ */
+/** @type {Inline10} */
+export const initial_Inline10 = {
+	personalLinks: [],
+}
+
+/**
+ * Initial value: {@link initial_Inline11}
+ *
+ * @typedef  {object} Inline11
+ * @property {String} message
+ */
+/** @type {Inline11} */
+export const initial_Inline11 = {
+	message: "",
+}
+
+/**
+ * Initial value: {@link initial_Inline12}
+ *
+ * @typedef  {object} Inline12
+ * @property {Maybe<String>} bio
+ */
+/** @type {Inline12} */
+export const initial_Inline12 = {
+	bio: null,
+}
+
+/**
+ * Initial value: {@link initial_Inline13}
+ *
+ * @typedef  {object} Inline13
+ * @property {Maybe<Inline11>} public
+ * @property {Maybe<Inline12>} auth
+ */
+/** @type {Inline13} */
+export const initial_Inline13 = {
+	public: null,
+	auth: null,
 }
 
 /**
  * Initial value: {@link initial_Inline2}
  *
  * @typedef  {object} Inline2
- * @property {Maybe<String>} username
- * @property {Maybe<String>} bio
- * @property {Array<Link>} links
+ * @property {String} title
+ * @property {String} pageUrl
  */
 /** @type {Inline2} */
 export const initial_Inline2 = {
-	username: null,
-	bio: null,
-	links: [],
+	title: "",
+	pageUrl: "",
+}
+
+/**
+ * Initial value: {@link initial_Link}
+ *
+ * @typedef  {object} Link
+ * @property {Maybe<String>} title
+ * @property {Maybe<String>} url
+ * @property {Maybe<String>} description
+ * @property {Maybe<String>} note
+ */
+/** @type {Link} */
+export const initial_Link = {
+	title: null,
+	url: null,
+	description: null,
+	note: null,
 }
 
 /**
  * Initial value: {@link initial_Inline3}
  *
  * @typedef  {object} Inline3
- * @property {Maybe<Inline1>} public
- * @property {Maybe<Inline2>} auth
+ * @property {Maybe<String>} bio
+ * @property {Array<Link>} personalLinks
+ * @property {Array<Inline2>} personalPages
+ * @property {Maybe<String>} username
  */
 /** @type {Inline3} */
 export const initial_Inline3 = {
-	public: null,
-	auth: null,
+	bio: null,
+	personalLinks: [],
+	personalPages: [],
+	username: null,
 }
 
 /**
  * Initial value: {@link initial_Inline4}
  *
  * @typedef  {object} Inline4
- * @property {String} email
- * @property {String} name
+ * @property {Maybe<Inline1>} public
+ * @property {Maybe<Inline3>} auth
  */
 /** @type {Inline4} */
 export const initial_Inline4 = {
-	email: "",
-	name: "",
+	public: null,
+	auth: null,
 }
 
 /**
  * Initial value: {@link initial_Inline5}
  *
  * @typedef  {object} Inline5
- * @property {Maybe<String>} id
- * @property {Maybe<String>} url
- * @property {Maybe<String>} title
- * @property {Maybe<String>} topic
+ * @property {Boolean} empty
  */
 /** @type {Inline5} */
 export const initial_Inline5 = {
-	id: null,
-	url: null,
-	title: null,
-	topic: null,
+	empty: false,
 }
 
 /**
  * Initial value: {@link initial_Inline6}
  *
  * @typedef  {object} Inline6
- * @property {Inline4} user
- * @property {Array<Inline5>} links
- * @property {String} showLinksStatus
- * @property {String} filterOrder
- * @property {String} filter
- * @property {Array<String>} userTopics
+ * @property {String} title
+ * @property {String} pageUrl
  */
 /** @type {Inline6} */
 export const initial_Inline6 = {
-	user: initial_Inline4,
-	links: [],
-	showLinksStatus: "",
-	filterOrder: "",
-	filter: "",
-	userTopics: [],
+	title: "",
+	pageUrl: "",
+}
+
+/**
+ * Initial value: {@link initial_Inline7}
+ *
+ * @typedef  {object} Inline7
+ * @property {Array<Link>} personalLinks
+ * @property {Array<Inline6>} personalPages
+ */
+/** @type {Inline7} */
+export const initial_Inline7 = {
+	personalLinks: [],
+	personalPages: [],
+}
+
+/**
+ * Initial value: {@link initial_Inline8}
+ *
+ * @typedef  {object} Inline8
+ * @property {Maybe<Inline5>} public
+ * @property {Maybe<Inline7>} auth
+ */
+/** @type {Inline8} */
+export const initial_Inline8 = {
+	public: null,
+	auth: null,
 }
 
 /**
@@ -261,14 +346,14 @@ QUERIES:
 /**
  * @typedef  {object} Vars_webIndex
  *
- * @typedef  {Inline3} Value_webIndex
+ * @typedef  {Inline4} Value_webIndex
  */
 
 /**
  * @param   {Vars_webIndex} vars
  * @returns {string} */
 export function query_get_body_webIndex(vars) {
-	return 'webIndex{public{latestGlobalTopicGraph{name prettyName connections}}auth{username bio links{title url}}}'
+	return 'webIndex{public{latestGlobalTopicGraph{name prettyName connections}}auth{bio personalLinks{title url description note}personalPages{title pageUrl}username}}'
 }
 
 /**
@@ -281,21 +366,48 @@ export const query_webIndex = /** @type {*} */({
 	name         : "webIndex",
 	kind         : "query",
 	get_body     : query_get_body_webIndex,
-	initial_value: initial_Inline3,
+	initial_value: initial_Inline4,
+})
+
+
+/**
+ * @typedef  {object} Vars_webSearch
+ *
+ * @typedef  {Inline8} Value_webSearch
+ */
+
+/**
+ * @param   {Vars_webSearch} vars
+ * @returns {string} */
+export function query_get_body_webSearch(vars) {
+	return 'webSearch{public{empty}auth{personalLinks{title url description note}personalPages{title pageUrl}}}'
+}
+
+/**
+ * query: `webSearch`\
+ * vars : {@link Vars_webSearch }\
+ * value: {@link Value_webSearch}
+ * @type  {Query_Data<Vars_webSearch, Value_webSearch>}
+ */
+export const query_webSearch = /** @type {*} */({
+	name         : "webSearch",
+	kind         : "query",
+	get_body     : query_get_body_webSearch,
+	initial_value: initial_Inline8,
 })
 
 
 /**
  * @typedef  {object} Vars_mobileIndex
  *
- * @typedef  {Inline6} Value_mobileIndex
+ * @typedef  {Inline10} Value_mobileIndex
  */
 
 /**
  * @param   {Vars_mobileIndex} vars
  * @returns {string} */
 export function query_get_body_mobileIndex(vars) {
-	return 'mobileIndex{user{email name}links{id url title topic}showLinksStatus filterOrder filter userTopics}'
+	return 'mobileIndex{personalLinks{id url title description year note}}'
 }
 
 /**
@@ -308,7 +420,34 @@ export const query_mobileIndex = /** @type {*} */({
 	name         : "mobileIndex",
 	kind         : "query",
 	get_body     : query_get_body_mobileIndex,
-	initial_value: initial_Inline6,
+	initial_value: initial_Inline10,
+})
+
+
+/**
+ * @typedef  {object} Vars_localTest
+ *
+ * @typedef  {Inline13} Value_localTest
+ */
+
+/**
+ * @param   {Vars_localTest} vars
+ * @returns {string} */
+export function query_get_body_localTest(vars) {
+	return 'localTest{public{message}auth{bio}}'
+}
+
+/**
+ * query: `localTest`\
+ * vars : {@link Vars_localTest }\
+ * value: {@link Value_localTest}
+ * @type  {Query_Data<Vars_localTest, Value_localTest>}
+ */
+export const query_localTest = /** @type {*} */({
+	name         : "localTest",
+	kind         : "query",
+	get_body     : query_get_body_localTest,
+	initial_value: initial_Inline13,
 })
 
 /*

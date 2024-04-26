@@ -25,6 +25,8 @@ const inline = (fields: TypeArguments[1]) =>
 const Link = g.type("Link", {
 	title: g.string().optional(),
 	url: g.string().optional(),
+	description: g.string().optional(),
+	note: g.string().optional(),
 })
 const LearningStatus = g.enum("LearningStatus", [
 	"Learn",
@@ -58,12 +60,35 @@ g.query("webIndex", {
 			}).list(),
 		}).optional(),
 		auth: inline({
-			username: g.string().optional(),
 			bio: g.string().optional(),
-			links: g.ref(Link).list(),
+			personalLinks: g.ref(Link).list(),
+			personalPages: inline({
+				title: g.string(),
+				pageUrl: g.string(),
+			}).list(),
+			username: g.string().optional(),
 		}).optional(),
 	}),
 	resolver: "web/index",
+})
+
+g.query("webSearch", {
+	args: {},
+	returns: inline({
+		public: inline({
+			// TODO: fields can't be empty, how to do this nicely?
+			empty: g.boolean(),
+		}).optional(),
+		auth: inline({
+			personalLinks: g.ref(Link).list(),
+			// TODO: add globalLinks
+			personalPages: inline({
+				title: g.string(),
+				pageUrl: g.string(),
+			}).list(),
+		}).optional(),
+	}),
+	resolver: "web/search",
 })
 
 // -- mobile queries
@@ -71,20 +96,36 @@ g.query("webIndex", {
 g.query("mobileIndex", {
 	args: {},
 	returns: inline({
-		user: inline({
-			email: g.string(),
-			name: g.string(),
-		}),
-		links: inline({
+		personalLinks: inline({
 			id: g.string().optional(),
 			url: g.string().optional(),
 			title: g.string().optional(),
-			topic: g.string().optional(),
+			description: g.string().optional(),
+			year: g.int().optional(),
+			note: g.string().optional(),
+			// TODO: add..
+			// topic: g.string().optional(),
+			// topicsToLearn: inline({
+			// 	name: g.string(),
+			// 	prettyName: g.string(),
+			// }).list(),
+			// topicsLearning: inline({
+			// 	name: g.string(),
+			// 	prettyName: g.string(),
+			// }).list(),
+			// topicsLearned: inline({
+			// 	name: g.string(),
+			// 	prettyName: g.string(),
+			// }).list(),
 		}).list(),
-		showLinksStatus: g.string(),
-		filterOrder: g.string(),
-		filter: g.string(),
-		userTopics: g.string().list(),
+		// user: inline({
+		// 	email: g.string(),
+		// 	name: g.string(),
+		// }),
+		// showLinksStatus: g.string(),
+		// filterOrder: g.string(),
+		// filter: g.string(),
+		// userTopics: g.string().list(),
 	}),
 	resolver: "mobile/index",
 })
@@ -111,4 +152,19 @@ g.mutation("updatePersonalLink", {
 	},
 	returns: g.boolean(),
 	resolver: "mutations/updatePersonalLink",
+})
+
+// -- local queries (only available locally)
+// /local/test = test route
+g.query("localTest", {
+	args: {},
+	returns: inline({
+		public: inline({
+			message: g.string(),
+		}).optional(),
+		auth: inline({
+			bio: g.string().optional(),
+		}).optional(),
+	}),
+	resolver: "local/test",
 })

@@ -4,7 +4,7 @@ import { register, UserClient } from "@teamhanko/hanko-elements"
 import { onMount } from "solid-js"
 import { getHankoCookie } from "../../../shared/auth"
 import * as gql from "../../../shared/graphql_solid"
-import DevDeployedBranch from "../../components/DevDeployedBranch"
+import DevOnlyDeployedBranch from "../../components/DevOnlyDeployedBranch"
 
 const hankoApi = import.meta.env.VITE_HANKO_API_URL
 
@@ -120,7 +120,7 @@ export default function Auth() {
 					<div>Learn Anything</div>
 				</div>
 				{/* TODO: maybe move it to show in all pages in dev. (put it in app.tsx?) */}
-				<DevDeployedBranch />
+				<DevOnlyDeployedBranch />
 			</div>
 		</>
 	)

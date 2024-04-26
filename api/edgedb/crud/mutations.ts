@@ -1,4 +1,6 @@
-import { foundOtherObjectId } from "../../../shared/edgedb"
+// all functions here start with either: create, update, delete
+import { foundUserByEmail } from "../../../shared/edgedb"
+import { splitUrlByProtocol } from "@nikiv/ts-utils"
 import { client } from "../client"
 import e from "../dbschema/edgeql-js"
 
@@ -41,6 +43,107 @@ export async function deleteUser(email: string) {
 		.run(client)
 }
 
+export async function createPersonalLink(
+	email: string,
+	url: string,
+	learningStatus:
+		| "ToComplete"
+		| "InProgress"
+		| "Completed"
+		| "NoLearningStatus",
+	title?: string,
+	description?: string,
+	note?: string,
+	liked?: boolean,
+	year?: number,
+	// TODO: should probably be datetime
+	dateAdded?: string,
+) {
+	const foundUser = foundUserByEmail(email)
+
+	const [urlWithoutProtocol, protocol] = splitUrlByProtocol(url)
+	if (urlWithoutProtocol && protocol) {
+		const globalLink = await e
+			.insert(e.GlobalLink, {
+				url: urlWithoutProtocol,
+				protocol: protocol,
+				...(title && { title }),
+			})
+			.unlessConflict((gl) => ({
+				on: gl.url,
+				else: gl,
+			}))
+
+		switch (learningStatus) {
+			case "NoLearningStatus":
+				return e
+					.update(foundUser, () => ({
+						set: {
+							linksWithoutLearningStatus: e.insert(e.PersonalLink, {
+								globalLink,
+								...(title && { title }),
+								...(description && { description }),
+								...(note && { note }),
+								...(year && { year }),
+							}),
+						},
+					}))
+					.run(client)
+			case "ToComplete":
+				return e
+					.update(foundUser, () => ({
+						set: {
+							linksCompleted: e.insert(e.PersonalLink, {
+								globalLink,
+								...(title && { title }),
+								...(description && { description }),
+								...(note && { note }),
+								...(year && { year }),
+							}),
+						},
+					}))
+					.run(client)
+			case "InProgress":
+				return e
+					.update(foundUser, () => ({
+						set: {
+							linksInProgress: e.insert(e.PersonalLink, {
+								globalLink,
+								...(title && { title }),
+								...(description && { description }),
+								...(note && { note }),
+								...(year && { year }),
+							}),
+						},
+					}))
+					.run(client)
+			case "Completed":
+				return e
+					.update(foundUser, () => ({
+						set: {
+							linksCompleted: e.insert(e.PersonalLink, {
+								globalLink,
+								...(title && { title }),
+								...(description && { description }),
+								...(note && { note }),
+								...(year && { year }),
+							}),
+						},
+					}))
+					.run(client)
+			default:
+				break
+		}
+	}
+}
+export async function deleteAllPersonalLinks() {
+	return await e.delete(e.PersonalLink).run(client)
+}
+export async function deleteAllGlobalLinks() {
+	return await e.delete(e.GlobalLink).run(client)
+}
+
+// -- past (non working)
 // export async function createOther() {
 // 	return await e
 // 		.insert(e.Other, {
@@ -50,7 +153,6 @@ export async function deleteUser(email: string) {
 // 		})
 // 		.run(client)
 // }
-
 // type TopicGraph = {
 // 	name: string
 // 	prettyName: string

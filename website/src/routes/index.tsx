@@ -1,43 +1,22 @@
-import { useNavigate } from "@solidjs/router"
-import { For, Match, Show, Switch, createEffect, createSignal } from "solid-js"
-import Button from "../../../shared/components/Button"
-import ProfileLink from "../../../shared/components/ProfileLink"
-import Search from "../../../shared/components/Search"
-import Topbar from "../../../shared/components/Topbar"
+import { Match, Switch, createSignal } from "solid-js"
 import * as gql from "../../../shared/graphql_solid"
-import clsx from "clsx"
+import { Sidebar } from "../../components/Sidebar"
 
+interface Local {
+	learningStatusFilter: "learning" | "toLearn" | "learned" | "all"
+	filterByLiked: boolean
+	sortBy: "custom" | "recentlyAdded"
+	filterByTopic?: string
+	payPlsModal: boolean
+}
 export default function Home() {
 	const [data, actions] = gql.useResource(gql.query_webIndex, {})
-	const [mobile] = gql.useResource(gql.query_mobileIndex, {})
-	const updateUserBio = gql.useRequest(gql.mutation_updateUserBio)
-
-	createEffect(() => {
-		console.log(mobile().links)
+	const [local, setLocal] = createSignal<Local>({
+		learningStatusFilter: "learning",
+		filterByLiked: false,
+		sortBy: "custom",
+		payPlsModal: false,
 	})
-
-	const [newBio, setNewBio] = createSignal("")
-
-	const [route, setRoute] = createSignal({
-		userTopics: ["games", "phyiscs", "math", "sports"],
-		shownTopic: "games",
-		links: [
-			{
-				title: "games",
-				url: "https://store.epicgames.com/en-US/",
-			},
-			{
-				title: "math",
-				url: "https://store.epicgames.com/en-US/",
-			},
-			{
-				title: "sports",
-				url: "https://store.epicgames.com/en-US/",
-			},
-		],
-	})
-	const [linkExpanded, setLinkExpanded] = createSignal("")
-	const [showSearch, setShowSearch] = createSignal(false)
 
 	return (
 		<div class="w-full h-screen">
@@ -47,117 +26,60 @@ export default function Home() {
 						return (
 							<>
 								<Sidebar
-									topics={route().userTopics}
-									setShowSearch={setShowSearch}
-									showSearch={showSearch()}
-									shownTopic={route().shownTopic}
+									personalPages={authData().personalPages}
+									// currentPage={currentPage()}
+									// setCurrentPage={setCurrentPage}
+									// setMode={setMode}
+									// mode={mode()}
 								/>
-								<div class="ml-[200px] h-full p-2 relative">
+								{/* <div class="ml-[200px] h-full p-2 relative">
 									<div class="border-[#191919]  h-full border rounded-[7px]">
-										{/* <UserBio
-			 bio={data.bio}
-			 updateBio={async (newBio) => {
-				await updateUserBio({ bio: newBio })
-				actions.update
-			 }}
-			/> */}
-										<Topbar
-											// changeLearningStatus={async (status) => {
-											//  const res = await updateLearningStatus({ topicName: "Solid", learningStatus: status })
-											//  if (res instanceof Error) return
-											//  actions.mutate((p) => ({
-											//   ...p,
-											//   showLinksStatus: status,
-											//  }))
-											//  console.log(res, "res")
-											// }}
-											changeLearningStatus={async (status: any) => {}}
-											// showLinksStatus={route().showLinksStatus}
-											showLinksStatus={"Learning"}
-											// filterOrder={routeData()?.filterOrder}
-											// filter={routeData()?.filter}
-										/>
-										<div class=" px-5 w-full  col-gap-[4px]">
-											<For each={route().links}>
-												{(link) => (
-													<ProfileLink
-														link={link}
-														setLinkExpanded={setLinkExpanded}
-														linkExpanded={linkExpanded()}
-													/>
-												)}
-											</For>
-										</div>
+										<Switch>
+											<Match when={mode() === "Topic"}>
+												<Topic
+													route={route()}
+													linkExpanded={linkExpanded()}
+													setLinkExpanded={setLinkExpanded}
+												/>
+											</Match>
+											<Match when={mode() === "Profile"}>
+												<Profile />
+											</Match>
+											<Match when={mode() === "Page"}>
+												<Page
+													page={
+														currentPage() !== ""
+															? route().pages[
+																	route().pages.findIndex((page: any) => {
+																		if (currentPage() !== "") {
+																			return page.title === currentPage()
+																		}
+																	})
+																]
+															: undefined
+													}
+												/>
+											</Match>
+										</Switch>
 									</div>
-									<Show when={showSearch()}>
+									<Show when={mode() === "Search"}>
 										<Search
 											links={route().links}
-											setShowSearch={setShowSearch}
-											showSearch={showSearch()}
+											setMode={setMode}
+											mode={mode()}
 										/>
 									</Show>
-								</div>
+								</div> */}
 							</>
 						)
 					}}
 				</Match>
 				<Match when={data().public}>
 					{(publicData) => {
-						const navigate = useNavigate()
 						return <>Force Graph</>
 					}}
 				</Match>
 			</Switch>
-		</div>
-	)
-}
-
-function Sidebar(props: {
-	topics?: string[]
-	setShowSearch: (value: boolean) => void
-	showSearch: boolean
-	shownTopic: string
-}) {
-	return (
-		<div class="fixed top-0 left-0 h-screen min-w-[200px] bg-dark text-textGray ">
-			<div class="flex-between m-[20px] mr-[2px]">
-				<div class="h-[40px] w-[40px] rounded-full bg-white"></div>
-				<div
-					class="px-[15px] h-[40px] flex-center rounded-[7px] text-white/30 bg-hoverDark "
-					onClick={() => {
-						props.setShowSearch(!props.showSearch)
-					}}
-				>
-					{props.showSearch ? "Back" : "Search"}
-				</div>
-			</div>
-			<div class="col-gap-[8px] pl-2">
-				<div
-					class={clsx(
-						"cursor-pointer px-3 text-white/60 p-[6px] rounded-[7px] transition-all",
-						props.shownTopic === "MyLinks" && "button",
-					)}
-				>
-					My Links
-				</div>
-				<div class="">
-					<div class="text-white/20 text-[14px] px-3 p-2">My Topics</div>
-					<For each={props.topics}>
-						{(topic) => {
-							return (
-								<div
-									class={clsx(
-										"text-white/60 px-3 p-[6px] cursor-pointer mb-[2px] hover:bg-hoverDark rounded-[7px] transition-all",
-										props.shownTopic === topic && "button",
-									)}
-								>
-									{topic}
-								</div>
-							)
-						}}
-					</For>
-				</div>
-			</div>
 		</div>
 	)
 }

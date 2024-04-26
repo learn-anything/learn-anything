@@ -1,12 +1,7 @@
-import { createSignal } from "solid-js"
-import Button from "./Button"
-// import Button from "../../shared/components/Button"
-
 export default function UserBio(props: {
 	bio: string
 	updateBio: (bio: string) => void
 }) {
-	const [newBio, setNewBio] = createSignal("")
 	return (
 		<>
 			<div>User bio: {props.bio}</div>
@@ -14,17 +9,13 @@ export default function UserBio(props: {
 				style={{ color: "black" }}
 				type="text"
 				placeholder="Change bio"
-				onChange={(e) => setNewBio(e.target.value)}
-			/>
-			<Button label="Testing wat" />
-			<button
-				onClick={() => {
-					console.log(newBio(), "new bio")
-					props.updateBio(newBio())
+				onKeyDown={async (e) => {
+					if (e.key === "Enter") {
+						const updatedBio = (e.target as HTMLInputElement).value
+						props.updateBio(updatedBio)
+					}
 				}}
-			>
-				Update bio
-			</button>
+			/>
 		</>
 	)
 }
