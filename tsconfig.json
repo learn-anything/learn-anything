@@ -1,9 +1,9 @@
 {
 	"compilerOptions": {
 		"target": "esnext",
-		"module": "esnext",
+		"module": "NodeNext",
 		"lib": ["ESNext", "dom"],
-		"moduleResolution": "node",
+		"moduleResolution": "NodeNext",
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
 		"resolveJsonModule": true,
@@ -22,7 +22,7 @@
 		"composite": true,
 		"downlevelIteration": true,
 		"noUncheckedIndexedAccess": true,
-		"types": ["bun-types", "vinxi/client", "vite/client", "@solidjs/start/env"]
+		"types": ["bun-types", "vinxi/client", "vite/client"]
 	},
 	"include": ["**/*.ts", "**/*.tsx", "**/*.js"]
 }

@@ -1,8 +1,26 @@
 // all functions here start with either: create, update, delete
 import { foundUserByEmail } from "../../../shared/edgedb"
-import { splitUrlByProtocol } from "@nikiv/ts-utils"
 import { client } from "../client"
 import e from "../dbschema/edgeql-js"
+import { parseURL } from "ufo"
+
+// TODO: get it from this import:
+// import { splitUrlByProtocol } from "@nikiv/utils"
+// https://discord.com/channels/684898665143206084/1203185670508515399/1233509095563198534
+function splitUrlByProtocol(url: string) {
+	let parsedUrl = parseURL(url)
+	let host = parsedUrl.host
+	if (host?.includes("www")) {
+		host = host?.replace("www.", "")
+	}
+	let urlWithoutProtocol = host + parsedUrl.pathname + parsedUrl.search
+
+	let protocol = parsedUrl.protocol
+	if (protocol) {
+		protocol = protocol.replace(":", "")
+	}
+	return [urlWithoutProtocol, protocol]
+}
 
 export async function createUser(email: string) {
 	const res = await e
