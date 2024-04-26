@@ -1,64 +1,65 @@
 {
-  "name": "la",
-  "scripts": {
-    "setup": "bun cmd.ts setup",
-    "web": "cd website && bun dev",
-    "web:deploy-dev": "bun cmd.ts websiteDeployDev",
-    "app": "cd app && bun tauri:dev",
-    "cli": "cd api/edgedb && bun --watch ../../cli/run.ts",
-    "db:ui": "cd api/edgedb && edgedb ui",
-    "db:migrate": "cd api/edgedb && edgedb migration create && edgedb migration apply && cd ../.. && bun db:queries-generate",
-    "db:queries-generate": "cd api/edgedb && bunx @edgedb/generate edgeql-js --target ts && bunx @edgedb/generate queries --target ts",
-    "grafbase": "bun cmd.ts runGrafbase",
-    "graphql": "bun cmd.ts graphql",
-    "graphstate-run": "cat shared/graphql_schema.gql | odin run graphstate > shared/graphql_queries.js",
-    "cmd": "bun --watch cmd.ts",
-    "seed": "cd api/edgedb && bun --watch ../../cli/seed.ts",
-    "ios": "cd mobile && pnpm run ios"
-  },
-  "workspaces": [
-    "app",
-    "website"
-  ],
-  "dependencies": {
-    "@nikiv/utils": "npm:@jsr/nikiv__utils",
-    "@nothing-but/utils": "^0.14.0",
-    "@tiptap/starter-kit": "^2.3.0",
-    "clsx": "^2.1.1",
-    "edgedb": "^1.5.4",
-    "fuse.js": "^7.0.0",
-    "grafbase": "^0.70.0",
-    "graphql": "^16.8.1",
-    "jose": "^5.2.4",
-    "js-cookie": "^3.0.5",
-    "react": "^18.2.0",
-    "rehype-raw": "^7.0.0",
-    "stripe": "^15.3.0",
-    "tailwindcss": "^3.4.3",
-    "tiptap-solid": "^1.0.2",
-    "watcher": "^2.3.1"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "1.7.1",
-    "@edgedb/generate": "^0.5.3",
-    "@grafbase/sdk": "^0.22.0",
-    "@nothing-but/graphstate": "^0.0.1",
-    "@types/js-cookie": "^3.0.6",
-    "@types/react": "^18.2.79",
-    "@typescript-eslint/eslint-plugin": "^7.7.1",
-    "@typescript-eslint/parser": "^7.7.1",
-    "bun-types": "1.1.4",
-    "eslint": "^9.1.1",
-    "eslint-plugin-eslint-comments": "^3.2.0",
-    "typescript": "^5.4.5"
-  },
-  "trustedDependencies": [
-    "@biomejs/biome",
-    "core-js",
-    "esbuild",
-    "grafbase"
-  ],
-  "prettier": {
-    "semi": false
-  }
+	"name": "la",
+	"scripts": {
+		"setup": "bun cmd.ts setup",
+		"web": "cd website && bun dev",
+		"web:deploy-dev": "bun cmd.ts websiteDeployDev",
+		"app": "cd app && bun tauri:dev",
+		"cli": "cd api/edgedb && bun --watch ../../cli/run.ts",
+		"db:ui": "cd api/edgedb && edgedb ui",
+		"db:migrate": "cd api/edgedb && edgedb migration create && edgedb migration apply && cd ../.. && bun db:queries-generate",
+		"db:queries-generate": "cd api/edgedb && bunx @edgedb/generate edgeql-js --target ts && bunx @edgedb/generate queries --target ts",
+		"grafbase": "bun cmd.ts runGrafbase",
+		"graphql": "bun cmd.ts graphql",
+		"graphstate-run": "cat shared/graphql_schema.gql | odin run graphstate > shared/graphql_queries.js",
+		"cmd": "bun --watch cmd.ts",
+		"seed": "cd api/edgedb && bun --watch ../../cli/seed.ts",
+		"ios": "cd mobile && pnpm run ios"
+	},
+	"workspaces": [
+		"app",
+		"website"
+	],
+	"type": "module",
+	"dependencies": {
+		"@nikiv/utils": "npm:@jsr/nikiv__utils",
+		"@nothing-but/utils": "^0.14.0",
+		"@tiptap/starter-kit": "^2.3.0",
+		"clsx": "^2.1.1",
+		"edgedb": "^1.5.4",
+		"fuse.js": "^7.0.0",
+		"grafbase": "^0.70.0",
+		"graphql": "^16.8.1",
+		"jose": "^5.2.4",
+		"js-cookie": "^3.0.5",
+		"react": "^18.2.0",
+		"rehype-raw": "^7.0.0",
+		"stripe": "^15.3.0",
+		"tailwindcss": "^3.4.3",
+		"tiptap-solid": "^1.0.2",
+		"watcher": "^2.3.1"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.7.1",
+		"@edgedb/generate": "^0.5.3",
+		"@grafbase/sdk": "^0.22.0",
+		"@nothing-but/graphstate": "^0.0.1",
+		"@types/js-cookie": "^3.0.6",
+		"@types/react": "^18.2.79",
+		"@typescript-eslint/eslint-plugin": "^7.7.1",
+		"@typescript-eslint/parser": "^7.7.1",
+		"bun-types": "1.1.4",
+		"eslint": "^9.1.1",
+		"eslint-plugin-eslint-comments": "^3.2.0",
+		"typescript": "^5.4.5"
+	},
+	"trustedDependencies": [
+		"@biomejs/biome",
+		"core-js",
+		"esbuild",
+		"grafbase"
+	],
+	"prettier": {
+		"semi": false
+	}
 }

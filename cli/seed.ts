@@ -4,7 +4,6 @@ import {
 	deleteAllGlobalLinks,
 	deleteAllPersonalLinks,
 	deleteUser,
-	updateUserBio,
 } from "../api/edgedb/crud/mutations"
 
 const email = process.env.email!
