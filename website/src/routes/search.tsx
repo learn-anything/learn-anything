@@ -2,8 +2,9 @@ import { Match, Switch, createEffect, onMount } from "solid-js"
 import * as gql from "../../../shared/graphql_solid"
 import { Sidebar } from "../../components/Sidebar"
 import { useNavigate } from "@solidjs/router"
+import Search from "../../components/Search"
 
-export default function Search() {
+export default function SearchPage() {
 	const [data, actions] = gql.useResource(gql.query_webSearch, {})
 	createEffect(() => {
 		console.log(data())
@@ -16,6 +17,7 @@ export default function Search() {
 						return (
 							<>
 								<Sidebar personalPages={authData().personalPages} />
+								<Search links={[{ title: "test", url: "url" }]} />
 							</>
 						)
 					}}

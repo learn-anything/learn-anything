@@ -1,8 +1,8 @@
 import clsx from "clsx"
 import { For, Show, createSignal } from "solid-js"
-import Icon from "../../shared/components/Icon"
 import { Motion, Presence } from "solid-motionone"
 import { useNavigate } from "@solidjs/router"
+import Icon from "./Icon"
 
 export function Sidebar(props: {
 	personalPages: { title: string; pageUrl: string }[]
