@@ -1,9 +1,10 @@
 {
 	"compilerOptions": {
 		"target": "esnext",
-		"module": "NodeNext",
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"moduleDetection": "force",
 		"lib": ["ESNext", "dom"],
-		"moduleResolution": "NodeNext",
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
 		"resolveJsonModule": true,
@@ -18,7 +19,6 @@
 			"@grafbase/generated": ["./api/grafbase/generated"]
 		},
 		"allowImportingTsExtensions": true,
-		"moduleDetection": "force",
 		"composite": true,
 		"downlevelIteration": true,
 		"noUncheckedIndexedAccess": true,

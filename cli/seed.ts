@@ -4,7 +4,7 @@ import {
 	deleteAllGlobalLinks,
 	deleteAllPersonalLinks,
 	deleteUser,
-} from "../api/edgedb/crud/mutations"
+} from "../api/edgedb/crud/mutations.ts"
 
 const email = process.env.email!
 
