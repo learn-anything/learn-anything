@@ -1,3 +1,6 @@
+# TODO: make use of it
+# using extension ai;
+
 # schema that defines LA data model with EdgeDB
 module default {
   # main and only user of the tool
@@ -175,6 +178,13 @@ module default {
     required prettyName: str;
     required multi connections: str;
   }
+# query: str, should return related QuestionAnswer
+# bm25 ..
+# TODO: think how to do this, just idea
+#  type QuestionAnswer {
+#     required question: vec32;
+#     required answer: str;
+#   }
   # attaches `created_at` field to objects that extend it
   # https://docs.edgedb.com/database/datamodel/objects#abstract-types
   abstract type WithCreatedAt {
