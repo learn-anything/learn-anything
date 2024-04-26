@@ -22,7 +22,7 @@
 	],
 	"type": "module",
 	"dependencies": {
-		"@nikiv/utils": "npm:@jsr/nikiv__utils",
+		"@nikiv/utils": "npm:@jsr/nikiv__utils@^0.1.5",
 		"@nothing-but/utils": "^0.14.0",
 		"@tiptap/starter-kit": "^2.3.0",
 		"clsx": "^2.1.1",
