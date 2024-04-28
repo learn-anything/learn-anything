@@ -48,7 +48,7 @@
 		"@types/react": "^18.2.79",
 		"@typescript-eslint/eslint-plugin": "^7.7.1",
 		"@typescript-eslint/parser": "^7.7.1",
-		"bun-types": "1.1.4",
+		"bun-types": "1.1.5",
 		"eslint": "^9.1.1",
 		"eslint-plugin-eslint-comments": "^3.2.0",
 		"typescript": "^5.4.5"

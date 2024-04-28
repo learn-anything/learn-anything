@@ -1,6 +1,6 @@
-import { Match, Switch, createEffect, createSignal } from "solid-js"
-import * as gql from "../../../../shared/graphql_solid"
-import UserBio from "../../../components/UserBio"
+import { Match, Switch, createSignal } from "solid-js"
+import * as gql from "../../../../shared/graphql_solid.js"
+import UserBio from "../../../components/UserBio.jsx"
 
 // only available in `local` env
 export default function LocalTest() {
