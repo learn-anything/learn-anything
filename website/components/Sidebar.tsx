@@ -23,10 +23,11 @@ export function Sidebar(props: {
 					<div
 						class="px-[15px] h-[40px] flex-center rounded-[7px] text-white/30 bg-hoverDark "
 						onClick={() => {
-							// props.setMode("Search")
+							navigate("/Search")
 						}}
 					>
 						{/* {props.mode === "Search" ? "Back" : "Search"} */}
+						Search
 					</div>
 				</div>
 				<div class="col-gap-[8px] pl-2">
