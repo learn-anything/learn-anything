@@ -72,7 +72,7 @@ Then open `http://localhost:3000` in browser.
 
 Always open to useful ideas or fixes in form of issues or PRs.
 
-Current [issues](../../issues) are organised with [labels](../../labels). Issues currently in focus are labeled with [Current Month](../../labels/Current%20Month) label.
+Current [issues](../../issues) are organised with [labels](../../labels). Issues currently in focus are labeled with [Focus](../../labels/Focus) label. See [Issues Overview](https://github.com/learn-anything/learn-anything.xyz/issues/103) for full list.
 
 If issue is not already present ([do search](../../issues) first), open [new issue](../../issues/new/choose), [start discussion](../../discussions) or ask about it on [Discord](https://discord.com/invite/bxtD8x6aNF).
 
