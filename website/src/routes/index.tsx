@@ -1,6 +1,8 @@
-import { Match, Switch, createSignal } from "solid-js"
+import { Match, Show, Switch, createSignal } from "solid-js"
 import * as gql from "../../../shared/graphql_solid"
 import { Sidebar } from "../../components/Sidebar"
+import Icon from "../../components/Icon"
+import clsx from "clsx"
 
 interface Local {
 	learningStatusFilter: "learning" | "toLearn" | "learned" | "all"
@@ -17,9 +19,25 @@ export default function Home() {
 		sortBy: "custom",
 		payPlsModal: false,
 	})
+	const [showPlusbar, setShowPlusBar] = createSignal(false)
 
 	return (
 		<div class="w-full h-screen">
+			<div
+				onClick={() => {
+					setShowPlusBar(true)
+				}}
+				class={clsx(
+					"absolute bottom-5 rounded-full transition-all bg-blue-500 right-5",
+					showPlusbar() && "rotate-90",
+				)}
+			>
+				<Icon name="Plus" />
+				<Show when={showPlusbar()}>
+					<div class="absolute bottom-0 right-0 bg-blue-500 w-[200px] h-[400px] rounded-[11px]"></div>
+				</Show>
+			</div>
+
 			<Switch fallback={<div>loading</div>}>
 				<Match when={data().auth}>
 					{(authData) => {

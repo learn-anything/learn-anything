@@ -31,6 +31,9 @@ export function Sidebar(props: {
 					</div>
 				</div>
 				<div class="col-gap-[8px] pl-2">
+					<div class="cursor-pointer px-3 text-white/60 p-[6px] rounded-[7px] transition-all">
+						Inbox
+					</div>
 					<div
 						class={clsx(
 							"cursor-pointer px-3 text-white/60 p-[6px] rounded-[7px] transition-all",

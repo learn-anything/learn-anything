@@ -9,7 +9,7 @@ import { Sidebar } from "../../components/Sidebar"
 
 export default function Topic() {
 	Placeholder.configure({
-		emptyEditorClass: "is-editor-empty",
+		emptyEditorClass: "my-custom-is-empty-class",
 		placeholder: "write something...",
 	})
 	const textEditor = createEditor({
