@@ -33,7 +33,6 @@ const { height } = Dimensions.get("window")
 
 export default function Note() {
 	const [text, setText] = useState("")
-	// const [secondText, setSecondText] = useState("")
 	const inputRef = useRef<TextInput>(null)
 	const [isFocused, setIsFocused] = useState(false)
 	const [selectedTab, setSelectedTab] = useState("Page")
@@ -41,6 +40,7 @@ export default function Note() {
 	const [isInputFocused, setIsInputFocused] = useState(false)
 	const [typing, setTyping] = useState(false)
 	const [richTextContent, setRichTextContent] = useState("")
+	const [isPrivate, setIsPrivate] = useState(true)
 
 	//learning buttons
 	const [showSheetLearningButtons, setShowSheetLearningButtons] =
@@ -71,6 +71,10 @@ export default function Note() {
 		)
 
 		Animated.parallel(staggeredSheetAnimations).start()
+	}
+
+	const toggleVisibility = () => {
+		setIsPrivate(!isPrivate)
 	}
 
 	const position = useRef(new Animated.Value(height - 100)).current
@@ -343,6 +347,9 @@ export default function Note() {
 							</View>
 						)}
 					</View>
+					<TouchableOpacity style={styles.addLinkButton}>
+						<Text style={{ color: "rgba(255, 255, 255, 0.7)" }}>Add link</Text>
+					</TouchableOpacity>
 				</SafeAreaView>
 			) : (
 				<SafeAreaView style={styles.container}>
@@ -387,7 +394,6 @@ export default function Note() {
 								/>
 
 								<View style={{ flex: 1 }}>
-									{/* {isRichTextFocused ? ( */}
 									<View>
 										<TextInput
 											ref={inputRef}
@@ -407,13 +413,15 @@ export default function Note() {
 											</Text>
 										) : null}
 									</View>
-									{/* )} */}
 								</View>
 							</View>
 							<View style={styles.buttonContainer}>
-								<TouchableOpacity style={styles.privateButton}>
+								<TouchableOpacity
+									style={styles.privateButton}
+									onPress={toggleVisibility}
+								>
 									<MaterialCommunityIcons
-										name="eye-off-outline"
+										name={isPrivate ? "eye-off-outline" : "eye-outline"}
 										size={22}
 										color="rgba(255, 255, 255, 0.4)"
 									/>
@@ -704,7 +712,7 @@ const styles = StyleSheet.create({
 	linkContainer: {
 		paddingTop: 20,
 		position: "absolute",
-		top: 100,
+		top: 80,
 		left: 0,
 		right: 0,
 		backgroundColor: "#171A21",
@@ -858,5 +866,15 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		opacity: 0.2,
 		marginLeft: 5,
+	},
+	addLinkButton: {
+		position: "absolute",
+		bottom: 50,
+		alignSelf: "center",
+		justifyContent: "center",
+		paddingVertical: 8,
+		paddingHorizontal: 11,
+		backgroundColor: "#232323",
+		borderRadius: 7,
 	},
 })

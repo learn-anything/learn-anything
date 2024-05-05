@@ -17,6 +17,7 @@ import {
 	JobIcon,
 	LeftArrowIcon,
 } from "../../assets/svg/icons"
+import Rive from "rive-react-native"
 
 const { width } = Dimensions.get("window")
 
@@ -62,10 +63,16 @@ export default function Personal() {
 			<View style={styles.fixedBar}>
 				<Text style={styles.personalUsername}>@username</Text>
 				<TouchableOpacity>
-					<SimpleLineIcons
+					{/* <SimpleLineIcons
 						name="settings"
 						size={18}
 						color="rgba(255, 255, 255, 0.5)"
+					/> */}
+					<Rive
+						url="https://public.rive.app/community/runtime-files/2195-4346-avatar-pack-use-case.riv"
+						artboardName="Avatar 1"
+						stateMachineName="avatar"
+						style={{ width: 20, height: 20 }}
 					/>
 				</TouchableOpacity>
 			</View>
