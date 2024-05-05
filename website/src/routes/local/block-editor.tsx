@@ -1,12 +1,12 @@
 import Placeholder from "@tiptap/extension-placeholder"
 import StarterKit from "@tiptap/starter-kit"
 import { EditorContent, createEditor } from "tiptap-solid"
-import { Sidebar } from "../../components/Sidebar"
 
-export default function Topic() {
+// TODO: Notion like editor with blocks
+export default function BlockEditor() {
 	Placeholder.configure({
 		emptyEditorClass: "my-custom-is-empty-class",
-		placeholder: "Write what",
+		placeholder: "Write",
 	})
 	const textEditor = createEditor({
 		extensions: [Placeholder, StarterKit],
@@ -19,7 +19,6 @@ export default function Topic() {
 
 	return (
 		<div class="ml-[200px] p-3 h-screen">
-			<Sidebar personalPages={[]} />
 			<div class=" border border-[#191919] rounded-[7px] h-full">
 				<EditorContent editor={textEditor()} />
 			</div>

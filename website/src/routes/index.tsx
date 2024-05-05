@@ -1,8 +1,8 @@
+import clsx from "clsx"
 import { Match, Show, Switch, createSignal } from "solid-js"
 import * as gql from "../../../shared/graphql_solid"
-import { Sidebar } from "../../components/Sidebar"
 import Icon from "../../components/Icon"
-import clsx from "clsx"
+import { Sidebar } from "../../components/Sidebar"
 
 interface Local {
 	learningStatusFilter: "learning" | "toLearn" | "learned" | "all"
@@ -11,7 +11,17 @@ interface Local {
 	filterByTopic?: string
 	payPlsModal: boolean
 }
+// TODO: make work like in kuskus server components
+// https://discord.com/channels/722131463138705510/910635844119982080/1236210923262185495
+// const getServerState = async () => {
+// 	"use server"
+// 	return await getUser("nikita@nikiv.dev")
+// }
 export default function Home() {
+	// const [serverState, setServerState] = createSignal()
+	// onMount(async () => {
+	// 	setServerState(await getServerState())
+	// })
 	const [data, actions] = gql.useResource(gql.query_webIndex, {})
 	const [local, setLocal] = createSignal<Local>({
 		learningStatusFilter: "learning",
