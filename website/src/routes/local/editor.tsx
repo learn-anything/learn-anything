@@ -2,14 +2,22 @@ import Placeholder from "@tiptap/extension-placeholder"
 import StarterKit from "@tiptap/starter-kit"
 import { EditorContent, createEditor } from "tiptap-solid"
 
+const PlaceholderPlugin = Placeholder.configure({
+	placeholder: "Write something",
+})
+
+const CustomStarterKit = StarterKit.configure({
+	heading: {
+		HTMLAttributes: {
+			class: `text-[#333] font-bold`,
+		},
+	},
+})
+
 // TODO: simple text editor
 export default function Editor() {
-	Placeholder.configure({
-		emptyEditorClass: "my-custom-is-empty-class",
-		placeholder: "Write",
-	})
 	const textEditor = createEditor({
-		extensions: [Placeholder, StarterKit],
+		extensions: [PlaceholderPlugin, CustomStarterKit],
 		editorProps: {
 			attributes: {
 				class: "focus:outline-none p-4",
