@@ -26,5 +26,8 @@
 		"typescript": "latest",
 		"vite": "latest",
 		"vite-plugin-solid": "latest"
+	},
+	"prettier": {
+		"semi": false
 	}
 }
