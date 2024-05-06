@@ -1,4 +1,5 @@
 import { defineConfig } from "@solidjs/start/config"
+import { prpcVite } from "@solid-mediakit/prpc-plugin"
 
 export default defineConfig({
 	ssr: false,
@@ -11,6 +12,7 @@ export default defineConfig({
 				"prosemirror-view",
 			],
 		},
+		plugins: [prpcVite({ log: false }) as any],
 	},
 	server: {
 		preset: "cloudflare_pages",

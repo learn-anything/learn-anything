@@ -22,6 +22,9 @@
   ],
   "dependencies": {
     "@nothing-but/utils": "^0.14.0",
+    "@solid-mediakit/prpc": "^1.2.3",
+    "@solid-mediakit/prpc-plugin": "^1.3.1",
+    "@tanstack/solid-query": "^5.35.1",
     "@tiptap/extension-mention": "^2.3.1",
     "@tiptap/extension-placeholder": "^2.3.0",
     "@tiptap/starter-kit": "^2.3.0",
