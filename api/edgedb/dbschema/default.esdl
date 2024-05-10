@@ -1,26 +1,41 @@
-# TODO: make use of it
-# using extension ai;
+# using extension auth;
 
-# schema that defines LA data model with EdgeDB
 module default {
-  # main and only user of the tool
+  # TODO: make auth work identical to KusKus (with next)
+  # ref: https://github.com/kuskusapp/kuskus/blob/main/dbschema/default.esdl
+  # scalar type Role extending enum<admin, user>;
+  # global current_user := (
+  #   assert_single((
+  #     select User { id, name, email, userRole }
+  #     filter .identity = global ext::auth::ClientTokenIdentity
+  #   ))
+  # );
   type User extending WithCreatedAt {
-    # unique email
+    # required identity: ext::auth::Identity;
+    # learn-anything.xyz/@{name}
+    name: str {
+      constraint exclusive;
+    };
     required email: str {
       constraint exclusive;
     };
-    # unique username
-    username: str {
-      constraint exclusive;
-    };
-    bio: str;
-    # TODO: should enforce usernames to be lowercase
-    # fails now: https://discord.com/channels/841451783728529451/1223277097020030977/1223280398398918837
-    # constraint username on str_trim(str_lower(.username));
-    # custom display name user can choose for themselves similar to X/GitHub
+    # pretty name of user (same as X username/name split)
     displayName: str;
-    # cloudflare R2 url with image
-    profileImage: str;
+    bio: str;
+    # cloudflare r2 url with image
+    profilePhotoUrl: str;
+    # city or country
+    place: str;
+    # date until user has paid membership for
+    memberUntil: datetime;
+    # paid monthly or yearly
+    stripePlan: str;
+    # after stripe payment succeeds, you get back subscription object id (can be used to cancel subscription)
+    stripeSubscriptionObjectId: str;
+    # whether user has stopped subscription and won't be be charged again
+    subscriptionStopped: bool;
+
+    # -- links
     # topics user wants to learn
     multi topicsToLearn: GlobalTopic;
     # topics user is learning
@@ -53,14 +68,12 @@ module default {
     };
     # total number of links user is interacting with
     # property linksTracked := count(.linksBookmarked) + count(.linksInProgress) + count(.linksCompleted) + count(.linksLiked);
-    # date until user has paid membership for
-    memberUntil: datetime;
-    # paid monthly or yearly
-    stripePlan: str;
-    # after stripe payment succeeds, you get back subscription object id (can be used to cancel subscription)
-    stripeSubscriptionObjectId: str;
-    # whether user has stopped subscription and won't be be charged again
-    subscriptionStopped: bool;
+
+    # -- TODO: delete or update
+    # TODO: move to `name`
+    username: str {
+      constraint exclusive;
+    };
   }
   # unique links that are defined by their unique url (essentially a link with metadata)
   type GlobalLink extending WithCreatedAt {

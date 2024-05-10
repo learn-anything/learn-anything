@@ -11,9 +11,6 @@
 		"noEmit": true,
 		"strict": true,
 		"types": ["vinxi/client", "vite/client", "@solidjs/start/env"],
-		"isolatedModules": true,
-		"paths": {
-			"~/*": ["./src/*"]
-		}
+		"isolatedModules": true
 	}
 }

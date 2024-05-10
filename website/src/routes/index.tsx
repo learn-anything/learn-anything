@@ -1,18 +1,29 @@
-import { Match, Switch } from "solid-js"
+import { createEffect } from "solid-js"
 import * as gql from "../../../shared/graphql_solid"
 
 // TODO: make it work like kuskus server components
 // https://github.com/kuskusapp/kuskus/blob/main/app/%5Bprofile%5D/page.tsx
 // edgedb-js-auth-solid is needed in https://github.com/edgedb/edgedb-js/tree/master/packages
 // to do sessions and auth
-//
 export default function Home() {
 	// TODO: remove, get it from server action like in kuskus server component
 	const [data, actions] = gql.useResource(gql.query_webIndex, {})
 
+	// const session = auth.getSession()
+	// const client = session.client
+	// const authenticated = await session.isSignedIn()
+
+	createEffect(() => {
+		// console.log(data(), "gql auth data")
+		// const authData = indexPublicQuery()
+		// console.log(authData)
+	})
+
+	// onMount(() )
+
 	return (
 		<div class="w-full h-screen">
-			<Switch fallback={<div>loading</div>}>
+			{/* <Switch fallback={<div>loading</div>}>
 				<Match when={data().auth}>
 					{(authData) => {
 						return <></>
@@ -23,7 +34,7 @@ export default function Home() {
 						return <></>
 					}}
 				</Match>
-			</Switch>
+			</Switch> */}
 		</div>
 	)
 }

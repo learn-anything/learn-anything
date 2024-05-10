@@ -1,5 +1,8 @@
 {
 	"compilerOptions": {
+		"paths": {
+			"~/*": ["./*"]
+		},
 		"target": "esnext",
 		"module": "esnext",
 		"moduleResolution": "bundler",
@@ -15,9 +18,6 @@
 		"skipLibCheck": true,
 		"noEmit": true,
 		"allowJs": true,
-		"paths": {
-			"@grafbase/generated": ["./api/grafbase/generated"]
-		},
 		"allowImportingTsExtensions": true,
 		"composite": true,
 		"downlevelIteration": true,
