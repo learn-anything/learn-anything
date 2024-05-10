@@ -68,6 +68,17 @@ module default {
     };
     # total number of links user is interacting with
     # property linksTracked := count(.linksBookmarked) + count(.linksInProgress) + count(.linksCompleted) + count(.linksLiked);
+
+    userRole: Role {
+      default := "user";
+    };
+    created: datetime {
+      rewrite insert using (datetime_of_statement());
+    }
+    updated: datetime {
+      rewrite insert using (datetime_of_statement());
+      rewrite update using (datetime_of_statement());
+    }
   }
   # unique links that are defined by their unique url (essentially a link with metadata)
   type GlobalLink extending WithCreatedAt {
