@@ -1,25 +1,10 @@
-import { createEffect } from "solid-js"
-import * as gql from "../../../shared/graphql_solid"
-
-// TODO: make it work like kuskus server components
-// https://github.com/kuskusapp/kuskus/blob/main/app/%5Bprofile%5D/page.tsx
-// edgedb-js-auth-solid is needed in https://github.com/edgedb/edgedb-js/tree/master/packages
-// to do sessions and auth
+// TODO: make it work like kuskus server components (https://github.com/kuskusapp/kuskus/blob/main/app/%5Bprofile%5D/page.tsx)
+// TODO: make edgedb-auth-solid work (i.e. existing packages: https://github.com/edgedb/edgedb-js/tree/master/packages)
+// TODO: sessions, auth, server actions (auth query, public query)
 export default function Home() {
-	// TODO: remove, get it from server action like in kuskus server component
-	const [data, actions] = gql.useResource(gql.query_webIndex, {})
-
 	// const session = auth.getSession()
 	// const client = session.client
 	// const authenticated = await session.isSignedIn()
-
-	createEffect(() => {
-		// console.log(data(), "gql auth data")
-		// const authData = indexPublicQuery()
-		// console.log(authData)
-	})
-
-	// onMount(() )
 
 	return (
 		<div class="w-full h-screen">
