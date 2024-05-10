@@ -1,22 +1,22 @@
-# using extension auth;
+using extension auth;
 
 module default {
   # TODO: make auth work identical to KusKus (with next)
   # ref: https://github.com/kuskusapp/kuskus/blob/main/dbschema/default.esdl
-  # scalar type Role extending enum<admin, user>;
-  # global current_user := (
-  #   assert_single((
-  #     select User { id, name, email, userRole }
-  #     filter .identity = global ext::auth::ClientTokenIdentity
-  #   ))
-  # );
+  scalar type Role extending enum<admin, user>;
+  global current_user := (
+    assert_single((
+      select User { id, name, email, userRole }
+      filter .identity = global ext::auth::ClientTokenIdentity
+    ))
+  );
   type User extending WithCreatedAt {
-    # required identity: ext::auth::Identity;
-    # learn-anything.xyz/@{name}
-    name: str {
+    required identity: ext::auth::Identity;
+    required email: str {
       constraint exclusive;
     };
-    required email: str {
+    # learn-anything.xyz/@{name}
+    name: str {
       constraint exclusive;
     };
     # pretty name of user (same as X username/name split)
@@ -68,12 +68,6 @@ module default {
     };
     # total number of links user is interacting with
     # property linksTracked := count(.linksBookmarked) + count(.linksInProgress) + count(.linksCompleted) + count(.linksLiked);
-
-    # -- TODO: delete or update
-    # TODO: move to `name`
-    username: str {
-      constraint exclusive;
-    };
   }
   # unique links that are defined by their unique url (essentially a link with metadata)
   type GlobalLink extending WithCreatedAt {
