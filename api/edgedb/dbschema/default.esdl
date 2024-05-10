@@ -12,7 +12,7 @@ module default {
   );
   type User extending WithCreatedAt {
     required identity: ext::auth::Identity;
-    required email: str {
+    email: str {
       constraint exclusive;
     };
     # learn-anything.xyz/@{name}

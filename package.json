@@ -29,6 +29,7 @@
     "@tiptap/extension-placeholder": "^2.3.0",
     "@tiptap/starter-kit": "^2.3.0",
     "clsx": "^2.1.1",
+    "cookie": "^0.6.0",
     "edgedb": "^1.5.4",
     "fuse.js": "^7.0.0",
     "grafbase": "^0.70.0",
