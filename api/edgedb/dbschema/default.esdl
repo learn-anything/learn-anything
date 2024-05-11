@@ -188,7 +188,7 @@ module default {
     mutation: json;
   }
   # everything else (within reason, logs are in ClickHouse, etc.)
-  type Other extending WithCreatedAt {
+  type GlobalState extending WithCreatedAt {
     latestGlobalTopicGraph: GlobalTopicGraph;
   }
   type GlobalTopicGraph {
@@ -212,4 +212,3 @@ module default {
     }
   }
 }
-
