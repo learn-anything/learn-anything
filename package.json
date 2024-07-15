@@ -1,0 +1,22 @@
+{
+	"name": "learn-anything",
+	"scripts": {
+		"dev": "bun web",
+		"web": "cd web && bun dev",
+		"web:build": "bun run --filter '*' build"
+	},
+	"devDependencies": {
+		"bun-types": "^1.1.18"
+	},
+	"workspaces": [
+		"web"
+	],
+	"prettier": {
+		"useTabs": true,
+		"semi": false,
+		"trailingComma": "none",
+		"printWidth": 120,
+		"arrowParens": "avoid"
+	},
+	"private": true
+}
