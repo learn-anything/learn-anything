@@ -144,8 +144,8 @@ const SidebarItem = ({ label, url, icon }: SidebarItemProps) => {
   return (
     <div
       className={cn("group relative my-0.5 rounded-md", {
-        "bg-primary/10": pathname === url,
-        "hover:bg-primary/5": pathname !== url
+        "bg-secondary/80": pathname === url,
+        "hover:bg-secondary/40": pathname !== url
       })}
     >
       <Link

@@ -3,15 +3,8 @@ import { Inter as FontSans } from "next/font/google"
 import { cn } from "@/lib/utils"
 import { ThemeProvider } from "@/lib/providers/theme-provider"
 import "./globals.css"
-
-import dynamic from "next/dynamic"
-
-const JazzProvider = dynamic(
-  () => import("@/lib/providers/jazz-provider").then((mod) => mod.JazzProvider),
-  {
-    ssr: false
-  }
-)
+import { JazzProvider } from "@/lib/providers/jazz-provider"
+import { JotaiProvider } from "@/lib/providers/jotai-provider"
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -39,7 +32,7 @@ export default function RootLayout({
       >
         <JazzProvider>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-            {children}
+            <JotaiProvider>{children}</JotaiProvider>
           </ThemeProvider>
         </JazzProvider>
       </body>
