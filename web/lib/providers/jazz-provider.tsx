@@ -1,6 +1,7 @@
 "use client"
 
-import { createJazzReactContext, DemoAuth } from "jazz-react"
+import { createJazzReactContext } from "jazz-react"
+import { DemoAuth } from "@/components/custom/demo-auth"
 
 const Jazz = createJazzReactContext({
   auth: DemoAuth({ appName: "Learn Anything" }),

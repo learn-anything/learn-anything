@@ -83,6 +83,14 @@ const config = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))"
+      },
+
+      screens: {
+        "max-2xl": { max: "1535px" },
+        "max-xl": { max: "1279px" },
+        "max-lg": { max: "1023px" },
+        "max-md": { max: "767px" },
+        "max-sm": { max: "639px" }
       }
     }
   },
