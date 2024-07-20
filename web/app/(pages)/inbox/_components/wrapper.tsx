@@ -94,7 +94,7 @@ const CreateContent: React.FC = () => {
           <div className="flex flex-row p-3">
             <div className="flex flex-auto flex-col gap-1.5">
               <div className="flex flex-row items-start justify-between">
-                <div className="flex min-w-0 flex-auto flex-row items-center gap-1.5">
+                <div className="flex flex-row items-center gap-1.5">
                   <Button
                     type="button"
                     variant="secondary"
@@ -111,6 +111,24 @@ const CreateContent: React.FC = () => {
                     placeholder="Paste a link or write a todo"
                     className="h-6 border-none p-1.5 font-medium placeholder:text-primary/40 focus-visible:outline-none focus-visible:ring-0"
                   />
+                </div>
+                <div className="flex min-w-0 shrink-0 cursor-pointer select-none flex-row">
+                  <Button
+                    size="icon"
+                    type="button"
+                    variant="ghost"
+                    className="size-7 gap-x-2 text-sm"
+                  >
+                    <EllipsisIcon size={16} className="text-primary/60" />
+                  </Button>
+                  <Button
+                    size="icon"
+                    type="button"
+                    variant="ghost"
+                    className="size-7 gap-x-2 text-sm"
+                  >
+                    <HeartIcon size={16} className="text-primary/60" />
+                  </Button>
                 </div>
               </div>
               <div className="flex flex-row items-center gap-1.5 pl-8">
@@ -139,22 +157,12 @@ const CreateContent: React.FC = () => {
               </div>
             </div>
             <div className="flex w-auto items-center justify-end">
-              <div className="flex min-w-0 shrink-0 cursor-pointer select-none flex-row">
-                <Button
-                  size="icon"
-                  type="button"
-                  variant="ghost"
-                  className="gap-x-2 text-sm"
-                >
-                  <EllipsisIcon size={16} className="text-primary/60" />
+              <div className="flex min-w-0 shrink-0 cursor-pointer select-none flex-row gap-x-2">
+                <Button size="sm" type="button" variant="ghost">
+                  Cancel
                 </Button>
-                <Button
-                  size="icon"
-                  type="button"
-                  variant="ghost"
-                  className="gap-x-2 text-sm"
-                >
-                  <HeartIcon size={16} className="text-primary/60" />
+                <Button size="sm" type="button">
+                  Save
                 </Button>
               </div>
             </div>
