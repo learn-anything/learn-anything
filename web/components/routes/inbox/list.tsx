@@ -30,6 +30,8 @@ export const InboxList = () => {
     return null
   }
 
+  console.log("test")
+
   const handleMoved = (dragIndex: number, hoverIndex: number) => {
     // const draggedTodo = todos[dragIndex]
     // const newTodos = [...todos]
@@ -54,9 +56,9 @@ export const InboxList = () => {
   return (
     <>
       <ul role="list" className="divide-y divide-primary/5">
-        {todos?.map((todoItem, index) => (
-          <>
-            {todoItem && (
+        {todos?.map(
+          (todoItem, index) =>
+            todoItem && (
               <SortableItem
                 key={`todo-${todoItem.id}-${todoItem.title}`}
                 todoItem={todoItem}
@@ -64,9 +66,8 @@ export const InboxList = () => {
                 onMove={handleMoved}
                 toggleCheck={toggleCheck}
               />
-            )}
-          </>
-        ))}
+            )
+        )}
       </ul>
     </>
   )
