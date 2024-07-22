@@ -14,6 +14,12 @@ export function isValidUrl(string: string): boolean {
   }
 }
 
+export function isUrl(text: string): boolean {
+  const pattern: RegExp =
+    /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
+  return pattern.test(text)
+}
+
 export function ensureUrlProtocol(url: string): string {
   if (url.startsWith("http://") || url.startsWith("https://")) {
     return url
@@ -22,18 +28,6 @@ export function ensureUrlProtocol(url: string): string {
   return `https://${url}`
 }
 
-export interface Metadata {
-  title: string
-  description: string
-  image: string | null
-  favicon: string
-  url: string
-}
-
-export async function fetchMetadata(url: string): Promise<Metadata> {
-  const res = await fetch(`/api/metadata?url=${encodeURIComponent(url)}`)
-  if (!res.ok) {
-    throw new Error("Failed to fetch metadata")
-  }
-  return res.json()
+export const randomId = () => {
+  return Math.random().toString(36).substring(7)
 }

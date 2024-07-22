@@ -1,10 +1,11 @@
 "use client"
 
-import { createJazzReactContext } from "jazz-react"
+import { createJazzReactContext, DemoAuth as BaseDemoAuth } from "jazz-react"
 import { DemoAuth } from "@/components/custom/demo-auth"
+import { LaAccount } from "../schema"
 
 const Jazz = createJazzReactContext({
-  auth: DemoAuth({ appName: "Learn Anything" }),
+  auth: DemoAuth({ appName: "Learn Anything", accountSchema: LaAccount }),
   peer: "wss://mesh.jazz.tools/?key=iupin5212@gmail.com" // <- put your email here to get a proper API key later
 })
 

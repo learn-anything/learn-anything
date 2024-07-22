@@ -10,11 +10,8 @@ export class GlobalLink extends CoMap {
   url = co.string // unique
 }
 
-class GlobalTopic extends CoMap {
+export class GlobalTopic extends CoMap {
   name = co.string
-  title = co.string
-  sections = co.ref(ListOfSections)
-  connections = co.ref(ListOfGlobalTopics)
 }
 class ListOfGlobalTopics extends CoList.Of(co.ref(GlobalTopic)) {}
 
@@ -31,32 +28,46 @@ export class Page extends CoMap {
   content = co.string
 }
 
-export class TodoItem extends CoMap {
-  type = co.literal("todo")
-  text = co.string
-  done = co.boolean
+export class UserLink extends CoMap {
+  url = co.string
+  title = co.string
+  image? = co.string as co<string> | null
+  favicon = co.string
+  description? = co.string as co<string> | null
 }
+export class TodoItem extends CoMap {
+  title = co.string
+  description? = co.string as co<string> | null
+  topic? = co.ref(GlobalTopic)
+  completed = co.boolean
+  sequence = co.number
+  isLink = co.boolean
+  meta? = co.ref(UserLink)
+}
+
+class ListOfPersonalTodoItems extends CoList.Of(co.ref(TodoItem)) {}
 
 class ListOfGlobalLinks extends CoList.Of(co.ref(GlobalLink)) {}
 class ListOfPersonalLinks extends CoList.Of(co.ref(PersonalLink)) {}
-class ListOfPersonalTodoItems extends CoList.Of(co.ref(TodoItem)) {}
 class ListOfPages extends CoList.Of(co.ref(Page)) {}
 class ListOfTopics extends CoList.Of(co.ref(GlobalTopic)) {}
 class UserProfile extends CoMap {
   name = co.string
   // TODO: avatar
 }
-class UserRoot extends CoMap {
+export class UserRoot extends CoMap {
+  name = co.string
+  username = co.string
+  website = co.string
+  bio = co.string
+  todos = co.ref(ListOfPersonalTodoItems)
+
+  // not implemented yet
   topicsWantToLearn = co.ref(ListOfTopics)
   topicsLearning = co.ref(ListOfTopics)
   topicsLearned = co.ref(ListOfTopics)
   personalLinks = co.ref(ListOfPersonalLinks)
   pages = co.ref(ListOfPages)
-  todos = co.ref(ListOfPersonalTodoItems)
-  name = co.string
-  username = co.string
-  website = co.string
-  bio = co.string
 }
 
 export class LaAccount extends Account {
@@ -79,16 +90,18 @@ export class LaAccount extends Account {
 
       this.root = UserRoot.create(
         {
+          name: creationProps.name,
+          username: creationProps.username,
+          website: creationProps.website,
+          bio: creationProps.bio,
+          todos: ListOfPersonalTodoItems.create([], { owner: this }),
+
+          // not implemented yet
           topicsWantToLearn: ListOfTopics.create([], { owner: this }),
           topicsLearning: ListOfTopics.create([], { owner: this }),
           topicsLearned: ListOfTopics.create([], { owner: this }),
           personalLinks: ListOfPersonalLinks.create([], { owner: this }),
-          pages: ListOfPages.create([], { owner: this }),
-          todos: ListOfPersonalTodoItems.create([], { owner: this }),
-          name: creationProps.name,
-          username: creationProps.username,
-          website: creationProps.website,
-          bio: creationProps.bio
+          pages: ListOfPages.create([], { owner: this })
         },
         { owner: this }
       )

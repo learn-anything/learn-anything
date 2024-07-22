@@ -5,6 +5,9 @@ import { ThemeProvider } from "@/lib/providers/theme-provider"
 import "./globals.css"
 import { JazzProvider } from "@/lib/providers/jazz-provider"
 import { JotaiProvider } from "@/lib/providers/jotai-provider"
+import { Toaster } from "@/components/ui/sonner"
+import { ConfirmProvider } from "@/lib/providers/confirm-provider"
+import { DndProvider } from "@/lib/providers/dnd-provider"
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -23,16 +26,18 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="fixed h-full w-full overflow-hidden">
+    <html lang="en" className="h-full w-full">
       <body
-        className={cn(
-          "fixed h-full w-full overflow-hidden font-sans antialiased",
-          fontSans.variable
-        )}
+        className={cn("h-full w-full font-sans antialiased", fontSans.variable)}
       >
         <JazzProvider>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-            <JotaiProvider>{children}</JotaiProvider>
+            <JotaiProvider>
+              <ConfirmProvider>
+                <DndProvider>{children}</DndProvider>
+                <Toaster expand />
+              </ConfirmProvider>
+            </JotaiProvider>
           </ThemeProvider>
         </JazzProvider>
       </body>

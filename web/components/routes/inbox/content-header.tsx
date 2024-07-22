@@ -1,3 +1,5 @@
+"use client"
+
 import { useAtom } from "jotai"
 import { isCollapseAtom, toggleCollapseAtom } from "@/store/sidebar"
 import { ListFilterIcon, PanelLeftIcon, PlusIcon } from "lucide-react"
@@ -12,7 +14,7 @@ interface TabItemProps {
 
 const TABS = ["All", "Links", "Todos", "Topics"]
 
-export const ContentHeader = () => {
+export const InboxContentHeader = () => {
   return (
     <header className="flex min-h-10 min-w-0 shrink-0 items-center gap-3 border-b border-b-primary/5 py-1 pl-8 pr-6 transition-opacity max-lg:pl-4 max-lg:pr-5">
       <TitleAndActions />

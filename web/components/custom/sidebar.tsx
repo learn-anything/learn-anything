@@ -40,7 +40,7 @@ export const Sidebar = () => {
 
   React.useEffect(() => {
     setIsCollapse(isTablet)
-  }, [isTablet])
+  }, [isTablet, setIsCollapse])
 
   return (
     <div>

@@ -80,7 +80,7 @@ export function DemoAuth<Acc extends Account = Account>({
         appName,
         seedAccounts
       )
-    }, [appName, appHostname, logOutCounter, seedAccounts, accountSchema])
+    }, [])
 
     const AuthUI = (
       <Component
@@ -157,7 +157,7 @@ const ExistingUsersList: React.FC<{
   <div className="flex flex-col gap-y-2">
     {existingUsers.map((user) => (
       <Button key={user} onClick={() => logInAs(user)}>
-        Log In as "{user}"
+        Log In as &quot;{user}&quot;
       </Button>
     ))}
   </div>
