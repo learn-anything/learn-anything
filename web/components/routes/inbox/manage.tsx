@@ -7,8 +7,6 @@ import {
   CheckIcon,
   ChevronDownIcon,
   CircleXIcon,
-  EllipsisIcon,
-  HeartIcon,
   PlusIcon
 } from "lucide-react"
 import { Input } from "@/components/ui/input"
@@ -18,7 +16,7 @@ import { TodoItem, UserLink } from "@/lib/schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { useDebounce } from "use-debounce"
+import { useDebounce } from "react-use"
 import { createInboxSchema } from "./schema"
 import { toast } from "sonner"
 import {
@@ -98,10 +96,13 @@ const CreateContent: React.FC<{ onCreate?: () => void }> = ({ onCreate }) => {
   })
 
   const title = form.watch("title")
-  const [debouncedText] = useDebounce(title, 300)
+  const [debouncedText, setDebouncedText] = useState<string>("")
+  useDebounce(() => setDebouncedText(title), 300, [title])
 
   useEffect(() => {
     const fetchData = async (url: string) => {
+      setIsFetching(true)
+
       try {
         const res = await fetch(
           `/api/metadata?url=${encodeURIComponent(url)}`,
@@ -127,6 +128,8 @@ const CreateContent: React.FC<{ onCreate?: () => void }> = ({ onCreate }) => {
         form.setValue("meta", null)
         form.setValue("title", debouncedText)
         form.setValue("description", "")
+      } finally {
+        setIsFetching(false)
       }
     }
 

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useRef } from "react"
+import React, { useCallback, useRef } from "react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { LinkIcon } from "lucide-react"
 import Link from "next/link"
@@ -24,8 +24,6 @@ export const InboxList = () => {
   const { me, logOut } = useAccount({
     root: { todos: [] }
   })
-
-  console.log("test")
 
   const handleMoved = (dragIndex: number, hoverIndex: number) => {
     const draggedTodo = me?.root.todos[dragIndex]

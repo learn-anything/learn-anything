@@ -7,10 +7,10 @@ import { cn } from "@/lib/utils"
 import * as React from "react"
 import { ChevronDownIcon, InboxIcon, SearchIcon } from "lucide-react"
 import Link from "next/link"
-import { useMediaQuery } from "@/hooks/use-media-query"
 import { useAtom } from "jotai"
 import { isCollapseAtom } from "@/store/sidebar"
 import { usePathname } from "next/navigation"
+import { useMedia } from "react-use"
 
 interface SidebarItemProps {
   label: string
@@ -36,7 +36,7 @@ const PAGES = [
 export const Sidebar = () => {
   const account = useAccount()
   const [isCollapse, setIsCollapse] = useAtom(isCollapseAtom)
-  const isTablet = useMediaQuery("(max-width: 1024px)")
+  const isTablet = useMedia("(max-width: 1024px)")
 
   React.useEffect(() => {
     setIsCollapse(isTablet)
