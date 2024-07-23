@@ -17,59 +17,52 @@ interface SortableItemProps {
   todoItem: TodoItem
   index: number
   onMove: (dragIndex: number, hoverIndex: number) => void
-  toggleCheck: (index: number) => void
+  onCheck: (index: number) => void
 }
 
 export const InboxList = () => {
   const { me, logOut } = useAccount({
     root: { todos: [] }
   })
-  const todos = me?.root.todos
-
-  if (!todos) {
-    return null
-  }
 
   console.log("test")
 
   const handleMoved = (dragIndex: number, hoverIndex: number) => {
-    // const draggedTodo = todos[dragIndex]
-    // const newTodos = [...todos]
-    // newTodos.splice(dragIndex, 1)
-    // newTodos.splice(hoverIndex, 0, draggedTodo)
-    // // Update sequences
-    // newTodos.forEach((todo, index) => {
-    //   todo.sequence = index + 1
-    // })
-    // me.root.todos = newTodos
+    const draggedTodo = me?.root.todos[dragIndex]
+    if (draggedTodo) {
+      me?.root.todos.splice(dragIndex, 1)
+      me?.root.todos.splice(hoverIndex, 0, draggedTodo)
+      // Update sequences
+      me?.root.todos.forEach((todo, index) => {
+        if (todo) {
+          todo.sequence = index
+        }
+      })
+    }
   }
 
   const toggleCheck = (index: number) => {
-    // if (todos) {
-    //   const todo = todos[index]
-    //   if (todo) {
-    //     todo.completed = !todo.completed
-    //   }
-    // }
+    const todo = me?.root.todos[index]
+    if (todo) {
+      todo.completed = !todo.completed
+    }
   }
 
   return (
-    <>
-      <ul role="list" className="divide-y divide-primary/5">
-        {todos?.map(
-          (todoItem, index) =>
-            todoItem && (
-              <SortableItem
-                key={`todo-${todoItem.id}-${todoItem.title}`}
-                todoItem={todoItem}
-                index={index}
-                onMove={handleMoved}
-                toggleCheck={toggleCheck}
-              />
-            )
-        )}
-      </ul>
-    </>
+    <ul role="list" className="divide-y divide-primary/5">
+      {me?.root.todos?.map(
+        (todoItem, index) =>
+          todoItem && (
+            <SortableItem
+              key={`todo-${todoItem.id}-${todoItem.title}`}
+              todoItem={todoItem}
+              index={index}
+              onMove={handleMoved}
+              onCheck={toggleCheck}
+            />
+          )
+      )}
+    </ul>
   )
 }
 
@@ -77,7 +70,7 @@ const SortableItem: React.FC<SortableItemProps> = ({
   todoItem,
   index,
   onMove,
-  toggleCheck
+  onCheck
 }) => {
   console.log(todoItem)
   const ref = useRef<HTMLLIElement>(null)
@@ -129,14 +122,14 @@ const SortableItem: React.FC<SortableItemProps> = ({
               <Image
                 src={todoItem.meta.favicon}
                 alt={todoItem.title}
-                className="size-5 rounded-md"
+                className="size-5 rounded-full"
                 width={16}
                 height={16}
               />
             ) : (
               <Checkbox
                 checked={todoItem.completed}
-                onChange={() => toggleCheck(index)}
+                onCheckedChange={() => onCheck(index)}
               />
             )}
             <div className="min-w-0 flex-auto">
