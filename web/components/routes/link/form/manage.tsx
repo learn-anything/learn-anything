@@ -30,6 +30,8 @@ import { useAccount } from "@/lib/providers/jazz-provider"
 import { TodoItem, UserLink } from "@/lib/schema"
 import { createLinkSchema } from "./schema"
 import { TopicSelector } from "./partial/topic-section"
+import { useAtom } from "jotai"
+import { linkShowCreateAtom } from "@/store/link"
 
 export type LinkFormValues = z.infer<typeof createLinkSchema>
 
@@ -41,25 +43,16 @@ const DEFAULT_FORM_VALUES: Partial<LinkFormValues> = {
   meta: null
 }
 
-const LinkContext = React.createContext<{
-  showCreate: boolean
-  setShowCreate: (value: boolean) => void
-}>({
-  showCreate: false,
-  setShowCreate: () => {}
-})
-
 export const LinkManage: React.FC = () => {
-  const [showCreate, setShowCreate] = useState(false)
-
+  const [showCreate, setShowCreate] = useAtom(linkShowCreateAtom)
   return (
-    <LinkContext.Provider value={{ showCreate, setShowCreate }}>
+    <>
       {showCreate && <CreateForm />}
       <CreateButton
-        onClick={() => setShowCreate((prev) => !prev)}
+        onClick={() => setShowCreate(!showCreate)}
         isOpen={showCreate}
       />
-    </LinkContext.Provider>
+    </>
   )
 }
 
@@ -79,7 +72,7 @@ const CreateButton: React.FC<{ onClick: () => void; isOpen: boolean }> = ({
 )
 
 const CreateForm: React.FC<{ onCreate?: () => void }> = ({ onCreate }) => {
-  const { setShowCreate } = React.useContext(LinkContext)
+  const [, setShowCreate] = useAtom(linkShowCreateAtom)
   const [isFetching, setIsFetching] = useState(false)
   const { me } = useAccount()
   const form = useForm<LinkFormValues>({

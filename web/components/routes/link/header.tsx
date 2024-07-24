@@ -1,11 +1,26 @@
 "use client"
 
+import * as React from "react"
 import { ListFilterIcon, PlusIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { ContentHeader } from "@/components/custom/content-header"
 import { useMedia } from "react-use"
-
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from "@/components/ui/popover"
+import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select"
+import { useAtom } from "jotai"
+import { linkSortAtom } from "@/store/link"
 interface TabItemProps {
   url: string
   label: string
@@ -65,18 +80,42 @@ const TabItem = ({ url, label }: TabItemProps) => {
 }
 
 const FilterAndSort = () => {
+  const [sort, setSort] = useAtom(linkSortAtom)
+
   return (
     <div className="flex w-auto items-center justify-end">
       <div className="flex items-center gap-2">
-        <Button
-          size="sm"
-          type="button"
-          variant="secondary"
-          className="gap-x-2 text-sm"
-        >
-          <ListFilterIcon size={16} className="text-primary/60" />
-          <span className="hidden md:block">Filter</span>
-        </Button>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              size="sm"
+              type="button"
+              variant="secondary"
+              className="gap-x-2 text-sm"
+            >
+              <ListFilterIcon size={16} className="text-primary/60" />
+              <span className="hidden md:block">Filter</span>
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-72" align="end">
+            <div className="flex flex-col">
+              <div className="flex min-w-8 flex-row items-center">
+                <Label>Sort by</Label>
+                <div className="flex flex-auto flex-row items-center justify-end">
+                  <Select value={sort} onValueChange={setSort}>
+                    <SelectTrigger className="h-6 w-auto">
+                      <SelectValue placeholder="Select"></SelectValue>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="title">Title</SelectItem>
+                      <SelectItem value="manual">Manual</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
         <Button
           size="sm"
           type="button"
