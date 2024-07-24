@@ -19,7 +19,7 @@ export const ContentHeader = ({
   const isTablet = useMedia("(max-width: 1024px)")
 
   return (
-    <header className="flex min-h-10 min-w-0 shrink-0 items-center gap-3 border-b border-b-primary/5 py-1 pl-8 pr-6 transition-opacity max-lg:pl-4 max-lg:pr-5">
+    <header className="flex min-h-10 min-w-0 shrink-0 items-center gap-3 border-b border-b-primary/5 px-6 py-1 transition-opacity max-lg:px-4">
       <div
         className="flex min-h-10 min-w-0 shrink-0 items-center gap-1.5"
         style={{ maxWidth: "50%" }}

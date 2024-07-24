@@ -25,7 +25,7 @@ export const InboxHeader = () => {
       </ContentHeader>
 
       {isTablet && (
-        <div className="flex min-h-10 flex-row items-start justify-between border-b border-b-primary/5 py-2 pl-8 pr-6 max-lg:pl-4 max-lg:pr-5">
+        <div className="flex min-h-10 flex-row items-start justify-between border-b border-b-primary/5 px-6 py-2 max-lg:pl-4">
           <Tabs />
         </div>
       )}

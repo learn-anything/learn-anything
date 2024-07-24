@@ -47,20 +47,22 @@ export const InboxList = () => {
   }
 
   return (
-    <ul role="list" className="divide-y divide-primary/5">
-      {me?.root.todos?.map(
-        (todoItem, index) =>
-          todoItem && (
-            <SortableItem
-              key={`todo-${todoItem.id}-${todoItem.title}`}
-              todoItem={todoItem}
-              index={index}
-              onMove={handleMoved}
-              onCheck={toggleCheck}
-            />
-          )
-      )}
-    </ul>
+    <div>
+      <ul role="list" className="divide-y divide-primary/5">
+        {me?.root.todos?.map(
+          (todoItem, index) =>
+            todoItem && (
+              <SortableItem
+                key={`todo-${todoItem.id}-${todoItem.title}`}
+                todoItem={todoItem}
+                index={index}
+                onMove={handleMoved}
+                onCheck={toggleCheck}
+              />
+            )
+        )}
+      </ul>
+    </div>
   )
 }
 
@@ -113,51 +115,49 @@ const SortableItem: React.FC<SortableItemProps> = ({
       style={{ opacity }}
       data-handler-id={handlerId}
     >
-      <div className="px-4">
-        <div className="flex justify-between gap-x-6">
-          <div className="flex min-w-0 gap-x-4">
-            {todoItem.isLink && todoItem.meta ? (
-              <Image
-                src={todoItem.meta.favicon}
-                alt={todoItem.title}
-                className="size-5 rounded-full"
-                width={16}
-                height={16}
-              />
-            ) : (
-              <Checkbox
-                checked={todoItem.completed}
-                onCheckedChange={() => onCheck(index)}
-              />
-            )}
-            <div className="min-w-0 flex-auto">
-              <p className="text-sm font-semibold text-primary/80 hover:text-primary">
-                {todoItem.isLink && todoItem.meta ? (
-                  <Link
-                    href={todoItem.meta.url}
-                    passHref
-                    prefetch={false}
-                    target="_blank"
-                  >
-                    <span className="absolute inset-x-0 -top-px bottom-0"></span>
-                    {todoItem.title}
-                  </Link>
-                ) : (
-                  todoItem.title
-                )}
-              </p>
-            </div>
-          </div>
-
-          {todoItem.isLink && (
-            <div className="flex shrink-0 items-center gap-x-4">
-              <LinkIcon
-                aria-hidden="true"
-                className="size-4 flex-none text-primary/40"
-              />
-            </div>
+      <div className="flex justify-between gap-x-6 px-6 max-lg:px-4">
+        <div className="flex min-w-0 gap-x-4">
+          {todoItem.isLink && todoItem.meta ? (
+            <Image
+              src={todoItem.meta.favicon}
+              alt={todoItem.title}
+              className="size-5 rounded-full"
+              width={16}
+              height={16}
+            />
+          ) : (
+            <Checkbox
+              checked={todoItem.completed}
+              onCheckedChange={() => onCheck(index)}
+            />
           )}
+          <div className="min-w-0 flex-auto">
+            <p className="text-sm font-semibold text-primary/80 hover:text-primary">
+              {todoItem.isLink && todoItem.meta ? (
+                <Link
+                  href={todoItem.meta.url}
+                  passHref
+                  prefetch={false}
+                  target="_blank"
+                >
+                  <span className="absolute inset-x-0 -top-px bottom-0"></span>
+                  {todoItem.title}
+                </Link>
+              ) : (
+                todoItem.title
+              )}
+            </p>
+          </div>
         </div>
+
+        {todoItem.isLink && (
+          <div className="flex shrink-0 items-center gap-x-4">
+            <LinkIcon
+              aria-hidden="true"
+              className="size-4 flex-none text-primary/40"
+            />
+          </div>
+        )}
       </div>
     </li>
   )
