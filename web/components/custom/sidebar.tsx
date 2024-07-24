@@ -1,9 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { useEffect } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useMedia } from "react-use"
 import { useAtom } from "jotai"
 import { ChevronDownIcon, InboxIcon, SearchIcon } from "lucide-react"
@@ -34,33 +33,43 @@ interface SidebarItemProps {
   icon?: React.ReactNode
 }
 
+const SidebarContext = React.createContext<{
+  isCollapsed: boolean
+  setIsCollapsed: (value: boolean) => void
+}>({
+  isCollapsed: false,
+  setIsCollapsed: () => {}
+})
+
 export const Sidebar: React.FC = () => {
   const account = useAccount()
   const [isCollapsed, setIsCollapsed] = useAtom(isCollapseAtom)
   const isTablet = useMedia("(max-width: 1024px)")
 
-  useEffect(() => {
+  React.useEffect(() => {
     setIsCollapsed(isTablet)
   }, [isTablet, setIsCollapsed])
 
   const sidebarContent = (
-    <nav className="relative flex h-full w-full shrink-0 flex-col bg-background">
-      <div className={cn({ "pt-12": !isCollapsed && isTablet })}>
-        <LogoAndSearch />
-      </div>
-      <div
-        tabIndex={-1}
-        className="relative mb-0.5 mt-1.5 flex grow flex-col overflow-y-auto rounded-md px-3.5"
-      >
-        <SidebarItem
-          url="/inbox"
-          label="Inbox"
-          icon={<InboxIcon size={16} />}
-        />
-        <div className="h-2 shrink-0" />
-        <Pages />
-      </div>
-    </nav>
+    <SidebarContext.Provider value={{ isCollapsed, setIsCollapsed }}>
+      <nav className="relative flex h-full w-full shrink-0 flex-col bg-background">
+        <div className={cn({ "pt-12": !isCollapsed && isTablet })}>
+          <LogoAndSearch />
+        </div>
+        <div
+          tabIndex={-1}
+          className="relative mb-0.5 mt-1.5 flex grow flex-col overflow-y-auto rounded-md px-3.5"
+        >
+          <SidebarItem
+            url="/inbox"
+            label="Inbox"
+            icon={<InboxIcon size={16} />}
+          />
+          <div className="h-2 shrink-0" />
+          <Pages />
+        </div>
+      </nav>
+    </SidebarContext.Provider>
   )
 
   const sidebarClasses = cn(
@@ -154,7 +163,15 @@ const Pages: React.FC = () => (
 
 const SidebarItem: React.FC<SidebarItemProps> = ({ label, url, icon }) => {
   const pathname = usePathname()
+  const router = useRouter()
   const isActive = pathname === url
+  const { setIsCollapsed } = React.useContext(SidebarContext)
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
+    setIsCollapsed(true)
+    router.push(url)
+  }
 
   return (
     <div
@@ -166,6 +183,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ label, url, icon }) => {
       <Link
         className="flex h-8 grow items-center truncate rounded-md pl-1.5 pr-1 text-sm font-medium text-secondary-foreground"
         href={url}
+        onClick={handleClick}
       >
         {icon && (
           <span
