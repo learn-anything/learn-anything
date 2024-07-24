@@ -7,7 +7,6 @@ import { JazzProvider } from "@/lib/providers/jazz-provider"
 import { JotaiProvider } from "@/lib/providers/jotai-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { ConfirmProvider } from "@/lib/providers/confirm-provider"
-import { DndProvider } from "@/lib/providers/dnd-provider"
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -34,7 +33,7 @@ export default function RootLayout({
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
             <JotaiProvider>
               <ConfirmProvider>
-                <DndProvider>{children}</DndProvider>
+                {children}
                 <Toaster expand />
               </ConfirmProvider>
             </JotaiProvider>

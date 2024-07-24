@@ -1,22 +1,33 @@
 "use client"
 
-import React, { useRef } from "react"
+import React from "react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { LinkIcon } from "lucide-react"
 import Link from "next/link"
-import { useDrag, useDrop } from "react-dnd"
+import Image from "next/image"
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent
+} from "@dnd-kit/core"
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy
+} from "@dnd-kit/sortable"
+import { CSS } from "@dnd-kit/utilities"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { TodoItem } from "@/lib/schema"
-import Image from "next/image"
-
-const ItemTypes = {
-  TODO_ITEM: "todoItem"
-}
 
 interface SortableItemProps {
   todoItem: TodoItem
   index: number
-  onMove: (dragIndex: number, hoverIndex: number) => void
   onCheck: (index: number) => void
 }
 
@@ -25,17 +36,31 @@ export const LinkList = () => {
     root: { todos: [] }
   })
 
-  const handleMoved = (dragIndex: number, hoverIndex: number) => {
-    const draggedTodo = me?.root.todos[dragIndex]
-    if (draggedTodo) {
-      me?.root.todos.splice(dragIndex, 1)
-      me?.root.todos.splice(hoverIndex, 0, draggedTodo)
-      // Update sequences
-      me?.root.todos.forEach((todo, index) => {
-        if (todo) {
-          todo.sequence = index
-        }
-      })
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates
+    })
+  )
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+
+    if (active.id !== over?.id) {
+      const oldIndex = me?.root.todos.findIndex(
+        (item) => item?.id === active.id
+      )
+      const newIndex = me?.root.todos.findIndex((item) => item?.id === over?.id)
+
+      if (oldIndex !== undefined && newIndex !== undefined) {
+        me?.root.todos.splice(newIndex, 0, me.root.todos.splice(oldIndex, 1)[0])
+        // Update sequences
+        me?.root.todos.forEach((todo, index) => {
+          if (todo) {
+            todo.sequence = index
+          }
+        })
+      }
     }
   }
 
@@ -47,73 +72,53 @@ export const LinkList = () => {
   }
 
   return (
-    <div>
-      <ul role="list" className="divide-y divide-primary/5">
-        {me?.root.todos?.map(
-          (todoItem, index) =>
-            todoItem && (
-              <SortableItem
-                key={`todo-${todoItem.id}-${todoItem.title}`}
-                todoItem={todoItem}
-                index={index}
-                onMove={handleMoved}
-                onCheck={toggleCheck}
-              />
-            )
-        )}
-      </ul>
-    </div>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+    >
+      <SortableContext
+        items={me?.root.todos?.map((item) => item?.id || "") || []}
+        strategy={verticalListSortingStrategy}
+      >
+        <ul role="list" className="divide-y divide-primary/5">
+          {me?.root.todos?.map(
+            (todoItem, index) =>
+              todoItem && (
+                <SortableItem
+                  key={`todo-${todoItem.id}-${todoItem.title}`}
+                  todoItem={todoItem}
+                  index={index}
+                  onCheck={toggleCheck}
+                />
+              )
+          )}
+        </ul>
+      </SortableContext>
+    </DndContext>
   )
 }
 
 const SortableItem: React.FC<SortableItemProps> = ({
   todoItem,
   index,
-  onMove,
   onCheck
 }) => {
-  console.log(todoItem)
-  const ref = useRef<HTMLLIElement>(null)
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: todoItem.id || "" })
 
-  const [{ isDragging }, drag] = useDrag({
-    type: ItemTypes.TODO_ITEM,
-    item: { index },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging()
-    })
-  })
-
-  const [{ handlerId }, drop] = useDrop({
-    accept: ItemTypes.TODO_ITEM,
-    hover(item: { index: number }, monitor) {
-      if (!ref.current) {
-        return
-      }
-      const dragIndex = item.index
-      const hoverIndex = index
-      if (dragIndex === hoverIndex) {
-        return
-      }
-      onMove(dragIndex, hoverIndex)
-      item.index = hoverIndex
-    },
-    collect(monitor) {
-      return {
-        handlerId: monitor.getHandlerId()
-      }
-    }
-  })
-
-  drag(drop(ref))
-
-  const opacity = isDragging ? 0.5 : 1
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition
+  }
 
   return (
     <li
-      ref={ref}
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
       className="relative py-3 hover:bg-muted/40"
-      style={{ opacity }}
-      data-handler-id={handlerId}
     >
       <div className="flex justify-between gap-x-6 px-6 max-lg:px-4">
         <div className="flex min-w-0 gap-x-4">
