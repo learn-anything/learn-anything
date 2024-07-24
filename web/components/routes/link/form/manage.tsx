@@ -26,7 +26,7 @@ import {
   PlusIcon
 } from "lucide-react"
 import { cn, ensureUrlProtocol, isUrl as LibIsUrl } from "@/lib/utils"
-import { useAccount } from "@/lib/providers/jazz-provider"
+import { useAccount, useCoState } from "@/lib/providers/jazz-provider"
 import { TodoItem, UserLink } from "@/lib/schema"
 import { createLinkSchema } from "./schema"
 import { TopicSelector } from "./partial/topic-section"
@@ -47,7 +47,12 @@ export const LinkManage: React.FC = () => {
   const [showCreate, setShowCreate] = useAtom(linkShowCreateAtom)
   return (
     <>
-      {showCreate && <CreateForm />}
+      {showCreate && (
+        <CreateForm
+          onSuccess={() => setShowCreate(false)}
+          onCancel={() => setShowCreate(false)}
+        />
+      )}
       <CreateButton
         onClick={() => setShowCreate(!showCreate)}
         isOpen={showCreate}
@@ -71,217 +76,255 @@ const CreateButton: React.FC<{ onClick: () => void; isOpen: boolean }> = ({
   </Button>
 )
 
-const CreateForm: React.FC<{ onCreate?: () => void }> = ({ onCreate }) => {
-  const [, setShowCreate] = useAtom(linkShowCreateAtom)
-  const [isFetching, setIsFetching] = useState(false)
-  const { me } = useAccount()
-  const form = useForm<LinkFormValues>({
-    resolver: zodResolver(createLinkSchema),
-    defaultValues: DEFAULT_FORM_VALUES
-  })
+interface CreateFormProps extends React.ComponentPropsWithoutRef<"form"> {
+  onSuccess?: () => void
+  onCancel?: () => void
+  todoItem?: TodoItem
+}
 
-  const title = form.watch("title")
-  const [debouncedText, setDebouncedText] = useState<string>("")
-  useDebounce(() => setDebouncedText(title), 300, [title])
+export const CreateForm = React.forwardRef<HTMLFormElement, CreateFormProps>(
+  ({ onSuccess, onCancel, todoItem }, ref) => {
+    const selectedTodo = useCoState(TodoItem, todoItem?.id)
+    const [isFetching, setIsFetching] = useState(false)
+    const { me } = useAccount()
+    const form = useForm<LinkFormValues>({
+      resolver: zodResolver(createLinkSchema),
+      defaultValues: DEFAULT_FORM_VALUES
+    })
 
-  useEffect(() => {
-    const fetchMetadata = async (url: string) => {
-      setIsFetching(true)
+    const title = form.watch("title")
+    const [debouncedText, setDebouncedText] = useState<string>("")
+    useDebounce(() => setDebouncedText(title), 300, [title])
+
+    useEffect(() => {
+      if (selectedTodo) {
+        form.setValue("title", selectedTodo.title)
+        form.setValue("description", selectedTodo.description ?? "")
+        form.setValue("isLink", selectedTodo.isLink)
+        form.setValue("meta", selectedTodo.meta)
+      }
+    }, [selectedTodo, form])
+
+    useEffect(() => {
+      const fetchMetadata = async (url: string) => {
+        setIsFetching(true)
+        try {
+          const res = await fetch(
+            `/api/metadata?url=${encodeURIComponent(url)}`,
+            { cache: "force-cache" }
+          )
+          if (!res.ok) throw new Error("Failed to fetch metadata")
+          const data = await res.json()
+          form.setValue("isLink", true)
+          form.setValue("meta", data)
+          form.setValue("title", data.title)
+          form.setValue("description", data.description)
+        } catch (err) {
+          toast.error("Link preview failed", {
+            duration: 5000,
+            icon: <CircleXIcon size={16} className="text-red-500" />
+          })
+          form.setValue("isLink", false)
+          form.setValue("meta", null)
+          form.setValue("title", debouncedText)
+          form.setValue("description", "")
+        } finally {
+          setIsFetching(false)
+        }
+      }
+
+      const lowerText = debouncedText.toLowerCase()
+      if (LibIsUrl(lowerText)) {
+        fetchMetadata(ensureUrlProtocol(lowerText))
+      }
+    }, [debouncedText, form])
+
+    const onSubmit = (values: LinkFormValues) => {
+      if (isFetching) return
+
       try {
-        const res = await fetch(
-          `/api/metadata?url=${encodeURIComponent(url)}`,
-          { cache: "force-cache" }
+        let userLink: UserLink | undefined
+
+        if (values.isLink && values.meta) {
+          userLink = UserLink.create(values.meta, { owner: me._owner })
+        }
+
+        if (selectedTodo) {
+          selectedTodo.title = values.title
+          selectedTodo.description = values.description ?? ""
+          selectedTodo.isLink = values.isLink
+          if (selectedTodo.meta) {
+            Object.assign(selectedTodo.meta, values.meta)
+          }
+
+          toast.success("Todo updated", {
+            duration: 5000,
+            icon: <CheckIcon size={16} className="text-green-500" />
+          })
+        } else {
+          // Create new todo
+          const newTodo = TodoItem.create(
+            {
+              title: values.title,
+              description: values.description,
+              sequence: me.root?.todos?.length || 1,
+              completed: false,
+              isLink: values.isLink,
+              meta: userLink
+              // topic: values.topic
+            },
+            { owner: me._owner }
+          )
+
+          me.root?.todos?.push(newTodo)
+
+          toast.success("Todo created", {
+            duration: 5000,
+            icon: <CheckIcon size={16} className="text-green-500" />
+          })
+        }
+
+        form.reset(DEFAULT_FORM_VALUES)
+        onSuccess?.()
+      } catch (error) {
+        console.error("Failed to create/update todo", error)
+        toast.error(
+          todoItem ? "Failed to update todo" : "Failed to create todo",
+          {
+            duration: 5000,
+            icon: <CircleXIcon size={16} className="text-red-500" />
+          }
         )
-        if (!res.ok) throw new Error("Failed to fetch metadata")
-        const data = await res.json()
-        form.setValue("isLink", true)
-        form.setValue("meta", data)
-        form.setValue("title", data.title)
-        form.setValue("description", data.description)
-      } catch (err) {
-        toast.error("Link preview failed", {
-          duration: 5000,
-          icon: <CircleXIcon size={16} className="text-red-500" />
-        })
-        form.setValue("isLink", false)
-        form.setValue("meta", null)
-        form.setValue("title", debouncedText)
-        form.setValue("description", "")
-      } finally {
-        setIsFetching(false)
       }
     }
 
-    const lowerText = debouncedText.toLowerCase()
-    if (LibIsUrl(lowerText)) {
-      fetchMetadata(ensureUrlProtocol(lowerText))
-    }
-  }, [debouncedText, form])
-
-  const onSubmit = (values: LinkFormValues) => {
-    if (isFetching) return
-
-    try {
-      let userLink: UserLink | undefined
-
-      if (values.isLink && values.meta) {
-        userLink = UserLink.create(values.meta, { owner: me._owner })
-      }
-
-      const newTodo = TodoItem.create(
-        {
-          title: values.title,
-          description: values.description,
-          sequence: me.root?.todos?.length || 1,
-          completed: false,
-          isLink: values.isLink,
-          meta: userLink
-        },
-        { owner: me._owner }
-      )
-
-      me.root?.todos?.push(newTodo)
-
+    const handleCancel: () => void = () => {
       form.reset(DEFAULT_FORM_VALUES)
-      onCreate?.()
-
-      toast.success("Todo created", {
-        duration: 5000,
-        icon: <CheckIcon size={16} className="text-green-500" />
-      })
-    } catch (error) {
-      toast.error("Failed to create todo", {
-        duration: 5000,
-        icon: <CircleXIcon size={16} className="text-red-500" />
-      })
+      onCancel?.()
     }
-  }
 
-  const handleCancel = () => {
-    form.reset(DEFAULT_FORM_VALUES)
-    setShowCreate(false)
-  }
+    return (
+      <div className="p-3 transition-all">
+        <div className="rounded-md border border-primary/5 bg-primary/5">
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="relative min-w-0 flex-1"
+              ref={ref}
+            >
+              <div className="flex flex-row p-3">
+                <div className="flex flex-auto flex-col gap-1.5">
+                  <div className="flex flex-row items-start justify-between">
+                    <div className="flex grow flex-row items-center gap-1.5">
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        size="icon"
+                        aria-label="Choose icon"
+                        className="size-7 text-primary/60"
+                      >
+                        {form.watch("isLink") ? (
+                          <Image
+                            src={form.watch("meta")?.favicon || ""}
+                            alt={form.watch("meta")?.title || ""}
+                            className="size-5 rounded-md"
+                            width={16}
+                            height={16}
+                          />
+                        ) : (
+                          <BoxIcon size={16} />
+                        )}
+                      </Button>
 
-  return (
-    <div className="p-3 transition-all">
-      <div className="rounded-md border border-primary/5 bg-primary/5">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="relative min-w-0 flex-1"
-          >
-            <div className="flex flex-row p-3">
-              <div className="flex flex-auto flex-col gap-1.5">
-                <div className="flex flex-row items-start justify-between">
-                  <div className="flex grow flex-row items-center gap-1.5">
-                    <Button
-                      type="button"
-                      variant="secondary"
-                      size="icon"
-                      aria-label="Choose icon"
-                      className="size-7 text-primary/60"
-                    >
-                      {form.watch("isLink") ? (
-                        <Image
-                          src={form.watch("meta")?.favicon || ""}
-                          alt={form.watch("meta")?.title || ""}
-                          className="size-5 rounded-md"
-                          width={16}
-                          height={16}
-                        />
-                      ) : (
-                        <BoxIcon size={16} />
-                      )}
-                    </Button>
+                      <FormField
+                        control={form.control}
+                        name="title"
+                        render={({ field }) => (
+                          <FormItem className="grow space-y-0">
+                            <FormLabel className="sr-only">Text</FormLabel>
+                            <FormControl>
+                              <Input
+                                {...field}
+                                autoComplete="off"
+                                maxLength={100}
+                                autoFocus
+                                placeholder="Paste a link or write a todo"
+                                className="h-6 border-none p-1.5 font-medium placeholder:text-primary/40 focus-visible:outline-none focus-visible:ring-0"
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
 
+                    <div className="flex min-w-0 shrink-0 cursor-pointer select-none flex-row">
+                      <Button
+                        size="icon"
+                        type="button"
+                        variant="ghost"
+                        className="size-7 gap-x-2 text-sm"
+                      >
+                        <EllipsisIcon size={16} className="text-primary/60" />
+                      </Button>
+                      <Button
+                        size="icon"
+                        type="button"
+                        variant="ghost"
+                        className="size-7 gap-x-2 text-sm"
+                      >
+                        <HeartIcon size={16} className="text-primary/60" />
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-row items-center gap-1.5 pl-8">
                     <FormField
                       control={form.control}
-                      name="title"
+                      name="description"
                       render={({ field }) => (
                         <FormItem className="grow space-y-0">
-                          <FormLabel className="sr-only">Text</FormLabel>
+                          <FormLabel className="sr-only">Description</FormLabel>
                           <FormControl>
-                            <Input
+                            <Textarea
                               {...field}
                               autoComplete="off"
-                              maxLength={100}
-                              autoFocus
-                              placeholder="Paste a link or write a todo"
-                              className="h-6 border-none p-1.5 font-medium placeholder:text-primary/40 focus-visible:outline-none focus-visible:ring-0"
+                              placeholder="Description (optional)"
+                              className="h-6 border-none p-1.5 text-xs font-medium placeholder:text-primary/40 focus-visible:outline-none focus-visible:ring-0"
                             />
                           </FormControl>
                         </FormItem>
                       )}
                     />
                   </div>
+                </div>
+              </div>
 
+              <div className="flex flex-auto flex-row items-center justify-between gap-2 border-t border-primary/5 px-3 py-2">
+                <div className="flex flex-row items-center gap-0.5">
                   <div className="flex min-w-0 shrink-0 cursor-pointer select-none flex-row">
+                    <TopicSelector />
+                  </div>
+                </div>
+                <div className="flex w-auto items-center justify-end">
+                  <div className="flex min-w-0 shrink-0 cursor-pointer select-none flex-row gap-x-2">
                     <Button
-                      size="icon"
+                      size="sm"
                       type="button"
                       variant="ghost"
-                      className="size-7 gap-x-2 text-sm"
+                      onClick={handleCancel}
                     >
-                      <EllipsisIcon size={16} className="text-primary/60" />
+                      Cancel
                     </Button>
-                    <Button
-                      size="icon"
-                      type="button"
-                      variant="ghost"
-                      className="size-7 gap-x-2 text-sm"
-                    >
-                      <HeartIcon size={16} className="text-primary/60" />
+                    <Button size="sm" disabled={isFetching}>
+                      Save
                     </Button>
                   </div>
                 </div>
-
-                <div className="flex flex-row items-center gap-1.5 pl-8">
-                  <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                      <FormItem className="grow space-y-0">
-                        <FormLabel className="sr-only">Description</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            {...field}
-                            autoComplete="off"
-                            placeholder="Description (optional)"
-                            className="h-6 border-none p-1.5 text-xs font-medium placeholder:text-primary/40 focus-visible:outline-none focus-visible:ring-0"
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                </div>
               </div>
-            </div>
-
-            <div className="flex flex-auto flex-row items-center justify-between gap-2 border-t border-primary/5 px-3 py-2">
-              <div className="flex flex-row items-center gap-0.5">
-                <div className="flex min-w-0 shrink-0 cursor-pointer select-none flex-row">
-                  <TopicSelector />
-                </div>
-              </div>
-              <div className="flex w-auto items-center justify-end">
-                <div className="flex min-w-0 shrink-0 cursor-pointer select-none flex-row gap-x-2">
-                  <Button
-                    size="sm"
-                    type="button"
-                    variant="ghost"
-                    onClick={handleCancel}
-                  >
-                    Cancel
-                  </Button>
-                  <Button size="sm" disabled={isFetching}>
-                    Save
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </form>
-        </Form>
+            </form>
+          </Form>
+        </div>
       </div>
-    </div>
-  )
-}
+    )
+  }
+)

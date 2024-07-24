@@ -45,7 +45,7 @@ export class TodoItem extends CoMap {
   meta? = co.ref(UserLink)
 }
 
-class ListOfPersonalTodoItems extends CoList.Of(co.ref(TodoItem)) {}
+export class ListOfPersonalTodoItems extends CoList.Of(co.ref(TodoItem)) {}
 
 class ListOfGlobalLinks extends CoList.Of(co.ref(GlobalLink)) {}
 class ListOfPersonalLinks extends CoList.Of(co.ref(PersonalLink)) {}
