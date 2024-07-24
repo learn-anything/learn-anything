@@ -24,14 +24,19 @@ import {
 import { CSS } from "@dnd-kit/utilities"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { TodoItem } from "@/lib/schema"
+import { useAtom } from "jotai"
+import { linkSortAtom } from "@/store/link"
 
 interface SortableItemProps {
   todoItem: TodoItem
   index: number
   onCheck: (index: number) => void
+  disabled?: boolean
 }
 
 export const LinkList = () => {
+  const [sort, setSort] = useAtom(linkSortAtom)
+  const [draggingId, setDraggingId] = React.useState<string | null>(null)
   const { me } = useAccount({
     root: { todos: [] }
   })
@@ -42,6 +47,11 @@ export const LinkList = () => {
       coordinateGetter: sortableKeyboardCoordinates
     })
   )
+
+  const handleDragStart = (event: any) => {
+    const { active } = event
+    setDraggingId(active.id)
+  }
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
@@ -71,18 +81,27 @@ export const LinkList = () => {
     }
   }
 
+  let sortedTodos =
+    sort === "title" && me?.root.todos
+      ? [...me?.root.todos].sort((a, b) =>
+          (a?.title || "").localeCompare(b?.title || "")
+        )
+      : me?.root.todos
+  sortedTodos = sortedTodos || []
+
   return (
     <DndContext
       sensors={sensors}
       collisionDetection={closestCenter}
+      onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
       <SortableContext
-        items={me?.root.todos?.map((item) => item?.id || "") || []}
+        items={sortedTodos.map((item) => item?.id || "") || []}
         strategy={verticalListSortingStrategy}
       >
         <ul role="list" className="divide-y divide-primary/5">
-          {me?.root.todos?.map(
+          {sortedTodos.map(
             (todoItem, index) =>
               todoItem && (
                 <SortableItem
@@ -90,6 +109,7 @@ export const LinkList = () => {
                   todoItem={todoItem}
                   index={index}
                   onCheck={toggleCheck}
+                  disabled={sort !== "manual"}
                 />
               )
           )}
@@ -102,10 +122,11 @@ export const LinkList = () => {
 const SortableItem: React.FC<SortableItemProps> = ({
   todoItem,
   index,
-  onCheck
+  onCheck,
+  disabled = false
 }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: todoItem.id || "" })
+    useSortable({ id: todoItem.id, disabled })
 
   const style = {
     transform: CSS.Transform.toString(transform),
