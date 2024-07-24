@@ -1,62 +1,55 @@
 "use client"
 
 import { useAccount } from "@/lib/providers/jazz-provider"
-import { Sidebar } from "@/components/custom/sidebar"
 import { Icons } from "next/dist/lib/metadata/types/metadata-types"
-// import { IoSearch, IoCloseOutline } from "react-icons/io5"
+import { IoSearch, IoCloseOutline } from "react-icons/io5"
 
 export const SearchWrapper = () => {
   const account = useAccount()
-  return (
-    <div className="box-border flex h-screen w-screen overflow-hidden text-white">
-      <div className="w-1/7 mr-2">
-        {" "}
-        <Sidebar />{" "}
-      </div>
-      <div className="mr-2 mt-2 flex h-full w-full justify-center rounded-[20px] border border-white/10">
-        <div className="w-[55%]">
-          <div className="relative mb-2 mt-5 flex w-full flex-row items-center transition-colors duration-300 hover:text-white/60">
-            {/* <IoSearch className="absolute left-2 text-white/30" size={20} /> */}
-            <input
-              type="text"
-              autoFocus
-              className="w-full rounded-[10px] bg-[#16181d] py-3 pl-10 pr-10 font-light tracking-wider text-white/70 outline-none placeholder:font-light placeholder:text-white/30"
-              placeholder="Search..."
-            />
-            {/* <IoCloseOutline
-              className="absolute right-2 text-white/30"
-              size={20}
-            /> */}
-          </div>
-          <div className="mx-auto my-5 justify-center space-y-1">
-            <p className="pb-3 pl-2 text-base font-light text-white/50">
-              Topics <span className="text-white/70">1</span>
-            </p>
-            <ProfileTopics topic="Figma" />
-          </div>
 
-          <div className="mx-auto my-5 justify-center space-y-1">
-            <p className="pb-3 pl-2 text-base font-light text-white/50">
-              Links <span className="text-white/70">3</span>
-            </p>
-            <ProfileLinks
-              linklabel="Figma"
-              link="https://figma.com"
-              topic="Figma"
-            />
-            <ProfileLinks
-              linklabel="Figma"
-              link="https://figma.com"
-              topic="Figma"
-            />
-            <ProfileLinks
-              linklabel="Figma"
-              link="https://figma.com"
-              topic="Figma"
-            />
-          </div>
+  // todo: remove Y scroll
+  return (
+    <div className="box-border flex h-screen w-screen justify-center overflow-hidden">
+      <div className="w-[55%] max-w-5xl">
+        <div className="relative mb-2 mt-5 flex w-full flex-row items-center transition-colors duration-300 hover:text-white/60">
+          <IoSearch className="absolute left-2 text-white/30" size={20} />
+          <input
+            type="text"
+            autoFocus
+            className="w-full rounded-[10px] bg-[#16181d] p-10 py-3 font-light tracking-wider opacity-70 outline-none placeholder:font-light placeholder:text-white/30"
+            placeholder="Search..."
+          />
+          <IoCloseOutline className="absolute right-2 opacity-30" size={20} />
+        </div>
+        <div className="mx-auto my-5 justify-center space-y-1">
+          <p className="pb-3 pl-2 text-base font-light opacity-50">
+            Topics <span className="opacity-70">1</span>
+          </p>
+          <ProfileTopics topic="Figma" />
+        </div>
+
+        <div className="mx-auto my-5 justify-center space-y-1">
+          <p className="pb-3 pl-2 text-base font-light opacity-50">
+            Links <span className="text-white/70">3</span>
+          </p>
+          <ProfileLinks
+            linklabel="Figma"
+            link="https://figma.com"
+            topic="Figma"
+          />
+          <ProfileLinks
+            linklabel="Figma"
+            link="https://figma.com"
+            topic="Figma"
+          />
+          <ProfileLinks
+            linklabel="Figma"
+            link="https://figma.com"
+            topic="Figma"
+          />
         </div>
       </div>
+      {/* </div> */}
     </div>
   )
 }

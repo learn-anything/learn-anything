@@ -117,27 +117,32 @@ export const Sidebar: React.FC = () => {
   )
 }
 
-const LogoAndSearch: React.FC = () => (
-  <div className="px-3.5">
-    <div className="mb-1 mt-2 flex h-10 max-w-full items-center">
-      <Link href="/" className="px-2">
-        <Logo className="size-7" />
-      </Link>
-      <div className="flex min-w-2 grow flex-row" />
-      <Link href="/search">
-        <Button
-          size="icon"
-          variant="secondary"
-          aria-label="Search"
-          type="button"
-          className="text-primary/60"
-        >
-          <SearchIcon size={16} />
-        </Button>
-      </Link>
+const LogoAndSearch: React.FC = () => {
+  const pathname = usePathname()
+  return (
+    <div className="px-3.5">
+      <div className="mb-1 mt-2 flex h-10 max-w-full items-center">
+        <Link href="/links" className="px-2">
+          <Logo className="size-7" />
+        </Link>
+        <div className="flex min-w-2 grow flex-row" />
+        {pathname !== "/search" && (
+          <Link href="/search">
+            <Button
+              size="icon"
+              variant="secondary"
+              aria-label="Search"
+              type="button"
+              className="text-primary/60"
+            >
+              <SearchIcon size={16} />
+            </Button>
+          </Link>
+        )}
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
 const Pages: React.FC = () => (
   <div className="-ml-2">
