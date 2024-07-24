@@ -11,7 +11,7 @@ export const ContentHeader = ({
   children,
   title
 }: {
-  children: React.ReactNode
+  children?: React.ReactNode
   title?: string
 }) => {
   const [isCollapse] = useAtom(isCollapseAtom)
