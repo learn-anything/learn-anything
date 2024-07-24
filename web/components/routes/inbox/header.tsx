@@ -4,6 +4,7 @@ import { ListFilterIcon, PlusIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { ContentHeader } from "@/components/custom/content-header"
+import { useMedia } from "react-use"
 
 interface TabItemProps {
   url: string
@@ -13,12 +14,22 @@ interface TabItemProps {
 const TABS = ["All", "Links", "Todos", "Topics"]
 
 export const InboxHeader = () => {
+  const isTablet = useMedia("(max-width: 1024px)")
+
   return (
-    <ContentHeader title="Inbox">
-      <Tabs />
-      <div className="flex flex-auto"></div>
-      <FilterAndSort />
-    </ContentHeader>
+    <>
+      <ContentHeader title="Inbox">
+        {!isTablet && <Tabs />}
+        <div className="flex flex-auto"></div>
+        <FilterAndSort />
+      </ContentHeader>
+
+      {isTablet && (
+        <div className="flex min-h-10 flex-row items-start justify-between border-b border-b-primary/5 py-2 pl-8 pr-6 max-lg:pl-4 max-lg:pr-5">
+          <Tabs />
+        </div>
+      )}
+    </>
   )
 }
 
