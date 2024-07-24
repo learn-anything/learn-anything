@@ -6,6 +6,7 @@ import { ListFilterIcon, PanelLeftIcon, PlusIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Separator } from "@/components/ui/separator"
+import { useMedia } from "react-use"
 
 interface TabItemProps {
   url: string
@@ -28,13 +29,14 @@ export const InboxContentHeader = () => {
 const TitleAndActions = () => {
   const [isCollapse] = useAtom(isCollapseAtom)
   const [, toogle] = useAtom(toggleCollapseAtom)
+  const isTablet = useMedia("(max-width: 1024px)")
 
   return (
     <div
       className="flex min-h-10 min-w-0 shrink-0 items-center gap-1.5"
       style={{ maxWidth: "50%" }}
     >
-      {isCollapse && (
+      {(isCollapse || isTablet) && (
         <>
           <Button
             type="button"

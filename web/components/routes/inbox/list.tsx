@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useCallback, useRef } from "react"
+import React, { useRef } from "react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { LinkIcon } from "lucide-react"
 import Link from "next/link"

@@ -1,29 +1,25 @@
 "use client"
 
+import * as React from "react"
+import { useEffect } from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { useMedia } from "react-use"
+import { useAtom } from "jotai"
+import { ChevronDownIcon, InboxIcon, SearchIcon } from "lucide-react"
+
 import { Logo } from "@/components/custom/logo"
 import { Button } from "@/components/ui/button"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { cn } from "@/lib/utils"
-import * as React from "react"
-import { ChevronDownIcon, InboxIcon, SearchIcon } from "lucide-react"
-import Link from "next/link"
-import { useAtom } from "jotai"
 import { isCollapseAtom } from "@/store/sidebar"
-import { usePathname } from "next/navigation"
-import { useMedia } from "react-use"
-
-interface SidebarItemProps {
-  label: string
-  url: string
-  icon?: React.ReactNode | string
-}
 
 const PAGES = [
   "EP 2024",
   "Ableton 12",
   "Householding",
   "ADHD",
-  "Javscript",
+  "Javascript",
   "Hiring",
   "IOS",
   "Drugs",
@@ -32,120 +28,139 @@ const PAGES = [
   "Java",
   "Design"
 ]
+interface SidebarItemProps {
+  label: string
+  url: string
+  icon?: React.ReactNode
+}
 
-export const Sidebar = () => {
+export const Sidebar: React.FC = () => {
   const account = useAccount()
-  const [isCollapse, setIsCollapse] = useAtom(isCollapseAtom)
+  const [isCollapsed, setIsCollapsed] = useAtom(isCollapseAtom)
   const isTablet = useMedia("(max-width: 1024px)")
 
-  React.useEffect(() => {
-    setIsCollapse(isTablet)
-  }, [isTablet, setIsCollapse])
+  useEffect(() => {
+    setIsCollapsed(isTablet)
+  }, [isTablet, setIsCollapsed])
 
-  return (
-    <div>
+  const sidebarContent = (
+    <nav className="relative flex h-full w-full shrink-0 flex-col bg-background">
+      <div className={cn({ "pt-12": !isCollapsed && isTablet })}>
+        <LogoAndSearch />
+      </div>
       <div
-        className={cn("h-full transition-[width]", {
-          "w-56": !isCollapse,
-          "w-0": isCollapse
-        })}
-      ></div>
-      <div
-        className={cn("fixed inset-y-0 z-[96] transition-all", {
-          "-left-80 w-auto": isCollapse,
-          "left-0 w-56": !isCollapse
-        })}
+        tabIndex={-1}
+        className="relative mb-0.5 mt-1.5 flex grow flex-col overflow-y-auto rounded-md px-3.5"
       >
-        <nav className="relative flex h-full shrink-0 flex-col transition-opacity">
-          <LogoAndSearch />
-
-          <div
-            tabIndex={-1}
-            className="relative mb-0.5 mt-1.5 flex grow flex-col overflow-y-auto rounded-md px-3.5"
-          >
-            <SidebarItem
-              url="/inbox"
-              label="Inbox"
-              icon={<InboxIcon size={16} />}
-            />
-
-            <div className="h-2 shrink-0"></div>
-
-            <Pages />
-          </div>
-          <div
-            className="sc-hLtZSE kiTTnM sc-eCA-dml kRVpwE"
-            style={{ right: "-5px", top: "14px", bottom: "14px" }}
-          ></div>
-        </nav>
+        <SidebarItem
+          url="/inbox"
+          label="Inbox"
+          icon={<InboxIcon size={16} />}
+        />
+        <div className="h-2 shrink-0" />
+        <Pages />
       </div>
-    </div>
+    </nav>
   )
-}
 
-const LogoAndSearch = () => {
-  return (
-    <div className="px-3.5">
-      <div className="mb-1 mt-2 flex h-10 max-w-full items-center">
-        <div className="flex min-w-0">
-          <Link href="/" className="px-2">
-            <Logo className="size-7" />
-          </Link>
-        </div>
-
-        <div className="flex min-w-2 grow flex-row"></div>
-
-        <div className="flex flex-row items-center gap-2">
-          <Link href="/search">
-            <Button
-              size="icon"
-              variant="secondary"
-              aria-label="Search"
-              type="button"
-              className="text-primary/60"
-            >
-              <SearchIcon size={16} />
-            </Button>
-          </Link>
-        </div>
-      </div>
-    </div>
+  const sidebarClasses = cn(
+    "h-full overflow-hidden transition-all duration-300 ease-in-out",
+    isCollapsed ? "w-0" : "w-auto min-w-56"
   )
-}
 
-const Pages = () => {
-  return (
-    <div className="-ml-2">
-      <div className="mb-0.5 ml-2 mt-2 flex cursor-pointer flex-row items-center justify-between rounded-md hover:bg-primary/10">
+  const sidebarInnerClasses = cn(
+    "h-full w-auto min-w-56 transition-transform duration-300 ease-in-out",
+    isCollapsed ? "-translate-x-full" : "translate-x-0"
+  )
+
+  if (isTablet) {
+    return (
+      <>
         <div
-          role="button"
-          tabIndex={0}
-          className="flex h-6 grow items-center gap-x-0.5 self-start rounded-md px-1 text-xs font-medium text-primary/50"
+          className={cn(
+            "fixed inset-0 z-30 bg-black/40 transition-opacity duration-300",
+            isCollapsed ? "pointer-events-none opacity-0" : "opacity-100"
+          )}
+          onClick={() => setIsCollapsed(true)}
+        />
+        <div
+          className={cn(
+            "fixed left-0 top-0 z-40 h-full",
+            sidebarClasses,
+            !isCollapsed &&
+              "shadow-[4px_0px_16px_rgba(0,0,0,0.1)] transition-all"
+          )}
         >
-          <span>Pages</span>
-          <ChevronDownIcon size={16} />
+          <div
+            className={cn(sidebarInnerClasses, "border-r border-r-primary/5")}
+          >
+            {sidebarContent}
+          </div>
         </div>
-      </div>
+      </>
+    )
+  }
 
-      <div className="relative shrink-0">
-        <div aria-hidden="false" className="ml-2 shrink-0 pb-2">
-          {PAGES.map((page) => (
-            <SidebarItem key={page} url="/" label={page} />
-          ))}
-        </div>
-      </div>
+  return (
+    <div className={sidebarClasses}>
+      <div className={sidebarInnerClasses}>{sidebarContent}</div>
     </div>
   )
 }
 
-const SidebarItem = ({ label, url, icon }: SidebarItemProps) => {
+const LogoAndSearch: React.FC = () => (
+  <div className="px-3.5">
+    <div className="mb-1 mt-2 flex h-10 max-w-full items-center">
+      <Link href="/" className="px-2">
+        <Logo className="size-7" />
+      </Link>
+      <div className="flex min-w-2 grow flex-row" />
+      <Link href="/search">
+        <Button
+          size="icon"
+          variant="secondary"
+          aria-label="Search"
+          type="button"
+          className="text-primary/60"
+        >
+          <SearchIcon size={16} />
+        </Button>
+      </Link>
+    </div>
+  </div>
+)
+
+const Pages: React.FC = () => (
+  <div className="-ml-2">
+    <div className="mb-0.5 ml-2 mt-2 flex cursor-pointer flex-row items-center justify-between rounded-md hover:bg-primary/10">
+      <div
+        role="button"
+        tabIndex={0}
+        className="flex h-6 grow items-center gap-x-0.5 self-start rounded-md px-1 text-xs font-medium text-primary/50"
+      >
+        <span>Pages</span>
+        <ChevronDownIcon size={16} />
+      </div>
+    </div>
+    <div className="relative shrink-0">
+      <div aria-hidden="false" className="ml-2 shrink-0 pb-2">
+        {PAGES.map((page) => (
+          <SidebarItem key={page} url="/" label={page} />
+        ))}
+      </div>
+    </div>
+  </div>
+)
+
+const SidebarItem: React.FC<SidebarItemProps> = ({ label, url, icon }) => {
   const pathname = usePathname()
+  const isActive = pathname === url
 
   return (
     <div
       className={cn("group relative my-0.5 rounded-md", {
-        "bg-secondary/80": pathname === url,
-        "hover:bg-secondary/40": pathname !== url
+        "bg-secondary/80": isActive,
+        "hover:bg-secondary/40": !isActive
       })}
     >
       <Link
@@ -156,15 +171,12 @@ const SidebarItem = ({ label, url, icon }: SidebarItemProps) => {
           <span
             className={cn(
               "mr-2 size-4 text-primary/60 group-hover:text-primary",
-              {
-                "text-primary": pathname === url
-              }
+              { "text-primary": isActive }
             )}
           >
             {icon}
           </span>
         )}
-
         <span>{label}</span>
       </Link>
     </div>
