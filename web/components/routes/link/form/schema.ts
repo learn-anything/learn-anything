@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const createInboxSchema = z.object({
+export const createLinkSchema = z.object({
   title: z
     .string({
       message: "Please enter a valid title"

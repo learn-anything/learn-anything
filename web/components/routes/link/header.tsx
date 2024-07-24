@@ -11,14 +11,14 @@ interface TabItemProps {
   label: string
 }
 
-const TABS = ["All", "Links", "Todos", "Topics"]
+const TABS = ["All", "Learning", "To Learn", "Learned"]
 
-export const InboxHeader = () => {
+export const LinkHeader = () => {
   const isTablet = useMedia("(max-width: 1024px)")
 
   return (
     <>
-      <ContentHeader title="Inbox">
+      <ContentHeader title="Link">
         {!isTablet && <Tabs />}
         <div className="flex flex-auto"></div>
         <FilterAndSort />

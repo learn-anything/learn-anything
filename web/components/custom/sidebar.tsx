@@ -5,7 +5,7 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useMedia } from "react-use"
 import { useAtom } from "jotai"
-import { ChevronDownIcon, InboxIcon, SearchIcon } from "lucide-react"
+import { ChevronDownIcon, LinkIcon, SearchIcon } from "lucide-react"
 
 import { Logo } from "@/components/custom/logo"
 import { Button } from "@/components/ui/button"
@@ -61,9 +61,9 @@ export const Sidebar: React.FC = () => {
           className="relative mb-0.5 mt-1.5 flex grow flex-col overflow-y-auto rounded-md px-3.5"
         >
           <SidebarItem
-            url="/inbox"
-            label="Inbox"
-            icon={<InboxIcon size={16} />}
+            url="/links"
+            label="Links"
+            icon={<LinkIcon size={16} />}
           />
           <div className="h-2 shrink-0" />
           <Pages />

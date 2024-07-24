@@ -20,8 +20,8 @@ interface SortableItemProps {
   onCheck: (index: number) => void
 }
 
-export const InboxList = () => {
-  const { me, logOut } = useAccount({
+export const LinkList = () => {
+  const { me } = useAccount({
     root: { todos: [] }
   })
 

@@ -1,36 +1,15 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
 import React, { useState, useEffect } from "react"
-import {
-  BoxIcon,
-  CheckIcon,
-  ChevronDownIcon,
-  CircleXIcon,
-  PlusIcon
-} from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { cn, ensureUrlProtocol, isUrl as LibIsUrl } from "@/lib/utils"
-import { useAccount } from "@/lib/providers/jazz-provider"
-import { TodoItem, UserLink } from "@/lib/schema"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { useDebounce } from "react-use"
-import { createInboxSchema } from "./schema"
 import { toast } from "sonner"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from "@/components/ui/popover"
-import {
-  Command,
-  CommandInput,
-  CommandItem,
-  CommandList
-} from "@/components/ui/command"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import Image from "next/image"
+import { z } from "zod"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Form,
   FormField,
@@ -38,12 +17,23 @@ import {
   FormLabel,
   FormControl
 } from "@/components/ui/form"
-import Image from "next/image"
-import { Textarea } from "@/components/ui/textarea"
+import {
+  BoxIcon,
+  CheckIcon,
+  CircleXIcon,
+  EllipsisIcon,
+  HeartIcon,
+  PlusIcon
+} from "lucide-react"
+import { cn, ensureUrlProtocol, isUrl as LibIsUrl } from "@/lib/utils"
+import { useAccount } from "@/lib/providers/jazz-provider"
+import { TodoItem, UserLink } from "@/lib/schema"
+import { createLinkSchema } from "./schema"
+import { TopicSelector } from "./partial/topic-section"
 
-export type InboxFormValues = z.infer<typeof createInboxSchema>
+export type LinkFormValues = z.infer<typeof createLinkSchema>
 
-const defaultValues: Partial<InboxFormValues> = {
+const DEFAULT_FORM_VALUES: Partial<LinkFormValues> = {
   title: "",
   description: "",
   topic: "",
@@ -51,48 +41,50 @@ const defaultValues: Partial<InboxFormValues> = {
   meta: null
 }
 
-export const InboxManage = () => {
-  const [showCreate, setShowCreate] = useState(false)
-  const { me, logOut } = useAccount()
+const LinkContext = React.createContext<{
+  showCreate: boolean
+  setShowCreate: (value: boolean) => void
+}>({
+  showCreate: false,
+  setShowCreate: () => {}
+})
 
-  const deleteAllTodos = () => {
-    me.root?.todos?.splice(0, me.root.todos.length)
-  }
+export const LinkManage: React.FC = () => {
+  const [showCreate, setShowCreate] = useState(false)
 
   return (
-    <>
-      {showCreate && <CreateContent onCreate={() => setShowCreate(false)} />}
-
-      <Button
-        className={cn(
-          "absolute bottom-4 right-4 size-12 rounded-full bg-[#274079] p-0 text-white transition-transform hover:bg-[#274079]/90",
-          { "rotate-45 transform": showCreate }
-        )}
+    <LinkContext.Provider value={{ showCreate, setShowCreate }}>
+      {showCreate && <CreateForm />}
+      <CreateButton
         onClick={() => setShowCreate((prev) => !prev)}
-      >
-        <PlusIcon className="size-6" />
-      </Button>
-    </>
+        isOpen={showCreate}
+      />
+    </LinkContext.Provider>
   )
 }
 
-const topics = [
-  {
-    id: "1",
-    name: "Work"
-  },
-  {
-    id: "2",
-    name: "Personal"
-  }
-]
+const CreateButton: React.FC<{ onClick: () => void; isOpen: boolean }> = ({
+  onClick,
+  isOpen
+}) => (
+  <Button
+    className={cn(
+      "absolute bottom-4 right-4 size-12 rounded-full bg-[#274079] p-0 text-white transition-transform hover:bg-[#274079]/90",
+      { "rotate-45 transform": isOpen }
+    )}
+    onClick={onClick}
+  >
+    <PlusIcon className="size-6" />
+  </Button>
+)
 
-const CreateContent: React.FC<{ onCreate?: () => void }> = ({ onCreate }) => {
+const CreateForm: React.FC<{ onCreate?: () => void }> = ({ onCreate }) => {
+  const { setShowCreate } = React.useContext(LinkContext)
   const [isFetching, setIsFetching] = useState(false)
   const { me } = useAccount()
-  const form = useForm<InboxFormValues>({
-    resolver: zodResolver(createInboxSchema),
-    defaultValues
+  const form = useForm<LinkFormValues>({
+    resolver: zodResolver(createLinkSchema),
+    defaultValues: DEFAULT_FORM_VALUES
   })
 
   const title = form.watch("title")
@@ -100,21 +92,15 @@ const CreateContent: React.FC<{ onCreate?: () => void }> = ({ onCreate }) => {
   useDebounce(() => setDebouncedText(title), 300, [title])
 
   useEffect(() => {
-    const fetchData = async (url: string) => {
+    const fetchMetadata = async (url: string) => {
       setIsFetching(true)
-
       try {
         const res = await fetch(
           `/api/metadata?url=${encodeURIComponent(url)}`,
           { cache: "force-cache" }
         )
-
-        if (!res.ok) {
-          throw new Error("Failed to fetch metadata")
-        }
-
+        if (!res.ok) throw new Error("Failed to fetch metadata")
         const data = await res.json()
-
         form.setValue("isLink", true)
         form.setValue("meta", data)
         form.setValue("title", data.title)
@@ -134,14 +120,12 @@ const CreateContent: React.FC<{ onCreate?: () => void }> = ({ onCreate }) => {
     }
 
     const lowerText = debouncedText.toLowerCase()
-    const isUrl = LibIsUrl(lowerText)
-
-    if (isUrl) {
-      fetchData(ensureUrlProtocol(lowerText))
+    if (LibIsUrl(lowerText)) {
+      fetchMetadata(ensureUrlProtocol(lowerText))
     }
   }, [debouncedText, form])
 
-  const onSubmit = (values: InboxFormValues) => {
+  const onSubmit = (values: LinkFormValues) => {
     if (isFetching) return
 
     try {
@@ -155,7 +139,6 @@ const CreateContent: React.FC<{ onCreate?: () => void }> = ({ onCreate }) => {
         {
           title: values.title,
           description: values.description,
-          // topic: useCoState(GlobalTopic, values.topic),
           sequence: me.root?.todos?.length || 1,
           completed: false,
           isLink: values.isLink,
@@ -166,7 +149,7 @@ const CreateContent: React.FC<{ onCreate?: () => void }> = ({ onCreate }) => {
 
       me.root?.todos?.push(newTodo)
 
-      form.reset(defaultValues)
+      form.reset(DEFAULT_FORM_VALUES)
       onCreate?.()
 
       toast.success("Todo created", {
@@ -181,6 +164,11 @@ const CreateContent: React.FC<{ onCreate?: () => void }> = ({ onCreate }) => {
     }
   }
 
+  const handleCancel = () => {
+    form.reset(DEFAULT_FORM_VALUES)
+    setShowCreate(false)
+  }
+
   return (
     <div className="p-3 transition-all">
       <div className="rounded-md border border-primary/5 bg-primary/5">
@@ -192,7 +180,6 @@ const CreateContent: React.FC<{ onCreate?: () => void }> = ({ onCreate }) => {
             <div className="flex flex-row p-3">
               <div className="flex flex-auto flex-col gap-1.5">
                 <div className="flex flex-row items-start justify-between">
-                  {/* text */}
                   <div className="flex grow flex-row items-center gap-1.5">
                     <Button
                       type="button"
@@ -235,8 +222,7 @@ const CreateContent: React.FC<{ onCreate?: () => void }> = ({ onCreate }) => {
                     />
                   </div>
 
-                  {/* actions */}
-                  {/* <div className="flex min-w-0 shrink-0 cursor-pointer select-none flex-row">
+                  <div className="flex min-w-0 shrink-0 cursor-pointer select-none flex-row">
                     <Button
                       size="icon"
                       type="button"
@@ -253,10 +239,9 @@ const CreateContent: React.FC<{ onCreate?: () => void }> = ({ onCreate }) => {
                     >
                       <HeartIcon size={16} className="text-primary/60" />
                     </Button>
-                  </div> */}
+                  </div>
                 </div>
 
-                {/* description */}
                 <div className="flex flex-row items-center gap-1.5 pl-8">
                   <FormField
                     control={form.control}
@@ -282,78 +267,17 @@ const CreateContent: React.FC<{ onCreate?: () => void }> = ({ onCreate }) => {
             <div className="flex flex-auto flex-row items-center justify-between gap-2 border-t border-primary/5 px-3 py-2">
               <div className="flex flex-row items-center gap-0.5">
                 <div className="flex min-w-0 shrink-0 cursor-pointer select-none flex-row">
-                  <FormField
-                    control={form.control}
-                    name="topic"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="sr-only">Topic</FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                size="sm"
-                                type="button"
-                                role="combobox"
-                                variant="secondary"
-                                className="gap-x-2 text-sm text-primary/60"
-                              >
-                                <span className="truncate">
-                                  {field.value
-                                    ? topics.find(
-                                        (topic) => topic.name === field.value
-                                      )?.name
-                                    : "Select topic"}
-                                </span>
-                                <ChevronDownIcon size={16} />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent
-                            className="w-52 rounded-lg p-0"
-                            side="right"
-                            align="start"
-                          >
-                            <Command>
-                              <CommandInput
-                                placeholder="Search topic..."
-                                className="h-9"
-                              />
-                              <CommandList>
-                                <ScrollArea>
-                                  {topics.map((topic) => (
-                                    <CommandItem
-                                      key={topic.id}
-                                      value={topic.name}
-                                      onSelect={(value) => {
-                                        form.setValue("topic", value)
-                                      }}
-                                    >
-                                      {topic.name}
-                                      <CheckIcon
-                                        size={16}
-                                        className={cn(
-                                          "absolute right-3",
-                                          topic.name === field.value
-                                            ? "text-primary"
-                                            : "text-transparent"
-                                        )}
-                                      />
-                                    </CommandItem>
-                                  ))}
-                                </ScrollArea>
-                              </CommandList>
-                            </Command>
-                          </PopoverContent>
-                        </Popover>
-                      </FormItem>
-                    )}
-                  />
+                  <TopicSelector />
                 </div>
               </div>
               <div className="flex w-auto items-center justify-end">
                 <div className="flex min-w-0 shrink-0 cursor-pointer select-none flex-row gap-x-2">
-                  <Button size="sm" type="button" variant="ghost">
+                  <Button
+                    size="sm"
+                    type="button"
+                    variant="ghost"
+                    onClick={handleCancel}
+                  >
                     Cancel
                   </Button>
                   <Button size="sm" disabled={isFetching}>
