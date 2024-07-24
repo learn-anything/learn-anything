@@ -18,5 +18,8 @@
 		"printWidth": 120,
 		"arrowParens": "avoid"
 	},
-	"private": true
+	"private": true,
+	"dependencies": {
+		"react-icons": "^5.2.1"
+	}
 }
