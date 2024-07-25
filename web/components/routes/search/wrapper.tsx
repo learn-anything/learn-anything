@@ -1,5 +1,5 @@
 "use client"
-
+import { useState } from "react"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { Icons } from "next/dist/lib/metadata/types/metadata-types"
 import { IoSearch, IoCloseOutline } from "react-icons/io5"
@@ -7,6 +7,11 @@ import { SearchHeader } from "./header"
 
 export const SearchWrapper = () => {
   const account = useAccount()
+  const [searchText, setSearchText] = useState("")
+
+  const clearSearch = () => {
+    setSearchText("")
+  }
 
   // todo: remove Y scroll
   return (
@@ -20,10 +25,18 @@ export const SearchWrapper = () => {
             <input
               type="text"
               autoFocus
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
               className="w-full rounded-[10px] bg-[#16181d] p-10 py-3 font-light tracking-wider opacity-70 outline-none placeholder:font-light placeholder:text-white/30"
               placeholder="Search..."
             />
-            <IoCloseOutline className="absolute right-2 opacity-30" size={20} />
+            {searchText && (
+              <IoCloseOutline
+                className="absolute right-2 cursor-pointer opacity-30"
+                size={20}
+                onClick={clearSearch}
+              />
+            )}
           </div>
           <div className="mx-auto my-5 justify-center space-y-1">
             <p className="pb-3 pl-2 text-base font-light opacity-50">
