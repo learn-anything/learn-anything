@@ -2,7 +2,7 @@
 import { useState } from "react"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { IoSearch, IoCloseOutline, IoChevronForward } from "react-icons/io5"
-// import { SearchHeader } from "./header"
+import AiSearch from "../../custom/ai-search"
 
 interface ProfileTopicsProps {
   topic: string
@@ -64,9 +64,18 @@ const ProfileLinks: React.FC<ProfileLinksProps> = ({
 export const SearchWrapper = () => {
   const account = useAccount()
   const [searchText, setSearchText] = useState("")
+  const [aiSearch, setAiSearch] = useState("")
+  const [showAiSearch, setShowAiSearch] = useState(false)
 
   const clearSearch = () => {
     setSearchText("")
+  }
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && searchText.trim() !== "") {
+      setShowAiSearch(true)
+      setAiSearch(searchText)
+    }
   }
 
   return (
@@ -81,6 +90,7 @@ export const SearchWrapper = () => {
               autoFocus
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
+              onKeyPress={handleKeyPress}
               className="w-full rounded-[10px] bg-[#16181d] p-10 py-3 pl-10 pr-3 font-semibold tracking-wider text-white outline-none placeholder:font-light placeholder:text-white/30"
               placeholder="Search..."
             />
@@ -92,29 +102,39 @@ export const SearchWrapper = () => {
               />
             )}
           </div>
-          <div className="my-5 space-y-1">
-            <ProfileTitle topicTitle="Topics" spanNumber={1} />
-            <ProfileTopics topic="Figma" />
-          </div>
+          {showAiSearch ? (
+            <div className="relative w-full">
+              <div className="absolute left-1/2 w-[110%] -translate-x-1/2">
+                <AiSearch />
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="my-5 space-y-1">
+                <ProfileTitle topicTitle="Topics" spanNumber={1} />
+                <ProfileTopics topic="Figma" />
+              </div>
 
-          <div className="my-5 space-y-1">
-            <ProfileTitle topicTitle="Links" spanNumber={3} />
-            <ProfileLinks
-              linklabel="Figma"
-              link="https://figma.com"
-              topic="Figma"
-            />
-            <ProfileLinks
-              linklabel="Figma"
-              link="https://figma.com"
-              topic="Figma"
-            />
-            <ProfileLinks
-              linklabel="Figma"
-              link="https://figma.com"
-              topic="Figma"
-            />
-          </div>
+              <div className="my-5 space-y-1">
+                <ProfileTitle topicTitle="Links" spanNumber={3} />
+                <ProfileLinks
+                  linklabel="Figma"
+                  link="https://figma.com"
+                  topic="Figma"
+                />
+                <ProfileLinks
+                  linklabel="Figma"
+                  link="https://figma.com"
+                  topic="Figma"
+                />
+                <ProfileLinks
+                  linklabel="Figma"
+                  link="https://figma.com"
+                  topic="Figma"
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
