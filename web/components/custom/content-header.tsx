@@ -18,6 +18,12 @@ export const ContentHeader = ({
   const [, toogle] = useAtom(toggleCollapseAtom)
   const isTablet = useMedia("(max-width: 1024px)")
 
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    toogle()
+  }
+
   return (
     <header className="flex min-h-10 min-w-0 shrink-0 items-center gap-3 border-b border-b-primary/5 px-6 py-1 transition-opacity max-lg:px-4">
       <div
@@ -32,7 +38,7 @@ export const ContentHeader = ({
               variant="ghost"
               aria-label="Menu"
               className="z-50 text-primary/60"
-              onClick={() => toogle()}
+              onClick={handleClick}
             >
               <PanelLeftIcon size={16} />
             </Button>

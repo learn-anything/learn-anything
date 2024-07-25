@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { useMedia } from "react-use"
 import { useAtom } from "jotai"
 import { ChevronDownIcon, LinkIcon, SearchIcon } from "lucide-react"
@@ -45,6 +45,11 @@ export const Sidebar: React.FC = () => {
   const account = useAccount()
   const [isCollapsed, setIsCollapsed] = useAtom(isCollapseAtom)
   const isTablet = useMedia("(max-width: 1024px)")
+  const pathname = usePathname()
+
+  React.useEffect(() => {
+    if (isTablet) setIsCollapsed(true)
+  }, [pathname, setIsCollapsed])
 
   React.useEffect(() => {
     setIsCollapsed(isTablet)
@@ -168,15 +173,7 @@ const Pages: React.FC = () => (
 
 const SidebarItem: React.FC<SidebarItemProps> = ({ label, url, icon }) => {
   const pathname = usePathname()
-  const router = useRouter()
   const isActive = pathname === url
-  const { setIsCollapsed } = React.useContext(SidebarContext)
-
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault()
-    setIsCollapsed(true)
-    router.push(url)
-  }
 
   return (
     <div
@@ -188,7 +185,6 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ label, url, icon }) => {
       <Link
         className="flex h-8 grow items-center truncate rounded-md pl-1.5 pr-1 text-sm font-medium text-secondary-foreground"
         href={url}
-        onClick={handleClick}
       >
         {icon && (
           <span
