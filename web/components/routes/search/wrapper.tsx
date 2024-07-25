@@ -80,6 +80,8 @@ export const SearchWrapper = () => {
 
   const clearSearch = () => {
     setSearchText("")
+    setShowAiSearch(false)
+    setShowAiPlaceholder(false)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
