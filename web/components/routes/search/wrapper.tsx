@@ -62,7 +62,7 @@ const ProfileLinks: React.FC<ProfileLinksProps> = ({
 }
 
 export const SearchWrapper = () => {
-  const account = useAccount()
+  // const account = useAccount()
   const [searchText, setSearchText] = useState("")
   const [aiSearch, setAiSearch] = useState("")
   const [showAiSearch, setShowAiSearch] = useState(false)
@@ -72,7 +72,7 @@ export const SearchWrapper = () => {
     setSearchText(e.target.value)
     if (e.target.value.trim() !== "") {
       setShowAiPlaceholder(false)
-      setTimeout(() => setShowAiPlaceholder(true), 500)
+      setTimeout(() => setShowAiPlaceholder(true), 1000)
     } else {
       setShowAiPlaceholder(false)
       setShowAiSearch(false)
@@ -107,9 +107,9 @@ export const SearchWrapper = () => {
               className="w-full rounded-[10px] bg-[#16181d] p-10 py-3 pl-10 pr-3 font-semibold tracking-wider text-white outline-none placeholder:font-light placeholder:text-white/30"
               placeholder="Search..."
             />
-            {showAiPlaceholder && searchText && (
+            {showAiPlaceholder && searchText && !showAiSearch && (
               <div className="absolute right-10 text-sm text-white/30">
-                press "enter" for AI search
+                press "Enter" for AI search
               </div>
             )}
             {searchText && (
