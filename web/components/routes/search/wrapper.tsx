@@ -123,7 +123,7 @@ export const SearchWrapper = () => {
           {showAiSearch ? (
             <div className="relative w-full">
               <div className="absolute left-1/2 w-[110%] -translate-x-1/2">
-                <AiSearch />
+                <AiSearch searchQuery={searchText} />
               </div>
             </div>
           ) : (
