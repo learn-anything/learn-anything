@@ -1,5 +1,15 @@
 import { CoMap, CoList, co, Account, Group } from "jazz-tools"
 
+// TODO: pages should have same permission control as Figma
+// public, certain members (read/write access later), personal (ideally end to end encrypted)
+export class PersonalPage extends CoMap {
+  publicName = co.string // optional (learn-anything.xyz/@user/publicName) (pretty page access)
+  content = co.string // TipTap content (JSON?)
+  // simple version of Notion/Reflect like editor
+  // backlinks: personal pages linking to this page
+  globalMainTopic = co.ref(GlobalTopic) // optional?
+}
+
 export class PersonalLink extends CoMap {
   note = co.string
   type = co.literal("personalLink")
