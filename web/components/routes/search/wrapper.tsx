@@ -66,12 +66,23 @@ export const SearchWrapper = () => {
   const [searchText, setSearchText] = useState("")
   const [aiSearch, setAiSearch] = useState("")
   const [showAiSearch, setShowAiSearch] = useState(false)
+  const [showAiPlaceholder, setShowAiPlaceholder] = useState(false)
+
+  const inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value)
+    if (e.target.value.trim() !== "") {
+      setShowAiPlaceholder(false)
+      setTimeout(() => setShowAiPlaceholder(true), 500)
+    } else {
+      setShowAiPlaceholder(false)
+    }
+  }
 
   const clearSearch = () => {
     setSearchText("")
   }
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && searchText.trim() !== "") {
       setShowAiSearch(true)
       setAiSearch(searchText)
@@ -80,7 +91,6 @@ export const SearchWrapper = () => {
 
   return (
     <div className="flex h-full flex-auto flex-col overflow-hidden">
-      {/* <SearchHeader /> */}
       <div className="flex h-full w-full justify-center overflow-hidden">
         <div className="w-full max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="relative mb-2 mt-5 flex w-full flex-row items-center transition-colors duration-300 hover:text-white/60">
@@ -89,11 +99,16 @@ export const SearchWrapper = () => {
               type="text"
               autoFocus
               value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-              onKeyPress={handleKeyPress}
+              onChange={inputChange}
+              onKeyDown={handleKeyDown}
               className="w-full rounded-[10px] bg-[#16181d] p-10 py-3 pl-10 pr-3 font-semibold tracking-wider text-white outline-none placeholder:font-light placeholder:text-white/30"
               placeholder="Search..."
             />
+            {showAiPlaceholder && searchText && (
+              <div className="absolute right-10 text-sm text-white/30">
+                press "enter" for AI search
+              </div>
+            )}
             {searchText && (
               <IoCloseOutline
                 className="absolute right-3 cursor-pointer opacity-30"
