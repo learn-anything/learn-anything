@@ -75,6 +75,7 @@ export const SearchWrapper = () => {
       setTimeout(() => setShowAiPlaceholder(true), 500)
     } else {
       setShowAiPlaceholder(false)
+      setShowAiSearch(false)
     }
   }
 
