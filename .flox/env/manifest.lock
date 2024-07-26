@@ -1,0 +1,144 @@
+{
+  "lockfile-version": 1,
+  "manifest": {
+    "version": 1,
+    "install": {
+      "bun": {
+        "pkg-path": "bun"
+      }
+    },
+    "vars": {},
+    "hook": {},
+    "profile": {},
+    "options": {
+      "systems": [
+        "aarch64-darwin",
+        "aarch64-linux",
+        "x86_64-darwin",
+        "x86_64-linux"
+      ],
+      "allow": {
+        "licenses": []
+      },
+      "semver": {}
+    }
+  },
+  "packages": [
+    {
+      "attr_path": "bun",
+      "broken": false,
+      "derivation": "/nix/store/ymzdis22d2qxrs34iwq2j02nz048dqrj-bun-1.1.20.drv",
+      "description": "Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one",
+      "install_id": "bun",
+      "license": "[ MIT, LGPL-2.1-only ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=68c9ed8bbed9dfce253cc91560bf9043297ef2fe",
+      "name": "bun-1.1.20",
+      "pname": "bun",
+      "rev": "68c9ed8bbed9dfce253cc91560bf9043297ef2fe",
+      "rev_count": 655874,
+      "rev_date": "2024-07-21T11:40:59Z",
+      "scrape_date": "2024-07-23T05:31:27Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "1.1.20",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/sjhdi5ixjsqyldxfmdzcazk1r3asa7c5-bun-1.1.20"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "bun",
+      "broken": false,
+      "derivation": "/nix/store/ph8qybp6ck0sqcsrhwjd68vaz4b164yy-bun-1.1.20.drv",
+      "description": "Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one",
+      "install_id": "bun",
+      "license": "[ MIT, LGPL-2.1-only ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=68c9ed8bbed9dfce253cc91560bf9043297ef2fe",
+      "name": "bun-1.1.20",
+      "pname": "bun",
+      "rev": "68c9ed8bbed9dfce253cc91560bf9043297ef2fe",
+      "rev_count": 655874,
+      "rev_date": "2024-07-21T11:40:59Z",
+      "scrape_date": "2024-07-23T05:31:27Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "1.1.20",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/1cg8hfz38pxcxqvk3ms1v9hr52bh9yrm-bun-1.1.20"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "bun",
+      "broken": false,
+      "derivation": "/nix/store/bmgp0mvw2gf0shq4h44qlkcb3pi1lm3z-bun-1.1.20.drv",
+      "description": "Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one",
+      "install_id": "bun",
+      "license": "[ MIT, LGPL-2.1-only ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=68c9ed8bbed9dfce253cc91560bf9043297ef2fe",
+      "name": "bun-1.1.20",
+      "pname": "bun",
+      "rev": "68c9ed8bbed9dfce253cc91560bf9043297ef2fe",
+      "rev_count": 655874,
+      "rev_date": "2024-07-21T11:40:59Z",
+      "scrape_date": "2024-07-23T05:31:27Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "1.1.20",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/2mnl4ry24y9q261caia8yn46h47ckpz3-bun-1.1.20"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "bun",
+      "broken": false,
+      "derivation": "/nix/store/6bqn2v45a2ynljv56b8pmjkldm5hxgqf-bun-1.1.20.drv",
+      "description": "Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one",
+      "install_id": "bun",
+      "license": "[ MIT, LGPL-2.1-only ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=68c9ed8bbed9dfce253cc91560bf9043297ef2fe",
+      "name": "bun-1.1.20",
+      "pname": "bun",
+      "rev": "68c9ed8bbed9dfce253cc91560bf9043297ef2fe",
+      "rev_count": 655874,
+      "rev_date": "2024-07-21T11:40:59Z",
+      "scrape_date": "2024-07-23T05:31:27Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "1.1.20",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/6a8kqmk0jda5a3kyka1c55dh9h5ry5ii-bun-1.1.20"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    }
+  ]
+}
