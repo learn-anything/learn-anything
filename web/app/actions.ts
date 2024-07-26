@@ -11,10 +11,10 @@ export const askGpt4ioAction = createServerAction()
   )
   .handler(async ({ input }) => {
 
-    const chunks = [input, "hello", "foo", "bar"]
+    const chunks: string[] = [input.question, "hello", "foo", "bar"]
     let i = 0
 
-    let stream = new ReadableStream({
+    let stream = new ReadableStream<string>({
       async pull(controller) {
 
         await new Promise(res => setTimeout(res, 1000))
@@ -32,7 +32,7 @@ export const askGpt4ioAction = createServerAction()
       },
     })
 
-    let res = new Response(stream)
+    // let res = new Response(stream)
 
-    return res
+    return stream
   })

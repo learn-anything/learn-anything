@@ -13,27 +13,24 @@ const AiSearch: React.FC<AiSearchProps> = (props: { searchQuery: string }) => {
 
   useEffect(() => {
     (async () => {
+
       const [res, err] = await askGpt4ioAction({ question: props.searchQuery })
+
       if (err) {
         console.error("Error fetching result:", err.message)
         setError("An error occurred while fetching the result.")
         return
       }
 
-      if (res.body == null) {
-        console.error("Response is not a ReadableStream")
-        setError("Response is not a ReadableStream")
-        return
-      }
-
-      let reader = res.body.getReader()
+      let reader = res.getReader()
 
       const decoder = new TextDecoder()
 
       let result
       while (!(result = await reader.read()).done) {
-        const chunk = decoder.decode(result.value)
-        console.log(chunk)
+
+        // const chunk = decoder.decode(result.value)
+        console.log(result.value)
       }
       
     })();
