@@ -9,19 +9,34 @@ interface AiSearchProps {
 
 const AiSearch: React.FC<AiSearchProps> = (props: { searchQuery: string }) => {
   const [result, setResult] = useState<string>("")
+  const [error, setError] = useState<string>("")
 
   useEffect(() => {
-    // const fetchResult = async () => {
-    //   try {
-    //     const res = await askGpt4ioAction({ question: props.searchQuery })
-    //     console.log(res, "res")
-    //     setResult(res)
-    //   } catch (error) {
-    //     console.error("Error fetching result:", error)
-    //     setResult("An error occurred while fetching the result.")
-    //   }
-    // }
-    // fetchResult()
+    (async () => {
+      const [res, err] = await askGpt4ioAction({ question: props.searchQuery })
+      if (err) {
+        console.error("Error fetching result:", err.message)
+        setError("An error occurred while fetching the result.")
+        return
+      }
+
+      if (res.body == null) {
+        console.error("Response is not a ReadableStream")
+        setError("Response is not a ReadableStream")
+        return
+      }
+
+      let reader = res.body.getReader()
+
+      const decoder = new TextDecoder()
+
+      let result
+      while (!(result = await reader.read()).done) {
+        const chunk = decoder.decode(result.value)
+        console.log(chunk)
+      }
+      
+    })();
   }, [props.searchQuery])
 
   return (
@@ -35,7 +50,7 @@ const AiSearch: React.FC<AiSearchProps> = (props: { searchQuery: string }) => {
             {props.searchQuery}
           </h1>
           <p className="min-h-[100px] whitespace-pre-wrap">
-            {/* AI content */}
+            {result}
           </p>
         </div>
       </div>
