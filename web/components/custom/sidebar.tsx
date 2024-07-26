@@ -131,16 +131,27 @@ const LogoAndSearch: React.FC = () => {
           <Logo className="size-7" />
         </Link>
         <div className="flex min-w-2 grow flex-row" />
-        {pathname !== "/search" && (
+        {pathname === "/search" ? (
+          <Link href="/links">
+            <Button
+              size="sm"
+              variant="secondary"
+              type="button"
+              className="text-md font-medium text-primary/60"
+            >
+              ← Back
+            </Button>
+          </Link>
+        ) : (
           <Link href="/search">
             <Button
-              size="icon"
+              size="sm"
               variant="secondary"
               aria-label="Search"
               type="button"
-              className="text-primary/60"
+              className="flex w-20 items-center justify-start py-4 pl-2 text-primary/60"
             >
-              <SearchIcon size={16} />
+              <SearchIcon size={16} className="mr-2" />
             </Button>
           </Link>
         )}

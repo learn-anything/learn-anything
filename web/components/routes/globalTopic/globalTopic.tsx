@@ -65,7 +65,7 @@ export default function GlobalTopic({ topic }: { topic: string }) {
         <div className="relative">
           <Button
             onClick={() => setShowOptions(!showOptions)}
-            className="rounded-[7px] bg-neutral-800 px-4 py-2 text-[16px] font-semibold text-white/70 shadow-inner shadow-neutral-700/50 transition-colors hover:bg-neutral-700"
+            className="rounded-[7px] bg-neutral-800 px-4 py-2 text-[17px] font-semibold text-white/70 shadow-inner shadow-neutral-700/50 transition-colors hover:bg-neutral-700"
           >
             {selectedOption || "Add to my profile"}
           </Button>
@@ -75,7 +75,7 @@ export default function GlobalTopic({ topic }: { topic: string }) {
                 <Button
                   key={option}
                   onClick={() => selectedStatus(option)}
-                  className="w-full text-left text-[16px] font-semibold hover:bg-neutral-700"
+                  className="w-full text-left text-[17px] font-semibold hover:bg-neutral-700"
                 >
                   {option}
                 </Button>
