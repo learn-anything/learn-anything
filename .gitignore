@@ -40,7 +40,6 @@ dbschema/interfaces.ts
 package-lock.json
 pnpm-lock.yaml
 .env
-cli/run.ts
 .next-types
 .env
 .next
