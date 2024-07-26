@@ -43,9 +43,11 @@
     "react-hook-form": "^7.52.1",
     "react-use": "^17.5.1",
     "sonner": "^1.5.0",
+    "streaming-markdown": "^0.0.14",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "zsa": "^0.5.1"
   },
   "devDependencies": {
     "@types/node": "^20.14.12",
