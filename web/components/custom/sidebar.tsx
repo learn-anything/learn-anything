@@ -164,11 +164,7 @@ const Pages: React.FC = () => (
     <div className="relative shrink-0">
       <div aria-hidden="false" className="ml-2 shrink-0 pb-2">
         {PAGES.map((page) => (
-          <SidebarItem
-            key={page}
-            url={`/globaltopic?topic=${encodeURIComponent(page)}`}
-            label={page}
-          />
+          <SidebarItem key={page} url={`/${page}`} label={page} />
         ))}
       </div>
     </div>

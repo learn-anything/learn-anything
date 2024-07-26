@@ -1,12 +1,8 @@
 "use client"
 
 import { ContentHeader } from "@/components/custom/content-header"
-import { useSearchParams } from "next/navigation"
 
-export default function GlobalTopic() {
-  const searchParams = useSearchParams()
-  const topic = searchParams.get("topic") || "Unknown Topic"
-
+export default function GlobalTopic({ topic }: { topic: string }) {
   return (
     <div className="flex h-full flex-auto flex-col overflow-hidden">
       <ContentHeader title={`${topic}`} />
