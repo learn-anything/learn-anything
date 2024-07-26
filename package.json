@@ -3,7 +3,8 @@
 	"scripts": {
 		"dev": "bun web",
 		"web": "cd web && bun dev",
-		"web:build": "bun run --filter '*' build"
+		"web:build": "bun run --filter '*' build",
+		"cli": "bun run --watch cli/run.ts"
 	},
 	"devDependencies": {
 		"bun-types": "^1.1.20"

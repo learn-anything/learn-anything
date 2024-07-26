@@ -25,7 +25,7 @@ export const ContentHeader = ({
   }
 
   return (
-    <header className="flex min-h-10 min-w-0 shrink-0 items-center gap-3 border-b border-b-primary/5 px-6 py-1 transition-opacity max-lg:px-4">
+    <header className="// flex min-h-10 min-w-0 shrink-0 items-center gap-3 px-6 py-4 transition-opacity max-lg:px-4">
       <div
         className="flex min-h-10 min-w-0 shrink-0 items-center gap-1.5"
         style={{ maxWidth: "50%" }}
@@ -46,7 +46,7 @@ export const ContentHeader = ({
           </>
         )}
 
-        {title && <div className="truncate text-sm font-medium">{title}</div>}
+        {title && <p className="truncate text-2xl font-bold">{title}</p>}
       </div>
 
       {children}

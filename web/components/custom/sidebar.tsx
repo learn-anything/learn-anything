@@ -157,14 +157,18 @@ const Pages: React.FC = () => (
         tabIndex={0}
         className="flex h-6 grow items-center gap-x-0.5 self-start rounded-md px-1 text-xs font-medium text-primary/50"
       >
-        <span>Pages</span>
+        <span>Topics</span>
         <ChevronDownIcon size={16} />
       </div>
     </div>
     <div className="relative shrink-0">
       <div aria-hidden="false" className="ml-2 shrink-0 pb-2">
         {PAGES.map((page) => (
-          <SidebarItem key={page} url="/" label={page} />
+          <SidebarItem
+            key={page}
+            url={`/globaltopic?topic=${encodeURIComponent(page)}`}
+            label={page}
+          />
         ))}
       </div>
     </div>
