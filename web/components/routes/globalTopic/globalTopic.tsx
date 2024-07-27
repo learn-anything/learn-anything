@@ -9,6 +9,12 @@ interface LinkProps {
   url: string
 }
 
+const links = [
+  { title: "JavaScript", url: "https://justjavascript.com" },
+  { title: "TypeScript", url: "https://www.typescriptlang.org/" },
+  { title: "React", url: "https://reactjs.org/" }
+]
+
 const LinkItem: React.FC<LinkProps> = ({ title, url }) => (
   <div className="mb-1 flex flex-row items-center justify-between rounded-xl bg-[#121212] px-2 py-4 hover:cursor-pointer">
     <div className="flex items-center space-x-4">
@@ -108,12 +114,15 @@ export default function GlobalTopic({ topic }: { topic: string }) {
       </ContentHeader>
       <div className="px-5 py-3">
         <h2 className="mb-3 text-white/60">Intro</h2>
-
-        <LinkItem title={"JavaScript"} url={"https://justjavascript.com"} />
+        {links.map((link, index) => (
+          <LinkItem key={index} title={link.title} url={link.url} />
+        ))}
       </div>
       <div className="px-5 py-3">
         <h2 className="mb-3 text-opacity-60">Other</h2>
-        <LinkItem title={"JavaScript"} url={"https://justjavascript.com"} />
+        {links.map((link, index) => (
+          <LinkItem key={index} title={link.title} url={link.url} />
+        ))}
       </div>
       <div className="flex-1 overflow-auto p-4"></div>
     </div>
