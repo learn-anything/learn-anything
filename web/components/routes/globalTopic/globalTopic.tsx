@@ -80,7 +80,7 @@ export default function GlobalTopic({ topic }: { topic: string }) {
       case "Learned":
         return "text-[#708F51]"
       default:
-        return ""
+        return "text-white/70"
     }
   }
 
