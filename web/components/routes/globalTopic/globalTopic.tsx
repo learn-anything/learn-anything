@@ -123,7 +123,7 @@ export default function GlobalTopic({ topic }: { topic: string }) {
         <div className="relative">
           <Button
             onClick={() => setShowOptions(!showOptions)}
-            className="w-[150px] whitespace-nowrap rounded-[7px] bg-neutral-800 px-4 py-2 text-[17px] font-semibold text-white/70 shadow-inner shadow-neutral-700/50 transition-colors hover:bg-neutral-700"
+            className="w-[150px] whitespace-nowrap rounded-[7px] bg-neutral-800 px-4 py-2 text-[17px] font-semibold shadow-inner shadow-neutral-700/50 transition-colors hover:bg-neutral-700"
             color={learningStatusColor(selectedOption || "")}
             icon={
               selectedOption &&
