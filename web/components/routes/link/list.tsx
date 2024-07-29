@@ -380,6 +380,7 @@ const SortableItem: React.FC<SortableItemProps> = ({
         <div className="flex min-w-0 gap-x-4">
           <Checkbox
             checked={todoItem.completed}
+            onClick={(e) => e.stopPropagation()}
             onCheckedChange={() => {
               todoItem.completed = !todoItem.completed
             }}
