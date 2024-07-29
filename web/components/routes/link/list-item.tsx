@@ -13,6 +13,7 @@ import { CreateForm } from "./form/manage"
 import { Button } from "@/components/ui/button"
 import { ConfirmOptions } from "@omit/react-confirm-dialog"
 import { toast } from "sonner"
+import { Badge } from "@/components/ui/badge"
 
 interface ListItemProps {
   confirm: (options: ConfirmOptions) => Promise<boolean>
@@ -132,14 +133,17 @@ export const ListItem: React.FC<ListItemProps> = ({
       onFocus={() => setFocusedId(todoItem.id)}
       onBlur={() => setFocusedId(null)}
       onKeyDown={handleKeyDown}
-      className={cn("relative py-3 outline-none hover:bg-muted/40", {
-        "bg-muted/40": isFocused
-        // "cursor-move": !disabled
-      })}
+      className={cn(
+        "relative flex h-11 items-center outline-none hover:bg-muted/40",
+        {
+          "bg-muted/40": isFocused
+          // "cursor-move": !disabled
+        }
+      )}
       onClick={handleRowClick}
     >
-      <div className="flex justify-between gap-x-6 px-6 max-lg:px-4">
-        <div className="flex min-w-0 gap-x-4">
+      <div className="flex grow justify-between gap-x-6 px-6 max-lg:px-4">
+        <div className="flex min-w-0 items-center gap-x-4">
           <Checkbox
             checked={todoItem.completed}
             onClick={(e) => e.stopPropagation()}
@@ -157,9 +161,9 @@ export const ListItem: React.FC<ListItemProps> = ({
               height={16}
             />
           )}
-          <div className="min-w-0 flex-auto cursor-auto">
-            <div className="flex flex-col gap-2 sm:flex-row">
-              <p className="text-sm font-semibold text-primary hover:text-primary">
+          <div className="w-full min-w-0 flex-auto cursor-auto">
+            <div className="flex flex-col gap-2 xl:flex-row">
+              <p className="text-sm font-semibold text-primary hover:text-primary xl:truncate">
                 {todoItem.title}
               </p>
               {todoItem.isLink && todoItem.meta && (
@@ -177,7 +181,7 @@ export const ListItem: React.FC<ListItemProps> = ({
                     aria-hidden="true"
                     className="size-3 flex-none text-muted-foreground group-hover:text-primary"
                   />
-                  {todoItem.meta.url}
+                  <span className="xl:truncate">{todoItem.meta.url}</span>
                 </Link>
               )}
             </div>
@@ -185,6 +189,7 @@ export const ListItem: React.FC<ListItemProps> = ({
         </div>
 
         <div className="flex shrink-0 items-center gap-x-4">
+          <Badge variant="secondary">Secondary</Badge>
           <Button
             size="icon"
             className="h-auto w-auto bg-transparent text-destructive hover:bg-transparent hover:text-red-500"
