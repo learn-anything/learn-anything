@@ -134,7 +134,7 @@ export const ListItem: React.FC<ListItemProps> = ({
       onBlur={() => setFocusedId(null)}
       onKeyDown={handleKeyDown}
       className={cn(
-        "relative flex h-11 items-center outline-none hover:bg-muted/40",
+        "relative flex items-center py-3 outline-none hover:bg-muted/40 xl:h-11 xl:py-0",
         {
           "bg-muted/40": isFocused
           // "cursor-move": !disabled
