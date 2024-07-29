@@ -30,7 +30,7 @@ import { TodoItem, UserLink } from "@/lib/schema"
 import { createLinkSchema } from "./schema"
 import { TopicSelector } from "./partial/topic-section"
 import { useAtom } from "jotai"
-import { linkShowCreateAtom } from "@/store/link"
+import { linkEditIdAtom, linkShowCreateAtom } from "@/store/link"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -51,6 +51,14 @@ const DEFAULT_FORM_VALUES: Partial<LinkFormValues> = {
 
 export const LinkManage: React.FC = () => {
   const [showCreate, setShowCreate] = useAtom(linkShowCreateAtom)
+  const [, setEditId] = useAtom(linkEditIdAtom)
+
+  useEffect(() => {
+    if (showCreate) {
+      setEditId(null)
+    }
+  }, [showCreate])
+
   return (
     <>
       {showCreate && (
