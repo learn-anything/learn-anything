@@ -12,8 +12,7 @@ const AiSearch: React.FC<AiSearchProps> = (props: { searchQuery: string }) => {
   const [error, setError] = useState<string>("")
 
   useEffect(() => {
-    (async () => {
-
+    ;(async () => {
       const [res, err] = await askGpt4ioAction({ question: props.searchQuery })
 
       if (err) {
@@ -28,12 +27,10 @@ const AiSearch: React.FC<AiSearchProps> = (props: { searchQuery: string }) => {
 
       let result
       while (!(result = await reader.read()).done) {
-
         // const chunk = decoder.decode(result.value)
         console.log(result.value)
       }
-      
-    })();
+    })()
   }, [props.searchQuery])
 
   return (
@@ -46,9 +43,7 @@ const AiSearch: React.FC<AiSearchProps> = (props: { searchQuery: string }) => {
           <h1 className="text-md mb-4 border-b border-neutral-800 pb-2 font-semibold tracking-wider text-white opacity-50">
             {props.searchQuery}
           </h1>
-          <p className="min-h-[100px] whitespace-pre-wrap">
-            {result}
-          </p>
+          <p className="min-h-[100px] whitespace-pre-wrap">{result}</p>
         </div>
       </div>
       <p className="text-md pb-5 font-semibold opacity-50">Not answered?</p>
