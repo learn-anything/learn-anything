@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useEffect, useMemo } from "react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ExternalLinkIcon, Trash2Icon } from "lucide-react"
 import Link from "next/link"
@@ -30,11 +30,14 @@ import { cn } from "@/lib/utils"
 import { CreateForm } from "./form/manage"
 import { useKey } from "react-use"
 import { Button } from "@/components/ui/button"
-import { useConfirm } from "@omit/react-confirm-dialog"
+import { ConfirmOptions, useConfirm } from "@omit/react-confirm-dialog"
 
 interface SortableItemProps {
+  confirm: (options: ConfirmOptions) => Promise<boolean>
   todoItem: TodoItem
   disabled?: boolean
+  isEditing: boolean
+  setEditId: (id: string | null) => void
   isDragging: boolean
   isFocused: boolean
   setFocusedId: (id: string | null) => void
@@ -43,15 +46,15 @@ interface SortableItemProps {
 }
 
 export const LinkList = () => {
+  const confirm = useConfirm()
   const { me } = useAccount({
     root: { todos: [] }
   })
-  const todos = me?.root.todos || []
+  const todos = useMemo(() => me?.root?.todos || [], [me?.root?.todos])
 
-  const isEditing = useAtomValue(linkEditIdAtom)
+  const [editId, setEditId] = useAtom(linkEditIdAtom)
   const [sort] = useAtom(linkSortAtom)
   const [focusedId, setFocusedId] = React.useState<string | null>(null)
-  const [isDragging, setIsDragging] = React.useState(false)
   const [draggingId, setDraggingId] = React.useState<string | null>(null)
   const todoRefs = React.useRef<{ [key: string]: HTMLLIElement | null }>({})
 
@@ -81,9 +84,14 @@ export const LinkList = () => {
     []
   )
 
+  useKey("Escape", () => {
+    console.log("Escape key pressed", { editId })
+    setEditId(null)
+  })
+
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!me?.root?.todos || sortedTodos.length === 0 || isEditing) return
+      if (!me?.root?.todos || sortedTodos.length === 0 || editId) return
 
       const currentIndex = sortedTodos.findIndex(
         (todo) => todo?.id === focusedId
@@ -139,7 +147,7 @@ export const LinkList = () => {
 
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [me?.root?.todos, focusedId, isEditing, sort])
+  }, [me?.root?.todos, focusedId, editId, sort])
 
   const updateSequences = (todos: ListOfPersonalTodoItems) => {
     todos.forEach((todo, index) => {
@@ -153,7 +161,6 @@ export const LinkList = () => {
     if (sort !== "manual") return
     const { active } = event
     setDraggingId(active.id)
-    setIsDragging(true)
   }
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -203,7 +210,6 @@ export const LinkList = () => {
       }
     }
 
-    setIsDragging(false)
     setDraggingId(null)
   }
 
@@ -232,10 +238,13 @@ export const LinkList = () => {
       >
         <ul role="list" className="divide-y divide-primary/5">
           {sortedTodos.map(
-            (todoItem, index) =>
+            (todoItem) =>
               todoItem && (
                 <SortableItem
                   key={todoItem.id}
+                  confirm={confirm}
+                  isEditing={editId === todoItem.id}
+                  setEditId={setEditId}
                   todoItem={todoItem}
                   disabled={sort !== "manual"}
                   registerRef={registerRef}
@@ -253,6 +262,9 @@ export const LinkList = () => {
 }
 
 const SortableItem: React.FC<SortableItemProps> = ({
+  confirm,
+  isEditing,
+  setEditId,
   todoItem,
   disabled = false,
   isDragging,
@@ -261,9 +273,6 @@ const SortableItem: React.FC<SortableItemProps> = ({
   registerRef,
   onDelete
 }) => {
-  const confirm = useConfirm()
-  const [editId, setEditId] = useAtom(linkEditIdAtom)
-  const isEditing = editId === todoItem.id
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: todoItem.id, disabled })
   const formRef = React.useRef<HTMLFormElement>(null)
@@ -295,18 +304,17 @@ const SortableItem: React.FC<SortableItemProps> = ({
     }
   }
 
-  useKey("Escape", () => {
-    if (isEditing) {
-      handleCancel()
-    }
-  })
-
   const handleSuccess = () => {
     setEditId(null)
   }
 
   const handleCancel = () => {
     setEditId(null)
+  }
+
+  const handleRowClick = () => {
+    console.log("Row clicked", todoItem.id)
+    setEditId(todoItem.id)
   }
 
   const handleDelete = async (e: React.MouseEvent, todoItem: TodoItem) => {
@@ -364,7 +372,7 @@ const SortableItem: React.FC<SortableItemProps> = ({
           // "cursor-move": !disabled
         }
       )}
-      onClick={() => setEditId(todoItem.id)}
+      onClick={handleRowClick}
     >
       <div className="flex justify-between gap-x-6 px-6 max-lg:px-4">
         <div className="flex min-w-0 gap-x-4">
