@@ -38,6 +38,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
+import { useKey } from "react-use"
 
 export type LinkFormValues = z.infer<typeof createLinkSchema>
 
@@ -58,6 +59,10 @@ export const LinkManage: React.FC = () => {
       setEditId(null)
     }
   }, [showCreate])
+
+  useKey("Escape", () => {
+    setShowCreate(false)
+  })
 
   return (
     <>
