@@ -35,6 +35,7 @@ import { useConfirm } from "@omit/react-confirm-dialog"
 interface SortableItemProps {
   todoItem: TodoItem
   disabled?: boolean
+  isDragging: boolean
   isFocused: boolean
   setFocusedId: (id: string | null) => void
   registerRef: (id: string, ref: HTMLLIElement | null) => void
@@ -50,6 +51,8 @@ export const LinkList = () => {
   const isEditing = useAtomValue(linkEditIdAtom)
   const [sort] = useAtom(linkSortAtom)
   const [focusedId, setFocusedId] = React.useState<string | null>(null)
+  const [isDragging, setIsDragging] = React.useState(false)
+  const [draggingId, setDraggingId] = React.useState<string | null>(null)
   const todoRefs = React.useRef<{ [key: string]: HTMLLIElement | null }>({})
 
   let sortedTodos =
@@ -97,10 +100,7 @@ export const LinkList = () => {
           const currentTodo = me.root.todos[currentIndex]
           if (!currentTodo) return
 
-          // Create a copy of the todos array
           const todosArray = [...me.root.todos]
-
-          // Use arrayMove on the copy
           const newTodos = arrayMove(todosArray, currentIndex, newIndex)
 
           // Clear the original list
@@ -108,7 +108,6 @@ export const LinkList = () => {
             me.root.todos.pop()
           }
 
-          // Add items back to the original list
           newTodos.forEach((todo) => {
             if (todo) {
               me.root.todos.push(todo)
@@ -148,6 +147,13 @@ export const LinkList = () => {
         todo.sequence = index
       }
     })
+  }
+
+  const handleDragStart = (event: any) => {
+    if (sort !== "manual") return
+    const { active } = event
+    setDraggingId(active.id)
+    setIsDragging(true)
   }
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -196,6 +202,9 @@ export const LinkList = () => {
         console.error("Error during todo reordering:", error)
       }
     }
+
+    setIsDragging(false)
+    setDraggingId(null)
   }
 
   const handleDelete = (todoItem: TodoItem) => {
@@ -214,6 +223,7 @@ export const LinkList = () => {
     <DndContext
       sensors={sensors}
       collisionDetection={closestCenter}
+      onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
       <SortableContext
@@ -229,6 +239,7 @@ export const LinkList = () => {
                   todoItem={todoItem}
                   disabled={sort !== "manual"}
                   registerRef={registerRef}
+                  isDragging={draggingId === todoItem.id}
                   isFocused={focusedId === todoItem.id}
                   setFocusedId={setFocusedId}
                   onDelete={handleDelete}
@@ -244,6 +255,7 @@ export const LinkList = () => {
 const SortableItem: React.FC<SortableItemProps> = ({
   todoItem,
   disabled = false,
+  isDragging,
   isFocused,
   setFocusedId,
   registerRef,
@@ -258,7 +270,8 @@ const SortableItem: React.FC<SortableItemProps> = ({
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition
+    transition,
+    pointerEvents: isDragging ? "none" : "auto"
   }
 
   React.useEffect(() => {
@@ -337,17 +350,20 @@ const SortableItem: React.FC<SortableItemProps> = ({
   return (
     <li
       ref={refCallback}
-      style={style}
+      style={style as React.CSSProperties}
       {...attributes}
       {...listeners}
       tabIndex={0}
       onFocus={() => setFocusedId(todoItem.id)}
       onBlur={() => setFocusedId(null)}
       onKeyDown={handleKeyDown}
-      className={cn("relative py-3 outline-none hover:bg-muted/40", {
-        "bg-muted/40": isFocused,
-        "cursor-move": !disabled
-      })}
+      className={cn(
+        "pointer-events-none relative cursor-auto py-3 outline-none hover:bg-muted/40",
+        {
+          "bg-muted/40": isFocused
+          // "cursor-move": !disabled
+        }
+      )}
       onClick={() => setEditId(todoItem.id)}
     >
       <div className="flex justify-between gap-x-6 px-6 max-lg:px-4">
