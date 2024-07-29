@@ -1,5 +1,6 @@
 "use client"
 
+import { CheckIcon, CircleXIcon } from "lucide-react"
 import { useTheme } from "next-themes"
 import { Toaster as Sonner } from "sonner"
 
@@ -12,6 +13,13 @@ const Toaster = ({ ...props }: ToasterProps) => {
     <Sonner
       theme={theme as ToasterProps["theme"]}
       className="toaster group"
+      expand
+      position="top-right"
+      duration={5000}
+      icons={{
+        success: <CheckIcon size={16} className="text-green-500" />,
+        error: <CircleXIcon size={16} className="text-red-500" />
+      }}
       toastOptions={{
         closeButton: true,
         classNames: {
