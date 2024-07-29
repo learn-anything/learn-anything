@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useMemo } from "react"
+import * as React from "react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ExternalLinkIcon, Trash2Icon } from "lucide-react"
 import Link from "next/link"
