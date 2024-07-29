@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { Checkbox } from "@/components/ui/checkbox"
-import { ExternalLinkIcon, Trash2Icon } from "lucide-react"
+import { LinkIcon, Trash2Icon } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { useSortable } from "@dnd-kit/sortable"
@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils"
 import { CreateForm } from "./form/manage"
 import { Button } from "@/components/ui/button"
 import { ConfirmOptions } from "@omit/react-confirm-dialog"
+import { toast } from "sonner"
 
 interface ListItemProps {
   confirm: (options: ConfirmOptions) => Promise<boolean>
@@ -106,6 +107,7 @@ export const ListItem: React.FC<ListItemProps> = ({
     if (result) {
       console.log("Deleting todo item", todoItem)
       onDelete?.(todoItem)
+      toast.success(`Deleted "${todoItem.title}"`)
     }
   }
 
@@ -144,6 +146,7 @@ export const ListItem: React.FC<ListItemProps> = ({
             onCheckedChange={() => {
               todoItem.completed = !todoItem.completed
             }}
+            className="border border-muted-foreground"
           />
           {todoItem.isLink && todoItem.meta && (
             <Image
@@ -155,29 +158,33 @@ export const ListItem: React.FC<ListItemProps> = ({
             />
           )}
           <div className="min-w-0 flex-auto cursor-auto">
-            <p className="text-sm font-semibold text-primary/80 hover:text-primary">
-              {todoItem.title}
-            </p>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <p className="text-sm font-semibold text-primary hover:text-primary">
+                {todoItem.title}
+              </p>
+              {todoItem.isLink && todoItem.meta && (
+                <Link
+                  href={todoItem.meta.url}
+                  passHref
+                  prefetch={false}
+                  target="_blank"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                  }}
+                  className="group flex items-center gap-x-1 text-xs text-muted-foreground hover:text-primary"
+                >
+                  <LinkIcon
+                    aria-hidden="true"
+                    className="size-3 flex-none text-muted-foreground group-hover:text-primary"
+                  />
+                  {todoItem.meta.url}
+                </Link>
+              )}
+            </div>
           </div>
         </div>
 
         <div className="flex shrink-0 items-center gap-x-4">
-          {todoItem.isLink && todoItem.meta && (
-            <Link
-              href={todoItem.meta.url}
-              passHref
-              prefetch={false}
-              target="_blank"
-              onClick={(e) => {
-                e.stopPropagation()
-              }}
-            >
-              <ExternalLinkIcon
-                aria-hidden="true"
-                className="size-4 flex-none text-primary/50 hover:text-primary"
-              />
-            </Link>
-          )}
           <Button
             size="icon"
             className="h-auto w-auto bg-transparent text-destructive hover:bg-transparent hover:text-red-500"

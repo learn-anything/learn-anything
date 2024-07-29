@@ -10,7 +10,7 @@ export default async function RootLayout({
       <Sidebar />
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <main className="relative flex flex-auto flex-col place-items-stretch overflow-auto rounded-md border border-primary/5 bg-muted/10 lg:my-2 lg:mr-2">
+        <main className="relative flex flex-auto flex-col place-items-stretch overflow-auto rounded-md border border-primary/5 bg-card lg:my-2 lg:mr-2">
           {children}
         </main>
       </div>

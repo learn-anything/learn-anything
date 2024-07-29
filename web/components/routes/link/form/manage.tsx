@@ -19,11 +19,10 @@ import {
 } from "@/components/ui/form"
 import {
   BoxIcon,
-  CheckIcon,
-  CircleXIcon,
   EllipsisIcon,
   HeartIcon,
-  PlusIcon
+  PlusIcon,
+  Trash2Icon
 } from "lucide-react"
 import { cn, ensureUrlProtocol, isUrl as LibIsUrl } from "@/lib/utils"
 import { useAccount, useCoState } from "@/lib/providers/jazz-provider"
@@ -32,6 +31,13 @@ import { createLinkSchema } from "./schema"
 import { TopicSelector } from "./partial/topic-section"
 import { useAtom } from "jotai"
 import { linkShowCreateAtom } from "@/store/link"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu"
 
 export type LinkFormValues = z.infer<typeof createLinkSchema>
 
@@ -120,10 +126,7 @@ export const CreateForm = React.forwardRef<HTMLFormElement, CreateFormProps>(
           form.setValue("title", data.title)
           form.setValue("description", data.description)
         } catch (err) {
-          toast.error("Link preview failed", {
-            duration: 5000,
-            icon: <CircleXIcon size={16} className="text-red-500" />
-          })
+          toast.error("Link preview failed")
           form.setValue("isLink", false)
           form.setValue("meta", null)
           form.setValue("title", debouncedText)
@@ -157,10 +160,7 @@ export const CreateForm = React.forwardRef<HTMLFormElement, CreateFormProps>(
             Object.assign(selectedTodo.meta, values.meta)
           }
 
-          toast.success("Todo updated", {
-            duration: 5000,
-            icon: <CheckIcon size={16} className="text-green-500" />
-          })
+          toast.success("Todo updated")
         } else {
           // Create new todo
           const newTodo = TodoItem.create(
@@ -178,10 +178,7 @@ export const CreateForm = React.forwardRef<HTMLFormElement, CreateFormProps>(
 
           me.root?.todos?.push(newTodo)
 
-          toast.success("Todo created", {
-            duration: 5000,
-            icon: <CheckIcon size={16} className="text-green-500" />
-          })
+          toast.success("Todo created")
         }
 
         form.reset(DEFAULT_FORM_VALUES)
@@ -189,11 +186,7 @@ export const CreateForm = React.forwardRef<HTMLFormElement, CreateFormProps>(
       } catch (error) {
         console.error("Failed to create/update todo", error)
         toast.error(
-          todoItem ? "Failed to update todo" : "Failed to create todo",
-          {
-            duration: 5000,
-            icon: <CircleXIcon size={16} className="text-red-500" />
-          }
+          todoItem ? "Failed to update todo" : "Failed to create todo"
         )
       }
     }
@@ -258,14 +251,31 @@ export const CreateForm = React.forwardRef<HTMLFormElement, CreateFormProps>(
                     </div>
 
                     <div className="flex min-w-0 shrink-0 cursor-pointer select-none flex-row">
-                      <Button
-                        size="icon"
-                        type="button"
-                        variant="ghost"
-                        className="size-7 gap-x-2 text-sm"
-                      >
-                        <EllipsisIcon size={16} className="text-primary/60" />
-                      </Button>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            size="icon"
+                            type="button"
+                            variant="ghost"
+                            className="size-7 gap-x-2 text-sm"
+                          >
+                            <EllipsisIcon
+                              size={16}
+                              className="text-primary/60"
+                            />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                          <DropdownMenuItem className="group">
+                            <Trash2Icon
+                              size={16}
+                              className="mr-2 text-destructive group-hover:text-red-500"
+                            />
+                            <span>Delete</span>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                       <Button
                         size="icon"
                         type="button"

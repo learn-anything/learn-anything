@@ -34,7 +34,7 @@ export default function RootLayout({
             <JotaiProvider>
               <ConfirmProvider>
                 {children}
-                <Toaster expand />
+                <Toaster />
               </ConfirmProvider>
             </JotaiProvider>
           </ThemeProvider>
