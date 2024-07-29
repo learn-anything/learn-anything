@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useMemo } from "react"
+import React, { useMemo } from "react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ExternalLinkIcon, Trash2Icon } from "lucide-react"
 import Link from "next/link"
@@ -24,7 +24,7 @@ import {
 import { CSS } from "@dnd-kit/utilities"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { ListOfPersonalTodoItems, TodoItem } from "@/lib/schema"
-import { useAtom, useAtomValue } from "jotai"
+import { useAtom } from "jotai"
 import { linkEditIdAtom, linkSortAtom } from "@/store/link"
 import { cn } from "@/lib/utils"
 import { CreateForm } from "./form/manage"
@@ -50,7 +50,7 @@ export const LinkList = () => {
   const { me } = useAccount({
     root: { todos: [] }
   })
-  const todos = useMemo(() => me?.root?.todos || [], [me?.root?.todos])
+  const todos = me?.root?.todos || []
 
   const [editId, setEditId] = useAtom(linkEditIdAtom)
   const [sort] = useAtom(linkSortAtom)
@@ -85,13 +85,15 @@ export const LinkList = () => {
   )
 
   useKey("Escape", () => {
-    console.log("Escape key pressed", { editId })
-    setEditId(null)
+    if (editId) {
+      setEditId(null)
+    }
   })
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!me?.root?.todos || sortedTodos.length === 0 || editId) return
+      if (!me?.root?.todos || sortedTodos.length === 0 || editId !== null)
+        return
 
       const currentIndex = sortedTodos.findIndex(
         (todo) => todo?.id === focusedId
@@ -246,7 +248,7 @@ export const LinkList = () => {
                   isEditing={editId === todoItem.id}
                   setEditId={setEditId}
                   todoItem={todoItem}
-                  disabled={sort !== "manual"}
+                  disabled={sort !== "manual" || editId !== null}
                   registerRef={registerRef}
                   isDragging={draggingId === todoItem.id}
                   isFocused={focusedId === todoItem.id}
