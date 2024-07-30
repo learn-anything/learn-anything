@@ -5,28 +5,15 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useMedia } from "react-use"
 import { useAtom } from "jotai"
-import { ChevronDownIcon, LinkIcon, SearchIcon } from "lucide-react"
-
+import { LinkIcon, SearchIcon } from "lucide-react"
 import { Logo } from "@/components/custom/logo"
 import { Button } from "@/components/ui/button"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { cn } from "@/lib/utils"
 import { isCollapseAtom } from "@/store/sidebar"
+import { PageSection } from "./partial/page-section"
+import { TopicSection } from "./partial/topic-section"
 
-const PAGES = [
-  "EP 2024",
-  "Ableton 12",
-  "Householding",
-  "ADHD",
-  "Javascript",
-  "Hiring",
-  "IOS",
-  "Drugs",
-  "Hiking",
-  "Kubernetes",
-  "Java",
-  "Design"
-]
 interface SidebarItemProps {
   label: string
   url: string
@@ -71,7 +58,8 @@ export const Sidebar: React.FC = () => {
             icon={<LinkIcon size={16} />}
           />
           <div className="h-2 shrink-0" />
-          <Pages />
+          <PageSection />
+          <TopicSection />
         </div>
       </nav>
     </SidebarContext.Provider>
@@ -160,29 +148,11 @@ const LogoAndSearch: React.FC = () => {
   )
 }
 
-const Pages: React.FC = () => (
-  <div className="-ml-2">
-    <div className="mb-0.5 ml-2 mt-2 flex cursor-pointer flex-row items-center justify-between rounded-md hover:bg-primary/10">
-      <div
-        role="button"
-        tabIndex={0}
-        className="flex h-6 grow items-center gap-x-0.5 self-start rounded-md px-1 text-xs font-medium text-primary/50"
-      >
-        <span>Topics</span>
-        <ChevronDownIcon size={16} />
-      </div>
-    </div>
-    <div className="relative shrink-0">
-      <div aria-hidden="false" className="ml-2 shrink-0 pb-2">
-        {PAGES.map((page) => (
-          <SidebarItem key={page} url={`/${page}`} label={page} />
-        ))}
-      </div>
-    </div>
-  </div>
-)
-
-const SidebarItem: React.FC<SidebarItemProps> = ({ label, url, icon }) => {
+export const SidebarItem: React.FC<SidebarItemProps> = ({
+  label,
+  url,
+  icon
+}) => {
   const pathname = usePathname()
   const isActive = pathname === url
 
