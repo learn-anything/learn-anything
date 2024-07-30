@@ -163,7 +163,7 @@ export const ListItem: React.FC<ListItemProps> = ({
           )}
           <div className="w-full min-w-0 flex-auto cursor-auto">
             <div className="flex flex-col gap-2 xl:flex-row">
-              <p className="text-sm font-semibold text-primary hover:text-primary xl:truncate">
+              <p className="text-sm font-medium text-primary hover:text-primary xl:truncate">
                 {todoItem.title}
               </p>
               {todoItem.isLink && todoItem.meta && (
