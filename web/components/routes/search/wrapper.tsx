@@ -109,7 +109,7 @@ export const SearchWrapper = () => {
             />
             {showAiPlaceholder && searchText && !showAiSearch && (
               <div className="absolute right-10 text-sm text-white/30">
-                press "Enter" for AI search
+                press &quot;Enter&quot; for AI search
               </div>
             )}
             {searchText && (
