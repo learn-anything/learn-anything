@@ -1,5 +1,4 @@
 "use client"
-import { askGpt4ioAction } from "@/app/actions"
 import React, { useEffect, useState } from "react"
 import * as smd from "streaming-markdown"
 
@@ -8,30 +7,68 @@ interface AiSearchProps {
 }
 
 const AiSearch: React.FC<AiSearchProps> = (props: { searchQuery: string }) => {
-  const [result, setResult] = useState<string>("")
   const [error, setError] = useState<string>("")
 
-  useEffect(() => {
-    ;(async () => {
-      const [res, err] = await askGpt4ioAction({ question: props.searchQuery })
+  let root_el = React.useRef<HTMLDivElement | null>(null)
 
-      if (err) {
-        console.error("Error fetching result:", err.message)
-        setError("An error occurred while fetching the result.")
+  let [parser, md_el] = React.useMemo(() => {
+    let md_el = document.createElement("div")
+    let renderer = smd.default_renderer(md_el)
+    let parser = smd.parser(renderer)
+    return [parser, md_el]
+  }, [])
+
+  useEffect(() => {
+    if (root_el.current) {
+      root_el.current.appendChild(md_el)
+    }
+  }, [root_el.current, md_el])
+
+  useEffect(() => {
+    let question = props.searchQuery
+
+    fetchData()
+    async function fetchData() {
+      let response: Response
+      try {
+        response = await fetch("/api/search-stream", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({question: question}),
+        })
+      } catch (error) {
+        console.error("Error fetching data:", error)
+        setError("Error fetching data")
         return
       }
 
-      let reader = res.getReader()
-
-      const decoder = new TextDecoder()
-
-      let result
-      while (!(result = await reader.read()).done) {
-        // const chunk = decoder.decode(result.value)
-        console.log(result.value)
+      if (!response.body) {
+        console.error("Response has no body")
+        setError("Response has no body")
+        return
       }
-    })()
-  }, [props.searchQuery])
+
+      const reader = response.body.getReader()
+      const decoder = new TextDecoder()
+      
+      while (true) {
+        let res = await reader.read()
+        
+        if (res.value) {
+          let text = decoder.decode(res.value)
+          smd.parser_write(parser, text)
+        }
+
+        if (res.done) {
+          smd.parser_end(parser)
+          break
+        }
+      }
+    }
+
+  }, [props.searchQuery, parser])
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col items-center">
@@ -39,14 +76,9 @@ const AiSearch: React.FC<AiSearchProps> = (props: { searchQuery: string }) => {
         <div className="mb-6 rounded-lg bg-blue-700 p-4">
           <h2 className="text-lg font-medium">✨ This is what I have found:</h2>
         </div>
-        <div className="rounded-xl bg-[#121212] p-4">
-          <h1 className="text-md mb-4 border-b border-neutral-800 pb-2 font-semibold tracking-wider text-white opacity-50">
-            {props.searchQuery}
-          </h1>
-          <p className="min-h-[100px] whitespace-pre-wrap">{result}</p>
-        </div>
+        <div className="rounded-xl bg-[#121212] p-4" ref={root_el}></div>
       </div>
-      <p className="text-md pb-5 font-semibold opacity-50">Not answered?</p>
+      <p className="text-md pb-5 font-semibold opacity-50">{error}</p>
       <button className="text-md rounded-2xl bg-neutral-800 px-6 py-3 font-semibold text-opacity-50 shadow-inner shadow-neutral-700/50 transition-colors hover:bg-neutral-700">
         Ask Community
       </button>
