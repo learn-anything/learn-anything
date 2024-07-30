@@ -36,7 +36,7 @@ export const Sidebar: React.FC = () => {
 
   React.useEffect(() => {
     if (isTablet) setIsCollapsed(true)
-  }, [pathname, setIsCollapsed])
+  }, [pathname, setIsCollapsed, isTablet])
 
   React.useEffect(() => {
     setIsCollapsed(isTablet)
