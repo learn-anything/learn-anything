@@ -24,7 +24,7 @@ import { useKey } from "react-use"
 import { useConfirm } from "@omit/react-confirm-dialog"
 import { ListItem } from "./list-item"
 
-export const LinkList = () => {
+const LinkList = () => {
   const confirm = useConfirm()
   const { me } = useAccount({
     root: { todos: [] }
@@ -128,7 +128,7 @@ export const LinkList = () => {
 
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [me?.root?.todos, focusedId, editId, sort])
+  }, [me?.root?.todos, sortedTodos, focusedId, editId, sort])
 
   const updateSequences = (todos: ListOfPersonalTodoItems) => {
     todos.forEach((todo, index) => {
@@ -237,3 +237,7 @@ export const LinkList = () => {
     </DndContext>
   )
 }
+
+LinkList.displayName = "LinkList"
+
+export { LinkList }

@@ -50,7 +50,7 @@ const DEFAULT_FORM_VALUES: Partial<LinkFormValues> = {
   meta: null
 }
 
-export const LinkManage: React.FC = () => {
+const LinkManage: React.FC = () => {
   const [showCreate, setShowCreate] = useAtom(linkShowCreateAtom)
   const [, setEditId] = useAtom(linkEditIdAtom)
 
@@ -58,7 +58,7 @@ export const LinkManage: React.FC = () => {
     if (showCreate) {
       setEditId(null)
     }
-  }, [showCreate])
+  }, [showCreate, setEditId])
 
   useKey("Escape", () => {
     setShowCreate(false)
@@ -67,7 +67,7 @@ export const LinkManage: React.FC = () => {
   return (
     <>
       {showCreate && (
-        <CreateForm
+        <LinkForm
           onSuccess={() => setShowCreate(false)}
           onCancel={() => setShowCreate(false)}
         />
@@ -95,13 +95,13 @@ const CreateButton: React.FC<{ onClick: () => void; isOpen: boolean }> = ({
   </Button>
 )
 
-interface CreateFormProps extends React.ComponentPropsWithoutRef<"form"> {
+interface LinkFormProps extends React.ComponentPropsWithoutRef<"form"> {
   onSuccess?: () => void
   onCancel?: () => void
   todoItem?: TodoItem
 }
 
-export const CreateForm = React.forwardRef<HTMLFormElement, CreateFormProps>(
+const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
   ({ onSuccess, onCancel, todoItem }, ref) => {
     const selectedTodo = useCoState(TodoItem, todoItem?.id)
     const [isFetching, setIsFetching] = useState(false)
@@ -351,3 +351,8 @@ export const CreateForm = React.forwardRef<HTMLFormElement, CreateFormProps>(
     )
   }
 )
+
+LinkManage.displayName = "LinkManage"
+LinkForm.displayName = "LinkForm"
+
+export { LinkManage, LinkForm }

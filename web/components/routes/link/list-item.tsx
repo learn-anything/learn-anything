@@ -9,7 +9,7 @@ import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { TodoItem } from "@/lib/schema"
 import { cn } from "@/lib/utils"
-import { CreateForm } from "./form/manage"
+import { LinkForm } from "./form/manage"
 import { Button } from "@/components/ui/button"
 import { ConfirmOptions } from "@omit/react-confirm-dialog"
 import { toast } from "sonner"
@@ -114,7 +114,7 @@ export const ListItem: React.FC<ListItemProps> = ({
 
   if (isEditing) {
     return (
-      <CreateForm
+      <LinkForm
         ref={formRef}
         todoItem={todoItem}
         onSuccess={handleSuccess}
