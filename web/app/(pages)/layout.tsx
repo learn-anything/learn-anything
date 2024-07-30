@@ -1,4 +1,4 @@
-import { Sidebar } from "@/components/custom/sidebar"
+import { Sidebar } from "@/components/custom/sidebar/sidebar"
 
 export default async function RootLayout({
   children
