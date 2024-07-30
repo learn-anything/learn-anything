@@ -1,4 +1,5 @@
 import { CoMap, CoList, co, Account, Group } from "jazz-tools"
+import { nullable, nullableJson } from "./types"
 
 // TODO: pages should have same permission control as Figma
 // public, certain members (read/write access later), personal (ideally end to end encrypted)
@@ -31,23 +32,21 @@ class Section extends CoMap {
 }
 class ListOfSections extends CoList.Of(co.ref(() => Section)) {}
 
-// TODO: not used until jazz supports rich text
 export class Page extends CoMap {
   title = co.string
-  // TODO: make rich text
-  content = co.string
+  content = nullableJson()
 }
 
 export class UserLink extends CoMap {
   url = co.string
   title = co.string
-  image? = co.string as co<string> | null
+  image = nullable(co.string)
   favicon = co.string
-  description? = co.string as co<string> | null
+  description = nullable(co.string)
 }
 export class TodoItem extends CoMap {
   title = co.string
-  description? = co.string as co<string> | null
+  description = nullable(co.string)
   topic? = co.ref(GlobalTopic)
   completed = co.boolean
   sequence = co.number
