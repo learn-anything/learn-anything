@@ -34,9 +34,9 @@ const AiSearch: React.FC<AiSearchProps> = (props: { searchQuery: string }) => {
         response = await fetch("/api/search-stream", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json"
           },
-          body: JSON.stringify({question: question}),
+          body: JSON.stringify({ question: question })
         })
       } catch (error) {
         console.error("Error fetching data:", error)
@@ -52,10 +52,10 @@ const AiSearch: React.FC<AiSearchProps> = (props: { searchQuery: string }) => {
 
       const reader = response.body.getReader()
       const decoder = new TextDecoder()
-      
+
       while (true) {
         let res = await reader.read()
-        
+
         if (res.value) {
           let text = decoder.decode(res.value)
           smd.parser_write(parser, text)
@@ -67,7 +67,6 @@ const AiSearch: React.FC<AiSearchProps> = (props: { searchQuery: string }) => {
         }
       }
     }
-
   }, [props.searchQuery, parser])
 
   return (

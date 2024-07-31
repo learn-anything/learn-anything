@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react"
-import { useAccount } from "@/lib/providers/jazz-provider"
+// import { useAccount } from "@/lib/providers/jazz-provider"
 import { IoSearch, IoCloseOutline, IoChevronForward } from "react-icons/io5"
 import AiSearch from "../../custom/ai-search"
 
