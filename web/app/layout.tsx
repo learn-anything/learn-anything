@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
-import { Inter as FontSans } from "next/font/google"
+// import { Inter as FontSans } from "next/font/google"
+import { Inter } from "next/font/google"
 import { cn } from "@/lib/utils"
 import { ThemeProvider } from "@/lib/providers/theme-provider"
 import "./globals.css"
@@ -8,7 +9,12 @@ import { JotaiProvider } from "@/lib/providers/jotai-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { ConfirmProvider } from "@/lib/providers/confirm-provider"
 
-const fontSans = FontSans({
+// const fontSans = FontSans({
+//   subsets: ["latin"],
+//   variable: "--font-sans"
+// })
+
+const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans"
 })
@@ -27,7 +33,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full w-full">
       <body
-        className={cn("h-full w-full font-sans antialiased", fontSans.variable)}
+        className={cn("h-full w-full font-sans antialiased", inter.variable)}
       >
         <JazzProvider>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
