@@ -116,7 +116,7 @@ const FilterAndSort = () => {
             </div>
           </PopoverContent>
         </Popover>
-        <Button
+        {/* <Button
           size="sm"
           type="button"
           variant="secondary"
@@ -124,7 +124,7 @@ const FilterAndSort = () => {
         >
           <PlusIcon size={16} className="text-primary/60" />
           <span className="hidden md:block">Date added</span>
-        </Button>
+        </Button> */}
       </div>
     </div>
   )

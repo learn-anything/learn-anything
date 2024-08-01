@@ -16,6 +16,7 @@ import {
   PopoverTrigger,
   PopoverContent
 } from "@/components/ui/popover"
+import { useState } from "react"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { CheckIcon, ChevronDownIcon } from "lucide-react"
 import { useFormContext } from "react-hook-form"
@@ -29,6 +30,7 @@ const TOPICS = [
 
 export const TopicSelector: React.FC = () => {
   const form = useFormContext<LinkFormValues>()
+  const [open, setOpen] = useState(false)
 
   return (
     <FormField
@@ -37,7 +39,7 @@ export const TopicSelector: React.FC = () => {
       render={({ field }) => (
         <FormItem>
           <FormLabel className="sr-only">Topic</FormLabel>
-          <Popover>
+          <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
@@ -70,7 +72,10 @@ export const TopicSelector: React.FC = () => {
                         className="cursor-pointer"
                         key={topic.id}
                         value={topic.name}
-                        onSelect={(value) => form.setValue("topic", value)}
+                        onSelect={(value) => {
+                          form.setValue("topic", value)
+                          setOpen(false)
+                        }}
                       >
                         {topic.name}
                         <CheckIcon
