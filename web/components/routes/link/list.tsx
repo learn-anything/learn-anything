@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import {
   DndContext,
   closestCenter,
@@ -23,6 +22,7 @@ import { linkEditIdAtom, linkSortAtom } from "@/store/link"
 import { useKey } from "react-use"
 import { useConfirm } from "@omit/react-confirm-dialog"
 import { ListItem } from "./list-item"
+import { useRef, useState, useCallback, useEffect } from "react"
 
 const LinkList = () => {
   const confirm = useConfirm()
@@ -32,10 +32,11 @@ const LinkList = () => {
   const todos = me?.root?.todos || []
 
   const [editId, setEditId] = useAtom(linkEditIdAtom)
+  const [open, setOpen] = useState(true)
   const [sort] = useAtom(linkSortAtom)
-  const [focusedId, setFocusedId] = React.useState<string | null>(null)
-  const [draggingId, setDraggingId] = React.useState<string | null>(null)
-  const todoRefs = React.useRef<{ [key: string]: HTMLLIElement | null }>({})
+  const [focusedId, setFocusedId] = useState<string | null>(null)
+  const [draggingId, setDraggingId] = useState<string | null>(null)
+  const todoRefs = useRef<{ [key: string]: HTMLLIElement | null }>({})
 
   let sortedTodos =
     sort === "title" && todos
@@ -56,12 +57,13 @@ const LinkList = () => {
     })
   )
 
-  const registerRef = React.useCallback(
-    (id: string, ref: HTMLLIElement | null) => {
-      todoRefs.current[id] = ref
-    },
-    []
-  )
+  const overlayClick = () => {
+    setEditId(null)
+  }
+
+  const registerRef = useCallback((id: string, ref: HTMLLIElement | null) => {
+    todoRefs.current[id] = ref
+  }, [])
 
   useKey("Escape", () => {
     if (editId) {
@@ -69,7 +71,7 @@ const LinkList = () => {
     }
   })
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!me?.root?.todos || sortedTodos.length === 0 || editId !== null)
         return
@@ -92,7 +94,6 @@ const LinkList = () => {
           const todosArray = [...me.root.todos]
           const newTodos = arrayMove(todosArray, currentIndex, newIndex)
 
-          // Clear the original list
           while (me.root.todos.length > 0) {
             me.root.todos.pop()
           }
@@ -103,7 +104,6 @@ const LinkList = () => {
             }
           })
 
-          // Update sequences
           updateSequences(me.root.todos)
 
           const newFocusedTodo = me.root.todos[newIndex]
@@ -170,7 +170,6 @@ const LinkList = () => {
         const todosArray = [...me.root.todos]
         const updatedTodos = arrayMove(todosArray, oldIndex, newIndex)
 
-        // Clear the original list
         while (me.root.todos.length > 0) {
           me.root.todos.pop()
         }
@@ -203,38 +202,43 @@ const LinkList = () => {
   }
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-    >
-      <SortableContext
-        items={sortedTodos.map((item) => item?.id || "") || []}
-        strategy={verticalListSortingStrategy}
-      >
-        <ul role="list" className="divide-y divide-primary/5">
-          {sortedTodos.map(
-            (todoItem) =>
-              todoItem && (
-                <ListItem
-                  key={todoItem.id}
-                  confirm={confirm}
-                  isEditing={editId === todoItem.id}
-                  setEditId={setEditId}
-                  todoItem={todoItem}
-                  disabled={sort !== "manual" || editId !== null}
-                  registerRef={registerRef}
-                  isDragging={draggingId === todoItem.id}
-                  isFocused={focusedId === todoItem.id}
-                  setFocusedId={setFocusedId}
-                  onDelete={handleDelete}
-                />
-              )
-          )}
-        </ul>
-      </SortableContext>
-    </DndContext>
+    <>
+      {editId && <div className="fixed inset-0 z-40" onClick={overlayClick} />}
+      <div className="relative z-50">
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={sortedTodos.map((item) => item?.id || "") || []}
+            strategy={verticalListSortingStrategy}
+          >
+            <ul role="list" className="divide-y divide-primary/5">
+              {sortedTodos.map(
+                (todoItem) =>
+                  todoItem && (
+                    <ListItem
+                      key={todoItem.id}
+                      confirm={confirm}
+                      isEditing={editId === todoItem.id}
+                      setEditId={setEditId}
+                      todoItem={todoItem}
+                      disabled={sort !== "manual" || editId !== null}
+                      registerRef={registerRef}
+                      isDragging={draggingId === todoItem.id}
+                      isFocused={focusedId === todoItem.id}
+                      setFocusedId={setFocusedId}
+                      onDelete={handleDelete}
+                    />
+                  )
+              )}
+            </ul>
+          </SortableContext>
+        </DndContext>
+      </div>
+    </>
   )
 }
 
