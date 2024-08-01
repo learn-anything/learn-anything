@@ -173,7 +173,7 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
             Object.assign(selectedTodo.meta, values.meta)
           }
 
-          toast.success("Todo updated")
+          // toast.success("Todo updated")
         } else {
           // Create new todo
           const newTodo = TodoItem.create(

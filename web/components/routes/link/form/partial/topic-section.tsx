@@ -67,6 +67,7 @@ export const TopicSelector: React.FC = () => {
                   <ScrollArea>
                     {TOPICS.map((topic) => (
                       <CommandItem
+                        className="cursor-pointer"
                         key={topic.id}
                         value={topic.name}
                         onSelect={(value) => form.setValue("topic", value)}
