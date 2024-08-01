@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useDebounce } from "react-use"
@@ -53,6 +53,7 @@ const DEFAULT_FORM_VALUES: Partial<LinkFormValues> = {
 const LinkManage: React.FC = () => {
   const [showCreate, setShowCreate] = useAtom(linkShowCreateAtom)
   const [, setEditId] = useAtom(linkEditIdAtom)
+  const formRef = React.useRef<HTMLFormElement>(null)
 
   useEffect(() => {
     if (showCreate) {
@@ -64,13 +65,32 @@ const LinkManage: React.FC = () => {
     setShowCreate(false)
   })
 
+  useEffect(() => {
+    const overlayClick = (event: MouseEvent) => {
+      if (formRef.current && !formRef.current.contains(event.target as Node)) {
+        setShowCreate(false)
+      }
+    }
+
+    if (showCreate) {
+      document.addEventListener("mousedown", overlayClick)
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", overlayClick)
+    }
+  }, [showCreate, setShowCreate])
+
   return (
     <>
       {showCreate && (
-        <LinkForm
-          onSuccess={() => setShowCreate(false)}
-          onCancel={() => setShowCreate(false)}
-        />
+        <div className="z-50">
+          <LinkForm
+            ref={formRef}
+            onSuccess={() => setShowCreate(false)}
+            onCancel={() => setShowCreate(false)}
+          />
+        </div>
       )}
       <CreateButton
         onClick={() => setShowCreate(!showCreate)}
