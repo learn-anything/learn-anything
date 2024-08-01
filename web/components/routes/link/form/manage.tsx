@@ -53,33 +53,45 @@ const DEFAULT_FORM_VALUES: Partial<LinkFormValues> = {
 const LinkManage: React.FC = () => {
   const [showCreate, setShowCreate] = useAtom(linkShowCreateAtom)
   const [, setEditId] = useAtom(linkEditIdAtom)
-  const formRef = React.useRef<HTMLFormElement>(null)
+  const formRef = useRef<HTMLFormElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+
+  const toggleForm = (event: React.MouseEvent) => {
+    event.stopPropagation()
+    setShowCreate((prev) => !prev)
+  }
 
   useEffect(() => {
-    if (showCreate) {
+    if (!showCreate) {
+      formRef.current?.reset()
       setEditId(null)
     }
   }, [showCreate, setEditId])
 
-  useKey("Escape", () => {
-    setShowCreate(false)
-  })
-
   useEffect(() => {
-    const overlayClick = (event: MouseEvent) => {
-      if (formRef.current && !formRef.current.contains(event.target as Node)) {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (
+        formRef.current &&
+        !formRef.current.contains(event.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target as Node)
+      ) {
         setShowCreate(false)
       }
     }
 
     if (showCreate) {
-      document.addEventListener("mousedown", overlayClick)
+      document.addEventListener("mousedown", handleOutsideClick)
     }
 
     return () => {
-      document.removeEventListener("mousedown", overlayClick)
+      document.removeEventListener("mousedown", handleOutsideClick)
     }
   }, [showCreate, setShowCreate])
+
+  useKey("Escape", () => {
+    setShowCreate(false)
+  })
 
   return (
     <>
@@ -92,19 +104,20 @@ const LinkManage: React.FC = () => {
           />
         </div>
       )}
-      <CreateButton
-        onClick={() => setShowCreate(!showCreate)}
-        isOpen={showCreate}
-      />
+      <CreateButton ref={buttonRef} onClick={toggleForm} isOpen={showCreate} />
     </>
   )
 }
 
-const CreateButton: React.FC<{ onClick: () => void; isOpen: boolean }> = ({
-  onClick,
-  isOpen
-}) => (
+const CreateButton = React.forwardRef<
+  HTMLButtonElement,
+  {
+    onClick: (event: React.MouseEvent) => void
+    isOpen: boolean
+  }
+>(({ onClick, isOpen }, ref) => (
   <Button
+    ref={ref}
     className={cn(
       "absolute bottom-4 right-4 size-12 rounded-full bg-[#274079] p-0 text-white transition-transform hover:bg-[#274079]/90",
       { "rotate-45 transform": isOpen }
@@ -113,7 +126,9 @@ const CreateButton: React.FC<{ onClick: () => void; isOpen: boolean }> = ({
   >
     <PlusIcon className="size-6" />
   </Button>
-)
+))
+
+CreateButton.displayName = "CreateButton"
 
 interface LinkFormProps extends React.ComponentPropsWithoutRef<"form"> {
   onSuccess?: () => void
