@@ -108,7 +108,7 @@ export const ListItem: React.FC<ListItemProps> = ({
     if (result) {
       console.log("Deleting todo item", todoItem)
       onDelete?.(todoItem)
-      toast.success(`Deleted "${todoItem.title}"`)
+      // toast.success(`Deleted "${todoItem.title}"`)
     }
   }
 

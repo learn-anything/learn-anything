@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { ListFilterIcon, PlusIcon } from "lucide-react"
+import { ListFilterIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { ContentHeader } from "@/components/custom/content-header"
@@ -82,6 +82,10 @@ const TabItem = ({ url, label }: TabItemProps) => {
 const FilterAndSort = () => {
   const [sort, setSort] = useAtom(linkSortAtom)
 
+  const getFilterText = () => {
+    return sort.charAt(0).toUpperCase() + sort.slice(1)
+  }
+
   return (
     <div className="flex w-auto items-center justify-end">
       <div className="flex items-center gap-2">
@@ -94,7 +98,7 @@ const FilterAndSort = () => {
               className="gap-x-2 text-sm"
             >
               <ListFilterIcon size={16} className="text-primary/60" />
-              <span className="hidden md:block">Filter</span>
+              <span className="hidden md:block">Filter: {getFilterText()}</span>
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-72" align="end">
@@ -116,15 +120,6 @@ const FilterAndSort = () => {
             </div>
           </PopoverContent>
         </Popover>
-        {/* <Button
-          size="sm"
-          type="button"
-          variant="secondary"
-          className="gap-x-2 text-sm"
-        >
-          <PlusIcon size={16} className="text-primary/60" />
-          <span className="hidden md:block">Date added</span>
-        </Button> */}
       </div>
     </div>
   )
