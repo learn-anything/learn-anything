@@ -11,4 +11,3 @@ async function run() {
 
 // @ts-ignore
 await run()
-// past:

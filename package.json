@@ -4,10 +4,11 @@
 		"dev": "bun web",
 		"web": "cd web && bun dev",
 		"web:build": "bun run --filter '*' build",
-		"cli": "bun run --watch cli/run.ts"
+		"cli": "bun run --watch cli/run.ts",
+		"seed": "bun --watch cli/seed.ts"
 	},
 	"devDependencies": {
-		"bun-types": "^1.1.20"
+		"bun-types": "^1.1.21"
 	},
 	"workspaces": [
 		"web"
@@ -21,6 +22,7 @@
 	},
 	"private": true,
 	"dependencies": {
+		"jazz-nodejs": "^0.7.23",
 		"react-icons": "^5.2.1"
 	}
 }

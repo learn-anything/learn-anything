@@ -1,45 +1,15 @@
-# dependencies
-node_modules
-/.pnp
-.pnp.js
-.yarn/install-state.gz
-
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
+# base
 .DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# local env files
+.env
 .env*.local
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-dbschema/edgeql-js
-dbschema/interfaces.ts
-
-# other
+# ts
+node_modules
 package-lock.json
 pnpm-lock.yaml
-.env
+.vercel
+# next
 .next-types
-.env
 .next
+# other
+private
+past-*
