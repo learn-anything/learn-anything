@@ -20,9 +20,6 @@ async function seed() {
 			case "productionSeed":
 				await productionSeed()
 				break
-			case "globalTopicsSeed":
-				await globalTopicsSeed()
-				break
 			default:
 				console.log("Unknown command")
 				break
@@ -46,22 +43,19 @@ async function setupJazz() {
 	await Bun.write("./.env", `JAZZ_GLOBAL_GROUP=${JSON.stringify(globalLinksGroup.id)}`)
 }
 
-async function productionSeed() {
+async function devSeed() {
 	const { worker } = await startWorker({
 		accountID: "co_zhvp7ryXJzDvQagX61F6RCZFJB9",
 		accountSecret:
 			"sealerSecret_z7o2TyWgbzin7Syoa4xUvoQc9ufyc3G2KWj6vfUsoE5en/signerSecret_z6ZnmVjPjqjFPtRcEiEVbPhuMcauvdE9hV7tVLUxRx1z5"
 	})
-
 	const user = (await (
 		await LaAccount.createAs(worker, {
 			creationProps: { name: "nikiv" }
 		})
 	).ensureLoaded({ root: { personalLinks: [], pages: [], todos: [] } }))!
-
 	const globalLinksGroup = Group.create({ owner: worker })
 	globalLinksGroup.addMember("everyone", "reader")
-
 	const globalLink1 = GlobalLink.create({ url: "https://google.com" }, { owner: globalLinksGroup })
 	const globalLink2 = GlobalLink.create({ url: "https://jazz.tools" }, { owner: globalLinksGroup })
 	// TODO: make note: optional
@@ -100,32 +94,41 @@ async function productionSeed() {
 	)
 }
 
-async function devSeed() {}
+async function productionSeed() {
+	const { worker } = await startWorker({
+		accountID: "co_zhvp7ryXJzDvQagX61F6RCZFJB9",
+		accountSecret:
+			"sealerSecret_z7o2TyWgbzin7Syoa4xUvoQc9ufyc3G2KWj6vfUsoE5en/signerSecret_z6ZnmVjPjqjFPtRcEiEVbPhuMcauvdE9hV7tVLUxRx1z5"
+	})
+	const global = Group.create({ owner: worker })
 
-async function globalTopicsSeed() {
-	// const { worker } = await startWorker({
-	// 	accountID: "co_zhvp7ryXJzDvQagX61F6RCZFJB9",
-	// 	accountSecret:
-	// 		"sealerSecret_z7o2TyWgbzin7Syoa4xUvoQc9ufyc3G2KWj6vfUsoE5en/signerSecret_z6ZnmVjPjqjFPtRcEiEVbPhuMcauvdE9hV7tVLUxRx1z5"
-	// })
+	// const user = (await (
+	// 	await LaAccount.createAs(worker, {
+	// 		creationProps: { name: "nikiv" }
+	// 	})
+	// ).ensureLoaded({ root: { personalLinks: [], pages: [], todos: [] } }))!
+
 	// console.log(process.env.JAZZ_GLOBAL_GROUP!, "group")
+	// console.log(worker)
 	// TODO: type err
 	// const globalGroup = await Group.load(process.env.JAZZ_GLOBAL_GROUP!, worker, {})
 	// console.log(globalGroup, "group")
 	// return
 
-	const currentFilePath = import.meta.path
-	const connectionsFilePath = `${currentFilePath.replace("seed.ts", "/seed/connections.json")}`
-	const file = Bun.file(connectionsFilePath)
-	const fileContent = await file.text()
-	const topicsWithConnections = JSON.parse(fileContent)
-	// let topicsWithConnections = JSON.stringify(obj, null, 2)
-	console.log(topicsWithConnections)
+	// const currentFilePath = import.meta.path
+	// const connectionsFilePath = `${currentFilePath.replace("seed.ts", "/seed/connections.json")}`
+	// const file = Bun.file(connectionsFilePath)
+	// const fileContent = await file.text()
+	// const topicsWithConnections = JSON.parse(fileContent)
+	// // let topicsWithConnections = JSON.stringify(obj, null, 2)
+	// console.log(topicsWithConnections)
 
 	// TODO: type err
 	// topicsWithConnections.map(topic => {
 	// 	const globalTopic = GlobalTopic.create({ name: topic.name, description: topic.description }, { owner: globalGroup })
 	// })
 }
+
+async function globalTopicsSeed(worker: LaAccount) {}
 
 await seed()
