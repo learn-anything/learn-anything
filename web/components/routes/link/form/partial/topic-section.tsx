@@ -31,6 +31,7 @@ const TOPICS = [
 export const TopicSelector: React.FC = () => {
   const form = useFormContext<LinkFormValues>()
   const [open, setOpen] = useState(false)
+  const { setValue } = useFormContext()
 
   return (
     <FormField
@@ -73,7 +74,7 @@ export const TopicSelector: React.FC = () => {
                         key={topic.id}
                         value={topic.name}
                         onSelect={(value) => {
-                          form.setValue("topic", value)
+                          setValue("topic", value)
                           setOpen(false)
                         }}
                       >

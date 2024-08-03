@@ -50,7 +50,7 @@ export const LinkHeader = () => {
 
 const Tabs = () => {
   return (
-    <div className="flex items-baseline gap-2 overflow-x-hidden rounded-md bg-secondary/50">
+    <div className="flex items-baseline overflow-x-hidden rounded-md bg-secondary/50">
       {TABS.map((tab) => (
         <TabItem key={tab} url="#" label={tab} />
       ))}
@@ -59,6 +59,8 @@ const Tabs = () => {
 }
 
 const TabItem = ({ url, label }: TabItemProps) => {
+  const [isActive, setIsActive] = React.useState(false)
+
   return (
     <div tabIndex={-1} className="rounded-md">
       <div className="flex flex-row">
@@ -68,7 +70,9 @@ const TabItem = ({ url, label }: TabItemProps) => {
               size="sm"
               type="button"
               variant="ghost"
-              className="gap-x-2 truncate text-sm"
+              className={`gap-x-2 truncate text-sm ${isActive ? "bg-accent text-accent-foreground" : ""}`}
+              onClick={() => setIsActive(true)}
+              onBlur={() => setIsActive(false)}
             >
               {label}
             </Button>
@@ -78,6 +82,27 @@ const TabItem = ({ url, label }: TabItemProps) => {
     </div>
   )
 }
+
+// const TabItem = ({ url, label }: TabItemProps) => {
+//   return (
+//     <div tabIndex={-1} className="rounded-md">
+//       <div className="flex flex-row">
+//         <div aria-label={label}>
+//           <Link href={url}>
+//             <Button
+//               size="sm"
+//               type="button"
+//               variant="ghost"
+//               className="gap-x-2 truncate text-sm"
+//             >
+//               {label}
+//             </Button>
+//           </Link>
+//         </div>
+//       </div>
+//     </div>
+//   )
+// }
 
 const FilterAndSort = () => {
   const [sort, setSort] = useAtom(linkSortAtom)
