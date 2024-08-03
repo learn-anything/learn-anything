@@ -65,7 +65,7 @@ const TopicSection = () => {
         {
           text: "Show All",
           icon: <BookOpen size={16} />,
-          color: "text-white/70"
+          color: "text-white"
         },
         ...learningOptions.filter((option) => option.text !== selectedStatus)
       ]
@@ -78,15 +78,21 @@ const TopicSection = () => {
         className="flex w-full items-center justify-between rounded-md bg-accent px-3 py-2 text-sm font-medium text-foreground hover:bg-accent/50"
       >
         <span>{selectedStatus ? `Topics: ${selectedStatus}` : "Topics"}</span>
-        <ChevronDown size={16} />
+        <ChevronDown
+          size={16}
+          className={`transform transition-transform duration-200 ease-in-out ${
+            showOptions ? "rotate-0" : "rotate-[-90deg]"
+          }`}
+        />
       </Button>
+
       {showOptions && (
-        <div className="space-y-1">
+        <div className="rounded-md bg-neutral-800">
           {availableOptions.map((option) => (
             <Button
               key={option.text}
               onClick={() => statusSelect(option.text)}
-              className={`flex w-full items-center justify-start space-x-2 rounded-md bg-accent px-3 py-2 text-sm font-medium hover:bg-accent/50 ${option.color}`}
+              className={`flex w-full items-center justify-start space-x-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-neutral-700 ${option.color} bg-inherit`}
             >
               {option.icon && (
                 <span className={option.color}>{option.icon}</span>
