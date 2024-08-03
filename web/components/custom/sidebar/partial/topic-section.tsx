@@ -1,4 +1,12 @@
-import { ChevronDownIcon } from "lucide-react"
+import { useState, useEffect, useRef } from "react"
+import { Button } from "@/components/ui/button"
+import {
+  ChevronDown,
+  BookOpen,
+  Bookmark,
+  GraduationCap,
+  Check
+} from "lucide-react"
 import { SidebarItem } from "../sidebar"
 
 const TOPICS = [
@@ -12,24 +20,96 @@ const TOPICS = [
   "Design"
 ]
 
-export const TopicSection: React.FC = () => (
-  <div className="-ml-2">
-    <div className="mb-0.5 ml-2 mt-2 flex cursor-pointer flex-row items-center justify-between rounded-md hover:bg-primary/10">
-      <div
-        role="button"
-        tabIndex={0}
-        className="flex h-6 grow items-center gap-x-0.5 self-start rounded-md px-1 text-xs font-medium text-primary/50"
+const TopicSection = () => {
+  const [showOptions, setShowOptions] = useState(false)
+  const [selectedStatus, setSelectedStatus] = useState<string | null>(null)
+  const sectionRef = useRef<HTMLDivElement>(null)
+
+  const learningOptions = [
+    { text: "To Learn", icon: <Bookmark size={16} />, color: "text-white/70" },
+    {
+      text: "Learning",
+      icon: <GraduationCap size={16} />,
+      color: "text-[#D29752]"
+    },
+    {
+      text: "Learned",
+      icon: <Check size={16} />,
+      color: "text-[#708F51]"
+    }
+  ]
+
+  const statusSelect = (status: string) => {
+    setSelectedStatus(status === "Show All" ? null : status)
+    setShowOptions(false)
+  }
+
+  useEffect(() => {
+    const overlayClick = (event: MouseEvent) => {
+      if (
+        sectionRef.current &&
+        !sectionRef.current.contains(event.target as Node)
+      ) {
+        setShowOptions(false)
+      }
+    }
+
+    document.addEventListener("mousedown", overlayClick)
+    return () => {
+      document.removeEventListener("mousedown", overlayClick)
+    }
+  }, [])
+
+  const availableOptions = selectedStatus
+    ? [
+        {
+          text: "Show All",
+          icon: <BookOpen size={16} />,
+          color: "text-white/70"
+        },
+        ...learningOptions.filter((option) => option.text !== selectedStatus)
+      ]
+    : learningOptions
+
+  return (
+    <div className="space-y-1 overflow-hidden" ref={sectionRef}>
+      <Button
+        onClick={() => setShowOptions(!showOptions)}
+        className="flex w-full items-center justify-between rounded-md bg-accent px-3 py-2 text-sm font-medium text-foreground hover:bg-accent/50"
       >
-        <span>Topics</span>
-        <ChevronDownIcon size={16} />
-      </div>
-    </div>
-    <div className="relative shrink-0">
-      <div aria-hidden="false" className="ml-2 shrink-0 pb-2">
-        {TOPICS.map((page) => (
-          <SidebarItem key={page} url={`/${page}`} label={page} />
+        <span>{selectedStatus ? `Topics: ${selectedStatus}` : "Topics"}</span>
+        <ChevronDown size={16} />
+      </Button>
+      {showOptions && (
+        <div className="space-y-1">
+          {availableOptions.map((option) => (
+            <Button
+              key={option.text}
+              onClick={() => statusSelect(option.text)}
+              className={`flex w-full items-center justify-start space-x-2 rounded-md bg-accent px-3 py-2 text-sm font-medium hover:bg-accent/50 ${option.color}`}
+            >
+              {option.icon && (
+                <span className={option.color}>{option.icon}</span>
+              )}
+              <span>{option.text}</span>
+            </Button>
+          ))}
+        </div>
+      )}
+      <div
+        className="scrollbar-hide space-y-1 overflow-y-auto"
+        style={{ maxHeight: "calc(100vh - 200px)" }}
+      >
+        {TOPICS.map((topic) => (
+          <SidebarItem
+            key={topic}
+            url={`/topic/${topic.toLowerCase()}`}
+            label={topic}
+          />
         ))}
       </div>
     </div>
-  </div>
-)
+  )
+}
+
+export default TopicSection

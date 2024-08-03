@@ -12,7 +12,7 @@ import { useAccount } from "@/lib/providers/jazz-provider"
 import { cn } from "@/lib/utils"
 import { isCollapseAtom } from "@/store/sidebar"
 import { PageSection } from "./partial/page-section"
-import { TopicSection } from "./partial/topic-section"
+import TopicSection from "./partial/topic-section"
 
 interface SidebarItemProps {
   label: string

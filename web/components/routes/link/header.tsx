@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/select"
 import { useAtom } from "jotai"
 import { linkSortAtom } from "@/store/link"
+
 interface TabItemProps {
   url: string
   label: string
@@ -82,27 +83,6 @@ const TabItem = ({ url, label }: TabItemProps) => {
     </div>
   )
 }
-
-// const TabItem = ({ url, label }: TabItemProps) => {
-//   return (
-//     <div tabIndex={-1} className="rounded-md">
-//       <div className="flex flex-row">
-//         <div aria-label={label}>
-//           <Link href={url}>
-//             <Button
-//               size="sm"
-//               type="button"
-//               variant="ghost"
-//               className="gap-x-2 truncate text-sm"
-//             >
-//               {label}
-//             </Button>
-//           </Link>
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }
 
 const FilterAndSort = () => {
   const [sort, setSort] = useAtom(linkSortAtom)
