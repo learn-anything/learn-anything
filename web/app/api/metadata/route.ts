@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
       description:
         $('meta[name="description"]').attr("content") ||
         $('meta[property="og:description"]').attr("content") ||
-        "No description available",
+        "test", // TODO: does not show
       image: $('meta[property="og:image"]').attr("content") || null,
       favicon:
         $('link[rel="icon"]').attr("href") ||

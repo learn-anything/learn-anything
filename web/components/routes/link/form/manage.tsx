@@ -147,6 +147,8 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
     })
 
     const title = form.watch("title")
+    const [originalLink, setOriginalLink] = useState<string>("")
+    const [linkEntered, setLinkEntered] = useState(false)
     const [debouncedText, setDebouncedText] = useState<string>("")
     useDebounce(() => setDebouncedText(title), 300, [title])
 
@@ -173,22 +175,30 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
           form.setValue("meta", data)
           form.setValue("title", data.title)
           form.setValue("description", data.description)
+          setOriginalLink(url)
         } catch (err) {
-          toast.error("Link preview failed")
           form.setValue("isLink", false)
           form.setValue("meta", null)
           form.setValue("title", debouncedText)
           form.setValue("description", "")
+          setOriginalLink("")
         } finally {
           setIsFetching(false)
         }
       }
 
       const lowerText = debouncedText.toLowerCase()
-      if (LibIsUrl(lowerText)) {
+      if (linkEntered && LibIsUrl(lowerText)) {
         fetchMetadata(ensureUrlProtocol(lowerText))
       }
-    }, [debouncedText, form])
+    }, [debouncedText, form, linkEntered])
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter" && LibIsUrl(e.currentTarget.value.toLowerCase())) {
+        e.preventDefault()
+        setLinkEntered(true)
+      }
+    }
 
     const onSubmit = (values: LinkFormValues) => {
       if (isFetching) return
@@ -225,8 +235,6 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
           )
 
           me.root?.todos?.push(newTodo)
-
-          toast.success("Todo created")
         }
 
         form.reset(DEFAULT_FORM_VALUES)
@@ -291,11 +299,19 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
                                 autoFocus
                                 placeholder="Paste a link or write a todo"
                                 className="h-6 border-none p-1.5 font-medium placeholder:text-primary/40 focus-visible:outline-none focus-visible:ring-0"
+                                onKeyDown={handleKeyDown}
                               />
                             </FormControl>
                           </FormItem>
                         )}
                       />
+                      <span className="mr-5 max-w-[200px] truncate text-xs text-white/60">
+                        {linkEntered
+                          ? originalLink
+                          : LibIsUrl(form.watch("title").toLowerCase())
+                            ? 'Press "Enter" to confirm URL'
+                            : ""}
+                      </span>
                     </div>
 
                     <div className="flex min-w-0 shrink-0 cursor-pointer select-none flex-row">
