@@ -363,7 +363,12 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
                               {...field}
                               autoComplete="off"
                               placeholder="Description (optional)"
-                              className="h-6 border-none p-1.5 text-xs font-medium placeholder:text-primary/40 focus-visible:outline-none focus-visible:ring-0"
+                              className="min-h-[24px] resize-none overflow-y-auto border-none p-1.5 text-xs font-medium placeholder:text-primary/40 focus-visible:outline-none focus-visible:ring-0"
+                              onInput={(e) => {
+                                const target = e.target as HTMLTextAreaElement
+                                target.style.height = "auto"
+                                target.style.height = `${target.scrollHeight}px`
+                              }}
                             />
                           </FormControl>
                         </FormItem>
