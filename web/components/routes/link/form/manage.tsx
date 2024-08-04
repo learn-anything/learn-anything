@@ -342,7 +342,7 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
                     <div className="flex min-w-0 shrink-0 cursor-pointer select-none flex-row">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button
+                          {/* <Button
                             size="icon"
                             type="button"
                             variant="ghost"
@@ -352,7 +352,7 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
                               size={16}
                               className="text-primary/60"
                             />
-                          </Button>
+                          </Button> */}
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
