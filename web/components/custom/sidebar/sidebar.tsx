@@ -18,6 +18,7 @@ interface SidebarItemProps {
   label: string
   url: string
   icon?: React.ReactNode
+  onClick?: () => void
 }
 
 const SidebarContext = React.createContext<{
@@ -148,11 +149,9 @@ const LogoAndSearch: React.FC = () => {
   )
 }
 
-export const SidebarItem: React.FC<SidebarItemProps> = ({
-  label,
-  url,
-  icon
-}) => {
+export const SidebarItem: React.FC<
+  SidebarItemProps & { children?: React.ReactNode }
+> = ({ label, url, icon, onClick, children }) => {
   const pathname = usePathname()
   const isActive = pathname === url
 
@@ -166,6 +165,7 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
       <Link
         className="flex h-8 grow items-center truncate rounded-md pl-1.5 pr-1 text-sm font-medium text-secondary-foreground"
         href={url}
+        onClick={onClick}
       >
         {icon && (
           <span
@@ -178,6 +178,7 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
           </span>
         )}
         <span>{label}</span>
+        {children}
       </Link>
     </div>
   )

@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react"
+import { usePathname } from "next/navigation"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import {
   ChevronDown,
@@ -24,7 +26,7 @@ const TopicSection = () => {
   const [showOptions, setShowOptions] = useState(false)
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
-
+  const pathname = usePathname()
   const learningOptions = [
     { text: "To Learn", icon: <Bookmark size={16} />, color: "text-white/70" },
     {
@@ -71,6 +73,10 @@ const TopicSection = () => {
       ]
     : learningOptions
 
+  // const topicClick = (topic: string) => {
+  //   router.push(`/${topic.toLowerCase()}`)
+  // }
+
   return (
     <div className="space-y-1 overflow-hidden" ref={sectionRef}>
       <Button
@@ -107,11 +113,9 @@ const TopicSection = () => {
         style={{ maxHeight: "calc(100vh - 200px)" }}
       >
         {TOPICS.map((topic) => (
-          <SidebarItem
-            key={topic}
-            url={`/topic/${topic.toLowerCase()}`}
-            label={topic}
-          />
+          <Link key={topic} href={`/${topic.toLowerCase()}`} passHref>
+            <SidebarItem label={topic} url={`/${topic}`} />
+          </Link>
         ))}
       </div>
     </div>
