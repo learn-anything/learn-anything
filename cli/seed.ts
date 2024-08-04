@@ -3,6 +3,7 @@ import { Group } from "jazz-tools"
 import { RawControlledAccount } from "cojson"
 import { GlobalLink, LaAccount, Page, PersonalLink } from "@/web/lib/schema"
 import { getEnvOrThrow } from "@/lib/utils"
+import { appendFile } from "node:fs/promises"
 
 const JAZZ_WORKER_SECRET = getEnvOrThrow("JAZZ_WORKER_SECRET")
 
@@ -41,7 +42,7 @@ async function setup() {
 	})
 	const globalGroup = Group.create({ owner: worker })
 	globalGroup.addMember("everyone", "reader")
-	await Bun.write("./.env", `JAZZ_GLOBAL_GROUP=${JSON.stringify(globalGroup.id)}`)
+	await appendFile("./.env", `\nJAZZ_GLOBAL_GROUP=${JSON.stringify(globalGroup.id)}`)
 }
 
 async function devSeed() {

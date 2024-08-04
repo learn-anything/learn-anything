@@ -1,42 +1,39 @@
-import { CoMap, CoList, co, Account, Group } from "jazz-tools"
+import { CoMap, CoList, co, Account, Group, Encoders } from "jazz-tools"
 import { nullable, nullableJson } from "./types"
 
-// TODO: pages should have same permission control as Figma
-// public, certain members (read/write access later), personal (ideally end to end encrypted)
+// PersonalPage is page of content that user can write to. Similar to Notion/Reflect page. It holds ProseMirror editor content + metadata.
+// if public, certain members (can do read/write access accordingly), personal (end to end encrypted, only accessed by user)
+// TODO: how to do optional/required fields
 export class PersonalPage extends CoMap {
-  publicName = co.string // optional (learn-anything.xyz/@user/publicName) (pretty page access)
-  content = co.string // TipTap content (JSON?)
-  // simple version of Notion/Reflect like editor
-  // backlinks: personal pages linking to this page
-  globalMainTopic = co.ref(GlobalTopic) // optional?
+  content = co.string // TODO: ask anselm how to best hold editor state of ProseMirror editor (required)
+  publicName = co.string // optional (learn-anything.xyz/@user/publicName)
+  // TODO: add backlinks (PersonalPages linking to this page)
+  globalMainTopic = co.optional.ref(GlobalTopic)
 }
-
+// GlobalLink is a link with unique URL that holds some useful metadata. Can be used to do queries like `most popular links added by users` etc.
+export class GlobalLink extends CoMap {
+  url = co.string // unique TODO: should be enforced https://discord.com/channels/1139617727565271160/1139621689882321009/1269637368789340342
+  websiteDown = co.boolean // if website is 404 or down
+  dateAdded = co.encoded(Encoders.Date)
+}
 export class PersonalLink extends CoMap {
   note = co.string
   type = co.literal("personalLink")
   globalLink = co.ref(GlobalLink)
 }
-
-export class GlobalLink extends CoMap {
-  url = co.string // unique
-}
-
 export class GlobalTopic extends CoMap {
   name = co.string
 }
 class ListOfGlobalTopics extends CoList.Of(co.ref(GlobalTopic)) {}
-
 class Section extends CoMap {
   title = co.string
   links = co.ref(ListOfGlobalLinks)
 }
 class ListOfSections extends CoList.Of(co.ref(() => Section)) {}
-
 export class Page extends CoMap {
   title = co.string
   content = nullableJson()
 }
-
 export class UserLink extends CoMap {
   url = co.string
   title = co.string
@@ -53,9 +50,7 @@ export class TodoItem extends CoMap {
   isLink = co.boolean
   meta? = co.ref(UserLink)
 }
-
 export class ListOfPersonalTodoItems extends CoList.Of(co.ref(TodoItem)) {}
-
 class ListOfGlobalLinks extends CoList.Of(co.ref(GlobalLink)) {}
 class ListOfPersonalLinks extends CoList.Of(co.ref(PersonalLink)) {}
 class ListOfPages extends CoList.Of(co.ref(Page)) {}
@@ -78,11 +73,9 @@ export class UserRoot extends CoMap {
   personalLinks = co.ref(ListOfPersonalLinks)
   pages = co.ref(ListOfPages)
 }
-
 export class LaAccount extends Account {
   profile = co.ref(UserProfile)
   root = co.ref(UserRoot)
-
   async migrate(
     this: LaAccount,
     creationProps?:
@@ -96,7 +89,6 @@ export class LaAccount extends Account {
         { name: creationProps.name },
         { owner: profileGroup }
       )
-
       this.root = UserRoot.create(
         {
           name: creationProps.name,
@@ -104,7 +96,6 @@ export class LaAccount extends Account {
           website: creationProps.website,
           bio: creationProps.bio,
           todos: ListOfPersonalTodoItems.create([], { owner: this }),
-
           // not implemented yet
           topicsWantToLearn: ListOfTopics.create([], { owner: this }),
           topicsLearning: ListOfTopics.create([], { owner: this }),
