@@ -25,7 +25,7 @@ export class GlobalLink extends CoMap {
   urlTitle = co.string // title of the page (as grabbed from url itself)
   protocol = co.literal("https") // TODO: other protocols? perhaps should be `co.string` for user custom protocols?
   aiSummary = co.optional.ref(GlobalLinkAiSummary) // TODO: should probably be a list? with allowing users to vote on results so 'top' one can be shown too
-  summary = co.optional.ref(GlobalLinkSummary)
+  summary = co.optional.ref(GlobalLinkSummary) // the very 'best' summary of link (can be part AI generated, part human written, whatever is best)
   urlWasCreatedOnInternetAt = co.optional.encoded(Encoders.Date) // date url was created on internet at (can pass just year or year+month or year+month+day)
   globalMainTopic = co.optional.ref(GlobalTopic) // each global link can have one main topic (to closest approximation)
   public = co.optional.boolean // if true, link is accessible from global search
@@ -48,13 +48,15 @@ export class GlobalLinkSummary extends CoMap {
   description = co.string // high quality description of link
   summary = co.string // high quality summary of link
 }
-// PersonalLink is link user added, it wraps over GlobalLink and lets user add notes and other things to it
+// PersonalLink is link user added, it wraps over GlobalLink and lets user add notes and other things to it (as well as set own title/description/summary if GlobalLink ones is not good enough or is lacking)
 export class PersonalLink extends CoMap {
   globalLink = co.ref(GlobalLink) // each personal link wraps over unique global link
   learningState = co.optional.literal("wantToLearn", "learning", "learned") // learning state of personal link
   notes = co.optional.string // notes for link as set by user
+  title = co.optional.string // title of link as set by user
+  description = co.optional.string // description of link as set by user
+  summary = co.optional.string // summary of link as set by user
   globalMainTopic = co.optional.ref(GlobalTopic) // each personal link can have one main topic (to closest approximation) (as set by user)
-  linkSummary = co.optional.ref(GlobalLinkHumanSummary) // each user can edit title, description, summary of link (at their own discretion)
 }
 // GlobalTopic is topic that is accessible from `learn-anything.xyz/name`
 export class GlobalTopic extends CoMap {
