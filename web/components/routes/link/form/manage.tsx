@@ -20,9 +20,12 @@ import {
 import {
   BoxIcon,
   EllipsisIcon,
-  HeartIcon,
   PlusIcon,
-  Trash2Icon
+  Trash2Icon,
+  PieChartIcon,
+  Bookmark,
+  GraduationCap,
+  Check
 } from "lucide-react"
 import { cn, ensureUrlProtocol, isUrl as LibIsUrl } from "@/lib/utils"
 import { useAccount, useCoState } from "@/lib/providers/jazz-provider"
@@ -151,6 +154,28 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
     const [linkEntered, setLinkEntered] = useState(false)
     const [debouncedText, setDebouncedText] = useState<string>("")
     useDebounce(() => setDebouncedText(title), 300, [title])
+
+    const [showStatusOptions, setShowStatusOptions] = useState(false)
+    const [selectedStatus, setSelectedStatus] = useState<string | null>(null)
+
+    const statusOptions = [
+      {
+        text: "To Learn",
+        icon: <Bookmark size={16} />,
+        color: "text-white/70"
+      },
+      {
+        text: "Learning",
+        icon: <GraduationCap size={16} />,
+        color: "text-[#D29752]"
+      },
+      { text: "Learned", icon: <Check size={16} />, color: "text-[#708F51]" }
+    ]
+
+    const statusSelect = (status: string) => {
+      setSelectedStatus(status === selectedStatus ? null : status)
+      setShowStatusOptions(false)
+    }
 
     useEffect(() => {
       if (selectedTodo) {
@@ -317,7 +342,7 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
                     <div className="flex min-w-0 shrink-0 cursor-pointer select-none flex-row">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button
+                          {/* <Button
                             size="icon"
                             type="button"
                             variant="ghost"
@@ -327,7 +352,7 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
                               size={16}
                               className="text-primary/60"
                             />
-                          </Button>
+                          </Button> */}
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
@@ -340,14 +365,53 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
-                      <Button
-                        size="icon"
-                        type="button"
-                        variant="ghost"
-                        className="size-7 gap-x-2 text-sm"
-                      >
-                        <HeartIcon size={16} className="text-primary/60" />
-                      </Button>
+                      <div className="relative">
+                        <Button
+                          size="icon"
+                          type="button"
+                          variant="ghost"
+                          className="size-7 gap-x-2 text-sm"
+                          onClick={() =>
+                            setShowStatusOptions(!showStatusOptions)
+                          }
+                        >
+                          {selectedStatus ? (
+                            (() => {
+                              const option = statusOptions.find(
+                                (opt) => opt.text === selectedStatus
+                              )
+                              return option
+                                ? React.cloneElement(option.icon, {
+                                    size: 16,
+                                    className: option.color
+                                  })
+                                : null
+                            })()
+                          ) : (
+                            <PieChartIcon
+                              size={16}
+                              className="text-primary/60"
+                            />
+                          )}
+                        </Button>
+                        {showStatusOptions && (
+                          <div className="absolute right-0 mt-1 w-40 rounded-md bg-neutral-800 shadow-lg">
+                            {statusOptions.map((option) => (
+                              <Button
+                                key={option.text}
+                                onClick={() => statusSelect(option.text)}
+                                className={`flex w-full items-center justify-start space-x-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-neutral-700 ${option.color} bg-inherit`}
+                              >
+                                {React.cloneElement(option.icon, {
+                                  size: 16,
+                                  className: option.color
+                                })}
+                                <span>{option.text}</span>
+                              </Button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
 

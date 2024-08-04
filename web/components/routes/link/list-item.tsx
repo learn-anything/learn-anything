@@ -189,7 +189,7 @@ export const ListItem: React.FC<ListItemProps> = ({
         </div>
 
         <div className="flex shrink-0 items-center gap-x-4">
-          <Badge variant="secondary">Secondary</Badge>
+          <Badge variant="secondary">Topic Name</Badge>
           <Button
             size="icon"
             className="h-auto w-auto bg-transparent text-destructive hover:bg-transparent hover:text-red-500"
