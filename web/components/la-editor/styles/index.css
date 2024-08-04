@@ -1,0 +1,138 @@
+.la-editor {
+  --la-code-background: rgba(8, 43, 120, 0.047);
+  --la-code-color: rgb(212, 212, 212);
+  --la-secondary: rgb(157, 157, 159);
+  --la-pre-background: rgb(236, 236, 236);
+  --la-pre-border: rgb(224, 224, 224);
+  --la-pre-color: rgb(47, 47, 49);
+  --la-hr: rgb(220, 220, 220);
+  --la-drag-handle-hover: rgb(92, 92, 94);
+
+  --hljs-string: rgb(170, 67, 15);
+  --hljs-title: rgb(176, 136, 54);
+  --hljs-comment: rgb(153, 153, 153);
+  --hljs-keyword: rgb(12, 94, 177);
+  --hljs-attr: rgb(58, 146, 188);
+  --hljs-literal: rgb(200, 43, 15);
+  --hljs-name: rgb(37, 151, 146);
+  --hljs-selector-tag: rgb(200, 80, 15);
+  --hljs-number: rgb(61, 160, 103);
+}
+
+.dark .la-editor {
+  --la-code-background: rgba(255, 255, 255, 0.075);
+  --la-code-color: rgb(44, 46, 51);
+  --la-secondary: rgb(89, 90, 92);
+  --la-pre-background: rgb(8, 8, 8);
+  --la-pre-border: rgb(35, 37, 42);
+  --la-pre-color: rgb(227, 228, 230);
+  --la-hr: rgb(38, 40, 45);
+  --la-drag-handle-hover: rgb(150, 151, 153);
+
+  --hljs-string: rgb(218, 147, 107);
+  --hljs-title: rgb(241, 213, 157);
+  --hljs-comment: rgb(170, 170, 170);
+  --hljs-keyword: rgb(102, 153, 204);
+  --hljs-attr: rgb(144, 202, 232);
+  --hljs-literal: rgb(242, 119, 122);
+  --hljs-name: rgb(95, 192, 160);
+  --hljs-selector-tag: rgb(232, 199, 133);
+  --hljs-number: rgb(182, 231, 182);
+}
+
+.la-editor .ProseMirror {
+  @apply flex max-w-full flex-1 cursor-text flex-col;
+  @apply z-0 outline-0;
+}
+
+.la-editor .ProseMirror > div.editor {
+  @apply block flex-1 whitespace-pre-wrap;
+}
+
+.la-editor .ProseMirror .block-node:not(:last-child),
+.la-editor .ProseMirror .list-node:not(:last-child),
+.la-editor .ProseMirror .text-node:not(:last-child) {
+  @apply mb-2.5;
+}
+
+.la-editor .ProseMirror ol,
+.la-editor .ProseMirror ul {
+  @apply pl-6;
+}
+
+.la-editor .ProseMirror blockquote,
+.la-editor .ProseMirror dl,
+.la-editor .ProseMirror ol,
+.la-editor .ProseMirror p,
+.la-editor .ProseMirror pre,
+.la-editor .ProseMirror ul {
+  @apply m-0;
+}
+
+.la-editor .ProseMirror li {
+  @apply leading-7;
+}
+
+.la-editor .ProseMirror p {
+  @apply break-words text-base leading-7;
+}
+
+.la-editor .ProseMirror li .text-node:has(+ .list-node),
+.la-editor .ProseMirror li > .list-node,
+.la-editor .ProseMirror li > .text-node,
+.la-editor .ProseMirror li p {
+  @apply mb-0;
+}
+
+.la-editor .ProseMirror blockquote {
+  @apply relative pl-3.5;
+}
+
+.la-editor .ProseMirror blockquote::before,
+.la-editor .ProseMirror blockquote.is-empty::before {
+  @apply absolute bottom-0 left-0 top-0 h-full w-1 rounded-sm bg-accent content-[''];
+}
+
+.la-editor .ProseMirror hr {
+  @apply my-3 h-0.5 w-full border-none bg-[var(--la-hr)];
+}
+
+.la-editor .ProseMirror-focused hr.ProseMirror-selectednode {
+  @apply rounded-full outline outline-2 outline-offset-1 outline-muted-foreground;
+}
+
+.la-editor .ProseMirror .ProseMirror-gapcursor {
+  @apply pointer-events-none absolute hidden;
+}
+
+.la-editor .ProseMirror .ProseMirror-hideselection {
+  @apply caret-transparent;
+}
+
+.la-editor .ProseMirror.resize-cursor {
+  @apply cursor-col-resize;
+}
+
+.la-editor .ProseMirror .selection {
+  @apply inline-block;
+}
+
+.la-editor .ProseMirror .selection,
+.la-editor .ProseMirror *::selection,
+::selection {
+  @apply bg-primary/40;
+}
+
+/* Override native selection when custom selection is present */
+.la-editor .ProseMirror .selection::selection {
+  background: transparent;
+}
+
+[data-theme='slash-command'] {
+  width: 1000vw;
+}
+
+@import './partials/code.css';
+@import './partials/placeholder.css';
+@import './partials/lists.css';
+@import './partials/typography.css';
