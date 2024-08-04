@@ -2,6 +2,9 @@ import { startWorker } from "jazz-nodejs"
 import { Group } from "jazz-tools"
 import { RawControlledAccount } from "cojson"
 import { GlobalLink, LaAccount, Page, PersonalLink } from "@/web/lib/schema"
+import { getEnvOrThrow } from "@/lib/utils"
+
+const JAZZ_WORKER_SECRET = getEnvOrThrow("JAZZ_WORKER_SECRET")
 
 async function seed() {
 	const args = Bun.argv
@@ -34,8 +37,7 @@ async function seed() {
 async function setup() {
 	const { worker } = await startWorker({
 		accountID: "co_zhvp7ryXJzDvQagX61F6RCZFJB9",
-		accountSecret:
-			"sealerSecret_z7o2TyWgbzin7Syoa4xUvoQc9ufyc3G2KWj6vfUsoE5en/signerSecret_z6ZnmVjPjqjFPtRcEiEVbPhuMcauvdE9hV7tVLUxRx1z5"
+		accountSecret: JAZZ_WORKER_SECRET
 	})
 	const globalGroup = Group.create({ owner: worker })
 	globalGroup.addMember("everyone", "reader")
@@ -45,8 +47,7 @@ async function setup() {
 async function devSeed() {
 	const { worker } = await startWorker({
 		accountID: "co_zhvp7ryXJzDvQagX61F6RCZFJB9",
-		accountSecret:
-			"sealerSecret_z7o2TyWgbzin7Syoa4xUvoQc9ufyc3G2KWj6vfUsoE5en/signerSecret_z6ZnmVjPjqjFPtRcEiEVbPhuMcauvdE9hV7tVLUxRx1z5"
+		accountSecret: JAZZ_WORKER_SECRET
 	})
 	const user = (await (
 		await LaAccount.createAs(worker, {
@@ -96,10 +97,8 @@ async function devSeed() {
 async function prodSeed() {
 	const { worker } = await startWorker({
 		accountID: "co_zhvp7ryXJzDvQagX61F6RCZFJB9",
-		accountSecret:
-			"sealerSecret_z7o2TyWgbzin7Syoa4xUvoQc9ufyc3G2KWj6vfUsoE5en/signerSecret_z6ZnmVjPjqjFPtRcEiEVbPhuMcauvdE9hV7tVLUxRx1z5"
+		accountSecret: JAZZ_WORKER_SECRET
 	})
-	const global = Group.create({ owner: worker })
 
 	// const user = (await (
 	// 	await LaAccount.createAs(worker, {
