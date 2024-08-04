@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import axios from "axios"
-import cheerio from "cheerio"
+import * as cheerio from "cheerio"
 
 interface Metadata {
   title: string
@@ -10,9 +10,15 @@ interface Metadata {
   url: string
 }
 
+const DEFAULT_VALUES = {
+  TITLE: "No title available",
+  DESCRIPTION: "No description available",
+  IMAGE: null,
+  FAVICON: process.env.NEXT_PUBLIC_APP_URL + "/default-favicon.ico"
+}
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
-  console.log("request", request)
   const url = searchParams.get("url")
 
   if (!url) {
@@ -34,20 +40,20 @@ export async function GET(request: NextRequest) {
       title:
         $("title").text() ||
         $('meta[property="og:title"]').attr("content") ||
-        "No title available",
+        DEFAULT_VALUES.TITLE,
       description:
         $('meta[name="description"]').attr("content") ||
         $('meta[property="og:description"]').attr("content") ||
-        "test", // TODO: does not show
-      image: $('meta[property="og:image"]').attr("content") || null,
+        DEFAULT_VALUES.DESCRIPTION,
+      image:
+        $('meta[property="og:image"]').attr("content") || DEFAULT_VALUES.IMAGE,
       favicon:
         $('link[rel="icon"]').attr("href") ||
         $('link[rel="shortcut icon"]').attr("href") ||
-        "/default-favicon.ico",
+        DEFAULT_VALUES.FAVICON,
       url: url
     }
 
-    // Ensure absolute URLs for image and favicon
     if (metadata.image && !metadata.image.startsWith("http")) {
       metadata.image = new URL(metadata.image, url).toString()
     }
@@ -57,13 +63,13 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(metadata)
   } catch (error) {
-    // console.error("Error fetching metadata:", error)
-    return NextResponse.json(
-      {
-        error: "Failed to fetch metadata",
-        message: error instanceof Error ? error.message : "Unknown error"
-      },
-      { status: 500 }
-    )
+    const defaultMetadata: Metadata = {
+      title: DEFAULT_VALUES.TITLE,
+      description: DEFAULT_VALUES.DESCRIPTION,
+      image: DEFAULT_VALUES.IMAGE,
+      favicon: new URL(DEFAULT_VALUES.FAVICON, url).toString(),
+      url: url
+    }
+    return NextResponse.json(defaultMetadata)
   }
 }
