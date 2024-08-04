@@ -13,7 +13,6 @@ import { nullable, nullableJson } from "./types"
 
 // PersonalPage is page of content that user can write to. Similar to Notion/Reflect page. It holds ProseMirror editor content + metadata.
 // if public, certain members (can do read/write access accordingly), personal (end to end encrypted, only accessed by user)
-// TODO: how to do optional/required fields
 export class PersonalPage extends CoMap {
   content = co.string // TODO: ask anselm how to best hold editor state of ProseMirror editor
   publicName = co.optional.string // with it, PersonalPage can be accessed from learn-anything.xyz/@user/publicName) (unique)
