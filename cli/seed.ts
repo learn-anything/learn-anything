@@ -11,14 +11,14 @@ async function seed() {
 			case undefined:
 				console.log("No command provided")
 				break
-			case "setupJazz":
-				await setupJazz()
+			case "setup":
+				await setup()
 				break
-			case "devSeed":
+			case "dev":
 				await devSeed()
 				break
-			case "productionSeed":
-				await productionSeed()
+			case "prod":
+				await prodSeed()
 				break
 			default:
 				console.log("Unknown command")
@@ -30,17 +30,16 @@ async function seed() {
 	}
 }
 
-async function setupJazz() {
+// sets up jazz global group and writes it to .env
+async function setup() {
 	const { worker } = await startWorker({
 		accountID: "co_zhvp7ryXJzDvQagX61F6RCZFJB9",
 		accountSecret:
 			"sealerSecret_z7o2TyWgbzin7Syoa4xUvoQc9ufyc3G2KWj6vfUsoE5en/signerSecret_z6ZnmVjPjqjFPtRcEiEVbPhuMcauvdE9hV7tVLUxRx1z5"
 	})
-	const globalLinksGroup = Group.create({ owner: worker })
-	globalLinksGroup.addMember("everyone", "reader")
-
-	// TODO: make it so it does not override
-	await Bun.write("./.env", `JAZZ_GLOBAL_GROUP=${JSON.stringify(globalLinksGroup.id)}`)
+	const globalGroup = Group.create({ owner: worker })
+	globalGroup.addMember("everyone", "reader")
+	await Bun.write("./.env", `JAZZ_GLOBAL_GROUP=${JSON.stringify(globalGroup.id)}`)
 }
 
 async function devSeed() {
@@ -94,7 +93,7 @@ async function devSeed() {
 	)
 }
 
-async function productionSeed() {
+async function prodSeed() {
 	const { worker } = await startWorker({
 		accountID: "co_zhvp7ryXJzDvQagX61F6RCZFJB9",
 		accountSecret:
