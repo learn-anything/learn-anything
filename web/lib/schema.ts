@@ -24,8 +24,8 @@ export class GlobalLink extends CoMap {
   url = co.string // url without the protocol (e.g. "learn-anything.xyz") (unique)
   urlTitle = co.string // title of the page (as grabbed from url itself)
   protocol = co.literal("https") // TODO: other protocols? perhaps should be `co.string` for user custom protocols?
-  aiSummary = co.optional.ref(GlobalLinkAiSummary) // best summary will be chosen (from multiple possible)
-  humanSummary = co.optional.ref(GlobalLinkHumanSummary) // best summary will be chosen (from multiple possible)
+  aiSummary = co.optional.ref(GlobalLinkAiSummary) // TODO: should probably be a list? with allowing users to vote on results so 'top' one can be shown too
+  summary = co.optional.ref(GlobalLinkSummary)
   urlWasCreatedOnInternetAt = co.optional.encoded(Encoders.Date) // date url was created on internet at (can pass just year or year+month or year+month+day)
   globalMainTopic = co.optional.ref(GlobalTopic) // each global link can have one main topic (to closest approximation)
   public = co.optional.boolean // if true, link is accessible from global search
@@ -41,12 +41,12 @@ export class GlobalLinkAiSummary extends CoMap {
   summary = co.string // high quality summary of link
   // vectorContent = co.optional.vector // vector content of link, TODO: jazz needs support for this
 }
-// GlobalLinkHumanSummary is high quality title, description, summary of link (as written by some user)
-export class GlobalLinkHumanSummary extends CoMap {
+// GlobalLinkSummary is high quality title, description, summary of link
+export class GlobalLinkSummary extends CoMap {
   link = co.ref(GlobalLink) // link the summary is for
-  title = co.string // high quality title of link (as written by some user)
-  description = co.string // high quality description of link (as written by some user)
-  summary = co.string // high quality summary of link (as written by some user)
+  title = co.string // high quality title of link
+  description = co.string // high quality description of link
+  summary = co.string // high quality summary of link
 }
 // PersonalLink is link user added, it wraps over GlobalLink and lets user add notes and other things to it
 export class PersonalLink extends CoMap {
