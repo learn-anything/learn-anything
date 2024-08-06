@@ -5,7 +5,7 @@ import {
   CaretSortIcon,
   CheckIcon,
   ChevronDownIcon,
-  ChevronUpIcon,
+  ChevronUpIcon
 } from "@radix-ui/react-icons"
 import * as SelectPrimitive from "@radix-ui/react-select"
 
@@ -160,5 +160,5 @@ export {
   SelectItem,
   SelectSeparator,
   SelectScrollUpButton,
-  SelectScrollDownButton,
+  SelectScrollDownButton
 }
