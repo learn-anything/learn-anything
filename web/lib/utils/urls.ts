@@ -1,10 +1,3 @@
-import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
-
 export function isValidUrl(string: string): boolean {
   try {
     new URL(string)
@@ -26,8 +19,4 @@ export function ensureUrlProtocol(url: string): string {
   }
 
   return `https://${url}`
-}
-
-export const randomId = () => {
-  return Math.random().toString(36).substring(7)
 }
