@@ -9,7 +9,7 @@ import { co, CoList, CoMap } from "jazz-tools"
 export class PersonalPage extends CoMap {
   title = co.string
   slug = co.string
-  content = co.optional.json
+  content = co.optional.json()
   // topic = co.optional.ref(GlobalTopic)
   // backlinks = co.optional.ref() // other PersonalPages linking to this page TODO: add, think through how to do it well, efficiently
 }

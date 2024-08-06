@@ -9,8 +9,8 @@
 // TODO: figure out how to do default values, e.g. `GlobalLink.protocol` should have default value `https` so we don't have to supply it every time in code..
 // TODO: can jazz support vector fields? e.g. `GlobalLinkAiSummary.vectorContent`, would be nice to store website content as vector for semantic search
 import { CoMap, CoList, co, Account, Group, Encoders } from "jazz-tools"
-import { PersonalPageLists } from "./schema/personal-page"
-import { PersonalLinkLists } from "./schema/personal-link"
+import { PersonalPageLists } from "./personal-page"
+import { PersonalLinkLists } from "./personal-link"
 
 // GlobalLink is link with unique URL that holds some useful metadata. Can be used to do queries like `most popular links added by users` etc.
 export class GlobalLink extends CoMap {
