@@ -1,15 +1,15 @@
-import * as React from 'react'
+import * as React from "react"
 
-import { cn } from '@/lib/utils'
+import { cn } from "@/lib/utils"
 
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
+import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
 
-import { Command, MenuListProps } from './types'
-import { getShortcutKeys } from '../../lib/utils'
-import { Icon } from '../../components/ui/icon'
-import { PopoverWrapper } from '../../components/ui/popover-wrapper'
-import { Shortcut } from '../../components/ui/shortcut'
+import { Command, MenuListProps } from "./types"
+import { getShortcutKeys } from "../../lib/utils"
+import { Icon } from "../../components/ui/icon"
+import { PopoverWrapper } from "../../components/ui/popover-wrapper"
+import { Shortcut } from "../../components/ui/shortcut"
 
 export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
   const scrollContainer = React.useRef<HTMLDivElement>(null)
@@ -29,12 +29,12 @@ export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
       const command = props.items[groupIndex].commands[commandIndex]
       props.command(command)
     },
-    [props],
+    [props]
   )
 
   React.useImperativeHandle(ref, () => ({
     onKeyDown: ({ event }: { event: React.KeyboardEvent }) => {
-      if (event.key === 'ArrowDown') {
+      if (event.key === "ArrowDown") {
         if (!props.items.length) {
           return false
         }
@@ -59,7 +59,7 @@ export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
         return true
       }
 
-      if (event.key === 'ArrowUp') {
+      if (event.key === "ArrowUp") {
         if (!props.items.length) {
           return false
         }
@@ -83,8 +83,12 @@ export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
         return true
       }
 
-      if (event.key === 'Enter') {
-        if (!props.items.length || selectedGroupIndex === -1 || selectedCommandIndex === -1) {
+      if (event.key === "Enter") {
+        if (
+          !props.items.length ||
+          selectedGroupIndex === -1 ||
+          selectedCommandIndex === -1
+        ) {
           return false
         }
 
@@ -94,7 +98,7 @@ export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
       }
 
       return false
-    },
+    }
   }))
 
   React.useEffect(() => {
@@ -112,7 +116,7 @@ export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
         selectItem(groupIndex, commandIndex)
       }
     },
-    [selectItem],
+    [selectItem]
   )
 
   if (!props.items.length) {
@@ -120,7 +124,10 @@ export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
   }
 
   return (
-    <PopoverWrapper ref={scrollContainer} className="flex max-h-[min(80vh,24rem)] flex-col overflow-auto p-1">
+    <PopoverWrapper
+      ref={scrollContainer}
+      className="flex max-h-[min(80vh,24rem)] flex-col overflow-auto p-1"
+    >
       {props.items.map((group, groupIndex: number) => (
         <React.Fragment key={group.title}>
           {group.commands.map((command: Command, commandIndex: number) => (
@@ -128,28 +135,34 @@ export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
               key={command.label}
               variant="ghost"
               onClick={createCommandClickHandler(groupIndex, commandIndex)}
-              className={cn('relative w-full justify-between gap-2 px-3.5 py-1.5 font-normal', {
-                'bg-accent text-accent-foreground':
-                  selectedGroupIndex === groupIndex && selectedCommandIndex === commandIndex,
-              })}
+              className={cn(
+                "relative w-full justify-between gap-2 px-3.5 py-1.5 font-normal",
+                {
+                  "bg-accent text-accent-foreground":
+                    selectedGroupIndex === groupIndex &&
+                    selectedCommandIndex === commandIndex
+                }
+              )}
             >
               <Icon name={command.iconName} />
               <span className="truncate text-sm">{command.label}</span>
               <div className="flex flex-auto flex-row"></div>
               <Shortcut.Wrapper ariaLabel={getShortcutKeys(command.shortcuts)}>
-                {command.shortcuts.map(shortcut => (
+                {command.shortcuts.map((shortcut) => (
                   <Shortcut.Key shortcut={shortcut} key={shortcut} />
                 ))}
               </Shortcut.Wrapper>
             </Button>
           ))}
-          {groupIndex !== props.items.length - 1 && <Separator className="my-1.5" />}
+          {groupIndex !== props.items.length - 1 && (
+            <Separator className="my-1.5" />
+          )}
         </React.Fragment>
       ))}
     </PopoverWrapper>
   )
 })
 
-MenuList.displayName = 'MenuList'
+MenuList.displayName = "MenuList"
 
 export default MenuList

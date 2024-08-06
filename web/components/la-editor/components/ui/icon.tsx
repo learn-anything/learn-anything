@@ -1,6 +1,6 @@
-import * as React from 'react'
-import { cn } from '@/lib/utils'
-import { icons } from 'lucide-react'
+import * as React from "react"
+import { cn } from "@/lib/utils"
+import { icons } from "lucide-react"
 
 export type IconProps = {
   name: keyof typeof icons
@@ -9,14 +9,22 @@ export type IconProps = {
   [key: string]: any
 }
 
-export const Icon = React.memo(({ name, className, size, strokeWidth, ...props }: IconProps) => {
-  const IconComponent = icons[name]
+export const Icon = React.memo(
+  ({ name, className, size, strokeWidth, ...props }: IconProps) => {
+    const IconComponent = icons[name]
 
-  if (!IconComponent) {
-    return null
+    if (!IconComponent) {
+      return null
+    }
+
+    return (
+      <IconComponent
+        className={cn(!size ? "size-4" : size, className)}
+        strokeWidth={strokeWidth || 2}
+        {...props}
+      />
+    )
   }
+)
 
-  return <IconComponent className={cn(!size ? 'size-4' : size, className)} strokeWidth={strokeWidth || 2} {...props} />
-})
-
-Icon.displayName = 'Icon'
+Icon.displayName = "Icon"
