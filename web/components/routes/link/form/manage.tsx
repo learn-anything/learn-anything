@@ -1,6 +1,5 @@
 "use client"
 
-import slugify from "slugify"
 import React, { useState, useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -27,7 +26,12 @@ import {
   GraduationCap,
   Check
 } from "lucide-react"
-import { cn, ensureUrlProtocol, isUrl as LibIsUrl } from "@/lib/utils"
+import {
+  cn,
+  ensureUrlProtocol,
+  generateUniqueSlug,
+  isUrl as LibIsUrl
+} from "@/lib/utils"
 import { useAccount, useCoState } from "@/lib/providers/jazz-provider"
 import { LinkMetadata, PersonalLink } from "@/lib/schema/personal-link"
 import { createLinkSchema } from "./schema"
@@ -229,8 +233,10 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
       if (isFetching) return
 
       try {
-        const slug = slugify(values.title, { lower: true })
         let linkMetadata: LinkMetadata | undefined
+
+        const personalLinks = me.root?.personalLinks?.toJSON() || []
+        const slug = generateUniqueSlug(personalLinks, values.title)
 
         if (values.isLink && values.meta) {
           linkMetadata = LinkMetadata.create(values.meta, { owner: me._owner })
@@ -248,15 +254,6 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 
           // toast.success("Todo updated")
         } else {
-          const isLinkExists = me.root?.personalLinks?.find(
-            (link) => link?.slug === slug
-          )
-
-          if (isLinkExists) {
-            toast.error("Link with same title already exists")
-            return
-          }
-
           const newPersonalLink = PersonalLink.create(
             {
               title: values.title,
