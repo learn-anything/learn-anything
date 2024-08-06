@@ -36,7 +36,7 @@ export default function RootLayout({
         className={cn("h-full w-full font-sans antialiased", inter.variable)}
       >
         <JazzProvider>
-          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <JotaiProvider>
               <ConfirmProvider>
                 {children}

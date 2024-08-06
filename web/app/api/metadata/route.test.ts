@@ -19,7 +19,6 @@ describe("Metadata Fetcher", () => {
         <head>
           <title>Test Title</title>
           <meta name="description" content="Test Description">
-          <meta property="og:image" content="https://example.com/image.jpg">
           <link rel="icon" href="/favicon.ico">
         </head>
       </html>
@@ -40,7 +39,6 @@ describe("Metadata Fetcher", () => {
     expect(data).toEqual({
       title: "Test Title",
       description: "Test Description",
-      image: "https://example.com/image.jpg",
       favicon: "https://example.com/favicon.ico",
       url: "https://example.com"
     })
@@ -74,8 +72,7 @@ describe("Metadata Fetcher", () => {
     expect(data).toEqual({
       title: "No title available",
       description: "No description available",
-      image: null,
-      favicon: process.env.NEXT_PUBLIC_APP_URL + "/default-favicon.ico",
+      favicon: null,
       url: "https://example.com"
     })
   })
@@ -103,8 +100,7 @@ describe("Metadata Fetcher", () => {
     expect(data).toEqual({
       title: "No title available",
       description: "No description available",
-      image: null,
-      favicon: process.env.NEXT_PUBLIC_APP_URL + "/default-favicon.ico",
+      favicon: null,
       url: "https://example.com"
     })
   })

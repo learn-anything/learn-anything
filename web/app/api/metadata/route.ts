@@ -5,8 +5,7 @@ import * as cheerio from "cheerio"
 interface Metadata {
   title: string
   description: string
-  image: string | null
-  favicon: string
+  favicon: string | null
   url: string
 }
 
@@ -14,7 +13,7 @@ const DEFAULT_VALUES = {
   TITLE: "No title available",
   DESCRIPTION: "No description available",
   IMAGE: null,
-  FAVICON: process.env.NEXT_PUBLIC_APP_URL + "/default-favicon.ico"
+  FAVICON: null
 }
 
 export async function GET(request: NextRequest) {
@@ -45,8 +44,6 @@ export async function GET(request: NextRequest) {
         $('meta[name="description"]').attr("content") ||
         $('meta[property="og:description"]').attr("content") ||
         DEFAULT_VALUES.DESCRIPTION,
-      image:
-        $('meta[property="og:image"]').attr("content") || DEFAULT_VALUES.IMAGE,
       favicon:
         $('link[rel="icon"]').attr("href") ||
         $('link[rel="shortcut icon"]').attr("href") ||
@@ -54,9 +51,6 @@ export async function GET(request: NextRequest) {
       url: url
     }
 
-    if (metadata.image && !metadata.image.startsWith("http")) {
-      metadata.image = new URL(metadata.image, url).toString()
-    }
     if (metadata.favicon && !metadata.favicon.startsWith("http")) {
       metadata.favicon = new URL(metadata.favicon, url).toString()
     }
@@ -66,8 +60,7 @@ export async function GET(request: NextRequest) {
     const defaultMetadata: Metadata = {
       title: DEFAULT_VALUES.TITLE,
       description: DEFAULT_VALUES.DESCRIPTION,
-      image: DEFAULT_VALUES.IMAGE,
-      favicon: new URL(DEFAULT_VALUES.FAVICON, url).toString(),
+      favicon: DEFAULT_VALUES.FAVICON,
       url: url
     }
     return NextResponse.json(defaultMetadata)
