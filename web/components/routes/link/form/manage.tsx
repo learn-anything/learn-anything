@@ -1,5 +1,6 @@
 "use client"
 
+import slugify from "slugify"
 import React, { useState, useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -19,7 +20,6 @@ import {
 } from "@/components/ui/form"
 import {
   BoxIcon,
-  EllipsisIcon,
   PlusIcon,
   Trash2Icon,
   PieChartIcon,
@@ -29,7 +29,7 @@ import {
 } from "lucide-react"
 import { cn, ensureUrlProtocol, isUrl as LibIsUrl } from "@/lib/utils"
 import { useAccount, useCoState } from "@/lib/providers/jazz-provider"
-import { TodoItem, UserLink } from "@/lib/schema"
+import { LinkMetadata, PersonalLink } from "@/lib/schema/personal-link"
 import { createLinkSchema } from "./schema"
 import { TopicSelector } from "./partial/topic-section"
 import { useAtom } from "jotai"
@@ -136,12 +136,12 @@ CreateButton.displayName = "CreateButton"
 interface LinkFormProps extends React.ComponentPropsWithoutRef<"form"> {
   onSuccess?: () => void
   onCancel?: () => void
-  todoItem?: TodoItem
+  personalLink?: PersonalLink
 }
 
 const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
-  ({ onSuccess, onCancel, todoItem }, ref) => {
-    const selectedTodo = useCoState(TodoItem, todoItem?.id)
+  ({ onSuccess, onCancel, personalLink }, ref) => {
+    const selectedLink = useCoState(PersonalLink, personalLink?.id)
     const [isFetching, setIsFetching] = useState(false)
     const { me } = useAccount()
     const form = useForm<LinkFormValues>({
@@ -178,13 +178,13 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
     }
 
     useEffect(() => {
-      if (selectedTodo) {
-        form.setValue("title", selectedTodo.title)
-        form.setValue("description", selectedTodo.description ?? "")
-        form.setValue("isLink", selectedTodo.isLink)
-        form.setValue("meta", selectedTodo.meta)
+      if (selectedLink) {
+        form.setValue("title", selectedLink.title)
+        form.setValue("description", selectedLink.description ?? "")
+        form.setValue("isLink", selectedLink.isLink)
+        form.setValue("meta", selectedLink.meta)
       }
-    }, [selectedTodo, form])
+    }, [selectedLink, form])
 
     useEffect(() => {
       const fetchMetadata = async (url: string) => {
@@ -229,45 +229,57 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
       if (isFetching) return
 
       try {
-        let userLink: UserLink | undefined
+        const slug = slugify(values.title, { lower: true })
+        let linkMetadata: LinkMetadata | undefined
 
         if (values.isLink && values.meta) {
-          userLink = UserLink.create(values.meta, { owner: me._owner })
+          linkMetadata = LinkMetadata.create(values.meta, { owner: me._owner })
         }
 
-        if (selectedTodo) {
-          selectedTodo.title = values.title
-          selectedTodo.description = values.description ?? ""
-          selectedTodo.isLink = values.isLink
-          if (selectedTodo.meta) {
-            Object.assign(selectedTodo.meta, values.meta)
+        if (selectedLink) {
+          selectedLink.title = values.title
+          selectedLink.slug = slug
+          selectedLink.description = values.description ?? ""
+          selectedLink.isLink = values.isLink
+
+          if (selectedLink.meta) {
+            Object.assign(selectedLink.meta, values.meta)
           }
 
           // toast.success("Todo updated")
         } else {
-          // Create new todo
-          const newTodo = TodoItem.create(
+          const isLinkExists = me.root?.personalLinks?.find(
+            (link) => link?.slug === slug
+          )
+
+          if (isLinkExists) {
+            toast.error("Link with same title already exists")
+            return
+          }
+
+          const newPersonalLink = PersonalLink.create(
             {
               title: values.title,
+              slug,
               description: values.description,
-              sequence: me.root?.todos?.length || 1,
+              sequence: me.root?.personalLinks?.length || 1,
               completed: false,
               isLink: values.isLink,
-              meta: userLink
+              meta: linkMetadata
               // topic: values.topic
             },
             { owner: me._owner }
           )
 
-          me.root?.todos?.push(newTodo)
+          me.root?.personalLinks?.push(newPersonalLink)
         }
 
         form.reset(DEFAULT_FORM_VALUES)
         onSuccess?.()
       } catch (error) {
-        console.error("Failed to create/update todo", error)
+        console.error("Failed to create/update link", error)
         toast.error(
-          todoItem ? "Failed to update todo" : "Failed to create todo"
+          personalLink ? "Failed to update link" : "Failed to create link"
         )
       }
     }
@@ -322,7 +334,7 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
                                 autoComplete="off"
                                 maxLength={100}
                                 autoFocus
-                                placeholder="Paste a link or write a todo"
+                                placeholder="Paste a link or write a link"
                                 className="h-6 border-none p-1.5 font-medium placeholder:text-primary/40 focus-visible:outline-none focus-visible:ring-0"
                                 onKeyDown={handleKeyDown}
                               />
@@ -442,7 +454,7 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
                 </div>
               </div>
 
-              <div className="flex flex-auto flex-row items-center justify-between gap-2 rounded-b-md border-t px-3 py-2">
+              <div className="flex flex-auto flex-row items-center justify-between gap-2 rounded-b-md border border-t px-3 py-2">
                 <div className="flex flex-row items-center gap-0.5">
                   <div className="flex min-w-0 shrink-0 cursor-pointer select-none flex-row">
                     <TopicSelector />

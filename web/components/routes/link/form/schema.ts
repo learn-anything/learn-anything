@@ -15,7 +15,6 @@ export const createLinkSchema = z.object({
     .object({
       url: z.string(),
       title: z.string(),
-      image: z.string().optional().nullable(),
       favicon: z.string(),
       description: z.string().optional().nullable()
     })

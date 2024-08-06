@@ -16,7 +16,8 @@ import {
   verticalListSortingStrategy
 } from "@dnd-kit/sortable"
 import { useAccount } from "@/lib/providers/jazz-provider"
-import { ListOfPersonalTodoItems, TodoItem } from "@/lib/schema"
+import { PersonalLinkLists } from "@/lib/schema/personal-link"
+import { PersonalLink } from "@/lib/schema/personal-link"
 import { useAtom } from "jotai"
 import { linkEditIdAtom, linkSortAtom } from "@/store/link"
 import { useKey } from "react-use"
@@ -27,24 +28,23 @@ import { useRef, useState, useCallback, useEffect } from "react"
 const LinkList = () => {
   const confirm = useConfirm()
   const { me } = useAccount({
-    root: { todos: [] }
+    root: { personalLinks: [] }
   })
-  const todos = me?.root?.todos || []
+  const personalLinks = me?.root?.personalLinks || []
 
   const [editId, setEditId] = useAtom(linkEditIdAtom)
-  const [open, setOpen] = useState(true)
   const [sort] = useAtom(linkSortAtom)
   const [focusedId, setFocusedId] = useState<string | null>(null)
   const [draggingId, setDraggingId] = useState<string | null>(null)
-  const todoRefs = useRef<{ [key: string]: HTMLLIElement | null }>({})
+  const linkRefs = useRef<{ [key: string]: HTMLLIElement | null }>({})
 
-  let sortedTodos =
-    sort === "title" && todos
-      ? [...todos].sort((a, b) =>
+  let sortedLinks =
+    sort === "title" && personalLinks
+      ? [...personalLinks].sort((a, b) =>
           (a?.title || "").localeCompare(b?.title || "")
         )
-      : todos
-  sortedTodos = sortedTodos || []
+      : personalLinks
+  sortedLinks = sortedLinks || []
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -62,7 +62,7 @@ const LinkList = () => {
   }
 
   const registerRef = useCallback((id: string, ref: HTMLLIElement | null) => {
-    todoRefs.current[id] = ref
+    linkRefs.current[id] = ref
   }, [])
 
   useKey("Escape", () => {
@@ -73,11 +73,15 @@ const LinkList = () => {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!me?.root?.todos || sortedTodos.length === 0 || editId !== null)
+      if (
+        !me?.root?.personalLinks ||
+        sortedLinks.length === 0 ||
+        editId !== null
+      )
         return
 
-      const currentIndex = sortedTodos.findIndex(
-        (todo) => todo?.id === focusedId
+      const currentIndex = sortedLinks.findIndex(
+        (link) => link?.id === focusedId
       )
 
       if (e.key === "ArrowUp" || e.key === "ArrowDown") {
@@ -85,41 +89,41 @@ const LinkList = () => {
         const newIndex =
           e.key === "ArrowUp"
             ? Math.max(0, currentIndex - 1)
-            : Math.min(sortedTodos.length - 1, currentIndex + 1)
+            : Math.min(sortedLinks.length - 1, currentIndex + 1)
 
         if (e.metaKey && sort === "manual") {
-          const currentTodo = me.root.todos[currentIndex]
-          if (!currentTodo) return
+          const currentLink = me.root.personalLinks[currentIndex]
+          if (!currentLink) return
 
-          const todosArray = [...me.root.todos]
-          const newTodos = arrayMove(todosArray, currentIndex, newIndex)
+          const linksArray = [...me.root.personalLinks]
+          const newLinks = arrayMove(linksArray, currentIndex, newIndex)
 
-          while (me.root.todos.length > 0) {
-            me.root.todos.pop()
+          while (me.root.personalLinks.length > 0) {
+            me.root.personalLinks.pop()
           }
 
-          newTodos.forEach((todo) => {
-            if (todo) {
-              me.root.todos.push(todo)
+          newLinks.forEach((link) => {
+            if (link) {
+              me.root.personalLinks.push(link)
             }
           })
 
-          updateSequences(me.root.todos)
+          updateSequences(me.root.personalLinks)
 
-          const newFocusedTodo = me.root.todos[newIndex]
-          if (newFocusedTodo) {
-            setFocusedId(newFocusedTodo.id)
+          const newFocusedLink = me.root.personalLinks[newIndex]
+          if (newFocusedLink) {
+            setFocusedId(newFocusedLink.id)
 
             requestAnimationFrame(() => {
-              todoRefs.current[newFocusedTodo.id]?.focus()
+              linkRefs.current[newFocusedLink.id]?.focus()
             })
           }
         } else {
-          const newFocusedTodo = sortedTodos[newIndex]
-          if (newFocusedTodo) {
-            setFocusedId(newFocusedTodo.id)
+          const newFocusedLink = sortedLinks[newIndex]
+          if (newFocusedLink) {
+            setFocusedId(newFocusedLink.id)
             requestAnimationFrame(() => {
-              todoRefs.current[newFocusedTodo.id]?.focus()
+              linkRefs.current[newFocusedLink.id]?.focus()
             })
           }
         }
@@ -128,12 +132,12 @@ const LinkList = () => {
 
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [me?.root?.todos, sortedTodos, focusedId, editId, sort])
+  }, [me?.root?.personalLinks, sortedLinks, focusedId, editId, sort])
 
-  const updateSequences = (todos: ListOfPersonalTodoItems) => {
-    todos.forEach((todo, index) => {
-      if (todo) {
-        todo.sequence = index
+  const updateSequences = (links: PersonalLinkLists) => {
+    links.forEach((link, index) => {
+      if (link) {
+        link.sequence = index
       }
     })
   }
@@ -147,13 +151,17 @@ const LinkList = () => {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
 
-    if (!active || !over || !me?.root?.todos) {
+    if (!active || !over || !me?.root?.personalLinks) {
       console.error("Drag operation fail", { active, over })
       return
     }
 
-    const oldIndex = me.root.todos.findIndex((item) => item?.id === active.id)
-    const newIndex = me.root.todos.findIndex((item) => item?.id === over.id)
+    const oldIndex = me.root.personalLinks.findIndex(
+      (item) => item?.id === active.id
+    )
+    const newIndex = me.root.personalLinks.findIndex(
+      (item) => item?.id === over.id
+    )
 
     if (oldIndex === -1 || newIndex === -1) {
       console.error("Drag operation fail", {
@@ -167,38 +175,40 @@ const LinkList = () => {
 
     if (oldIndex !== newIndex) {
       try {
-        const todosArray = [...me.root.todos]
-        const updatedTodos = arrayMove(todosArray, oldIndex, newIndex)
+        const personalLinksArray = [...me.root.personalLinks]
+        const updatedLinks = arrayMove(personalLinksArray, oldIndex, newIndex)
 
-        while (me.root.todos.length > 0) {
-          me.root.todos.pop()
+        while (me.root.personalLinks.length > 0) {
+          me.root.personalLinks.pop()
         }
 
-        updatedTodos.forEach((todo) => {
-          if (todo) {
-            me.root.todos.push(todo)
+        updatedLinks.forEach((link) => {
+          if (link) {
+            me.root.personalLinks.push(link)
           }
         })
 
-        updateSequences(me.root.todos)
+        updateSequences(me.root.personalLinks)
       } catch (error) {
-        console.error("Error during todo reordering:", error)
+        console.error("Error during link reordering:", error)
       }
     }
 
     setDraggingId(null)
   }
 
-  const handleDelete = (todoItem: TodoItem) => {
-    if (!me?.root?.todos) return
+  const handleDelete = (linkItem: PersonalLink) => {
+    if (!me?.root?.personalLinks) return
 
-    const index = me.root.todos.findIndex((item) => item?.id === todoItem.id)
+    const index = me.root.personalLinks.findIndex(
+      (item) => item?.id === linkItem.id
+    )
     if (index === -1) {
-      console.error("Delete operation fail", { index, todoItem })
+      console.error("Delete operation fail", { index, linkItem })
       return
     }
 
-    me.root.todos.splice(index, 1)
+    me.root.personalLinks.splice(index, 1)
   }
 
   return (
@@ -212,23 +222,23 @@ const LinkList = () => {
           onDragEnd={handleDragEnd}
         >
           <SortableContext
-            items={sortedTodos.map((item) => item?.id || "") || []}
+            items={sortedLinks.map((item) => item?.id || "") || []}
             strategy={verticalListSortingStrategy}
           >
             <ul role="list" className="divide-y divide-primary/5">
-              {sortedTodos.map(
-                (todoItem) =>
-                  todoItem && (
+              {sortedLinks.map(
+                (linkItem) =>
+                  linkItem && (
                     <ListItem
-                      key={todoItem.id}
+                      key={linkItem.id}
                       confirm={confirm}
-                      isEditing={editId === todoItem.id}
+                      isEditing={editId === linkItem.id}
                       setEditId={setEditId}
-                      todoItem={todoItem}
+                      personalLink={linkItem}
                       disabled={sort !== "manual" || editId !== null}
                       registerRef={registerRef}
-                      isDragging={draggingId === todoItem.id}
-                      isFocused={focusedId === todoItem.id}
+                      isDragging={draggingId === linkItem.id}
+                      isFocused={focusedId === linkItem.id}
                       setFocusedId={setFocusedId}
                       onDelete={handleDelete}
                     />

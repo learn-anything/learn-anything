@@ -7,7 +7,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
-import { TodoItem } from "@/lib/schema"
+import { PersonalLink } from "@/lib/schema/personal-link"
 import { cn } from "@/lib/utils"
 import { LinkForm } from "./form/manage"
 import { Button } from "@/components/ui/button"
@@ -16,7 +16,7 @@ import { Badge } from "@/components/ui/badge"
 
 interface ListItemProps {
   confirm: (options: ConfirmOptions) => Promise<boolean>
-  todoItem: TodoItem
+  personalLink: PersonalLink
   disabled?: boolean
   isEditing: boolean
   setEditId: (id: string | null) => void
@@ -24,14 +24,14 @@ interface ListItemProps {
   isFocused: boolean
   setFocusedId: (id: string | null) => void
   registerRef: (id: string, ref: HTMLLIElement | null) => void
-  onDelete?: (todoItem: TodoItem) => void
+  onDelete?: (personalLink: PersonalLink) => void
 }
 
 export const ListItem: React.FC<ListItemProps> = ({
   confirm,
   isEditing,
   setEditId,
-  todoItem,
+  personalLink,
   disabled = false,
   isDragging,
   isFocused,
@@ -40,7 +40,7 @@ export const ListItem: React.FC<ListItemProps> = ({
   onDelete
 }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: todoItem.id, disabled })
+    useSortable({ id: personalLink.id, disabled })
   const formRef = React.useRef<HTMLFormElement>(null)
 
   const style = {
@@ -58,15 +58,15 @@ export const ListItem: React.FC<ListItemProps> = ({
   const refCallback = React.useCallback(
     (node: HTMLLIElement | null) => {
       setNodeRef(node)
-      registerRef(todoItem.id, node)
+      registerRef(personalLink.id, node)
     },
-    [setNodeRef, registerRef, todoItem.id]
+    [setNodeRef, registerRef, personalLink.id]
   )
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
       e.preventDefault()
-      setEditId(todoItem.id)
+      setEditId(personalLink.id)
     }
   }
 
@@ -79,15 +79,18 @@ export const ListItem: React.FC<ListItemProps> = ({
   }
 
   const handleRowClick = () => {
-    console.log("Row clicked", todoItem.id)
-    setEditId(todoItem.id)
+    console.log("Row clicked", personalLink.id)
+    setEditId(personalLink.id)
   }
 
-  const handleDelete = async (e: React.MouseEvent, todoItem: TodoItem) => {
+  const handleDelete = async (
+    e: React.MouseEvent,
+    personalLink: PersonalLink
+  ) => {
     e.stopPropagation()
 
     const result = await confirm({
-      title: `Delete "${todoItem.title}"?`,
+      title: `Delete "${personalLink.title}"?`,
       description: "This action cannot be undone.",
       alertDialogTitle: {
         className: "text-base"
@@ -105,7 +108,7 @@ export const ListItem: React.FC<ListItemProps> = ({
     })
 
     if (result) {
-      onDelete?.(todoItem)
+      onDelete?.(personalLink)
     }
   }
 
@@ -113,7 +116,7 @@ export const ListItem: React.FC<ListItemProps> = ({
     return (
       <LinkForm
         ref={formRef}
-        todoItem={todoItem}
+        personalLink={personalLink}
         onSuccess={handleSuccess}
         onCancel={handleCancel}
       />
@@ -127,11 +130,11 @@ export const ListItem: React.FC<ListItemProps> = ({
       {...attributes}
       {...listeners}
       tabIndex={0}
-      onFocus={() => setFocusedId(todoItem.id)}
+      onFocus={() => setFocusedId(personalLink.id)}
       onBlur={() => setFocusedId(null)}
       onKeyDown={handleKeyDown}
       className={cn(
-        "relative flex cursor-default items-center py-3 outline-none hover:bg-muted/50 xl:h-11 xl:py-0",
+        "relative flex h-14 cursor-default items-center outline-none hover:bg-muted/50 xl:h-11",
         { "bg-muted/50": isFocused }
       )}
       onClick={handleRowClick}
@@ -139,17 +142,17 @@ export const ListItem: React.FC<ListItemProps> = ({
       <div className="flex grow justify-between gap-x-6 px-6 max-lg:px-4">
         <div className="flex min-w-0 items-center gap-x-4">
           <Checkbox
-            checked={todoItem.completed}
+            checked={personalLink.completed}
             onClick={(e) => e.stopPropagation()}
             onCheckedChange={() => {
-              todoItem.completed = !todoItem.completed
+              personalLink.completed = !personalLink.completed
             }}
             className="border border-muted-foreground"
           />
-          {todoItem.isLink && todoItem.meta && (
+          {personalLink.isLink && personalLink.meta && (
             <Image
-              src={todoItem.meta.favicon}
-              alt={todoItem.title}
+              src={personalLink.meta.favicon}
+              alt={personalLink.title}
               className="size-5 rounded-full"
               width={16}
               height={16}
@@ -157,17 +160,17 @@ export const ListItem: React.FC<ListItemProps> = ({
           )}
           <div className="w-full min-w-0 flex-auto">
             <div className="gap-x-2 space-y-0.5 xl:flex xl:flex-row">
-              <p className="line-clamp-2 text-sm font-medium text-primary hover:text-primary xl:truncate">
-                {todoItem.title}
+              <p className="line-clamp-1 text-sm font-medium text-primary hover:text-primary xl:truncate">
+                {personalLink.title}
               </p>
-              {todoItem.isLink && todoItem.meta && (
+              {personalLink.isLink && personalLink.meta && (
                 <div className="group flex items-center gap-x-1">
                   <LinkIcon
                     aria-hidden="true"
                     className="size-3 flex-none text-muted-foreground group-hover:text-primary"
                   />
                   <Link
-                    href={todoItem.meta.url}
+                    href={personalLink.meta.url}
                     passHref
                     prefetch={false}
                     target="_blank"
@@ -176,7 +179,7 @@ export const ListItem: React.FC<ListItemProps> = ({
                     }}
                     className="text-xs text-muted-foreground hover:text-primary"
                   >
-                    <span className="xl:truncate">{todoItem.meta.url}</span>
+                    <span className="xl:truncate">{personalLink.meta.url}</span>
                   </Link>
                 </div>
               )}
@@ -189,7 +192,7 @@ export const ListItem: React.FC<ListItemProps> = ({
           <Button
             size="icon"
             className="h-auto w-auto bg-transparent text-destructive hover:bg-transparent hover:text-red-500"
-            onClick={(e) => handleDelete(e, todoItem)}
+            onClick={(e) => handleDelete(e, personalLink)}
           >
             <Trash2Icon size={16} />
           </Button>
