@@ -5,7 +5,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useMedia } from "react-use"
 import { useAtom } from "jotai"
-import { LayersIcon, LinkIcon, SearchIcon } from "lucide-react"
+import { LinkIcon, SearchIcon } from "lucide-react"
 import { Logo } from "@/components/custom/logo"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -136,11 +136,6 @@ const SidebarContent: React.FC = React.memo(() => {
         className="relative mb-0.5 mt-1.5 flex grow flex-col overflow-y-auto rounded-md px-3.5"
       >
         <SidebarItem url="/links" label="Links" icon={<LinkIcon size={16} />} />
-        <SidebarItem
-          url="/pages"
-          label="Pages"
-          icon={<LayersIcon size={16} />}
-        />
         <div className="h-2 shrink-0" />
         <PageSection />
         <TopicSection />

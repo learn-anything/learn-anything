@@ -55,7 +55,7 @@ export const PageSection: React.FC = () => {
               page && (
                 <SidebarItem
                   key={page.id}
-                  url={`/${page.slug}`}
+                  url={`/pages/${page.slug}`}
                   label={page.title}
                 />
               )

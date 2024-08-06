@@ -1,6 +1,6 @@
 "use client"
 
-import { createJazzReactContext, DemoAuth as BaseDemoAuth } from "jazz-react"
+import { createJazzReactContext } from "jazz-react"
 import { DemoAuth } from "@/components/custom/demo-auth"
 import { LaAccount } from "../schema"
 
