@@ -203,8 +203,8 @@ const LinkList = () => {
 
   return (
     <>
-      {editId && <div className="fixed inset-0 z-40" onClick={overlayClick} />}
-      <div className="relative z-50">
+      {editId && <div className="fixed inset-0 z-10" onClick={overlayClick} />}
+      <div className="relative z-20">
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}

@@ -192,7 +192,7 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
         try {
           const res = await fetch(
             `/api/metadata?url=${encodeURIComponent(url)}`,
-            { cache: "force-cache" }
+            { cache: "no-store" }
           )
           if (!res.ok) throw new Error("Failed to fetch metadata")
           const data = await res.json()
@@ -279,7 +279,7 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 
     return (
       <div className="p-3 transition-all">
-        <div className="rounded-md border border-primary/5 bg-primary/5">
+        <div className="rounded-md border bg-muted/50">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -427,7 +427,7 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
                               {...field}
                               autoComplete="off"
                               placeholder="Description (optional)"
-                              className="min-h-[24px] resize-none overflow-y-auto border-none p-1.5 text-xs font-medium placeholder:text-primary/40 focus-visible:outline-none focus-visible:ring-0"
+                              className="min-h-[24px] resize-none overflow-y-auto border-none p-1.5 text-xs font-medium shadow-none placeholder:text-primary/40 focus-visible:outline-none focus-visible:ring-0"
                               onInput={(e) => {
                                 const target = e.target as HTMLTextAreaElement
                                 target.style.height = "auto"
@@ -442,7 +442,7 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
                 </div>
               </div>
 
-              <div className="flex flex-auto flex-row items-center justify-between gap-2 border-t border-primary/5 px-3 py-2">
+              <div className="flex flex-auto flex-row items-center justify-between gap-2 rounded-b-md border-t px-3 py-2">
                 <div className="flex flex-row items-center gap-0.5">
                   <div className="flex min-w-0 shrink-0 cursor-pointer select-none flex-row">
                     <TopicSelector />

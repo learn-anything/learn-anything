@@ -48,7 +48,7 @@ export const TopicSelector: React.FC = () => {
                   type="button"
                   role="combobox"
                   variant="secondary"
-                  className="gap-x-2 text-sm text-primary/60"
+                  className="!mt-0 gap-x-2 text-sm"
                 >
                   <span className="truncate">
                     {field.value

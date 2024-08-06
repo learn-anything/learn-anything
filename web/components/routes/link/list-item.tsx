@@ -12,7 +12,6 @@ import { cn } from "@/lib/utils"
 import { LinkForm } from "./form/manage"
 import { Button } from "@/components/ui/button"
 import { ConfirmOptions } from "@omit/react-confirm-dialog"
-import { toast } from "sonner"
 import { Badge } from "@/components/ui/badge"
 
 interface ListItemProps {
@@ -106,9 +105,7 @@ export const ListItem: React.FC<ListItemProps> = ({
     })
 
     if (result) {
-      console.log("Deleting todo item", todoItem)
       onDelete?.(todoItem)
-      // toast.success(`Deleted "${todoItem.title}"`)
     }
   }
 
@@ -134,11 +131,8 @@ export const ListItem: React.FC<ListItemProps> = ({
       onBlur={() => setFocusedId(null)}
       onKeyDown={handleKeyDown}
       className={cn(
-        "relative flex items-center py-3 outline-none hover:bg-muted/40 xl:h-11 xl:py-0",
-        {
-          "bg-muted/40": isFocused
-          // "cursor-move": !disabled
-        }
+        "relative flex cursor-default items-center py-3 outline-none hover:bg-muted/50 xl:h-11 xl:py-0",
+        { "bg-muted/50": isFocused }
       )}
       onClick={handleRowClick}
     >
@@ -161,28 +155,30 @@ export const ListItem: React.FC<ListItemProps> = ({
               height={16}
             />
           )}
-          <div className="w-full min-w-0 flex-auto cursor-auto">
-            <div className="flex flex-col gap-2 xl:flex-row">
-              <p className="text-sm font-medium text-primary hover:text-primary xl:truncate">
+          <div className="w-full min-w-0 flex-auto">
+            <div className="gap-x-2 gap-y-0.5 xl:flex-row">
+              <p className="line-clamp-2 text-sm font-medium text-primary hover:text-primary xl:truncate">
                 {todoItem.title}
               </p>
               {todoItem.isLink && todoItem.meta && (
-                <Link
-                  href={todoItem.meta.url}
-                  passHref
-                  prefetch={false}
-                  target="_blank"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                  }}
-                  className="group flex items-center gap-x-1 text-xs text-muted-foreground hover:text-primary"
-                >
+                <div className="group flex items-center gap-x-1">
                   <LinkIcon
                     aria-hidden="true"
                     className="size-3 flex-none text-muted-foreground group-hover:text-primary"
                   />
-                  <span className="xl:truncate">{todoItem.meta.url}</span>
-                </Link>
+                  <Link
+                    href={todoItem.meta.url}
+                    passHref
+                    prefetch={false}
+                    target="_blank"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                    }}
+                    className="text-xs text-muted-foreground hover:text-primary"
+                  >
+                    <span className="xl:truncate">{todoItem.meta.url}</span>
+                  </Link>
+                </div>
               )}
             </div>
           </div>
