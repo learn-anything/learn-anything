@@ -156,7 +156,7 @@ export const ListItem: React.FC<ListItemProps> = ({
             />
           )}
           <div className="w-full min-w-0 flex-auto">
-            <div className="gap-x-2 gap-y-0.5 xl:flex-row">
+            <div className="gap-x-2 space-y-0.5 xl:flex xl:flex-row">
               <p className="line-clamp-2 text-sm font-medium text-primary hover:text-primary xl:truncate">
                 {todoItem.title}
               </p>
