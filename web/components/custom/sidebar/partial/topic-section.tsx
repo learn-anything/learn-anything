@@ -22,7 +22,7 @@ const TOPICS = [
   "Design"
 ]
 
-const TopicSection = () => {
+export const TopicSection = () => {
   const [showOptions, setShowOptions] = useState(false)
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
