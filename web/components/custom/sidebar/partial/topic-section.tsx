@@ -26,7 +26,7 @@ const TopicSection = () => {
   const [showOptions, setShowOptions] = useState(false)
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
-  const pathname = usePathname()
+
   const learningOptions = [
     { text: "To Learn", icon: <Bookmark size={16} />, color: "text-white/70" },
     {
@@ -113,9 +113,7 @@ const TopicSection = () => {
         style={{ maxHeight: "calc(100vh - 200px)" }}
       >
         {TOPICS.map((topic) => (
-          <Link key={topic} href={`/${topic.toLowerCase()}`} passHref>
-            <SidebarItem label={topic} url={`/${topic}`} />
-          </Link>
+          <SidebarItem key={topic} label={topic} url={`/${topic}`} />
         ))}
       </div>
     </div>
