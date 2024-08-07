@@ -4,7 +4,10 @@ import * as React from "react"
 import { ListFilterIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { ContentHeader } from "@/components/custom/content-header"
+import {
+  ContentHeader,
+  SidebarToggleButton
+} from "@/components/custom/content-header"
 import { useMedia } from "react-use"
 import {
   Popover,
@@ -34,9 +37,19 @@ export const LinkHeader = () => {
 
   return (
     <>
-      <ContentHeader title="Link">
+      <ContentHeader className="p-4">
+        {/* Toggle and Title */}
+        <div className="flex min-w-0 shrink-0 items-center gap-1.5">
+          <SidebarToggleButton />
+          <div className="flex min-h-0 items-center">
+            <span className="truncate text-left text-xl font-bold">Links</span>
+          </div>
+        </div>
+
         {!isTablet && <Tabs />}
+
         <div className="flex flex-auto"></div>
+
         <FilterAndSort />
       </ContentHeader>
 
