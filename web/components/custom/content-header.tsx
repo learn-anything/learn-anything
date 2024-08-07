@@ -1,55 +1,62 @@
 "use client"
 
-import { isCollapseAtom, toggleCollapseAtom } from "@/store/sidebar"
-import { useAtom } from "jotai"
-import { useMedia } from "react-use"
-import { Button } from "@/components/ui/button"
-import { PanelLeftIcon } from "lucide-react"
+import React from "react"
 import { Separator } from "@/components/ui/separator"
+import { Button } from "../ui/button"
+import { PanelLeftIcon } from "lucide-react"
+import { useAtom } from "jotai"
+import { isCollapseAtom, toggleCollapseAtom } from "@/store/sidebar"
+import { useMedia } from "react-use"
+import { cn } from "@/lib/utils"
 
-export const ContentHeader = ({
-  children,
-  title
-}: {
-  children?: React.ReactNode
-  title?: string
-}) => {
+type ContentHeaderProps = Omit<React.HTMLAttributes<HTMLDivElement>, "title">
+
+export const ContentHeader = React.forwardRef<
+  HTMLDivElement,
+  ContentHeaderProps
+>(({ children, className, ...props }, ref) => {
+  return (
+    <header
+      className={cn(
+        "flex min-h-10 min-w-0 max-w-[100vw] shrink-0 items-center gap-3 border border-b pl-8 pr-6 transition-opacity max-lg:pl-4 max-lg:pr-5",
+        className
+      )}
+      ref={ref}
+      {...props}
+    >
+      {children}
+    </header>
+  )
+})
+
+ContentHeader.displayName = "ContentHeader"
+
+export const SidebarToggleButton: React.FC = () => {
   const [isCollapse] = useAtom(isCollapseAtom)
-  const [, toogle] = useAtom(toggleCollapseAtom)
+  const [, toggle] = useAtom(toggleCollapseAtom)
   const isTablet = useMedia("(max-width: 1024px)")
+
+  if (!isCollapse && !isTablet) return null
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     e.stopPropagation()
-    toogle()
+    toggle()
   }
 
   return (
-    <header className="flex min-h-10 min-w-0 shrink-0 items-center gap-3 px-6 py-4 transition-opacity max-lg:px-4">
-      <div
-        className="flex min-h-10 min-w-0 shrink-0 items-center gap-1.5"
-        style={{ maxWidth: "50%" }}
+    <div className="flex items-center gap-1">
+      <Button
+        type="button"
+        size="icon"
+        variant="ghost"
+        aria-label="Menu"
+        className="z-50 text-primary/60"
+        onClick={handleClick}
       >
-        {(isCollapse || isTablet) && (
-          <>
-            <Button
-              type="button"
-              size="icon"
-              variant="ghost"
-              aria-label="Menu"
-              className="z-50 text-primary/60"
-              onClick={handleClick}
-            >
-              <PanelLeftIcon size={16} />
-            </Button>
-            <Separator orientation="vertical" />
-          </>
-        )}
-
-        {title && <p className="truncate text-2xl font-bold">{title}</p>}
-      </div>
-
-      {children}
-    </header>
+        <PanelLeftIcon size={16} />
+      </Button>
+      <Separator orientation="vertical" />
+    </div>
   )
 }
