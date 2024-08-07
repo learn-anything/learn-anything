@@ -58,7 +58,11 @@ export function DetailPageWrapper({ pageId }: { pageId: string }) {
         toast.error("Update failed", {
           description: "Title must be longer than or equal to 1 character"
         })
-        editor.commands.setContent(`<p>${page.title}</p>`)
+
+        // https://github.com/ueberdosis/tiptap/issues/3764
+        setTimeout(() => {
+          editor.commands.setContent(`<p>${page.title}</p>`)
+        })
       } else {
         page.title = title
       }
@@ -89,7 +93,9 @@ export function DetailPageWrapper({ pageId }: { pageId: string }) {
 
   useEffect(() => {
     if (page && editor) {
-      editor.commands.setContent(`<p>${page.title}</p>`)
+      setTimeout(() => {
+        editor.commands.setContent(`<p>${page.title}</p>`)
+      })
     }
   }, [page, editor])
 
