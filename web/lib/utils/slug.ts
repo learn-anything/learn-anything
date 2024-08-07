@@ -16,6 +16,10 @@ export function generateUniqueSlug(
   let uniqueSlug = baseSlug.slice(0, maxLength)
   let num = 1
 
+  if (!existingItems || existingItems.length === 0) {
+    return uniqueSlug
+  }
+
   const isSlugTaken = (slug: string) =>
     existingItems.some((item) => {
       const itemSlug = item[slugProperty] as SlugLikeProperty

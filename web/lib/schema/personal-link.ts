@@ -1,5 +1,7 @@
 import { co, CoList, CoMap } from "jazz-tools"
 import { nullable } from "../types"
+import { GlobalLink } from "./global-link"
+import { GlobalTopic } from "./global-topic"
 
 export class LinkMetadata extends CoMap {
   url = co.string
@@ -25,7 +27,8 @@ export class PersonalLink extends CoMap {
   learningState = co.optional.literal("wantToLearn", "learning", "learned")
   notes = co.optional.string
   summary = co.optional.string
-  // topic = co.optional.ref(GlobalTopic)
+  globalLink = co.optional.ref(GlobalLink)
+  topic = co.optional.ref(GlobalTopic)
 }
 
 export class PersonalLinkLists extends CoList.Of(co.ref(PersonalLink)) {}
