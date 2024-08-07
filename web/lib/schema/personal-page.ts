@@ -8,11 +8,11 @@ import { GlobalTopic } from "./global-topic"
  * - if public, certain members (can do read/write access accordingly), personal (end to end encrypted, only accessed by user)
  */
 export class PersonalPage extends CoMap {
-  title = co.string
-  slug = co.string
-  content = co.optional.json()
-  topic = co.optional.ref(GlobalTopic)
-  // backlinks = co.optional.ref() // other PersonalPages linking to this page TODO: add, think through how to do it well, efficiently
+	title = co.string
+	slug = co.string
+	content = co.optional.json()
+	topic = co.optional.ref(GlobalTopic)
+	// backlinks = co.optional.ref() // other PersonalPages linking to this page TODO: add, think through how to do it well, efficiently
 }
 
 export class PersonalPageLists extends CoList.Of(co.ref(PersonalPage)) {}

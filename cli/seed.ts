@@ -55,35 +55,5 @@ async function prodSeed() {
 	const globalGroup = await Group.load(process.env.JAZZ_PUBLIC_GLOBAL_GROUP as ID<Group>, worker, {})
 	if (!globalGroup) return // TODO: err
 	// TODO: complete full seed (connections, topics from old LA)
-
-	// const globalLink = GlobalLink.create(
-	// 	{
-	// 		url: "https://google.com",
-	// 		urlTitle: "Google",
-	// 		protocol: "https"
-	// 	},
-	// 	{ owner: globalGroup }
-	// )
-	// const user = (await (
-	// 	await LaAccount.createAs(worker, {
-	// 		creationProps: { name: "nikiv" }
-	// 	})
-	// ).ensureLoaded({ root: { personalLinks: [], pages: [], todos: [] } }))!
-	// console.log(process.env.JAZZ_GLOBAL_GROUP!, "group")
-	// console.log(worker)
-	// TODO: type err
-	// console.log(globalGroup, "group")
-	// return
-	// const currentFilePath = import.meta.path
-	// const connectionsFilePath = `${currentFilePath.replace("seed.ts", "/seed/connections.json")}`
-	// const file = Bun.file(connectionsFilePath)
-	// const fileContent = await file.text()
-	// const topicsWithConnections = JSON.parse(fileContent)
-	// // let topicsWithConnections = JSON.stringify(obj, null, 2)
-	// console.log(topicsWithConnections)
-	// TODO: type err
-	// topicsWithConnections.map(topic => {
-	// 	const globalTopic = GlobalTopic.create({ name: topic.name, description: topic.description }, { owner: globalGroup })
-	// })
 }
 await seed()

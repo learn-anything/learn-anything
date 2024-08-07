@@ -14,59 +14,54 @@ import { PersonalLinkLists } from "./personal-link"
 import { GlobalTopicLists } from "./global-topic"
 
 class UserProfile extends CoMap {
-  name = co.string
-  // TODO: avatar
+	name = co.string
+	// TODO: avatar
 }
 export class UserRoot extends CoMap {
-  name = co.string
-  username = co.string
-  website = co.string
-  bio = co.string
+	name = co.string
+	username = co.string
+	website = co.string
+	bio = co.string
 
-  personalLinks = co.ref(PersonalLinkLists)
-  personalPages = co.ref(PersonalPageLists)
+	personalLinks = co.ref(PersonalLinkLists)
+	personalPages = co.ref(PersonalPageLists)
 
-  // not implemented yet
-  topicsWantToLearn = co.ref(GlobalTopicLists)
-  topicsLearning = co.ref(GlobalTopicLists)
-  topicsLearned = co.ref(GlobalTopicLists)
+	// not implemented yet
+	topicsWantToLearn = co.ref(GlobalTopicLists)
+	topicsLearning = co.ref(GlobalTopicLists)
+	topicsLearned = co.ref(GlobalTopicLists)
 }
 
 export class LaAccount extends Account {
-  profile = co.ref(UserProfile)
-  root = co.ref(UserRoot)
-  async migrate(
-    this: LaAccount,
-    creationProps?:
-      | { name: string; username: string; website: string; bio: string }
-      | undefined
-  ): Promise<void> {
-    if (!this._refs.root && creationProps) {
-      const profileGroup = Group.create({ owner: this })
-      profileGroup.addMember("everyone", "reader")
-      this.profile = UserProfile.create(
-        { name: creationProps.name },
-        { owner: profileGroup }
-      )
-      this.root = UserRoot.create(
-        {
-          name: creationProps.name,
-          username: creationProps.username,
-          website: creationProps.website,
-          bio: creationProps.bio,
+	profile = co.ref(UserProfile)
+	root = co.ref(UserRoot)
+	async migrate(
+		this: LaAccount,
+		creationProps?: { name: string; username: string; website: string; bio: string } | undefined
+	): Promise<void> {
+		if (!this._refs.root && creationProps) {
+			const profileGroup = Group.create({ owner: this })
+			profileGroup.addMember("everyone", "reader")
+			this.profile = UserProfile.create({ name: creationProps.name }, { owner: profileGroup })
+			this.root = UserRoot.create(
+				{
+					name: creationProps.name,
+					username: creationProps.username,
+					website: creationProps.website,
+					bio: creationProps.bio,
 
-          personalLinks: PersonalLinkLists.create([], { owner: this }),
-          personalPages: PersonalPageLists.create([], { owner: this }),
+					personalLinks: PersonalLinkLists.create([], { owner: this }),
+					personalPages: PersonalPageLists.create([], { owner: this }),
 
-          // not implemented yet
-          topicsWantToLearn: GlobalTopicLists.create([], { owner: this }),
-          topicsLearning: GlobalTopicLists.create([], { owner: this }),
-          topicsLearned: GlobalTopicLists.create([], { owner: this })
-        },
-        { owner: this }
-      )
-    }
-  }
+					// not implemented yet
+					topicsWantToLearn: GlobalTopicLists.create([], { owner: this }),
+					topicsLearning: GlobalTopicLists.create([], { owner: this }),
+					topicsLearned: GlobalTopicLists.create([], { owner: this })
+				},
+				{ owner: this }
+			)
+		}
+	}
 }
 // TODO: need?
 // class ListOfGlobalTopics extends CoList.Of(co.ref(GlobalTopic)) {}

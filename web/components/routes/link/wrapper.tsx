@@ -7,13 +7,13 @@ import { useAtom } from "jotai"
 import { linkEditIdAtom } from "@/store/link"
 
 export function LinkWrapper() {
-  const [editId] = useAtom(linkEditIdAtom)
+	const [editId] = useAtom(linkEditIdAtom)
 
-  return (
-    <div className="flex h-full flex-auto flex-col overflow-hidden">
-      <LinkHeader />
-      <LinkManage />
-      <LinkList key={editId} />
-    </div>
-  )
+	return (
+		<div className="flex h-full flex-auto flex-col overflow-hidden">
+			<LinkHeader />
+			<LinkManage />
+			<LinkList key={editId} />
+		</div>
+	)
 }

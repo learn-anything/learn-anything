@@ -15,37 +15,34 @@ import { ConfirmProvider } from "@/lib/providers/confirm-provider"
 // })
 
 const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans"
+	subsets: ["latin"],
+	variable: "--font-sans"
 })
 
 export const metadata: Metadata = {
-  title: "Learn Anything",
-  description:
-    "Organize world's knowledge, explore connections and curate learning paths"
+	title: "Learn Anything",
+	description: "Organize world's knowledge, explore connections and curate learning paths"
 }
 
 export default function RootLayout({
-  children
+	children
 }: Readonly<{
-  children: React.ReactNode
+	children: React.ReactNode
 }>) {
-  return (
-    <html lang="en" className="h-full w-full">
-      <body
-        className={cn("h-full w-full font-sans antialiased", inter.variable)}
-      >
-        <JazzProvider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <JotaiProvider>
-              <ConfirmProvider>
-                {children}
-                <Toaster />
-              </ConfirmProvider>
-            </JotaiProvider>
-          </ThemeProvider>
-        </JazzProvider>
-      </body>
-    </html>
-  )
+	return (
+		<html lang="en" className="h-full w-full">
+			<body className={cn("h-full w-full font-sans antialiased", inter.variable)}>
+				<JazzProvider>
+					<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+						<JotaiProvider>
+							<ConfirmProvider>
+								{children}
+								<Toaster />
+							</ConfirmProvider>
+						</JotaiProvider>
+					</ThemeProvider>
+				</JazzProvider>
+			</body>
+		</html>
+	)
 }
