@@ -109,7 +109,10 @@ export const LAEditor = React.forwardRef<LAEditorRef, LAEditorProps>(
 
     React.useEffect(() => {
       if (editor && initialContent) {
-        editor.commands.setContent(initialContent)
+        // https://github.com/ueberdosis/tiptap/issues/3764
+        setTimeout(() => {
+          editor.commands.setContent(initialContent)
+        })
       }
     }, [editor, initialContent])
 
