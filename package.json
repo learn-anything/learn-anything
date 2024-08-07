@@ -3,20 +3,29 @@
 	"scripts": {
 		"dev": "bun web",
 		"web": "cd web && bun dev",
-		"web:build": "bun run --filter '*' build"
-	},
-	"devDependencies": {
-		"bun-types": "^1.1.18"
+		"web:build": "bun run --filter '*' build",
+		"cli": "bun run --watch cli/run.ts",
+		"seed": "bun --watch cli/seed.ts"
 	},
 	"workspaces": [
 		"web"
 	],
+	"dependencies": {
+		"jazz-nodejs": "^0.7.23",
+		"react-icons": "^5.2.1"
+	},
+	"devDependencies": {
+		"bun-types": "^1.1.21"
+	},
 	"prettier": {
+		"plugins": [
+			"prettier-plugin-tailwindcss"
+		],
 		"useTabs": true,
 		"semi": false,
 		"trailingComma": "none",
 		"printWidth": 120,
 		"arrowParens": "avoid"
 	},
-	"private": true
+	"license": "MIT"
 }
