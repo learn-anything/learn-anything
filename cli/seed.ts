@@ -1,9 +1,10 @@
 import { startWorker } from "jazz-nodejs"
 import { Group } from "jazz-tools"
 import { RawControlledAccount } from "cojson"
-import { GlobalLink, LaAccount, Page, PersonalLink } from "@/web/lib/schema"
+import { GlobalLink, LaAccount, PersonalPage, PersonalLink } from "@/web/lib/schema"
 import { getEnvOrThrow } from "@/lib/utils"
 import { appendFile } from "node:fs/promises"
+import { generateUniqueSlug } from "@/web/lib/utils"
 
 const JAZZ_WORKER_SECRET = getEnvOrThrow("JAZZ_WORKER_SECRET")
 
@@ -71,10 +72,20 @@ async function devSeed() {
 	user.root.personalLinks.push(personalLink1)
 	user.root.personalLinks.push(personalLink2)
 
-	const page1 = Page.create({ title: "Physics", content: "Physics is great" }, { owner: user })
-	const page2 = Page.create({ title: "Karabiner", content: "Karabiner is great" }, { owner: user })
-	user.root.pages.push(page1)
-	user.root.pages.push(page2)
+	const pageOneTitle = "Physics"
+	const pageTwoTitle = "Karabiner"
+
+	const page1 = PersonalPage.create(
+		{ title: pageOneTitle, slug: generateUniqueSlug([], pageOneTitle), content: "Physics is great" },
+		{ owner: user }
+	)
+	const page2 = PersonalPage.create(
+		{ title: pageTwoTitle, slug: generateUniqueSlug([], pageTwoTitle), content: "Karabiner is great" },
+		{ owner: user }
+	)
+
+	user.root.personalPages?.push(page1)
+	user.root.personalPages?.push(page2)
 
 	const credentials = {
 		accountID: user.id,
