@@ -2,8 +2,7 @@
 
 import * as React from "react"
 import { EditorContent, useEditor } from "@tiptap/react"
-import { Editor } from "@tiptap/core"
-import { Content } from "@tiptap/core"
+import { Editor, Content } from "@tiptap/core"
 import { useThrottleFn } from "react-use"
 import { BubbleMenu } from "./components/bubble-menu"
 import { createExtensions } from "./extensions"
@@ -18,13 +17,13 @@ export interface LAEditorProps
   placeholder?: string
   editorClassName?: string
   onUpdate?: (content: Content) => void
-  onBlur?: (Content: Content) => void
+  onBlur?: (content: Content) => void
   onNewBlock?: (content: Content) => void
   value?: Content
   throttleDelay?: number
 }
 
-export interface LAEditorRef {
+interface LAEditorRef {
   focus: () => void
 }
 
@@ -58,12 +57,31 @@ export const LAEditor = React.forwardRef<LAEditorRef, LAEditorProps>(
     const [lastThrottledContent, setLastThrottledContent] =
       React.useState(throttledContent)
 
-    React.useEffect(() => {
-      if (lastThrottledContent !== throttledContent) {
-        setLastThrottledContent(throttledContent)
-        onUpdate?.(throttledContent!)
-      }
-    })
+    const handleUpdate = React.useCallback(
+      (editor: Editor) => {
+        const newContent = getOutput(editor, output)
+        setContent(newContent)
+
+        const customEditor = editor as CustomEditor
+        const json = customEditor.getJSON()
+
+        if (json.content && Array.isArray(json.content)) {
+          const currentBlockCount = json.content.length
+
+          if (
+            typeof customEditor.previousBlockCount === "number" &&
+            currentBlockCount > customEditor.previousBlockCount
+          ) {
+            requestAnimationFrame(() => {
+              onNewBlock?.(newContent)
+            })
+          }
+
+          customEditor.previousBlockCount = currentBlockCount
+        }
+      },
+      [output, onNewBlock]
+    )
 
     const editor = useEditor({
       autofocus: false,
@@ -81,27 +99,11 @@ export const LAEditor = React.forwardRef<LAEditorRef, LAEditorProps>(
           editor.commands.setContent(value)
         }
       },
-      onUpdate: ({ editor }) => {
-        setContent(getOutput(editor, output))
-
-        const customEditor = editor as CustomEditor
-        const json = customEditor.getJSON()
-
-        if (json.content && Array.isArray(json.content)) {
-          const currentBlockCount = json.content.length
-
-          if (
-            typeof customEditor.previousBlockCount === "number" &&
-            currentBlockCount > customEditor.previousBlockCount
-          ) {
-            onNewBlock?.(getOutput(editor, output))
-          }
-
-          customEditor.previousBlockCount = currentBlockCount
-        }
-      },
+      onUpdate: ({ editor }) => handleUpdate(editor),
       onBlur: ({ editor }) => {
-        onBlur?.(getOutput(editor, output))
+        requestAnimationFrame(() => {
+          onBlur?.(getOutput(editor, output))
+        })
       }
     })
 
@@ -109,16 +111,22 @@ export const LAEditor = React.forwardRef<LAEditorRef, LAEditorProps>(
       if (editor && initialContent) {
         editor.commands.setContent(initialContent)
       }
-    }, [initialContent])
+    }, [editor, initialContent])
+
+    React.useEffect(() => {
+      if (lastThrottledContent !== throttledContent) {
+        setLastThrottledContent(throttledContent)
+
+        requestAnimationFrame(() => {
+          onUpdate?.(throttledContent!)
+        })
+      }
+    }, [throttledContent, lastThrottledContent, onUpdate])
 
     React.useImperativeHandle(
       ref,
       () => ({
-        focus: () => {
-          if (editor) {
-            editor.commands.focus()
-          }
-        }
+        focus: () => editor?.commands.focus()
       }),
       [editor]
     )
