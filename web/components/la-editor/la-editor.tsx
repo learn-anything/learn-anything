@@ -23,7 +23,7 @@ export interface LAEditorProps
   throttleDelay?: number
 }
 
-interface LAEditorRef {
+export interface LAEditorRef {
   focus: () => void
 }
 
