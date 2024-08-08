@@ -8,20 +8,17 @@
 // open issue about it: https://github.com/gardencmp/jazz/issues/44
 // TODO: figure out how to do default values, e.g. `GlobalLink.protocol` should have default value `https` so we don't have to supply it every time in code..
 // TODO: can jazz support vector fields? e.g. `GlobalLinkAiSummary.vectorContent`, would be nice to store website content as vector for semantic search
-import { CoMap, co, Account, Group } from "jazz-tools"
+import { CoMap, co, Account, Profile } from "jazz-tools"
 import { PersonalPageLists } from "./personal-page"
 import { PersonalLinkLists } from "./personal-link"
 import { GlobalTopicLists } from "./global-topic"
-
-class UserProfile extends CoMap {
-	name = co.string
-	// TODO: avatar
-}
 export class UserRoot extends CoMap {
 	name = co.string
 	username = co.string
-	website = co.string
-	bio = co.string
+	avatar = co.optional.string
+	website = co.optional.string
+	bio = co.optional.string
+	is_public = co.optional.boolean
 
 	personalLinks = co.ref(PersonalLinkLists)
 	personalPages = co.ref(PersonalPageLists)
@@ -33,22 +30,24 @@ export class UserRoot extends CoMap {
 }
 
 export class LaAccount extends Account {
-	profile = co.ref(UserProfile)
+	profile = co.ref(Profile)
 	root = co.ref(UserRoot)
-	async migrate(
-		this: LaAccount,
-		creationProps?: { name: string; username: string; website: string; bio: string } | undefined
-	): Promise<void> {
+
+	migrate(this: LaAccount, creationProps?: { name: string }) {
+		// since we dont have a custom AuthProvider yet.
+		// and still using the DemoAuth. the creationProps will only accept name.
+		// so just do default profile create provided by jazz-tools
+		super.migrate(creationProps)
+
 		if (!this._refs.root && creationProps) {
-			const profileGroup = Group.create({ owner: this })
-			profileGroup.addMember("everyone", "reader")
-			this.profile = UserProfile.create({ name: creationProps.name }, { owner: profileGroup })
 			this.root = UserRoot.create(
 				{
 					name: creationProps.name,
-					username: creationProps.username,
-					website: creationProps.website,
-					bio: creationProps.bio,
+					username: creationProps.name,
+					avatar: "",
+					website: "",
+					bio: "",
+					is_public: false,
 
 					personalLinks: PersonalLinkLists.create([], { owner: this }),
 					personalPages: PersonalPageLists.create([], { owner: this }),
@@ -63,8 +62,6 @@ export class LaAccount extends Account {
 		}
 	}
 }
-// TODO: need?
-// class ListOfGlobalTopics extends CoList.Of(co.ref(GlobalTopic)) {}
 
 export * from "./global-link"
 export * from "./global-topic"
