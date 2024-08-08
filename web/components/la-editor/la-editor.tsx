@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { EditorContent, useEditor } from "@tiptap/react"
 import { Editor, Content } from "@tiptap/core"
@@ -9,21 +7,22 @@ import { createExtensions } from "./extensions"
 import "./styles/index.css"
 import { cn } from "@/lib/utils"
 import { getOutput } from "./lib/utils"
+import { EditorView } from "@tiptap/pm/view"
 
 export interface LAEditorProps extends Omit<React.HTMLProps<HTMLDivElement>, "value"> {
-	initialContent?: any
 	output?: "html" | "json" | "text"
 	placeholder?: string
 	editorClassName?: string
 	onUpdate?: (content: Content) => void
 	onBlur?: (content: Content) => void
 	onNewBlock?: (content: Content) => void
-	value?: Content
+	handleKeyDown?: (view: EditorView, event: KeyboardEvent) => boolean
+	value?: any
 	throttleDelay?: number
 }
 
 export interface LAEditorRef {
-	focus: () => void
+	editor: Editor | null
 }
 
 interface CustomEditor extends Editor {
@@ -33,7 +32,6 @@ interface CustomEditor extends Editor {
 export const LAEditor = React.forwardRef<LAEditorRef, LAEditorProps>(
 	(
 		{
-			initialContent,
 			value,
 			placeholder,
 			output = "html",
@@ -42,6 +40,7 @@ export const LAEditor = React.forwardRef<LAEditorRef, LAEditorProps>(
 			onUpdate,
 			onBlur,
 			onNewBlock,
+			handleKeyDown,
 			throttleDelay = 1000,
 			...props
 		},
@@ -66,9 +65,7 @@ export const LAEditor = React.forwardRef<LAEditorRef, LAEditorProps>(
 						typeof customEditor.previousBlockCount === "number" &&
 						currentBlockCount > customEditor.previousBlockCount
 					) {
-						requestAnimationFrame(() => {
-							onNewBlock?.(newContent)
-						})
+						onNewBlock?.(newContent)
 					}
 
 					customEditor.previousBlockCount = currentBlockCount
@@ -79,6 +76,7 @@ export const LAEditor = React.forwardRef<LAEditorRef, LAEditorProps>(
 
 		const editor = useEditor({
 			autofocus: false,
+			immediatelyRender: false,
 			extensions: createExtensions({ placeholder }),
 			editorProps: {
 				attributes: {
@@ -86,44 +84,29 @@ export const LAEditor = React.forwardRef<LAEditorRef, LAEditorProps>(
 					autocorrect: "off",
 					autocapitalize: "off",
 					class: editorClassName || ""
-				}
+				},
+				handleKeyDown
 			},
 			onCreate: ({ editor }) => {
-				if (editor.isEmpty && value) {
-					editor.commands.setContent(value)
-				}
+				editor.commands.setContent(value)
 			},
 			onUpdate: ({ editor }) => handleUpdate(editor),
 			onBlur: ({ editor }) => {
-				requestAnimationFrame(() => {
-					onBlur?.(getOutput(editor, output))
-				})
+				onBlur?.(getOutput(editor, output))
 			}
 		})
 
 		React.useEffect(() => {
-			if (editor && initialContent) {
-				// https://github.com/ueberdosis/tiptap/issues/3764
-				setTimeout(() => {
-					editor.commands.setContent(initialContent)
-				})
-			}
-		}, [editor, initialContent])
-
-		React.useEffect(() => {
 			if (lastThrottledContent !== throttledContent) {
 				setLastThrottledContent(throttledContent)
-
-				requestAnimationFrame(() => {
-					onUpdate?.(throttledContent!)
-				})
+				onUpdate?.(throttledContent!)
 			}
 		}, [throttledContent, lastThrottledContent, onUpdate])
 
 		React.useImperativeHandle(
 			ref,
 			() => ({
-				focus: () => editor?.commands.focus()
+				editor: editor
 			}),
 			[editor]
 		)
