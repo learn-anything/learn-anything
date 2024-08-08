@@ -11,6 +11,8 @@ import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 const createPageSchema = z.object({
 	title: z.string({ message: "Please enter a valid title" }).min(1, { message: "Please enter a valid title" })
@@ -47,7 +49,9 @@ export const PageSection: React.FC = () => {
 }
 
 const CreatePageForm: React.FC = () => {
+	const [open, setOpen] = useState(false)
 	const { me } = useAccount()
+	const route = useRouter()
 
 	const form = useForm<PageFormValues>({
 		resolver: zodResolver(createPageSchema),
@@ -72,6 +76,11 @@ const CreatePageForm: React.FC = () => {
 
 			me.root?.personalPages?.push(newPersonalPage)
 
+			form.reset()
+			setOpen(false)
+
+			route.push(`/pages/${newPersonalPage.id}`)
+
 			toast.success("Page created successfully")
 		} catch (error) {
 			console.error(error)
@@ -80,7 +89,7 @@ const CreatePageForm: React.FC = () => {
 	}
 
 	return (
-		<Popover>
+		<Popover open={open} onOpenChange={setOpen}>
 			<PopoverTrigger asChild>
 				<Button type="button" size="icon" variant="ghost" aria-label="New Page" className="size-6">
 					<PlusIcon size={16} />
