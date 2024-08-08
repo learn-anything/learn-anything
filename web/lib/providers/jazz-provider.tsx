@@ -1,15 +1,23 @@
 "use client"
 
-import { createJazzReactContext } from "jazz-react"
-import { DemoAuth } from "@/components/custom/demo-auth"
-import { LaAccount } from "../schema"
+import { createJazzReactContext, DemoAuth } from "jazz-react"
+import { AuthUI } from "@/components/custom/auth-ui"
+import { LaAccount } from "@/lib/schema"
 
-const Jazz = createJazzReactContext({
-	auth: DemoAuth({ appName: "Learn Anything", accountSchema: LaAccount }),
-	peer: "wss://mesh.jazz.tools/?key=iupin5212@gmail.com" // <- put your email here to get a proper API key later
+const appName = process.env.NEXT_PUBLIC_APP_NAME!
+
+const auth = DemoAuth<LaAccount>({
+	appName,
+	Component: AuthUI,
+	accountSchema: LaAccount
 })
 
-export const { useAccount, useCoState } = Jazz
+const Jazz = createJazzReactContext({
+	auth,
+	peer: "wss://mesh.jazz.tools/?key=example@gmail.com"
+})
+
+export const { useAccount, useCoState, useAcceptInvite } = Jazz
 
 export function JazzProvider({ children }: { children: React.ReactNode }) {
 	return <Jazz.Provider>{children}</Jazz.Provider>
