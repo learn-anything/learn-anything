@@ -17,7 +17,7 @@ export class LinkMetadata extends CoMap {
 export class PersonalLink extends CoMap {
 	title = co.string
 	slug = co.string
-	description = nullable(co.string)
+	description = co.optional.string
 	completed = co.boolean
 	sequence = co.number
 	isLink = co.boolean
