@@ -30,7 +30,7 @@ export default function RootLayout({
 	children: React.ReactNode
 }>) {
 	return (
-		<html lang="en" className="h-full w-full">
+		<html lang="en" className="h-full w-full" suppressHydrationWarning>
 			<body className={cn("h-full w-full font-sans antialiased", inter.variable)}>
 				<JazzProvider>
 					<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
