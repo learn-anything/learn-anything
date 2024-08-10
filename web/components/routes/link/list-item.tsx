@@ -41,6 +41,7 @@ export const ListItem: React.FC<ListItemProps> = ({
 }) => {
 	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: personalLink.id, disabled })
 	const formRef = React.useRef<HTMLFormElement>(null)
+	const [showDeleteIcon, setShowDeleteIcon] = React.useState(false)
 
 	const style = {
 		transform: CSS.Transform.toString(transform),
@@ -77,8 +78,15 @@ export const ListItem: React.FC<ListItemProps> = ({
 		setEditId(null)
 	}
 
+	// const handleRowClick = () => {
+	// 	console.log("Row clicked", personalLink.id)
+	// 	setEditId(personalLink.id)
+	// }
 	const handleRowClick = () => {
-		console.log("Row clicked", personalLink.id)
+		setShowDeleteIcon(!showDeleteIcon)
+	}
+
+	const handleDoubleClick = () => {
 		setEditId(personalLink.id)
 	}
 
@@ -126,6 +134,7 @@ export const ListItem: React.FC<ListItemProps> = ({
 				"bg-muted/50": isFocused
 			})}
 			onClick={handleRowClick}
+			onDoubleClick={handleDoubleClick}
 		>
 			<div className="flex grow justify-between gap-x-6 px-6 max-lg:px-4">
 				<div className="flex min-w-0 items-center gap-x-4">
@@ -177,13 +186,15 @@ export const ListItem: React.FC<ListItemProps> = ({
 
 				<div className="flex shrink-0 items-center gap-x-4">
 					<Badge variant="secondary">Topic Name</Badge>
-					<Button
-						size="icon"
-						className="text-destructive h-auto w-auto bg-transparent hover:bg-transparent hover:text-red-500"
-						onClick={e => handleDelete(e, personalLink)}
-					>
-						<Trash2Icon size={16} />
-					</Button>
+					{showDeleteIcon && (
+						<Button
+							size="icon"
+							className="text-destructive h-auto w-auto bg-transparent hover:bg-transparent hover:text-red-500"
+							onClick={e => handleDelete(e, personalLink)}
+						>
+							<Trash2Icon size={16} />
+						</Button>
+					)}
 				</div>
 			</div>
 		</li>
