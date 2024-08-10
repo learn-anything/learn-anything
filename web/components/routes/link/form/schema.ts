@@ -1,16 +1,12 @@
 import { z } from "zod"
+import { isUrl } from "@/lib/utils"
 
 export const createLinkSchema = z.object({
-	title: z
-		.string({
-			message: "Please enter a valid title"
-		})
-		.min(1, {
-			message: "Please enter a valid title"
-		}),
+	title: z.string().min(1, { message: "Title can't be empty" }),
+	originalUrl: z.string().refine(isUrl, { message: "Only links are allowed" }),
 	description: z.string().optional(),
 	topic: z.string().optional(),
-	isLink: z.boolean().default(false),
+	isLink: z.boolean().default(true),
 	meta: z
 		.object({
 			url: z.string(),

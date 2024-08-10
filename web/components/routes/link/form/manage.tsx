@@ -121,22 +121,24 @@ interface LinkFormProps extends React.ComponentPropsWithoutRef<"form"> {
 }
 
 const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(({ onSuccess, onCancel, personalLink }, ref) => {
-	const selectedLink = useCoState(PersonalLink, personalLink?.id)
 	const [isFetching, setIsFetching] = useState(false)
 	const { me } = useAccount()
 	const form = useForm<LinkFormValues>({
 		resolver: zodResolver(createLinkSchema),
-		defaultValues: DEFAULT_FORM_VALUES
+		defaultValues: {
+			...DEFAULT_FORM_VALUES,
+			isLink: true
+		}
 	})
-
+	const selectedLink = useCoState(PersonalLink, personalLink?.id)
 	const title = form.watch("title")
 	const [inputValue, setInputValue] = useState("")
 	const [originalLink, setOriginalLink] = useState<string>("")
+	const [linkValidation, setLinkValidation] = useState<string | null>(null)
 	const [invalidLink, setInvalidLink] = useState(false)
-	const [showLinkStatus, setShowLinkStatus] = useState(false)
+	const [showLink, setShowLink] = useState(false)
 	const [debouncedText, setDebouncedText] = useState<string>("")
 	useDebounce(() => setDebouncedText(title), 300, [title])
-
 	const [showStatusOptions, setShowStatusOptions] = useState(false)
 	const [selectedStatus, setSelectedStatus] = useState<string | null>(null)
 
@@ -171,21 +173,23 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(({ onSuccess, 
 	const changeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value
 		setInputValue(value)
-		setShowLinkStatus(false)
-		setInvalidLink(false)
+		form.setValue("title", value)
 	}
 
 	const pressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === "Enter") {
+		if (e.key === "Enter" && !showLink) {
 			e.preventDefault()
 			const trimmedValue = inputValue.trim().toLowerCase()
 			if (LibIsUrl(trimmedValue)) {
-				form.setValue("title", trimmedValue)
-				setShowLinkStatus(true)
+				setShowLink(true)
 				setInvalidLink(false)
+				setLinkValidation(trimmedValue)
+				setInputValue(trimmedValue)
+				form.setValue("title", trimmedValue)
 			} else {
 				setInvalidLink(true)
-				setShowLinkStatus(true)
+				setShowLink(true)
+				setLinkValidation(null)
 			}
 		}
 	}
@@ -212,10 +216,10 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(({ onSuccess, 
 				setIsFetching(false)
 			}
 		}
-		if (showLinkStatus && !invalidLink && LibIsUrl(form.getValues("title").toLowerCase())) {
+		if (showLink && !invalidLink && LibIsUrl(form.getValues("title").toLowerCase())) {
 			fetchMetadata(ensureUrlProtocol(form.getValues("title").toLowerCase()))
 		}
-	}, [showLinkStatus, invalidLink, form])
+	}, [showLink, invalidLink, form])
 
 	const onSubmit = (values: LinkFormValues) => {
 		if (isFetching) return
@@ -279,7 +283,7 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(({ onSuccess, 
 							<div className="flex flex-auto flex-col gap-1.5">
 								<div className="flex flex-row items-start justify-between">
 									<div className="flex grow flex-row items-center gap-1.5">
-										<Button
+										{/* <Button
 											type="button"
 											variant="secondary"
 											size="icon"
@@ -297,7 +301,7 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(({ onSuccess, 
 											) : (
 												<BoxIcon size={16} />
 											)}
-										</Button>
+										</Button> */}
 
 										<FormField
 											control={form.control}
@@ -324,9 +328,9 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(({ onSuccess, 
 												</FormItem>
 											)}
 										/>
-										{showLinkStatus && (
+										{showLink && (
 											<span className={cn("mr-5 max-w-[200px] truncate text-xs", invalidLink ? "text-red-500" : "")}>
-												{invalidLink ? "Allowing links only" : originalLink || ""}
+												{invalidLink ? "Only links are allowed" : linkValidation || originalLink || ""}
 											</span>
 										)}
 									</div>
@@ -423,7 +427,7 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(({ onSuccess, 
 									<Button size="sm" type="button" variant="ghost" onClick={undoEditing}>
 										Cancel
 									</Button>
-									<Button size="sm" disabled={isFetching}>
+									<Button size="sm" type="submit" disabled={isFetching}>
 										Save
 									</Button>
 								</div>
