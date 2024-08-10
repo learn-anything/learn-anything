@@ -130,8 +130,10 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(({ onSuccess, 
 	})
 
 	const title = form.watch("title")
+	const [inputValue, setInputValue] = useState("")
 	const [originalLink, setOriginalLink] = useState<string>("")
-	const [linkEntered, setLinkEntered] = useState(false)
+	const [invalidLink, setInvalidLink] = useState(false)
+	const [showLinkStatus, setShowLinkStatus] = useState(false)
 	const [debouncedText, setDebouncedText] = useState<string>("")
 	useDebounce(() => setDebouncedText(title), 300, [title])
 
@@ -166,11 +168,33 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(({ onSuccess, 
 		}
 	}, [selectedLink, form])
 
+	const changeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const value = e.target.value
+		setInputValue(value)
+		setShowLinkStatus(false)
+		setInvalidLink(false)
+	}
+
+	const pressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === "Enter") {
+			e.preventDefault()
+			const trimmedValue = inputValue.trim().toLowerCase()
+			if (LibIsUrl(trimmedValue)) {
+				form.setValue("title", trimmedValue)
+				setShowLinkStatus(true)
+				setInvalidLink(false)
+			} else {
+				setInvalidLink(true)
+				setShowLinkStatus(true)
+			}
+		}
+	}
+
 	useEffect(() => {
 		const fetchMetadata = async (url: string) => {
 			setIsFetching(true)
 			try {
-				const res = await fetch(`/api/metadata?url=${encodeURIComponent(url)}`, { cache: "no-store" })
+				const res = await fetch(`/api/metadata?url=${encodeURIComponent(url)}`, { cache: "force-cache" })
 				if (!res.ok) throw new Error("Failed to fetch metadata")
 				const data = await res.json()
 				form.setValue("isLink", true)
@@ -188,19 +212,10 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(({ onSuccess, 
 				setIsFetching(false)
 			}
 		}
-
-		const lowerText = debouncedText.toLowerCase()
-		if (linkEntered && LibIsUrl(lowerText)) {
-			fetchMetadata(ensureUrlProtocol(lowerText))
+		if (showLinkStatus && !invalidLink && LibIsUrl(form.getValues("title").toLowerCase())) {
+			fetchMetadata(ensureUrlProtocol(form.getValues("title").toLowerCase()))
 		}
-	}, [debouncedText, form, linkEntered])
-
-	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === "Enter" && LibIsUrl(e.currentTarget.value.toLowerCase())) {
-			e.preventDefault()
-			setLinkEntered(true)
-		}
-	}
+	}, [showLinkStatus, invalidLink, form])
 
 	const onSubmit = (values: LinkFormValues) => {
 		if (isFetching) return
@@ -221,11 +236,9 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(({ onSuccess, 
 				selectedLink.description = values.description ?? ""
 				selectedLink.isLink = values.isLink
 
-				if (selectedLink.meta) {
-					Object.assign(selectedLink.meta, values.meta)
+				if (values.isLink && values.meta) {
+					linkMetadata = LinkMetadata.create(values.meta, { owner: me._owner })
 				}
-
-				// toast.success("Todo updated")
 			} else {
 				const newPersonalLink = PersonalLink.create(
 					{
@@ -252,14 +265,14 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(({ onSuccess, 
 		}
 	}
 
-	const handleCancel: () => void = () => {
+	const undoEditing: () => void = () => {
 		form.reset(DEFAULT_FORM_VALUES)
 		onCancel?.()
 	}
 
 	return (
 		<div className="p-3 transition-all">
-			<div className="bg-muted/50 rounded-md border">
+			<div className="rounded-md border bg-muted/50">
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)} className="relative min-w-0 flex-1" ref={ref}>
 						<div className="flex flex-row p-3">
@@ -271,7 +284,7 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(({ onSuccess, 
 											variant="secondary"
 											size="icon"
 											aria-label="Choose icon"
-											className="text-primary/60 size-7"
+											className="size-7 text-primary/60"
 										>
 											{form.watch("isLink") ? (
 												<Image
@@ -295,45 +308,36 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(({ onSuccess, 
 													<FormControl>
 														<Input
 															{...field}
+															value={inputValue}
 															autoComplete="off"
 															maxLength={100}
 															autoFocus
 															placeholder="Paste a link or write a link"
-															className="placeholder:text-primary/40 h-6 border-none p-1.5 font-medium focus-visible:outline-none focus-visible:ring-0"
-															onKeyDown={handleKeyDown}
+															className={cn(
+																"h-6 border-none p-1.5 font-medium placeholder:text-primary/40 focus-visible:outline-none focus-visible:ring-0",
+																invalidLink ? "text-red-500" : ""
+															)}
+															onKeyDown={pressEnter}
+															onChange={changeInput}
 														/>
 													</FormControl>
 												</FormItem>
 											)}
 										/>
-										<span className="mr-5 max-w-[200px] truncate text-xs text-white/60">
-											{linkEntered
-												? originalLink
-												: LibIsUrl(form.watch("title").toLowerCase())
-													? 'Press "Enter" to confirm URL'
-													: ""}
-										</span>
+										{showLinkStatus && (
+											<span className={cn("mr-5 max-w-[200px] truncate text-xs", invalidLink ? "text-red-500" : "")}>
+												{invalidLink ? "Allowing links only" : originalLink || ""}
+											</span>
+										)}
 									</div>
 
 									<div className="flex min-w-0 shrink-0 cursor-pointer select-none flex-row">
 										<DropdownMenu>
-											<DropdownMenuTrigger asChild>
-												{/* <Button
-                            size="icon"
-                            type="button"
-                            variant="ghost"
-                            className="size-7 gap-x-2 text-sm"
-                          >
-                            <EllipsisIcon
-                              size={16}
-                              className="text-primary/60"
-                            />
-                          </Button> */}
-											</DropdownMenuTrigger>
+											<DropdownMenuTrigger asChild></DropdownMenuTrigger>
 											<DropdownMenuContent align="end">
 												<DropdownMenuLabel>Actions</DropdownMenuLabel>
 												<DropdownMenuItem className="group">
-													<Trash2Icon size={16} className="text-destructive mr-2 group-hover:text-red-500" />
+													<Trash2Icon size={16} className="mr-2 text-destructive group-hover:text-red-500" />
 													<span>Delete</span>
 												</DropdownMenuItem>
 											</DropdownMenuContent>
@@ -393,7 +397,7 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(({ onSuccess, 
 														{...field}
 														autoComplete="off"
 														placeholder="Description (optional)"
-														className="placeholder:text-primary/40 min-h-[24px] resize-none overflow-y-auto border-none p-1.5 text-xs font-medium shadow-none focus-visible:outline-none focus-visible:ring-0"
+														className="min-h-[24px] resize-none overflow-y-auto border-none p-1.5 text-xs font-medium shadow-none placeholder:text-primary/40 focus-visible:outline-none focus-visible:ring-0"
 														onInput={e => {
 															const target = e.target as HTMLTextAreaElement
 															target.style.height = "auto"
@@ -416,7 +420,7 @@ const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(({ onSuccess, 
 							</div>
 							<div className="flex w-auto items-center justify-end">
 								<div className="flex min-w-0 shrink-0 cursor-pointer select-none flex-row gap-x-2">
-									<Button size="sm" type="button" variant="ghost" onClick={handleCancel}>
+									<Button size="sm" type="button" variant="ghost" onClick={undoEditing}>
 										Cancel
 									</Button>
 									<Button size="sm" disabled={isFetching}>
