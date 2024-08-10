@@ -25,7 +25,6 @@ export const LinkHeader = () => {
 	return (
 		<>
 			<ContentHeader className="p-4">
-				{/* Toggle and Title */}
 				<div className="flex min-w-0 shrink-0 items-center gap-1.5">
 					<SidebarToggleButton />
 					<div className="flex min-h-0 items-center">
@@ -50,18 +49,25 @@ export const LinkHeader = () => {
 }
 
 const Tabs = () => {
+	const [activeTab, setActiveTab] = React.useState(TABS[0])
+
 	return (
 		<div className="bg-secondary/50 flex items-baseline overflow-x-hidden rounded-md">
 			{TABS.map(tab => (
-				<TabItem key={tab} url="#" label={tab} />
+				<TabItem key={tab} url="#" label={tab} isActive={activeTab === tab} onClick={() => setActiveTab(tab)} />
 			))}
 		</div>
 	)
 }
 
-const TabItem = ({ url, label }: TabItemProps) => {
-	const [isActive, setIsActive] = React.useState(false)
+interface TabItemProps {
+	url: string
+	label: string
+	isActive: boolean
+	onClick: () => void
+}
 
+const TabItem = ({ url, label, isActive, onClick }: TabItemProps) => {
 	return (
 		<div tabIndex={-1} className="rounded-md">
 			<div className="flex flex-row">
@@ -72,8 +78,7 @@ const TabItem = ({ url, label }: TabItemProps) => {
 							type="button"
 							variant="ghost"
 							className={`gap-x-2 truncate text-sm ${isActive ? "bg-accent text-accent-foreground" : ""}`}
-							onClick={() => setIsActive(true)}
-							onBlur={() => setIsActive(false)}
+							onClick={onClick}
 						>
 							{label}
 						</Button>
