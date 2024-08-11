@@ -81,7 +81,7 @@ const CreatePageForm: React.FC = () => {
 
 			route.push(`/pages/${newPersonalPage.id}`)
 
-			toast.success("Page created successfully")
+			// toast.success("Page created successfully")
 		} catch (error) {
 			console.error(error)
 			toast.error("Failed to create page")

@@ -2,7 +2,7 @@
 
 import React, { useCallback, useRef, useEffect } from "react"
 import { LAEditor, LAEditorRef } from "@/components/la-editor"
-import { DetailPageHeader } from "./header"
+// import { DetailPageHeader } from "./header" //dont need. check figma
 import { ID } from "jazz-tools"
 import { PersonalPage } from "@/lib/schema/personal-page"
 import { Content, EditorContent, useEditor } from "@tiptap/react"
@@ -25,7 +25,7 @@ export function DetailPageWrapper({ pageId }: { pageId: string }) {
 		<div className="flex flex-row">
 			<div className="flex h-full w-full">
 				<div className="relative flex min-w-0 grow basis-[760px] flex-col">
-					<DetailPageHeader pageId={pageId as ID<PersonalPage>} />
+					{/* <DetailPageHeader pageId={pageId as ID<PersonalPage>} /> */}
 					<DetailPageForm page={page} />
 				</div>
 			</div>
@@ -59,8 +59,11 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 		const personalPages = me.root?.personalPages?.toJSON() || []
 		const slug = generateUniqueSlug(personalPages, page.slug)
 
-		page.title = newTitle
+		const capitalizedTitle = newTitle.charAt(0).toUpperCase() + newTitle.slice(1)
+		page.title = capitalizedTitle
 		page.slug = slug
+
+		editor.commands.setContent(capitalizedTitle)
 	}
 
 	const handleTitleKeyDown = useCallback((view: EditorView, event: KeyboardEvent) => {
@@ -140,7 +143,8 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 			handleKeyDown: handleTitleKeyDown
 		},
 		onCreate: ({ editor }) => {
-			editor.commands.setContent(`<p>${page.title}</p>`)
+			const capitalizedTitle = page.title.charAt(0).toUpperCase() + page.title.slice(1)
+			editor.commands.setContent(`<p>${capitalizedTitle}</p>`)
 		},
 		onBlur: ({ editor }) => handleTitleBlur(editor)
 	})
