@@ -3,6 +3,8 @@ import { LaAccount } from "@/web/lib/schema"
 import { startWorker } from "jazz-nodejs"
 import { Group, ID } from "jazz-tools"
 import { appendFile } from "node:fs/promises"
+import path from "path"
+import fs from "fs/promises"
 
 const JAZZ_WORKER_SECRET = getEnvOrThrow("JAZZ_WORKER_SECRET")
 
@@ -54,6 +56,29 @@ async function prodSeed() {
 	})
 	const globalGroup = await Group.load(process.env.JAZZ_PUBLIC_GLOBAL_GROUP as ID<Group>, worker, {})
 	if (!globalGroup) return // TODO: err
-	// TODO: complete full seed (connections, topics from old LA)
+
+	const folderPath = path.join(__dirname, "..", "private")
+	const files = await fs.readdir(folderPath)
+	for (const file of files) {
+		if (file === ".git") continue
+		const filePath = path.join(folderPath, file)
+		const stats = await fs.stat(filePath)
+
+		if (stats.isDirectory()) {
+			// // TODO: do after connections.json
+			// if (file === "edgedb-dump") {
+			// 	const subFiles = await fs.readdir(filePath)
+			// 	for (const subFile of subFiles) {
+			// 		const subFilePath = path.join(filePath, subFile)
+			// 	}
+			// }
+		} else if (stats.isFile()) {
+			if (file === "connections.json") {
+				const content = await fs.readFile(filePath, "utf-8")
+				console.log(content)
+			}
+		}
+	}
 }
+
 await seed()
