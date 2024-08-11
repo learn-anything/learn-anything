@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { ContentHeader } from "@/components/custom/content-header"
 import { PiLinkSimple } from "react-icons/pi"
 import { Bookmark, GraduationCap, Check } from "lucide-react"
@@ -55,8 +55,21 @@ export default function GlobalTopic({ topic }: { topic: string }) {
 	const [showOptions, setShowOptions] = useState(false)
 	const [selectedOption, setSelectedOption] = useState<string | null>(null)
 	const [activeTab, setActiveTab] = useState("Guide")
-
 	const decodedTopic = decodeURIComponent(topic)
+	const learningStatusRef = useRef<HTMLDivElement>(null)
+
+	useEffect(() => {
+		function handleClickOutside(event: MouseEvent) {
+			if (learningStatusRef.current && !learningStatusRef.current.contains(event.target as Node)) {
+				setShowOptions(false)
+			}
+		}
+
+		document.addEventListener("mousedown", handleClickOutside)
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside)
+		}
+	}, [])
 
 	const learningOptions = [
 		{ text: "To Learn", icon: <Bookmark size={18} /> },
@@ -123,7 +136,10 @@ export default function GlobalTopic({ topic }: { topic: string }) {
 						{selectedOption || "Add to my profile"}
 					</Button>
 					{showOptions && (
-						<div className="absolute left-1/2 mt-1 w-40 -translate-x-1/2 rounded-lg bg-neutral-800 shadow-lg">
+						<div
+							ref={learningStatusRef}
+							className="absolute left-1/2 mt-1 w-40 -translate-x-1/2 rounded-lg bg-neutral-800 shadow-lg"
+						>
 							{learningOptions.map(option => (
 								<Button
 									key={option.text}
