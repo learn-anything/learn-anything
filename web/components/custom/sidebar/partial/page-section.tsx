@@ -11,7 +11,7 @@ import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useState } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
 
 const createPageSchema = z.object({
@@ -22,7 +22,20 @@ type PageFormValues = z.infer<typeof createPageSchema>
 
 export const PageSection: React.FC = () => {
 	const { me } = useAccount()
-	const personalPages = me.root?.personalPages || []
+	const [personalPages, setPersonalPages] = useState<PersonalPage[]>([])
+
+	useEffect(() => {
+		if (me.root?.personalPages) {
+			setPersonalPages(prevPages => {
+				const newPages = Array.from(me.root?.personalPages ?? []).filter((page): page is PersonalPage => page !== null)
+				return [...prevPages, ...newPages.filter(newPage => !prevPages.some(prevPage => prevPage.id === newPage.id))]
+			})
+		}
+	}, [me.root?.personalPages])
+
+	const onPageCreated = useCallback((newPage: PersonalPage) => {
+		setPersonalPages(prevPages => [...prevPages, newPage])
+	}, [])
 
 	return (
 		<div className="-ml-2">
@@ -33,22 +46,22 @@ export const PageSection: React.FC = () => {
 					className="text-muted-foreground hover:bg-muted/50 flex h-6 grow cursor-default items-center justify-between gap-x-0.5 self-start rounded-md px-1 text-xs font-medium"
 				>
 					<span className="group-hover:text-muted-foreground">Pages</span>
-					<CreatePageForm />
+					<CreatePageForm onPageCreated={onPageCreated} />
 				</div>
 			</div>
 
 			<div className="relative shrink-0">
-				<div aria-hidden="false" className="ml-2 shrink-0 pb-2">
-					{personalPages.map(
-						page => page && <SidebarItem key={page.id} url={`/pages/${page.id}`} label={page.title} />
-					)}
+				<div aria-hidden="false" className="ml-2 flex shrink-0 flex-col space-y-1 pb-2">
+					{personalPages.map(page => (
+						<SidebarItem key={page.id} url={`/pages/${page.id}`} label={page.title} />
+					))}
 				</div>
 			</div>
 		</div>
 	)
 }
 
-const CreatePageForm: React.FC = () => {
+const CreatePageForm: React.FC<{ onPageCreated: (page: PersonalPage) => void }> = ({ onPageCreated }) => {
 	const [open, setOpen] = useState(false)
 	const { me } = useAccount()
 	const route = useRouter()
@@ -75,13 +88,12 @@ const CreatePageForm: React.FC = () => {
 			)
 
 			me.root?.personalPages?.push(newPersonalPage)
+			onPageCreated(newPersonalPage)
 
 			form.reset()
 			setOpen(false)
 
 			route.push(`/pages/${newPersonalPage.id}`)
-
-			// toast.success("Page created successfully")
 		} catch (error) {
 			console.error(error)
 			toast.error("Failed to create page")
