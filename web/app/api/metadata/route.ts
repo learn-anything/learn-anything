@@ -10,8 +10,8 @@ interface Metadata {
 }
 
 const DEFAULT_VALUES = {
-	TITLE: "No title available",
-	DESCRIPTION: "No description available",
+	TITLE: "",
+	DESCRIPTION: "",
 	IMAGE: null,
 	FAVICON: null
 }
@@ -58,6 +58,6 @@ export async function GET(request: NextRequest) {
 			favicon: DEFAULT_VALUES.FAVICON,
 			url: url
 		}
-		return NextResponse.json(defaultMetadata)
+		return NextResponse.json(defaultMetadata, { status: 500 })
 	}
 }

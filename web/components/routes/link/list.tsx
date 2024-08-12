@@ -50,10 +50,6 @@ const LinkList = () => {
 		})
 	)
 
-	const overlayClick = () => {
-		setEditId(null)
-	}
-
 	const registerRef = useCallback((id: string, ref: HTMLLIElement | null) => {
 		linkRefs.current[id] = ref
 	}, [])
@@ -190,40 +186,37 @@ const LinkList = () => {
 	}
 
 	return (
-		<>
-			{editId && <div className="fixed inset-0 z-10" onClick={overlayClick} />}
-			<div className="relative z-20">
-				<DndContext
-					sensors={sensors}
-					collisionDetection={closestCenter}
-					onDragStart={handleDragStart}
-					onDragEnd={handleDragEnd}
-				>
-					<SortableContext items={sortedLinks.map(item => item?.id || "") || []} strategy={verticalListSortingStrategy}>
-						<ul role="list" className="divide-primary/5 divide-y">
-							{sortedLinks.map(
-								linkItem =>
-									linkItem && (
-										<ListItem
-											key={linkItem.id}
-											confirm={confirm}
-											isEditing={editId === linkItem.id}
-											setEditId={setEditId}
-											personalLink={linkItem}
-											disabled={sort !== "manual" || editId !== null}
-											registerRef={registerRef}
-											isDragging={draggingId === linkItem.id}
-											isFocused={focusedId === linkItem.id}
-											setFocusedId={setFocusedId}
-											onDelete={handleDelete}
-										/>
-									)
-							)}
-						</ul>
-					</SortableContext>
-				</DndContext>
-			</div>
-		</>
+		<div className="relative z-20">
+			<DndContext
+				sensors={sensors}
+				collisionDetection={closestCenter}
+				onDragStart={handleDragStart}
+				onDragEnd={handleDragEnd}
+			>
+				<SortableContext items={sortedLinks.map(item => item?.id || "") || []} strategy={verticalListSortingStrategy}>
+					<ul role="list" className="divide-primary/5 divide-y">
+						{sortedLinks.map(
+							linkItem =>
+								linkItem && (
+									<ListItem
+										key={linkItem.id}
+										confirm={confirm}
+										isEditing={editId === linkItem.id}
+										setEditId={setEditId}
+										personalLink={linkItem}
+										disabled={sort !== "manual" || editId !== null}
+										registerRef={registerRef}
+										isDragging={draggingId === linkItem.id}
+										isFocused={focusedId === linkItem.id}
+										setFocusedId={setFocusedId}
+										onDelete={handleDelete}
+									/>
+								)
+						)}
+					</ul>
+				</SortableContext>
+			</DndContext>
+		</div>
 	)
 }
 

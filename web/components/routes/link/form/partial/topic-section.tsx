@@ -6,8 +6,8 @@ import { useState } from "react"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { CheckIcon, ChevronDownIcon } from "lucide-react"
 import { useFormContext } from "react-hook-form"
-import { LinkFormValues } from "../manage"
 import { cn } from "@/lib/utils"
+import { LinkFormValues } from "../link-form"
 
 const TOPICS = [
 	{ id: "1", name: "Work" },
@@ -44,9 +44,12 @@ export const TopicSelector: React.FC = () => {
 									<ScrollArea>
 										{TOPICS.map(topic => (
 											<CommandItem
-												className="cursor-pointer"
 												key={topic.id}
 												value={topic.name}
+												onClick={e => {
+													e.preventDefault()
+													e.stopPropagation()
+												}}
 												onSelect={value => {
 													setValue("topic", value)
 													setOpen(false)
