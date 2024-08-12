@@ -10,9 +10,9 @@ import { cn, ensureUrlProtocol, generateUniqueSlug, isUrl } from "@/lib/utils"
 import { toast } from "sonner"
 import { Form, FormField, FormItem, FormControl, FormLabel } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { LearningStateSection } from "./partial/learning-state-section"
+import { LearningStateSelector } from "./partial/learning-state-selector"
+import { TopicSelector } from "./partial/topic-selector"
 import { TextareaAutosize } from "@/components/custom/textarea-autosize"
-import { TopicSelector } from "./partial/topic-section"
 import { Button } from "@/components/ui/button"
 import { z } from "zod"
 
@@ -208,7 +208,7 @@ export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 										</div>
 
 										<div className="flex flex-row items-center gap-2">
-											<LearningStateSection />
+											<LearningStateSelector />
 										</div>
 									</div>
 

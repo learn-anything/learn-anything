@@ -1,13 +1,14 @@
 import { Button } from "@/components/ui/button"
-import { Command, CommandInput, CommandList, CommandItem } from "@/components/ui/command"
+import { Command, CommandInput, CommandList, CommandItem, CommandGroup } from "@/components/ui/command"
 import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form"
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
-import { useState } from "react"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { CheckIcon, ChevronDownIcon } from "lucide-react"
 import { useFormContext } from "react-hook-form"
 import { cn } from "@/lib/utils"
 import { LinkFormValues } from "../link-form"
+import { useAtom } from "jotai"
+import { linkTopicSelectorAtom } from "@/store/link"
 
 const TOPICS = [
 	{ id: "1", name: "Work" },
@@ -15,9 +16,8 @@ const TOPICS = [
 ]
 
 export const TopicSelector: React.FC = () => {
+	const [istopicSelectorOpen, setIstopicSelectorOpen] = useAtom(linkTopicSelectorAtom)
 	const form = useFormContext<LinkFormValues>()
-	const [open, setOpen] = useState(false)
-	const { setValue } = useFormContext()
 
 	return (
 		<FormField
@@ -26,7 +26,7 @@ export const TopicSelector: React.FC = () => {
 			render={({ field }) => (
 				<FormItem>
 					<FormLabel className="sr-only">Topic</FormLabel>
-					<Popover open={open} onOpenChange={setOpen}>
+					<Popover open={istopicSelectorOpen} onOpenChange={setIstopicSelectorOpen}>
 						<PopoverTrigger asChild>
 							<FormControl>
 								<Button size="sm" type="button" role="combobox" variant="secondary" className="!mt-0 gap-x-2 text-sm">
@@ -42,29 +42,31 @@ export const TopicSelector: React.FC = () => {
 								<CommandInput placeholder="Search topic..." className="h-9" />
 								<CommandList>
 									<ScrollArea>
-										{TOPICS.map(topic => (
-											<CommandItem
-												key={topic.id}
-												value={topic.name}
-												onClick={e => {
-													e.preventDefault()
-													e.stopPropagation()
-												}}
-												onSelect={value => {
-													setValue("topic", value)
-													setOpen(false)
-												}}
-											>
-												{topic.name}
-												<CheckIcon
-													size={16}
-													className={cn(
-														"absolute right-3",
-														topic.name === field.value ? "text-primary" : "text-transparent"
-													)}
-												/>
-											</CommandItem>
-										))}
+										<CommandGroup>
+											{TOPICS.map(topic => (
+												<CommandItem
+													key={topic.id}
+													value={topic.name}
+													onClick={e => {
+														e.preventDefault()
+														e.stopPropagation()
+													}}
+													onSelect={value => {
+														field.onChange(value)
+														setIstopicSelectorOpen(false)
+													}}
+												>
+													{topic.name}
+													<CheckIcon
+														size={16}
+														className={cn(
+															"absolute right-3",
+															topic.name === field.value ? "text-primary" : "text-transparent"
+														)}
+													/>
+												</CommandItem>
+											))}
+										</CommandGroup>
 									</ScrollArea>
 								</CommandList>
 							</Command>

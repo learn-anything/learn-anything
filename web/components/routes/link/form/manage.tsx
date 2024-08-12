@@ -1,8 +1,8 @@
 "use client"
 
-import React, { useState, useEffect, useRef } from "react"
+import React, { useEffect, useRef } from "react"
 import { useAtom } from "jotai"
-import { linkEditIdAtom, linkShowCreateAtom } from "@/store/link"
+import { linkEditIdAtom, linkLearningStateSelectorAtom, linkShowCreateAtom, linkTopicSelectorAtom } from "@/store/link"
 import { useKey } from "react-use"
 import { FloatingButton } from "./partial/floating-button"
 import { LinkForm } from "./link-form"
@@ -10,7 +10,8 @@ import { LinkForm } from "./link-form"
 const LinkManage: React.FC = () => {
 	const [showCreate, setShowCreate] = useAtom(linkShowCreateAtom)
 	const [, setEditId] = useAtom(linkEditIdAtom)
-	const [isPopoverOpen, setIsPopoverOpen] = useState(false)
+	const [IslearningStateSelectorOpen] = useAtom(linkLearningStateSelectorAtom)
+	const [IstopicSelectorOpen] = useAtom(linkTopicSelectorAtom)
 
 	const formRef = useRef<HTMLFormElement>(null)
 	const buttonRef = useRef<HTMLButtonElement>(null)
@@ -33,7 +34,12 @@ const LinkManage: React.FC = () => {
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
-			if (formRef.current && !formRef.current.contains(event.target as Node) && !isPopoverOpen) {
+			if (
+				formRef.current &&
+				!formRef.current.contains(event.target as Node) &&
+				!IstopicSelectorOpen &&
+				!IslearningStateSelectorOpen
+			) {
 				handleFormClose()
 			}
 		}
@@ -45,7 +51,7 @@ const LinkManage: React.FC = () => {
 		return () => {
 			document.removeEventListener("mousedown", handleClickOutside)
 		}
-	}, [showCreate, isPopoverOpen])
+	}, [showCreate, IslearningStateSelectorOpen, IstopicSelectorOpen])
 
 	useKey("Escape", handleFormClose)
 
