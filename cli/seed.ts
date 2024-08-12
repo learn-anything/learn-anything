@@ -5,7 +5,13 @@ import { Group, ID } from "jazz-tools"
 import { appendFile } from "node:fs/promises"
 import path from "path"
 import fs from "fs/promises"
-import { GlobalTopicGraph, TopicGraphNode } from "@/web/lib/schema/global-topic-graph"
+import {
+	GlobalTopicGraph,
+	ListOfTopicGraphNodes,
+	PublicGlobalGroup,
+	PublicGlobalGroupRoot,
+	TopicGraphNode
+} from "@/web/lib/schema/global-topic-graph"
 
 const JAZZ_WORKER_SECRET = getEnvOrThrow("JAZZ_WORKER_SECRET")
 
@@ -42,7 +48,8 @@ async function setup() {
 	const user = (await await LaAccount.createAs(worker, {
 		creationProps: { name: "nikiv" }
 	}))!
-	const publicGlobalGroup = Group.create({ owner: worker })
+	const publicGlobalGroup = PublicGlobalGroup.create({ owner: worker })
+	publicGlobalGroup.root = PublicGlobalGroupRoot.create({}, { owner: publicGlobalGroup })
 	publicGlobalGroup.addMember("everyone", "reader")
 	await appendFile("./.env", `\nJAZZ_PUBLIC_GLOBAL_GROUP=${JSON.stringify(publicGlobalGroup.id)}`)
 	const adminGlobalGroup = Group.create({ owner: worker })
@@ -55,7 +62,9 @@ async function prodSeed() {
 		accountID: "co_zhvp7ryXJzDvQagX61F6RCZFJB9",
 		accountSecret: JAZZ_WORKER_SECRET
 	})
-	const globalGroup = await Group.load(process.env.JAZZ_PUBLIC_GLOBAL_GROUP as ID<Group>, worker, {})
+	const globalGroup = await (
+		(await PublicGlobalGroup.load(process.env.JAZZ_PUBLIC_GLOBAL_GROUP as ID<Group>, worker, {})) as PublicGlobalGroup
+	).ensureLoaded({ root: true })
 	if (!globalGroup) return // TODO: err
 
 	const folderPath = path.join(__dirname, "..", "private")
@@ -77,20 +86,40 @@ async function prodSeed() {
 			if (file === "connections.json") {
 				const content = await fs.readFile(filePath, "utf-8")
 				const topics = JSON.parse(content) as Array<{ name: string; prettyName: string; connections: string[] }>
-				const createdTopicNodes = [] as TopicGraphNode[]
 
-				topics.forEach(topic => {
-					const topicGraphNode = TopicGraphNode.create(
-						{
-							name: topic.name,
-							prettyName: topic.prettyName,
-							connectedTopicName: topic.connections[0]
-						},
-						{ owner: globalGroup }
-					)
-					createdTopicNodes.push(topicGraphNode)
-				})
-				const globalTopicGraph = GlobalTopicGraph.create(createdTopicNodes, { owner: globalGroup })
+				const createdTopics: { [name: string]: { node: TopicGraphNode; connections: string[] } } = Object.fromEntries(
+					topics.map(topic => {
+						const node = TopicGraphNode.create(
+							{
+								name: topic.name,
+								prettyName: topic.prettyName,
+								connectedTopics: ListOfTopicGraphNodes.create([], { owner: globalGroup })
+							},
+							{ owner: globalGroup }
+						)
+
+						const connections = topic.connections
+
+						return [topic.name, { node, connections }]
+					})
+				)
+
+				for (const [topicName, { node, connections }] of Object.entries(createdTopics)) {
+					for (const connection of connections) {
+						const connectionNode = createdTopics[connection].node
+						node.connectedTopics!.push(connectionNode)
+					}
+				}
+
+				const graph = GlobalTopicGraph.create(
+					Object.values(createdTopics).map(({ node }) => node),
+					{ owner: globalGroup }
+				)
+				console.log(graph, "graph")
+
+				globalGroup.root.topicGraph = graph
+
+				await new Promise(resolve => setTimeout(resolve, 1000))
 			}
 		}
 	}

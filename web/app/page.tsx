@@ -1,12 +1,11 @@
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import ForceGraph from "@/components/routes/force-graph"
 
 export default function HomePage() {
+	// if authenticated, show the <Home (<Links)
+	console.log("running...")
 	return (
 		<div className="flex min-h-full items-center justify-center">
-			<Link href="/links">
-				<Button>Go to main page</Button>
-			</Link>
+			<ForceGraph />
 		</div>
 	)
 }
