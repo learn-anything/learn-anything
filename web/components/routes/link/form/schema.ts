@@ -17,5 +17,6 @@ export const createLinkSchema = z.object({
 		})
 		.optional()
 		.nullable(),
-	completed: z.boolean().default(false)
+	completed: z.boolean().default(false),
+	notes: z.string().optional()
 })

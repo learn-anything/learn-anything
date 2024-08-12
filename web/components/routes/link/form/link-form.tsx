@@ -10,11 +10,13 @@ import { cn, ensureUrlProtocol, generateUniqueSlug, isUrl } from "@/lib/utils"
 import { toast } from "sonner"
 import { Form, FormField, FormItem, FormControl, FormLabel } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { LearningStateSelector } from "./partial/learning-state-selector"
-import { TopicSelector } from "./partial/topic-selector"
 import { TextareaAutosize } from "@/components/custom/textarea-autosize"
 import { Button } from "@/components/ui/button"
 import { z } from "zod"
+
+import { LearningStateSelector } from "./partial/learning-state-selector"
+import { TopicSelector } from "./partial/topic-selector"
+import { NotesSection } from "./partial/notes-section"
 
 interface LinkFormProps extends React.ComponentPropsWithoutRef<"form"> {
 	onSuccess?: () => void
@@ -30,6 +32,7 @@ const defaultValues: Partial<LinkFormValues> = {
 	learningState: "wantToLearn",
 	topic: "",
 	isLink: false,
+	notes: "",
 	meta: null
 }
 
@@ -190,7 +193,7 @@ export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 																autoFocus
 																placeholder="Paste a link or write a link"
 																className={cn(
-																	"placeholder:text-primary/40 h-6 border-none p-1.5 font-medium focus-visible:ring-0",
+																	"placeholder:text-muted-foreground/70 h-6 border-none p-1.5 font-medium focus-visible:ring-0",
 																	invalidLink ? "text-red-500" : ""
 																)}
 																onKeyDown={pressEnter}
@@ -209,6 +212,7 @@ export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 
 										<div className="flex flex-row items-center gap-2">
 											<LearningStateSelector />
+											<TopicSelector />
 										</div>
 									</div>
 
@@ -224,7 +228,7 @@ export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 															{...field}
 															autoComplete="off"
 															placeholder="Description (optional)"
-															className="placeholder:text-primary/40 min-h-6 resize-none overflow-y-auto border-none p-1.5 text-xs font-medium shadow-none focus-visible:ring-0"
+															className="placeholder:text-muted-foreground/70 min-h-6 resize-none overflow-y-auto border-none p-1.5 text-xs font-medium shadow-none focus-visible:ring-0"
 														/>
 													</FormControl>
 												</FormItem>
@@ -237,7 +241,7 @@ export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 							<div className="flex flex-auto flex-row items-center justify-between gap-2 rounded-b-md border border-t px-3 py-2">
 								<div className="flex flex-row items-center gap-0.5">
 									<div className="flex min-w-0 shrink-0 cursor-pointer select-none flex-row">
-										<TopicSelector />
+										<NotesSection />
 									</div>
 								</div>
 								<div className="flex w-auto items-center justify-end">

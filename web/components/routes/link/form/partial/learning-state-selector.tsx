@@ -39,12 +39,12 @@ export const LearningStateSelector: React.FC = () => {
 			control={form.control}
 			name="learningState"
 			render={({ field }) => (
-				<FormItem>
+				<FormItem className="space-y-0">
 					<FormLabel className="sr-only">Topic</FormLabel>
 					<Popover open={islearningStateSelectorOpen} onOpenChange={setIslearningStateSelectorOpen}>
 						<PopoverTrigger asChild>
 							<FormControl>
-								<Button size="sm" type="button" role="combobox" variant="secondary" className="!mt-0 gap-x-2 text-sm">
+								<Button size="sm" type="button" role="combobox" variant="secondary" className="gap-x-2 text-sm">
 									{selectedLearningState?.icon && (
 										<LaIcon
 											name={selectedLearningState.icon}

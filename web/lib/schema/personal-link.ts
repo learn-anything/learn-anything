@@ -21,11 +21,11 @@ export class PersonalLink extends CoMap {
 	completed = co.boolean
 	sequence = co.number
 	isLink = co.boolean
+	learningState = co.optional.literal("wantToLearn", "learning", "learned")
+	notes = co.optional.string
 	meta = co.optional.ref(LinkMetadata)
 
 	// not yet implemented
-	learningState = co.optional.literal("wantToLearn", "learning", "learned")
-	notes = co.optional.string
 	summary = co.optional.string
 	globalLink = co.optional.ref(GlobalLink)
 	topic = co.optional.ref(GlobalTopic)

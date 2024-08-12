@@ -24,12 +24,12 @@ export const TopicSelector: React.FC = () => {
 			control={form.control}
 			name="topic"
 			render={({ field }) => (
-				<FormItem>
+				<FormItem className="space-y-0">
 					<FormLabel className="sr-only">Topic</FormLabel>
 					<Popover open={istopicSelectorOpen} onOpenChange={setIstopicSelectorOpen}>
 						<PopoverTrigger asChild>
 							<FormControl>
-								<Button size="sm" type="button" role="combobox" variant="secondary" className="!mt-0 gap-x-2 text-sm">
+								<Button size="sm" type="button" role="combobox" variant="secondary" className="gap-x-2 text-sm">
 									<span className="truncate">
 										{field.value ? TOPICS.find(topic => topic.name === field.value)?.name : "Select topic"}
 									</span>
@@ -37,7 +37,12 @@ export const TopicSelector: React.FC = () => {
 								</Button>
 							</FormControl>
 						</PopoverTrigger>
-						<PopoverContent className="w-52 rounded-lg p-0" side="right" align="start">
+						<PopoverContent
+							className="w-52 rounded-lg p-0"
+							side="bottom"
+							align="end"
+							onCloseAutoFocus={e => e.preventDefault()}
+						>
 							<Command>
 								<CommandInput placeholder="Search topic..." className="h-9" />
 								<CommandList>

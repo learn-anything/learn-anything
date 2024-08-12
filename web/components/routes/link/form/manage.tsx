@@ -10,8 +10,8 @@ import { LinkForm } from "./link-form"
 const LinkManage: React.FC = () => {
 	const [showCreate, setShowCreate] = useAtom(linkShowCreateAtom)
 	const [, setEditId] = useAtom(linkEditIdAtom)
-	const [IslearningStateSelectorOpen] = useAtom(linkLearningStateSelectorAtom)
-	const [IstopicSelectorOpen] = useAtom(linkTopicSelectorAtom)
+	const [islearningStateSelectorOpen] = useAtom(linkLearningStateSelectorAtom)
+	const [istopicSelectorOpen] = useAtom(linkTopicSelectorAtom)
 
 	const formRef = useRef<HTMLFormElement>(null)
 	const buttonRef = useRef<HTMLButtonElement>(null)
@@ -37,8 +37,8 @@ const LinkManage: React.FC = () => {
 			if (
 				formRef.current &&
 				!formRef.current.contains(event.target as Node) &&
-				!IstopicSelectorOpen &&
-				!IslearningStateSelectorOpen
+				!istopicSelectorOpen &&
+				!islearningStateSelectorOpen
 			) {
 				handleFormClose()
 			}
@@ -51,7 +51,7 @@ const LinkManage: React.FC = () => {
 		return () => {
 			document.removeEventListener("mousedown", handleClickOutside)
 		}
-	}, [showCreate, IslearningStateSelectorOpen, IstopicSelectorOpen])
+	}, [showCreate, islearningStateSelectorOpen, istopicSelectorOpen])
 
 	useKey("Escape", handleFormClose)
 
