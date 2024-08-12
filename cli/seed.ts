@@ -5,6 +5,7 @@ import { Group, ID } from "jazz-tools"
 import { appendFile } from "node:fs/promises"
 import path from "path"
 import fs from "fs/promises"
+import { GlobalTopicGraph, TopicGraphNode } from "@/web/lib/schema/global-topic-graph"
 
 const JAZZ_WORKER_SECRET = getEnvOrThrow("JAZZ_WORKER_SECRET")
 
@@ -75,7 +76,21 @@ async function prodSeed() {
 		} else if (stats.isFile()) {
 			if (file === "connections.json") {
 				const content = await fs.readFile(filePath, "utf-8")
-				console.log(content)
+				const topics = JSON.parse(content) as Array<{ name: string; prettyName: string; connections: string[] }>
+				const createdTopicNodes = [] as TopicGraphNode[]
+
+				topics.forEach(topic => {
+					const topicGraphNode = TopicGraphNode.create(
+						{
+							name: topic.name,
+							prettyName: topic.prettyName,
+							connectedTopicName: topic.connections[0]
+						},
+						{ owner: globalGroup }
+					)
+					createdTopicNodes.push(topicGraphNode)
+				})
+				const globalTopicGraph = GlobalTopicGraph.create(createdTopicNodes, { owner: globalGroup })
 			}
 		}
 	}
