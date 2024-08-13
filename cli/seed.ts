@@ -1,5 +1,5 @@
 import { getEnvOrThrow } from "@/lib/utils"
-import { LaAccount } from "@/web/lib/schema"
+import { GlobalTopic, LaAccount } from "@/web/lib/schema"
 import { startWorker } from "jazz-nodejs"
 import { Group, ID } from "jazz-tools"
 import { appendFile } from "node:fs/promises"
@@ -65,6 +65,7 @@ async function prodSeed() {
 	const globalGroup = await (
 		(await PublicGlobalGroup.load(process.env.JAZZ_PUBLIC_GLOBAL_GROUP as ID<Group>, worker, {})) as PublicGlobalGroup
 	).ensureLoaded({ root: true })
+	console.log(globalGroup, "group")
 	if (!globalGroup) return // TODO: err
 
 	const folderPath = path.join(__dirname, "..", "private")
@@ -83,7 +84,16 @@ async function prodSeed() {
 			// 	}
 			// }
 		} else if (stats.isFile()) {
-			if (file === "connections.json") {
+			if (file === "topics.json") {
+				const content = await fs.readFile(filePath, "utf-8")
+				const topics = JSON.parse(content) as Array<{ name: string; prettyName: string }>
+
+				topics.forEach(topic => {
+					GlobalTopic.create({ name: topic.name, prettyName: topic.prettyName }, { owner: globalGroup })
+				})
+			}
+			// TODO: intentional mistake with nn (remove after)
+			if (file === "connections.jsonn") {
 				const content = await fs.readFile(filePath, "utf-8")
 				const topics = JSON.parse(content) as Array<{ name: string; prettyName: string; connections: string[] }>
 
@@ -110,19 +120,23 @@ async function prodSeed() {
 						node.connectedTopics!.push(connectionNode)
 					}
 				}
-
 				const graph = GlobalTopicGraph.create(
 					Object.values(createdTopics).map(({ node }) => node),
 					{ owner: globalGroup }
 				)
-				console.log(graph, "graph")
-
+				// await writeToOutput(graph, "graph.json")
 				globalGroup.root.topicGraph = graph
-
-				await new Promise(resolve => setTimeout(resolve, 1000))
+				// await new Promise(resolve => setTimeout(resolve, 1000))
 			}
 		}
 	}
+}
+
+async function writeToOutput(content: any, file: string) {
+	const outputDir = path.join(__dirname, "..", "output")
+	await fs.mkdir(outputDir, { recursive: true })
+	const outputPath = path.join(outputDir, file)
+	await fs.writeFile(outputPath, JSON.stringify(content, null, 2))
 }
 
 await seed()

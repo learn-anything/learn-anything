@@ -23,7 +23,12 @@ async function readJazz() {
 	).ensureLoaded({ root: { topicGraph: [{ connectedTopics: [{}] }] } })
 	if (!globalGroup) return // TODO: err
 
-	console.log(globalGroup.root.topicGraph, "graph")
+	console.log(
+		globalGroup.root.topicGraph?.subscribe([], graph => {
+			console.log(graph, "graph")
+		}),
+		"graph"
+	)
 }
 
 await run()
