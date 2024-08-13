@@ -6,9 +6,9 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { CheckIcon, ChevronDownIcon } from "lucide-react"
 import { useFormContext } from "react-hook-form"
 import { cn } from "@/lib/utils"
-import { LinkFormValues } from "../link-form"
 import { useAtom } from "jotai"
 import { linkTopicSelectorAtom } from "@/store/link"
+import { LinkFormValues } from "../schema"
 
 const TOPICS = [
 	{ id: "1", name: "Work" },
@@ -31,7 +31,7 @@ export const TopicSelector: React.FC = () => {
 							<FormControl>
 								<Button size="sm" type="button" role="combobox" variant="secondary" className="gap-x-2 text-sm">
 									<span className="truncate">
-										{field.value ? TOPICS.find(topic => topic.name === field.value)?.name : "Select topic"}
+										{field.value ? TOPICS.find(topic => topic.name === field.value)?.name : "Topic"}
 									</span>
 									<ChevronDownIcon size={16} />
 								</Button>

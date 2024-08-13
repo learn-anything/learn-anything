@@ -58,6 +58,6 @@ export async function GET(request: NextRequest) {
 			favicon: DEFAULT_VALUES.FAVICON,
 			url: url
 		}
-		return NextResponse.json(defaultMetadata, { status: 500 })
+		return NextResponse.json(defaultMetadata)
 	}
 }

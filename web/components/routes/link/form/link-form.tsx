@@ -1,22 +1,21 @@
 import * as React from "react"
 import { useAccount, useCoState } from "@/lib/providers/jazz-provider"
-import { LinkMetadata, PersonalLink } from "@/lib/schema"
-import { useState } from "react"
+import { PersonalLink } from "@/lib/schema"
 import { useForm } from "react-hook-form"
-import { createLinkSchema } from "./schema"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useDebounce } from "react-use"
-import { cn, ensureUrlProtocol, generateUniqueSlug, isUrl } from "@/lib/utils"
 import { toast } from "sonner"
-import { Form, FormField, FormItem, FormControl, FormLabel } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { TextareaAutosize } from "@/components/custom/textarea-autosize"
+import { createLinkSchema, LinkFormValues } from "./schema"
+import { generateUniqueSlug } from "@/lib/utils"
+import { Form } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
-import { z } from "zod"
 
-import { LearningStateSelector } from "./partial/learning-state-selector"
-import { TopicSelector } from "./partial/topic-selector"
+import { UrlInput } from "./partial/url-input"
+import { UrlBadge } from "./partial/url-badge"
+import { TitleInput } from "./partial/title-input"
 import { NotesSection } from "./partial/notes-section"
+import { TopicSelector } from "./partial/topic-selector"
+import { DescriptionInput } from "./partial/description-input"
+import { LearningStateSelector } from "./partial/learning-state-selector"
 
 interface LinkFormProps extends React.ComponentPropsWithoutRef<"form"> {
 	onSuccess?: () => void
@@ -24,138 +23,77 @@ interface LinkFormProps extends React.ComponentPropsWithoutRef<"form"> {
 	personalLink?: PersonalLink
 }
 
-export type LinkFormValues = z.infer<typeof createLinkSchema>
-
 const defaultValues: Partial<LinkFormValues> = {
+	url: "",
 	title: "",
 	description: "",
-	learningState: "wantToLearn",
-	topic: "",
-	isLink: false,
+	completed: false,
 	notes: "",
-	meta: null
+	learningState: "wantToLearn"
 }
 
 export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 	({ onSuccess, onCancel, personalLink }, ref) => {
-		const [isFetching, setIsFetching] = useState(false)
+		const [isFetching, setIsFetching] = React.useState(false)
+		const [urlFetched, setUrlFetched] = React.useState<string | null>(null)
 		const { me } = useAccount()
+		const selectedLink = useCoState(PersonalLink, personalLink?.id)
+
 		const form = useForm<LinkFormValues>({
 			resolver: zodResolver(createLinkSchema),
-			defaultValues
+			defaultValues,
+			mode: "all"
 		})
-
-		const selectedLink = useCoState(PersonalLink, personalLink?.id)
-		const title = form.watch("title")
-		const [inputValue, setInputValue] = useState("")
-		const [originalLink, setOriginalLink] = useState<string>("")
-		const [linkValidation, setLinkValidation] = useState<string | null>(null)
-		const [invalidLink, setInvalidLink] = useState(false)
-		const [showLink, setShowLink] = useState(false)
-		const [debouncedText, setDebouncedText] = useState<string>("")
-
-		useDebounce(() => setDebouncedText(title), 300, [title])
 
 		React.useEffect(() => {
 			if (selectedLink) {
-				form.setValue("title", selectedLink.title)
-				form.setValue("description", selectedLink.description ?? "")
-				form.setValue("isLink", selectedLink.isLink)
-				form.setValue("meta", selectedLink.meta)
+				form.reset({
+					url: selectedLink.url,
+					title: selectedLink.title,
+					description: selectedLink.description,
+					completed: selectedLink.completed,
+					notes: selectedLink.notes,
+					learningState: selectedLink.learningState
+				})
 			}
 		}, [selectedLink, form])
 
-		const changeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-			const value = e.target.value
-			setInputValue(value)
-			form.setValue("title", value)
-		}
-
-		const pressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-			if (e.key === "Enter" && !showLink) {
-				e.preventDefault()
-				const trimmedValue = inputValue.trim().toLowerCase()
-				if (isUrl(trimmedValue)) {
-					setShowLink(true)
-					setInvalidLink(false)
-					setLinkValidation(trimmedValue)
-					setInputValue(trimmedValue)
-					form.setValue("title", trimmedValue)
-				} else {
-					setInvalidLink(true)
-					setShowLink(true)
-					setLinkValidation(null)
-				}
+		const fetchMetadata = async (url: string) => {
+			setIsFetching(true)
+			try {
+				const res = await fetch(`/api/metadata?url=${encodeURIComponent(url)}`, { cache: "force-cache" })
+				const data = await res.json()
+				setUrlFetched(data.url)
+				form.setValue("title", data.title)
+				if (!form.getValues("description")) form.setValue("description", data.description)
+				form.setFocus("title")
+			} catch (err) {
+				console.error("Failed to fetch metadata", err)
+			} finally {
+				setIsFetching(false)
 			}
 		}
-
-		React.useEffect(() => {
-			const fetchMetadata = async (url: string) => {
-				setIsFetching(true)
-				try {
-					const res = await fetch(`/api/metadata?url=${encodeURIComponent(url)}`, { cache: "force-cache" })
-					if (!res.ok) throw new Error("Failed to fetch metadata")
-					const data = await res.json()
-					form.setValue("isLink", true)
-					form.setValue("meta", data)
-					form.setValue("title", data.title)
-					form.setValue("description", data.description)
-					setOriginalLink(url)
-				} catch (err) {
-					form.setValue("isLink", false)
-					form.setValue("meta", null)
-					form.setValue("title", debouncedText)
-					form.setValue("description", "")
-					setOriginalLink("")
-				} finally {
-					setIsFetching(false)
-				}
-			}
-			if (showLink && !invalidLink && isUrl(form.getValues("title").toLowerCase())) {
-				fetchMetadata(ensureUrlProtocol(form.getValues("title").toLowerCase()))
-			}
-		}, [showLink, invalidLink, form])
 
 		const onSubmit = (values: LinkFormValues) => {
 			if (isFetching) return
-
 			try {
-				let linkMetadata: LinkMetadata | undefined
-
 				const personalLinks = me.root?.personalLinks?.toJSON() || []
 				const slug = generateUniqueSlug(personalLinks, values.title)
-
-				if (values.isLink && values.meta) {
-					linkMetadata = LinkMetadata.create(values.meta, { owner: me._owner })
-				}
-
 				if (selectedLink) {
-					selectedLink.title = values.title
-					selectedLink.slug = slug
-					selectedLink.description = values.description ?? ""
-					selectedLink.isLink = values.isLink
-
-					if (values.isLink && values.meta) {
-						linkMetadata = LinkMetadata.create(values.meta, { owner: me._owner })
-					}
+					selectedLink.applyDiff({ ...values, slug })
 				} else {
 					const newPersonalLink = PersonalLink.create(
 						{
-							title: values.title,
+							...values,
 							slug,
-							description: values.description,
 							sequence: me.root?.personalLinks?.length || 1,
-							completed: false,
-							isLink: values.isLink,
-							meta: linkMetadata
-							// topic: values.topic
+							createdAt: new Date(),
+							updatedAt: new Date()
 						},
 						{ owner: me._owner }
 					)
-
 					me.root?.personalLinks?.push(newPersonalLink)
 				}
-
 				form.reset(defaultValues)
 				onSuccess?.()
 			} catch (error) {
@@ -164,95 +102,43 @@ export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 			}
 		}
 
-		const undoEditing: () => void = () => {
+		const handleCancel = () => {
 			form.reset(defaultValues)
 			onCancel?.()
 		}
 
+		const handleResetUrl = () => {
+			setUrlFetched(null)
+			form.setFocus("url")
+			form.reset({ url: "", title: "", description: "" })
+		}
+
 		return (
 			<div className="p-3 transition-all">
-				<div className="bg-muted/50 rounded-md border">
+				<div className="bg-muted/30 rounded-md border">
 					<Form {...form}>
 						<form onSubmit={form.handleSubmit(onSubmit)} className="relative min-w-0 flex-1" ref={ref}>
-							<div className="flex flex-row p-3">
-								<div className="flex flex-auto flex-col gap-1.5">
-									<div className="flex flex-row items-start justify-between">
-										<div className="flex grow flex-row items-center gap-1.5">
-											<FormField
-												control={form.control}
-												name="title"
-												render={({ field }) => (
-													<FormItem className="grow space-y-0">
-														<FormLabel className="sr-only">Text</FormLabel>
-														<FormControl>
-															<Input
-																{...field}
-																value={inputValue}
-																autoComplete="off"
-																maxLength={100}
-																autoFocus
-																placeholder="Paste a link or write a link"
-																className={cn(
-																	"placeholder:text-muted-foreground/70 h-6 border-none p-1.5 font-medium focus-visible:ring-0",
-																	invalidLink ? "text-red-500" : ""
-																)}
-																onKeyDown={pressEnter}
-																onChange={changeInput}
-															/>
-														</FormControl>
-													</FormItem>
-												)}
-											/>
-											{showLink && (
-												<span className={cn("mr-5 max-w-[200px] truncate text-xs", invalidLink ? "text-red-500" : "")}>
-													{invalidLink ? "Only links are allowed" : linkValidation || originalLink || ""}
-												</span>
-											)}
-										</div>
-
-										<div className="flex flex-row items-center gap-2">
-											<LearningStateSelector />
-											<TopicSelector />
-										</div>
-									</div>
-
-									<div className="flex flex-row items-center gap-1.5 pl-8">
-										<FormField
-											control={form.control}
-											name="description"
-											render={({ field }) => (
-												<FormItem className="grow space-y-0">
-													<FormLabel className="sr-only">Description</FormLabel>
-													<FormControl>
-														<TextareaAutosize
-															{...field}
-															autoComplete="off"
-															placeholder="Description (optional)"
-															className="placeholder:text-muted-foreground/70 min-h-6 resize-none overflow-y-auto border-none p-1.5 text-xs font-medium shadow-none focus-visible:ring-0"
-														/>
-													</FormControl>
-												</FormItem>
-											)}
-										/>
+							<div className="flex flex-col gap-1.5 p-3">
+								<div className="flex flex-row items-start justify-between">
+									<UrlInput urlFetched={urlFetched} fetchMetadata={fetchMetadata} />
+									<TitleInput urlFetched={urlFetched} />
+									<div className="flex flex-row items-center gap-2">
+										<LearningStateSelector />
+										<TopicSelector />
 									</div>
 								</div>
+								<DescriptionInput />
+								<UrlBadge urlFetched={urlFetched} handleResetUrl={handleResetUrl} />
 							</div>
-
-							<div className="flex flex-auto flex-row items-center justify-between gap-2 rounded-b-md border border-t px-3 py-2">
-								<div className="flex flex-row items-center gap-0.5">
-									<div className="flex min-w-0 shrink-0 cursor-pointer select-none flex-row">
-										<NotesSection />
-									</div>
-								</div>
-								<div className="flex w-auto items-center justify-end">
-									<div className="flex min-w-0 shrink-0 cursor-pointer select-none flex-row gap-x-2">
-										<Button size="sm" type="button" variant="ghost" onClick={undoEditing}>
-											Cancel
-										</Button>
-										<Button size="sm" type="submit" disabled={isFetching}>
-											Save
-										</Button>
-									</div>
+							<div className="flex flex-row items-center justify-between gap-2 rounded-b-md border-t px-3 py-2">
+								<NotesSection />
+								<div className="flex w-auto items-center justify-end gap-x-2">
+									<Button size="sm" type="button" variant="ghost" onClick={handleCancel}>
+										Cancel
+									</Button>
+									<Button size="sm" type="submit">
+										Save
+									</Button>
 								</div>
 							</div>
 						</form>

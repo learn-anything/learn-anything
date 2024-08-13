@@ -5,12 +5,12 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { CheckIcon, ChevronDownIcon, icons } from "lucide-react"
 import { useFormContext } from "react-hook-form"
-import { LinkFormValues } from "../link-form"
 import { cn } from "@/lib/utils"
 import { LaIcon } from "@/components/custom/la-icon"
 import { useAtom } from "jotai"
 import { linkLearningStateSelectorAtom } from "@/store/link"
 import { useMemo } from "react"
+import { LinkFormValues } from "../schema"
 
 type LearningState = {
 	label: string
@@ -21,8 +21,8 @@ type LearningState = {
 
 const LEARNING_STATES: LearningState[] = [
 	{ label: "To Learn", value: "wantToLearn", icon: "Bookmark", className: "text-foreground" },
-	{ label: "Learning", value: "Learning", icon: "GraduationCap", className: "text-[#D29752]" },
-	{ label: "Learned", value: "Learned", icon: "Check", className: "text-[#708F51]" }
+	{ label: "Learning", value: "learning", icon: "GraduationCap", className: "text-[#D29752]" },
+	{ label: "Learned", value: "learned", icon: "Check", className: "text-[#708F51]" }
 ]
 
 export const LearningStateSelector: React.FC = () => {
