@@ -59,11 +59,13 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 		const personalPages = me.root?.personalPages?.toJSON() || []
 		const slug = generateUniqueSlug(personalPages, page.slug)
 
-		const capitalizedTitle = newTitle.charAt(0).toUpperCase() + newTitle.slice(1)
-		page.title = capitalizedTitle
+		const trimmedTitle = editor.getText().trim()
+		page.title = trimmedTitle
 		page.slug = slug
 
-		editor.commands.setContent(capitalizedTitle)
+		const url = new URL("input")
+
+		editor.commands.setContent(trimmedTitle)
 	}
 
 	const handleTitleKeyDown = useCallback((view: EditorView, event: KeyboardEvent) => {

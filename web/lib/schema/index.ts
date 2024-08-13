@@ -12,6 +12,7 @@ import { CoMap, co, Account, Profile } from "jazz-tools"
 import { PersonalPageLists } from "./personal-page"
 import { PersonalLinkLists } from "./personal-link"
 import { GlobalTopicLists } from "./global-topic"
+
 export class UserRoot extends CoMap {
 	name = co.string
 	username = co.string
