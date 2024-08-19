@@ -55,7 +55,7 @@ export const PageSection: React.FC = () => {
 				</Button>
 				<CreatePageForm onPageCreated={onPageCreated} />
 			</div>
-			<div className="flex flex-col gap-px">
+			<div className="flex flex-col gap-px" key={personalPages.length}>
 				{personalPages.map(page => (
 					<div key={page.id} className="group/reorder-page relative">
 						{/* <span className="absolute -left-3 top-1/2 -translate-y-1/2 cursor-move opacity-0 group-hover/reorder-page:opacity-100">
