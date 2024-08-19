@@ -6,7 +6,7 @@ import { LinkManage } from "@/components/routes/link/form/manage"
 import { useAtom } from "jotai"
 import { linkEditIdAtom } from "@/store/link"
 
-export function LinkWrapper() {
+export function AuthHomeRoute() {
 	const [editId] = useAtom(linkEditIdAtom)
 
 	return (
