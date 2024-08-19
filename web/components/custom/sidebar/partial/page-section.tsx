@@ -1,4 +1,3 @@
-import { SidebarItem } from "../sidebar"
 import { z } from "zod"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { Input } from "@/components/ui/input"
@@ -11,10 +10,9 @@ import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useState, useEffect, useCallback } from "react"
+import { useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
-import { useAtom } from "jotai"
 
 const createPageSchema = z.object({
 	title: z.string({ message: "Please enter a valid title" }).min(1, { message: "Please enter a valid title" })
@@ -28,10 +26,6 @@ export const PageSection: React.FC = () => {
 	})
 	const pathname = usePathname()
 
-	const onPageCreated = useCallback((newPage: PersonalPage) => {
-		setPersonalPages(prevPages => [...prevPages, newPage])
-	}, [])
-
 	return (
 		<div className="group/pages flex flex-col gap-px py-2">
 			<div className="flex items-center gap-px">
@@ -44,7 +38,7 @@ export const PageSection: React.FC = () => {
 					</span> */}
 					<p className="text-xs font-medium">Pages</p>
 				</Button>
-				<CreatePageForm onPageCreated={onPageCreated} />
+				{me?.root.personalPages && <CreatePageForm />}
 			</div>
 			<div className="flex flex-col gap-px">
 				{me?.root.personalPages.map(
@@ -83,7 +77,7 @@ export const PageSection: React.FC = () => {
 	)
 }
 
-const CreatePageForm: React.FC<{ onPageCreated: (page: PersonalPage) => void }> = ({ onPageCreated }) => {
+const CreatePageForm: React.FC = () => {
 	const [open, setOpen] = useState(false)
 	const { me } = useAccount()
 	const route = useRouter()
@@ -110,7 +104,6 @@ const CreatePageForm: React.FC<{ onPageCreated: (page: PersonalPage) => void }> 
 			)
 
 			me.root?.personalPages?.push(newPersonalPage)
-			onPageCreated(newPersonalPage)
 
 			form.reset()
 			setOpen(false)
