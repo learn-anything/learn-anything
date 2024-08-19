@@ -3,7 +3,7 @@ import PublicHomeRoute from "@/components/routes/PublicHomeRoute"
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
 	// TODO: get it from jazz/clerk
-	const loggedIn = false
+	const loggedIn = true
 
 	if (loggedIn) {
 		return (
