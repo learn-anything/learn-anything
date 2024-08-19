@@ -1,7 +1,7 @@
 import { getEnvOrThrow } from "@/lib/utils"
 import { PublicGlobalGroup } from "@/web/lib/schema/global-topic-graph"
 import { startWorker } from "jazz-nodejs"
-import { Group, ID } from "jazz-tools"
+import { ID } from "jazz-tools"
 
 const JAZZ_WORKER_SECRET = getEnvOrThrow("JAZZ_WORKER_SECRET")
 
@@ -18,17 +18,25 @@ async function readJazz() {
 		accountID: "co_zhvp7ryXJzDvQagX61F6RCZFJB9",
 		accountSecret: JAZZ_WORKER_SECRET
 	})
-	const globalGroup = await (
-		(await PublicGlobalGroup.load(process.env.JAZZ_PUBLIC_GLOBAL_GROUP as ID<Group>, worker, {})) as PublicGlobalGroup
-	).ensureLoaded({ root: { topicGraph: [{ connectedTopics: [{}] }] } })
+
+	const globalGroupId = process.env.JAZZ_PUBLIC_GLOBAL_GROUP as ID<PublicGlobalGroup>
+	const globalGroup = await PublicGlobalGroup.load(globalGroupId, worker, {
+		root: { topicGraph: [{ connections: [{}] }] }
+	})
+
 	if (!globalGroup) return // TODO: err
 
-	console.log(
-		globalGroup.root.topicGraph?.subscribe([], graph => {
-			console.log(graph, "graph")
-		}),
-		"graph"
-	)
+	const asJson = globalGroup.root.topicGraph?.map(node => {
+		const connections = node.connections?.map(connection => {
+			return connection?.name
+		})
+		return {
+			name: node.name,
+			prettyName: node.prettyName,
+			connections
+		}
+	})
+	console.log({ asJson })
 }
 
 await run()
