@@ -50,7 +50,7 @@ export const SidebarToggleButton: React.FC = () => {
 				size="icon"
 				variant="ghost"
 				aria-label="Menu"
-				className="text-primary/60 z-50"
+				className="text-primary/60"
 				onClick={handleClick}
 			>
 				<PanelLeftIcon size={16} />
