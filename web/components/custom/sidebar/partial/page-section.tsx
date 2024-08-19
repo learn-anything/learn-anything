@@ -15,6 +15,8 @@ import { useState, useEffect, useCallback } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { LaIcon } from "../../la-icon"
 import Link from "next/link"
+import { useAtom } from "jotai"
+import { pageSectionKeyAtom } from "@/store/sidebar"
 
 const createPageSchema = z.object({
 	title: z.string({ message: "Please enter a valid title" }).min(1, { message: "Please enter a valid title" })
@@ -23,6 +25,7 @@ const createPageSchema = z.object({
 type PageFormValues = z.infer<typeof createPageSchema>
 
 export const PageSection: React.FC = () => {
+	const [pageSectionKey] = useAtom(pageSectionKeyAtom)
 	const { me } = useAccount()
 	const pathname = usePathname()
 	const [personalPages, setPersonalPages] = useState<PersonalPage[]>([])
@@ -41,7 +44,7 @@ export const PageSection: React.FC = () => {
 	}, [])
 
 	return (
-		<div className="group/pages flex flex-col gap-px py-2">
+		<div className="group/pages flex flex-col gap-px py-2" key={pageSectionKey}>
 			<div className="flex items-center gap-px">
 				<Button
 					variant="ghost"
