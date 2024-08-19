@@ -38,7 +38,7 @@ export const PageSection: React.FC = () => {
 					</span> */}
 					<p className="text-xs font-medium">Pages</p>
 				</Button>
-				{me?.root.personalPages && <CreatePageForm />}
+				<CreatePageForm />
 			</div>
 			<div className="flex flex-col gap-px">
 				{me?.root.personalPages.map(
