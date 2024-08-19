@@ -10,7 +10,7 @@ import { StarterKit } from "@/components/la-editor/extensions/starter-kit"
 import { Paragraph } from "@/components/la-editor/extensions/paragraph"
 import { useAccount, useCoState } from "@/lib/providers/jazz-provider"
 import { toast } from "sonner"
-import { EditorView } from "prosemirror-view"
+import { EditorView } from "@tiptap/pm/view"
 import { Editor } from "@tiptap/core"
 import { generateUniqueSlug } from "@/lib/utils"
 
