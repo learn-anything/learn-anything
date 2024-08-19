@@ -5,14 +5,16 @@ import { Input } from "@/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
 import { PlusIcon } from "lucide-react"
-import { generateUniqueSlug } from "@/lib/utils"
+import { cn, generateUniqueSlug } from "@/lib/utils"
 import { PersonalPage } from "@/lib/schema/personal-page"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState, useEffect, useCallback } from "react"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
+import { LaIcon } from "../../la-icon"
+import Link from "next/link"
 
 const createPageSchema = z.object({
 	title: z.string({ message: "Please enter a valid title" }).min(1, { message: "Please enter a valid title" })
@@ -22,6 +24,7 @@ type PageFormValues = z.infer<typeof createPageSchema>
 
 export const PageSection: React.FC = () => {
 	const { me } = useAccount()
+	const pathname = usePathname()
 	const [personalPages, setPersonalPages] = useState<PersonalPage[]>([])
 
 	useEffect(() => {
@@ -38,24 +41,48 @@ export const PageSection: React.FC = () => {
 	}, [])
 
 	return (
-		<div className="-ml-2">
-			<div className="group mb-0.5 ml-2 mt-2 flex flex-row items-center justify-between rounded-md">
-				<div
-					role="button"
-					tabIndex={0}
-					className="text-muted-foreground hover:bg-muted/50 flex h-6 grow cursor-default items-center justify-between gap-x-0.5 self-start rounded-md px-1 text-xs font-medium"
+		<div className="group/pages flex flex-col gap-px py-2">
+			<div className="flex items-center gap-px">
+				<Button
+					variant="ghost"
+					className="group size-6 flex-1 items-center justify-start rounded-md px-2 py-1 focus:outline-0 focus:ring-0"
 				>
-					<span className="group-hover:text-muted-foreground">Pages</span>
-					<CreatePageForm onPageCreated={onPageCreated} />
-				</div>
+					{/* <span className="mr-1.5 rotate-90 transition-transform duration-200">
+						<LaIcon name="ChevronRight" />
+					</span> */}
+					<p className="text-xs font-medium">Pages</p>
+				</Button>
+				<CreatePageForm onPageCreated={onPageCreated} />
 			</div>
-
-			<div className="relative shrink-0">
-				<div aria-hidden="false" className="ml-2 flex shrink-0 flex-col space-y-1 pb-2">
-					{personalPages.map(page => (
-						<SidebarItem key={page.id} url={`/pages/${page.id}`} label={page.title} />
-					))}
-				</div>
+			<div className="flex flex-col gap-px">
+				{personalPages.map(page => (
+					<div key={page.id} className="group/reorder-page relative">
+						{/* <span className="absolute -left-3 top-1/2 -translate-y-1/2 cursor-move opacity-0 group-hover/reorder-page:opacity-100">
+							<LaIcon name="GripVertical" className="size-3.5" />
+						</span> */}
+						<div className="group/sidebar-link relative flex min-w-0 flex-1">
+							<Link
+								href={`/pages/${page.id}`}
+								className={cn(
+									"group-hover/sidebar-link:bg-accent group-hover/sidebar-link:text-accent-foreground relative flex h-8 w-full items-center gap-2 rounded-md p-1.5 font-medium",
+									{ "bg-accent text-accent-foreground": pathname === `/pages/${page.id}` }
+								)}
+							>
+								{/* <LaIcon name="NotepadText" /> */}
+								<span className="flex max-w-[calc(100%-52px)] flex-1 items-center gap-1.5 truncate text-sm">
+									<span className="truncate opacity-85 group-hover/sidebar-link:opacity-100">{page.title}</span>
+								</span>
+							</Link>
+							{/* <Button
+								variant="ghost"
+								aria-label="Remove"
+								className="absolute right-0.5 top-1/2 z-[1] size-6 -translate-y-1/2 p-1 opacity-0 focus:opacity-100 group-hover/sidebar-link:opacity-100"
+							>
+								<LaIcon name="X" />
+							</Button> */}
+						</div>
+					</div>
+				))}
 			</div>
 		</div>
 	)
@@ -103,7 +130,15 @@ const CreatePageForm: React.FC<{ onPageCreated: (page: PersonalPage) => void }> 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
 			<PopoverTrigger asChild>
-				<Button type="button" size="icon" variant="ghost" aria-label="New Page" className="size-6">
+				<Button
+					type="button"
+					variant="ghost"
+					aria-label="New Page"
+					className={cn(
+						"group flex size-6 items-center justify-center rounded-md p-0.5 focus:outline-0 focus:ring-0"
+						// 'opacity-0 group-hover/pages:opacity-100 data-[state="open"]:opacity-100'
+					)}
+				>
 					<PlusIcon size={16} />
 				</Button>
 			</PopoverTrigger>
