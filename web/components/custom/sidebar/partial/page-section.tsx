@@ -23,19 +23,10 @@ const createPageSchema = z.object({
 type PageFormValues = z.infer<typeof createPageSchema>
 
 export const PageSection: React.FC = () => {
-	const { me } = useAccount()
+	const { me } = useAccount({
+		root: { personalPages: [] }
+	})
 	const pathname = usePathname()
-	const [personalPages, setPersonalPages] = useState<PersonalPage[]>([])
-
-	useEffect(() => {
-		console.log("me.root?.personalPages", me.root?.personalPages?.toJSON())
-		if (me.root?.personalPages) {
-			setPersonalPages(prevPages => {
-				const newPages = Array.from(me.root?.personalPages ?? []).filter((page): page is PersonalPage => page !== null)
-				return [...prevPages, ...newPages.filter(newPage => !prevPages.some(prevPage => prevPage.id === newPage.id))]
-			})
-		}
-	}, [me.root?.personalPages])
 
 	const onPageCreated = useCallback((newPage: PersonalPage) => {
 		setPersonalPages(prevPages => [...prevPages, newPage])
@@ -55,35 +46,38 @@ export const PageSection: React.FC = () => {
 				</Button>
 				<CreatePageForm onPageCreated={onPageCreated} />
 			</div>
-			<div className="flex flex-col gap-px" key={personalPages.length}>
-				{personalPages.map(page => (
-					<div key={page.id} className="group/reorder-page relative">
-						{/* <span className="absolute -left-3 top-1/2 -translate-y-1/2 cursor-move opacity-0 group-hover/reorder-page:opacity-100">
+			<div className="flex flex-col gap-px">
+				{me?.root.personalPages.map(
+					page =>
+						page?.id && (
+							<div key={page.id} className="group/reorder-page relative">
+								{/* <span className="absolute -left-3 top-1/2 -translate-y-1/2 cursor-move opacity-0 group-hover/reorder-page:opacity-100">
 							<LaIcon name="GripVertical" className="size-3.5" />
 						</span> */}
-						<div className="group/sidebar-link relative flex min-w-0 flex-1">
-							<Link
-								href={`/pages/${page.id}`}
-								className={cn(
-									"group-hover/sidebar-link:bg-accent group-hover/sidebar-link:text-accent-foreground relative flex h-8 w-full items-center gap-2 rounded-md p-1.5 font-medium",
-									{ "bg-accent text-accent-foreground": pathname === `/pages/${page.id}` }
-								)}
-							>
-								{/* <LaIcon name="NotepadText" /> */}
-								<span className="flex max-w-[calc(100%-52px)] flex-1 items-center gap-1.5 truncate text-sm">
-									<span className="truncate opacity-85 group-hover/sidebar-link:opacity-100">{page.title}</span>
-								</span>
-							</Link>
-							{/* <Button
+								<div className="group/sidebar-link relative flex min-w-0 flex-1">
+									<Link
+										href={`/pages/${page.id}`}
+										className={cn(
+											"group-hover/sidebar-link:bg-accent group-hover/sidebar-link:text-accent-foreground relative flex h-8 w-full items-center gap-2 rounded-md p-1.5 font-medium",
+											{ "bg-accent text-accent-foreground": pathname === `/pages/${page.id}` }
+										)}
+									>
+										{/* <LaIcon name="NotepadText" /> */}
+										<span className="flex max-w-[calc(100%-52px)] flex-1 items-center gap-1.5 truncate text-sm">
+											<span className="truncate opacity-85 group-hover/sidebar-link:opacity-100">{page.title}</span>
+										</span>
+									</Link>
+									{/* <Button
 								variant="ghost"
 								aria-label="Remove"
 								className="absolute right-0.5 top-1/2 z-[1] size-6 -translate-y-1/2 p-1 opacity-0 focus:opacity-100 group-hover/sidebar-link:opacity-100"
 							>
 								<LaIcon name="X" />
 							</Button> */}
-						</div>
-					</div>
-				))}
+								</div>
+							</div>
+						)
+				)}
 			</div>
 		</div>
 	)
