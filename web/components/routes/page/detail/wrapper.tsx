@@ -13,8 +13,6 @@ import { toast } from "sonner"
 import { EditorView } from "@tiptap/pm/view"
 import { Editor } from "@tiptap/core"
 import { generateUniqueSlug } from "@/lib/utils"
-import { useAtom } from "jotai"
-import { pageSectionKeyAtom } from "@/store/sidebar"
 
 const TITLE_PLACEHOLDER = "Page title"
 
@@ -37,7 +35,6 @@ export function DetailPageWrapper({ pageId }: { pageId: string }) {
 
 const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 	const { me } = useAccount()
-	const [, setPageSectionKey] = useAtom(pageSectionKeyAtom)
 
 	const titleEditorRef = useRef<Editor | null>(null)
 	const contentEditorRef = useRef<LAEditorRef>(null)
@@ -65,11 +62,6 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 		const trimmedTitle = editor.getText().trim()
 		page.title = trimmedTitle
 		page.slug = slug
-
-		const url = new URL("input")
-
-		// re-render sidebar
-		setPageSectionKey(pre => pre + 1)
 
 		editor.commands.setContent(trimmedTitle)
 	}

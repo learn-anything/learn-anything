@@ -13,10 +13,8 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState, useEffect, useCallback } from "react"
 import { usePathname, useRouter } from "next/navigation"
-import { LaIcon } from "../../la-icon"
 import Link from "next/link"
 import { useAtom } from "jotai"
-import { pageSectionKeyAtom } from "@/store/sidebar"
 
 const createPageSchema = z.object({
 	title: z.string({ message: "Please enter a valid title" }).min(1, { message: "Please enter a valid title" })
@@ -25,12 +23,12 @@ const createPageSchema = z.object({
 type PageFormValues = z.infer<typeof createPageSchema>
 
 export const PageSection: React.FC = () => {
-	const [pageSectionKey] = useAtom(pageSectionKeyAtom)
 	const { me } = useAccount()
 	const pathname = usePathname()
 	const [personalPages, setPersonalPages] = useState<PersonalPage[]>([])
 
 	useEffect(() => {
+		console.log("me.root?.personalPages", me.root?.personalPages?.toJSON())
 		if (me.root?.personalPages) {
 			setPersonalPages(prevPages => {
 				const newPages = Array.from(me.root?.personalPages ?? []).filter((page): page is PersonalPage => page !== null)
@@ -44,7 +42,7 @@ export const PageSection: React.FC = () => {
 	}, [])
 
 	return (
-		<div className="group/pages flex flex-col gap-px py-2" key={pageSectionKey}>
+		<div className="group/pages flex flex-col gap-px py-2">
 			<div className="flex items-center gap-px">
 				<Button
 					variant="ghost"
