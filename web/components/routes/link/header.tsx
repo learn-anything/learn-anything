@@ -91,15 +91,21 @@ const TabItem = ({ url, label, isActive, onClick }: TabItemProps) => {
 
 const FilterAndSort = () => {
 	const [sort, setSort] = useAtom(linkSortAtom)
+	const [sortOpen, setSortOpen] = React.useState(false)
 
 	const getFilterText = () => {
 		return sort.charAt(0).toUpperCase() + sort.slice(1)
 	}
 
+	const handleSortChange = (value: string) => {
+		setSort(value)
+		setSortOpen(false)
+	}
+
 	return (
 		<div className="flex w-auto items-center justify-end">
 			<div className="flex items-center gap-2">
-				<Popover>
+				<Popover open={sortOpen} onOpenChange={setSortOpen}>
 					<PopoverTrigger asChild>
 						<Button size="sm" type="button" variant="secondary" className="gap-x-2 text-sm">
 							<ListFilterIcon size={16} className="text-primary/60" />
@@ -111,7 +117,7 @@ const FilterAndSort = () => {
 							<div className="flex min-w-8 flex-row items-center">
 								<Label>Sort by</Label>
 								<div className="flex flex-auto flex-row items-center justify-end">
-									<Select value={sort} onValueChange={setSort}>
+									<Select value={sort} onValueChange={handleSortChange}>
 										<SelectTrigger className="h-6 w-auto">
 											<SelectValue placeholder="Select"></SelectValue>
 										</SelectTrigger>
