@@ -10,9 +10,9 @@ interface ProfileTopicsProps {
 
 const ProfileTopics: React.FC<ProfileTopicsProps> = ({ topic }) => {
 	return (
-		<div className="flex cursor-pointer flex-row items-center justify-between rounded-lg bg-[#121212] p-3">
+		<div className="bg-input flex cursor-pointer flex-row items-center justify-between rounded-lg p-3">
 			<p>{topic}</p>
-			<IoChevronForward className="text-white" size={20} />
+			<IoChevronForward className="text-black/50 dark:text-white" size={20} />
 		</div>
 	)
 }
@@ -30,22 +30,24 @@ interface ProfileTitleProps {
 
 const ProfileTitle: React.FC<ProfileTitleProps> = ({ topicTitle, spanNumber }) => {
 	return (
-		<p className="pb-3 pl-2 text-base font-light text-white/50">
-			{topicTitle} <span className="text-white">{spanNumber}</span>
+		<p className="pb-3 pl-2 text-base font-light text-black/50 dark:text-white/50">
+			{topicTitle} <span className="text-black dark:text-white">{spanNumber}</span>
 		</p>
 	)
 }
 
 const ProfileLinks: React.FC<ProfileLinksProps> = ({ linklabel, link, topic }) => {
 	return (
-		<div className="flex flex-row items-center justify-between rounded-lg bg-[#121212] p-3 text-white">
+		<div className="bg-input flex flex-row items-center justify-between rounded-lg p-3 text-black dark:text-white">
 			<div className="flex flex-row items-center space-x-3">
-				<p className="text-base text-white">{linklabel}</p>
+				<p className="text-base">{linklabel}</p>
 				<div className="flex cursor-pointer flex-row items-center gap-1">
-					<p className="text-md text-white/10 transition-colors duration-300 hover:text-white/30">{link}</p>
+					<p className="text-md opacity-50 transition-colors duration-300 hover:opacity-30">{link}</p>
 				</div>
 			</div>
-			<div className="cursor-default rounded-lg bg-[#1a1a1a] p-2 text-white/60">{topic}</div>
+			<div className="cursor-default rounded-lg bg-[#888888] p-2 text-white dark:bg-[#1a1a1a] dark:text-opacity-50">
+				{topic}
+			</div>
 		</div>
 	)
 }
@@ -86,21 +88,27 @@ export const SearchWrapper = () => {
 			<div className="flex h-full w-full justify-center overflow-hidden">
 				<div className="w-full max-w-3xl px-4 sm:px-6 lg:px-8">
 					<div className="relative mb-2 mt-5 flex w-full flex-row items-center transition-colors duration-300 hover:text-white/60">
-						<IoSearch className="absolute left-3 text-white/30" size={20} />
+						<IoSearch className="absolute left-3 text-black/30 dark:text-white/30" size={20} />
 						<input
 							type="text"
 							autoFocus
 							value={searchText}
 							onChange={inputChange}
 							onKeyDown={handleKeyDown}
-							className="w-full rounded-[10px] bg-[#16181d] p-10 py-3 pl-10 pr-3 font-semibold tracking-wider text-white outline-none placeholder:font-light placeholder:text-white/30"
+							className="bg-input w-full rounded-[10px] p-10 py-3 pl-10 pr-3 font-semibold tracking-wider text-black/70 outline-none placeholder:font-light dark:text-white"
 							placeholder="Search..."
 						/>
 						{showAiPlaceholder && searchText && !showAiSearch && (
-							<div className="absolute right-10 text-sm text-white/30">press &quot;Enter&quot; for AI search</div>
+							<div className="absolute right-10 text-sm text-black/70 dark:text-white/30">
+								press &quot;Enter&quot; for AI search
+							</div>
 						)}
 						{searchText && (
-							<IoCloseOutline className="absolute right-3 cursor-pointer opacity-30" size={20} onClick={clearSearch} />
+							<IoCloseOutline
+								className="absolute right-3 cursor-pointer text-black/70 dark:text-white/30"
+								size={20}
+								onClick={clearSearch}
+							/>
 						)}
 					</div>
 					{showAiSearch ? (
