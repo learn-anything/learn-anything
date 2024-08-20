@@ -1,8 +1,5 @@
-from fastapi import APIRouter
+from pydantic import BaseModel
 
-router = APIRouter()
-
-@router.get("/example")
-def read_example():
-    return {"message": "This is an example route."}
-
+class ExampleModel(BaseModel):
+    id: int
+    name: str
