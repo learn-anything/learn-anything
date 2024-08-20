@@ -13,3 +13,8 @@ pnpm-lock.yaml
 # other
 private
 past-*
+# fastapi
+app/__pycache__/
+*.pyc
+*.pyo
+*.pyd
