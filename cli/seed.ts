@@ -1,5 +1,5 @@
 import { getEnvOrThrow } from "@/lib/utils"
-import { ListOfForceGraphs } from "@/web/lib/schema/master/force-graph"
+import { Connection, ForceGraph, ListOfConnections, ListOfForceGraphs } from "@/web/lib/schema/master/force-graph"
 import { PublicGlobalGroup, PublicGlobalGroupRoot } from "@/web/lib/schema/master/public-group"
 import {
 	LatestGlobalGuide,
@@ -92,6 +92,8 @@ async function startJazzWorker() {
  * Sets up the global and admin groups.
  */
 async function setup() {
+	console.log("Starting setup")
+
 	const worker = await startJazzWorker()
 
 	/*
@@ -117,6 +119,8 @@ async function setup() {
 	// const adminGlobalGroup = Group.create({ owner: worker })
 	// adminGlobalGroup.addMember(user, "admin")
 	// await appendFile("./.env", `\nJAZZ_ADMIN_GLOBAL_GROUP=${JSON.stringify(adminGlobalGroup.id)}`)
+
+	console.log("Setup completed successfully", publicGlobalGroup.id)
 }
 
 /**
@@ -127,10 +131,12 @@ async function setup() {
 async function loadGlobalGroup() {
 	const worker = await startJazzWorker()
 
-	const globalGroupId = process.env.JAZZ_PUBLIC_GLOBAL_GROUP as ID<PublicGlobalGroup>
+	const globalGroupId = getEnvOrThrow("JAZZ_PUBLIC_GLOBAL_GROUP") as ID<PublicGlobalGroup>
+
 	const globalGroup = await PublicGlobalGroup.load(globalGroupId, worker, {
 		root: {
-			topics: [{ latestGlobalGuide: { sections: [] } }]
+			topics: [{ latestGlobalGuide: { sections: [] } }],
+			forceGraphs: [{ connections: [] }]
 		}
 	})
 
@@ -239,7 +245,6 @@ async function saveProcessedData(linkLists: Link[], topics: TopicJson[]) {
 			section.links.map(link => {
 				const linkModel = linkLists.find(l => l.url === link.url)
 				if (linkModel) {
-					console.log("link found", linkModel)
 					sectionModel.links?.push(linkModel)
 				}
 			})
@@ -265,15 +270,156 @@ async function prodSeed() {
 	const insertedLinks = await insertLinksInBatch(linkManager.getAllLinks())
 	await saveProcessedData(insertedLinks, processedData)
 
+	// wait 3 seconds before finishing
+	await new Promise(resolve => setTimeout(resolve, 3000))
+
 	console.log("Finished seeding data")
+}
+
+interface ForceGraphJson {
+	name: string
+	prettyName: string
+	connections: string[]
+}
+
+/**
+ * Manages links, handling deduplication and tracking duplicates.
+ */
+class ConnectionManager {
+	private connections: Map<string, string> = new Map()
+	private duplicateCount: number = 0
+
+	/**
+	 * Adds a connection to the manager, tracking duplicates.
+	 * @param connection - The connection to add.
+	 */
+	addConnection(connection: string) {
+		if (this.connections.has(connection)) {
+			this.duplicateCount++
+		} else {
+			this.connections.set(connection, connection)
+		}
+	}
+
+	/**
+	 * Gets all unique connections.
+	 * @returns An array of unique connections.
+	 */
+	getAllConnections() {
+		return Array.from(this.connections.values())
+	}
+
+	/**
+	 * Gets the count of duplicate connections.
+	 * @returns The number of duplicate connections.
+	 */
+	getDuplicateCount() {
+		return this.duplicateCount
+	}
+}
+
+/**
+ * Inserts connections in batch.
+ * @param connections - An array of string objects to insert.
+ * @returns A Promise that resolves to an array of created Connection models.
+ */
+async function insertConnectionsInBatch(connections: string[]) {
+	const globalGroup = await loadGlobalGroup()
+	const rows = []
+
+	for (const connection of connections) {
+		const connectionModel = Connection.create(
+			{
+				name: connection
+			},
+			{ owner: globalGroup }
+		)
+		rows.push(connectionModel)
+	}
+
+	return rows
+}
+
+/**
+ * Saves force graph data to the global group.
+ * @param connectionLists - An array of Connection models.
+ * @param forceGraphs - An array of ForceGraphJson objects.
+ */
+async function saveForceGraph(connectionLists: Connection[], forceGraphs: ForceGraphJson[]) {
+	const globalGroup = await loadGlobalGroup()
+
+	forceGraphs.map(forceGraph => {
+		const forceGraphModel = ForceGraph.create(
+			{
+				name: forceGraph.name,
+				prettyName: forceGraph.prettyName,
+				connections: ListOfConnections.create([], { owner: globalGroup })
+			},
+			{ owner: globalGroup }
+		)
+
+		forceGraph.connections.map(connection => {
+			const connectionModel = connectionLists.find(c => c.name === connection)
+			if (connectionModel) {
+				forceGraphModel.connections?.push(connectionModel)
+			}
+		})
+
+		globalGroup.root.forceGraphs?.push(forceGraphModel)
+	})
+}
+
+async function forceGraphSeed() {
+	console.log("Starting to seed force graph data")
+
+	const directory = path.join(__dirname, "..", "private", "data", "edgedb")
+
+	const connectionManager = new ConnectionManager()
+	const processedData: ForceGraphJson[] = []
+
+	const files = await fs.readdir(directory)
+	const file = files.find(file => file === "force-graphs.json")
+
+	if (!file) {
+		console.error("No force-graphs.json file found")
+		return
+	}
+
+	const filePath = path.join(directory, file)
+
+	try {
+		const forceGraphs = JSON.parse(await fs.readFile(filePath, "utf-8")) as ForceGraphJson[]
+
+		for (const forceGraph of forceGraphs) {
+			if (forceGraph.connections.length) {
+				for (const connection of forceGraph.connections) {
+					connectionManager.addConnection(connection)
+				}
+			}
+
+			processedData.push(forceGraph)
+		}
+	} catch (error) {
+		console.error(`Error processing file ${file}:`, error)
+	}
+
+	console.log(`Collected ${connectionManager.getAllConnections().length} unique connections.`)
+	console.log(`Found ${connectionManager.getDuplicateCount()} duplicate connections.`)
+
+	const insertedConnections = await insertConnectionsInBatch(connectionManager.getAllConnections())
+	await saveForceGraph(insertedConnections, processedData)
+
+	// wait 3 seconds before finishing
+	await new Promise(resolve => setTimeout(resolve, 3000))
+	console.log("Finished seeding force graph data")
 }
 
 /**
  * Performs a full production rebuild.
  */
 async function fullProdRebuild() {
-	await setup()
 	await prodSeed()
+	await forceGraphSeed()
 }
 
 /**
@@ -296,11 +442,13 @@ async function seed() {
 			case "fullProdRebuild":
 				await fullProdRebuild()
 				break
+			case "forceGraph":
+				await forceGraphSeed()
+				break
 			default:
 				console.log("Unknown command")
 				break
 		}
-		console.log("done")
 	} catch (err) {
 		console.error("Error occurred:", err)
 	}

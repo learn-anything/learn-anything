@@ -32,11 +32,35 @@ async function readJazz() {
 						]
 					}
 				}
+			],
+			forceGraphs: [
+				{
+					connections: [{}]
+				}
 			]
 		}
 	})
 
 	if (!globalGroup) return // TODO: err
+
+	// wait 10 seconds
+	await new Promise(resolve => setTimeout(resolve, 10000))
+
+	/*
+	 * Log forceGraphs
+	 */
+	const asJsonForceGraphs = globalGroup.root.forceGraphs.map(node => {
+		console.log({ node }, "node")
+		return {
+			name: node.name,
+			prettyName: node.prettyName,
+			connections: node.connections?.map(connection => {
+				return {
+					name: connection?.name
+				}
+			})
+		}
+	})
 
 	const asJson = globalGroup.root.topics?.map(node => {
 		return {
@@ -58,13 +82,8 @@ async function readJazz() {
 		}
 	})
 
-	for (const topic of asJson) {
-		console.log(topic)
-
-		for (const section of topic.latestGlobalGuide.sections) {
-			console.log(section)
-		}
-	}
+	console.log({ asJsonForceGraphs }, "asJsonForceGraphs")
+	console.log({ asJson }, "asJson")
 }
 
 await run()
