@@ -9,7 +9,7 @@ interface Metadata {
 	url: string
 }
 
-const DEFAULT_VALUES = {
+export const DEFAULT_VALUES = {
 	TITLE: "",
 	DESCRIPTION: "",
 	FAVICON: null

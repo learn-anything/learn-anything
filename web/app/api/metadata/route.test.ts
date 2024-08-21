@@ -3,7 +3,7 @@
  */
 import { NextRequest } from "next/server"
 import axios from "axios"
-import { GET } from "./route"
+import { DEFAULT_VALUES, GET } from "./route"
 
 jest.mock("axios")
 const mockedAxios = axios as jest.Mocked<typeof axios>
@@ -66,8 +66,8 @@ describe("Metadata Fetcher", () => {
 
 		expect(response.status).toBe(200)
 		expect(data).toEqual({
-			title: "No title available",
-			description: "No description available",
+			title: DEFAULT_VALUES.TITLE,
+			description: DEFAULT_VALUES.DESCRIPTION,
 			favicon: null,
 			url: "https://example.com"
 		})
@@ -92,8 +92,8 @@ describe("Metadata Fetcher", () => {
 
 		expect(response.status).toBe(200)
 		expect(data).toEqual({
-			title: "No title available",
-			description: "No description available",
+			title: DEFAULT_VALUES.TITLE,
+			description: DEFAULT_VALUES.DESCRIPTION,
 			favicon: null,
 			url: "https://example.com"
 		})
