@@ -11,7 +11,8 @@ export const createLinkSchema = z.object({
 	description: z.string().optional(),
 	completed: z.boolean().default(false),
 	notes: z.string().optional(),
-	learningState: z.enum(["wantToLearn", "learning", "learned"])
+	learningState: z.enum(["wantToLearn", "learning", "learned"]),
+	topic: z.string().nullable().optional()
 })
 
 export type LinkFormValues = z.infer<typeof createLinkSchema>

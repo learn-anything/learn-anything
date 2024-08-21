@@ -8,7 +8,6 @@ import { createLinkSchema, LinkFormValues } from "./schema"
 import { generateUniqueSlug } from "@/lib/utils"
 import { Form } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
-
 import { UrlInput } from "./partial/url-input"
 import { UrlBadge } from "./partial/url-badge"
 import { TitleInput } from "./partial/title-input"
@@ -29,7 +28,8 @@ const defaultValues: Partial<LinkFormValues> = {
 	description: "",
 	completed: false,
 	notes: "",
-	learningState: "wantToLearn"
+	learningState: "wantToLearn",
+	topic: null
 }
 
 export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
@@ -80,12 +80,13 @@ export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 				const personalLinks = me.root?.personalLinks?.toJSON() || []
 				const slug = generateUniqueSlug(personalLinks, values.title)
 				if (selectedLink) {
-					selectedLink.applyDiff({ ...values, slug })
+					selectedLink.applyDiff({ ...values, slug, topic: null })
 				} else {
 					const newPersonalLink = PersonalLink.create(
 						{
 							...values,
 							slug,
+							topic: null,
 							sequence: me.root?.personalLinks?.length || 1,
 							createdAt: new Date(),
 							updatedAt: new Date()
