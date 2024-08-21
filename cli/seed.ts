@@ -1,17 +1,16 @@
 import { getEnvOrThrow } from "@/lib/utils"
-import { GlobalTopic, LaAccount } from "@/web/lib/schema"
+import { LaAccount } from "@/web/lib/schema"
 import { startWorker } from "jazz-nodejs"
 import { Group, ID } from "jazz-tools"
 import { appendFile } from "node:fs/promises"
 import path from "path"
 import fs from "fs/promises"
 import {
-	GlobalTopicGraph,
-	ListOfTopicGraphNodes,
+	ListOfGlobalTopics,
 	PublicGlobalGroup,
 	PublicGlobalGroupRoot,
-	TopicGraphNode
-} from "@/web/lib/schema/global-topic-graph"
+	GlobalTopic
+} from "@/web/lib/schema/global-topic"
 
 const JAZZ_WORKER_SECRET = getEnvOrThrow("JAZZ_WORKER_SECRET")
 
@@ -65,7 +64,6 @@ async function prodSeed() {
 	const globalGroup = await (
 		(await PublicGlobalGroup.load(process.env.JAZZ_PUBLIC_GLOBAL_GROUP as ID<Group>, worker, {})) as PublicGlobalGroup
 	).ensureLoaded({ root: true })
-	console.log(globalGroup, "group")
 	if (!globalGroup) return // TODO: err
 
 	const folderPath = path.join(__dirname, "..", "private")
@@ -76,13 +74,13 @@ async function prodSeed() {
 		const stats = await fs.stat(filePath)
 
 		if (stats.isDirectory()) {
-			// // TODO: do after connections.json
-			// if (file === "edgedb-dump") {
-			// 	const subFiles = await fs.readdir(filePath)
-			// 	for (const subFile of subFiles) {
-			// 		const subFilePath = path.join(filePath, subFile)
-			// 	}
-			// }
+			if (file === "edgedb-dump") {
+				const edgedbFiles = await fs.readdir(filePath)
+				for (const subFile of edgedbFiles) {
+					const edgedbFilePath = path.join(filePath, subFile)
+					console.log(edgedbFilePath, "file path")
+				}
+			}
 		} else if (stats.isFile()) {
 			if (file === "topics.json") {
 				const content = await fs.readFile(filePath, "utf-8")
@@ -92,18 +90,18 @@ async function prodSeed() {
 					GlobalTopic.create({ name: topic.name, prettyName: topic.prettyName }, { owner: globalGroup })
 				})
 			}
-			// TODO: intentional mistake with nn (remove after)
+			// TODO: intentional mistake with nn (remove after edgedb dump is ported, topics etc.)
 			if (file === "connections.jsonn") {
 				const content = await fs.readFile(filePath, "utf-8")
 				const topics = JSON.parse(content) as Array<{ name: string; prettyName: string; connections: string[] }>
 
-				const createdTopics: { [name: string]: { node: TopicGraphNode; connections: string[] } } = Object.fromEntries(
+				const createdTopics: { [name: string]: { node: GlobalTopic; connections: string[] } } = Object.fromEntries(
 					topics.map(topic => {
-						const node = TopicGraphNode.create(
+						const node = GlobalTopic.create(
 							{
 								name: topic.name,
 								prettyName: topic.prettyName,
-								connectedTopics: ListOfTopicGraphNodes.create([], { owner: globalGroup })
+								connections: ListOfGlobalTopics.create([], { owner: globalGroup })
 							},
 							{ owner: globalGroup }
 						)
@@ -117,15 +115,15 @@ async function prodSeed() {
 				for (const [topicName, { node, connections }] of Object.entries(createdTopics)) {
 					for (const connection of connections) {
 						const connectionNode = createdTopics[connection].node
-						node.connectedTopics!.push(connectionNode)
+						node.connections!.push(connectionNode)
 					}
 				}
-				const graph = GlobalTopicGraph.create(
-					Object.values(createdTopics).map(({ node }) => node),
-					{ owner: globalGroup }
-				)
+				// const graph = GlobalTopicGraph.create(
+				// 	Object.values(createdTopics).map(({ node }) => node),
+				// 	{ owner: globalGroup }
+				// )
 				// await writeToOutput(graph, "graph.json")
-				globalGroup.root.topicGraph = graph
+				// globalGroup.root.topics = graph
 				// await new Promise(resolve => setTimeout(resolve, 1000))
 			}
 		}

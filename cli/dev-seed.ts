@@ -1,17 +1,15 @@
 import { startWorker } from "jazz-nodejs"
-import { Account, Group, ID, WasmCrypto } from "jazz-tools"
+import { ID } from "jazz-tools"
 import { appendFile, readFile, readdir, stat } from "node:fs/promises"
 import path from "path"
 import {
-	// GlobalTopicGraph,
 	ListOfTopicConnections,
-	ListOfTopicGraphNodes,
+	ListOfGlobalTopics,
 	PublicGlobalGroup,
 	PublicGlobalGroupRoot,
 	TopicConnection,
-	TopicGraphNode
-} from "@/web/lib/schema/global-topic-graph"
-import { LaAccount } from "@/web/lib/schema"
+	GlobalTopic
+} from "@/web/lib/schema/global-topic"
 import { getEnvOrThrow } from "@/lib/utils"
 
 const JAZZ_WORKER_ACCOUNT_ID = getEnvOrThrow("JAZZ_WORKER_ACCOUNT_ID")
@@ -31,7 +29,7 @@ async function setup() {
 		const publicGlobalGroup = PublicGlobalGroup.create({ owner: worker })
 		publicGlobalGroup.root = PublicGlobalGroupRoot.create(
 			{
-				topicGraph: ListOfTopicGraphNodes.create([], { owner: publicGlobalGroup })
+				topics: ListOfGlobalTopics.create([], { owner: publicGlobalGroup })
 			},
 			{ owner: publicGlobalGroup }
 		)
@@ -58,7 +56,7 @@ async function prodSeed() {
 		const globalGroupId = process.env.JAZZ_PUBLIC_GLOBAL_GROUP as ID<PublicGlobalGroup>
 		const globalGroup = await PublicGlobalGroup.load(globalGroupId, worker, {
 			root: {
-				topicGraph: [{ connections: [] }]
+				topics: [{ connections: [] }]
 			}
 		})
 		if (!globalGroup) throw new Error("Failed to load global group")
@@ -95,7 +93,7 @@ async function processTopics(topics: Array<{ name: string; prettyName: string; c
 	const globalGroupId = process.env.JAZZ_PUBLIC_GLOBAL_GROUP as ID<PublicGlobalGroup>
 	const globalGroup = await PublicGlobalGroup.load(globalGroupId, worker, {
 		root: {
-			topicGraph: [{ connections: [] }]
+			topics: [{ connections: [] }]
 		}
 	})
 	if (!globalGroup) throw new Error("Failed to load global group")
@@ -129,11 +127,11 @@ async function processTopics(topics: Array<{ name: string; prettyName: string; c
 		createdConnections.set(value, connectionNode)
 	})
 
-	// Step 2: Create TopicGraphNodes with unique connections
-	const createdTopics = new Map<string, TopicGraphNode>()
+	// Step 2: Create Topics with unique connections
+	const createdTopics = new Map<string, GlobalTopic>()
 
 	topics.forEach(topic => {
-		const node = TopicGraphNode.create(
+		const node = GlobalTopic.create(
 			{
 				name: topic.name,
 				prettyName: topic.prettyName,
@@ -152,7 +150,7 @@ async function processTopics(topics: Array<{ name: string; prettyName: string; c
 			for (const connection of connections) {
 				const connectionNode = createdConnections.get(connection)
 
-				if ( connectionNode && connectionNode.id) {
+				if (connectionNode && connectionNode.id) {
 					console.log("Adding connection to topic", topic, connectionNode)
 					topic.connections?.push(connectionNode)
 				}
@@ -161,17 +159,17 @@ async function processTopics(topics: Array<{ name: string; prettyName: string; c
 	}
 
 	Array.from(createdTopics.values()).forEach(topic => {
-		if ( topic && topic.id) {
+		if (topic && topic.id) {
 			console.log("Adding topic to graph", topic)
-			globalGroup.root.topicGraph?.push(topic)
+			globalGroup.root.topics?.push(topic)
 		}
 	})
 
 	// Step 4: Create the graph
-	// const graph = ListOfTopicGraphNodes.create(Array.from(createdTopics.values()), { owner: globalGroup })
+	// const graph = ListOfTopics.create(Array.from(createdTopics.values()), { owner: globalGroup })
 
 	// Step 5: Assign the graph to the global group
-	// globalGroup.root.topicGraph = graph
+	// globalGroup.root.topics = graph
 
 	await new Promise(resolve => setTimeout(resolve, 1000))
 }
