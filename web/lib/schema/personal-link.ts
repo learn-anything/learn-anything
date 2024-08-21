@@ -8,6 +8,7 @@ class BaseModel extends CoMap {
 
 export class PersonalLink extends BaseModel {
 	url = co.string
+	icon = co.optional.string // is an icon URL
 	title = co.string
 	slug = co.string
 	description = co.optional.string
