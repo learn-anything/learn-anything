@@ -1,12 +1,32 @@
 import { co, CoList, CoMap, Group } from "jazz-tools"
+
+export class GlobalLink extends CoMap {
+	name = co.string
+	url = co.string
+}
+
+export class GlobalLinks extends CoList.Of(co.ref(GlobalLink)) {}
+
+export class Section extends CoMap {
+	name = co.string
+	links = co.ref(GlobalLinks)
+}
+
+export class ListOfSections extends CoList.Of(co.ref(Section)) {}
+
+export class GlobalGuide extends CoMap {
+	sections = co.ref(ListOfSections)
+}
 export class TopicConnection extends CoMap {
 	name = co.string
 }
+
 export class ListOfTopicConnections extends CoList.Of(co.ref(TopicConnection)) {}
 export class GlobalTopic extends CoMap {
 	name = co.string
 	prettyName = co.string
 	connections = co.optional.ref(ListOfTopicConnections)
+	globalGuide = co.ref(GlobalGuide)
 }
 
 export class ListOfGlobalTopics extends CoList.Of(co.ref(GlobalTopic)) {}
