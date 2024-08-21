@@ -1,7 +1,7 @@
-import { customUrlSchema } from "./schema"
+import { urlSchema } from "./schema"
 
 function validateUrl(url: string): boolean {
-	const result = customUrlSchema.safeParse(url)
+	const result = urlSchema.safeParse(url)
 	return result.success
 }
 
