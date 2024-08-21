@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
 import { createLinkSchema, LinkFormValues } from "./schema"
-import { generateUniqueSlug } from "@/lib/utils"
+import { cn, generateUniqueSlug } from "@/lib/utils"
 import { Form } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { UrlInput } from "./partial/url-input"
@@ -64,14 +64,24 @@ export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 		const fetchMetadata = async (url: string) => {
 			setIsFetching(true)
 			try {
-				const res = await fetch(`/api/metadata?url=${encodeURIComponent(url)}`, { cache: "force-cache" })
+				const res = await fetch(`/api/metadata?url=${encodeURIComponent(url)}`, { cache: "no-cache" })
 				const data = await res.json()
 				setUrlFetched(data.url)
-				form.setValue("url", data.url)
-				form.setValue("icon", data.icon)
-				form.setValue("title", data.title)
-				if (!form.getValues("description")) form.setValue("description", data.description)
+				form.setValue("url", data.url, {
+					shouldValidate: true
+				})
+				form.setValue("icon", data.icon ?? "", {
+					shouldValidate: true
+				})
+				form.setValue("title", data.title, {
+					shouldValidate: true
+				})
+				if (!form.getValues("description"))
+					form.setValue("description", data.description, {
+						shouldValidate: true
+					})
 				form.setFocus("title")
+				console.log(form.formState.isValid, "form state after....")
 			} catch (err) {
 				console.error("Failed to fetch metadata", err)
 			} finally {
@@ -120,15 +130,18 @@ export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 			form.reset({ url: "", title: "", icon: "", description: "" })
 		}
 
+		const canSubmit = form.formState.isValid && !form.formState.isSubmitting
+
 		return (
 			<div className="p-3 transition-all">
-				<div className="bg-muted/30 rounded-md border">
+				<div className={cn("bg-muted/30 relative rounded-md border", isFetching && "opacity-50")}>
 					<Form {...form}>
 						<form onSubmit={form.handleSubmit(onSubmit)} className="relative min-w-0 flex-1" ref={ref}>
+							{isFetching && <div className="absolute inset-0 z-10 bg-transparent" aria-hidden="true" />}
 							<div className="flex flex-col gap-1.5 p-3">
 								<div className="flex flex-row items-start justify-between">
-									<UrlInput urlFetched={urlFetched} fetchMetadata={fetchMetadata} />
-									<TitleInput urlFetched={urlFetched} />
+									<UrlInput urlFetched={urlFetched} fetchMetadata={fetchMetadata} isFetchingUrlMetadata={isFetching} />
+									{urlFetched && <TitleInput urlFetched={urlFetched} />}
 
 									<div className="flex flex-row items-center gap-2">
 										<LearningStateSelector />
@@ -143,14 +156,39 @@ export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 							<div className="flex flex-row items-center justify-between gap-2 rounded-b-md border-t px-3 py-2">
 								<NotesSection />
 
-								<div className="flex w-auto items-center justify-end gap-x-2">
-									<Button size="sm" type="button" variant="ghost" onClick={handleCancel}>
-										Cancel
-									</Button>
-									<Button size="sm" type="submit">
-										Save
-									</Button>
-								</div>
+								{isFetching && (
+									<div className="flex w-auto items-center justify-end gap-x-2">
+										<span className="text-muted-foreground flex items-center text-sm">
+											<svg className="mr-2 h-4 w-4 animate-spin" viewBox="0 0 24 24">
+												<circle
+													className="opacity-25"
+													cx="12"
+													cy="12"
+													r="10"
+													stroke="currentColor"
+													strokeWidth="4"
+													fill="none"
+												/>
+												<path
+													className="opacity-75"
+													fill="currentColor"
+													d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+												/>
+											</svg>
+											Fetching metadata...
+										</span>
+									</div>
+								)}
+								{!isFetching && (
+									<div className="flex w-auto items-center justify-end gap-x-2">
+										<Button size="sm" type="button" variant="ghost" onClick={handleCancel}>
+											Cancel
+										</Button>
+										<Button size="sm" type="submit" disabled={!canSubmit}>
+											Save
+										</Button>
+									</div>
+								)}
 							</div>
 						</form>
 					</Form>

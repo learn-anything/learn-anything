@@ -1,18 +1,18 @@
 "use client"
 
-import * as React from "react"
+import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { LinkIcon, Trash2Icon } from "lucide-react"
-import Link from "next/link"
-import Image from "next/image"
-import { useSortable } from "@dnd-kit/sortable"
-import { CSS } from "@dnd-kit/utilities"
 import { PersonalLink } from "@/lib/schema/personal-link"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { useSortable } from "@dnd-kit/sortable"
+import { CSS } from "@dnd-kit/utilities"
 import { ConfirmOptions } from "@omit/react-confirm-dialog"
-import { Badge } from "@/components/ui/badge"
+import { LinkIcon, Trash2Icon } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
+import * as React from "react"
 import { LinkForm } from "./form/link-form"
+import { useEffect } from "react"
 
 interface ListItemProps {
 	confirm: (options: ConfirmOptions) => Promise<boolean>
@@ -25,6 +25,8 @@ interface ListItemProps {
 	setFocusedId: (id: string | null) => void
 	registerRef: (id: string, ref: HTMLLIElement | null) => void
 	onDelete?: (personalLink: PersonalLink) => void
+	showDeleteIconForLinkId: string | null
+	setShowDeleteIconForLinkId: (id: string | null) => void
 }
 
 export const ListItem: React.FC<ListItemProps> = ({
@@ -37,11 +39,24 @@ export const ListItem: React.FC<ListItemProps> = ({
 	isFocused,
 	setFocusedId,
 	registerRef,
-	onDelete
+	onDelete,
+	showDeleteIconForLinkId,
+	setShowDeleteIconForLinkId
 }) => {
 	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: personalLink.id, disabled })
 	const formRef = React.useRef<HTMLFormElement>(null)
-	const [showDeleteIcon, setShowDeleteIcon] = React.useState(false)
+
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			console.log("ran..")
+			if (formRef.current && !formRef.current.contains(event.target as Node)) {
+				handleCancel()
+			}
+		}
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside)
+		}
+	}, [])
 
 	const style = {
 		transform: CSS.Transform.toString(transform),
@@ -79,7 +94,7 @@ export const ListItem: React.FC<ListItemProps> = ({
 	}
 
 	const handleRowClick = () => {
-		setShowDeleteIcon(!showDeleteIcon)
+		setShowDeleteIconForLinkId(personalLink.id)
 	}
 
 	const handleRowDoubleClick = () => {
@@ -124,7 +139,11 @@ export const ListItem: React.FC<ListItemProps> = ({
 			{...listeners}
 			tabIndex={0}
 			onFocus={() => setFocusedId(personalLink.id)}
-			onBlur={() => setFocusedId(null)}
+			onBlur={() => {
+				setFocusedId(null)
+
+				// setShowDeleteIconForLinkId(null)
+			}}
 			onKeyDown={handleKeyDown}
 			className={cn("hover:bg-muted/50 relative flex h-14 cursor-default items-center outline-none xl:h-11", {
 				"bg-muted/50": isFocused
@@ -181,12 +200,16 @@ export const ListItem: React.FC<ListItemProps> = ({
 				</div>
 
 				<div className="flex shrink-0 items-center gap-x-4">
-					<Badge variant="secondary">Topic Name</Badge>
-					{showDeleteIcon && (
+					{/* TODO: add back with real topic name */}
+					{/* <Badge variant="secondary">Topic Name</Badge> */}
+					{showDeleteIconForLinkId === personalLink.id && (
 						<Button
 							size="icon"
 							className="text-destructive h-auto w-auto bg-transparent hover:bg-transparent hover:text-red-500"
-							onClick={e => handleDelete(e, personalLink)}
+							onClick={e => {
+								e.stopPropagation()
+								handleDelete(e, personalLink)
+							}}
 						>
 							<Trash2Icon size={16} />
 						</Button>

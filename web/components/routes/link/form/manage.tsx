@@ -1,11 +1,13 @@
 "use client"
 
-import React, { useEffect, useRef } from "react"
-import { useAtom } from "jotai"
+import { Button } from "@/components/ui/button"
 import { linkEditIdAtom, linkLearningStateSelectorAtom, linkShowCreateAtom, linkTopicSelectorAtom } from "@/store/link"
+import { useAtom } from "jotai"
+import React, { useEffect, useRef } from "react"
 import { useKey } from "react-use"
-import { FloatingButton } from "./partial/floating-button"
 import { LinkForm } from "./link-form"
+import { FloatingButton } from "./partial/floating-button"
+import { LaIcon } from "@/components/custom/la-icon"
 
 const LinkManage: React.FC = () => {
 	const [showCreate, setShowCreate] = useAtom(linkShowCreateAtom)
@@ -18,6 +20,7 @@ const LinkManage: React.FC = () => {
 
 	const toggleForm = (event: React.MouseEvent) => {
 		event.stopPropagation()
+		if (showCreate) return
 		setShowCreate(prev => !prev)
 	}
 
@@ -25,6 +28,7 @@ const LinkManage: React.FC = () => {
 		setShowCreate(false)
 	}
 
+	// wipes the data from the form when the form is closed
 	useEffect(() => {
 		if (!showCreate) {
 			formRef.current?.reset()
@@ -58,7 +62,22 @@ const LinkManage: React.FC = () => {
 	return (
 		<>
 			{showCreate && <LinkForm ref={formRef} onSuccess={handleFormClose} onCancel={handleFormClose} />}
-			<FloatingButton ref={buttonRef} onClick={toggleForm} isOpen={showCreate} />
+
+			<div className="absolute bottom-0 m-0 flex w-full list-none border-t border-[#dedede] bg-white p-2.5 text-center align-middle font-semibold leading-[13px] no-underline">
+				<div className="mx-auto flex flex-row items-center justify-center gap-2">
+					{showCreate && (
+						<Button variant={"ghost"} onClick={toggleForm}>
+							<LaIcon name="Trash" />
+						</Button>
+					)}
+					{!showCreate && (
+						<Button variant={"ghost"} onClick={toggleForm}>
+							<LaIcon name="Plus" />
+						</Button>
+					)}
+				</div>
+			</div>
+			{/* <FloatingButton ref={buttonRef} onClick={toggleForm} isOpen={showCreate} /> */}
 		</>
 	)
 }

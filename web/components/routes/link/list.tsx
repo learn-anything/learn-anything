@@ -32,6 +32,7 @@ const LinkList = () => {
 	const [focusedId, setFocusedId] = useState<string | null>(null)
 	const [draggingId, setDraggingId] = useState<string | null>(null)
 	const linkRefs = useRef<{ [key: string]: HTMLLIElement | null }>({})
+	const [showDeleteIconForLinkId, setShowDeleteIconForLinkId] = useState<string | null>(null)
 
 	let sortedLinks =
 		sort === "title" && personalLinks
@@ -187,6 +188,7 @@ const LinkList = () => {
 
 	return (
 		<div className="relative z-20">
+			{/* {editId && <div className="absolute inset-0 z-30 bg-black/20" onClick={() => setEditId(null)} />} */}
 			<DndContext
 				sensors={sensors}
 				collisionDetection={closestCenter}
@@ -210,6 +212,8 @@ const LinkList = () => {
 										isFocused={focusedId === linkItem.id}
 										setFocusedId={setFocusedId}
 										onDelete={handleDelete}
+										showDeleteIconForLinkId={showDeleteIconForLinkId}
+										setShowDeleteIconForLinkId={setShowDeleteIconForLinkId}
 									/>
 								)
 						)}

@@ -21,6 +21,8 @@ export async function GET(request: NextRequest) {
 	const { searchParams } = new URL(request.url)
 	let url = searchParams.get("url")
 
+	await new Promise(resolve => setTimeout(resolve, 1000))
+
 	if (!url) {
 		return NextResponse.json({ error: "URL is required" }, { status: 400 })
 	}
