@@ -67,6 +67,7 @@ export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 				const res = await fetch(`/api/metadata?url=${encodeURIComponent(url)}`, { cache: "force-cache" })
 				const data = await res.json()
 				setUrlFetched(data.url)
+				form.setValue("url", data.url)
 				form.setValue("icon", data.icon)
 				form.setValue("title", data.title)
 				if (!form.getValues("description")) form.setValue("description", data.description)
