@@ -47,6 +47,7 @@ export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 
 		React.useEffect(() => {
 			if (selectedLink) {
+				setUrlFetched(selectedLink.url)
 				form.reset({
 					url: selectedLink.url,
 					title: selectedLink.title,
@@ -123,16 +124,20 @@ export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 								<div className="flex flex-row items-start justify-between">
 									<UrlInput urlFetched={urlFetched} fetchMetadata={fetchMetadata} />
 									<TitleInput urlFetched={urlFetched} />
+
 									<div className="flex flex-row items-center gap-2">
 										<LearningStateSelector />
 										<TopicSelector />
 									</div>
 								</div>
+
 								<DescriptionInput />
 								<UrlBadge urlFetched={urlFetched} handleResetUrl={handleResetUrl} />
 							</div>
+
 							<div className="flex flex-row items-center justify-between gap-2 rounded-b-md border-t px-3 py-2">
 								<NotesSection />
+
 								<div className="flex w-auto items-center justify-end gap-x-2">
 									<Button size="sm" type="button" variant="ghost" onClick={handleCancel}>
 										Cancel
