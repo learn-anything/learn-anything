@@ -2,15 +2,10 @@ import { startWorker } from "jazz-nodejs"
 import { ID } from "jazz-tools"
 import { appendFile, readFile, readdir, stat } from "node:fs/promises"
 import path from "path"
-import {
-	ListOfTopicConnections,
-	ListOfGlobalTopics,
-	PublicGlobalGroup,
-	PublicGlobalGroupRoot,
-	TopicConnection,
-	GlobalTopic
-} from "@/web/lib/schema/master/topic"
 import { getEnvOrThrow } from "@/lib/utils"
+import { PublicGlobalGroup, PublicGlobalGroupRoot } from "@/web/lib/schema/master/public-group"
+import { Connection, ForceGraph, ListOfConnections, ListOfForceGraphs } from "@/web/lib/schema/master/force-graph"
+import { ListOfTopics } from "@/web/lib/schema"
 
 const JAZZ_WORKER_ACCOUNT_ID = getEnvOrThrow("JAZZ_WORKER_ACCOUNT_ID")
 const JAZZ_WORKER_SECRET = getEnvOrThrow("JAZZ_WORKER_SECRET")
@@ -29,7 +24,8 @@ async function setup() {
 		const publicGlobalGroup = PublicGlobalGroup.create({ owner: worker })
 		publicGlobalGroup.root = PublicGlobalGroupRoot.create(
 			{
-				topics: ListOfGlobalTopics.create([], { owner: publicGlobalGroup })
+				forceGraphs: ListOfForceGraphs.create([], { owner: publicGlobalGroup }),
+				topics: ListOfTopics.create([], { owner: publicGlobalGroup })
 			},
 			{ owner: publicGlobalGroup }
 		)
@@ -56,7 +52,7 @@ async function prodSeed() {
 		const globalGroupId = process.env.JAZZ_PUBLIC_GLOBAL_GROUP as ID<PublicGlobalGroup>
 		const globalGroup = await PublicGlobalGroup.load(globalGroupId, worker, {
 			root: {
-				topics: [{ connections: [] }]
+				forceGraphs: [{ connections: [] }]
 			}
 		})
 		if (!globalGroup) throw new Error("Failed to load global group")
@@ -71,12 +67,12 @@ async function prodSeed() {
 			const stats = await stat(filePath)
 
 			if (stats.isFile() && file === "connections.json") {
-				const topics = (await readJsonFile(filePath)) as Array<{
+				const forceGraphs = (await readJsonFile(filePath)) as Array<{
 					name: string
 					prettyName: string
 					connections: string[]
 				}>
-				await processTopics(topics)
+				await processTopics(forceGraphs)
 			}
 		}
 
@@ -87,13 +83,13 @@ async function prodSeed() {
 	}
 }
 
-async function processTopics(topics: Array<{ name: string; prettyName: string; connections: string[] }>) {
+async function processTopics(forceGraphs: Array<{ name: string; prettyName: string; connections: string[] }>) {
 	const { worker } = await createWorker()
 
 	const globalGroupId = process.env.JAZZ_PUBLIC_GLOBAL_GROUP as ID<PublicGlobalGroup>
 	const globalGroup = await PublicGlobalGroup.load(globalGroupId, worker, {
 		root: {
-			topics: [{ connections: [] }]
+			forceGraphs: [{ connections: [] }]
 		}
 	})
 	if (!globalGroup) throw new Error("Failed to load global group")
@@ -101,18 +97,18 @@ async function processTopics(topics: Array<{ name: string; prettyName: string; c
 	// Step 1: Create a map of all unique connections
 	const allConnections = new Map<string, Set<string>>()
 
-	topics.forEach(topic => {
-		if (!allConnections.has(topic.name)) {
-			allConnections.set(topic.name, new Set())
+	forceGraphs.forEach(forceGraph => {
+		if (!allConnections.has(forceGraph.name)) {
+			allConnections.set(forceGraph.name, new Set())
 		}
 
-		topic.connections.forEach(connection => {
-			allConnections.get(topic.name)!.add(connection)
+		forceGraph.connections.forEach(connection => {
+			allConnections.get(forceGraph.name)!.add(connection)
 
 			if (!allConnections.has(connection)) {
 				allConnections.set(connection, new Set())
 			}
-			allConnections.get(connection)!.add(topic.name)
+			allConnections.get(connection)!.add(forceGraph.name)
 		})
 	})
 
@@ -120,48 +116,48 @@ async function processTopics(topics: Array<{ name: string; prettyName: string; c
 	const connections = Array.from(allConnections.values()).map(connections => Array.from(connections))
 	const uniqueConnections = [...new Set(connections.flat())]
 
-	const createdConnections = new Map<string, TopicConnection>()
+	const createdConnections = new Map<string, Connection>()
 
 	uniqueConnections.forEach(value => {
-		const connectionNode = TopicConnection.create({ name: value }, { owner: globalGroup })
+		const connectionNode = Connection.create({ name: value }, { owner: globalGroup })
 		createdConnections.set(value, connectionNode)
 	})
 
 	// Step 2: Create Topics with unique connections
-	const createdTopics = new Map<string, GlobalTopic>()
+	const createdTopics = new Map<string, ForceGraph>()
 
-	topics.forEach(topic => {
-		const node = GlobalTopic.create(
+	forceGraphs.forEach(forceGraph => {
+		const node = ForceGraph.create(
 			{
-				name: topic.name,
-				prettyName: topic.prettyName,
-				connections: ListOfTopicConnections.create([], { owner: globalGroup })
+				name: forceGraph.name,
+				prettyName: forceGraph.prettyName,
+				connections: ListOfConnections.create([], { owner: globalGroup })
 			},
 			{ owner: globalGroup }
 		)
-		createdTopics.set(topic.name, node)
+		createdTopics.set(forceGraph.name, node)
 	})
 
 	// Step 3: Add connections to each node
-	for (const [topicName, connections] of allConnections) {
-		const topic = createdTopics.get(topicName)
+	for (const [forceGraphName, connections] of allConnections) {
+		const forceGraph = createdTopics.get(forceGraphName)
 
-		if (topic && topic.id) {
+		if (forceGraph && forceGraph.id) {
 			for (const connection of connections) {
 				const connectionNode = createdConnections.get(connection)
 
 				if (connectionNode && connectionNode.id) {
-					console.log("Adding connection to topic", topic, connectionNode)
-					topic.connections?.push(connectionNode)
+					console.log("Adding connection to forceGraph", forceGraph, connectionNode)
+					forceGraph.connections?.push(connectionNode)
 				}
 			}
 		}
 	}
 
-	Array.from(createdTopics.values()).forEach(topic => {
-		if (topic && topic.id) {
-			console.log("Adding topic to graph", topic)
-			globalGroup.root.topics?.push(topic)
+	Array.from(createdTopics.values()).forEach(forceGraph => {
+		if (forceGraph && forceGraph.id) {
+			console.log("Adding forceGraph to graph", forceGraph)
+			globalGroup.root.forceGraphs?.push(forceGraph)
 		}
 	})
 
@@ -169,7 +165,7 @@ async function processTopics(topics: Array<{ name: string; prettyName: string; c
 	// const graph = ListOfTopics.create(Array.from(createdTopics.values()), { owner: globalGroup })
 
 	// Step 5: Assign the graph to the global group
-	// globalGroup.root.topics = graph
+	// globalGroup.root.forceGraphs = graph
 
 	await new Promise(resolve => setTimeout(resolve, 1000))
 }

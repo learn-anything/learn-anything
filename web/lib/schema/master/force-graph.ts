@@ -1,4 +1,4 @@
-import { co, CoList, CoMap, Group } from "jazz-tools"
+import { co, CoList, CoMap } from "jazz-tools"
 
 export class Connection extends CoMap {
 	name = co.string
