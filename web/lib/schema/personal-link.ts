@@ -1,5 +1,5 @@
 import { co, CoList, CoMap, Encoders, ID } from "jazz-tools"
-import { GlobalTopic } from "./global-topic"
+import { Topic } from "./master/topic"
 
 class BaseModel extends CoMap {
 	createdAt = co.encoded(Encoders.Date)
@@ -17,7 +17,7 @@ export class PersonalLink extends BaseModel {
 	learningState = co.optional.literal("wantToLearn", "learning", "learned")
 	notes = co.optional.string
 	summary = co.optional.string
-	topic = co.optional.ref(GlobalTopic)
+	topic = co.optional.ref(Topic)
 }
 
 export class PersonalLinkLists extends CoList.Of(co.ref(PersonalLink)) {}
