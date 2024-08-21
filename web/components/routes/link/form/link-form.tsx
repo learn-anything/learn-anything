@@ -24,6 +24,7 @@ interface LinkFormProps extends React.ComponentPropsWithoutRef<"form"> {
 
 const defaultValues: Partial<LinkFormValues> = {
 	url: "",
+	icon: "",
 	title: "",
 	description: "",
 	completed: false,
@@ -50,6 +51,7 @@ export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 				setUrlFetched(selectedLink.url)
 				form.reset({
 					url: selectedLink.url,
+					icon: selectedLink.icon,
 					title: selectedLink.title,
 					description: selectedLink.description,
 					completed: selectedLink.completed,
@@ -65,6 +67,7 @@ export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 				const res = await fetch(`/api/metadata?url=${encodeURIComponent(url)}`, { cache: "force-cache" })
 				const data = await res.json()
 				setUrlFetched(data.url)
+				form.setValue("icon", data.icon)
 				form.setValue("title", data.title)
 				if (!form.getValues("description")) form.setValue("description", data.description)
 				form.setFocus("title")
@@ -80,6 +83,7 @@ export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 			try {
 				const personalLinks = me.root?.personalLinks?.toJSON() || []
 				const slug = generateUniqueSlug(personalLinks, values.title)
+
 				if (selectedLink) {
 					selectedLink.applyDiff({ ...values, slug, topic: null })
 				} else {
@@ -112,7 +116,7 @@ export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 		const handleResetUrl = () => {
 			setUrlFetched(null)
 			form.setFocus("url")
-			form.reset({ url: "", title: "", description: "" })
+			form.reset({ url: "", title: "", icon: "", description: "" })
 		}
 
 		return (
