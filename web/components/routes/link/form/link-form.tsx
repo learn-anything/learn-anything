@@ -8,7 +8,6 @@ import { createLinkSchema, LinkFormValues } from "./schema"
 import { generateUniqueSlug } from "@/lib/utils"
 import { Form } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
-
 import { UrlInput } from "./partial/url-input"
 import { UrlBadge } from "./partial/url-badge"
 import { TitleInput } from "./partial/title-input"
@@ -25,11 +24,13 @@ interface LinkFormProps extends React.ComponentPropsWithoutRef<"form"> {
 
 const defaultValues: Partial<LinkFormValues> = {
 	url: "",
+	icon: "",
 	title: "",
 	description: "",
 	completed: false,
 	notes: "",
-	learningState: "wantToLearn"
+	learningState: "wantToLearn",
+	topic: null
 }
 
 export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
@@ -47,8 +48,10 @@ export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 
 		React.useEffect(() => {
 			if (selectedLink) {
+				setUrlFetched(selectedLink.url)
 				form.reset({
 					url: selectedLink.url,
+					icon: selectedLink.icon,
 					title: selectedLink.title,
 					description: selectedLink.description,
 					completed: selectedLink.completed,
@@ -64,6 +67,8 @@ export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 				const res = await fetch(`/api/metadata?url=${encodeURIComponent(url)}`, { cache: "force-cache" })
 				const data = await res.json()
 				setUrlFetched(data.url)
+				form.setValue("url", data.url)
+				form.setValue("icon", data.icon)
 				form.setValue("title", data.title)
 				if (!form.getValues("description")) form.setValue("description", data.description)
 				form.setFocus("title")
@@ -79,13 +84,15 @@ export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 			try {
 				const personalLinks = me.root?.personalLinks?.toJSON() || []
 				const slug = generateUniqueSlug(personalLinks, values.title)
+
 				if (selectedLink) {
-					selectedLink.applyDiff({ ...values, slug })
+					selectedLink.applyDiff({ ...values, slug, topic: null })
 				} else {
 					const newPersonalLink = PersonalLink.create(
 						{
 							...values,
 							slug,
+							topic: null,
 							sequence: me.root?.personalLinks?.length || 1,
 							createdAt: new Date(),
 							updatedAt: new Date()
@@ -110,7 +117,7 @@ export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 		const handleResetUrl = () => {
 			setUrlFetched(null)
 			form.setFocus("url")
-			form.reset({ url: "", title: "", description: "" })
+			form.reset({ url: "", title: "", icon: "", description: "" })
 		}
 
 		return (
@@ -122,16 +129,20 @@ export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 								<div className="flex flex-row items-start justify-between">
 									<UrlInput urlFetched={urlFetched} fetchMetadata={fetchMetadata} />
 									<TitleInput urlFetched={urlFetched} />
+
 									<div className="flex flex-row items-center gap-2">
 										<LearningStateSelector />
 										<TopicSelector />
 									</div>
 								</div>
+
 								<DescriptionInput />
 								<UrlBadge urlFetched={urlFetched} handleResetUrl={handleResetUrl} />
 							</div>
+
 							<div className="flex flex-row items-center justify-between gap-2 rounded-b-md border-t px-3 py-2">
 								<NotesSection />
+
 								<div className="flex w-auto items-center justify-end gap-x-2">
 									<Button size="sm" type="button" variant="ghost" onClick={handleCancel}>
 										Cancel

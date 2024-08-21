@@ -1,16 +1,16 @@
 import { getEnvOrThrow } from "@/lib/utils"
-import { GlobalTopic, LaAccount } from "@/web/lib/schema"
+import { LaAccount } from "@/web/lib/schema"
+import {
+	GlobalTopic,
+	ListOfGlobalTopics,
+	PublicGlobalGroup,
+	PublicGlobalGroupRoot
+} from "@/web/lib/schema/global-topic"
+import fs from "fs/promises"
 import { startWorker } from "jazz-nodejs"
 import { Group, ID } from "jazz-tools"
 import { appendFile } from "node:fs/promises"
 import path from "path"
-import fs from "fs/promises"
-import {
-	ListOfTopicGraphNodes,
-	PublicGlobalGroup,
-	PublicGlobalGroupRoot,
-	TopicGraphNode
-} from "@/web/lib/schema/global-topic-graph"
 
 const JAZZ_WORKER_SECRET = getEnvOrThrow("JAZZ_WORKER_SECRET")
 
@@ -95,13 +95,13 @@ async function prodSeed() {
 				const content = await fs.readFile(filePath, "utf-8")
 				const topics = JSON.parse(content) as Array<{ name: string; prettyName: string; connections: string[] }>
 
-				const createdTopics: { [name: string]: { node: TopicGraphNode; connections: string[] } } = Object.fromEntries(
+				const createdTopics: { [name: string]: { node: GlobalTopic; connections: string[] } } = Object.fromEntries(
 					topics.map(topic => {
-						const node = TopicGraphNode.create(
+						const node = GlobalTopic.create(
 							{
 								name: topic.name,
 								prettyName: topic.prettyName,
-								connections: ListOfTopicGraphNodes.create([], { owner: globalGroup })
+								connections: ListOfGlobalTopics.create([], { owner: globalGroup })
 							},
 							{ owner: globalGroup }
 						)
@@ -123,7 +123,7 @@ async function prodSeed() {
 				// 	{ owner: globalGroup }
 				// )
 				// await writeToOutput(graph, "graph.json")
-				// globalGroup.root.topicGraph = graph
+				// globalGroup.root.topics = graph
 				// await new Promise(resolve => setTimeout(resolve, 1000))
 			}
 		}

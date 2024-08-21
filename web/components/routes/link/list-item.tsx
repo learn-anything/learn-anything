@@ -9,10 +9,10 @@ import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { PersonalLink } from "@/lib/schema/personal-link"
 import { cn } from "@/lib/utils"
-import { LinkForm } from "./form/manage"
 import { Button } from "@/components/ui/button"
 import { ConfirmOptions } from "@omit/react-confirm-dialog"
 import { Badge } from "@/components/ui/badge"
+import { LinkForm } from "./form/link-form"
 
 interface ListItemProps {
 	confirm: (options: ConfirmOptions) => Promise<boolean>
@@ -78,15 +78,11 @@ export const ListItem: React.FC<ListItemProps> = ({
 		setEditId(null)
 	}
 
-	// const handleRowClick = () => {
-	// 	console.log("Row clicked", personalLink.id)
-	// 	setEditId(personalLink.id)
-	// }
 	const handleRowClick = () => {
 		setShowDeleteIcon(!showDeleteIcon)
 	}
 
-	const handleDoubleClick = () => {
+	const handleRowDoubleClick = () => {
 		setEditId(personalLink.id)
 	}
 
@@ -134,7 +130,7 @@ export const ListItem: React.FC<ListItemProps> = ({
 				"bg-muted/50": isFocused
 			})}
 			onClick={handleRowClick}
-			onDoubleClick={handleDoubleClick}
+			onDoubleClick={handleRowDoubleClick}
 		>
 			<div className="flex grow justify-between gap-x-6 px-6 max-lg:px-4">
 				<div className="flex min-w-0 items-center gap-x-4">
@@ -146,9 +142,9 @@ export const ListItem: React.FC<ListItemProps> = ({
 						}}
 						className="border-muted-foreground border"
 					/>
-					{personalLink.isLink && personalLink.meta && (
+					{personalLink.icon && (
 						<Image
-							src={personalLink.meta.favicon}
+							src={personalLink.icon}
 							alt={personalLink.title}
 							className="size-5 rounded-full"
 							width={16}
@@ -160,14 +156,14 @@ export const ListItem: React.FC<ListItemProps> = ({
 							<p className="text-primary hover:text-primary line-clamp-1 text-sm font-medium xl:truncate">
 								{personalLink.title}
 							</p>
-							{personalLink.isLink && personalLink.meta && (
+							{personalLink.url && (
 								<div className="group flex items-center gap-x-1">
 									<LinkIcon
 										aria-hidden="true"
 										className="text-muted-foreground group-hover:text-primary size-3 flex-none"
 									/>
 									<Link
-										href={personalLink.meta.url}
+										href={personalLink.url}
 										passHref
 										prefetch={false}
 										target="_blank"
@@ -176,7 +172,7 @@ export const ListItem: React.FC<ListItemProps> = ({
 										}}
 										className="text-muted-foreground hover:text-primary text-xs"
 									>
-										<span className="xl:truncate">{personalLink.meta.url}</span>
+										<span className="xl:truncate">{personalLink.url}</span>
 									</Link>
 								</div>
 							)}

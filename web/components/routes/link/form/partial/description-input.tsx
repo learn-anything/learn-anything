@@ -10,7 +10,7 @@ export const DescriptionInput: React.FC<DescriptionInputProps> = () => {
 	const form = useFormContext<LinkFormValues>()
 
 	return (
-		<div className="pl-6">
+		<div>
 			<FormField
 				control={form.control}
 				name="description"

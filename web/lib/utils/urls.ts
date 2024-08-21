@@ -12,10 +12,10 @@ export function isUrl(text: string): boolean {
 	return pattern.test(text)
 }
 
-export function ensureUrlProtocol(url: string): string {
-	if (url.startsWith("http://") || url.startsWith("https://")) {
+export function ensureUrlProtocol(url: string, defaultProtocol: string = "https://"): string {
+	if (url.match(/^[a-zA-Z]+:\/\//)) {
 		return url
 	}
 
-	return `https://${url}`
+	return `${defaultProtocol}${url.startsWith("//") ? url.slice(2) : url}`
 }
