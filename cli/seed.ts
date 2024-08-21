@@ -28,6 +28,9 @@ async function seed() {
 			case "prod":
 				await prodSeed()
 				break
+			case "fullProdRebuild":
+				await fullProdRebuild()
+				break
 			default:
 				console.log("Unknown command")
 				break
@@ -40,13 +43,16 @@ async function seed() {
 
 // sets up jazz global group and writes it to .env
 async function setup() {
+	console.log("..")
 	const { worker } = await startWorker({
 		accountID: "co_zhvp7ryXJzDvQagX61F6RCZFJB9",
 		accountSecret: JAZZ_WORKER_SECRET
 	})
+	console.log("creating")
 	const user = (await await LaAccount.createAs(worker, {
 		creationProps: { name: "nikiv" }
 	}))!
+	console.log("here?")
 	const publicGlobalGroup = PublicGlobalGroup.create({ owner: worker })
 	publicGlobalGroup.root = PublicGlobalGroupRoot.create({}, { owner: publicGlobalGroup })
 	publicGlobalGroup.addMember("everyone", "reader")
@@ -74,7 +80,7 @@ async function prodSeed() {
 		const stats = await fs.stat(filePath)
 
 		if (stats.isDirectory()) {
-			if (file === "edgedb-dump") {
+			if (file === "edgedb") {
 				const edgedbFiles = await fs.readdir(filePath)
 				for (const subFile of edgedbFiles) {
 					const edgedbFilePath = path.join(filePath, subFile)
@@ -82,16 +88,7 @@ async function prodSeed() {
 				}
 			}
 		} else if (stats.isFile()) {
-			if (file === "topics.json") {
-				const content = await fs.readFile(filePath, "utf-8")
-				const topics = JSON.parse(content) as Array<{ name: string; prettyName: string }>
-
-				topics.forEach(topic => {
-					GlobalTopic.create({ name: topic.name, prettyName: topic.prettyName }, { owner: globalGroup })
-				})
-			}
-			// TODO: intentional mistake with nn (remove after edgedb dump is ported, topics etc.)
-			if (file === "connections.jsonn") {
+			if (file === "force-graph-connections.json") {
 				const content = await fs.readFile(filePath, "utf-8")
 				const topics = JSON.parse(content) as Array<{ name: string; prettyName: string; connections: string[] }>
 
@@ -126,8 +123,21 @@ async function prodSeed() {
 				// globalGroup.root.topics = graph
 				// await new Promise(resolve => setTimeout(resolve, 1000))
 			}
+			if (file === "topics.json") {
+				const content = await fs.readFile(filePath, "utf-8")
+				const topics = JSON.parse(content) as Array<{ name: string; prettyName: string }>
+
+				topics.forEach(topic => {
+					GlobalTopic.create({ name: topic.name, prettyName: topic.prettyName }, { owner: globalGroup })
+				})
+			}
 		}
 	}
+}
+
+async function fullProdRebuild() {
+	await setup()
+	await prodSeed()
 }
 
 async function writeToOutput(content: any, file: string) {
