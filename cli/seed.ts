@@ -1,10 +1,13 @@
 import { getEnvOrThrow } from "@/lib/utils"
 import { LaAccount } from "@/web/lib/schema"
 import {
+	GlobalGuide,
 	GlobalLink,
 	GlobalTopic,
 	ListOfGlobalLinks,
 	ListOfGlobalTopics,
+	ListOfSections,
+	ListOfTopicConnections,
 	PublicGlobalGroup,
 	PublicGlobalGroupRoot,
 	Section
@@ -67,25 +70,30 @@ async function setup() {
 	await new Promise(resolve => setTimeout(resolve, 1000))
 }
 
+// for now this seeds the GlobalTopics + their study guides
+// all the data comes from private/ folder
 async function prodSeed() {
 	const { worker } = await startWorker({
 		accountID: "co_zhvp7ryXJzDvQagX61F6RCZFJB9",
 		accountSecret: JAZZ_WORKER_SECRET
 	})
-	const globalGroup = await (
-		(await PublicGlobalGroup.load(process.env.JAZZ_PUBLIC_GLOBAL_GROUP as ID<Group>, worker, {})) as PublicGlobalGroup
-	).ensureLoaded({ root: true })
-	if (!globalGroup) return // TODO: err
+	console.log(process.env.JAZZ_PUBLIC_GLOBAL_GROUP, "group?")
+	const globalGroupId = process.env.JAZZ_PUBLIC_GLOBAL_GROUP as ID<PublicGlobalGroup>
+	const globalGroup = await PublicGlobalGroup.load(globalGroupId, worker, {
+		root: {
+			topics: [{ connections: [], globalGuide: { sections: [] } }]
+		}
+	})
+	if (!globalGroup) throw new Error("Failed to load global group")
 
-	const folderPath = path.join(__dirname, "..", "private", "data", "edgedb", "topics")
+	const folderPathWithGlobalTopics = path.join(__dirname, "..", "private", "data", "edgedb", "topics")
 	try {
-		const files = await fs.readdir(folderPath)
-		files.sort((a, b) => a.localeCompare(b))
-		console.log("Files in private/data/edgedb/topics:")
+		const topicFiles = await fs.readdir(folderPathWithGlobalTopics)
+		topicFiles.sort((a, b) => a.localeCompare(b))
+		// console.log("Files in private/data/edgedb/topics:")
 
-		// files.forEach(async file => {
-		const file = files[0]
-		const filePath = path.join(folderPath, file)
+		const file = topicFiles[0]
+		const filePath = path.join(folderPathWithGlobalTopics, file)
 		const content = await fs.readFile(filePath, "utf-8")
 		const data = JSON.parse(content)
 
@@ -95,9 +103,23 @@ async function prodSeed() {
 			console.error("No sections found in", fileName)
 			return
 		}
-
 		const name = data.name
 		const prettyName = data.prettyName
+
+		const topic = GlobalTopic.create(
+			{
+				name,
+				prettyName,
+				connections: ListOfTopicConnections.create([], { owner: globalGroup }),
+				globalGuide: GlobalGuide.create(
+					{
+						sections: ListOfSections.create([], { owner: globalGroup })
+					},
+					{ owner: globalGroup }
+				)
+			},
+			{ owner: globalGroup }
+		)
 		const sections = data.latestGlobalGuide.sections
 
 		for (const section of sections) {
@@ -112,6 +134,7 @@ async function prodSeed() {
 				{ owner: globalGroup }
 			)
 
+			// TODO: make sure that links of same `url` are not duplicated in GlobalLink
 			for (const link of sectionsLinks) {
 				const linkModel = GlobalLink.create(
 					{
@@ -122,8 +145,8 @@ async function prodSeed() {
 				)
 				sectionModel.links?.push(linkModel)
 			}
+			topic.globalGuide?.sections?.push(sectionModel)
 		}
-		// })
 	} catch (error) {
 		console.error("Error reading directory:", error)
 	}

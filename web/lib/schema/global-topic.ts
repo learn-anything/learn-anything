@@ -2,6 +2,7 @@ import { co, CoList, CoMap, Group } from "jazz-tools"
 
 export class GlobalLink extends CoMap {
 	name = co.string
+	// TODO: make sure its unique
 	url = co.string
 }
 
