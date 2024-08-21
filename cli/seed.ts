@@ -31,6 +31,9 @@ async function seed() {
 			case "fullProdRebuild":
 				await fullProdRebuild()
 				break
+			case "test":
+				await test()
+				break
 			default:
 				console.log("Unknown command")
 				break
@@ -43,12 +46,10 @@ async function seed() {
 
 // sets up jazz global group and writes it to .env
 async function setup() {
-	console.log("..")
 	const { worker } = await startWorker({
 		accountID: "co_zhvp7ryXJzDvQagX61F6RCZFJB9",
 		accountSecret: JAZZ_WORKER_SECRET
 	})
-	console.log("creating")
 	const user = (await await LaAccount.createAs(worker, {
 		creationProps: { name: "nikiv" }
 	}))!
@@ -132,6 +133,17 @@ async function prodSeed() {
 				})
 			}
 		}
+	}
+}
+
+async function test() {
+	const folderPath = path.join(__dirname, "..", "private", "data", "edgedb", "topics")
+	try {
+		const files = await fs.readdir(folderPath)
+		console.log("Files in private/data/edgedb/topics:")
+		files.forEach(file => console.log(file))
+	} catch (error) {
+		console.error("Error reading directory:", error)
 	}
 }
 
