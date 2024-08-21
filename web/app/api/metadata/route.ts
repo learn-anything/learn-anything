@@ -12,7 +12,6 @@ interface Metadata {
 const DEFAULT_VALUES = {
 	TITLE: "",
 	DESCRIPTION: "",
-	IMAGE: null,
 	FAVICON: null
 }
 
