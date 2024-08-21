@@ -1,17 +1,15 @@
 import { getEnvOrThrow } from "@/lib/utils"
-import { LaAccount } from "@/web/lib/schema"
+import { ListOfForceGraphs } from "@/web/lib/schema/master/force-graph"
+import { PublicGlobalGroup, PublicGlobalGroupRoot } from "@/web/lib/schema/master/public-group"
 import {
-	GlobalGuide,
-	GlobalLink,
-	GlobalTopic,
-	ListOfGlobalLinks,
-	ListOfGlobalTopics,
+	LatestGlobalGuide,
+	Link,
+	ListOfLinks,
 	ListOfSections,
-	ListOfTopicConnections,
-	PublicGlobalGroup,
-	PublicGlobalGroupRoot,
-	Section
-} from "@/web/lib/schema/global-topic"
+	ListOfTopics,
+	Section,
+	Topic
+} from "@/web/lib/schema/master/topic"
 import fs from "fs/promises"
 import { startWorker } from "jazz-nodejs"
 import { Group, ID } from "jazz-tools"
@@ -57,7 +55,13 @@ async function setup() {
 	// 	creationProps: { name: "nikiv" }
 	// }))!
 	const publicGlobalGroup = PublicGlobalGroup.create({ owner: worker })
-	publicGlobalGroup.root = PublicGlobalGroupRoot.create({}, { owner: publicGlobalGroup })
+	publicGlobalGroup.root = PublicGlobalGroupRoot.create(
+		{
+			topics: ListOfTopics.create([], { owner: publicGlobalGroup }),
+			forceGraphs: ListOfForceGraphs.create([], { owner: publicGlobalGroup })
+		},
+		{ owner: publicGlobalGroup }
+	)
 	publicGlobalGroup.addMember("everyone", "reader")
 	await appendFile("./.env", `\nJAZZ_PUBLIC_GLOBAL_GROUP=${JSON.stringify(publicGlobalGroup.id)}`)
 	const adminGlobalGroup = Group.create({ owner: worker })
@@ -85,6 +89,7 @@ async function prodSeed() {
 		}
 	})
 	if (!globalGroup) throw new Error("Failed to load global group")
+	console.log("group loaded")
 
 	const folderPathWithGlobalTopics = path.join(__dirname, "..", "private", "data", "edgedb", "topics")
 	try {
@@ -106,20 +111,20 @@ async function prodSeed() {
 		const name = data.name
 		const prettyName = data.prettyName
 
-		const topic = GlobalTopic.create(
+		const topic = Topic.create(
 			{
 				name,
 				prettyName,
-				connections: ListOfTopicConnections.create([], { owner: globalGroup }),
-				globalGuide: GlobalGuide.create(
-					{
-						sections: ListOfSections.create([], { owner: globalGroup })
-					},
+				latestGlobalGuide: LatestGlobalGuide.create(
+					{ sections: ListOfSections.create([], { owner: globalGroup }) },
 					{ owner: globalGroup }
 				)
 			},
 			{ owner: globalGroup }
 		)
+
+		console.log("topic created", topic)
+
 		const sections = data.latestGlobalGuide.sections
 
 		for (const section of sections) {
@@ -128,24 +133,28 @@ async function prodSeed() {
 
 			const sectionModel = Section.create(
 				{
-					name: sectionTitle,
-					links: ListOfGlobalLinks.create([], { owner: globalGroup })
+					title: sectionTitle,
+					links: ListOfLinks.create([], { owner: globalGroup })
 				},
 				{ owner: globalGroup }
 			)
 
+			console.log("section created", sectionModel)
+
 			// TODO: make sure that links of same `url` are not duplicated in GlobalLink
 			for (const link of sectionsLinks) {
-				const linkModel = GlobalLink.create(
+				const linkModel = Link.create(
 					{
-						name: link.name,
+						title: link.title,
 						url: link.url
 					},
 					{ owner: globalGroup }
 				)
 				sectionModel.links?.push(linkModel)
 			}
-			topic.globalGuide?.sections?.push(sectionModel)
+
+			console.log("links added to section", sectionModel)
+			topic.latestGlobalGuide?.sections?.push(sectionModel)
 		}
 	} catch (error) {
 		console.error("Error reading directory:", error)

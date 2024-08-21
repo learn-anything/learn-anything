@@ -9,7 +9,7 @@ import {
 	PublicGlobalGroupRoot,
 	TopicConnection,
 	GlobalTopic
-} from "@/web/lib/schema/global-topic"
+} from "@/web/lib/schema/master/topic"
 import { getEnvOrThrow } from "@/lib/utils"
 
 const JAZZ_WORKER_ACCOUNT_ID = getEnvOrThrow("JAZZ_WORKER_ACCOUNT_ID")
