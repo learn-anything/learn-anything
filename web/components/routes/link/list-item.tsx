@@ -49,17 +49,25 @@ export const ListItem: React.FC<ListItemProps> = ({
 	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: personalLink.id, disabled })
 	const formRef = React.useRef<HTMLFormElement>(null)
 
+	React.useEffect(() => {
+		function handleClickOutside(event: MouseEvent) {
+			if (formRef.current && !formRef.current.contains(event.target as Node)) {
+				setEditId(null)
+			}
+		}
+
+		document.addEventListener("mousedown", handleClickOutside)
+
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside)
+		}
+	}, [formRef])
+
 	const style = {
 		transform: CSS.Transform.toString(transform),
 		transition,
 		pointerEvents: isDragging ? "none" : "auto"
 	}
-
-	React.useEffect(() => {
-		if (isEditing) {
-			formRef.current?.focus()
-		}
-	}, [isEditing])
 
 	const refCallback = React.useCallback(
 		(node: HTMLLIElement | null) => {
