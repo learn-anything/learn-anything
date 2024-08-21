@@ -1,10 +1,13 @@
 import { getEnvOrThrow } from "@/lib/utils"
 import { LaAccount } from "@/web/lib/schema"
 import {
+	GlobalLink,
 	GlobalTopic,
+	ListOfGlobalLinks,
 	ListOfGlobalTopics,
 	PublicGlobalGroup,
-	PublicGlobalGroupRoot
+	PublicGlobalGroupRoot,
+	Section
 } from "@/web/lib/schema/global-topic"
 import fs from "fs/promises"
 import { startWorker } from "jazz-nodejs"
@@ -31,9 +34,6 @@ async function seed() {
 			case "fullProdRebuild":
 				await fullProdRebuild()
 				break
-			case "test":
-				await test()
-				break
 			default:
 				console.log("Unknown command")
 				break
@@ -46,10 +46,12 @@ async function seed() {
 
 // sets up jazz global group and writes it to .env
 async function setup() {
+	console.log("..")
 	const { worker } = await startWorker({
 		accountID: "co_zhvp7ryXJzDvQagX61F6RCZFJB9",
 		accountSecret: JAZZ_WORKER_SECRET
 	})
+	console.log("creating")
 	const user = (await await LaAccount.createAs(worker, {
 		creationProps: { name: "nikiv" }
 	}))!
@@ -73,7 +75,60 @@ async function prodSeed() {
 	).ensureLoaded({ root: true })
 	if (!globalGroup) return // TODO: err
 
-	const folderPath = path.join(__dirname, "..", "private")
+	const folderPath = path.join(__dirname, "..", "private", "data", "edgedb", "topics")
+	try {
+		const files = await fs.readdir(folderPath)
+		files.sort((a, b) => a.localeCompare(b))
+		console.log("Files in private/data/edgedb/topics:")
+
+		// files.forEach(async file => {
+		const file = files[0]
+		const filePath = path.join(folderPath, file)
+		const content = await fs.readFile(filePath, "utf-8")
+		const data = JSON.parse(content)
+
+		const fileName = file.split(".")[0]
+
+		if (!data.latestGlobalGuide) {
+			console.error("No sections found in", fileName)
+			return
+		}
+
+		const name = data.name
+		const prettyName = data.prettyName
+		const sections = data.latestGlobalGuide.sections
+
+		for (const section of sections) {
+			const sectionTitle = section.title
+			const sectionsLinks = section.links
+
+			const sectionModel = Section.create(
+				{
+					name: sectionTitle,
+					links: ListOfGlobalLinks.create([], { owner: globalGroup })
+				},
+				{ owner: globalGroup }
+			)
+
+			for (const link of sectionsLinks) {
+				const linkModel = GlobalLink.create(
+					{
+						name: link.name,
+						url: link.url
+					},
+					{ owner: globalGroup }
+				)
+				sectionModel.links?.push(linkModel)
+			}
+		}
+		// })
+	} catch (error) {
+		console.error("Error reading directory:", error)
+	}
+
+	return
+
+	// const folderPath = path.join(__dirname, "..", "private")
 	const files = await fs.readdir(folderPath)
 	for (const file of files) {
 		if (file === ".git") continue
@@ -81,9 +136,23 @@ async function prodSeed() {
 		const stats = await fs.stat(filePath)
 
 		if (stats.isDirectory()) {
-			if (file === "edgedb") {
+			// if datare folder go inside it and read files
+			if (file === "data") {
+				console.logturn
+				const dataFiles = await fs.readdir(filePath)
+				for (const subFile of dataFiles) {
+					const dataFilePath = path.join(filePath, subFile)
+					const content = await fs.readFile(dataFilePath, "utf-8")
+					const data = JSON.parse(content)
+					console.log(data, "data")
+				}
+			}
+
+			if (file === "lastprod") {
+				console.log("lastprod folder")
 				const edgedbFiles = await fs.readdir(filePath)
 				for (const subFile of edgedbFiles) {
+					console.log(subFile, "sub file")
 					const edgedbFilePath = path.join(filePath, subFile)
 					console.log(edgedbFilePath, "file path")
 				}

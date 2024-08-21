@@ -5,11 +5,11 @@ export class GlobalLink extends CoMap {
 	url = co.string
 }
 
-export class GlobalLinks extends CoList.Of(co.ref(GlobalLink)) {}
+export class ListOfGlobalLinks extends CoList.Of(co.ref(GlobalLink)) {}
 
 export class Section extends CoMap {
 	name = co.string
-	links = co.ref(GlobalLinks)
+	links = co.ref(ListOfGlobalLinks)
 }
 
 export class ListOfSections extends CoList.Of(co.ref(Section)) {}
