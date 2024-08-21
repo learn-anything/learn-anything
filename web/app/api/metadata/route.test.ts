@@ -19,7 +19,7 @@ describe("Metadata Fetcher", () => {
         <head>
           <title>Test Title</title>
           <meta name="description" content="Test Description">
-          <link rel="icon" href="/favicon.ico">
+          <link rel="icon" href="/icon.ico">
         </head>
       </html>
     `
@@ -37,7 +37,7 @@ describe("Metadata Fetcher", () => {
 		expect(data).toEqual({
 			title: "Test Title",
 			description: "Test Description",
-			favicon: "https://example.com/favicon.ico",
+			icon: "https://example.com/icon.ico",
 			url: "https://example.com"
 		})
 	})
@@ -68,7 +68,7 @@ describe("Metadata Fetcher", () => {
 		expect(data).toEqual({
 			title: DEFAULT_VALUES.TITLE,
 			description: DEFAULT_VALUES.DESCRIPTION,
-			favicon: null,
+			icon: null,
 			url: "https://example.com"
 		})
 	})
@@ -94,7 +94,7 @@ describe("Metadata Fetcher", () => {
 		expect(data).toEqual({
 			title: DEFAULT_VALUES.TITLE,
 			description: DEFAULT_VALUES.DESCRIPTION,
-			favicon: null,
+			icon: null,
 			url: "https://example.com"
 		})
 	})

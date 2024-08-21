@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server"
 import axios from "axios"
 import * as cheerio from "cheerio"
+import { ensureUrlProtocol } from "@/lib/utils"
+import { urlSchema } from "@/lib/utils/schema"
 
 interface Metadata {
 	title: string
 	description: string
-	favicon: string | null
+	icon: string | null
 	url: string
 }
 
@@ -17,11 +19,18 @@ export const DEFAULT_VALUES = {
 
 export async function GET(request: NextRequest) {
 	const { searchParams } = new URL(request.url)
-	const url = searchParams.get("url")
+	let url = searchParams.get("url")
 
 	if (!url) {
 		return NextResponse.json({ error: "URL is required" }, { status: 400 })
 	}
+
+	const result = urlSchema.safeParse(url)
+	if (!result.success) {
+		throw new Error(result.error.issues.map(issue => issue.message).join(", "))
+	}
+
+	url = ensureUrlProtocol(url)
 
 	try {
 		const { data } = await axios.get(url, {
@@ -40,13 +49,12 @@ export async function GET(request: NextRequest) {
 				$('meta[name="description"]').attr("content") ||
 				$('meta[property="og:description"]').attr("content") ||
 				DEFAULT_VALUES.DESCRIPTION,
-			favicon:
-				$('link[rel="icon"]').attr("href") || $('link[rel="shortcut icon"]').attr("href") || DEFAULT_VALUES.FAVICON,
+			icon: $('link[rel="icon"]').attr("href") || $('link[rel="shortcut icon"]').attr("href") || DEFAULT_VALUES.FAVICON,
 			url: url
 		}
 
-		if (metadata.favicon && !metadata.favicon.startsWith("http")) {
-			metadata.favicon = new URL(metadata.favicon, url).toString()
+		if (metadata.icon && !metadata.icon.startsWith("http")) {
+			metadata.icon = new URL(metadata.icon, url).toString()
 		}
 
 		return NextResponse.json(metadata)
@@ -54,7 +62,7 @@ export async function GET(request: NextRequest) {
 		const defaultMetadata: Metadata = {
 			title: DEFAULT_VALUES.TITLE,
 			description: DEFAULT_VALUES.DESCRIPTION,
-			favicon: DEFAULT_VALUES.FAVICON,
+			icon: DEFAULT_VALUES.FAVICON,
 			url: url
 		}
 		return NextResponse.json(defaultMetadata)
