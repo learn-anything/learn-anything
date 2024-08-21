@@ -3,7 +3,6 @@ import { Command, CommandInput, CommandList, CommandItem, CommandGroup } from "@
 import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form"
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { CheckIcon, ChevronDownIcon, icons } from "lucide-react"
 import { useFormContext } from "react-hook-form"
 import { cn } from "@/lib/utils"
 import { LaIcon } from "@/components/custom/la-icon"
@@ -11,19 +10,7 @@ import { useAtom } from "jotai"
 import { linkLearningStateSelectorAtom } from "@/store/link"
 import { useMemo } from "react"
 import { LinkFormValues } from "../schema"
-
-type LearningState = {
-	label: string
-	value: string
-	icon: keyof typeof icons
-	className: string
-}
-
-const LEARNING_STATES: LearningState[] = [
-	{ label: "To Learn", value: "wantToLearn", icon: "Bookmark", className: "text-foreground" },
-	{ label: "Learning", value: "learning", icon: "GraduationCap", className: "text-[#D29752]" },
-	{ label: "Learned", value: "learned", icon: "Check", className: "text-[#708F51]" }
-]
+import { LEARNING_STATES } from "@/lib/constants"
 
 export const LearningStateSelector: React.FC = () => {
 	const [islearningStateSelectorOpen, setIslearningStateSelectorOpen] = useAtom(linkLearningStateSelectorAtom)
@@ -54,7 +41,7 @@ export const LearningStateSelector: React.FC = () => {
 									<span className={cn("truncate", selectedLearningState?.className || "")}>
 										{selectedLearningState?.label || "Select state"}
 									</span>
-									<ChevronDownIcon size={16} />
+									<LaIcon name="ChevronDown" size={16} />
 								</Button>
 							</FormControl>
 						</PopoverTrigger>
@@ -80,7 +67,8 @@ export const LearningStateSelector: React.FC = () => {
 												>
 													<LaIcon name={ls.icon} className={cn("mr-2", ls.className)} />
 													<span className={ls.className}>{ls.label}</span>
-													<CheckIcon
+													<LaIcon
+														name="Check"
 														size={16}
 														className={cn(
 															"absolute right-3",

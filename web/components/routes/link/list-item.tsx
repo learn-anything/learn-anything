@@ -12,8 +12,11 @@ import Image from "next/image"
 import Link from "next/link"
 import * as React from "react"
 import { LinkForm } from "./form/link-form"
-import { useEffect } from "react"
-
+import { Command, CommandInput, CommandList, CommandItem, CommandGroup } from "@/components/ui/command"
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { LaIcon } from "@/components/custom/la-icon"
+import { LEARNING_STATES } from "@/lib/constants"
 interface ListItemProps {
 	confirm: (options: ConfirmOptions) => Promise<boolean>
 	personalLink: PersonalLink
@@ -45,18 +48,6 @@ export const ListItem: React.FC<ListItemProps> = ({
 }) => {
 	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: personalLink.id, disabled })
 	const formRef = React.useRef<HTMLFormElement>(null)
-
-	useEffect(() => {
-		const handleClickOutside = (event: MouseEvent) => {
-			console.log("ran..")
-			if (formRef.current && !formRef.current.contains(event.target as Node)) {
-				handleCancel()
-			}
-		}
-		return () => {
-			document.removeEventListener("mousedown", handleClickOutside)
-		}
-	}, [])
 
 	const style = {
 		transform: CSS.Transform.toString(transform),
@@ -127,6 +118,8 @@ export const ListItem: React.FC<ListItemProps> = ({
 		}
 	}
 
+	const selectedLearningState = LEARNING_STATES.find(ls => ls.value === personalLink.learningState)
+
 	if (isEditing) {
 		return <LinkForm ref={formRef} personalLink={personalLink} onSuccess={handleSuccess} onCancel={handleCancel} />
 	}
@@ -141,8 +134,6 @@ export const ListItem: React.FC<ListItemProps> = ({
 			onFocus={() => setFocusedId(personalLink.id)}
 			onBlur={() => {
 				setFocusedId(null)
-
-				// setShowDeleteIconForLinkId(null)
 			}}
 			onKeyDown={handleKeyDown}
 			className={cn("hover:bg-muted/50 relative flex h-14 cursor-default items-center outline-none xl:h-11", {
@@ -153,14 +144,59 @@ export const ListItem: React.FC<ListItemProps> = ({
 		>
 			<div className="flex grow justify-between gap-x-6 px-6 max-lg:px-4">
 				<div className="flex min-w-0 items-center gap-x-4">
-					<Checkbox
+					{/* <Checkbox
 						checked={personalLink.completed}
 						onClick={e => e.stopPropagation()}
 						onCheckedChange={() => {
 							personalLink.completed = !personalLink.completed
 						}}
 						className="border-muted-foreground border"
-					/>
+					/> */}
+					<Popover>
+						<PopoverTrigger asChild>
+							<Button size="sm" type="button" role="combobox" variant="secondary" className="size-7 shrink-0 p-0">
+								{selectedLearningState?.icon && (
+									<LaIcon name={selectedLearningState.icon} className={cn(selectedLearningState.className)} />
+								)}
+							</Button>
+						</PopoverTrigger>
+						<PopoverContent
+							className="w-52 rounded-lg p-0"
+							side="bottom"
+							align="start"
+							onCloseAutoFocus={e => e.preventDefault()}
+						>
+							<Command>
+								<CommandInput placeholder="Search state..." className="h-9" />
+								<CommandList>
+									<ScrollArea>
+										<CommandGroup>
+											{LEARNING_STATES.map(ls => (
+												<CommandItem
+													key={ls.value}
+													value={ls.value}
+													onSelect={value => {
+														personalLink.learningState = value as "wantToLearn" | "learning" | "learned" | undefined
+													}}
+												>
+													<LaIcon name={ls.icon} className={cn("mr-2", ls.className)} />
+													<span className={ls.className}>{ls.label}</span>
+													<LaIcon
+														name="Check"
+														size={16}
+														className={cn(
+															"absolute right-3",
+															ls.value === personalLink.learningState ? "text-primary" : "text-transparent"
+														)}
+													/>
+												</CommandItem>
+											))}
+										</CommandGroup>
+									</ScrollArea>
+								</CommandList>
+							</Command>
+						</PopoverContent>
+					</Popover>
 					{personalLink.icon && (
 						<Image
 							src={personalLink.icon}
