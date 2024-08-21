@@ -10,9 +10,10 @@ import { TooltipArrow } from "@radix-ui/react-tooltip"
 interface UrlInputProps {
 	urlFetched: string | null
 	fetchMetadata: (url: string) => Promise<void>
+	isFetchingUrlMetadata: boolean
 }
 
-export const UrlInput: React.FC<UrlInputProps> = ({ urlFetched, fetchMetadata }) => {
+export const UrlInput: React.FC<UrlInputProps> = ({ urlFetched, fetchMetadata, isFetchingUrlMetadata }) => {
 	const [isFocused, setIsFocused] = React.useState(false)
 	const form = useFormContext<LinkFormValues>()
 
@@ -23,9 +24,7 @@ export const UrlInput: React.FC<UrlInputProps> = ({ urlFetched, fetchMetadata })
 		}
 	}
 
-	const shouldShowTooltip = React.useMemo(() => {
-		return isFocused && !form.formState.errors.url && !!form.getValues("url") && !urlFetched
-	}, [isFocused, form.formState.errors.url])
+	const shouldShowTooltip = isFocused && !form.formState.errors.url && !!form.getValues("url") && !urlFetched
 
 	return (
 		<FormField
@@ -40,7 +39,7 @@ export const UrlInput: React.FC<UrlInputProps> = ({ urlFetched, fetchMetadata })
 					<FormLabel className="sr-only">Url</FormLabel>
 					<FormControl>
 						<TooltipProvider delayDuration={0}>
-							<Tooltip open={shouldShowTooltip}>
+							<Tooltip open={shouldShowTooltip && !isFetchingUrlMetadata}>
 								<TooltipTrigger asChild>
 									<Input
 										{...field}
