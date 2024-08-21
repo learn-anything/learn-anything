@@ -12,12 +12,273 @@ import {
 } from "@/web/lib/schema/master/topic"
 import fs from "fs/promises"
 import { startWorker } from "jazz-nodejs"
-import { Group, ID } from "jazz-tools"
+import { ID } from "jazz-tools"
 import { appendFile } from "node:fs/promises"
 import path from "path"
 
+// Define interfaces for JSON data structures
+interface LinkJson {
+	id?: ID<Link>
+	title: string
+	url: string
+}
+
+interface SectionJson {
+	title: string
+	links: LinkJson[]
+}
+
+interface TopicJson {
+	name: string
+	prettyName: string
+	latestGlobalGuide: {
+		sections: SectionJson[]
+	} | null
+}
+
+// Get the Jazz worker secret from environment variables
 const JAZZ_WORKER_SECRET = getEnvOrThrow("JAZZ_WORKER_SECRET")
 
+/**
+ * Manages links, handling deduplication and tracking duplicates.
+ */
+class LinkManager {
+	private links: Map<string, LinkJson> = new Map()
+	private duplicateCount: number = 0
+
+	/**
+	 * Adds a link to the manager, tracking duplicates.
+	 * @param link - The link to add.
+	 */
+	addLink(link: LinkJson) {
+		const key = link.url
+		if (this.links.has(key)) {
+			this.duplicateCount++
+		} else {
+			this.links.set(key, link)
+		}
+	}
+
+	/**
+	 * Gets all unique links.
+	 * @returns An array of unique links.
+	 */
+	getAllLinks() {
+		return Array.from(this.links.values())
+	}
+
+	/**
+	 * Gets the count of duplicate links.
+	 * @returns The number of duplicate links.
+	 */
+	getDuplicateCount() {
+		return this.duplicateCount
+	}
+}
+
+/**
+ * Starts a Jazz worker.
+ * @returns A Promise that resolves to the started worker.
+ */
+async function startJazzWorker() {
+	const { worker } = await startWorker({
+		accountID: "co_zhvp7ryXJzDvQagX61F6RCZFJB9",
+		accountSecret: JAZZ_WORKER_SECRET
+	})
+	return worker
+}
+
+/**
+ * Sets up the global and admin groups.
+ */
+async function setup() {
+	const worker = await startJazzWorker()
+
+	/*
+	 * Create global group
+	 */
+	const publicGlobalGroup = PublicGlobalGroup.create({ owner: worker })
+	publicGlobalGroup.root = PublicGlobalGroupRoot.create(
+		{
+			topics: ListOfTopics.create([], { owner: publicGlobalGroup }),
+			forceGraphs: ListOfForceGraphs.create([], { owner: publicGlobalGroup })
+		},
+		{ owner: publicGlobalGroup }
+	)
+	publicGlobalGroup.addMember("everyone", "reader")
+	await appendFile("./.env", `\nJAZZ_PUBLIC_GLOBAL_GROUP=${JSON.stringify(publicGlobalGroup.id)}`)
+
+	/*
+	 * Create admin group
+	 */
+	// const user = (await await LaAccount.createAs(worker, {
+	// 	creationProps: { name: "nikiv" }
+	// }))!
+	// const adminGlobalGroup = Group.create({ owner: worker })
+	// adminGlobalGroup.addMember(user, "admin")
+	// await appendFile("./.env", `\nJAZZ_ADMIN_GLOBAL_GROUP=${JSON.stringify(adminGlobalGroup.id)}`)
+}
+
+/**
+ * Loads the global group.
+ * @returns A Promise that resolves to the loaded global group.
+ * @throws Error if the global group fails to load.
+ */
+async function loadGlobalGroup() {
+	const worker = await startJazzWorker()
+
+	const globalGroupId = process.env.JAZZ_PUBLIC_GLOBAL_GROUP as ID<PublicGlobalGroup>
+	const globalGroup = await PublicGlobalGroup.load(globalGroupId, worker, {
+		root: {
+			topics: [{ latestGlobalGuide: { sections: [] } }]
+		}
+	})
+
+	if (!globalGroup) throw new Error("Failed to load global group")
+
+	return globalGroup
+}
+
+/**
+ * Processes JSON files to extract link and topic data.
+ * @returns A Promise that resolves to a tuple containing a LinkManager and an array of TopicJson.
+ */
+async function processJsonFiles(): Promise<[LinkManager, TopicJson[]]> {
+	const directory = path.join(__dirname, "..", "private", "data", "edgedb", "topics")
+
+	const linkManager = new LinkManager()
+	const processedData: TopicJson[] = []
+
+	let files = await fs.readdir(directory)
+	files.sort((a, b) => a.localeCompare(b)) // sort files alphabetically
+
+	files = files.slice(0, 1) // get only 1 file for testing
+
+	for (const file of files) {
+		if (path.extname(file) === ".json") {
+			const filePath = path.join(directory, file)
+			try {
+				const data = JSON.parse(await fs.readFile(filePath, "utf-8")) as TopicJson
+				if (data.latestGlobalGuide) {
+					for (const section of data.latestGlobalGuide.sections) {
+						for (const link of section.links) {
+							linkManager.addLink(link)
+						}
+					}
+				}
+				processedData.push(data)
+			} catch (error) {
+				console.error(`Error processing file ${file}:`, error)
+			}
+		}
+	}
+
+	return [linkManager, processedData]
+}
+
+/**
+ * Inserts links in batch.
+ * @param links - An array of LinkJson objects to insert.
+ * @returns A Promise that resolves to an array of created Link models.
+ */
+async function insertLinksInBatch(links: LinkJson[]) {
+	const globalGroup = await loadGlobalGroup()
+	const rows = []
+
+	for (const link of links) {
+		const linkModel = Link.create(
+			{
+				title: link.title,
+				url: link.url
+			},
+			{ owner: globalGroup }
+		)
+		rows.push(linkModel)
+	}
+
+	return rows
+}
+
+/**
+ * Saves processed data (topics and links) to the global group.
+ * @param linkLists - An array of Link models.
+ * @param topics - An array of TopicJson objects.
+ */
+async function saveProcessedData(linkLists: Link[], topics: TopicJson[]) {
+	const globalGroup = await loadGlobalGroup()
+
+	topics.map(topic => {
+		const topicModel = Topic.create(
+			{
+				name: topic.name,
+				prettyName: topic.prettyName,
+				latestGlobalGuide: LatestGlobalGuide.create(
+					{
+						sections: ListOfSections.create([], { owner: globalGroup })
+					},
+					{ owner: globalGroup }
+				)
+			},
+			{ owner: globalGroup }
+		)
+
+		if (!topic.latestGlobalGuide) {
+			console.error("No sections found in", topic.name)
+			return
+		}
+
+		topic.latestGlobalGuide.sections.map(section => {
+			const sectionModel = Section.create(
+				{
+					title: section.title,
+					links: ListOfLinks.create([], { owner: globalGroup })
+				},
+				{ owner: globalGroup }
+			)
+
+			section.links.map(link => {
+				const linkModel = linkLists.find(l => l.url === link.url)
+				if (linkModel) {
+					console.log("link found", linkModel)
+					sectionModel.links?.push(linkModel)
+				}
+			})
+
+			topicModel.latestGlobalGuide?.sections?.push(sectionModel)
+		})
+
+		globalGroup.root.topics?.push(topicModel)
+	})
+}
+
+/**
+ * Seeds production data.
+ */
+async function prodSeed() {
+	console.log("Starting to seed data")
+
+	const [linkManager, processedData] = await processJsonFiles()
+
+	console.log(`Collected ${linkManager.getAllLinks().length} unique links.`)
+	console.log(`Found ${linkManager.getDuplicateCount()} duplicate links.`)
+
+	const insertedLinks = await insertLinksInBatch(linkManager.getAllLinks())
+	await saveProcessedData(insertedLinks, processedData)
+
+	console.log("Finished seeding data")
+}
+
+/**
+ * Performs a full production rebuild.
+ */
+async function fullProdRebuild() {
+	await setup()
+	await prodSeed()
+}
+
+/**
+ * Main seed function to handle different commands.
+ */
 async function seed() {
 	const args = Bun.argv
 	const command = args[2]
@@ -44,221 +305,5 @@ async function seed() {
 		console.error("Error occurred:", err)
 	}
 }
-
-// sets up jazz global/admin group and writes it to .env
-async function setup() {
-	const { worker } = await startWorker({
-		accountID: "co_zhvp7ryXJzDvQagX61F6RCZFJB9",
-		accountSecret: JAZZ_WORKER_SECRET
-	})
-	// const user = (await await LaAccount.createAs(worker, {
-	// 	creationProps: { name: "nikiv" }
-	// }))!
-	const publicGlobalGroup = PublicGlobalGroup.create({ owner: worker })
-	publicGlobalGroup.root = PublicGlobalGroupRoot.create(
-		{
-			topics: ListOfTopics.create([], { owner: publicGlobalGroup }),
-			forceGraphs: ListOfForceGraphs.create([], { owner: publicGlobalGroup })
-		},
-		{ owner: publicGlobalGroup }
-	)
-	publicGlobalGroup.addMember("everyone", "reader")
-	await appendFile("./.env", `\nJAZZ_PUBLIC_GLOBAL_GROUP=${JSON.stringify(publicGlobalGroup.id)}`)
-	const adminGlobalGroup = Group.create({ owner: worker })
-	// adminGlobalGroup.addMember(user, "admin")
-	console.log("created admin group", adminGlobalGroup.id)
-	// console.log(user.id)
-	await appendFile("./.env", `\nJAZZ_ADMIN_GLOBAL_GROUP=${JSON.stringify(adminGlobalGroup.id)}`)
-
-	// make sure newly created groups have time to be synced
-	await new Promise(resolve => setTimeout(resolve, 1000))
-}
-
-// for now this seeds the GlobalTopics + their study guides
-// all the data comes from private/ folder
-async function prodSeed() {
-	const { worker } = await startWorker({
-		accountID: "co_zhvp7ryXJzDvQagX61F6RCZFJB9",
-		accountSecret: JAZZ_WORKER_SECRET
-	})
-	console.log(process.env.JAZZ_PUBLIC_GLOBAL_GROUP, "group?")
-	const globalGroupId = process.env.JAZZ_PUBLIC_GLOBAL_GROUP as ID<PublicGlobalGroup>
-	const globalGroup = await PublicGlobalGroup.load(globalGroupId, worker, {
-		root: {
-			topics: [{ connections: [], globalGuide: { sections: [] } }]
-		}
-	})
-	if (!globalGroup) throw new Error("Failed to load global group")
-	console.log("group loaded")
-
-	const folderPathWithGlobalTopics = path.join(__dirname, "..", "private", "data", "edgedb", "topics")
-	try {
-		const topicFiles = await fs.readdir(folderPathWithGlobalTopics)
-		topicFiles.sort((a, b) => a.localeCompare(b))
-		// console.log("Files in private/data/edgedb/topics:")
-
-		const file = topicFiles[0]
-		const filePath = path.join(folderPathWithGlobalTopics, file)
-		const content = await fs.readFile(filePath, "utf-8")
-		const data = JSON.parse(content)
-
-		const fileName = file.split(".")[0]
-
-		if (!data.latestGlobalGuide) {
-			console.error("No sections found in", fileName)
-			return
-		}
-		const name = data.name
-		const prettyName = data.prettyName
-
-		const topic = Topic.create(
-			{
-				name,
-				prettyName,
-				latestGlobalGuide: LatestGlobalGuide.create(
-					{ sections: ListOfSections.create([], { owner: globalGroup }) },
-					{ owner: globalGroup }
-				)
-			},
-			{ owner: globalGroup }
-		)
-
-		console.log("topic created", topic)
-
-		const sections = data.latestGlobalGuide.sections
-
-		for (const section of sections) {
-			const sectionTitle = section.title
-			const sectionsLinks = section.links
-
-			const sectionModel = Section.create(
-				{
-					title: sectionTitle,
-					links: ListOfLinks.create([], { owner: globalGroup })
-				},
-				{ owner: globalGroup }
-			)
-
-			console.log("section created", sectionModel)
-
-			// TODO: make sure that links of same `url` are not duplicated in GlobalLink
-			for (const link of sectionsLinks) {
-				const linkModel = Link.create(
-					{
-						title: link.title,
-						url: link.url
-					},
-					{ owner: globalGroup }
-				)
-				sectionModel.links?.push(linkModel)
-			}
-
-			console.log("links added to section", sectionModel)
-			topic.latestGlobalGuide?.sections?.push(sectionModel)
-		}
-	} catch (error) {
-		console.error("Error reading directory:", error)
-	}
-}
-
-// const folderPath = path.join(__dirname, "..", "private")
-// const files = await fs.readdir(folderPath)
-// for (const file of files) {
-// 	if (file === ".git") continue
-// 	const filePath = path.join(folderPath, file)
-// 	const stats = await fs.stat(filePath)
-
-// 	if (stats.isDirectory()) {
-// 		// if datare folder go inside it and read files
-// 		if (file === "data") {
-// 			console.logturn
-// 			const dataFiles = await fs.readdir(filePath)
-// 			for (const subFile of dataFiles) {
-// 				const dataFilePath = path.join(filePath, subFile)
-// 				const content = await fs.readFile(dataFilePath, "utf-8")
-// 				const data = JSON.parse(content)
-// 				console.log(data, "data")
-// 			}
-// 		}
-
-// 		if (file === "lastprod") {
-// 			console.log("lastprod folder")
-// 			const edgedbFiles = await fs.readdir(filePath)
-// 			for (const subFile of edgedbFiles) {
-// 				console.log(subFile, "sub file")
-// 				const edgedbFilePath = path.join(filePath, subFile)
-// 				console.log(edgedbFilePath, "file path")
-// 			}
-// 		}
-// 	} else if (stats.isFile()) {
-// 		if (file === "force-graph-connections.json") {
-// 			const content = await fs.readFile(filePath, "utf-8")
-// 			const topics = JSON.parse(content) as Array<{ name: string; prettyName: string; connections: string[] }>
-
-// 			const createdTopics: { [name: string]: { node: GlobalTopic; connections: string[] } } = Object.fromEntries(
-// 				topics.map(topic => {
-// 					const node = GlobalTopic.create(
-// 						{
-// 							name: topic.name,
-// 							prettyName: topic.prettyName,
-// 							connections: ListOfGlobalTopics.create([], { owner: globalGroup })
-// 						},
-// 						{ owner: globalGroup }
-// 					)
-
-// 					const connections = topic.connections
-
-// 					return [topic.name, { node, connections }]
-// 				})
-// 			)
-
-// 			for (const [topicName, { node, connections }] of Object.entries(createdTopics)) {
-// 				for (const connection of connections) {
-// 					const connectionNode = createdTopics[connection].node
-// 					node.connections!.push(connectionNode)
-// 				}
-// 			}
-// const graph = GlobalTopicGraph.create(
-// 	Object.values(createdTopics).map(({ node }) => node),
-// 	{ owner: globalGroup }
-// )
-// await writeToOutput(graph, "graph.json")
-// globalGroup.root.topics = graph
-// await new Promise(resolve => setTimeout(resolve, 1000))
-// }
-// if (file === "topics.json") {
-// 	const content = await fs.readFile(filePath, "utf-8")
-// 	const topics = JSON.parse(content) as Array<{ name: string; prettyName: string }>
-
-// 	topics.forEach(topic => {
-// 		GlobalTopic.create({ name: topic.name, prettyName: topic.prettyName }, { owner: globalGroup })
-// 	})
-// }
-// }
-// 	}
-// }
-
-async function test() {
-	const folderPath = path.join(__dirname, "..", "private", "data", "edgedb", "topics")
-	try {
-		const files = await fs.readdir(folderPath)
-		console.log("Files in private/data/edgedb/topics:")
-		files.forEach(file => console.log(file))
-	} catch (error) {
-		console.error("Error reading directory:", error)
-	}
-}
-
-async function fullProdRebuild() {
-	await setup()
-	await prodSeed()
-}
-
-// async function writeToOutput(content: any, file: string) {
-// 	const outputDir = path.join(__dirname, "..", "output")
-// 	await fs.mkdir(outputDir, { recursive: true })
-// 	const outputPath = path.join(outputDir, file)
-// 	await fs.writeFile(outputPath, JSON.stringify(content, null, 2))
-// }
 
 await seed()

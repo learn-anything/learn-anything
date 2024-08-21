@@ -42,20 +42,29 @@ async function readJazz() {
 		return {
 			name: node.name,
 			prettyName: node.prettyName,
-			sections: node.latestGlobalGuide.sections?.map(section => {
-				return {
-					title: section?.title,
-					links: section?.links?.map(link => {
-						return {
-							title: link?.title,
-							url: link?.url
-						}
-					})
-				}
-			})
+			latestGlobalGuide: {
+				sections: node.latestGlobalGuide.sections.map(section => {
+					return {
+						title: section?.title,
+						links: section?.links?.map(link => {
+							return {
+								title: link?.title,
+								url: link?.url
+							}
+						})
+					}
+				})
+			}
 		}
 	})
-	console.log({ asJson })
+
+	for (const topic of asJson) {
+		console.log(topic)
+
+		for (const section of topic.latestGlobalGuide.sections) {
+			console.log(section)
+		}
+	}
 }
 
 await run()
