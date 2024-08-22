@@ -5,7 +5,7 @@ import { linkEditIdAtom, linkShowCreateAtom } from "@/store/link"
 import { useAtom } from "jotai"
 import React, { useEffect, useRef, useState } from "react"
 import { useKey } from "react-use"
-import { LinkForm } from "./link-form"
+import { globalLinkFormExceptionRefsAtom, LinkForm } from "./link-form"
 import { LaIcon } from "@/components/custom/la-icon"
 import LinkOptions from "@/components/LinkOptions"
 // import { FloatingButton } from "./partial/floating-button"
@@ -13,11 +13,12 @@ import LinkOptions from "@/components/LinkOptions"
 const LinkManage: React.FC = () => {
 	const [showCreate, setShowCreate] = useAtom(linkShowCreateAtom)
 	const [editId, setEditId] = useAtom(linkEditIdAtom)
+	const [, setGlobalExceptionRefs] = useAtom(globalLinkFormExceptionRefsAtom)
 
 	const [showOptions, setShowOptions] = useState(false)
 
 	const optionsRef = useRef<HTMLDivElement>(null)
-	// const buttonRef = useRef<HTMLButtonElement>(null)
+	const buttonRef = useRef<HTMLButtonElement>(null)
 
 	const toggleForm = (event: React.MouseEvent) => {
 		event.stopPropagation()
@@ -25,7 +26,8 @@ const LinkManage: React.FC = () => {
 		setShowCreate(prev => !prev)
 	}
 
-	const clickOptionsButton = () => {
+	const clickOptionsButton = (e: React.MouseEvent) => {
+		e.preventDefault()
 		setShowOptions(prev => !prev)
 	}
 
@@ -60,6 +62,13 @@ const LinkManage: React.FC = () => {
 		}
 	}, [showOptions])
 
+	/*
+	 * This code means that when link form is opened, these refs will be added as an exception to the click outside handler
+	 */
+	React.useEffect(() => {
+		setGlobalExceptionRefs([optionsRef, buttonRef])
+	}, [setGlobalExceptionRefs])
+
 	return (
 		<>
 			{showCreate && <LinkForm onClose={handleFormClose} onSuccess={handleFormClose} onFail={handleFormFail} />}
@@ -74,7 +83,7 @@ const LinkManage: React.FC = () => {
 					</Button>
 					<div className="relative" ref={optionsRef}>
 						{showOptions && <LinkOptions />}
-						<Button variant="ghost" onClick={clickOptionsButton}>
+						<Button ref={buttonRef} variant="ghost" onClick={clickOptionsButton}>
 							<LaIcon name="Ellipsis" />
 						</Button>
 					</div>

@@ -15,14 +15,16 @@ import { NotesSection } from "./partial/notes-section"
 import { TopicSelector } from "./partial/topic-selector"
 import { DescriptionInput } from "./partial/description-input"
 import { LearningStateSelector } from "./partial/learning-state-selector"
-import { useAtom } from "jotai"
+import { atom, useAtom } from "jotai"
 import { linkLearningStateSelectorAtom, linkTopicSelectorAtom } from "@/store/link"
 
+export const globalLinkFormExceptionRefsAtom = atom<React.RefObject<HTMLElement>[]>([])
 interface LinkFormProps extends React.ComponentPropsWithoutRef<"form"> {
 	onClose?: () => void
 	onSuccess?: () => void
 	onFail?: () => void
 	personalLink?: PersonalLink
+	exceptionsRefs?: React.RefObject<HTMLElement>[]
 }
 
 const defaultValues: Partial<LinkFormValues> = {
@@ -36,9 +38,17 @@ const defaultValues: Partial<LinkFormValues> = {
 	topic: null
 }
 
-export const LinkForm: React.FC<LinkFormProps> = ({ onSuccess, onFail, personalLink, onClose }) => {
+export const LinkForm: React.FC<LinkFormProps> = ({
+	onSuccess,
+	onFail,
+	personalLink,
+	onClose,
+	exceptionsRefs = []
+}) => {
 	const [islearningStateSelectorOpen] = useAtom(linkLearningStateSelectorAtom)
 	const [istopicSelectorOpen] = useAtom(linkTopicSelectorAtom)
+	const [globalExceptionRefs] = useAtom(globalLinkFormExceptionRefsAtom)
+
 	const formRef = React.useRef<HTMLFormElement>(null)
 
 	const [isFetching, setIsFetching] = React.useState(false)
@@ -52,14 +62,21 @@ export const LinkForm: React.FC<LinkFormProps> = ({ onSuccess, onFail, personalL
 		mode: "all"
 	})
 
+	const allExceptionRefs = React.useMemo(
+		() => [...exceptionsRefs, ...globalExceptionRefs],
+		[exceptionsRefs, globalExceptionRefs]
+	)
+
 	React.useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
-			if (
-				formRef.current &&
-				!formRef.current.contains(event.target as Node) &&
-				!istopicSelectorOpen &&
-				!islearningStateSelectorOpen
-			) {
+			const isClickInsideForm = formRef.current && formRef.current.contains(event.target as Node)
+
+			const isClickInsideExceptions = allExceptionRefs.some((ref, index) => {
+				const isInside = ref.current && ref.current.contains(event.target as Node)
+				return isInside
+			})
+
+			if (!isClickInsideForm && !istopicSelectorOpen && !islearningStateSelectorOpen && !isClickInsideExceptions) {
 				onClose?.()
 			}
 		}
@@ -69,7 +86,7 @@ export const LinkForm: React.FC<LinkFormProps> = ({ onSuccess, onFail, personalL
 		return () => {
 			document.removeEventListener("mousedown", handleClickOutside)
 		}
-	}, [islearningStateSelectorOpen, istopicSelectorOpen])
+	}, [islearningStateSelectorOpen, istopicSelectorOpen, allExceptionRefs, onClose])
 
 	React.useEffect(() => {
 		if (selectedLink) {
