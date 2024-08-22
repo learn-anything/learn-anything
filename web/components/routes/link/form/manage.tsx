@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { linkEditIdAtom, linkLearningStateSelectorAtom, linkShowCreateAtom, linkTopicSelectorAtom } from "@/store/link"
+import { linkEditIdAtom, linkShowCreateAtom } from "@/store/link"
 import { useAtom } from "jotai"
 import React, { useEffect, useRef, useState } from "react"
 import { useKey } from "react-use"
@@ -13,10 +13,9 @@ import LinkOptions from "@/components/LinkOptions"
 const LinkManage: React.FC = () => {
 	const [showCreate, setShowCreate] = useAtom(linkShowCreateAtom)
 	const [editId, setEditId] = useAtom(linkEditIdAtom)
-	const [islearningStateSelectorOpen] = useAtom(linkLearningStateSelectorAtom)
-	const [istopicSelectorOpen] = useAtom(linkTopicSelectorAtom)
+
 	const [showOptions, setShowOptions] = useState(false)
-	const formRef = useRef<HTMLFormElement>(null)
+
 	const optionsRef = useRef<HTMLDivElement>(null)
 	// const buttonRef = useRef<HTMLButtonElement>(null)
 
@@ -26,44 +25,24 @@ const LinkManage: React.FC = () => {
 		setShowCreate(prev => !prev)
 	}
 
+	const clickOptionsButton = () => {
+		setShowOptions(prev => !prev)
+	}
+
 	const handleFormClose = () => {
 		setShowCreate(false)
 	}
 
+	const handleFormFail = () => {}
+
 	// wipes the data from the form when the form is closed
-	useEffect(() => {
+	React.useEffect(() => {
 		if (!showCreate) {
-			formRef.current?.reset()
 			setEditId(null)
 		}
 	}, [showCreate, setEditId])
 
-	useEffect(() => {
-		const handleClickOutside = (event: MouseEvent) => {
-			if (
-				formRef.current &&
-				!formRef.current.contains(event.target as Node) &&
-				!istopicSelectorOpen &&
-				!islearningStateSelectorOpen
-			) {
-				handleFormClose()
-			}
-		}
-
-		if (showCreate) {
-			document.addEventListener("mousedown", handleClickOutside)
-		}
-
-		return () => {
-			document.removeEventListener("mousedown", handleClickOutside)
-		}
-	}, [showCreate, islearningStateSelectorOpen, istopicSelectorOpen])
-
 	useKey("Escape", handleFormClose)
-
-	const clickOptionsButton = () => {
-		setShowOptions(prev => !prev)
-	}
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -83,7 +62,7 @@ const LinkManage: React.FC = () => {
 
 	return (
 		<>
-			{showCreate && <LinkForm ref={formRef} onSuccess={handleFormClose} onCancel={handleFormClose} />}
+			{showCreate && <LinkForm onClose={handleFormClose} onSuccess={handleFormClose} onFail={handleFormFail} />}
 			<div className="absolute bottom-0 m-0 flex w-full list-none bg-inherit p-2.5 text-center align-middle font-semibold leading-[13px] no-underline">
 				<div className="mx-auto flex flex-row items-center justify-center gap-2">
 					<Button
