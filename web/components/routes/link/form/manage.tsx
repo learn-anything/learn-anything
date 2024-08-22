@@ -16,8 +16,8 @@ const LinkManage: React.FC = () => {
 	const [islearningStateSelectorOpen] = useAtom(linkLearningStateSelectorAtom)
 	const [istopicSelectorOpen] = useAtom(linkTopicSelectorAtom)
 	const [showOptions, setShowOptions] = useState(false)
-
 	const formRef = useRef<HTMLFormElement>(null)
+	const optionsRef = useRef<HTMLDivElement>(null)
 	// const buttonRef = useRef<HTMLButtonElement>(null)
 
 	const toggleForm = (event: React.MouseEvent) => {
@@ -28,10 +28,6 @@ const LinkManage: React.FC = () => {
 
 	const handleFormClose = () => {
 		setShowCreate(false)
-	}
-
-	const clickOptionsButton = () => {
-		setShowOptions(prev => !prev)
 	}
 
 	// wipes the data from the form when the form is closed
@@ -65,6 +61,26 @@ const LinkManage: React.FC = () => {
 
 	useKey("Escape", handleFormClose)
 
+	const clickOptionsButton = () => {
+		setShowOptions(prev => !prev)
+	}
+
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (optionsRef.current && !optionsRef.current.contains(event.target as Node)) {
+				setShowOptions(false)
+			}
+		}
+
+		if (showOptions) {
+			document.addEventListener("mousedown", handleClickOutside)
+		}
+
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside)
+		}
+	}, [showOptions])
+
 	return (
 		<>
 			{showCreate && <LinkForm ref={formRef} onSuccess={handleFormClose} onCancel={handleFormClose} />}
@@ -77,7 +93,7 @@ const LinkManage: React.FC = () => {
 					>
 						<LaIcon name={showCreate ? "X" : editId ? "Trash" : "Plus"} />
 					</Button>
-					<div className="relative">
+					<div className="relative" ref={optionsRef}>
 						{showOptions && <LinkOptions />}
 						<Button variant="ghost" onClick={clickOptionsButton}>
 							<LaIcon name="Ellipsis" />
