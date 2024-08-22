@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useCallback, useRef, useEffect } from "react"
+import { useAtom } from "jotai"
 import { LAEditor, LAEditorRef } from "@/components/la-editor"
 // import { DetailPageHeader } from "./header" //dont need. check figma
 import { ID } from "jazz-tools"
@@ -13,6 +14,10 @@ import { toast } from "sonner"
 import { EditorView } from "@tiptap/pm/view"
 import { Editor } from "@tiptap/core"
 import { generateUniqueSlug } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { TopicSelector } from "@/components/routes/link/form/partial/topic-selector"
+import { linkTopicSelectorAtom } from "@/store/link"
+import { LaIcon } from "@/components/custom/la-icon"
 
 const TITLE_PLACEHOLDER = "Page title"
 
@@ -38,6 +43,8 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 
 	const titleEditorRef = useRef<Editor | null>(null)
 	const contentEditorRef = useRef<LAEditorRef>(null)
+
+	const [istopicSelectorOpen] = useAtom(linkTopicSelectorAtom)
 
 	const updatePageContent = (content: Content, model: PersonalPage) => {
 		model.content = content
@@ -159,11 +166,26 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 		<div tabIndex={0} className="relative flex grow flex-col overflow-y-auto">
 			<div className="relative mx-auto flex h-full w-[calc(100%-40px)] shrink-0 grow flex-col sm:w-[calc(100%-80px)]">
 				<form className="flex shrink-0 flex-col">
-					<div className="mb-2 mt-8 py-1.5">
+					<div className="mb-2 mt-8 flex flex-row justify-between py-1.5">
 						<EditorContent
 							editor={titleEditor}
 							className="la-editor cursor-text select-text text-2xl font-semibold leading-[calc(1.33333)] tracking-[-0.00625rem]"
 						/>
+						{/* <TopicSelector /> */}
+						<div>
+							<Button variant="ghost">
+								<LaIcon
+									className="text-neutral-500 transition-colors duration-200 hover:text-neutral-300"
+									name="EyeOff"
+								/>
+							</Button>
+							<Button variant="ghost">
+								<LaIcon
+									className="text-neutral-500 transition-colors duration-200 hover:text-neutral-300"
+									name="Ellipsis"
+								/>
+							</Button>
+						</div>
 					</div>
 					<div className="flex flex-auto flex-col">
 						<div className="relative flex h-full max-w-full grow flex-col items-stretch p-0">
