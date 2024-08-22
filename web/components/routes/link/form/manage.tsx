@@ -63,10 +63,10 @@ const LinkManage: React.FC = () => {
 		<>
 			{showCreate && <LinkForm ref={formRef} onSuccess={handleFormClose} onCancel={handleFormClose} />}
 
-			<div className="absolute bottom-0 m-0 flex w-full list-none border-t border-[#dedede] bg-white p-2.5 text-center align-middle font-semibold leading-[13px] no-underline">
+			<div className="absolute bottom-0 m-0 flex w-full list-none bg-inherit p-2.5 text-center align-middle font-semibold leading-[13px] no-underline">
 				<div className="mx-auto flex flex-row items-center justify-center gap-2">
 					{showCreate && (
-						<Button variant={"ghost"} onClick={toggleForm}>
+						<Button variant={"ghost"} className="hover:bg-red-500/50" onClick={toggleForm}>
 							<LaIcon name="Trash" />
 						</Button>
 					)}
