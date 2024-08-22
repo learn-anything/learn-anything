@@ -48,21 +48,6 @@ export const ListItem: React.FC<ListItemProps> = ({
 	setShowDeleteIconForLinkId
 }) => {
 	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: personalLink.id, disabled })
-	const formRef = React.useRef<HTMLFormElement>(null)
-
-	React.useEffect(() => {
-		function handleClickOutside(event: MouseEvent) {
-			if (formRef.current && !formRef.current.contains(event.target as Node)) {
-				setEditId(null)
-			}
-		}
-
-		document.addEventListener("mousedown", handleClickOutside)
-
-		return () => {
-			document.removeEventListener("mousedown", handleClickOutside)
-		}
-	}, [formRef])
 
 	const style = {
 		transform: CSS.Transform.toString(transform),
@@ -89,9 +74,11 @@ export const ListItem: React.FC<ListItemProps> = ({
 		setEditId(null)
 	}
 
-	const handleCancel = () => {
+	const handleOnClose = () => {
 		setEditId(null)
 	}
+
+	const handleOnFail = () => {}
 
 	// const handleRowClick = () => {
 	// 	setShowDeleteIconForLinkId(personalLink.id)
@@ -130,7 +117,9 @@ export const ListItem: React.FC<ListItemProps> = ({
 	const selectedLearningState = LEARNING_STATES.find(ls => ls.value === personalLink.learningState)
 
 	if (isEditing) {
-		return <LinkForm ref={formRef} personalLink={personalLink} onSuccess={handleSuccess} onCancel={handleCancel} />
+		return (
+			<LinkForm onClose={handleOnClose} personalLink={personalLink} onSuccess={handleSuccess} onFail={handleOnFail} />
+		)
 	}
 
 	return (
