@@ -11,8 +11,7 @@ import { LaIcon } from "@/components/custom/la-icon"
 
 const LinkManage: React.FC = () => {
 	const [showCreate, setShowCreate] = useAtom(linkShowCreateAtom)
-	const [editId] = useAtom(linkEditIdAtom)
-	const [, setEditId] = useAtom(linkEditIdAtom)
+	const [editId, setEditId] = useAtom(linkEditIdAtom)
 	const [islearningStateSelectorOpen] = useAtom(linkLearningStateSelectorAtom)
 	const [istopicSelectorOpen] = useAtom(linkTopicSelectorAtom)
 
@@ -63,15 +62,14 @@ const LinkManage: React.FC = () => {
 	return (
 		<>
 			{showCreate && <LinkForm ref={formRef} onSuccess={handleFormClose} onCancel={handleFormClose} />}
-
 			<div className="absolute bottom-0 m-0 flex w-full list-none bg-inherit p-2.5 text-center align-middle font-semibold leading-[13px] no-underline">
 				<div className="mx-auto flex flex-row items-center justify-center gap-2">
 					<Button
 						variant="ghost"
 						onClick={toggleForm}
-						className={editId ? "text-red-500 hover:bg-red-500/50 hover:text-white" : ""}
+						className={editId || showCreate ? "text-red-500 hover:bg-red-500/50 hover:text-white" : ""}
 					>
-						<LaIcon name={editId ? "Trash" : "Plus"} />
+						<LaIcon name={showCreate ? "X" : editId ? "Trash" : "Plus"} />
 					</Button>
 				</div>
 			</div>
@@ -83,6 +81,4 @@ LinkManage.displayName = "LinkManage"
 
 export { LinkManage }
 
-{
-	/* <FloatingButton ref={buttonRef} onClick={toggleForm} isOpen={showCreate} /> */
-}
+/* <FloatingButton ref={buttonRef} onClick={toggleForm} isOpen={showCreate} /> */
