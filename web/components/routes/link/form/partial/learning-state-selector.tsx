@@ -41,7 +41,7 @@ export const LearningStateSelector: React.FC = () => {
 									<span className={cn("truncate", selectedLearningState?.className || "")}>
 										{selectedLearningState?.label || "Select state"}
 									</span>
-									<LaIcon name="ChevronDown" size={16} />
+									<LaIcon name="ChevronDown" />
 								</Button>
 							</FormControl>
 						</PopoverTrigger>
