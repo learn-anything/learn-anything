@@ -6,11 +6,12 @@ import { useAtom } from "jotai"
 import React, { useEffect, useRef } from "react"
 import { useKey } from "react-use"
 import { LinkForm } from "./link-form"
-import { FloatingButton } from "./partial/floating-button"
 import { LaIcon } from "@/components/custom/la-icon"
+// import { FloatingButton } from "./partial/floating-button"
 
 const LinkManage: React.FC = () => {
 	const [showCreate, setShowCreate] = useAtom(linkShowCreateAtom)
+	const [editId] = useAtom(linkEditIdAtom)
 	const [, setEditId] = useAtom(linkEditIdAtom)
 	const [islearningStateSelectorOpen] = useAtom(linkLearningStateSelectorAtom)
 	const [istopicSelectorOpen] = useAtom(linkTopicSelectorAtom)
@@ -65,19 +66,15 @@ const LinkManage: React.FC = () => {
 
 			<div className="absolute bottom-0 m-0 flex w-full list-none bg-inherit p-2.5 text-center align-middle font-semibold leading-[13px] no-underline">
 				<div className="mx-auto flex flex-row items-center justify-center gap-2">
-					{showCreate && (
-						<Button variant={"ghost"} className="hover:bg-red-500/50" onClick={toggleForm}>
-							<LaIcon name="Trash" />
-						</Button>
-					)}
-					{!showCreate && (
-						<Button variant={"ghost"} onClick={toggleForm}>
-							<LaIcon name="Plus" />
-						</Button>
-					)}
+					<Button
+						variant="ghost"
+						onClick={toggleForm}
+						className={editId ? "text-red-500 hover:bg-red-500/50 hover:text-white" : ""}
+					>
+						<LaIcon name={editId ? "Trash" : "Plus"} />
+					</Button>
 				</div>
 			</div>
-			{/* <FloatingButton ref={buttonRef} onClick={toggleForm} isOpen={showCreate} /> */}
 		</>
 	)
 }
@@ -85,3 +82,7 @@ const LinkManage: React.FC = () => {
 LinkManage.displayName = "LinkManage"
 
 export { LinkManage }
+
+{
+	/* <FloatingButton ref={buttonRef} onClick={toggleForm} isOpen={showCreate} /> */
+}

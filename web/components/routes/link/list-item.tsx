@@ -1,5 +1,6 @@
 "use client"
 
+import { useAtom } from "jotai"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { PersonalLink } from "@/lib/schema/personal-link"
@@ -92,9 +93,9 @@ export const ListItem: React.FC<ListItemProps> = ({
 		setEditId(null)
 	}
 
-	const handleRowClick = () => {
-		setShowDeleteIconForLinkId(personalLink.id)
-	}
+	// const handleRowClick = () => {
+	// 	setShowDeleteIconForLinkId(personalLink.id)
+	// }
 
 	const handleRowDoubleClick = () => {
 		setEditId(personalLink.id)
@@ -147,7 +148,7 @@ export const ListItem: React.FC<ListItemProps> = ({
 			className={cn("hover:bg-muted/50 relative flex h-14 cursor-default items-center outline-none xl:h-11", {
 				"bg-muted/50": isFocused
 			})}
-			onClick={handleRowClick}
+			// onClick={handleRowClick}
 			onDoubleClick={handleRowDoubleClick}
 		>
 			<div className="flex grow justify-between gap-x-6 px-6 max-lg:px-4">
