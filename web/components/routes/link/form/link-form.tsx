@@ -153,10 +153,20 @@ export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 								<UrlBadge urlFetched={urlFetched} handleResetUrl={handleResetUrl} />
 							</div>
 
-							<div className="flex flex-row items-center justify-between gap-2 rounded-b-md border-t px-3 py-2">
+							<div
+								className="flex flex-row items-center justify-between gap-2 rounded-b-md border-t px-3 py-2"
+								onClick={e => {
+									if (!(e.target as HTMLElement).closest("button")) {
+										const notesInput = e.currentTarget.querySelector("input")
+										if (notesInput) {
+											notesInput.focus()
+										}
+									}
+								}}
+							>
 								<NotesSection />
 
-								{isFetching && (
+								{isFetching ? (
 									<div className="flex w-auto items-center justify-end gap-x-2">
 										<span className="text-muted-foreground flex items-center text-sm">
 											<svg className="mr-2 h-4 w-4 animate-spin" viewBox="0 0 24 24">
@@ -178,8 +188,7 @@ export const LinkForm = React.forwardRef<HTMLFormElement, LinkFormProps>(
 											Fetching metadata...
 										</span>
 									</div>
-								)}
-								{!isFetching && (
+								) : (
 									<div className="flex w-auto items-center justify-end gap-x-2">
 										<Button size="sm" type="button" variant="ghost" onClick={handleCancel}>
 											Cancel

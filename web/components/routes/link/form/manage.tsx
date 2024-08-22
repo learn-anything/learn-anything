@@ -3,10 +3,11 @@
 import { Button } from "@/components/ui/button"
 import { linkEditIdAtom, linkLearningStateSelectorAtom, linkShowCreateAtom, linkTopicSelectorAtom } from "@/store/link"
 import { useAtom } from "jotai"
-import React, { useEffect, useRef } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useKey } from "react-use"
 import { LinkForm } from "./link-form"
 import { LaIcon } from "@/components/custom/la-icon"
+import LinkOptions from "@/components/LinkOptions"
 // import { FloatingButton } from "./partial/floating-button"
 
 const LinkManage: React.FC = () => {
@@ -14,9 +15,10 @@ const LinkManage: React.FC = () => {
 	const [editId, setEditId] = useAtom(linkEditIdAtom)
 	const [islearningStateSelectorOpen] = useAtom(linkLearningStateSelectorAtom)
 	const [istopicSelectorOpen] = useAtom(linkTopicSelectorAtom)
+	const [showOptions, setShowOptions] = useState(false)
 
 	const formRef = useRef<HTMLFormElement>(null)
-	const buttonRef = useRef<HTMLButtonElement>(null)
+	// const buttonRef = useRef<HTMLButtonElement>(null)
 
 	const toggleForm = (event: React.MouseEvent) => {
 		event.stopPropagation()
@@ -26,6 +28,10 @@ const LinkManage: React.FC = () => {
 
 	const handleFormClose = () => {
 		setShowCreate(false)
+	}
+
+	const clickOptionsButton = () => {
+		setShowOptions(prev => !prev)
 	}
 
 	// wipes the data from the form when the form is closed
@@ -71,6 +77,12 @@ const LinkManage: React.FC = () => {
 					>
 						<LaIcon name={showCreate ? "X" : editId ? "Trash" : "Plus"} />
 					</Button>
+					<div className="relative">
+						{showOptions && <LinkOptions />}
+						<Button variant="ghost" onClick={clickOptionsButton}>
+							<LaIcon name="Ellipsis" />
+						</Button>
+					</div>
 				</div>
 			</div>
 		</>
