@@ -45,9 +45,6 @@ export const PageSection: React.FC = () => {
 					page =>
 						page?.id && (
 							<div key={page.id} className="group/reorder-page relative">
-								{/* <span className="absolute -left-3 top-1/2 -translate-y-1/2 cursor-move opacity-0 group-hover/reorder-page:opacity-100">
-							<LaIcon name="GripVertical" className="size-3.5" />
-						</span> */}
 								<div className="group/sidebar-link relative flex min-w-0 flex-1">
 									<Link
 										href={`/pages/${page.id}`}
@@ -56,9 +53,8 @@ export const PageSection: React.FC = () => {
 											{ "bg-accent text-accent-foreground": pathname === `/pages/${page.id}` }
 										)}
 									>
-										{/* <LaIcon name="NotepadText" /> */}
 										<span className="flex max-w-[calc(100%-52px)] flex-1 items-center gap-1.5 truncate text-sm">
-											<span className="truncate opacity-85 group-hover/sidebar-link:opacity-100">{page.title}</span>
+											<span className="truncate opacity-60 group-hover/sidebar-link:opacity-100">{page.title}</span>
 										</span>
 									</Link>
 									{/* <Button
