@@ -11,14 +11,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useAtom } from "jotai"
 import { linkSortAtom } from "@/store/link"
 import { atom } from "jotai"
-import { LEARNING_STATES, LearningState } from "@/lib/constants"
+import { LEARNING_STATES } from "@/lib/constants"
 import { useQueryState, parseAsStringLiteral } from "nuqs"
+import { FancySwitch } from "@omit/react-fancy-switch"
+import { cn } from "@/lib/utils"
 
-const ALL_STATES: ReadonlyArray<LearningState> = [
-	{ label: "All", value: "all", icon: "List", className: "text-foreground" },
-	...LEARNING_STATES
-] as const
-
+const ALL_STATES = [{ label: "All", value: "all", icon: "List", className: "text-foreground" }, ...LEARNING_STATES]
 const ALL_STATES_STRING = ALL_STATES.map(ls => ls.value)
 
 const learningStateAtom = atom<string>("all")
@@ -36,7 +34,7 @@ export const LinkHeader = React.memo(() => {
 					</div>
 				</div>
 
-				{!isTablet && <Tabs />}
+				{!isTablet && <LearningTab />}
 
 				<div className="flex flex-auto"></div>
 
@@ -45,7 +43,7 @@ export const LinkHeader = React.memo(() => {
 
 			{isTablet && (
 				<div className="border-b-primary/5 flex min-h-10 flex-row items-start justify-between border-b px-6 py-2 max-lg:pl-4">
-					<Tabs />
+					<LearningTab />
 				</div>
 			)}
 		</>
@@ -54,7 +52,7 @@ export const LinkHeader = React.memo(() => {
 
 LinkHeader.displayName = "LinkHeader"
 
-const Tabs = React.memo(() => {
+const LearningTab = React.memo(() => {
 	const [activeTab, setActiveTab] = useAtom(learningStateAtom)
 	const [activeState, setActiveState] = useQueryState(
 		"state",
@@ -74,42 +72,21 @@ const Tabs = React.memo(() => {
 	}, [activeState, setActiveTab])
 
 	return (
-		<div className="bg-secondary/50 flex items-baseline overflow-x-hidden rounded-md">
-			{ALL_STATES.map(ls => (
-				<TabItem key={ls.value} {...ls} isActive={activeTab === ls.value} onClick={() => handleTabChange(ls.value)} />
-			))}
-		</div>
+		<FancySwitch
+			value={activeTab}
+			onChange={value => {
+				handleTabChange(value as string)
+			}}
+			options={ALL_STATES}
+			className="bg-secondary flex rounded-lg"
+			highlighterClassName="bg-secondary-foreground/10"
+			radioClassName={cn(
+				"relative mx-2 flex h-8 cursor-pointer items-center justify-center rounded-full px-1 text-sm text-secondary-foreground/60 data-[checked]:text-secondary-foreground font-medium transition-colors focus:outline-none"
+			)}
+			highlighterIncludeMargin={true}
+		/>
 	)
 })
-
-Tabs.displayName = "Tabs"
-
-interface TabItemProps extends LearningState {
-	isActive: boolean
-	onClick: () => void
-}
-
-const TabItem = React.memo(({ label, value, isActive, onClick }: TabItemProps) => {
-	return (
-		<div tabIndex={-1} className="rounded-md">
-			<div className="flex flex-row">
-				<div aria-label={label}>
-					<Button
-						size="sm"
-						type="button"
-						variant="ghost"
-						className={`gap-x-2 truncate text-sm ${isActive ? "bg-accent text-accent-foreground" : ""}`}
-						onClick={onClick}
-					>
-						{label}
-					</Button>
-				</div>
-			</div>
-		</div>
-	)
-})
-
-TabItem.displayName = "TabItem"
 
 const FilterAndSort = React.memo(() => {
 	const [sort, setSort] = useAtom(linkSortAtom)
