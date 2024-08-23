@@ -2,10 +2,10 @@
 
 import * as react from "react"
 
-import type * as force_graph from "./ForceGraphClient"
+import type * as force_graph from "./force-graph-client"
 
-let graph_data_promise = import("./graph_data.json").then(a => a.default)
-let ForceGraphClient   = react.lazy(() => import("./ForceGraphClient"))
+let graph_data_promise = import("./graph-data.json").then(a => a.default)
+let ForceGraphClient   = react.lazy(() => import("./force-graph-client"))
 
 export default function PublicHomeRoute() {
 
