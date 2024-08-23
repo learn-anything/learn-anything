@@ -3,6 +3,7 @@
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { useParams } from "next/navigation"
 import Link from "next/link"
+import { LaIcon } from "@/components/custom/la-icon"
 import { Icon } from "@/components/la-editor/components/ui/icon"
 
 interface ProfileStatsProps {
@@ -79,7 +80,13 @@ export const ProfileWrapper = () => {
 
 	return (
 		<div className="flex flex-1 flex-col text-black dark:text-white">
-			<p className="p-[20px] text-2xl font-semibold">Profile</p>
+			<div className="flex items-center justify-between p-[20px]">
+				<p className="text-2xl font-semibold">Profile</p>
+				<LaIcon
+					name="Settings"
+					className="cursor-pointer text-neutral-500 transition-colors duration-200 hover:text-neutral-300"
+				/>
+			</div>
 			<p className="text-2xl font-semibold">{username}</p>
 			<div className="flex flex-col items-center border-b border-neutral-900 bg-inherit pb-5">
 				<div className="flex w-full max-w-2xl align-top">
