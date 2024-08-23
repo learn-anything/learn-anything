@@ -13,8 +13,13 @@ import { useCoState } from "@/lib/providers/jazz-provider"
 import { PublicGlobalGroup } from "@/lib/schema/master/public-group"
 import { ID } from "jazz-tools"
 import { LaIcon } from "@/components/custom/la-icon"
+import { Topic } from "@/lib/schema"
 
-export const TopicSelector: React.FC = () => {
+interface TopicSelectorProps {
+	onSelect?: (value: Topic) => void
+}
+
+export const TopicSelector: React.FC<TopicSelectorProps> = ({ onSelect }) => {
 	const globalGroup = useCoState(
 		PublicGlobalGroup,
 		process.env.NEXT_PUBLIC_JAZZ_GLOBAL_GROUP as ID<PublicGlobalGroup>,
@@ -69,7 +74,13 @@ export const TopicSelector: React.FC = () => {
 																e.stopPropagation()
 															}}
 															onSelect={value => {
+																const topic = globalGroup?.root.topics.find(topic => topic?.name === value)
 																field.onChange(value)
+
+																if (topic) {
+																	onSelect?.(topic)
+																}
+
 																setIstopicSelectorOpen(false)
 															}}
 														>

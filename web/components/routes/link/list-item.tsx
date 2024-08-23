@@ -1,6 +1,5 @@
 "use client"
 
-import { useAtom } from "jotai"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { PersonalLink } from "@/lib/schema/personal-link"
@@ -18,6 +17,8 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { LaIcon } from "@/components/custom/la-icon"
 import { LEARNING_STATES } from "@/lib/constants"
+import { Badge } from "@/components/ui/badge"
+
 interface ListItemProps {
 	confirm: (options: ConfirmOptions) => Promise<boolean>
 	personalLink: PersonalLink
@@ -234,8 +235,7 @@ export const ListItem: React.FC<ListItemProps> = ({
 				</div>
 
 				<div className="flex shrink-0 items-center gap-x-4">
-					{/* TODO: add back with real topic name */}
-					{/* <Badge variant="secondary">Topic Name</Badge> */}
+					{personalLink.topic && <Badge variant="secondary">{personalLink.topic.prettyName}</Badge>}
 					{showDeleteIconForLinkId === personalLink.id && (
 						<Button
 							size="icon"

@@ -1,6 +1,6 @@
 import * as React from "react"
 import { useAccount, useCoState } from "@/lib/providers/jazz-provider"
-import { PersonalLink } from "@/lib/schema"
+import { PersonalLink, Topic } from "@/lib/schema"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
@@ -45,6 +45,8 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 	onClose,
 	exceptionsRefs = []
 }) => {
+	const [selectedTopic, setSelectedTopic] = React.useState<Topic | null>(null)
+
 	const [islearningStateSelectorOpen] = useAtom(linkLearningStateSelectorAtom)
 	const [istopicSelectorOpen] = useAtom(linkTopicSelectorAtom)
 	const [globalExceptionRefs] = useAtom(globalLinkFormExceptionRefsAtom)
@@ -138,13 +140,13 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 			const slug = generateUniqueSlug(personalLinks, values.title)
 
 			if (selectedLink) {
-				selectedLink.applyDiff({ ...values, slug, topic: null })
+				selectedLink.applyDiff({ ...values, slug, topic: selectedTopic })
 			} else {
 				const newPersonalLink = PersonalLink.create(
 					{
 						...values,
 						slug,
-						topic: null,
+						topic: selectedTopic,
 						sequence: me.root?.personalLinks?.length || 1,
 						createdAt: new Date(),
 						updatedAt: new Date()
@@ -188,7 +190,7 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 
 								<div className="flex flex-row items-center gap-2">
 									<LearningStateSelector />
-									<TopicSelector />
+									<TopicSelector onSelect={topic => setSelectedTopic(topic)} />
 								</div>
 							</div>
 
