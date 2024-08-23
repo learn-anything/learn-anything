@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils"
 const ALL_STATES = [{ label: "All", value: "all", icon: "List", className: "text-foreground" }, ...LEARNING_STATES]
 const ALL_STATES_STRING = ALL_STATES.map(ls => ls.value)
 
-const learningStateAtom = atom<string>("all")
+export const learningStateAtom = atom<string>("all")
 
 export const LinkHeader = React.memo(() => {
 	const isTablet = useMedia("(max-width: 1024px)")

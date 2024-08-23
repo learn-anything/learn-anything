@@ -19,8 +19,10 @@ import { useKey } from "react-use"
 import { useConfirm } from "@omit/react-confirm-dialog"
 import { ListItem } from "./list-item"
 import { useRef, useState, useCallback, useEffect } from "react"
+import { learningStateAtom } from "./header"
 
 const LinkList = () => {
+	const [activeLearningState] = useAtom(learningStateAtom)
 	const confirm = useConfirm()
 	const { me } = useAccount({
 		root: { personalLinks: [] }
@@ -34,10 +36,15 @@ const LinkList = () => {
 	const linkRefs = useRef<{ [key: string]: HTMLLIElement | null }>({})
 	const [showDeleteIconForLinkId, setShowDeleteIconForLinkId] = useState<string | null>(null)
 
+	let filteredLinks = personalLinks.filter(link => {
+		if (activeLearningState === "all") return true
+		if (!link?.learningState) return false
+		return link.learningState === activeLearningState
+	})
 	let sortedLinks =
-		sort === "title" && personalLinks
-			? [...personalLinks].sort((a, b) => (a?.title || "").localeCompare(b?.title || ""))
-			: personalLinks
+		sort === "title" && filteredLinks
+			? [...filteredLinks].sort((a, b) => (a?.title || "").localeCompare(b?.title || ""))
+			: filteredLinks
 	sortedLinks = sortedLinks || []
 
 	const sensors = useSensors(
@@ -188,7 +195,6 @@ const LinkList = () => {
 
 	return (
 		<div className="relative z-20">
-			{/* {editId && <div className="absolute inset-0 z-30 bg-black/20" onClick={() => setEditId(null)} />} */}
 			<DndContext
 				sensors={sensors}
 				collisionDetection={closestCenter}
