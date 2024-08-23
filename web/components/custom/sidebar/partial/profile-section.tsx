@@ -40,7 +40,9 @@ export const ProfileSection: React.FC = () => {
 								<DropdownMenuItem>
 									<div className="relative flex flex-1 items-center gap-2">
 										<LaIcon name="CircleUser" />
-										<span className="line-clamp-1 flex-1">My profile</span>
+										<Link href="/profile">
+											<span className="line-clamp-1 flex-1">My profile</span>
+										</Link>
 									</div>
 								</DropdownMenuItem>
 							</DropdownMenuGroup>
