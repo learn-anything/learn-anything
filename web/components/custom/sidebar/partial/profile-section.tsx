@@ -82,7 +82,7 @@ export const ProfileSection: React.FC = () => {
 							</DropdownMenuItem>
 							<DropdownMenuSeparator />
 							<DropdownMenuItem>
-								<MenuItem icon="UserCog" text="Edit profile" href="/edit-profile" onClose={closeMenu} />
+								<MenuItem icon="Settings" text="Settings" href="/settings" onClose={closeMenu} />
 							</DropdownMenuItem>
 							<DropdownMenuSeparator />
 							<DropdownMenuItem>
