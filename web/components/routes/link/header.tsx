@@ -3,7 +3,6 @@
 import * as React from "react"
 import { ListFilterIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
 import { ContentHeader, SidebarToggleButton } from "@/components/custom/content-header"
 import { useMedia } from "react-use"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -11,15 +10,20 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useAtom } from "jotai"
 import { linkSortAtom } from "@/store/link"
+import { atom } from "jotai"
+import { LEARNING_STATES, LearningState } from "@/lib/constants"
+import { useQueryState, parseAsStringLiteral } from "nuqs"
 
-interface TabItemProps {
-	url: string
-	label: string
-}
+const ALL_STATES: ReadonlyArray<LearningState> = [
+	{ label: "All", value: "all", icon: "List", className: "text-foreground" },
+	...LEARNING_STATES
+] as const
 
-const TABS = ["All", "Learning", "To Learn", "Learned"]
+const ALL_STATES_STRING = ALL_STATES.map(ls => ls.value)
 
-export const LinkHeader = () => {
+const learningStateAtom = atom<string>("all")
+
+export const LinkHeader = React.memo(() => {
 	const isTablet = useMedia("(max-width: 1024px)")
 
 	return (
@@ -46,61 +50,82 @@ export const LinkHeader = () => {
 			)}
 		</>
 	)
-}
+})
 
-const Tabs = () => {
-	const [activeTab, setActiveTab] = React.useState(TABS[0])
+LinkHeader.displayName = "LinkHeader"
+
+const Tabs = React.memo(() => {
+	const [activeTab, setActiveTab] = useAtom(learningStateAtom)
+	const [activeState, setActiveState] = useQueryState(
+		"state",
+		parseAsStringLiteral(Object.values(ALL_STATES_STRING)).withDefault(ALL_STATES_STRING[0])
+	)
+
+	const handleTabChange = React.useCallback(
+		(value: string) => {
+			setActiveTab(value)
+			setActiveState(value)
+		},
+		[setActiveTab, setActiveState]
+	)
+
+	React.useEffect(() => {
+		setActiveTab(activeState)
+	}, [activeState, setActiveTab])
 
 	return (
 		<div className="bg-secondary/50 flex items-baseline overflow-x-hidden rounded-md">
-			{TABS.map(tab => (
-				<TabItem key={tab} url="#" label={tab} isActive={activeTab === tab} onClick={() => setActiveTab(tab)} />
+			{ALL_STATES.map(ls => (
+				<TabItem key={ls.value} {...ls} isActive={activeTab === ls.value} onClick={() => handleTabChange(ls.value)} />
 			))}
 		</div>
 	)
-}
+})
 
-interface TabItemProps {
-	url: string
-	label: string
+Tabs.displayName = "Tabs"
+
+interface TabItemProps extends LearningState {
 	isActive: boolean
 	onClick: () => void
 }
 
-const TabItem = ({ url, label, isActive, onClick }: TabItemProps) => {
+const TabItem = React.memo(({ label, value, isActive, onClick }: TabItemProps) => {
 	return (
 		<div tabIndex={-1} className="rounded-md">
 			<div className="flex flex-row">
 				<div aria-label={label}>
-					<Link href={url}>
-						<Button
-							size="sm"
-							type="button"
-							variant="ghost"
-							className={`gap-x-2 truncate text-sm ${isActive ? "bg-accent text-accent-foreground" : ""}`}
-							onClick={onClick}
-						>
-							{label}
-						</Button>
-					</Link>
+					<Button
+						size="sm"
+						type="button"
+						variant="ghost"
+						className={`gap-x-2 truncate text-sm ${isActive ? "bg-accent text-accent-foreground" : ""}`}
+						onClick={onClick}
+					>
+						{label}
+					</Button>
 				</div>
 			</div>
 		</div>
 	)
-}
+})
 
-const FilterAndSort = () => {
+TabItem.displayName = "TabItem"
+
+const FilterAndSort = React.memo(() => {
 	const [sort, setSort] = useAtom(linkSortAtom)
 	const [sortOpen, setSortOpen] = React.useState(false)
 
-	const getFilterText = () => {
+	const getFilterText = React.useCallback(() => {
 		return sort.charAt(0).toUpperCase() + sort.slice(1)
-	}
+	}, [sort])
 
-	const handleSortChange = (value: string) => {
-		setSort(value)
-		setSortOpen(false)
-	}
+	const handleSortChange = React.useCallback(
+		(value: string) => {
+			setSort(value)
+			setSortOpen(false)
+		},
+		[setSort]
+	)
 
 	return (
 		<div className="flex w-auto items-center justify-end">
@@ -134,4 +159,6 @@ const FilterAndSort = () => {
 			</div>
 		</div>
 	)
-}
+})
+
+FilterAndSort.displayName = "FilterAndSort"
