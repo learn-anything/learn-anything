@@ -26,7 +26,7 @@ export const LinkHeader = React.memo(() => {
 
 	return (
 		<>
-			<ContentHeader className="p-4">
+			<ContentHeader className="px-6 py-5 max-lg:px-4">
 				<div className="flex min-w-0 shrink-0 items-center gap-1.5">
 					<SidebarToggleButton />
 					<div className="flex min-h-0 items-center">

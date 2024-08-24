@@ -16,7 +16,7 @@ export const ContentHeader = React.forwardRef<HTMLDivElement, ContentHeaderProps
 		return (
 			<header
 				className={cn(
-					"flex min-h-20 min-w-0 max-w-[100vw] shrink-0 items-center gap-3 pl-8 pr-6 transition-opacity max-lg:pl-4 max-lg:pr-5",
+					"flex min-h-10 min-w-0 max-w-[100vw] shrink-0 items-center gap-3 pl-8 pr-6 transition-opacity max-lg:pl-4 max-lg:pr-5",
 					className
 				)}
 				ref={ref}
