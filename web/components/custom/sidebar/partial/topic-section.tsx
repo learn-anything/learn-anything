@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button"
 import { LaIcon } from "@/components/custom/la-icon"
 import { SidebarItem } from "../sidebar"
 
-// Do not show topics in sidebar
 // const TOPICS = ["Nix", "Javascript", "Kubernetes", "Figma", "Hiring", "Java", "IOS", "Design"]
 
 export const TopicSection = () => {
@@ -31,7 +30,7 @@ export const TopicSection = () => {
 	}
 
 	const statusSelect = (status: string) => {
-		setSelectedStatus(status)
+		setSelectedStatus(prevStatus => (prevStatus === status ? null : status))
 	}
 
 	return (
