@@ -91,7 +91,7 @@ const PageList: React.FC<{ personalPages: PersonalPageLists; sortBy: string }> =
 										{ "bg-accent text-accent-foreground": pathname === `/pages/${page.id}` }
 									)}
 								>
-									<div className="flex max-w-[calc(100%-52px)] flex-1 items-center gap-1.5 truncate text-sm">
+									<div className="flex max-w-[calc(100%-15px)] flex-1 items-center gap-1.5 truncate text-sm">
 										<LaIcon name="FileText" className="h-3 w-3 opacity-60" />
 										<p className="truncate opacity-95 group-hover/sidebar-link:opacity-100">{page.title}</p>
 									</div>

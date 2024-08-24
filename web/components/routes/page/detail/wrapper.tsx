@@ -176,12 +176,6 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 							<Button variant="ghost">
 								<LaIcon
 									className="text-neutral-500 transition-colors duration-200 hover:text-neutral-300"
-									name="EyeOff"
-								/>
-							</Button>
-							<Button variant="ghost">
-								<LaIcon
-									className="text-neutral-500 transition-colors duration-200 hover:text-neutral-300"
 									name="Ellipsis"
 								/>
 							</Button>
