@@ -3,16 +3,17 @@ import { Button } from "@/components/ui/button"
 import { LaIcon } from "@/components/custom/la-icon"
 import { SidebarItem } from "../sidebar"
 
-const TOPICS = ["Nix", "Javascript", "Kubernetes", "Figma", "Hiring", "Java", "IOS", "Design"]
+// Do not show topics in sidebar
+// const TOPICS = ["Nix", "Javascript", "Kubernetes", "Figma", "Hiring", "Java", "IOS", "Design"]
 
 export const TopicSection = () => {
 	const [selectedStatus, setSelectedStatus] = useState<string | null>(null)
 	const sectionRef = useRef<HTMLDivElement>(null)
 
 	const learningOptions = [
-		{ text: "To Learn", icon: <LaIcon name="NotebookPen" />, color: "text-black dark:text-white" },
-		{ text: "Learning", icon: <LaIcon name="GraduationCap" />, color: "text-[#D29752]" },
-		{ text: "Learned", icon: <LaIcon name="Check" />, color: "text-[#708F51]" }
+		{ text: "To Learn", icon: <LaIcon name="NotebookPen" className="h-3 w-3" />, color: "text-black dark:text-white" },
+		{ text: "Learning", icon: <LaIcon name="GraduationCap" className="h-3 w-3" />, color: "text-[#D29752]" },
+		{ text: "Learned", icon: <LaIcon name="Check" className="h-3 w-3" />, color: "text-[#708F51]" }
 	]
 
 	const getStatusColor = (status: string | null) => {
@@ -22,41 +23,26 @@ export const TopicSection = () => {
 	}
 
 	const statusSelect = (status: string) => {
-		setSelectedStatus(status === "Show All" ? null : status)
+		setSelectedStatus(status)
 	}
-
-	const availableOptions = [
-		{
-			text: "Show All",
-			icon: <LaIcon name="BookOpen" />,
-			color: "text-black dark:text-white"
-		},
-		...learningOptions
-	]
 
 	return (
 		<div className="space-y-1 overflow-hidden" ref={sectionRef}>
-			<div className="text-foreground flex w-full items-center justify-between rounded-md px-2 py-2 text-xs font-medium">
-				<span className={getStatusColor(selectedStatus)}>
-					{selectedStatus ? `Topics: ${selectedStatus}` : "Topics"}
+			<div className="text-foreground flex w-full items-center justify-between rounded-md py-2 text-xs font-medium">
+				<span>
+					Topics <span className={getStatusColor(selectedStatus)}>{selectedStatus ? `: ${selectedStatus}` : ""}</span>
 				</span>
 			</div>
-
-			<div className="rounded-lg border border-neutral-200 bg-inherit dark:border-neutral-700">
-				{availableOptions.map(option => (
+			<div>
+				{learningOptions.map(option => (
 					<Button
 						key={option.text}
 						onClick={() => statusSelect(option.text)}
-						className={`flex w-full items-center justify-start space-x-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-neutral-100 dark:hover:bg-neutral-100/20 ${option.color} bg-inherit shadow-none`}
+						className={`flex w-full items-center justify-start gap-2 rounded-md py-1 text-sm font-medium hover:bg-neutral-100 dark:hover:bg-neutral-100/20 ${option.color} bg-inherit shadow-none`}
 					>
 						{option.icon && <span className={option.color}>{option.icon}</span>}
 						<span>{option.text}</span>
 					</Button>
-				))}
-			</div>
-			<div className="scrollbar-hide space-y-1 overflow-y-auto opacity-70" style={{ maxHeight: "calc(100vh - 200px)" }}>
-				{TOPICS.map(topic => (
-					<SidebarItem key={topic} label={topic} url={`/${topic}`} />
 				))}
 			</div>
 		</div>

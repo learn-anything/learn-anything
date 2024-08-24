@@ -53,7 +53,7 @@ export const PageSection: React.FC = () => {
 						Pages <span className="text-muted-foreground ml-1">{pageCount}</span>
 					</p>
 				</Button>
-				<ShowAllForm filteredPages={sortedPages} />
+				{/* <ShowAllForm filteredPages={sortedPages} /> */}
 				<CreatePageForm />
 			</div>
 
@@ -78,7 +78,7 @@ const PageList: React.FC<{ personalPages: PersonalPageLists; sortBy: string }> =
 		.slice(0, 6)
 
 	return (
-		<div className="flex flex-col gap-px">
+		<div className="flex flex-col gap-1">
 			{sortedPages.map(
 				page =>
 					page?.id && (
@@ -91,8 +91,8 @@ const PageList: React.FC<{ personalPages: PersonalPageLists; sortBy: string }> =
 										{ "bg-accent text-accent-foreground": pathname === `/pages/${page.id}` }
 									)}
 								>
-									<div className="flex max-w-[calc(100%-15px)] flex-1 items-center gap-1.5 truncate text-sm">
-										<LaIcon name="FileText" className="h-3 w-3 opacity-60" />
+									<div className="flex max-w-full flex-1 items-center gap-1.5 truncate text-sm">
+										<LaIcon name="FileText" className="size-3 flex-shrink-0 opacity-60" />
 										<p className="truncate opacity-95 group-hover/sidebar-link:opacity-100">{page.title}</p>
 									</div>
 								</Link>
@@ -108,42 +108,42 @@ interface ShowAllFormProps {
 	filteredPages: (filter: string) => void
 }
 
-const ShowAllForm: React.FC<ShowAllFormProps> = ({ filteredPages }) => {
-	const [popoverOpen, setPopoverOpen] = useState(false)
+// const ShowAllForm: React.FC<ShowAllFormProps> = ({ filteredPages }) => {
+// 	const [popoverOpen, setPopoverOpen] = useState(false)
 
-	const sortPages = (filter: string) => {
-		filteredPages(filter)
-		setPopoverOpen(false)
-	}
+// 	const sortPages = (filter: string) => {
+// 		filteredPages(filter)
+// 		setPopoverOpen(false)
+// 	}
 
-	return (
-		<Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-			<PopoverTrigger asChild>
-				<button
-					type="button"
-					aria-label="Sort pages"
-					className={cn(
-						"flex size-6 cursor-pointer items-center justify-center rounded-lg bg-inherit p-0.5 shadow-none focus:outline-0 focus:ring-0",
-						'opacity-0 transition-opacity duration-200 group-hover/pages:opacity-100 data-[state="open"]:opacity-100'
-					)}
-				>
-					<LaIcon name="Ellipsis" />
-				</button>
-			</PopoverTrigger>
-			<PopoverContent align="start" className="w-45 p-2">
-				<div className="flex flex-col space-y-1">
-					<p className="text-muted-foreground px-2 py-1 text-sm font-medium">Sort by</p>
-					<Button variant="ghost" onClick={() => sortPages("title")} className="justify-between">
-						Title
-					</Button>
-					<Button variant="ghost" onClick={() => sortPages("latest")} className="justify-between">
-						Recently Added
-					</Button>
-				</div>
-			</PopoverContent>
-		</Popover>
-	)
-}
+// 	return (
+// 		<Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+// 			<PopoverTrigger asChild>
+// 				<button
+// 					type="button"
+// 					aria-label="Sort pages"
+// 					className={cn(
+// 						"flex size-6 cursor-pointer items-center justify-center rounded-lg bg-inherit p-0.5 shadow-none focus:outline-0 focus:ring-0",
+// 						'opacity-0 transition-opacity duration-200 group-hover/pages:opacity-100 data-[state="open"]:opacity-100'
+// 					)}
+// 				>
+// 					<LaIcon name="Ellipsis" />
+// 				</button>
+// 			</PopoverTrigger>
+// 			<PopoverContent align="start" className="w-45 p-2">
+// 				<div className="flex flex-col space-y-1">
+// 					<p className="text-muted-foreground px-2 py-1 text-sm font-medium">Sort by</p>
+// 					<Button variant="ghost" onClick={() => sortPages("title")} className="justify-between">
+// 						Title
+// 					</Button>
+// 					<Button variant="ghost" onClick={() => sortPages("latest")} className="justify-between">
+// 						Recently Added
+// 					</Button>
+// 				</div>
+// 			</PopoverContent>
+// 		</Popover>
+// 	)
+// }
 
 const CreatePageForm: React.FC = () => {
 	const [open, setOpen] = useState(false)
