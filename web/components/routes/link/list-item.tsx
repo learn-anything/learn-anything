@@ -17,6 +17,8 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { LaIcon } from "@/components/custom/la-icon"
 import { LEARNING_STATES } from "@/lib/constants"
+import { Badge } from "@/components/ui/badge"
+
 interface ListItemProps {
 	confirm: (options: ConfirmOptions) => Promise<boolean>
 	personalLink: PersonalLink
@@ -47,21 +49,6 @@ export const ListItem: React.FC<ListItemProps> = ({
 	setShowDeleteIconForLinkId
 }) => {
 	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: personalLink.id, disabled })
-	const formRef = React.useRef<HTMLFormElement>(null)
-
-	React.useEffect(() => {
-		function handleClickOutside(event: MouseEvent) {
-			if (formRef.current && !formRef.current.contains(event.target as Node)) {
-				setEditId(null)
-			}
-		}
-
-		document.addEventListener("mousedown", handleClickOutside)
-
-		return () => {
-			document.removeEventListener("mousedown", handleClickOutside)
-		}
-	}, [formRef])
 
 	const style = {
 		transform: CSS.Transform.toString(transform),
@@ -88,13 +75,15 @@ export const ListItem: React.FC<ListItemProps> = ({
 		setEditId(null)
 	}
 
-	const handleCancel = () => {
+	const handleOnClose = () => {
 		setEditId(null)
 	}
 
-	const handleRowClick = () => {
-		setShowDeleteIconForLinkId(personalLink.id)
-	}
+	const handleOnFail = () => {}
+
+	// const handleRowClick = () => {
+	// 	setShowDeleteIconForLinkId(personalLink.id)
+	// }
 
 	const handleRowDoubleClick = () => {
 		setEditId(personalLink.id)
@@ -129,7 +118,9 @@ export const ListItem: React.FC<ListItemProps> = ({
 	const selectedLearningState = LEARNING_STATES.find(ls => ls.value === personalLink.learningState)
 
 	if (isEditing) {
-		return <LinkForm ref={formRef} personalLink={personalLink} onSuccess={handleSuccess} onCancel={handleCancel} />
+		return (
+			<LinkForm onClose={handleOnClose} personalLink={personalLink} onSuccess={handleSuccess} onFail={handleOnFail} />
+		)
 	}
 
 	return (
@@ -147,7 +138,7 @@ export const ListItem: React.FC<ListItemProps> = ({
 			className={cn("hover:bg-muted/50 relative flex h-14 cursor-default items-center outline-none xl:h-11", {
 				"bg-muted/50": isFocused
 			})}
-			onClick={handleRowClick}
+			// onClick={handleRowClick}
 			onDoubleClick={handleRowDoubleClick}
 		>
 			<div className="flex grow justify-between gap-x-6 px-6 max-lg:px-4">
@@ -244,8 +235,7 @@ export const ListItem: React.FC<ListItemProps> = ({
 				</div>
 
 				<div className="flex shrink-0 items-center gap-x-4">
-					{/* TODO: add back with real topic name */}
-					{/* <Badge variant="secondary">Topic Name</Badge> */}
+					{personalLink.topic && <Badge variant="secondary">{personalLink.topic.prettyName}</Badge>}
 					{showDeleteIconForLinkId === personalLink.id && (
 						<Button
 							size="icon"

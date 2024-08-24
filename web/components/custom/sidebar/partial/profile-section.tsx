@@ -1,10 +1,10 @@
 import { LaIcon } from "../../la-icon"
+import { useState } from "react"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
 	DropdownMenu,
 	DropdownMenuContent,
-	DropdownMenuGroup,
 	DropdownMenuItem,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger
@@ -12,44 +12,81 @@ import {
 import { useAccount } from "@/lib/providers/jazz-provider"
 import Link from "next/link"
 
+const MenuItem = ({
+	icon,
+	text,
+	href,
+	onClick,
+	onClose
+}: {
+	icon: string
+	text: string
+	href?: string
+	onClick?: () => void
+	onClose: () => void
+}) => {
+	const handleClick = () => {
+		onClose()
+		if (onClick) {
+			onClick()
+		}
+	}
+
+	return (
+		<div className="relative flex flex-1 items-center gap-2">
+			<LaIcon name={icon as any} />
+			{href ? (
+				<Link href={href} onClick={onClose}>
+					<span className="line-clamp-1 flex-1">{text}</span>
+				</Link>
+			) : (
+				<span className="line-clamp-1 flex-1" onClick={handleClick}>
+					{text}
+				</span>
+			)}
+		</div>
+	)
+}
 export const ProfileSection: React.FC = () => {
 	const { me, logOut } = useAccount({
 		profile: true
 	})
+	const [menuOpen, setMenuOpen] = useState(false)
+
+	const closeMenu = () => setMenuOpen(false)
 
 	return (
 		<div className="visible absolute inset-x-0 bottom-0 z-10 flex gap-8 p-2.5">
 			<div className="flex h-10 min-w-full items-center">
 				<div className="flex min-w-0">
-					<DropdownMenu>
+					<DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
 						<DropdownMenuTrigger asChild>
 							<button
 								aria-label="Profile"
-								className="hover:bg-accent focus-visible:ring-ring hover:text-accent-foreground flex h-8 items-center gap-1.5 truncate rounded pl-1 pr-1.5 focus-visible:outline-none focus-visible:ring-1"
+								className="hover:bg-accent focus-visible:ring-ring hover:text-accent-foreground flex items-center gap-1.5 truncate rounded pl-1 pr-1.5 focus-visible:outline-none focus-visible:ring-1"
 							>
 								<Avatar className="size-6">
 									<AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-									<AvatarFallback>CN</AvatarFallback>
+									{/* <AvatarFallback>CN</AvatarFallback> */}
 								</Avatar>
 								<span className="truncate text-left text-sm font-medium -tracking-wider">{me?.profile?.name}</span>
-								<LaIcon name="ChevronDown" className="size-4 shrink-0" />
+								<LaIcon
+									name="ChevronDown"
+									className={`size-4 shrink-0 transition-transform duration-300 ${menuOpen ? "rotate-180" : ""}`}
+								/>
 							</button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent className="w-56" align="start" side="top">
-							<DropdownMenuGroup>
-								<DropdownMenuItem>
-									<div className="relative flex flex-1 items-center gap-2">
-										<LaIcon name="CircleUser" />
-										<span className="line-clamp-1 flex-1">My profile</span>
-									</div>
-								</DropdownMenuItem>
-							</DropdownMenuGroup>
+							<DropdownMenuItem>
+								<MenuItem icon="CircleUser" text="My profile" href="/profile" onClose={closeMenu} />
+							</DropdownMenuItem>
 							<DropdownMenuSeparator />
-							<DropdownMenuItem onClick={logOut}>
-								<div className="relative flex flex-1 items-center gap-2">
-									{/* <LaIcon name="LogOut" /> */}
-									<span className="line-clamp-1 flex-1">Log out</span>
-								</div>
+							<DropdownMenuItem>
+								<MenuItem icon="Settings" text="Settings" href="/settings" onClose={closeMenu} />
+							</DropdownMenuItem>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem>
+								<MenuItem icon="LogOut" text="Log out" onClick={logOut} onClose={closeMenu} />
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>

@@ -1,21 +1,23 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { linkEditIdAtom, linkLearningStateSelectorAtom, linkShowCreateAtom, linkTopicSelectorAtom } from "@/store/link"
+import { linkEditIdAtom, linkShowCreateAtom } from "@/store/link"
 import { useAtom } from "jotai"
-import React, { useEffect, useRef } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useKey } from "react-use"
-import { LinkForm } from "./link-form"
-import { FloatingButton } from "./partial/floating-button"
+import { globalLinkFormExceptionRefsAtom, LinkForm } from "./link-form"
 import { LaIcon } from "@/components/custom/la-icon"
+import LinkOptions from "@/components/LinkOptions"
+// import { FloatingButton } from "./partial/floating-button"
 
 const LinkManage: React.FC = () => {
 	const [showCreate, setShowCreate] = useAtom(linkShowCreateAtom)
-	const [, setEditId] = useAtom(linkEditIdAtom)
-	const [islearningStateSelectorOpen] = useAtom(linkLearningStateSelectorAtom)
-	const [istopicSelectorOpen] = useAtom(linkTopicSelectorAtom)
+	const [editId, setEditId] = useAtom(linkEditIdAtom)
+	const [, setGlobalExceptionRefs] = useAtom(globalLinkFormExceptionRefsAtom)
 
-	const formRef = useRef<HTMLFormElement>(null)
+	const [showOptions, setShowOptions] = useState(false)
+
+	const optionsRef = useRef<HTMLDivElement>(null)
 	const buttonRef = useRef<HTMLButtonElement>(null)
 
 	const toggleForm = (event: React.MouseEvent) => {
@@ -24,60 +26,69 @@ const LinkManage: React.FC = () => {
 		setShowCreate(prev => !prev)
 	}
 
+	const clickOptionsButton = (e: React.MouseEvent) => {
+		e.preventDefault()
+		setShowOptions(prev => !prev)
+	}
+
 	const handleFormClose = () => {
 		setShowCreate(false)
 	}
 
+	const handleFormFail = () => {}
+
 	// wipes the data from the form when the form is closed
-	useEffect(() => {
+	React.useEffect(() => {
 		if (!showCreate) {
-			formRef.current?.reset()
 			setEditId(null)
 		}
 	}, [showCreate, setEditId])
 
+	useKey("Escape", handleFormClose)
+
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
-			if (
-				formRef.current &&
-				!formRef.current.contains(event.target as Node) &&
-				!istopicSelectorOpen &&
-				!islearningStateSelectorOpen
-			) {
-				handleFormClose()
+			if (optionsRef.current && !optionsRef.current.contains(event.target as Node)) {
+				setShowOptions(false)
 			}
 		}
 
-		if (showCreate) {
+		if (showOptions) {
 			document.addEventListener("mousedown", handleClickOutside)
 		}
 
 		return () => {
 			document.removeEventListener("mousedown", handleClickOutside)
 		}
-	}, [showCreate, islearningStateSelectorOpen, istopicSelectorOpen])
+	}, [showOptions])
 
-	useKey("Escape", handleFormClose)
+	/*
+	 * This code means that when link form is opened, these refs will be added as an exception to the click outside handler
+	 */
+	React.useEffect(() => {
+		setGlobalExceptionRefs([optionsRef, buttonRef])
+	}, [setGlobalExceptionRefs])
 
 	return (
 		<>
-			{showCreate && <LinkForm ref={formRef} onSuccess={handleFormClose} onCancel={handleFormClose} />}
-
-			<div className="absolute bottom-0 m-0 flex w-full list-none border-t border-[#dedede] bg-white p-2.5 text-center align-middle font-semibold leading-[13px] no-underline">
+			{showCreate && <LinkForm onClose={handleFormClose} onSuccess={handleFormClose} onFail={handleFormFail} />}
+			<div className="absolute bottom-0 m-0 flex w-full list-none bg-inherit p-2.5 text-center align-middle font-semibold leading-[13px] no-underline">
 				<div className="mx-auto flex flex-row items-center justify-center gap-2">
-					{showCreate && (
-						<Button variant={"ghost"} onClick={toggleForm}>
-							<LaIcon name="Trash" />
+					<Button
+						variant="ghost"
+						onClick={toggleForm}
+						className={editId || showCreate ? "text-red-500 hover:bg-red-500/50 hover:text-white" : ""}
+					>
+						<LaIcon name={showCreate ? "X" : editId ? "Trash" : "Plus"} />
+					</Button>
+					<div className="relative" ref={optionsRef}>
+						{showOptions && <LinkOptions />}
+						<Button ref={buttonRef} variant="ghost" onClick={clickOptionsButton}>
+							<LaIcon name="Ellipsis" />
 						</Button>
-					)}
-					{!showCreate && (
-						<Button variant={"ghost"} onClick={toggleForm}>
-							<LaIcon name="Plus" />
-						</Button>
-					)}
+					</div>
 				</div>
 			</div>
-			{/* <FloatingButton ref={buttonRef} onClick={toggleForm} isOpen={showCreate} /> */}
 		</>
 	)
 }
@@ -85,3 +96,5 @@ const LinkManage: React.FC = () => {
 LinkManage.displayName = "LinkManage"
 
 export { LinkManage }
+
+/* <FloatingButton ref={buttonRef} onClick={toggleForm} isOpen={showCreate} /> */

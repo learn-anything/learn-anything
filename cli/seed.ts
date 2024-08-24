@@ -183,77 +183,113 @@ async function processJsonFiles(): Promise<[LinkManager, TopicJson[]]> {
 }
 
 /**
- * Inserts links in batch.
- * @param links - An array of LinkJson objects to insert.
- * @returns A Promise that resolves to an array of created Link models.
+ * Creates a simple progress bar string.
+ * @param progress - Current progress (0-100).
+ * @param total - Total width of the progress bar.
+ * @returns A string representing the progress bar.
  */
-async function insertLinksInBatch(links: LinkJson[]) {
-	const globalGroup = await loadGlobalGroup()
-	const rows = []
-
-	for (const link of links) {
-		const linkModel = Link.create(
-			{
-				title: link.title,
-				url: link.url
-			},
-			{ owner: globalGroup }
-		)
-		rows.push(linkModel)
-	}
-
-	return rows
+function createProgressBar(progress: number, total: number = 30): string {
+	const filledWidth = Math.round((progress / 100) * total)
+	const emptyWidth = total - filledWidth
+	return `[${"=".repeat(filledWidth)}${" ".repeat(emptyWidth)}]`
 }
 
 /**
- * Saves processed data (topics and links) to the global group.
- * @param linkLists - An array of Link models.
- * @param topics - An array of TopicJson objects.
+ * Updates the progress display in the terminal.
+ * @param message - The message to display.
+ * @param current - Current progress value.
+ * @param total - Total progress value.
  */
-async function saveProcessedData(linkLists: Link[], topics: TopicJson[]) {
+function updateProgress(message: string, current: number, total: number) {
+	const percentage = Math.round((current / total) * 100)
+	const progressBar = createProgressBar(percentage)
+	process.stdout.write(`\r${message} ${progressBar} ${percentage}% (${current}/${total})`)
+}
+
+async function insertLinksInBatch(links: LinkJson[], chunkSize: number = 100) {
 	const globalGroup = await loadGlobalGroup()
+	const allCreatedLinks: Link[] = []
+	const totalLinks = links.length
 
-	topics.map(topic => {
-		const topicModel = Topic.create(
-			{
-				name: topic.name,
-				prettyName: topic.prettyName,
-				latestGlobalGuide: LatestGlobalGuide.create(
-					{
-						sections: ListOfSections.create([], { owner: globalGroup })
-					},
-					{ owner: globalGroup }
-				)
-			},
-			{ owner: globalGroup }
-		)
-
-		if (!topic.latestGlobalGuide) {
-			console.error("No sections found in", topic.name)
-			return
-		}
-
-		topic.latestGlobalGuide.sections.map(section => {
-			const sectionModel = Section.create(
+	for (let i = 0; i < totalLinks; i += chunkSize) {
+		const chunk = links.slice(i, i + chunkSize)
+		const rows = chunk.map(link =>
+			Link.create(
 				{
-					title: section.title,
-					links: ListOfLinks.create([], { owner: globalGroup })
+					title: link.title,
+					url: link.url
+				},
+				{ owner: globalGroup }
+			)
+		)
+		allCreatedLinks.push(...rows)
+
+		updateProgress("Processing links:", i + chunk.length, totalLinks)
+
+		// Add a small delay between chunks to avoid overwhelming the system
+		await new Promise(resolve => setTimeout(resolve, 1000))
+	}
+
+	console.log("\nFinished processing links")
+	return allCreatedLinks
+}
+
+async function saveProcessedData(linkLists: Link[], topics: TopicJson[], chunkSize: number = 10) {
+	const globalGroup = await loadGlobalGroup()
+	const totalTopics = topics.length
+
+	for (let i = 0; i < totalTopics; i += chunkSize) {
+		const topicChunk = topics.slice(i, i + chunkSize)
+
+		topicChunk.forEach(topic => {
+			const topicModel = Topic.create(
+				{
+					name: topic.name,
+					prettyName: topic.prettyName,
+					latestGlobalGuide: LatestGlobalGuide.create(
+						{
+							sections: ListOfSections.create([], { owner: globalGroup })
+						},
+						{ owner: globalGroup }
+					)
 				},
 				{ owner: globalGroup }
 			)
 
-			section.links.map(link => {
-				const linkModel = linkLists.find(l => l.url === link.url)
-				if (linkModel) {
-					sectionModel.links?.push(linkModel)
-				}
+			if (!topic.latestGlobalGuide) {
+				console.error("No sections found in", topic.name)
+				return
+			}
+
+			topic.latestGlobalGuide.sections.map(section => {
+				const sectionModel = Section.create(
+					{
+						title: section.title,
+						links: ListOfLinks.create([], { owner: globalGroup })
+					},
+					{ owner: globalGroup }
+				)
+
+				section.links.map(link => {
+					const linkModel = linkLists.find(l => l.url === link.url)
+					if (linkModel) {
+						sectionModel.links?.push(linkModel)
+					}
+				})
+
+				topicModel.latestGlobalGuide?.sections?.push(sectionModel)
 			})
 
-			topicModel.latestGlobalGuide?.sections?.push(sectionModel)
+			globalGroup.root.topics?.push(topicModel)
 		})
 
-		globalGroup.root.topics?.push(topicModel)
-	})
+		updateProgress("Processing topics:", i + topicChunk.length, totalTopics)
+
+		// Add a small delay between chunks to avoid overwhelming the system
+		await new Promise(resolve => setTimeout(resolve, 1000))
+	}
+
+	console.log("\nFinished processing topics")
 }
 
 /**
@@ -267,13 +303,13 @@ async function prodSeed() {
 	console.log(`Collected ${linkManager.getAllLinks().length} unique links.`)
 	console.log(`Found ${linkManager.getDuplicateCount()} duplicate links.`)
 
-	const insertedLinks = await insertLinksInBatch(linkManager.getAllLinks())
-	await saveProcessedData(insertedLinks, processedData)
+	console.log("\nInserting links:")
+	const insertedLinks = await insertLinksInBatch(linkManager.getAllLinks(), 100)
 
-	// wait 3 seconds before finishing
-	await new Promise(resolve => setTimeout(resolve, 3000))
+	console.log("\nSaving processed data:")
+	await saveProcessedData(insertedLinks, processedData, 10)
 
-	console.log("Finished seeding data")
+	console.log("\nFinished seeding data")
 }
 
 interface ForceGraphJson {
