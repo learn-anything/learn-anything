@@ -15,8 +15,8 @@ import { Input } from "@/components/ui/input"
 import { LaIcon } from "../../la-icon"
 import { toast } from "sonner"
 import Link from "next/link"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
-// const isCollapsedAtom = atomWithStorage("isCollapsed", true)
 const pageSortAtom = atomWithStorage("pageSort", "title")
 const createPageSchema = z.object({
 	title: z.string({ message: "Please enter a valid title" }).min(1, { message: "Please enter a valid title" })
@@ -25,12 +25,7 @@ const createPageSchema = z.object({
 type PageFormValues = z.infer<typeof createPageSchema>
 
 export const PageSection: React.FC = () => {
-	// const [collapsed, setCollapsed] = useAtom(isCollapsedAtom)
 	const [pagesSorted, setPagesSorted] = useAtom(pageSortAtom)
-
-	// const toggleCollapse = () => {
-	// 	setCollapsed(!collapsed)
-	// }
 
 	const { me } = useAccount({
 		root: { personalPages: [] }
@@ -43,22 +38,23 @@ export const PageSection: React.FC = () => {
 	}
 
 	return (
-		<div className="group/pages flex flex-col gap-px py-2">
-			<div className="hover:bg-accent group flex items-center gap-px rounded-md">
+		<div className="flex flex-col gap-px py-2">
+			<div className="hover:bg-accent group/pages flex items-center gap-px rounded-md">
 				<Button
 					variant="ghost"
 					className="size-6 flex-1 items-center justify-start rounded-md px-2 py-1 focus:outline-0 focus:ring-0"
 				>
-					<p className="text-xs font-medium">
+					<p className="flex items-center text-xs font-medium">
 						Pages <span className="text-muted-foreground ml-1">{pageCount}</span>
 					</p>
 				</Button>
-				{/* <ShowAllForm filteredPages={sortedPages} /> */}
-				<CreatePageForm />
+				<div className="flex items-center opacity-0 transition-opacity duration-200 group-hover/pages:opacity-100">
+					<ShowAllForm filteredPages={sortedPages} />
+					<CreatePageForm />
+				</div>
 			</div>
 
 			{me?.root.personalPages && <PageList personalPages={me.root.personalPages} sortBy={pagesSorted} />}
-			{/* {!collapsed && me?.root.personalPages && <PageList personalPages={me.root.personalPages} sortBy={pagesSorted} />} */}
 		</div>
 	)
 }
@@ -107,43 +103,34 @@ const PageList: React.FC<{ personalPages: PersonalPageLists; sortBy: string }> =
 interface ShowAllFormProps {
 	filteredPages: (filter: string) => void
 }
+const ShowAllForm: React.FC<ShowAllFormProps> = ({ filteredPages }) => {
+	const [pagesSorted, setPagesSorted] = useAtom(pageSortAtom)
 
-// const ShowAllForm: React.FC<ShowAllFormProps> = ({ filteredPages }) => {
-// 	const [popoverOpen, setPopoverOpen] = useState(false)
+	const handleSort = (newSort: string) => {
+		setPagesSorted(newSort.toLowerCase())
+		filteredPages(newSort.toLowerCase())
+	}
 
-// 	const sortPages = (filter: string) => {
-// 		filteredPages(filter)
-// 		setPopoverOpen(false)
-// 	}
-
-// 	return (
-// 		<Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-// 			<PopoverTrigger asChild>
-// 				<button
-// 					type="button"
-// 					aria-label="Sort pages"
-// 					className={cn(
-// 						"flex size-6 cursor-pointer items-center justify-center rounded-lg bg-inherit p-0.5 shadow-none focus:outline-0 focus:ring-0",
-// 						'opacity-0 transition-opacity duration-200 group-hover/pages:opacity-100 data-[state="open"]:opacity-100'
-// 					)}
-// 				>
-// 					<LaIcon name="Ellipsis" />
-// 				</button>
-// 			</PopoverTrigger>
-// 			<PopoverContent align="start" className="w-45 p-2">
-// 				<div className="flex flex-col space-y-1">
-// 					<p className="text-muted-foreground px-2 py-1 text-sm font-medium">Sort by</p>
-// 					<Button variant="ghost" onClick={() => sortPages("title")} className="justify-between">
-// 						Title
-// 					</Button>
-// 					<Button variant="ghost" onClick={() => sortPages("latest")} className="justify-between">
-// 						Recently Added
-// 					</Button>
-// 				</div>
-// 			</PopoverContent>
-// 		</Popover>
-// 	)
-// }
+	return (
+		<DropdownMenu>
+			<DropdownMenuTrigger asChild>
+				<Button variant="ghost" size="sm" className="h-8 px-2 text-xs font-medium">
+					<LaIcon name="Ellipsis" className="h-4 w-4" />
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent align="start" className="w-[100px]">
+				<DropdownMenuItem onClick={() => handleSort("title")}>
+					Title
+					{pagesSorted === "title" && <LaIcon name="Check" className="ml-auto h-4 w-4" />}
+				</DropdownMenuItem>
+				<DropdownMenuItem onClick={() => handleSort("manual")}>
+					Manual
+					{pagesSorted === "manual" && <LaIcon name="Check" className="ml-auto h-4 w-4" />}
+				</DropdownMenuItem>
+			</DropdownMenuContent>
+		</DropdownMenu>
+	)
+}
 
 const CreatePageForm: React.FC = () => {
 	const [open, setOpen] = useState(false)
