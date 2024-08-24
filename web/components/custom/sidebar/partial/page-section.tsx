@@ -1,72 +1,85 @@
 import { z } from "zod"
+import { useAtom } from "jotai"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { usePathname, useRouter } from "next/navigation"
 import { useAccount } from "@/lib/providers/jazz-provider"
-import { Input } from "@/components/ui/input"
+import { cn, generateUniqueSlug } from "@/lib/utils"
+import { atomWithStorage } from "jotai/utils"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
-import { PlusIcon } from "lucide-react"
-import { cn, generateUniqueSlug } from "@/lib/utils"
 import { PersonalPage, PersonalPageLists } from "@/lib/schema/personal-page"
-import { toast } from "sonner"
-import { Button } from "@/components/ui/button"
-import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useState } from "react"
-import { usePathname, useRouter } from "next/navigation"
-import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { LaIcon } from "../../la-icon"
-import { atomWithStorage } from "jotai/utils"
-import { useAtom } from "jotai"
+import { toast } from "sonner"
+import Link from "next/link"
 
+// const isCollapsedAtom = atomWithStorage("isCollapsed", true)
+const pageSortAtom = atomWithStorage("pageSort", "title")
 const createPageSchema = z.object({
 	title: z.string({ message: "Please enter a valid title" }).min(1, { message: "Please enter a valid title" })
 })
 
 type PageFormValues = z.infer<typeof createPageSchema>
 
-const isCollapsedAtom = atomWithStorage("isCollapsed", true)
-
 export const PageSection: React.FC = () => {
-	const [isCollapsed, setIsCollapsed] = useAtom(isCollapsedAtom)
+	// const [collapsed, setCollapsed] = useAtom(isCollapsedAtom)
+	const [pagesSorted, setPagesSorted] = useAtom(pageSortAtom)
 
-	const toggleCollapse = () => {
-		setIsCollapsed(!isCollapsed)
-	}
+	// const toggleCollapse = () => {
+	// 	setCollapsed(!collapsed)
+	// }
 
 	const { me } = useAccount({
 		root: { personalPages: [] }
 	})
 
+	const pageCount = me?.root.personalPages?.length || 0
+
+	const sortedPages = (filter: string) => {
+		setPagesSorted(filter)
+	}
+
 	return (
 		<div className="group/pages flex flex-col gap-px py-2">
-			<div className="flex items-center gap-px">
+			<div className="hover:bg-accent group flex items-center gap-px rounded-md">
 				<Button
 					variant="ghost"
-					className="group size-6 flex-1 items-center justify-start rounded-md px-1.5 py-1 focus:outline-0 focus:ring-0"
-					onClick={toggleCollapse}
+					className="size-6 flex-1 items-center justify-start rounded-md px-2 py-1 focus:outline-0 focus:ring-0"
 				>
-					<p className="text-xs font-medium">Pages</p>
-					<span
-						className={cn("ml-1.5 transition-transform duration-200", {
-							"rotate-90": !isCollapsed
-						})}
-					>
-						<LaIcon name="ChevronRight" />
-					</span>
+					<p className="text-xs font-medium">
+						Pages <span className="text-muted-foreground ml-1">{pageCount}</span>
+					</p>
 				</Button>
+				<ShowAllForm filteredPages={sortedPages} />
 				<CreatePageForm />
 			</div>
 
-			{!isCollapsed && me?.root.personalPages && <PageList personalPages={me.root.personalPages} />}
+			{me?.root.personalPages && <PageList personalPages={me.root.personalPages} sortBy={pagesSorted} />}
+			{/* {!collapsed && me?.root.personalPages && <PageList personalPages={me.root.personalPages} sortBy={pagesSorted} />} */}
 		</div>
 	)
 }
 
-const PageList: React.FC<{ personalPages: PersonalPageLists }> = ({ personalPages }) => {
+const PageList: React.FC<{ personalPages: PersonalPageLists; sortBy: string }> = ({ personalPages, sortBy }) => {
 	const pathname = usePathname()
+
+	const sortedPages = [...personalPages]
+		.sort((a, b) => {
+			if (sortBy === "title") {
+				return (a?.title || "").localeCompare(b?.title || "")
+			} else if (sortBy === "latest") {
+				return ((b as any)?.createdAt?.getTime?.() ?? 0) - ((a as any)?.createdAt?.getTime?.() ?? 0)
+			}
+			return 0
+		})
+		.slice(0, 6)
 
 	return (
 		<div className="flex flex-col gap-px">
-			{personalPages.map(
+			{sortedPages.map(
 				page =>
 					page?.id && (
 						<div key={page.id} className="group/reorder-page relative">
@@ -78,22 +91,57 @@ const PageList: React.FC<{ personalPages: PersonalPageLists }> = ({ personalPage
 										{ "bg-accent text-accent-foreground": pathname === `/pages/${page.id}` }
 									)}
 								>
-									<span className="flex max-w-[calc(100%-52px)] flex-1 items-center gap-1.5 truncate text-sm">
-										<span className="truncate opacity-60 group-hover/sidebar-link:opacity-100">{page.title}</span>
-									</span>
+									<div className="flex max-w-[calc(100%-52px)] flex-1 items-center gap-1.5 truncate text-sm">
+										<LaIcon name="FileText" className="h-3 w-3 opacity-60" />
+										<p className="truncate opacity-95 group-hover/sidebar-link:opacity-100">{page.title}</p>
+									</div>
 								</Link>
-								{/* <Button
-									variant="ghost"
-									aria-label="Remove"
-									className="absolute right-0.5 top-1/2 z-[1] size-6 -translate-y-1/2 p-1 opacity-0 focus:opacity-100 group-hover/sidebar-link:opacity-100"
-								>
-									<LaIcon name="X" />
-								</Button> */}
 							</div>
 						</div>
 					)
 			)}
 		</div>
+	)
+}
+
+interface ShowAllFormProps {
+	filteredPages: (filter: string) => void
+}
+
+const ShowAllForm: React.FC<ShowAllFormProps> = ({ filteredPages }) => {
+	const [popoverOpen, setPopoverOpen] = useState(false)
+
+	const sortPages = (filter: string) => {
+		filteredPages(filter)
+		setPopoverOpen(false)
+	}
+
+	return (
+		<Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+			<PopoverTrigger asChild>
+				<button
+					type="button"
+					aria-label="Sort pages"
+					className={cn(
+						"flex size-6 cursor-pointer items-center justify-center rounded-lg bg-inherit p-0.5 shadow-none focus:outline-0 focus:ring-0",
+						'opacity-0 transition-opacity duration-200 group-hover/pages:opacity-100 data-[state="open"]:opacity-100'
+					)}
+				>
+					<LaIcon name="Ellipsis" />
+				</button>
+			</PopoverTrigger>
+			<PopoverContent align="start" className="w-45 p-2">
+				<div className="flex flex-col space-y-1">
+					<p className="text-muted-foreground px-2 py-1 text-sm font-medium">Sort by</p>
+					<Button variant="ghost" onClick={() => sortPages("title")} className="justify-between">
+						Title
+					</Button>
+					<Button variant="ghost" onClick={() => sortPages("latest")} className="justify-between">
+						Recently Added
+					</Button>
+				</div>
+			</PopoverContent>
+		</Popover>
 	)
 }
 
@@ -138,17 +186,16 @@ const CreatePageForm: React.FC = () => {
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
 			<PopoverTrigger asChild>
-				<Button
+				<button
 					type="button"
-					variant="ghost"
 					aria-label="New Page"
 					className={cn(
-						"group flex size-6 items-center justify-center rounded-md p-0.5 focus:outline-0 focus:ring-0",
-						'opacity-0 group-hover/pages:opacity-100 data-[state="open"]:opacity-100'
+						"flex size-6 cursor-pointer items-center justify-center rounded-lg bg-inherit p-0.5 shadow-none focus:outline-0 focus:ring-0",
+						'opacity-0 transition-opacity duration-200 group-hover/pages:opacity-100 data-[state="open"]:opacity-100'
 					)}
 				>
-					<PlusIcon size={16} />
-				</Button>
+					<LaIcon name="Plus" className="text-black dark:text-white" />
+				</button>
 			</PopoverTrigger>
 			<PopoverContent align="start">
 				<Form {...form}>
