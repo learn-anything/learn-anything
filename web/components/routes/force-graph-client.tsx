@@ -1,5 +1,6 @@
 "use client"
 
+import * as react from "react"
 import * as fg from "@nothing-but/force-graph"
 import {ease, trig} from "@nothing-but/utils"
 
@@ -236,12 +237,15 @@ export type ForceGraphProps = {
 	 *
 	 * `""` means no filter
 	 */
-	filterQuery: s.Accessor<string>
+	filter_query: string
 	raw_nodes: RawNode[]
 }
 
-export const createForceGraph = (props: ForceGraphProps): s.JSXElement => {
-	if (props.raw_nodes.length === 0) return
+export const createForceGraph = (props: ForceGraphProps): react.JSX.Element => {
+
+	if (props.raw_nodes.length === 0) {
+		return <></>
+	}
 
 	let [nodes, edges] = generateNodesFromRawData(props.raw_nodes)
 
@@ -252,92 +256,94 @@ export const createForceGraph = (props: ForceGraphProps): s.JSXElement => {
 	/*
 		Filter nodes when the filter query changes
 	*/
-	let scheduleFilterNodes = schedule.scheduleIdle(filterNodes)
-	onCleanup(() => scheduleFilterNodes.clear())
-	s.createEffect(() => {
-		let query = props.filterQuery()
-
-		scheduleFilterNodes.trigger(graph, nodes, edges, query)
+	let schedule_filter_nodes = schedule.scheduleIdle(filterNodes)
+	react.useEffect(() => {
+		schedule_filter_nodes.trigger(graph, nodes, edges, props.filter_query)
 		bump_end = anim.bump(bump_end)
-	})
+	}, [props.filter_query])
 
-	let canvas_el!: HTMLCanvasElement
-	let root_el = (
-		<div class="absolute inset-0 overflow-hidden">
-			<canvas
-				ref={canvas_el}
-				style={`
-					position: absolute;
-					top: -10%;
-					left: -10%;
-					width: 120%;
-					height: 120%;
-				`}
-			/>
-		</div>
-	)
+	let canvas_el = react.useRef<HTMLCanvasElement>(null)
 
-	let ctx = canvas_el.getContext("2d")
-	if (!ctx) throw new Error("no context")
+	react.useEffect(() => {
+		let el = canvas_el.current
+		if (!el) return
 
-	let canvas_state = fg.canvas.canvasState({
-		el: canvas_el,
-		ctx,
-		graph,
-		max_scale: 3,
-		init_scale: 1.7,
-		init_grid_pos: trig.ZERO
-	})
+		let ctx = el.getContext("2d")
+		if (!ctx) throw new Error("no context")
 
-	let window_size = ws.useWindowSize()
+		let canvas_state = fg.canvas.canvasState({
+			ctx,
+			graph,
+			max_scale: 3,
+			init_scale: 1.7,
+			init_grid_pos: trig.ZERO
+		})
 
-	let alpha = 0 // 0 - 1
-	let bump_end = anim.bump(0)
-	let frame_iter_limit = anim.frameIterationsLimit()
+		let window_size = ws.useWindowSize()
 
-	let loop = anim.animationLoop((time) => {
-		let is_active = gestures.mode.type === fg.canvas.Mode.DraggingNode
-		let iterations = anim.calcIterations(frame_iter_limit, time)
+		let alpha = 0 // 0 - 1
+		let bump_end = anim.bump(0)
+		let frame_iter_limit = anim.frameIterationsLimit()
 
-		for (let i = Math.min(iterations, 2); i >= 0; i--) {
-			alpha = anim.updateAlpha(alpha, is_active || time < bump_end)
-			simulateGraph(alpha, graph, canvas_state, window_size.width, window_size.height)
-		}
-		drawGraph(canvas_state, color_map)
-	})
-	anim.loopStart(loop)
-	s.onCleanup(() => anim.loopClear(loop))
+		let loop = anim.animationLoop((time) => {
+			let is_active = gestures.mode.type === fg.canvas.Mode.DraggingNode
+			let iterations = anim.calcIterations(frame_iter_limit, time)
 
-	let ro = new ResizeObserver(() => {
-		if (canvas.resizeCanvasToDisplaySize(canvas_el)) {
-			fg.canvas.updateTranslate(canvas_state, canvas_state.translate.x, canvas_state.translate.y)
-		}
-	})
-	ro.observe(canvas_el)
-	s.onCleanup(() => ro.disconnect())
-
-	let gestures = fg.canvas.canvasGestures({
-		canvas: canvas_state,
-		onGesture: (e) => {
-			switch (e.type) {
-			case fg.canvas.GestureEventType.Translate:
-				bump_end = anim.bump(bump_end)
-				break
-			case fg.canvas.GestureEventType.NodeClick:
-				props.onNodeClick(e.node.key as string)
-				break
-			case fg.canvas.GestureEventType.NodeDrag:
-				fg.graph.changeNodePosition(
-					canvas_state.graph.grid,
-					e.node,
-					e.pos.x,
-					e.pos.y
-				)
-				break
+			for (let i = Math.min(iterations, 2); i >= 0; i--) {
+				alpha = anim.updateAlpha(alpha, is_active || time < bump_end)
+				simulateGraph(alpha, graph, canvas_state, window_size.width, window_size.height)
 			}
-		}
-	})
-	s.onCleanup(() => fg.canvas.cleanupCanvasGestures(gestures))
+			drawGraph(canvas_state, color_map)
+		})
+		anim.loopStart(loop)
 
-	return root_el
+		let ro = new ResizeObserver(() => {
+			if (canvas.resizeCanvasToDisplaySize(el)) {
+				fg.canvas.updateTranslate(canvas_state, canvas_state.translate.x, canvas_state.translate.y)
+			}
+		})
+		ro.observe(el)
+
+		let gestures = fg.canvas.canvasGestures({
+			canvas: canvas_state,
+			onGesture: (e) => {
+				switch (e.type) {
+				case fg.canvas.GestureEventType.Translate:
+					bump_end = anim.bump(bump_end)
+					break
+				case fg.canvas.GestureEventType.NodeClick:
+					props.onNodeClick(e.node.key as string)
+					break
+				case fg.canvas.GestureEventType.NodeDrag:
+					fg.graph.changeNodePosition(
+						canvas_state.graph.grid,
+						e.node,
+						e.pos.x,
+						e.pos.y
+					)
+					break
+				}
+			}
+		})
+
+		return () => {
+			anim.loopClear(loop)
+			ro.disconnect()
+			fg.canvas.cleanupCanvasGestures(gestures)
+			schedule_filter_nodes.clear()
+		}
+	}, [canvas_el.current])
+
+	return <div className="absolute inset-0 overflow-hidden">
+		<canvas
+			ref={canvas_el}
+			style={{
+				position: "absolute",
+				top:    "-10%",
+				left:   "-10%",
+				width:  "120%",
+				height: "120%",
+			}}
+		/>
+	</div>
 }
