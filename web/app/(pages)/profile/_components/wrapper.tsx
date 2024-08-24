@@ -1,9 +1,11 @@
 "use client"
 
 import { useAccount } from "@/lib/providers/jazz-provider"
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
+import { LaIcon } from "@/components/custom/la-icon"
 import { Icon } from "@/components/la-editor/components/ui/icon"
+import { Button } from "@/components/ui/button"
 
 interface ProfileStatsProps {
 	number: number
@@ -57,6 +59,10 @@ export const ProfileWrapper = () => {
 	const params = useParams()
 	const username = params.username as string
 
+	const router = useRouter()
+
+	const clickEdit = () => router.push("/edit-profile")
+
 	if (!account.me || !account.me.profile) {
 		return (
 			<div className="flex h-screen flex-col py-3 text-black dark:text-white">
@@ -79,7 +85,16 @@ export const ProfileWrapper = () => {
 
 	return (
 		<div className="flex flex-1 flex-col text-black dark:text-white">
-			<p className="p-[20px] text-2xl font-semibold">Profile</p>
+			<div className="flex items-center justify-between p-[20px]">
+				<p className="text-2xl font-semibold">Profile</p>
+				<Button
+					onClick={clickEdit}
+					className="shadow-outer ml-auto flex h-[34px] cursor-pointer flex-row space-x-2 rounded-lg bg-white px-3 text-black shadow-[1px_1px_1px_1px_rgba(0,0,0,0.3)] hover:bg-black/10 dark:bg-[#222222] dark:text-white dark:hover:opacity-60"
+				>
+					<LaIcon name="UserCog" className="cursor-pointer text-neutral-200" />
+					<span>Edit Profile</span>
+				</Button>
+			</div>
 			<p className="text-2xl font-semibold">{username}</p>
 			<div className="flex flex-col items-center border-b border-neutral-900 bg-inherit pb-5">
 				<div className="flex w-full max-w-2xl align-top">
@@ -87,15 +102,14 @@ export const ProfileWrapper = () => {
 					<div className="ml-6 flex-1">
 						<p className="mb-3 text-[25px] font-semibold">{account.me.profile.name}</p>
 						<div className="mb-1 flex flex-row items-center font-light text-[24]">
-							<Icon name="Link" />
-							<p className="pl-1">{account.me.root?.username}</p>
+							@<p className="pl-1">{account.me.root?.username}</p>
 						</div>
 						<a href={account.me.root?.website || "#"} className="mb-1 flex flex-row items-center text-sm font-light">
 							<Icon name="Link" />
 							<p className="pl-1">{account.me.root?.website}</p>
 						</a>
 					</div>
-					<button className="shadow-outer ml-auto h-[34px] cursor-pointer rounded-md bg-[#222222] px-3 text-white shadow-inner hover:opacity-60">
+					<button className="shadow-outer ml-auto flex h-[34px] cursor-pointer flex-row items-center justify-center space-x-2 rounded-lg bg-white px-3 text-center font-medium text-black shadow-[1px_1px_1px_1px_rgba(0,0,0,0.3)] hover:bg-black/10 dark:bg-[#222222] dark:text-white dark:hover:opacity-60">
 						Follow
 					</button>
 				</div>
