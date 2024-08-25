@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { LaIcon } from "@/components/custom/la-icon"
 import { SidebarItem } from "../sidebar"
@@ -23,12 +23,6 @@ export const TopicSection = () => {
 		{ text: "Learned", icon: <LaIcon name="Check" className="size-4 flex-shrink-0" />, color: "text-[#708F51]" }
 	]
 
-	const getStatusColor = (status: string | null) => {
-		if (!status) return "text-foreground"
-		const option = learningOptions.find(opt => opt.text === status)
-		return option ? option.color : "text-foreground"
-	}
-
 	const statusSelect = (status: string) => {
 		setSelectedStatus(prevStatus => (prevStatus === status ? null : status))
 	}
@@ -44,12 +38,8 @@ export const TopicSection = () => {
 
 	return (
 		<div className="space-y-1 overflow-hidden" ref={sectionRef}>
-			<div className="text-foreground group/topics flex w-full items-center justify-between rounded-md px-2 py-2 text-xs font-medium hover:bg-neutral-100">
-				<span className={getStatusColor(selectedStatus)}>
-					<span className="text-black dark:text-white">Topics</span>
-					{selectedStatus ? `: ${selectedStatus}` : ""}{" "}
-					{selectedStatus ? topicCounts[selectedStatus as keyof typeof topicCounts] : topicCounts.total} {/* </span> */}
-				</span>
+			<div className="text-foreground group/topics hover:bg-accent flex w-full items-center justify-between rounded-md px-2 py-2 text-xs font-medium">
+				<span className="text-black dark:text-white">Topics {topicCounts.total}</span>
 				<button className="opacity-0 transition-opacity duration-200 group-hover/topics:opacity-100">
 					<LaIcon name="Ellipsis" className="size-4 flex-shrink-0" />
 				</button>
@@ -59,13 +49,15 @@ export const TopicSection = () => {
 					<Button
 						key={option.text}
 						onClick={() => statusSelect(option.text)}
-						className={`flex w-full items-center justify-between rounded-md py-1 pl-1 text-sm font-medium hover:bg-neutral-100 dark:hover:bg-neutral-100/20 ${option.color} bg-inherit shadow-none`}
+						className={`flex w-full items-center justify-between rounded-md py-1 pl-1 text-sm font-medium hover:bg-neutral-100 dark:hover:bg-neutral-100/20 ${option.color} ${
+							selectedStatus === option.text ? "bg-accent" : "bg-inherit"
+						} shadow-none`}
 					>
 						<div className="flex items-center gap-2">
 							{option.icon && <span className={option.color}>{option.icon}</span>}
 							<span>{option.text}</span>
 						</div>
-						<span className="option.color mr-2">{topicCounts[option.text as keyof typeof topicCounts]}</span>
+						<span className={`${option.color} mr-2`}>{topicCounts[option.text as keyof typeof topicCounts]}</span>
 					</Button>
 				))}
 			</div>
