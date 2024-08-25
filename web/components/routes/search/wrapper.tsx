@@ -10,7 +10,7 @@ interface ProfileTopicsProps {
 
 const ProfileTopics: React.FC<ProfileTopicsProps> = ({ topic }) => {
 	return (
-		<div className="bg-input flex cursor-pointer flex-row items-center justify-between rounded-lg p-3">
+		<div className="bg-result flex cursor-pointer flex-row items-center justify-between rounded-lg p-3">
 			<p>{topic}</p>
 			<IoChevronForward className="text-black/50 dark:text-white" size={20} />
 		</div>
@@ -38,7 +38,7 @@ const ProfileTitle: React.FC<ProfileTitleProps> = ({ topicTitle, spanNumber }) =
 
 const ProfileLinks: React.FC<ProfileLinksProps> = ({ linklabel, link, topic }) => {
 	return (
-		<div className="bg-input flex flex-row items-center justify-between rounded-lg p-3 text-black dark:text-white">
+		<div className="bg-result flex flex-row items-center justify-between rounded-lg p-3 text-black dark:text-white">
 			<div className="flex flex-row items-center space-x-3">
 				<p className="text-base">{linklabel}</p>
 				<div className="flex cursor-pointer flex-row items-center gap-1">
@@ -86,7 +86,7 @@ export const SearchWrapper = () => {
 	return (
 		<div className="flex h-full flex-auto flex-col overflow-hidden">
 			<div className="flex h-full w-full justify-center overflow-hidden">
-				<div className="w-full max-w-3xl px-4 sm:px-6 lg:px-8">
+				<div className="w-full max-w-[70%] sm:px-6 lg:px-8">
 					<div className="relative mb-2 mt-5 flex w-full flex-row items-center transition-colors duration-300 hover:text-white/60">
 						<IoSearch className="absolute left-3 text-black/30 dark:text-white/30" size={20} />
 						<input
@@ -98,6 +98,7 @@ export const SearchWrapper = () => {
 							className="bg-input w-full rounded-[10px] p-10 py-3 pl-10 pr-3 font-semibold tracking-wider text-black/70 outline-none placeholder:font-light dark:text-white"
 							placeholder="Search..."
 						/>
+
 						{showAiPlaceholder && searchText && !showAiSearch && (
 							<div className="absolute right-10 text-sm text-black/70 dark:text-white/30">
 								press &quot;Enter&quot; for AI search
@@ -111,6 +112,7 @@ export const SearchWrapper = () => {
 							/>
 						)}
 					</div>
+					<div className="my-5 rounded-lg bg-blue-600 p-4 font-semibold text-white">✨ Ask AI</div>
 					{showAiSearch ? (
 						<div className="relative w-full">
 							<div className="absolute left-1/2 w-[110%] -translate-x-1/2">
@@ -123,7 +125,6 @@ export const SearchWrapper = () => {
 								<ProfileTitle topicTitle="Topics" spanNumber={1} />
 								<ProfileTopics topic="Figma" />
 							</div>
-
 							<div className="my-5 space-y-1">
 								<ProfileTitle topicTitle="Links" spanNumber={3} />
 								<ProfileLinks linklabel="Figma" link="https://figma.com" topic="Figma" />
