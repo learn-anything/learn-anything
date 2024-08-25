@@ -1,9 +1,11 @@
 "use client"
+
+import * as React from "react"
 import { useAtom } from "jotai"
 import { ID } from "jazz-tools"
+import { PersonalPage, Topic } from "@/lib/schema"
 import { useCallback, useRef, useEffect, useState } from "react"
 import { LAEditor, LAEditorRef } from "@/components/la-editor"
-import { PersonalPage } from "@/lib/schema/personal-page"
 import { Content, EditorContent, useEditor } from "@tiptap/react"
 import { StarterKit } from "@/components/la-editor/extensions/starter-kit"
 import { Paragraph } from "@/components/la-editor/extensions/paragraph"
@@ -14,9 +16,11 @@ import { Editor } from "@tiptap/core"
 import { generateUniqueSlug } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { LaIcon } from "@/components/custom/la-icon"
+import { pageTopicSelectorAtom } from "@/store/page"
 import { TopicSelector } from "@/components/routes/link/form/partial/topic-selector"
 import DeletePageModal from "@/components/custom/delete-modal"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
 
 const TITLE_PLACEHOLDER = "Page title"
 
@@ -40,7 +44,8 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 	const { me } = useAccount()
 	const titleEditorRef = useRef<Editor | null>(null)
 	const contentEditorRef = useRef<LAEditorRef>(null)
-	const [topicSelectorOpen, setTopicSelectorOpen] = useState(false)
+	const [topicSelectorOpen, setTopicSelectorOpen] = useAtom(pageTopicSelectorAtom)
+	const [selectedPageTopic, setSelectedPageTopic] = useState<Topic | null>(page.topic || null)
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
 	const updatePageContent = (content: Content, model: PersonalPage) => {
@@ -170,36 +175,23 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 							editor={titleEditor}
 							className="la-editor cursor-text select-text text-2xl font-semibold leading-[calc(1.33333)] tracking-[-0.00625rem]"
 						/>
-						<div>
-							<DropdownMenu>
-								<DropdownMenuTrigger asChild>
-									<Button variant="ghost">
-										<LaIcon
-											className="text-neutral-500 transition-colors duration-200 hover:text-neutral-300"
-											name="Ellipsis"
-										/>
-									</Button>
-								</DropdownMenuTrigger>
-								<DropdownMenuContent align="end">
-									<DropdownMenuItem onSelect={() => handleDelete(page)}>
-										<LaIcon name="Trash" className="mr-2 h-4 w-4" />
-										<span>Delete</span>
-									</DropdownMenuItem>
-									<DropdownMenuItem onSelect={() => setTopicSelectorOpen(true)}>
-										{page.topic ? (
-											<>
-												<LaIcon name="FolderCog" className="mr-2 h-4 w-4" />
-												<span>Change topic</span>
-											</>
-										) : (
-											<>
-												<LaIcon name="Plus" className="mr-2 h-4 w-4" />
-												<span>Add topic</span>
-											</>
-										)}
-									</DropdownMenuItem>
-								</DropdownMenuContent>
-							</DropdownMenu>
+						<div className="items-center space-x-4">
+							<TopicSelector
+								// selectedTopic={selectedTopic}
+								onSelect={topic => {
+									page.topic = topic
+									setSelectedPageTopic(topic)
+									setTopicSelectorOpen(false)
+								}}
+							/>
+							<Button
+								type="button"
+								variant="secondary"
+								className="text-foreground bg-truncat"
+								onClick={() => setDeleteModalOpen(true)}
+							>
+								<LaIcon name="Trash" className="h-4 w-4" />
+							</Button>
 						</div>
 					</div>
 					<div className="flex flex-auto flex-col">
@@ -220,15 +212,7 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 					</div>
 				</form>
 			</div>
-			{/* TODO: fix */}
-			{topicSelectorOpen && (
-				<TopicSelector
-					onSelect={topic => {
-						page.topic = topic
-						setTopicSelectorOpen(false)
-					}}
-				/>
-			)}
+
 			<DeletePageModal
 				isOpen={deleteModalOpen}
 				onClose={() => setDeleteModalOpen(false)}

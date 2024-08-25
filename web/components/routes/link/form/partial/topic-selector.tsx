@@ -29,80 +29,63 @@ export const TopicSelector: React.FC<TopicSelectorProps> = ({ onSelect }) => {
 			}
 		}
 	)
-	const [istopicSelectorOpen, setIstopicSelectorOpen] = useAtom(linkTopicSelectorAtom)
+	const [isTopicSelectorOpen, setIsTopicSelectorOpen] = useAtom(linkTopicSelectorAtom)
 	const form = useFormContext<LinkFormValues>()
 
+	const handleSelect = (value: string) => {
+		const topic = globalGroup?.root.topics.find(topic => topic?.name === value)
+		if (topic) {
+			onSelect?.(topic)
+			form?.setValue("topic", value)
+		}
+		setIsTopicSelectorOpen(false)
+	}
+
+	const selectedValue = form ? form.watch("topic") : null
+
 	return (
-		<FormField
-			control={form.control}
-			name="topic"
-			render={({ field }) => (
-				<FormItem className="space-y-0">
-					<FormLabel className="sr-only">Topic</FormLabel>
-					<Popover open={istopicSelectorOpen} onOpenChange={setIstopicSelectorOpen}>
-						<PopoverTrigger asChild>
-							<FormControl>
-								<Button size="sm" type="button" role="combobox" variant="secondary" className="gap-x-2 text-sm">
-									<span className="truncate">
-										{field.value
-											? globalGroup?.root.topics.find(topic => topic?.id && topic.name === field.value)?.name
-											: "Topic"}
-									</span>
-									<LaIcon name="ChevronDown" />
-								</Button>
-							</FormControl>
-						</PopoverTrigger>
-						<PopoverContent
-							className="w-52 rounded-lg p-0"
-							side="bottom"
-							align="end"
-							onCloseAutoFocus={e => e.preventDefault()}
-						>
-							<Command>
-								<CommandInput placeholder="Search topic..." className="h-9" />
-								<CommandList>
-									<ScrollArea>
-										<CommandGroup>
-											{globalGroup?.root.topics.map(
-												topic =>
-													topic?.id && (
-														<CommandItem
-															key={topic.id}
-															value={topic.name}
-															onClick={e => {
-																e.preventDefault()
-																e.stopPropagation()
-															}}
-															onSelect={value => {
-																const topic = globalGroup?.root.topics.find(topic => topic?.name === value)
-																field.onChange(value)
-
-																if (topic) {
-																	onSelect?.(topic)
-																}
-
-																setIstopicSelectorOpen(false)
-															}}
-														>
-															{topic.prettyName}
-															<CheckIcon
-																size={16}
-																className={cn(
-																	"absolute right-3",
-																	topic.name === field.value ? "text-primary" : "text-transparent"
-																)}
-															/>
-														</CommandItem>
-													)
-											)}
-										</CommandGroup>
-									</ScrollArea>
-								</CommandList>
-							</Command>
-						</PopoverContent>
-					</Popover>
-				</FormItem>
-			)}
-		/>
+		<Popover open={isTopicSelectorOpen} onOpenChange={setIsTopicSelectorOpen}>
+			<PopoverTrigger asChild>
+				<Button size="sm" type="button" role="combobox" variant="secondary" className="gap-x-2 text-sm">
+					<span className="truncate">
+						{selectedValue
+							? globalGroup?.root.topics.find(topic => topic?.id && topic.name === selectedValue)?.prettyName
+							: "Topic"}
+					</span>
+					<LaIcon name="ChevronDown" />
+				</Button>
+			</PopoverTrigger>
+			<PopoverContent
+				className="z-50 w-52 rounded-lg p-0"
+				side="bottom"
+				align="end"
+				onCloseAutoFocus={e => e.preventDefault()}
+			>
+				<Command>
+					<CommandInput placeholder="Search topic..." className="h-9" />
+					<CommandList>
+						<ScrollArea>
+							<CommandGroup>
+								{globalGroup?.root.topics.map(
+									topic =>
+										topic?.id && (
+											<CommandItem key={topic.id} value={topic.name} onSelect={handleSelect}>
+												{topic.prettyName}
+												<CheckIcon
+													size={16}
+													className={cn(
+														"absolute right-3",
+														topic.name === selectedValue ? "text-primary" : "text-transparent"
+													)}
+												/>
+											</CommandItem>
+										)
+								)}
+							</CommandGroup>
+						</ScrollArea>
+					</CommandList>
+				</Command>
+			</PopoverContent>
+		</Popover>
 	)
 }

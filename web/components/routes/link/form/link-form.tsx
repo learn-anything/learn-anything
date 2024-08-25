@@ -46,9 +46,8 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 	exceptionsRefs = []
 }) => {
 	const [selectedTopic, setSelectedTopic] = React.useState<Topic | null>(null)
-
-	const [islearningStateSelectorOpen] = useAtom(linkLearningStateSelectorAtom)
 	const [istopicSelectorOpen] = useAtom(linkTopicSelectorAtom)
+	const [islearningStateSelectorOpen] = useAtom(linkLearningStateSelectorAtom)
 	const [globalExceptionRefs] = useAtom(globalLinkFormExceptionRefsAtom)
 
 	const formRef = React.useRef<HTMLFormElement>(null)
