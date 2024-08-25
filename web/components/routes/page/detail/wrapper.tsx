@@ -1,10 +1,8 @@
 "use client"
-
-import React, { useCallback, useRef, useEffect } from "react"
 import { useAtom } from "jotai"
-import { LAEditor, LAEditorRef } from "@/components/la-editor"
-// import { DetailPageHeader } from "./header" //dont need. check figma
 import { ID } from "jazz-tools"
+import { useCallback, useRef, useEffect, useState } from "react"
+import { LAEditor, LAEditorRef } from "@/components/la-editor"
 import { PersonalPage } from "@/lib/schema/personal-page"
 import { Content, EditorContent, useEditor } from "@tiptap/react"
 import { StarterKit } from "@/components/la-editor/extensions/starter-kit"
@@ -15,9 +13,10 @@ import { EditorView } from "@tiptap/pm/view"
 import { Editor } from "@tiptap/core"
 import { generateUniqueSlug } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { TopicSelector } from "@/components/routes/link/form/partial/topic-selector"
-import { linkTopicSelectorAtom } from "@/store/link"
 import { LaIcon } from "@/components/custom/la-icon"
+import { TopicSelector } from "@/components/routes/link/form/partial/topic-selector"
+import DeletePageModal from "@/components/custom/delete-modal"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 const TITLE_PLACEHOLDER = "Page title"
 
@@ -30,7 +29,6 @@ export function DetailPageWrapper({ pageId }: { pageId: string }) {
 		<div className="flex flex-row">
 			<div className="flex h-full w-full">
 				<div className="relative flex min-w-0 grow basis-[760px] flex-col">
-					{/* <DetailPageHeader pageId={pageId as ID<PersonalPage>} /> */}
 					<DetailPageForm page={page} />
 				</div>
 			</div>
@@ -38,13 +36,12 @@ export function DetailPageWrapper({ pageId }: { pageId: string }) {
 	)
 }
 
-const DetailPageForm = ({ page }: { page: PersonalPage }) => {
+export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 	const { me } = useAccount()
-
 	const titleEditorRef = useRef<Editor | null>(null)
 	const contentEditorRef = useRef<LAEditorRef>(null)
-
-	const [istopicSelectorOpen] = useAtom(linkTopicSelectorAtom)
+	const [topicSelectorOpen, setTopicSelectorOpen] = useState(false)
+	const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
 	const updatePageContent = (content: Content, model: PersonalPage) => {
 		model.content = content
@@ -105,19 +102,21 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 	const handleContentKeyDown = useCallback((view: EditorView, event: KeyboardEvent) => {
 		const editor = contentEditorRef.current?.editor
 		if (!editor) return false
-
 		const { state } = editor
 		const { selection } = state
 		const { $anchor } = selection
-
-		if ((event.key === "ArrowLeft" || event.key === "ArrowUp") && $anchor.pos - 1 === 0) {
-			event.preventDefault()
-			titleEditorRef.current?.commands.focus("end")
-			return true
-		}
-
 		return false
 	}, [])
+
+	const handleDelete = (page: PersonalPage) => {
+		setDeleteModalOpen(true)
+	}
+
+	const confirmDelete = (page: PersonalPage) => {
+		console.log("Deleting page:", page.id)
+		setDeleteModalOpen(false)
+		//TODO: add delete logic
+	}
 
 	const titleEditor = useEditor({
 		immediatelyRender: false,
@@ -171,14 +170,36 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 							editor={titleEditor}
 							className="la-editor cursor-text select-text text-2xl font-semibold leading-[calc(1.33333)] tracking-[-0.00625rem]"
 						/>
-						{/* <TopicSelector /> */}
 						<div>
-							<Button variant="ghost">
-								<LaIcon
-									className="text-neutral-500 transition-colors duration-200 hover:text-neutral-300"
-									name="Ellipsis"
-								/>
-							</Button>
+							<DropdownMenu>
+								<DropdownMenuTrigger asChild>
+									<Button variant="ghost">
+										<LaIcon
+											className="text-neutral-500 transition-colors duration-200 hover:text-neutral-300"
+											name="Ellipsis"
+										/>
+									</Button>
+								</DropdownMenuTrigger>
+								<DropdownMenuContent align="end">
+									<DropdownMenuItem onSelect={() => handleDelete(page)}>
+										<LaIcon name="Trash" className="mr-2 h-4 w-4" />
+										<span>Delete</span>
+									</DropdownMenuItem>
+									<DropdownMenuItem onSelect={() => setTopicSelectorOpen(true)}>
+										{page.topic ? (
+											<>
+												<LaIcon name="FolderCog" className="mr-2 h-4 w-4" />
+												<span>Change topic</span>
+											</>
+										) : (
+											<>
+												<LaIcon name="Plus" className="mr-2 h-4 w-4" />
+												<span>Add topic</span>
+											</>
+										)}
+									</DropdownMenuItem>
+								</DropdownMenuContent>
+							</DropdownMenu>
 						</div>
 					</div>
 					<div className="flex flex-auto flex-col">
@@ -199,6 +220,23 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 					</div>
 				</form>
 			</div>
+			{/* TODO: fix */}
+			{topicSelectorOpen && (
+				<TopicSelector
+					onSelect={topic => {
+						page.topic = topic
+						setTopicSelectorOpen(false)
+					}}
+				/>
+			)}
+			<DeletePageModal
+				isOpen={deleteModalOpen}
+				onClose={() => setDeleteModalOpen(false)}
+				onConfirm={() => {
+					confirmDelete(page)
+				}}
+				title={page.title.charAt(0).toUpperCase() + page.title.slice(1)}
+			/>
 		</div>
 	)
 }
