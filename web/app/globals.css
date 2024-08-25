@@ -3,12 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-	body {
-		@apply bg-background text-foreground;
-	}
-}
-
-@layer base {
 	:root {
 		--background: 0 0% 100%;
 		--foreground: 240 10% 3.9%;
@@ -63,7 +57,7 @@
 		--chart-3: 30 80% 55%;
 		--chart-4: 280 65% 60%;
 		--chart-5: 340 75% 55%;
-		--boxShadow: rgba(255,255,255, 0.04);
+		--boxShadow: rgba(255, 255, 255, 0.04);
 	}
 }
 
@@ -75,5 +69,3 @@
 		@apply bg-background text-foreground;
 	}
 }
-
-@import "./custom.css";
