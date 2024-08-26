@@ -1,20 +1,15 @@
+import { urlSchema } from "@/lib/utils/schema"
 import { z } from "zod"
-import { isUrl } from "@/lib/utils"
 
 export const createLinkSchema = z.object({
+	url: urlSchema,
+	icon: z.string().optional(),
 	title: z.string().min(1, { message: "Title can't be empty" }),
-	originalUrl: z.string().refine(isUrl, { message: "Only links are allowed" }),
 	description: z.string().optional(),
-	topic: z.string().optional(),
-	isLink: z.boolean().default(true),
-	meta: z
-		.object({
-			url: z.string(),
-			title: z.string(),
-			favicon: z.string(),
-			description: z.string().optional().nullable()
-		})
-		.optional()
-		.nullable(),
-	completed: z.boolean().default(false)
+	completed: z.boolean().default(false),
+	notes: z.string().optional(),
+	learningState: z.enum(["wantToLearn", "learning", "learned"]),
+	topic: z.string().nullable().optional()
 })
+
+export type LinkFormValues = z.infer<typeof createLinkSchema>

@@ -41,12 +41,12 @@ const CommandInput = React.forwardRef<
 	React.ElementRef<typeof CommandPrimitive.Input>,
 	React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
 >(({ className, ...props }, ref) => (
-	<div className="flex items-center border-b px-3" cmdk-input-wrapper="">
-		<MagnifyingGlassIcon className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+	<div className="flex items-center px-3" cmdk-input-wrapper="">
+		<MagnifyingGlassIcon className="mr-2 w-4 shrink-0 opacity-50" />
 		<CommandPrimitive.Input
 			ref={ref}
 			className={cn(
-				"placeholder:text-muted-foreground flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-none disabled:cursor-not-allowed disabled:opacity-50",
+				"placeholder:text-muted-foreground flex w-full bg-transparent text-sm outline-none disabled:cursor-not-allowed disabled:opacity-50",
 				className
 			)}
 			{...props}
@@ -83,7 +83,7 @@ const CommandGroup = React.forwardRef<
 	<CommandPrimitive.Group
 		ref={ref}
 		className={cn(
-			"text-foreground [&_[cmdk-group-heading]]:text-muted-foreground overflow-hidden p-1 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium",
+			"text-foreground [&_[cmdk-group-heading]]:text-muted-foreground overflow-hidden [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium",
 			className
 		)}
 		{...props}

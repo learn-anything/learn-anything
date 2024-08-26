@@ -3,7 +3,6 @@
 import * as React from "react"
 import { ListFilterIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
 import { ContentHeader, SidebarToggleButton } from "@/components/custom/content-header"
 import { useMedia } from "react-use"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -11,20 +10,23 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useAtom } from "jotai"
 import { linkSortAtom } from "@/store/link"
+import { atom } from "jotai"
+import { LEARNING_STATES } from "@/lib/constants"
+import { useQueryState, parseAsStringLiteral } from "nuqs"
+import { FancySwitch } from "@omit/react-fancy-switch"
+import { cn } from "@/lib/utils"
 
-interface TabItemProps {
-	url: string
-	label: string
-}
+const ALL_STATES = [{ label: "All", value: "all", icon: "List", className: "text-foreground" }, ...LEARNING_STATES]
+const ALL_STATES_STRING = ALL_STATES.map(ls => ls.value)
 
-const TABS = ["All", "Learning", "To Learn", "Learned"]
+export const learningStateAtom = atom<string>("all")
 
-export const LinkHeader = () => {
+export const LinkHeader = React.memo(() => {
 	const isTablet = useMedia("(max-width: 1024px)")
 
 	return (
 		<>
-			<ContentHeader className="p-4">
+			<ContentHeader className="px-6 py-5 max-lg:px-4">
 				<div className="flex min-w-0 shrink-0 items-center gap-1.5">
 					<SidebarToggleButton />
 					<div className="flex min-h-0 items-center">
@@ -32,7 +34,7 @@ export const LinkHeader = () => {
 					</div>
 				</div>
 
-				{!isTablet && <Tabs />}
+				{!isTablet && <LearningTab />}
 
 				<div className="flex flex-auto"></div>
 
@@ -41,66 +43,66 @@ export const LinkHeader = () => {
 
 			{isTablet && (
 				<div className="border-b-primary/5 flex min-h-10 flex-row items-start justify-between border-b px-6 py-2 max-lg:pl-4">
-					<Tabs />
+					<LearningTab />
 				</div>
 			)}
 		</>
 	)
-}
+})
 
-const Tabs = () => {
-	const [activeTab, setActiveTab] = React.useState(TABS[0])
+LinkHeader.displayName = "LinkHeader"
+
+const LearningTab = React.memo(() => {
+	const [activeTab, setActiveTab] = useAtom(learningStateAtom)
+	const [activeState, setActiveState] = useQueryState(
+		"state",
+		parseAsStringLiteral(Object.values(ALL_STATES_STRING)).withDefault(ALL_STATES_STRING[0])
+	)
+
+	const handleTabChange = React.useCallback(
+		(value: string) => {
+			setActiveTab(value)
+			setActiveState(value)
+		},
+		[setActiveTab, setActiveState]
+	)
+
+	React.useEffect(() => {
+		setActiveTab(activeState)
+	}, [activeState, setActiveTab])
 
 	return (
-		<div className="bg-secondary/50 flex items-baseline overflow-x-hidden rounded-md">
-			{TABS.map(tab => (
-				<TabItem key={tab} url="#" label={tab} isActive={activeTab === tab} onClick={() => setActiveTab(tab)} />
-			))}
-		</div>
+		<FancySwitch
+			value={activeTab}
+			onChange={value => {
+				handleTabChange(value as string)
+			}}
+			options={ALL_STATES}
+			className="bg-secondary flex rounded-lg"
+			highlighterClassName="bg-secondary-foreground/10 rounded-lg"
+			radioClassName={cn(
+				"relative mx-2 flex h-8 cursor-pointer items-center justify-center rounded-full px-1 text-sm text-secondary-foreground/60 data-[checked]:text-secondary-foreground font-medium transition-colors focus:outline-none"
+			)}
+			highlighterIncludeMargin={true}
+		/>
 	)
-}
+})
 
-interface TabItemProps {
-	url: string
-	label: string
-	isActive: boolean
-	onClick: () => void
-}
-
-const TabItem = ({ url, label, isActive, onClick }: TabItemProps) => {
-	return (
-		<div tabIndex={-1} className="rounded-md">
-			<div className="flex flex-row">
-				<div aria-label={label}>
-					<Link href={url}>
-						<Button
-							size="sm"
-							type="button"
-							variant="ghost"
-							className={`gap-x-2 truncate text-sm ${isActive ? "bg-accent text-accent-foreground" : ""}`}
-							onClick={onClick}
-						>
-							{label}
-						</Button>
-					</Link>
-				</div>
-			</div>
-		</div>
-	)
-}
-
-const FilterAndSort = () => {
+const FilterAndSort = React.memo(() => {
 	const [sort, setSort] = useAtom(linkSortAtom)
 	const [sortOpen, setSortOpen] = React.useState(false)
 
-	const getFilterText = () => {
+	const getFilterText = React.useCallback(() => {
 		return sort.charAt(0).toUpperCase() + sort.slice(1)
-	}
+	}, [sort])
 
-	const handleSortChange = (value: string) => {
-		setSort(value)
-		setSortOpen(false)
-	}
+	const handleSortChange = React.useCallback(
+		(value: string) => {
+			setSort(value)
+			setSortOpen(false)
+		},
+		[setSort]
+	)
 
 	return (
 		<div className="flex w-auto items-center justify-end">
@@ -134,4 +136,6 @@ const FilterAndSort = () => {
 			</div>
 		</div>
 	)
-}
+})
+
+FilterAndSort.displayName = "FilterAndSort"

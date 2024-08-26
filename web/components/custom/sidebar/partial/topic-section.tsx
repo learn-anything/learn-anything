@@ -1,100 +1,66 @@
-import { useState, useEffect, useRef } from "react"
-import { usePathname } from "next/navigation"
-import Link from "next/link"
+import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
-import { ChevronDown, BookOpen, Bookmark, GraduationCap, Check } from "lucide-react"
+import { LaIcon } from "@/components/custom/la-icon"
 import { SidebarItem } from "../sidebar"
 
-const TOPICS = ["Nix", "Javascript", "Kubernetes", "Figma", "Hiring", "Java", "IOS", "Design"]
+// const TOPICS = ["Nix", "Javascript", "Kubernetes", "Figma", "Hiring", "Java", "IOS", "Design"]
 
 export const TopicSection = () => {
-	const [showOptions, setShowOptions] = useState(false)
 	const [selectedStatus, setSelectedStatus] = useState<string | null>(null)
 	const sectionRef = useRef<HTMLDivElement>(null)
 
 	const learningOptions = [
-		{ text: "To Learn", icon: <Bookmark size={16} />, color: "text-white/70" },
 		{
-			text: "Learning",
-			icon: <GraduationCap size={16} />,
-			color: "text-[#D29752]"
+			text: "To Learn",
+			icon: <LaIcon name="NotebookPen" className="size-3 flex-shrink-0" />,
+			color: "text-black dark:text-white"
 		},
 		{
-			text: "Learned",
-			icon: <Check size={16} />,
-			color: "text-[#708F51]"
-		}
+			text: "Learning",
+			icon: <LaIcon name="GraduationCap" className="size-4 flex-shrink-0" />,
+			color: "text-[#D29752]"
+		},
+		{ text: "Learned", icon: <LaIcon name="Check" className="size-4 flex-shrink-0" />, color: "text-[#708F51]" }
 	]
 
 	const statusSelect = (status: string) => {
-		setSelectedStatus(status === "Show All" ? null : status)
-		setShowOptions(false)
+		setSelectedStatus(prevStatus => (prevStatus === status ? null : status))
 	}
 
-	useEffect(() => {
-		const overlayClick = (event: MouseEvent) => {
-			if (sectionRef.current && !sectionRef.current.contains(event.target as Node)) {
-				setShowOptions(false)
-			}
+	const topicCounts = {
+		"To Learn": 2,
+		Learning: 5,
+		Learned: 3,
+		get total() {
+			return this["To Learn"] + this.Learning + this.Learned
 		}
-
-		document.addEventListener("mousedown", overlayClick)
-		return () => {
-			document.removeEventListener("mousedown", overlayClick)
-		}
-	}, [])
-
-	const availableOptions = selectedStatus
-		? [
-				{
-					text: "Show All",
-					icon: <BookOpen size={16} />,
-					color: "text-white"
-				},
-				...learningOptions.filter(option => option.text !== selectedStatus)
-			]
-		: learningOptions
-
-	// const topicClick = (topic: string) => {
-	//   router.push(`/${topic.toLowerCase()}`)
-	// }
+	}
 
 	return (
 		<div className="space-y-1 overflow-hidden" ref={sectionRef}>
-			<Button
-				onClick={() => setShowOptions(!showOptions)}
-				className="bg-accent text-foreground hover:bg-accent/50 flex w-full items-center justify-between rounded-md px-3 py-2 text-sm font-medium"
-			>
-				<span>{selectedStatus ? `Topics: ${selectedStatus}` : "Topics"}</span>
-				<ChevronDown
-					size={16}
-					className={`transform transition-transform duration-200 ease-in-out ${
-						showOptions ? "rotate-0" : "rotate-[-90deg]"
-					}`}
-				/>
-			</Button>
-
-			{showOptions && (
-				<div className="rounded-md bg-neutral-800">
-					{availableOptions.map(option => (
-						<Button
-							key={option.text}
-							onClick={() => statusSelect(option.text)}
-							className={`flex w-full items-center justify-start space-x-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-neutral-700 ${option.color} bg-inherit`}
-						>
+			<div className="text-foreground group/topics hover:bg-accent flex w-full items-center justify-between rounded-md px-2 py-2 text-xs font-medium">
+				<span className="text-black dark:text-white">Topics {topicCounts.total}</span>
+				<button className="opacity-0 transition-opacity duration-200 group-hover/topics:opacity-100">
+					<LaIcon name="Ellipsis" className="size-4 flex-shrink-0" />
+				</button>
+			</div>
+			<div>
+				{learningOptions.map(option => (
+					<Button
+						key={option.text}
+						onClick={() => statusSelect(option.text)}
+						className={`flex w-full items-center justify-between rounded-md py-1 pl-1 text-sm font-medium hover:bg-neutral-100 dark:hover:bg-neutral-100/20 ${option.color} ${
+							selectedStatus === option.text ? "bg-accent" : "bg-inherit"
+						} shadow-none`}
+					>
+						<div className="flex items-center gap-2">
 							{option.icon && <span className={option.color}>{option.icon}</span>}
 							<span>{option.text}</span>
-						</Button>
-					))}
-				</div>
-			)}
-			<div className="scrollbar-hide space-y-1 overflow-y-auto" style={{ maxHeight: "calc(100vh - 200px)" }}>
-				{TOPICS.map(topic => (
-					<SidebarItem key={topic} label={topic} url={`/${topic}`} />
+						</div>
+						<span className={`${option.color} mr-2`}>{topicCounts[option.text as keyof typeof topicCounts]}</span>
+					</Button>
 				))}
 			</div>
 		</div>
 	)
 }
-
-export default TopicSection
