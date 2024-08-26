@@ -9,7 +9,8 @@ import { Topic } from "./master/topic"
  */
 export class PersonalPage extends CoMap {
 	title = co.string
-	slug = co.string
+	slug = co.string // is used only when `public: true` for sharing, `@user/page-slug`
+	// public = co.boolean // needed?
 	content = co.optional.json()
 	topic = co.optional.ref(Topic)
 	// backlinks = co.optional.ref() // other PersonalPages linking to this page TODO: add, think through how to do it well, efficiently
