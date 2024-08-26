@@ -14,9 +14,10 @@ import { TitleInput } from "./partial/title-input"
 import { NotesSection } from "./partial/notes-section"
 import { TopicSelector } from "./partial/topic-selector"
 import { DescriptionInput } from "./partial/description-input"
-import { LearningStateSelector } from "./partial/learning-state-selector"
 import { atom, useAtom } from "jotai"
 import { linkLearningStateSelectorAtom, linkTopicSelectorAtom } from "@/store/link"
+import { FormField, FormItem, FormLabel } from "@/components/ui/form"
+import { LearningStateSelector } from "@/components/custom/learning-state-selector"
 
 export const globalLinkFormExceptionRefsAtom = atom<React.RefObject<HTMLElement>[]>([])
 interface LinkFormProps extends React.ComponentPropsWithoutRef<"form"> {
@@ -139,7 +140,9 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 			const slug = generateUniqueSlug(personalLinks, values.title)
 
 			if (selectedLink) {
-				selectedLink.applyDiff({ ...values, slug, topic: selectedTopic })
+				if (selectedTopic) {
+					selectedLink.applyDiff({ ...values, slug, topic: selectedTopic })
+				}
 			} else {
 				const newPersonalLink = PersonalLink.create(
 					{
@@ -188,7 +191,16 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 								{urlFetched && <TitleInput urlFetched={urlFetched} />}
 
 								<div className="flex flex-row items-center gap-2">
-									<LearningStateSelector />
+									<FormField
+										control={form.control}
+										name="learningState"
+										render={({ field }) => (
+											<FormItem className="space-y-0">
+												<FormLabel className="sr-only">Topic</FormLabel>
+												<LearningStateSelector value={field.value} onChange={field.onChange} />
+											</FormItem>
+										)}
+									/>
 									<TopicSelector onSelect={topic => setSelectedTopic(topic)} />
 								</div>
 							</div>
