@@ -44,7 +44,7 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 	const { me } = useAccount()
 	const titleEditorRef = useRef<Editor | null>(null)
 	const contentEditorRef = useRef<LAEditorRef>(null)
-	const [topicSelectorOpen, setTopicSelectorOpen] = useAtom(pageTopicSelectorAtom)
+	const [, setTopicSelectorOpen] = useAtom(pageTopicSelectorAtom)
 	const [selectedPageTopic, setSelectedPageTopic] = useState<Topic | null>(page.topic || null)
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
@@ -83,24 +83,11 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 		const { selection } = state
 		const { $anchor } = selection
 
-		switch (event.key) {
-			case "ArrowRight":
-			case "ArrowDown":
-				if ($anchor.pos === state.doc.content.size - 1) {
-					event.preventDefault()
-					contentEditorRef.current?.editor?.commands.focus("start")
-					return true
-				}
-				break
-			case "Enter":
-				if (!event.shiftKey) {
-					event.preventDefault()
-					contentEditorRef.current?.editor?.commands.focus("start")
-					return true
-				}
-				break
+		if ((event.key === "ArrowLeft" || event.key === "ArrowUp") && $anchor.pos - 1 === 0) {
+			event.preventDefault()
+			titleEditorRef.current?.commands.focus("end")
+			return true
 		}
-
 		return false
 	}, [])
 
@@ -112,10 +99,6 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 		const { $anchor } = selection
 		return false
 	}, [])
-
-	const handleDelete = (page: PersonalPage) => {
-		setDeleteModalOpen(true)
-	}
 
 	const confirmDelete = (page: PersonalPage) => {
 		console.log("Deleting page:", page.id)
@@ -177,7 +160,6 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 						/>
 						<div className="items-center space-x-4">
 							<TopicSelector
-								// selectedTopic={selectedTopic}
 								onSelect={topic => {
 									page.topic = topic
 									setSelectedPageTopic(topic)
