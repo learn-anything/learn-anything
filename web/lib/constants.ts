@@ -3,7 +3,7 @@ import { icons } from "lucide-react"
 export type LearningStateValue = "wantToLearn" | "learning" | "learned"
 export type LearningState = {
 	label: string
-	value: string
+	value: LearningStateValue
 	icon: keyof typeof icons
 	className: string
 }

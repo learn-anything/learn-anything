@@ -5,17 +5,25 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
 import { LaIcon } from "@/components/custom/la-icon"
-import { LEARNING_STATES } from "@/lib/constants"
+import { LEARNING_STATES, LearningStateValue } from "@/lib/constants"
 import { useAtom } from "jotai"
 import { linkLearningStateSelectorAtom } from "@/store/link"
 
 interface LearningStateSelectorProps {
+	defaultLabel?: string
+	searchPlaceholder?: string
 	value: string
-	onChange: (value: string) => void
+	onChange: (value: LearningStateValue) => void
 	className?: string
 }
 
-export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({ value, onChange, className }) => {
+export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({
+	defaultLabel = "Select state",
+	searchPlaceholder = "Search state...",
+	value,
+	onChange,
+	className
+}) => {
 	const [islearningStateSelectorOpen, setIslearningStateSelectorOpen] = useAtom(linkLearningStateSelectorAtom)
 
 	const selectedLearningState = useMemo(() => LEARNING_STATES.find(ls => ls.value === value), [value])
@@ -34,7 +42,7 @@ export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({ va
 						<LaIcon name={selectedLearningState.icon} className={cn("h-4 w-4", selectedLearningState.className)} />
 					)}
 					<span className={cn("truncate", selectedLearningState?.className || "")}>
-						{selectedLearningState?.label || "Select state"}
+						{selectedLearningState?.label || defaultLabel}
 					</span>
 					<LaIcon name="ChevronDown" />
 				</Button>
@@ -46,7 +54,7 @@ export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({ va
 				onCloseAutoFocus={e => e.preventDefault()}
 			>
 				<Command>
-					<CommandInput placeholder="Search state..." className="h-9" />
+					<CommandInput placeholder={searchPlaceholder} className="h-9" />
 					<CommandList>
 						<ScrollArea>
 							<CommandGroup>
@@ -55,7 +63,7 @@ export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({ va
 										key={ls.value}
 										value={ls.value}
 										onSelect={selectedValue => {
-											onChange(selectedValue)
+											onChange(selectedValue as LearningStateValue)
 											setIslearningStateSelectorOpen(false)
 										}}
 									>
