@@ -6,7 +6,12 @@ class BaseModel extends CoMap {
 	updatedAt = co.encoded(Encoders.Date)
 }
 
+// TODO: anselm should fix the lookup (has to be instant)
+// export class GlobalLink extends BaseModel {
+// 	url = co.string
+// }
 export class PersonalLink extends BaseModel {
+	// globalLink = co.optional.ref(GlobalLink)
 	url = co.string
 	icon = co.optional.string // is an icon URL
 	title = co.string
