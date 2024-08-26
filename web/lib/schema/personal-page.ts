@@ -1,5 +1,5 @@
 import { co, CoList, CoMap } from "jazz-tools"
-import { GlobalTopic } from "./global-topic"
+import { Topic } from "./master/topic"
 
 /*
  * Page, content that user can write to. Similar to Notion/Reflect page. It holds ProseMirror editor content + metadata.
@@ -11,7 +11,7 @@ export class PersonalPage extends CoMap {
 	title = co.string
 	slug = co.string
 	content = co.optional.json()
-	topic = co.optional.ref(GlobalTopic)
+	topic = co.optional.ref(Topic)
 	// backlinks = co.optional.ref() // other PersonalPages linking to this page TODO: add, think through how to do it well, efficiently
 }
 

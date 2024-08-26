@@ -1,4 +1,3 @@
-# base
 .DS_Store
 .env
 .env*.local
@@ -13,3 +12,4 @@ pnpm-lock.yaml
 # other
 private
 past-*
+output

@@ -19,8 +19,10 @@ import { useKey } from "react-use"
 import { useConfirm } from "@omit/react-confirm-dialog"
 import { ListItem } from "./list-item"
 import { useRef, useState, useCallback, useEffect } from "react"
+import { learningStateAtom } from "./header"
 
 const LinkList = () => {
+	const [activeLearningState] = useAtom(learningStateAtom)
 	const confirm = useConfirm()
 	const { me } = useAccount({
 		root: { personalLinks: [] }
@@ -32,11 +34,17 @@ const LinkList = () => {
 	const [focusedId, setFocusedId] = useState<string | null>(null)
 	const [draggingId, setDraggingId] = useState<string | null>(null)
 	const linkRefs = useRef<{ [key: string]: HTMLLIElement | null }>({})
+	const [showDeleteIconForLinkId, setShowDeleteIconForLinkId] = useState<string | null>(null)
 
+	let filteredLinks = personalLinks.filter(link => {
+		if (activeLearningState === "all") return true
+		if (!link?.learningState) return false
+		return link.learningState === activeLearningState
+	})
 	let sortedLinks =
-		sort === "title" && personalLinks
-			? [...personalLinks].sort((a, b) => (a?.title || "").localeCompare(b?.title || ""))
-			: personalLinks
+		sort === "title" && filteredLinks
+			? [...filteredLinks].sort((a, b) => (a?.title || "").localeCompare(b?.title || ""))
+			: filteredLinks
 	sortedLinks = sortedLinks || []
 
 	const sensors = useSensors(
@@ -49,10 +57,6 @@ const LinkList = () => {
 			coordinateGetter: sortableKeyboardCoordinates
 		})
 	)
-
-	const overlayClick = () => {
-		setEditId(null)
-	}
 
 	const registerRef = useCallback((id: string, ref: HTMLLIElement | null) => {
 		linkRefs.current[id] = ref
@@ -190,40 +194,39 @@ const LinkList = () => {
 	}
 
 	return (
-		<>
-			{editId && <div className="fixed inset-0 z-10" onClick={overlayClick} />}
-			<div className="relative z-20">
-				<DndContext
-					sensors={sensors}
-					collisionDetection={closestCenter}
-					onDragStart={handleDragStart}
-					onDragEnd={handleDragEnd}
-				>
-					<SortableContext items={sortedLinks.map(item => item?.id || "") || []} strategy={verticalListSortingStrategy}>
-						<ul role="list" className="divide-primary/5 divide-y">
-							{sortedLinks.map(
-								linkItem =>
-									linkItem && (
-										<ListItem
-											key={linkItem.id}
-											confirm={confirm}
-											isEditing={editId === linkItem.id}
-											setEditId={setEditId}
-											personalLink={linkItem}
-											disabled={sort !== "manual" || editId !== null}
-											registerRef={registerRef}
-											isDragging={draggingId === linkItem.id}
-											isFocused={focusedId === linkItem.id}
-											setFocusedId={setFocusedId}
-											onDelete={handleDelete}
-										/>
-									)
-							)}
-						</ul>
-					</SortableContext>
-				</DndContext>
-			</div>
-		</>
+		<div className="relative z-20">
+			<DndContext
+				sensors={sensors}
+				collisionDetection={closestCenter}
+				onDragStart={handleDragStart}
+				onDragEnd={handleDragEnd}
+			>
+				<SortableContext items={sortedLinks.map(item => item?.id || "") || []} strategy={verticalListSortingStrategy}>
+					<ul role="list" className="divide-primary/5 divide-y">
+						{sortedLinks.map(
+							linkItem =>
+								linkItem && (
+									<ListItem
+										key={linkItem.id}
+										confirm={confirm}
+										isEditing={editId === linkItem.id}
+										setEditId={setEditId}
+										personalLink={linkItem}
+										disabled={sort !== "manual" || editId !== null}
+										registerRef={registerRef}
+										isDragging={draggingId === linkItem.id}
+										isFocused={focusedId === linkItem.id}
+										setFocusedId={setFocusedId}
+										onDelete={handleDelete}
+										showDeleteIconForLinkId={showDeleteIconForLinkId}
+										setShowDeleteIconForLinkId={setShowDeleteIconForLinkId}
+									/>
+								)
+						)}
+					</ul>
+				</SortableContext>
+			</DndContext>
+		</div>
 	)
 }
 

@@ -1,17 +1,22 @@
 "use client"
 
-import * as React from "react"
+import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { LinkIcon, Trash2Icon } from "lucide-react"
-import Link from "next/link"
-import Image from "next/image"
-import { useSortable } from "@dnd-kit/sortable"
-import { CSS } from "@dnd-kit/utilities"
 import { PersonalLink } from "@/lib/schema/personal-link"
 import { cn } from "@/lib/utils"
-import { LinkForm } from "./form/manage"
-import { Button } from "@/components/ui/button"
+import { useSortable } from "@dnd-kit/sortable"
+import { CSS } from "@dnd-kit/utilities"
 import { ConfirmOptions } from "@omit/react-confirm-dialog"
+import { LinkIcon, Trash2Icon } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
+import * as React from "react"
+import { LinkForm } from "./form/link-form"
+import { Command, CommandInput, CommandList, CommandItem, CommandGroup } from "@/components/ui/command"
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { LaIcon } from "@/components/custom/la-icon"
+import { LEARNING_STATES } from "@/lib/constants"
 import { Badge } from "@/components/ui/badge"
 
 interface ListItemProps {
@@ -25,6 +30,8 @@ interface ListItemProps {
 	setFocusedId: (id: string | null) => void
 	registerRef: (id: string, ref: HTMLLIElement | null) => void
 	onDelete?: (personalLink: PersonalLink) => void
+	showDeleteIconForLinkId: string | null
+	setShowDeleteIconForLinkId: (id: string | null) => void
 }
 
 export const ListItem: React.FC<ListItemProps> = ({
@@ -37,23 +44,17 @@ export const ListItem: React.FC<ListItemProps> = ({
 	isFocused,
 	setFocusedId,
 	registerRef,
-	onDelete
+	onDelete,
+	showDeleteIconForLinkId,
+	setShowDeleteIconForLinkId
 }) => {
 	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: personalLink.id, disabled })
-	const formRef = React.useRef<HTMLFormElement>(null)
-	const [showDeleteIcon, setShowDeleteIcon] = React.useState(false)
 
 	const style = {
 		transform: CSS.Transform.toString(transform),
 		transition,
 		pointerEvents: isDragging ? "none" : "auto"
 	}
-
-	React.useEffect(() => {
-		if (isEditing) {
-			formRef.current?.focus()
-		}
-	}, [isEditing])
 
 	const refCallback = React.useCallback(
 		(node: HTMLLIElement | null) => {
@@ -74,19 +75,17 @@ export const ListItem: React.FC<ListItemProps> = ({
 		setEditId(null)
 	}
 
-	const handleCancel = () => {
+	const handleOnClose = () => {
 		setEditId(null)
 	}
 
-	// const handleRowClick = () => {
-	// 	console.log("Row clicked", personalLink.id)
-	// 	setEditId(personalLink.id)
-	// }
-	const handleRowClick = () => {
-		setShowDeleteIcon(!showDeleteIcon)
-	}
+	const handleOnFail = () => {}
 
-	const handleDoubleClick = () => {
+	// const handleRowClick = () => {
+	// 	setShowDeleteIconForLinkId(personalLink.id)
+	// }
+
+	const handleRowDoubleClick = () => {
 		setEditId(personalLink.id)
 	}
 
@@ -116,8 +115,12 @@ export const ListItem: React.FC<ListItemProps> = ({
 		}
 	}
 
+	const selectedLearningState = LEARNING_STATES.find(ls => ls.value === personalLink.learningState)
+
 	if (isEditing) {
-		return <LinkForm ref={formRef} personalLink={personalLink} onSuccess={handleSuccess} onCancel={handleCancel} />
+		return (
+			<LinkForm onClose={handleOnClose} personalLink={personalLink} onSuccess={handleSuccess} onFail={handleOnFail} />
+		)
 	}
 
 	return (
@@ -128,27 +131,74 @@ export const ListItem: React.FC<ListItemProps> = ({
 			{...listeners}
 			tabIndex={0}
 			onFocus={() => setFocusedId(personalLink.id)}
-			onBlur={() => setFocusedId(null)}
+			onBlur={() => {
+				setFocusedId(null)
+			}}
 			onKeyDown={handleKeyDown}
 			className={cn("hover:bg-muted/50 relative flex h-14 cursor-default items-center outline-none xl:h-11", {
 				"bg-muted/50": isFocused
 			})}
-			onClick={handleRowClick}
-			onDoubleClick={handleDoubleClick}
+			// onClick={handleRowClick}
+			onDoubleClick={handleRowDoubleClick}
 		>
 			<div className="flex grow justify-between gap-x-6 px-6 max-lg:px-4">
 				<div className="flex min-w-0 items-center gap-x-4">
-					<Checkbox
+					{/* <Checkbox
 						checked={personalLink.completed}
 						onClick={e => e.stopPropagation()}
 						onCheckedChange={() => {
 							personalLink.completed = !personalLink.completed
 						}}
 						className="border-muted-foreground border"
-					/>
-					{personalLink.isLink && personalLink.meta && (
+					/> */}
+					<Popover>
+						<PopoverTrigger asChild>
+							<Button size="sm" type="button" role="combobox" variant="secondary" className="size-7 shrink-0 p-0">
+								{selectedLearningState?.icon && (
+									<LaIcon name={selectedLearningState.icon} className={cn(selectedLearningState.className)} />
+								)}
+							</Button>
+						</PopoverTrigger>
+						<PopoverContent
+							className="w-52 rounded-lg p-0"
+							side="bottom"
+							align="start"
+							onCloseAutoFocus={e => e.preventDefault()}
+						>
+							<Command>
+								<CommandInput placeholder="Search state..." className="h-9" />
+								<CommandList>
+									<ScrollArea>
+										<CommandGroup>
+											{LEARNING_STATES.map(ls => (
+												<CommandItem
+													key={ls.value}
+													value={ls.value}
+													onSelect={value => {
+														personalLink.learningState = value as "wantToLearn" | "learning" | "learned" | undefined
+													}}
+												>
+													<LaIcon name={ls.icon} className={cn("mr-2", ls.className)} />
+													<span className={ls.className}>{ls.label}</span>
+													<LaIcon
+														name="Check"
+														size={16}
+														className={cn(
+															"absolute right-3",
+															ls.value === personalLink.learningState ? "text-primary" : "text-transparent"
+														)}
+													/>
+												</CommandItem>
+											))}
+										</CommandGroup>
+									</ScrollArea>
+								</CommandList>
+							</Command>
+						</PopoverContent>
+					</Popover>
+					{personalLink.icon && (
 						<Image
-							src={personalLink.meta.favicon}
+							src={personalLink.icon}
 							alt={personalLink.title}
 							className="size-5 rounded-full"
 							width={16}
@@ -160,14 +210,14 @@ export const ListItem: React.FC<ListItemProps> = ({
 							<p className="text-primary hover:text-primary line-clamp-1 text-sm font-medium xl:truncate">
 								{personalLink.title}
 							</p>
-							{personalLink.isLink && personalLink.meta && (
+							{personalLink.url && (
 								<div className="group flex items-center gap-x-1">
 									<LinkIcon
 										aria-hidden="true"
 										className="text-muted-foreground group-hover:text-primary size-3 flex-none"
 									/>
 									<Link
-										href={personalLink.meta.url}
+										href={personalLink.url}
 										passHref
 										prefetch={false}
 										target="_blank"
@@ -176,7 +226,7 @@ export const ListItem: React.FC<ListItemProps> = ({
 										}}
 										className="text-muted-foreground hover:text-primary text-xs"
 									>
-										<span className="xl:truncate">{personalLink.meta.url}</span>
+										<span className="xl:truncate">{personalLink.url}</span>
 									</Link>
 								</div>
 							)}
@@ -185,12 +235,15 @@ export const ListItem: React.FC<ListItemProps> = ({
 				</div>
 
 				<div className="flex shrink-0 items-center gap-x-4">
-					<Badge variant="secondary">Topic Name</Badge>
-					{showDeleteIcon && (
+					{personalLink.topic && <Badge variant="secondary">{personalLink.topic.prettyName}</Badge>}
+					{showDeleteIconForLinkId === personalLink.id && (
 						<Button
 							size="icon"
 							className="text-destructive h-auto w-auto bg-transparent hover:bg-transparent hover:text-red-500"
-							onClick={e => handleDelete(e, personalLink)}
+							onClick={e => {
+								e.stopPropagation()
+								handleDelete(e, personalLink)
+							}}
 						>
 							<Trash2Icon size={16} />
 						</Button>

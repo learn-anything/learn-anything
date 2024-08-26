@@ -1,18 +1,26 @@
 "use client"
 
-import React, { useCallback, useRef, useEffect } from "react"
-import { LAEditor, LAEditorRef } from "@/components/la-editor"
-// import { DetailPageHeader } from "./header" //dont need. check figma
+import * as React from "react"
+import { useAtom } from "jotai"
 import { ID } from "jazz-tools"
-import { PersonalPage } from "@/lib/schema/personal-page"
+import { PersonalPage, Topic } from "@/lib/schema"
+import { useCallback, useRef, useEffect, useState } from "react"
+import { LAEditor, LAEditorRef } from "@/components/la-editor"
 import { Content, EditorContent, useEditor } from "@tiptap/react"
 import { StarterKit } from "@/components/la-editor/extensions/starter-kit"
 import { Paragraph } from "@/components/la-editor/extensions/paragraph"
 import { useAccount, useCoState } from "@/lib/providers/jazz-provider"
 import { toast } from "sonner"
-import { EditorView } from "prosemirror-view"
+import { EditorView } from "@tiptap/pm/view"
 import { Editor } from "@tiptap/core"
 import { generateUniqueSlug } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { LaIcon } from "@/components/custom/la-icon"
+import { pageTopicSelectorAtom } from "@/store/page"
+import { TopicSelector } from "@/components/routes/link/form/partial/topic-selector"
+import DeletePageModal from "@/components/custom/delete-modal"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
 
 const TITLE_PLACEHOLDER = "Page title"
 
@@ -25,7 +33,6 @@ export function DetailPageWrapper({ pageId }: { pageId: string }) {
 		<div className="flex flex-row">
 			<div className="flex h-full w-full">
 				<div className="relative flex min-w-0 grow basis-[760px] flex-col">
-					{/* <DetailPageHeader pageId={pageId as ID<PersonalPage>} /> */}
 					<DetailPageForm page={page} />
 				</div>
 			</div>
@@ -33,11 +40,13 @@ export function DetailPageWrapper({ pageId }: { pageId: string }) {
 	)
 }
 
-const DetailPageForm = ({ page }: { page: PersonalPage }) => {
+export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 	const { me } = useAccount()
-
 	const titleEditorRef = useRef<Editor | null>(null)
 	const contentEditorRef = useRef<LAEditorRef>(null)
+	const [, setTopicSelectorOpen] = useAtom(pageTopicSelectorAtom)
+	const [selectedPageTopic, setSelectedPageTopic] = useState<Topic | null>(page.topic || null)
+	const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
 	const updatePageContent = (content: Content, model: PersonalPage) => {
 		model.content = content
@@ -59,44 +68,15 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 		const personalPages = me.root?.personalPages?.toJSON() || []
 		const slug = generateUniqueSlug(personalPages, page.slug)
 
-		const capitalizedTitle = newTitle.charAt(0).toUpperCase() + newTitle.slice(1)
-		page.title = capitalizedTitle
+		const trimmedTitle = editor.getText().trim()
+		page.title = trimmedTitle
 		page.slug = slug
 
-		editor.commands.setContent(capitalizedTitle)
+		editor.commands.setContent(trimmedTitle)
 	}
 
 	const handleTitleKeyDown = useCallback((view: EditorView, event: KeyboardEvent) => {
 		const editor = titleEditorRef.current
-		if (!editor) return false
-
-		const { state } = editor
-		const { selection } = state
-		const { $anchor } = selection
-
-		switch (event.key) {
-			case "ArrowRight":
-			case "ArrowDown":
-				if ($anchor.pos === state.doc.content.size - 1) {
-					event.preventDefault()
-					contentEditorRef.current?.editor?.commands.focus("start")
-					return true
-				}
-				break
-			case "Enter":
-				if (!event.shiftKey) {
-					event.preventDefault()
-					contentEditorRef.current?.editor?.commands.focus("start")
-					return true
-				}
-				break
-		}
-
-		return false
-	}, [])
-
-	const handleContentKeyDown = useCallback((view: EditorView, event: KeyboardEvent) => {
-		const editor = contentEditorRef.current?.editor
 		if (!editor) return false
 
 		const { state } = editor
@@ -108,9 +88,23 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 			titleEditorRef.current?.commands.focus("end")
 			return true
 		}
-
 		return false
 	}, [])
+
+	const handleContentKeyDown = useCallback((view: EditorView, event: KeyboardEvent) => {
+		const editor = contentEditorRef.current?.editor
+		if (!editor) return false
+		const { state } = editor
+		const { selection } = state
+		const { $anchor } = selection
+		return false
+	}, [])
+
+	const confirmDelete = (page: PersonalPage) => {
+		console.log("Deleting page:", page.id)
+		setDeleteModalOpen(false)
+		//TODO: add delete logic
+	}
 
 	const titleEditor = useEditor({
 		immediatelyRender: false,
@@ -159,11 +153,28 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 		<div tabIndex={0} className="relative flex grow flex-col overflow-y-auto">
 			<div className="relative mx-auto flex h-full w-[calc(100%-40px)] shrink-0 grow flex-col sm:w-[calc(100%-80px)]">
 				<form className="flex shrink-0 flex-col">
-					<div className="mb-2 mt-8 py-1.5">
+					<div className="mb-2 mt-8 flex flex-row justify-between py-1.5">
 						<EditorContent
 							editor={titleEditor}
 							className="la-editor cursor-text select-text text-2xl font-semibold leading-[calc(1.33333)] tracking-[-0.00625rem]"
 						/>
+						<div className="items-center space-x-4">
+							<TopicSelector
+								onSelect={topic => {
+									page.topic = topic
+									setSelectedPageTopic(topic)
+									setTopicSelectorOpen(false)
+								}}
+							/>
+							<Button
+								type="button"
+								variant="secondary"
+								className="text-foreground bg-truncat"
+								onClick={() => setDeleteModalOpen(true)}
+							>
+								<LaIcon name="Trash" className="h-4 w-4" />
+							</Button>
+						</div>
 					</div>
 					<div className="flex flex-auto flex-col">
 						<div className="relative flex h-full max-w-full grow flex-col items-stretch p-0">
@@ -183,6 +194,15 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 					</div>
 				</form>
 			</div>
+
+			<DeletePageModal
+				isOpen={deleteModalOpen}
+				onClose={() => setDeleteModalOpen(false)}
+				onConfirm={() => {
+					confirmDelete(page)
+				}}
+				title={page.title.charAt(0).toUpperCase() + page.title.slice(1)}
+			/>
 		</div>
 	)
 }

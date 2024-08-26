@@ -1,19 +1,23 @@
-import { SidebarItem } from "../sidebar"
 import { z } from "zod"
+import { useAtom } from "jotai"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { usePathname, useRouter } from "next/navigation"
 import { useAccount } from "@/lib/providers/jazz-provider"
-import { Input } from "@/components/ui/input"
+import { cn, generateUniqueSlug } from "@/lib/utils"
+import { atomWithStorage } from "jotai/utils"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
-import { PlusIcon } from "lucide-react"
-import { generateUniqueSlug } from "@/lib/utils"
-import { PersonalPage } from "@/lib/schema/personal-page"
-import { toast } from "sonner"
-import { Button } from "@/components/ui/button"
-import { useForm } from "react-hook-form"
+import { PersonalPage, PersonalPageLists } from "@/lib/schema/personal-page"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useState, useEffect, useCallback } from "react"
-import { useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { LaIcon } from "../../la-icon"
+import { toast } from "sonner"
+import Link from "next/link"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
+const pageSortAtom = atomWithStorage("pageSort", "title")
 const createPageSchema = z.object({
 	title: z.string({ message: "Please enter a valid title" }).min(1, { message: "Please enter a valid title" })
 })
@@ -21,47 +25,114 @@ const createPageSchema = z.object({
 type PageFormValues = z.infer<typeof createPageSchema>
 
 export const PageSection: React.FC = () => {
-	const { me } = useAccount()
-	const [personalPages, setPersonalPages] = useState<PersonalPage[]>([])
+	const [pagesSorted, setPagesSorted] = useAtom(pageSortAtom)
 
-	useEffect(() => {
-		if (me.root?.personalPages) {
-			setPersonalPages(prevPages => {
-				const newPages = Array.from(me.root?.personalPages ?? []).filter((page): page is PersonalPage => page !== null)
-				return [...prevPages, ...newPages.filter(newPage => !prevPages.some(prevPage => prevPage.id === newPage.id))]
-			})
-		}
-	}, [me.root?.personalPages])
+	const { me } = useAccount({
+		root: { personalPages: [] }
+	})
 
-	const onPageCreated = useCallback((newPage: PersonalPage) => {
-		setPersonalPages(prevPages => [...prevPages, newPage])
-	}, [])
+	const pageCount = me?.root.personalPages?.length || 0
+
+	const sortedPages = (filter: string) => {
+		setPagesSorted(filter)
+	}
 
 	return (
-		<div className="-ml-2">
-			<div className="group mb-0.5 ml-2 mt-2 flex flex-row items-center justify-between rounded-md">
-				<div
-					role="button"
-					tabIndex={0}
-					className="text-muted-foreground hover:bg-muted/50 flex h-6 grow cursor-default items-center justify-between gap-x-0.5 self-start rounded-md px-1 text-xs font-medium"
+		<div className="flex flex-col gap-px py-2">
+			<div className="hover:bg-accent group/pages flex items-center gap-px rounded-md">
+				<Button
+					variant="ghost"
+					className="size-6 flex-1 items-center justify-start rounded-md px-2 py-1 focus:outline-0 focus:ring-0"
 				>
-					<span className="group-hover:text-muted-foreground">Pages</span>
-					<CreatePageForm onPageCreated={onPageCreated} />
+					<p className="flex items-center text-xs font-medium">
+						Pages <span className="text-muted-foreground ml-1">{pageCount}</span>
+					</p>
+				</Button>
+				<div className="flex items-center opacity-0 transition-opacity duration-200 group-hover/pages:opacity-100">
+					<ShowAllForm filteredPages={sortedPages} />
+					<CreatePageForm />
 				</div>
 			</div>
 
-			<div className="relative shrink-0">
-				<div aria-hidden="false" className="ml-2 flex shrink-0 flex-col space-y-1 pb-2">
-					{personalPages.map(page => (
-						<SidebarItem key={page.id} url={`/pages/${page.id}`} label={page.title} />
-					))}
-				</div>
-			</div>
+			{me?.root.personalPages && <PageList personalPages={me.root.personalPages} sortBy={pagesSorted} />}
 		</div>
 	)
 }
 
-const CreatePageForm: React.FC<{ onPageCreated: (page: PersonalPage) => void }> = ({ onPageCreated }) => {
+const PageList: React.FC<{ personalPages: PersonalPageLists; sortBy: string }> = ({ personalPages, sortBy }) => {
+	const pathname = usePathname()
+
+	const sortedPages = [...personalPages]
+		.sort((a, b) => {
+			if (sortBy === "title") {
+				return (a?.title || "").localeCompare(b?.title || "")
+			} else if (sortBy === "latest") {
+				return ((b as any)?.createdAt?.getTime?.() ?? 0) - ((a as any)?.createdAt?.getTime?.() ?? 0)
+			}
+			return 0
+		})
+		.slice(0, 6)
+
+	return (
+		<div className="flex flex-col gap-1">
+			{sortedPages.map(
+				page =>
+					page?.id && (
+						<div key={page.id} className="group/reorder-page relative">
+							<div className="group/sidebar-link relative flex min-w-0 flex-1">
+								<Link
+									href={`/pages/${page.id}`}
+									className={cn(
+										"group-hover/sidebar-link:bg-accent group-hover/sidebar-link:text-accent-foreground relative flex h-8 w-full items-center gap-2 rounded-md p-1.5 font-medium",
+										{ "bg-accent text-accent-foreground": pathname === `/pages/${page.id}` }
+									)}
+								>
+									<div className="flex max-w-full flex-1 items-center gap-1.5 truncate text-sm">
+										<LaIcon name="FileText" className="size-3 flex-shrink-0 opacity-60" />
+										<p className="truncate opacity-95 group-hover/sidebar-link:opacity-100">{page.title}</p>
+									</div>
+								</Link>
+							</div>
+						</div>
+					)
+			)}
+		</div>
+	)
+}
+
+interface ShowAllFormProps {
+	filteredPages: (filter: string) => void
+}
+const ShowAllForm: React.FC<ShowAllFormProps> = ({ filteredPages }) => {
+	const [pagesSorted, setPagesSorted] = useAtom(pageSortAtom)
+
+	const handleSort = (newSort: string) => {
+		setPagesSorted(newSort.toLowerCase())
+		filteredPages(newSort.toLowerCase())
+	}
+
+	return (
+		<DropdownMenu>
+			<DropdownMenuTrigger asChild>
+				<Button variant="ghost" size="sm" className="h-8 px-2 text-xs font-medium">
+					<LaIcon name="Ellipsis" className="h-4 w-4" />
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent align="start" className="w-[100px]">
+				<DropdownMenuItem onClick={() => handleSort("title")}>
+					Title
+					{pagesSorted === "title" && <LaIcon name="Check" className="ml-auto h-4 w-4" />}
+				</DropdownMenuItem>
+				<DropdownMenuItem onClick={() => handleSort("manual")}>
+					Manual
+					{pagesSorted === "manual" && <LaIcon name="Check" className="ml-auto h-4 w-4" />}
+				</DropdownMenuItem>
+			</DropdownMenuContent>
+		</DropdownMenu>
+	)
+}
+
+const CreatePageForm: React.FC = () => {
 	const [open, setOpen] = useState(false)
 	const { me } = useAccount()
 	const route = useRouter()
@@ -88,7 +159,6 @@ const CreatePageForm: React.FC<{ onPageCreated: (page: PersonalPage) => void }> 
 			)
 
 			me.root?.personalPages?.push(newPersonalPage)
-			onPageCreated(newPersonalPage)
 
 			form.reset()
 			setOpen(false)
@@ -103,9 +173,16 @@ const CreatePageForm: React.FC<{ onPageCreated: (page: PersonalPage) => void }> 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
 			<PopoverTrigger asChild>
-				<Button type="button" size="icon" variant="ghost" aria-label="New Page" className="size-6">
-					<PlusIcon size={16} />
-				</Button>
+				<button
+					type="button"
+					aria-label="New Page"
+					className={cn(
+						"flex size-6 cursor-pointer items-center justify-center rounded-lg bg-inherit p-0.5 shadow-none focus:outline-0 focus:ring-0",
+						'opacity-0 transition-opacity duration-200 group-hover/pages:opacity-100 data-[state="open"]:opacity-100'
+					)}
+				>
+					<LaIcon name="Plus" className="text-black dark:text-white" />
+				</button>
 			</PopoverTrigger>
 			<PopoverContent align="start">
 				<Form {...form}>

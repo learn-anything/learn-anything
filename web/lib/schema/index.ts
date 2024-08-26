@@ -11,7 +11,8 @@
 import { CoMap, co, Account, Profile } from "jazz-tools"
 import { PersonalPageLists } from "./personal-page"
 import { PersonalLinkLists } from "./personal-link"
-import { GlobalTopicLists } from "./global-topic"
+import { ListOfTopics } from "./master/topic"
+
 export class UserRoot extends CoMap {
 	name = co.string
 	username = co.string
@@ -24,9 +25,9 @@ export class UserRoot extends CoMap {
 	personalPages = co.ref(PersonalPageLists)
 
 	// not implemented yet
-	topicsWantToLearn = co.ref(GlobalTopicLists)
-	topicsLearning = co.ref(GlobalTopicLists)
-	topicsLearned = co.ref(GlobalTopicLists)
+	topicsWantToLearn = co.ref(ListOfTopics)
+	topicsLearning = co.ref(ListOfTopics)
+	topicsLearned = co.ref(ListOfTopics)
 }
 
 export class LaAccount extends Account {
@@ -53,9 +54,9 @@ export class LaAccount extends Account {
 					personalPages: PersonalPageLists.create([], { owner: this }),
 
 					// not implemented yet
-					topicsWantToLearn: GlobalTopicLists.create([], { owner: this }),
-					topicsLearning: GlobalTopicLists.create([], { owner: this }),
-					topicsLearned: GlobalTopicLists.create([], { owner: this })
+					topicsWantToLearn: ListOfTopics.create([], { owner: this }),
+					topicsLearning: ListOfTopics.create([], { owner: this }),
+					topicsLearned: ListOfTopics.create([], { owner: this })
 				},
 				{ owner: this }
 			)
@@ -63,7 +64,6 @@ export class LaAccount extends Account {
 	}
 }
 
-export * from "./global-link"
-export * from "./global-topic"
+export * from "./master/topic"
 export * from "./personal-link"
 export * from "./personal-page"

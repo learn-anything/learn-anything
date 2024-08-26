@@ -5,14 +5,14 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useMedia } from "react-use"
 import { useAtom } from "jotai"
-import { LinkIcon, SearchIcon } from "lucide-react"
+import { SearchIcon } from "lucide-react"
 import { Logo } from "@/components/custom/logo"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { isCollapseAtom } from "@/store/sidebar"
-
 import { PageSection } from "./partial/page-section"
 import { TopicSection } from "./partial/topic-section"
+import { ProfileSection } from "./partial/profile-section"
 
 interface SidebarContextType {
 	isCollapsed: boolean
@@ -73,14 +73,14 @@ export const SidebarItem: React.FC<SidebarItemProps> = React.memo(({ label, url,
 const LogoAndSearch: React.FC = React.memo(() => {
 	const pathname = usePathname()
 	return (
-		<div className="px-3.5">
-			<div className="mb-1 mt-2 flex h-10 max-w-full items-center">
-				<Link href="/links" className="px-2">
+		<div className="px-3">
+			<div className="mt-2 flex h-10 max-w-full items-center">
+				<Link href="/" className="px-2">
 					<Logo className="size-7" />
 				</Link>
 				<div className="flex min-w-2 grow flex-row" />
 				{pathname === "/search" ? (
-					<Link href="/links">
+					<Link href="/">
 						<Button size="sm" variant="secondary" type="button" className="text-md text-primary/60 font-medium">
 							← Back
 						</Button>
@@ -104,21 +104,20 @@ const LogoAndSearch: React.FC = React.memo(() => {
 })
 
 const SidebarContent: React.FC = React.memo(() => {
-	const { isCollapsed } = React.useContext(SidebarContext)
-	const isTablet = useMedia("(max-width: 1024px)")
-
 	return (
-		<nav className="bg-background relative flex h-full w-full shrink-0 flex-col">
-			<div className={cn({ "pt-12": !isCollapsed && isTablet })}>
-				<LogoAndSearch />
-			</div>
-			<div tabIndex={-1} className="relative mb-0.5 mt-1.5 flex grow flex-col overflow-y-auto rounded-md px-3.5">
-				<SidebarItem url="/links" label="Links" icon={<LinkIcon size={16} />} />
-				<div className="h-2 shrink-0" />
-				<PageSection />
-				<TopicSection />
-			</div>
-		</nav>
+		<>
+			<nav className="bg-background relative flex h-full w-full shrink-0 flex-col">
+				<div>
+					<LogoAndSearch />
+				</div>
+				<div tabIndex={-1} className="relative mb-0.5 mt-1.5 flex grow flex-col overflow-y-auto rounded-md px-3">
+					<div className="h-2 shrink-0" />
+					<PageSection />
+					<TopicSection />
+				</div>
+			</nav>
+			<ProfileSection />
+		</>
 	)
 })
 
@@ -132,7 +131,7 @@ export const Sidebar: React.FC = () => {
 	)
 
 	const sidebarInnerClasses = cn(
-		"h-full w-auto min-w-56 transition-transform duration-300 ease-in-out",
+		"h-full w-56 min-w-56 transition-transform duration-300 ease-in-out",
 		isCollapsed ? "-translate-x-full" : "translate-x-0"
 	)
 

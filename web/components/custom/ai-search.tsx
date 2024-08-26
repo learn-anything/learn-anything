@@ -71,14 +71,14 @@ const AiSearch: React.FC<AiSearchProps> = (props: { searchQuery: string }) => {
 
 	return (
 		<div className="mx-auto flex max-w-3xl flex-col items-center">
-			<div className="w-full rounded-lg bg-inherit p-6 text-white">
-				<div className="mb-6 rounded-lg bg-blue-700 p-4">
+			<div className="w-full rounded-lg bg-inherit p-6 text-black dark:text-white">
+				<div className="mb-6 rounded-lg bg-blue-700 p-4 text-white">
 					<h2 className="text-lg font-medium">✨ This is what I have found:</h2>
 				</div>
-				<div className="rounded-xl bg-[#121212] p-4" ref={root_el}></div>
+				<div className="rounded-xl bg-neutral-100 p-4 dark:bg-[#121212]" ref={root_el}></div>
 			</div>
 			<p className="text-md pb-5 font-semibold opacity-50">{error}</p>
-			<button className="text-md rounded-2xl bg-neutral-800 px-6 py-3 font-semibold text-opacity-50 shadow-inner shadow-neutral-700/50 transition-colors hover:bg-neutral-700">
+			<button className="text-md rounded-2xl bg-neutral-300 px-6 py-3 font-semibold text-opacity-50 shadow-inner shadow-neutral-400/50 transition-colors hover:bg-neutral-700 dark:bg-neutral-800 dark:shadow-neutral-700/50">
 				Ask Community
 			</button>
 		</div>

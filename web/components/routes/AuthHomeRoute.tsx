@@ -6,11 +6,11 @@ import { LinkManage } from "@/components/routes/link/form/manage"
 import { useAtom } from "jotai"
 import { linkEditIdAtom } from "@/store/link"
 
-export function LinkWrapper() {
+export default function AuthHomeRoute() {
 	const [editId] = useAtom(linkEditIdAtom)
 
 	return (
-		<div className="flex h-full flex-auto flex-col overflow-hidden">
+		<div className="relative z-[1] flex h-full flex-auto flex-col overflow-hidden">
 			<LinkHeader />
 			<LinkManage />
 			<LinkList key={editId} />
