@@ -20,9 +20,31 @@ import {
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
+import { icons } from "lucide-react"
 
-const pageSortAtom = atomWithStorage("pageSort", "title")
-const pageShowAtom = atomWithStorage("pageShow", 0)
+type SortOption = "title" | "recent"
+type ShowOption = 5 | 10 | 15 | 20 | 0
+
+interface Option<T> {
+	label: string
+	value: T
+}
+
+const SORTS: Option<SortOption>[] = [
+	{ label: "Title", value: "title" },
+	{ label: "Last edited", value: "recent" }
+]
+
+const SHOWS: Option<ShowOption>[] = [
+	{ label: "5 items", value: 5 },
+	{ label: "10 items", value: 10 },
+	{ label: "15 items", value: 15 },
+	{ label: "20 items", value: 20 },
+	{ label: "All", value: 0 }
+]
+
+const pageSortAtom = atomWithStorage<SortOption>("pageSort", "title")
+const pageShowAtom = atomWithStorage<ShowOption>("pageShow", 5)
 
 export const PageSection: React.FC = () => {
 	const { me } = useAccount({ root: { personalPages: [] } })
@@ -150,18 +172,40 @@ const PageListItem: React.FC<PageListItemProps> = ({ page, isActive }) => (
 	</div>
 )
 
-const SORTS = [
-	{ label: "Title", value: "title" },
-	{ label: "Last edited", value: "recent" }
-]
+interface SubMenuProps<T> {
+	icon: keyof typeof icons
+	label: string
+	options: Option<T>[]
+	currentValue: T
+	onSelect: (value: T) => void
+}
 
-const SHOWS = [
-	{ label: "5 items", value: 5 },
-	{ label: "10 items", value: 10 },
-	{ label: "15 items", value: 15 },
-	{ label: "20 items", value: 20 },
-	{ label: "All", value: 0 }
-]
+const SubMenu = <T extends string | number>({ icon, label, options, currentValue, onSelect }: SubMenuProps<T>) => (
+	<DropdownMenuSub>
+		<DropdownMenuSubTrigger>
+			<span className="flex items-center gap-2">
+				<LaIcon name={icon} />
+				<span>{label}</span>
+			</span>
+			<span className="ml-auto flex items-center gap-1">
+				<span className="text-muted-foreground text-xs">
+					{options.find(option => option.value === currentValue)?.label}
+				</span>
+				<LaIcon name="ChevronRight" />
+			</span>
+		</DropdownMenuSubTrigger>
+		<DropdownMenuPortal>
+			<DropdownMenuSubContent>
+				{options.map(option => (
+					<DropdownMenuItem key={option.value} onClick={() => onSelect(option.value)}>
+						{option.label}
+						{currentValue === option.value && <LaIcon name="Check" className="ml-auto" />}
+					</DropdownMenuItem>
+				))}
+			</DropdownMenuSubContent>
+		</DropdownMenuPortal>
+	</DropdownMenuSub>
+)
 
 const ShowAllForm: React.FC = () => {
 	const [pagesSorted, setPagesSorted] = useAtom(pageSortAtom)
@@ -185,42 +229,20 @@ const ShowAllForm: React.FC = () => {
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="start" className="w-56">
 				<DropdownMenuGroup>
-					<DropdownMenuSub>
-						<DropdownMenuSubTrigger>
-							<span className="flex items-center gap-2">
-								<LaIcon name="ArrowUpDown" />
-								<span>Sort</span>
-							</span>
-						</DropdownMenuSubTrigger>
-						<DropdownMenuPortal>
-							<DropdownMenuSubContent>
-								{SORTS.map(sort => (
-									<DropdownMenuItem key={sort.value} onClick={() => setPagesSorted(sort.value)}>
-										{sort.label}
-										{pagesSorted === sort.value && <LaIcon name="Check" className="ml-auto" />}
-									</DropdownMenuItem>
-								))}
-							</DropdownMenuSubContent>
-						</DropdownMenuPortal>
-					</DropdownMenuSub>
-					<DropdownMenuSub>
-						<DropdownMenuSubTrigger>
-							<span className="flex items-center gap-2">
-								<LaIcon name="Hash" />
-								<span>Show</span>
-							</span>
-						</DropdownMenuSubTrigger>
-						<DropdownMenuPortal>
-							<DropdownMenuSubContent>
-								{SHOWS.map(show => (
-									<DropdownMenuItem key={show.value} onClick={() => setPagesShow(show.value)}>
-										{show.label}
-										{pagesShow === show.value && <LaIcon name="Check" className="ml-auto" />}
-									</DropdownMenuItem>
-								))}
-							</DropdownMenuSubContent>
-						</DropdownMenuPortal>
-					</DropdownMenuSub>
+					<SubMenu<SortOption>
+						icon="ArrowUpDown"
+						label="Sort"
+						options={SORTS}
+						currentValue={pagesSorted}
+						onSelect={setPagesSorted}
+					/>
+					<SubMenu<ShowOption>
+						icon="Hash"
+						label="Show"
+						options={SHOWS}
+						currentValue={pagesShow}
+						onSelect={setPagesShow}
+					/>
 				</DropdownMenuGroup>
 			</DropdownMenuContent>
 		</DropdownMenu>
