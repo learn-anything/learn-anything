@@ -1,16 +1,16 @@
-// not sure if good approach
+// TODO: somehow there should be dynamic config for tauri/website
+// one way is perhaps via env variable like below
 const TAURI_DEV = false
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+	// due to some jazz things
 	reactStrictMode: false,
 	output: TAURI_DEV ? "export" : undefined,
-	// typescript: {
-	// 	// TODO: hacky for tauri
-	// 	ignoreBuildErrors: TAURI_DEV ? true : false
-	// },
+	// TODO: should dist be at root or in `web`
+	distDir: TAURI_DEV ? "../dist" : ".next",
 	images: {
-		// TODO: hacky for tauri
+		// TODO: can't optimize in tauri it seems?
 		unoptimized: TAURI_DEV ? true : false,
 		remotePatterns: [
 			{
