@@ -1,19 +1,15 @@
 import { co, CoList, CoMap, Encoders, ID } from "jazz-tools"
-import { Topic } from "./master/topic"
+import { Link, Topic } from "./master/topic"
 
 class BaseModel extends CoMap {
 	createdAt = co.encoded(Encoders.Date)
 	updatedAt = co.encoded(Encoders.Date)
 }
 
-// TODO: anselm should fix the lookup (has to be instant)
-// export class GlobalLink extends BaseModel {
-// 	url = co.string
-// }
 export class PersonalLink extends BaseModel {
-	// globalLink = co.optional.ref(GlobalLink)
 	url = co.string
 	icon = co.optional.string // is an icon URL
+	link = co.optional.ref(Link)
 	title = co.string
 	slug = co.string
 	description = co.optional.string
