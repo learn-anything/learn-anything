@@ -12,14 +12,16 @@ import Image from "next/image"
 import Link from "next/link"
 import * as React from "react"
 import { LinkForm } from "./form/link-form"
-import { Command, CommandInput, CommandList, CommandItem, CommandGroup } from "@/components/ui/command"
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
-import { ScrollArea } from "@/components/ui/scroll-area"
+
 import { LaIcon } from "@/components/custom/la-icon"
-import { LEARNING_STATES } from "@/lib/constants"
+import { LEARNING_STATES, LearningStateValue } from "@/lib/constants"
 import { Badge } from "@/components/ui/badge"
+import { LearningStateSelectorContent } from "@/components/custom/learning-state-selector"
 
 interface ListItemProps {
+	openPopoverForId: string | number | null
+	setOpenPopoverForId: (id: string | null) => void
 	confirm: (options: ConfirmOptions) => Promise<boolean>
 	personalLink: PersonalLink
 	disabled?: boolean
@@ -35,6 +37,8 @@ interface ListItemProps {
 }
 
 export const ListItem: React.FC<ListItemProps> = ({
+	openPopoverForId,
+	setOpenPopoverForId,
 	confirm,
 	isEditing,
 	setEditId,
@@ -151,11 +155,17 @@ export const ListItem: React.FC<ListItemProps> = ({
 						}}
 						className="border-muted-foreground border"
 					/> */}
-					<Popover>
+
+					<Popover
+						open={openPopoverForId === personalLink.id}
+						onOpenChange={(open: boolean) => setOpenPopoverForId(open ? personalLink.id : null)}
+					>
 						<PopoverTrigger asChild>
 							<Button size="sm" type="button" role="combobox" variant="secondary" className="size-7 shrink-0 p-0">
-								{selectedLearningState?.icon && (
+								{selectedLearningState?.icon ? (
 									<LaIcon name={selectedLearningState.icon} className={cn(selectedLearningState.className)} />
+								) : (
+									<LaIcon name="Circle" />
 								)}
 							</Button>
 						</PopoverTrigger>
@@ -165,37 +175,21 @@ export const ListItem: React.FC<ListItemProps> = ({
 							align="start"
 							onCloseAutoFocus={e => e.preventDefault()}
 						>
-							<Command>
-								<CommandInput placeholder="Search state..." className="h-9" />
-								<CommandList>
-									<ScrollArea>
-										<CommandGroup>
-											{LEARNING_STATES.map(ls => (
-												<CommandItem
-													key={ls.value}
-													value={ls.value}
-													onSelect={value => {
-														personalLink.learningState = value as "wantToLearn" | "learning" | "learned" | undefined
-													}}
-												>
-													<LaIcon name={ls.icon} className={cn("mr-2", ls.className)} />
-													<span className={ls.className}>{ls.label}</span>
-													<LaIcon
-														name="Check"
-														size={16}
-														className={cn(
-															"absolute right-3",
-															ls.value === personalLink.learningState ? "text-primary" : "text-transparent"
-														)}
-													/>
-												</CommandItem>
-											))}
-										</CommandGroup>
-									</ScrollArea>
-								</CommandList>
-							</Command>
+							<LearningStateSelectorContent
+								showSearch={false}
+								searchPlaceholder={"Search state..."}
+								value={personalLink.learningState}
+								onSelect={value => {
+									// toggle, if already selected set undefined
+									const learningState = value as LearningStateValue
+									personalLink.learningState = personalLink.learningState === learningState ? undefined : learningState
+
+									setOpenPopoverForId(null)
+								}}
+							/>
 						</PopoverContent>
 					</Popover>
+
 					{personalLink.icon && (
 						<Image
 							src={personalLink.icon}

@@ -36,6 +36,9 @@ const LinkList = () => {
 	const linkRefs = useRef<{ [key: string]: HTMLLIElement | null }>({})
 	const [showDeleteIconForLinkId, setShowDeleteIconForLinkId] = useState<string | null>(null)
 
+	// handle learning state popover for each link
+	const [openPopoverForId, setOpenPopoverForId] = useState<string | number | null>(null)
+
 	let filteredLinks = personalLinks.filter(link => {
 		if (activeLearningState === "all") return true
 		if (!link?.learningState) return false
@@ -208,6 +211,8 @@ const LinkList = () => {
 								linkItem && (
 									<ListItem
 										key={linkItem.id}
+										openPopoverForId={openPopoverForId}
+										setOpenPopoverForId={setOpenPopoverForId}
 										confirm={confirm}
 										isEditing={editId === linkItem.id}
 										setEditId={setEditId}
