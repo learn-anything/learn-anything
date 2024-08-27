@@ -10,11 +10,5 @@ export default function SettingsRoute() {
 				</button>
 			</div>
 		</div>
-		// <div className="flex flex-1 flex-col">
-		// 	<p className="h-[74px] p-[20px] text-2xl font-semibold text-white/30">Settings</p>
-		// 	<div className="mx-auto w-[60%]">
-		// 		<Button className="text-foreground">Settings button for something</Button>
-		// 	</div>
-		// </div>
 	)
 }
