@@ -53,7 +53,7 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 		}
 	}
 
-	const handleAddToProfile = (learningState: LearningStateValue) => {
+	const handleAddToProfile = (learningState: LearningStateValue | undefined) => {
 		const topicLists: Record<LearningStateValue, (ListOfTopics | null) | undefined> = {
 			wantToLearn: me?.root.topicsWantToLearn,
 			learning: me?.root.topicsLearning,
@@ -65,14 +65,12 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 		}
 
 		if (p) {
-			if (learningState === p.learningState) {
-				removeFromList(p.learningState, p.index)
-				return
-			}
 			removeFromList(p.learningState, p.index)
 		}
 
-		topicLists[learningState]?.push(topic)
+		if (learningState) {
+			topicLists[learningState]?.push(topic)
+		}
 	}
 
 	return (
@@ -87,8 +85,10 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 			<div className="flex flex-auto"></div>
 
 			<LearningStateSelector
-				value={p?.learningState || ""}
-				onChange={handleAddToProfile}
+				value={p?.learningState}
+				onChange={(value: LearningStateValue | undefined) => {
+					handleAddToProfile(value)
+				}}
 				defaultLabel="Add to my profile"
 			/>
 		</ContentHeader>

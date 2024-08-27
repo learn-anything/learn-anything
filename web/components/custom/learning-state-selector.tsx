@@ -12,21 +12,31 @@ import { linkLearningStateSelectorAtom } from "@/store/link"
 interface LearningStateSelectorProps {
 	defaultLabel?: string
 	searchPlaceholder?: string
-	value: string
-	onChange: (value: LearningStateValue) => void
+	value: LearningStateValue | undefined
+	onChange: (value: LearningStateValue | undefined) => void
 	className?: string
 }
 
 export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({
-	defaultLabel = "Select state",
+	defaultLabel = "Add to my profile",
 	searchPlaceholder = "Search state...",
 	value,
 	onChange,
 	className
 }) => {
 	const [islearningStateSelectorOpen, setIslearningStateSelectorOpen] = useAtom(linkLearningStateSelectorAtom)
-
 	const selectedLearningState = useMemo(() => LEARNING_STATES.find(ls => ls.value === value), [value])
+
+	const resetOption = {
+		value: undefined,
+		label: "Remove From My Profile",
+		className: "opacity-50"
+	}
+
+	const handleSelect = (selectedValue: string | undefined) => {
+		onChange(selectedValue as LearningStateValue | undefined)
+		setIslearningStateSelectorOpen(false)
+	}
 
 	return (
 		<Popover open={islearningStateSelectorOpen} onOpenChange={setIslearningStateSelectorOpen}>
@@ -58,15 +68,15 @@ export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({
 					<CommandList>
 						<ScrollArea>
 							<CommandGroup>
+								{value ? (
+									<CommandItem value={resetOption.value} onSelect={() => handleSelect(undefined)}>
+										<LaIcon name="X" className={cn("mr-2", resetOption.className)} />
+										<span className={resetOption.className}>{resetOption.label}</span>
+									</CommandItem>
+								) : null}
+
 								{LEARNING_STATES.map(ls => (
-									<CommandItem
-										key={ls.value}
-										value={ls.value}
-										onSelect={selectedValue => {
-											onChange(selectedValue as LearningStateValue)
-											setIslearningStateSelectorOpen(false)
-										}}
-									>
+									<CommandItem key={ls.value} value={ls.value} onSelect={() => handleSelect(ls.value)}>
 										<LaIcon name={ls.icon} className={cn("mr-2", ls.className)} />
 										<span className={ls.className}>{ls.label}</span>
 										<LaIcon
