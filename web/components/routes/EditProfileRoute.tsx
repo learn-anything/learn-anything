@@ -7,8 +7,8 @@ export default function EditProfileRoute() {
 
 	return (
 		<div className="flex flex-1 flex-col">
-			<p className="h-[74px] p-[20px] text-2xl font-semibold text-white/30">Profile</p>
-			<div className="flex flex-col items-center border-b border-neutral-900 bg-inherit pb-5 text-white">
+			<p className="h-[74px] p-[20px] text-2xl font-semibold text-black dark:text-white/30">Profile</p>
+			<div className="flex flex-col items-center border-b border-neutral-900 bg-inherit pb-5">
 				<div className="flex w-full max-w-2xl align-top">
 					<button className="mr-3 h-[130px] w-[130px] flex-col items-center justify-center rounded-xl border border-dashed border-white/10 bg-neutral-100 text-white/50 dark:bg-neutral-900">
 						<p className="text-sm tracking-wide">Photo</p>

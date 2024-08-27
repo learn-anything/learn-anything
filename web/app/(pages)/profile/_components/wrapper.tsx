@@ -86,7 +86,7 @@ export const ProfileWrapper = () => {
 	return (
 		<div className="flex flex-1 flex-col text-black dark:text-white">
 			<div className="flex items-center justify-between p-[20px]">
-				<p className="text-2xl font-semibold">Profile</p>
+				<p className="text-2xl font-semibold opacity-65">@{account.me.root?.username}</p>
 				<Button
 					onClick={clickEdit}
 					className="shadow-outer ml-auto flex h-[34px] cursor-pointer flex-row space-x-2 rounded-lg bg-white px-3 text-black shadow-[1px_1px_1px_1px_rgba(0,0,0,0.3)] hover:bg-black/10 dark:bg-[#222222] dark:text-white dark:hover:opacity-60"

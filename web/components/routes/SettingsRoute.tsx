@@ -1,5 +1,3 @@
-import { Button } from "../ui/button"
-
 export default function SettingsRoute() {
 	return (
 		<div className="flex flex-1 flex-col">
