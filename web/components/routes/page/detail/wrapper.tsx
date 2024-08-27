@@ -67,17 +67,20 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 			return
 		}
 
-		const newTitle = editor.getText().trim()
+		/*
+		 * The logic changed, but we keep this commented code for reference
+		 */
+		// const newTitle = editor.getText().trim()
 
-		if (!newTitle) {
-			// toast.error("Update failed", {
-			// 	description: "Title must be longer than or equal to 1 character"
-			// })
-			editor.commands.setContent(page.title || "")
-			return
-		}
+		// if (!newTitle) {
+		// toast.error("Update failed", {
+		// 	description: "Title must be longer than or equal to 1 character"
+		// })
+		// 	editor.commands.setContent(page.title || "")
+		// 	return
+		// }
 
-		if (newTitle === page.title) return
+		// if (newTitle === page.title) return
 
 		console.log("Updating page title")
 		const personalPages = me.root?.personalPages?.toJSON() || []
