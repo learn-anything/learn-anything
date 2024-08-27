@@ -22,28 +22,25 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 const pageSortAtom = atomWithStorage("pageSort", "title")
+const pageShowAtom = atomWithStorage("pageShow", 0)
 
 export const PageSection: React.FC = () => {
-	const [pagesSorted, setPagesSorted] = useAtom(pageSortAtom)
 	const { me } = useAccount({ root: { personalPages: [] } })
 	const pageCount = me?.root.personalPages?.length || 0
 
-	const sortPages = (filter: string) => setPagesSorted(filter)
-
 	return (
 		<div className="group/pages flex flex-col gap-px py-2">
-			<PageSectionHeader pageCount={pageCount} sortPages={sortPages} />
-			{me?.root.personalPages && <PageList personalPages={me.root.personalPages} sortBy={pagesSorted} />}
+			<PageSectionHeader pageCount={pageCount} />
+			{me?.root.personalPages && <PageList personalPages={me.root.personalPages} />}
 		</div>
 	)
 }
 
 interface PageSectionHeaderProps {
 	pageCount: number
-	sortPages: (filter: string) => void
 }
 
-const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({ pageCount, sortPages }) => (
+const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({ pageCount }) => (
 	<div
 		className={cn("flex min-h-[30px] items-center gap-px rounded-md", "hover:bg-accent hover:text-accent-foreground")}
 	>
@@ -56,7 +53,7 @@ const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({ pageCount, sortPa
 			</p>
 		</Button>
 		<div className={cn("flex items-center gap-px pr-2")}>
-			<ShowAllForm filteredPages={sortPages} />
+			<ShowAllForm />
 			<NewPageButton />
 		</div>
 	</div>
@@ -68,7 +65,10 @@ const NewPageButton: React.FC = () => {
 
 	const handleClick = () => {
 		try {
-			const newPersonalPage = PersonalPage.create({ public: false }, { owner: me._owner })
+			const newPersonalPage = PersonalPage.create(
+				{ public: false, createdAt: new Date(), updatedAt: new Date() },
+				{ owner: me._owner }
+			)
 			me.root?.personalPages?.push(newPersonalPage)
 			router.push(`/pages/${newPersonalPage.id}`)
 		} catch (error) {
@@ -96,22 +96,26 @@ const NewPageButton: React.FC = () => {
 
 interface PageListProps {
 	personalPages: PersonalPageLists
-	sortBy: string
 }
 
-const PageList: React.FC<PageListProps> = ({ personalPages, sortBy }) => {
+const PageList: React.FC<PageListProps> = ({ personalPages }) => {
 	const pathname = usePathname()
+
+	const [sortCriteria] = useAtom(pageSortAtom)
+	const [showCount] = useAtom(pageShowAtom)
 
 	const sortedPages = [...personalPages]
 		.sort((a, b) => {
-			if (sortBy === "title") {
-				return (a?.title || "").localeCompare(b?.title || "")
-			} else if (sortBy === "latest") {
-				return ((b as any)?.createdAt?.getTime?.() ?? 0) - ((a as any)?.createdAt?.getTime?.() ?? 0)
+			switch (sortCriteria) {
+				case "title":
+					return (a?.title ?? "").localeCompare(b?.title ?? "")
+				case "recent":
+					return (b?.updatedAt?.getTime() ?? 0) - (a?.updatedAt?.getTime() ?? 0)
+				default:
+					return 0
 			}
-			return 0
 		})
-		.slice(0, 6)
+		.slice(0, showCount === 0 ? personalPages.length : showCount)
 
 	return (
 		<div className="flex flex-col gap-px">
@@ -146,17 +150,22 @@ const PageListItem: React.FC<PageListItemProps> = ({ page, isActive }) => (
 	</div>
 )
 
-interface ShowAllFormProps {
-	filteredPages: (filter: string) => void
-}
+const SORTS = [
+	{ label: "Title", value: "title" },
+	{ label: "Last edited", value: "recent" }
+]
 
-const ShowAllForm: React.FC<ShowAllFormProps> = ({ filteredPages }) => {
+const SHOWS = [
+	{ label: "5 items", value: 5 },
+	{ label: "10 items", value: 10 },
+	{ label: "15 items", value: 15 },
+	{ label: "20 items", value: 20 },
+	{ label: "All", value: 0 }
+]
+
+const ShowAllForm: React.FC = () => {
 	const [pagesSorted, setPagesSorted] = useAtom(pageSortAtom)
-
-	const handleSort = (newSort: string) => {
-		setPagesSorted(newSort.toLowerCase())
-		filteredPages(newSort.toLowerCase())
-	}
+	const [pagesShow, setPagesShow] = useAtom(pageShowAtom)
 
 	return (
 		<DropdownMenu>
@@ -175,15 +184,6 @@ const ShowAllForm: React.FC<ShowAllFormProps> = ({ filteredPages }) => {
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="start" className="w-56">
-				<DropdownMenuItem onClick={() => handleSort("title")}>
-					Title
-					{pagesSorted === "title" && <LaIcon name="Check" className="ml-auto h-4 w-4" />}
-				</DropdownMenuItem>
-				<DropdownMenuItem onClick={() => handleSort("manual")}>
-					Manual
-					{pagesSorted === "manual" && <LaIcon name="Check" className="ml-auto h-4 w-4" />}
-				</DropdownMenuItem>
-
 				<DropdownMenuGroup>
 					<DropdownMenuSub>
 						<DropdownMenuSubTrigger>
@@ -194,8 +194,12 @@ const ShowAllForm: React.FC<ShowAllFormProps> = ({ filteredPages }) => {
 						</DropdownMenuSubTrigger>
 						<DropdownMenuPortal>
 							<DropdownMenuSubContent>
-								<DropdownMenuItem>Title</DropdownMenuItem>
-								<DropdownMenuItem>Last edited</DropdownMenuItem>
+								{SORTS.map(sort => (
+									<DropdownMenuItem key={sort.value} onClick={() => setPagesSorted(sort.value)}>
+										{sort.label}
+										{pagesSorted === sort.value && <LaIcon name="Check" className="ml-auto" />}
+									</DropdownMenuItem>
+								))}
 							</DropdownMenuSubContent>
 						</DropdownMenuPortal>
 					</DropdownMenuSub>
@@ -208,8 +212,12 @@ const ShowAllForm: React.FC<ShowAllFormProps> = ({ filteredPages }) => {
 						</DropdownMenuSubTrigger>
 						<DropdownMenuPortal>
 							<DropdownMenuSubContent>
-								<DropdownMenuItem>Title</DropdownMenuItem>
-								<DropdownMenuItem>Last edited</DropdownMenuItem>
+								{SHOWS.map(show => (
+									<DropdownMenuItem key={show.value} onClick={() => setPagesShow(show.value)}>
+										{show.label}
+										{pagesShow === show.value && <LaIcon name="Check" className="ml-auto" />}
+									</DropdownMenuItem>
+								))}
 							</DropdownMenuSubContent>
 						</DropdownMenuPortal>
 					</DropdownMenuSub>
