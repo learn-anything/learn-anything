@@ -1,6 +1,6 @@
 // TODO: somehow there should be dynamic config for tauri/website
 // one way is perhaps via env variable like below
-const TAURI_DEV = false
+const TAURI_DEV = true
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
