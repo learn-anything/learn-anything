@@ -197,7 +197,7 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 										render={({ field }) => (
 											<FormItem className="space-y-0">
 												<FormLabel className="sr-only">Topic</FormLabel>
-												<LearningStateSelector value={field.value} onChange={field.onChange} />
+												<LearningStateSelector value={field.value} onChange={field.onChange} showSearch={false} />
 											</FormItem>
 										)}
 									/>

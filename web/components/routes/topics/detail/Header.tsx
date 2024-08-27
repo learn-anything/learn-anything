@@ -87,6 +87,7 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 			<div className="flex flex-auto"></div>
 
 			<LearningStateSelector
+				showSearch={false}
 				value={p?.learningState || ""}
 				onChange={handleAddToProfile}
 				defaultLabel="Add to my profile"

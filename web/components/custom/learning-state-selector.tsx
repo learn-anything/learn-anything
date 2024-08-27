@@ -10,6 +10,7 @@ import { useAtom } from "jotai"
 import { linkLearningStateSelectorAtom } from "@/store/link"
 
 interface LearningStateSelectorProps {
+	showSearch?: boolean
 	defaultLabel?: string
 	searchPlaceholder?: string
 	value: string
@@ -18,6 +19,7 @@ interface LearningStateSelectorProps {
 }
 
 export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({
+	showSearch = true,
 	defaultLabel = "Select state",
 	searchPlaceholder = "Search state...",
 	value,
@@ -58,7 +60,8 @@ export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({
 				onCloseAutoFocus={e => e.preventDefault()}
 			>
 				<Command>
-					<CommandInput placeholder={searchPlaceholder} className="h-9" />
+					{showSearch && <CommandInput placeholder={searchPlaceholder} className="h-9" />}
+
 					<CommandList>
 						<ScrollArea>
 							<CommandGroup>
@@ -68,7 +71,6 @@ export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({
 										<span className={ls.className}>{ls.label}</span>
 										<LaIcon
 											name="Check"
-											size={16}
 											className={cn("absolute right-3", ls.value === value ? "text-primary" : "text-transparent")}
 										/>
 									</CommandItem>
