@@ -1,17 +1,17 @@
-// TODO: somehow there should be dynamic config for tauri/website
-// one way is perhaps via env variable like below
-const TAURI_DEV = true
+// with this set to true, website works in both tauri (`bun app` and website with `bun web`)
+// TODO: find a nicer way to do this, seems bad
+const DEV = process.env.DEV
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-	// due to some jazz things
+	// due to jazz issues
 	reactStrictMode: false,
-	output: TAURI_DEV ? "export" : undefined,
+	output: DEV ? "export" : undefined,
 	// TODO: should dist be at root or in `web`
-	distDir: TAURI_DEV ? "../dist" : ".next",
+	distDir: DEV ? "../dist" : ".next",
 	images: {
 		// TODO: can't optimize in tauri it seems?
-		unoptimized: TAURI_DEV ? true : false,
+		unoptimized: DEV ? true : false,
 		remotePatterns: [
 			{
 				protocol: "https",
