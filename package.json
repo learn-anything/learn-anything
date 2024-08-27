@@ -16,8 +16,8 @@
 		"react-icons": "^5.3.0"
 	},
 	"devDependencies": {
-		"bun-types": "^1.1.26",
-		"@tauri-apps/cli": "^1.6.0"
+		"@tauri-apps/cli": "^2.0.0-rc.7",
+		"bun-types": "^1.1.26"
 	},
 	"prettier": {
 		"plugins": [
