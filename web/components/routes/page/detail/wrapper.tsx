@@ -47,12 +47,26 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 	const [, setSelectedPageTopic] = useState<Topic | null>(page.topic || null)
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
+	const isTitleInitialMount = useRef(true)
+	const isContentInitialMount = useRef(true)
+
 	const updatePageContent = (content: Content, model: PersonalPage) => {
+		if (isContentInitialMount.current) {
+			isContentInitialMount.current = false
+			return
+		}
+
+		console.log("Updating page content")
 		model.content = content
 		model.updatedAt = new Date()
 	}
 
-	const handleTitleBlur = (editor: Editor) => {
+	const handleUpdateTitle = (editor: Editor) => {
+		if (isTitleInitialMount.current) {
+			isTitleInitialMount.current = false
+			return
+		}
+
 		const newTitle = editor.getText().trim()
 
 		if (!newTitle) {
@@ -65,6 +79,7 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 
 		if (newTitle === page.title) return
 
+		console.log("Updating page title")
 		const personalPages = me.root?.personalPages?.toJSON() || []
 		const slug = generateUniqueSlug(personalPages, page.slug || "")
 
@@ -142,7 +157,10 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 		onCreate: ({ editor }) => {
 			if (page.title) editor.commands.setContent(`<p>${page.title}</p>`)
 		},
-		onBlur: ({ editor }) => handleTitleBlur(editor)
+		onBlur: ({ editor }) => handleUpdateTitle(editor),
+		onUpdate: ({ editor }) => {
+			handleUpdateTitle(editor)
+		}
 	})
 
 	useEffect(() => {
@@ -150,6 +168,11 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 			titleEditorRef.current = titleEditor
 		}
 	}, [titleEditor])
+
+	useEffect(() => {
+		isTitleInitialMount.current = true
+		isContentInitialMount.current = true
+	}, [])
 
 	return (
 		<div tabIndex={0} className="relative flex grow flex-col overflow-y-auto">

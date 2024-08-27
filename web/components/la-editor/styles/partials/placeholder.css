@@ -1,4 +1,4 @@
-.la-editor:not .ProseMirror .is-empty::before {
+.la-editor .ProseMirror .is-empty::before {
 	@apply pointer-events-none float-left h-0 w-full text-[var(--la-secondary)];
 }
 
