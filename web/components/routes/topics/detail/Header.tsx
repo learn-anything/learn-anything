@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { ContentHeader, SidebarToggleButton } from "@/components/custom/content-header"
-import { Topic } from "@/lib/schema"
+import { ListOfTopics, Topic } from "@/lib/schema"
 import { LearningStateSelector } from "@/components/custom/learning-state-selector"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { LearningStateValue } from "@/lib/constants"
@@ -54,31 +54,25 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 	}
 
 	const handleAddToProfile = (learningState: LearningStateValue) => {
-		if (p) {
-			switch (p.learningState) {
-				case "wantToLearn":
-					me?.root.topicsWantToLearn.splice(p.index, 1)
-					break
-				case "learning":
-					me?.root.topicsLearning.splice(p.index, 1)
-					break
-				case "learned":
-					me?.root.topicsLearned.splice(p.index, 1)
-					break
-			}
+		const topicLists: Record<LearningStateValue, (ListOfTopics | null) | undefined> = {
+			wantToLearn: me?.root.topicsWantToLearn,
+			learning: me?.root.topicsLearning,
+			learned: me?.root.topicsLearned
 		}
 
-		switch (learningState) {
-			case "wantToLearn":
-				me?.root.topicsWantToLearn.push(topic)
-				break
-			case "learning":
-				me?.root.topicsLearning.push(topic)
-				break
-			case "learned":
-				me?.root.topicsLearned.push(topic)
-				break
+		const removeFromList = (state: LearningStateValue, index: number) => {
+			topicLists[state]?.splice(index, 1)
 		}
+
+		if (p) {
+			if (learningState === p.learningState) {
+				removeFromList(p.learningState, p.index)
+				return
+			}
+			removeFromList(p.learningState, p.index)
+		}
+
+		topicLists[learningState]?.push(topic)
 	}
 
 	return (
