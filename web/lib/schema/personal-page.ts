@@ -1,4 +1,4 @@
-import { co, CoList, CoMap } from "jazz-tools"
+import { co, CoList, CoMap, Encoders } from "jazz-tools"
 import { Topic } from "./master/topic"
 
 /*
@@ -13,6 +13,8 @@ export class PersonalPage extends CoMap {
 	public = co.boolean
 	content = co.optional.json()
 	topic = co.optional.ref(Topic)
+	createdAt = co.encoded(Encoders.Date)
+	updatedAt = co.encoded(Encoders.Date)
 	// backlinks = co.optional.ref() // other PersonalPages linking to this page TODO: add, think through how to do it well, efficiently
 }
 
