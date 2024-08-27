@@ -35,7 +35,7 @@ const defaultValues: Partial<LinkFormValues> = {
 	description: "",
 	completed: false,
 	notes: "",
-	learningState: "wantToLearn",
+	learningState: undefined,
 	topic: null
 }
 
@@ -46,7 +46,7 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 	onClose,
 	exceptionsRefs = []
 }) => {
-	const [selectedTopic, setSelectedTopic] = React.useState<Topic | null>(null)
+	const [selectedTopic, setSelectedTopic] = React.useState<Topic | undefined>()
 	const [istopicSelectorOpen] = useAtom(linkTopicSelectorAtom)
 	const [islearningStateSelectorOpen] = useAtom(linkLearningStateSelectorAtom)
 	const [globalExceptionRefs] = useAtom(globalLinkFormExceptionRefsAtom)
@@ -135,12 +135,17 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 
 	const onSubmit = (values: LinkFormValues) => {
 		if (isFetching) return
+
 		try {
 			const personalLinks = me.root?.personalLinks?.toJSON() || []
 			const slug = generateUniqueSlug(personalLinks, values.title)
 
 			if (selectedLink) {
-				if (selectedTopic) {
+				const { topic, ...diffValues } = values
+
+				if (!selectedTopic) {
+					selectedLink.applyDiff({ ...diffValues, slug, updatedAt: new Date() })
+				} else {
 					selectedLink.applyDiff({ ...values, slug, topic: selectedTopic })
 				}
 			} else {
@@ -197,7 +202,14 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 										render={({ field }) => (
 											<FormItem className="space-y-0">
 												<FormLabel className="sr-only">Topic</FormLabel>
-												<LearningStateSelector value={field.value} onChange={field.onChange} showSearch={false} />
+												<LearningStateSelector
+													value={field.value}
+													onChange={value => {
+														// toggle, if already selected set undefined
+														form.setValue("learningState", field.value === value ? undefined : value)
+													}}
+													showSearch={false}
+												/>
 											</FormItem>
 										)}
 									/>

@@ -13,7 +13,7 @@ interface LearningStateSelectorProps {
 	showSearch?: boolean
 	defaultLabel?: string
 	searchPlaceholder?: string
-	value: string
+	value?: string
 	onChange: (value: LearningStateValue) => void
 	className?: string
 }
