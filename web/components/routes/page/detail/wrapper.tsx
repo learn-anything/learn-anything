@@ -19,10 +19,8 @@ import { LaIcon } from "@/components/custom/la-icon"
 import { pageTopicSelectorAtom } from "@/store/page"
 import { TopicSelector } from "@/components/routes/link/form/partial/topic-selector"
 import DeletePageModal from "@/components/custom/delete-modal"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
 
-const TITLE_PLACEHOLDER = "Page title"
+const TITLE_PLACEHOLDER = "Untitled"
 
 export function DetailPageWrapper({ pageId }: { pageId: string }) {
 	const page = useCoState(PersonalPage, pageId as ID<PersonalPage>)
@@ -59,14 +57,14 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 			toast.error("Update failed", {
 				description: "Title must be longer than or equal to 1 character"
 			})
-			editor.commands.setContent(page.title)
+			editor.commands.setContent(page.title || "")
 			return
 		}
 
 		if (newTitle === page.title) return
 
 		const personalPages = me.root?.personalPages?.toJSON() || []
-		const slug = generateUniqueSlug(personalPages, page.slug)
+		const slug = generateUniqueSlug(personalPages, page.slug || "")
 
 		const trimmedTitle = editor.getText().trim()
 		page.title = trimmedTitle
@@ -137,8 +135,7 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 			handleKeyDown: handleTitleKeyDown
 		},
 		onCreate: ({ editor }) => {
-			const capitalizedTitle = page.title.charAt(0).toUpperCase() + page.title.slice(1)
-			editor.commands.setContent(`<p>${capitalizedTitle}</p>`)
+			if (page.title) editor.commands.setContent(`<p>${page.title}</p>`)
 		},
 		onBlur: ({ editor }) => handleTitleBlur(editor)
 	})
@@ -156,7 +153,7 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 					<div className="mb-2 mt-8 flex flex-row justify-between py-1.5">
 						<EditorContent
 							editor={titleEditor}
-							className="la-editor cursor-text select-text text-2xl font-semibold leading-[calc(1.33333)] tracking-[-0.00625rem]"
+							className="la-editor grow cursor-text select-text text-2xl font-semibold leading-[calc(1.33333)] tracking-[-0.00625rem]"
 						/>
 						<div className="items-center space-x-4">
 							<TopicSelector
@@ -201,7 +198,7 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 				onConfirm={() => {
 					confirmDelete(page)
 				}}
-				title={page.title.charAt(0).toUpperCase() + page.title.slice(1)}
+				title={page.title || ""}
 			/>
 		</div>
 	)
