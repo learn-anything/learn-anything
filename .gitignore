@@ -14,3 +14,4 @@ private
 past-*
 output
 dist
+app/target
