@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button"
 import { LaIcon } from "@/components/custom/la-icon"
 import { pageTopicSelectorAtom } from "@/store/page"
 import { TopicSelector } from "@/components/routes/link/form/partial/topic-selector"
+import { FocusClasses } from "@tiptap/extension-focus"
 import DeletePageModal from "@/components/custom/delete-modal"
 
 const TITLE_PLACEHOLDER = "Untitled"
@@ -43,20 +44,21 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 	const titleEditorRef = useRef<Editor | null>(null)
 	const contentEditorRef = useRef<LAEditorRef>(null)
 	const [, setTopicSelectorOpen] = useAtom(pageTopicSelectorAtom)
-	const [selectedPageTopic, setSelectedPageTopic] = useState<Topic | null>(page.topic || null)
+	const [, setSelectedPageTopic] = useState<Topic | null>(page.topic || null)
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
 	const updatePageContent = (content: Content, model: PersonalPage) => {
 		model.content = content
+		model.updatedAt = new Date()
 	}
 
 	const handleTitleBlur = (editor: Editor) => {
 		const newTitle = editor.getText().trim()
 
 		if (!newTitle) {
-			toast.error("Update failed", {
-				description: "Title must be longer than or equal to 1 character"
-			})
+			// toast.error("Update failed", {
+			// 	description: "Title must be longer than or equal to 1 character"
+			// })
 			editor.commands.setContent(page.title || "")
 			return
 		}
@@ -69,6 +71,7 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 		const trimmedTitle = editor.getText().trim()
 		page.title = trimmedTitle
 		page.slug = slug
+		page.updatedAt = new Date()
 
 		editor.commands.setContent(trimmedTitle)
 	}
@@ -106,7 +109,9 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 
 	const titleEditor = useEditor({
 		immediatelyRender: false,
+		autofocus: true,
 		extensions: [
+			FocusClasses,
 			Paragraph,
 			StarterKit.configure({
 				bold: false,
@@ -153,7 +158,7 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 					<div className="mb-2 mt-8 flex flex-row justify-between py-1.5">
 						<EditorContent
 							editor={titleEditor}
-							className="la-editor grow cursor-text select-text text-2xl font-semibold leading-[calc(1.33333)] tracking-[-0.00625rem]"
+							className="la-editor no-command grow cursor-text select-text text-2xl font-semibold leading-[calc(1.33333)] tracking-[-0.00625rem]"
 						/>
 						<div className="items-center space-x-4">
 							<TopicSelector
