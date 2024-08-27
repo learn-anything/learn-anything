@@ -1,6 +1,7 @@
 // with this set to true, website works in both tauri (`bun app` and website with `bun web`)
 // TODO: find a nicer way to do this, seems bad
-const DEV = process.env.DEV
+// const DEV = process.env.DEV
+const DEV = false
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
