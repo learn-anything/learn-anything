@@ -47,7 +47,7 @@ interface SidebarItemProps {
 	children?: React.ReactNode
 }
 
-export const SidebarItem: React.FC<SidebarItemProps> = React.memo(({ label, url, icon, onClick, children }) => {
+const SidebarItem: React.FC<SidebarItemProps> = React.memo(({ label, url, icon, onClick, children }) => {
 	const pathname = usePathname()
 	const isActive = pathname === url
 
@@ -69,6 +69,8 @@ export const SidebarItem: React.FC<SidebarItemProps> = React.memo(({ label, url,
 		</div>
 	)
 })
+
+SidebarItem.displayName = "SidebarItem"
 
 const LogoAndSearch: React.FC = React.memo(() => {
 	const pathname = usePathname()
@@ -103,6 +105,8 @@ const LogoAndSearch: React.FC = React.memo(() => {
 	)
 })
 
+LogoAndSearch.displayName = "LogoAndSearch"
+
 const SidebarContent: React.FC = React.memo(() => {
 	return (
 		<>
@@ -121,7 +125,9 @@ const SidebarContent: React.FC = React.memo(() => {
 	)
 })
 
-export const Sidebar: React.FC = () => {
+SidebarContent.displayName = "SidebarContent"
+
+const Sidebar: React.FC = () => {
 	const isTablet = useMedia("(max-width: 1024px)")
 	const [isCollapsed, setIsCollapsed] = useSidebarCollapse(isTablet)
 
@@ -175,4 +181,6 @@ export const Sidebar: React.FC = () => {
 	)
 }
 
-export default Sidebar
+Sidebar.displayName = "Sidebar"
+
+export { Sidebar, SidebarItem, SidebarContext }
