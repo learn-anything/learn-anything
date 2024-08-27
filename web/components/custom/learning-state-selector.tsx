@@ -8,18 +8,17 @@ import { LaIcon } from "@/components/custom/la-icon"
 import { LEARNING_STATES, LearningStateValue } from "@/lib/constants"
 import { useAtom } from "jotai"
 import { linkLearningStateSelectorAtom } from "@/store/link"
-import { usePathname } from "next/navigation"
 
 interface LearningStateSelectorProps {
 	defaultLabel?: string
 	searchPlaceholder?: string
-	value: LearningStateValue | undefined
-	onChange: (value: LearningStateValue | undefined) => void
+	value: string
+	onChange: (value: LearningStateValue) => void
 	className?: string
 }
 
 export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({
-	defaultLabel = "Add to my profile",
+	defaultLabel = "Select state",
 	searchPlaceholder = "Search state...",
 	value,
 	onChange,
@@ -27,18 +26,9 @@ export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({
 }) => {
 	const [islearningStateSelectorOpen, setIslearningStateSelectorOpen] = useAtom(linkLearningStateSelectorAtom)
 	const selectedLearningState = useMemo(() => LEARNING_STATES.find(ls => ls.value === value), [value])
-	const pathname = usePathname()
 
-	const resetOption = {
-		value: undefined,
-		label: "Remove From My Profile",
-		className: "opacity-50"
-	}
-
-	const showReset = pathname !== "/" && value !== undefined
-
-	const handleSelect = (selectedValue: LearningStateValue | undefined) => {
-		onChange(selectedValue)
+	const handleSelect = (selectedValue: string) => {
+		onChange(selectedValue as LearningStateValue)
 		setIslearningStateSelectorOpen(false)
 	}
 
@@ -72,16 +62,8 @@ export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({
 					<CommandList>
 						<ScrollArea>
 							<CommandGroup>
-								{/* TODO: check doubleclick for Learned case  */}
-								{showReset ? (
-									<CommandItem value={resetOption.value} onSelect={() => handleSelect(undefined)}>
-										<LaIcon name="X" className={cn("mr-2", resetOption.className)} />
-										<span className={resetOption.className}>{resetOption.label}</span>
-									</CommandItem>
-								) : null}
-
 								{LEARNING_STATES.map(ls => (
-									<CommandItem key={ls.value} value={ls.value} onSelect={() => handleSelect(ls.value)}>
+									<CommandItem key={ls.value} value={ls.value} onSelect={handleSelect}>
 										<LaIcon name={ls.icon} className={cn("mr-2", ls.className)} />
 										<span className={ls.className}>{ls.label}</span>
 										<LaIcon

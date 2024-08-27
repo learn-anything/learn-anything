@@ -6,14 +6,12 @@ import { ListOfTopics, Topic } from "@/lib/schema"
 import { LearningStateSelector } from "@/components/custom/learning-state-selector"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { LearningStateValue } from "@/lib/constants"
-import { usePathname } from "next/navigation"
 
 interface TopicDetailHeaderProps {
 	topic: Topic
 }
 
 export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }: TopicDetailHeaderProps) {
-	const pathname = usePathname()
 	const { me } = useAccount({
 		root: {
 			topicsWantToLearn: [],
@@ -46,7 +44,16 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 		}
 	}
 
-	const handleAddToProfile = (learningState: LearningStateValue | undefined) => {
+	const learnedIndex = me?.root.topicsLearned.findIndex(t => t?.id === topic.id) ?? -1
+	if (learnedIndex !== -1) {
+		p = {
+			index: learnedIndex,
+			topic: me?.root.topicsLearned[learnedIndex],
+			learningState: "learned"
+		}
+	}
+
+	const handleAddToProfile = (learningState: LearningStateValue) => {
 		const topicLists: Record<LearningStateValue, (ListOfTopics | null) | undefined> = {
 			wantToLearn: me?.root.topicsWantToLearn,
 			learning: me?.root.topicsLearning,
@@ -58,12 +65,14 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 		}
 
 		if (p) {
+			if (learningState === p.learningState) {
+				removeFromList(p.learningState, p.index)
+				return
+			}
 			removeFromList(p.learningState, p.index)
 		}
 
-		if (learningState) {
-			topicLists[learningState]?.push(topic)
-		}
+		topicLists[learningState]?.push(topic)
 	}
 
 	return (
@@ -78,10 +87,8 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 			<div className="flex flex-auto"></div>
 
 			<LearningStateSelector
-				value={p?.learningState}
-				onChange={(value: LearningStateValue | undefined) => {
-					handleAddToProfile(value)
-				}}
+				value={p?.learningState || ""}
+				onChange={handleAddToProfile}
 				defaultLabel="Add to my profile"
 			/>
 		</ContentHeader>
