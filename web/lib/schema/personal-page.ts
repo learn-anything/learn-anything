@@ -8,9 +8,9 @@ import { Topic } from "./master/topic"
  * - if public, certain members (can do read/write access accordingly), personal (end to end encrypted, only accessed by user)
  */
 export class PersonalPage extends CoMap {
-	title = co.string
-	slug = co.string // is used only when `public: true` for sharing, `@user/page-slug`
-	// public = co.boolean // needed?
+	title = co.optional.string
+	slug = co.optional.string // is used only when `public: true` for sharing, `@user/page-slug`
+	public = co.boolean
 	content = co.optional.json()
 	topic = co.optional.ref(Topic)
 	// backlinks = co.optional.ref() // other PersonalPages linking to this page TODO: add, think through how to do it well, efficiently
