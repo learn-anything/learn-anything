@@ -8,6 +8,7 @@ import { LaIcon } from "@/components/custom/la-icon"
 import { LEARNING_STATES, LearningStateValue } from "@/lib/constants"
 import { useAtom } from "jotai"
 import { linkLearningStateSelectorAtom } from "@/store/link"
+import { usePathname } from "next/navigation"
 
 interface LearningStateSelectorProps {
 	defaultLabel?: string
@@ -26,6 +27,7 @@ export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({
 }) => {
 	const [islearningStateSelectorOpen, setIslearningStateSelectorOpen] = useAtom(linkLearningStateSelectorAtom)
 	const selectedLearningState = useMemo(() => LEARNING_STATES.find(ls => ls.value === value), [value])
+	const pathname = usePathname()
 
 	const resetOption = {
 		value: undefined,
@@ -33,8 +35,10 @@ export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({
 		className: "opacity-50"
 	}
 
-	const handleSelect = (selectedValue: string | undefined) => {
-		onChange(selectedValue as LearningStateValue | undefined)
+	const showReset = pathname !== "/" && value !== undefined
+
+	const handleSelect = (selectedValue: LearningStateValue | undefined) => {
+		onChange(selectedValue)
 		setIslearningStateSelectorOpen(false)
 	}
 
@@ -68,7 +72,8 @@ export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({
 					<CommandList>
 						<ScrollArea>
 							<CommandGroup>
-								{value ? (
+								{/* TODO: check doubleclick for Learned case  */}
+								{showReset ? (
 									<CommandItem value={resetOption.value} onSelect={() => handleSelect(undefined)}>
 										<LaIcon name="X" className={cn("mr-2", resetOption.className)} />
 										<span className={resetOption.className}>{resetOption.label}</span>

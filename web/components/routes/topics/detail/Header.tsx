@@ -6,12 +6,14 @@ import { ListOfTopics, Topic } from "@/lib/schema"
 import { LearningStateSelector } from "@/components/custom/learning-state-selector"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { LearningStateValue } from "@/lib/constants"
+import { usePathname } from "next/navigation"
 
 interface TopicDetailHeaderProps {
 	topic: Topic
 }
 
 export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }: TopicDetailHeaderProps) {
+	const pathname = usePathname()
 	const { me } = useAccount({
 		root: {
 			topicsWantToLearn: [],
@@ -41,15 +43,6 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 			index: learningIndex,
 			topic: me?.root.topicsLearning[learningIndex],
 			learningState: "learning"
-		}
-	}
-
-	const learnedIndex = me?.root.topicsLearned.findIndex(t => t?.id === topic.id) ?? -1
-	if (learnedIndex !== -1) {
-		p = {
-			index: learnedIndex,
-			topic: me?.root.topicsLearned[learnedIndex],
-			learningState: "learned"
 		}
 	}
 
