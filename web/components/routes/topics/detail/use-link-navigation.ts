@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react"
 import { Link as LinkSchema } from "@/lib/schema"
+import { ensureUrlProtocol } from "@/lib/utils"
 
 export function useLinkNavigation(allLinks: (LinkSchema | null)[]) {
 	const [activeIndex, setActiveIndex] = useState(-1)
@@ -40,9 +41,14 @@ export function useLinkNavigation(allLinks: (LinkSchema | null)[]) {
 					scrollToLink(newIndex)
 					return newIndex
 				})
+			} else if (e.key === "Enter" && activeIndex !== -1) {
+				const link = allLinks[activeIndex]
+				if (link) {
+					window.open(ensureUrlProtocol(link.url), "_blank")
+				}
 			}
 		},
-		[allLinks, scrollToLink]
+		[activeIndex, allLinks, scrollToLink]
 	)
 
 	useEffect(() => {
