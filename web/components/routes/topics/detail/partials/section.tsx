@@ -1,6 +1,6 @@
 import React from "react"
 import { LinkItem } from "./link-item"
-import { Section as SectionSchema } from "@/lib/schema"
+import { LaAccount, PersonalLinkLists, Section as SectionSchema, UserRoot } from "@/lib/schema"
 
 interface SectionProps {
 	section: SectionSchema
@@ -8,9 +8,23 @@ interface SectionProps {
 	startIndex: number
 	linkRefs: React.MutableRefObject<(HTMLLIElement | null)[]>
 	setActiveIndex: (index: number) => void
+	me: {
+		root: {
+			personalLinks: PersonalLinkLists
+		} & UserRoot
+	} & LaAccount
+	personalLinks: PersonalLinkLists
 }
 
-export function Section({ section, activeIndex, setActiveIndex, startIndex, linkRefs }: SectionProps) {
+export function Section({
+	section,
+	activeIndex,
+	setActiveIndex,
+	startIndex,
+	linkRefs,
+	me,
+	personalLinks
+}: SectionProps) {
 	return (
 		<div className="flex flex-col">
 			<div className="flex items-center gap-4 px-6 py-2 max-lg:px-4">
@@ -31,6 +45,8 @@ export function Section({ section, activeIndex, setActiveIndex, startIndex, link
 								ref={el => {
 									linkRefs.current[startIndex + index] = el
 								}}
+								me={me}
+								personalLinks={personalLinks}
 							/>
 						)
 				)}
