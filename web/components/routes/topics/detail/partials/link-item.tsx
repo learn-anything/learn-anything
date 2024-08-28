@@ -9,7 +9,8 @@ import { useAtom } from "jotai"
 import { openPopoverForIdAtom } from "../TopicDetailRoute"
 import { LearningStateSelectorContent } from "@/components/custom/learning-state-selector"
 import { LEARNING_STATES, LearningStateValue } from "@/lib/constants"
-import { toast } from "sonner"
+import { toast, ToastT } from "sonner"
+import { useRouter } from "next/navigation"
 interface LinkItemProps {
 	link: LinkSchema
 	isActive: boolean
@@ -25,6 +26,7 @@ interface LinkItemProps {
 
 export const LinkItem = React.forwardRef<HTMLLIElement, LinkItemProps>(
 	({ link, isActive, index, setActiveIndex, me, personalLinks }, ref) => {
+		const router = useRouter()
 		const [openPopoverForId, setOpenPopoverForId] = useAtom(openPopoverForIdAtom)
 		const personalLink = useMemo(() => {
 			return personalLinks.find(pl => pl?.link?.id === link.id)
@@ -38,17 +40,26 @@ export const LinkItem = React.forwardRef<HTMLLIElement, LinkItemProps>(
 		}
 
 		const handleSelectLearningState = (learningState: LearningStateValue) => {
+			let defaultToast: Partial<ToastT> = {
+				duration: 5000,
+				position: "bottom-right",
+				closeButton: true,
+				action: {
+					label: "Go to list",
+					onClick: () => {
+						router.push("/")
+					}
+				}
+			}
+
 			if (personalLink) {
 				if (personalLink.learningState === learningState) {
 					personalLink.learningState = undefined
-
-					toast.info("Learning state removed")
-					return
+					toast.error("Link learning state removed", defaultToast)
+				} else {
+					personalLink.learningState = learningState
+					toast.success("Link learning state updated", defaultToast)
 				}
-
-				personalLink.learningState = learningState
-
-				toast.success("Learning state updated")
 			} else {
 				const slug = generateUniqueSlug(personalLinks.toJSON(), link.title)
 				const payload = {
@@ -63,12 +74,16 @@ export const LinkItem = React.forwardRef<HTMLLIElement, LinkItemProps>(
 					updatedAt: new Date()
 				}
 
-				console.log("payload", payload)
 				const newPersonalLink = PersonalLink.create(payload, { owner: me })
 				personalLinks.push(newPersonalLink)
 
-				toast.success("Link added to your list")
+				toast.success("Link added.", {
+					...defaultToast,
+					description: `${link.title} has been added to your personal link.`
+				})
 			}
+
+			setOpenPopoverForId(null)
 		}
 
 		return (
