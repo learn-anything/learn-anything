@@ -22,7 +22,7 @@ import DeletePageModal from "@/components/custom/delete-modal"
 
 const TITLE_PLACEHOLDER = "Untitled"
 
-export function DetailPageWrapper({ pageId }: { pageId: string }) {
+export function PageDetailRoute({ pageId }: { pageId: string }) {
 	const page = useCoState(PersonalPage, pageId as ID<PersonalPage>)
 
 	if (!page) return <div>Loading...</div>
