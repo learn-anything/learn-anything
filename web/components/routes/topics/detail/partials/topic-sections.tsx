@@ -1,8 +1,9 @@
 import React from "react"
 import { Section } from "./section"
-import { LaAccount, ListOfSections, PersonalLinkLists, UserRoot } from "@/lib/schema"
+import { LaAccount, ListOfSections, PersonalLinkLists, Topic, UserRoot } from "@/lib/schema"
 
 interface TopicSectionsProps {
+	topic: Topic
 	sections: (ListOfSections | null) | undefined
 	activeIndex: number
 	setActiveIndex: (index: number) => void
@@ -17,6 +18,7 @@ interface TopicSectionsProps {
 }
 
 export function TopicSections({
+	topic,
 	sections,
 	activeIndex,
 	setActiveIndex,
@@ -34,6 +36,7 @@ export function TopicSections({
 							section?.id && (
 								<Section
 									key={sectionIndex}
+									topic={topic}
 									section={section}
 									activeIndex={activeIndex}
 									setActiveIndex={setActiveIndex}

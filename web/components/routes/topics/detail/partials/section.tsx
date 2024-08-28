@@ -1,8 +1,9 @@
 import React from "react"
 import { LinkItem } from "./link-item"
-import { LaAccount, PersonalLinkLists, Section as SectionSchema, UserRoot } from "@/lib/schema"
+import { LaAccount, PersonalLinkLists, Section as SectionSchema, Topic, UserRoot } from "@/lib/schema"
 
 interface SectionProps {
+	topic: Topic
 	section: SectionSchema
 	activeIndex: number
 	startIndex: number
@@ -17,6 +18,7 @@ interface SectionProps {
 }
 
 export function Section({
+	topic,
 	section,
 	activeIndex,
 	setActiveIndex,
@@ -38,6 +40,7 @@ export function Section({
 						link?.url && (
 							<LinkItem
 								key={index}
+								topic={topic}
 								link={link}
 								isActive={activeIndex === startIndex + index}
 								index={startIndex + index}

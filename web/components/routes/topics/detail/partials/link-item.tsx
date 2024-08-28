@@ -10,11 +10,12 @@ import { Button } from "@/components/ui/button"
 import { LearningStateSelectorContent } from "@/components/custom/learning-state-selector"
 
 import { cn, ensureUrlProtocol, generateUniqueSlug } from "@/lib/utils"
-import { LaAccount, Link as LinkSchema, PersonalLink, PersonalLinkLists, UserRoot } from "@/lib/schema"
+import { LaAccount, Link as LinkSchema, PersonalLink, PersonalLinkLists, Topic, UserRoot } from "@/lib/schema"
 import { openPopoverForIdAtom } from "../TopicDetailRoute"
 import { LEARNING_STATES, LearningStateValue } from "@/lib/constants"
 
 interface LinkItemProps {
+	topic: Topic
 	link: LinkSchema
 	isActive: boolean
 	index: number
@@ -29,7 +30,7 @@ interface LinkItemProps {
 
 export const LinkItem = React.memo(
 	React.forwardRef<HTMLLIElement, LinkItemProps>(
-		({ link, isActive, index, setActiveIndex, me, personalLinks }, ref) => {
+		({ topic, link, isActive, index, setActiveIndex, me, personalLinks }, ref) => {
 			const router = useRouter()
 			const [, setOpenPopoverForId] = useAtom(openPopoverForIdAtom)
 			const [isPopoverOpen, setIsPopoverOpen] = useState(false)
@@ -81,6 +82,7 @@ export const LinkItem = React.memo(
 								learningState,
 								sequence: personalLinks.length + 1,
 								completed: false,
+								topic,
 								createdAt: new Date(),
 								updatedAt: new Date()
 							},

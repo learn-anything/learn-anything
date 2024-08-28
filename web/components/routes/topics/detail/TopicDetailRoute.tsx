@@ -27,6 +27,7 @@ export function TopicDetailRoute({ topicName }: TopicDetailRouteProps) {
 		<div className="flex h-full flex-auto flex-col">
 			<TopicDetailHeader topic={topic} />
 			<TopicSections
+				topic={topic}
 				sections={topic.latestGlobalGuide?.sections}
 				activeIndex={activeIndex}
 				setActiveIndex={setActiveIndex}
