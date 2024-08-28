@@ -44,6 +44,8 @@ const ToolbarButton = React.forwardRef<HTMLButtonElement, ToolbarButtonProps>(({
 	return button
 })
 
+ToolbarButton.displayName = "ToolbarButton"
+
 export const LinkBottomBar: React.FC = () => {
 	const [editId, setEditId] = useQueryState("editId")
 	const [, setGlobalLinkFormExceptionRefsAtom] = useAtom(globalLinkFormExceptionRefsAtom)
@@ -190,5 +192,7 @@ export const LinkBottomBar: React.FC = () => {
 		</motion.div>
 	)
 }
+
+LinkBottomBar.displayName = "LinkBottomBar"
 
 export default LinkBottomBar
