@@ -18,7 +18,7 @@ const SearchTitle: React.FC<SearchTitleProps> = ({ topicTitle, topics }) => {
 		<div className="flex w-full items-center">
 			<h2 className="text-lg font-semibold">{topicTitle}</h2>
 			<div className="mx-4 flex-grow">
-				<div className="h-px bg-gray-300 dark:bg-gray-700"></div>
+				<div className="h-px bg-neutral-200 dark:bg-neutral-700"></div>
 			</div>
 			<span className="text-base font-light text-opacity-55">{topics.length}</span>
 		</div>
@@ -86,15 +86,18 @@ export const SearchWrapper = () => {
 							<div className="space-y-4">
 								<SearchTitle topicTitle="Topics" topics={searchResults.map(topic => topic.prettyName)} />
 								{searchResults.map((topic, index) => (
-									<div key={topic.id} className="flex min-w-0 items-center gap-x-4">
-										<LaIcon name="Square" className="size-4 flex-shrink-0 opacity-50" />
+									<div key={topic.id} className="group flex min-w-0 items-center gap-x-4">
+										<LaIcon
+											name="Square"
+											className="size-4 flex-shrink-0 opacity-0 transition-opacity duration-200 group-hover:opacity-50"
+										/>
 										<div className="group">
 											<Link
 												href={`/${topic.name}`}
 												passHref
 												prefetch={false}
 												onClick={e => e.stopPropagation()}
-												className="hover:text-primary text-sm font-medium"
+												className="hover:text-primary text-sm font-medium hover:opacity-70"
 											>
 												{topic.prettyName}
 											</Link>
