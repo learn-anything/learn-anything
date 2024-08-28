@@ -197,7 +197,7 @@ const LinkList = () => {
 	}
 
 	return (
-		<div className="relative z-20">
+		<div className="flex w-full flex-1 flex-col overflow-y-auto [scrollbar-gutter:stable]">
 			<DndContext
 				sensors={sensors}
 				collisionDetection={closestCenter}

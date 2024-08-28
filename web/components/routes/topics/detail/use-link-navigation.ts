@@ -42,15 +42,12 @@ export function useLinkNavigation(allLinks: (LinkSchema | null)[]) {
 					scrollToLink(newIndex)
 					return newIndex
 				})
+			} else if (e.key === "Enter" && activeIndex !== -1) {
+				const link = allLinks[activeIndex]
+				if (link) {
+					window.open(ensureUrlProtocol(link.url), "_blank")
+				}
 			}
-
-			console.log("activeIndex", activeIndex)
-			// else if (e.key === "Enter" && activeIndex !== -1) {
-			// 	const link = allLinks[activeIndex]
-			// 	if (link) {
-			// 		window.open(ensureUrlProtocol(link.url), "_blank")
-			// 	}
-			// }
 		},
 		[activeIndex, allLinks, scrollToLink]
 	)

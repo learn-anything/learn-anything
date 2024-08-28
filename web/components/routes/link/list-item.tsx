@@ -139,8 +139,9 @@ export const ListItem: React.FC<ListItemProps> = ({
 				setFocusedId(null)
 			}}
 			onKeyDown={handleKeyDown}
-			className={cn("hover:bg-muted/50 relative flex h-14 cursor-default items-center outline-none xl:h-11", {
-				"bg-muted/50": isFocused
+			className={cn("relative flex h-14 cursor-default items-center outline-none xl:h-11", {
+				"bg-muted-foreground/10": isFocused,
+				"hover:bg-muted/50": !isFocused
 			})}
 			// onClick={handleRowClick}
 			onDoubleClick={handleRowDoubleClick}

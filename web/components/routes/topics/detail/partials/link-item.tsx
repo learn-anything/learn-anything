@@ -91,10 +91,10 @@ export const LinkItem = React.forwardRef<HTMLLIElement, LinkItemProps>(
 				ref={ref}
 				tabIndex={0}
 				onClick={handleClick}
-				className={cn(
-					"hover:bg-muted/50 relative flex h-14 cursor-pointer items-center outline-none xl:h-11",
-					isActive && "bg-muted/50"
-				)}
+				className={cn("relative flex h-14 cursor-pointer items-center outline-none xl:h-11", {
+					"bg-muted-foreground/10": isActive,
+					"hover:bg-muted/50": !isActive
+				})}
 			>
 				<div className="flex grow justify-between gap-x-6 px-6 max-lg:px-4">
 					<div className="flex min-w-0 items-center gap-x-4">
@@ -108,10 +108,10 @@ export const LinkItem = React.forwardRef<HTMLLIElement, LinkItemProps>(
 									type="button"
 									role="combobox"
 									variant="secondary"
-									className={cn("size-7 shrink-0 p-0", "hover:bg-accent-foreground/20")}
+									className={cn("size-7 shrink-0 p-0", "hover:bg-accent-foreground/10")}
 								>
 									{selectedLearningState?.icon ? (
-										<LaIcon name={selectedLearningState.icon} className={cn(selectedLearningState.className)} />
+										<LaIcon name={selectedLearningState.icon} className={selectedLearningState.className} />
 									) : (
 										<LaIcon name="Circle" />
 									)}
