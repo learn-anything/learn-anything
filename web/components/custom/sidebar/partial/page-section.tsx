@@ -165,7 +165,7 @@ const PageListItem: React.FC<PageListItemProps> = ({ page, isActive }) => (
 				)}
 			>
 				<div className="flex max-w-full flex-1 items-center gap-1.5 truncate text-sm">
-					<LaIcon name="FileText" className="size-3 flex-shrink-0 opacity-60" />
+					<LaIcon name="FileText" className="flex-shrink-0 opacity-60" />
 					<p className="truncate opacity-95 group-hover/sidebar-link:opacity-100">{page.title || "Untitled"}</p>
 				</div>
 			</Link>

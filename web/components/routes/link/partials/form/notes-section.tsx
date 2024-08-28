@@ -18,7 +18,7 @@ export const NotesSection: React.FC = () => {
 					<FormControl>
 						<>
 							<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-								<LaIcon name="Pencil" aria-hidden="true" className="text-muted-foreground/70 size-3" />
+								<LaIcon name="Pencil" aria-hidden="true" className="text-muted-foreground/70" />
 							</div>
 
 							<Input

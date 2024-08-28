@@ -155,7 +155,7 @@ export const LinkItem: React.FC<LinkItemProps> = ({
 									<LaIcon
 										name="Link"
 										aria-hidden="true"
-										className="text-muted-foreground group-hover:text-primary size-3 flex-none"
+										className="text-muted-foreground group-hover:text-primary flex-none"
 									/>
 									<Link
 										href={personalLink.url}
