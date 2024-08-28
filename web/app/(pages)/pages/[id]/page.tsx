@@ -1,5 +1,5 @@
-import { DetailPageWrapper } from "@/components/routes/page/detail/wrapper"
+import { PageDetailRoute } from "@/components/routes/page/detail/PageDetailRoute"
 
 export default function DetailPage({ params }: { params: { id: string } }) {
-	return <DetailPageWrapper pageId={params.id} />
+	return <PageDetailRoute pageId={params.id} />
 }
