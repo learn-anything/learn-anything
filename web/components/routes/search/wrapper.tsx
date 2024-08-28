@@ -39,15 +39,17 @@ export const SearchWrapper = () => {
 			}
 		}
 	)
+
 	const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value
 		setSearchText(value)
 
-		const results = value
-			? globalGroup?.root.topics.filter(
-					(topic): topic is Topic => topic !== null && topic.prettyName.toLowerCase().startsWith(value.toLowerCase())
-				)
-			: []
+		const results =
+			value && globalGroup?.root.topics
+				? globalGroup.root.topics.filter(
+						(topic): topic is Topic => topic !== null && topic.prettyName.toLowerCase().startsWith(value.toLowerCase())
+					)
+				: []
 		setSearchResults(results)
 	}
 
@@ -83,10 +85,13 @@ export const SearchWrapper = () => {
 					</div>
 					<div className="relative w-full pb-5">
 						{searchResults.length > 0 ? (
-							<div className="space-y-4">
+							<div className="space-y-1">
 								<SearchTitle topicTitle="Topics" topics={searchResults.map(topic => topic.prettyName)} />
 								{searchResults.map((topic, index) => (
-									<div key={topic.id} className="group flex min-w-0 items-center gap-x-4">
+									<div
+										key={topic.id}
+										className="hover:bg-result group flex min-w-0 items-center gap-x-4 rounded-md p-2"
+									>
 										<LaIcon
 											name="Square"
 											className="size-4 flex-shrink-0 opacity-0 transition-opacity duration-200 group-hover:opacity-50"
