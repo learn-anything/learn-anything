@@ -9,10 +9,11 @@ interface Data {
 export function generateUniqueSlug(
 	existingItems: Data[],
 	title: string,
-	slugProperty: string = "slug",
+	slugProperty: string = "slug" || undefined,
+	slug?: string,
 	maxLength: number = 50
 ): string {
-	const baseSlug = slugify(title, { lower: true, strict: true })
+	const baseSlug = slug || slugify(title, { lower: true, strict: true })
 	let uniqueSlug = baseSlug.slice(0, maxLength)
 	let num = 1
 
