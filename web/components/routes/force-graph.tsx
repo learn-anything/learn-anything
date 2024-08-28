@@ -12,7 +12,7 @@ export default function ForceGraph() {
 
 	const graph = useMemo(() => {
 		return globalGroup?.root.topicGraph?.map(
-			topic =>
+			(topic: { name: string; prettyName: string; connectedTopics: Array<{ name?: string }> }) =>
 				({
 					name: topic.name,
 					prettyName: topic.prettyName,

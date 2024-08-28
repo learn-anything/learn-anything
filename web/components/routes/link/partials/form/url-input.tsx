@@ -3,7 +3,7 @@ import { useFormContext } from "react-hook-form"
 import { FormField, FormItem, FormControl, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
-import { LinkFormValues } from "../schema"
+import { LinkFormValues } from "./schema"
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
 import { TooltipArrow } from "@radix-ui/react-tooltip"
 

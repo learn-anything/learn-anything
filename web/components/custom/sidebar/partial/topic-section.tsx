@@ -1,66 +1,136 @@
-import { useState, useRef } from "react"
+import React from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { useAccount } from "@/lib/providers/jazz-provider"
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { LaIcon } from "@/components/custom/la-icon"
-import { SidebarItem } from "../sidebar"
+import { ListOfTopics } from "@/lib/schema"
+import { LEARNING_STATES, LearningStateValue } from "@/lib/constants"
 
-// const TOPICS = ["Nix", "Javascript", "Kubernetes", "Figma", "Hiring", "Java", "IOS", "Design"]
-
-export const TopicSection = () => {
-	const [selectedStatus, setSelectedStatus] = useState<string | null>(null)
-	const sectionRef = useRef<HTMLDivElement>(null)
-
-	const learningOptions = [
-		{
-			text: "To Learn",
-			icon: <LaIcon name="NotebookPen" className="size-3 flex-shrink-0" />,
-			color: "text-black dark:text-white"
-		},
-		{
-			text: "Learning",
-			icon: <LaIcon name="GraduationCap" className="size-4 flex-shrink-0" />,
-			color: "text-[#D29752]"
-		},
-		{ text: "Learned", icon: <LaIcon name="Check" className="size-4 flex-shrink-0" />, color: "text-[#708F51]" }
-	]
-
-	const statusSelect = (status: string) => {
-		setSelectedStatus(prevStatus => (prevStatus === status ? null : status))
-	}
-
-	const topicCounts = {
-		"To Learn": 2,
-		Learning: 5,
-		Learned: 3,
-		get total() {
-			return this["To Learn"] + this.Learning + this.Learned
+export const TopicSection: React.FC = () => {
+	const { me } = useAccount({
+		root: {
+			topicsWantToLearn: [],
+			topicsLearning: [],
+			topicsLearned: []
 		}
-	}
+	})
+
+	const topicCount =
+		(me?.root.topicsWantToLearn?.length || 0) +
+		(me?.root.topicsLearning?.length || 0) +
+		(me?.root.topicsLearned?.length || 0)
+
+	if (!me) return null
 
 	return (
-		<div className="space-y-1 overflow-hidden" ref={sectionRef}>
-			<div className="text-foreground group/topics hover:bg-accent flex w-full items-center justify-between rounded-md px-2 py-2 text-xs font-medium">
-				<span className="text-black dark:text-white">Topics {topicCounts.total}</span>
-				<button className="opacity-0 transition-opacity duration-200 group-hover/topics:opacity-100">
-					<LaIcon name="Ellipsis" className="size-4 flex-shrink-0" />
-				</button>
-			</div>
-			<div>
-				{learningOptions.map(option => (
-					<Button
-						key={option.text}
-						onClick={() => statusSelect(option.text)}
-						className={`flex w-full items-center justify-between rounded-md py-1 pl-1 text-sm font-medium hover:bg-neutral-100 dark:hover:bg-neutral-100/20 ${option.color} ${
-							selectedStatus === option.text ? "bg-accent" : "bg-inherit"
-						} shadow-none`}
-					>
-						<div className="flex items-center gap-2">
-							{option.icon && <span className={option.color}>{option.icon}</span>}
-							<span>{option.text}</span>
-						</div>
-						<span className={`${option.color} mr-2`}>{topicCounts[option.text as keyof typeof topicCounts]}</span>
-					</Button>
-				))}
+		<div className="group/pages flex flex-col gap-px py-2">
+			<TopicSectionHeader topicCount={topicCount} />
+			<List
+				topicsWantToLearn={me.root.topicsWantToLearn}
+				topicsLearning={me.root.topicsLearning}
+				topicsLearned={me.root.topicsLearned}
+			/>
+		</div>
+	)
+}
+
+interface TopicSectionHeaderProps {
+	topicCount: number
+}
+
+const TopicSectionHeader: React.FC<TopicSectionHeaderProps> = ({ topicCount }) => (
+	<div
+		className={cn("flex min-h-[30px] items-center gap-px rounded-md", "hover:bg-accent hover:text-accent-foreground")}
+	>
+		<Button
+			variant="ghost"
+			className="size-6 flex-1 items-center justify-start rounded-md px-2 py-1 focus-visible:outline-none focus-visible:ring-0"
+		>
+			<p className="flex items-center text-xs font-medium">
+				Topics
+				{topicCount && <span className="text-muted-foreground ml-1">{topicCount}</span>}
+			</p>
+		</Button>
+	</div>
+)
+
+interface ListProps {
+	topicsWantToLearn: ListOfTopics
+	topicsLearning: ListOfTopics
+	topicsLearned: ListOfTopics
+}
+
+const List: React.FC<ListProps> = ({ topicsWantToLearn, topicsLearning, topicsLearned }) => {
+	const pathname = usePathname()
+
+	return (
+		<div className="flex flex-col gap-px">
+			<ListItem
+				key={topicsWantToLearn.id}
+				count={topicsWantToLearn.length}
+				label="To Learn"
+				value="wantToLearn"
+				href="/me/wantToLearn"
+				isActive={pathname === "/me/wantToLearn"}
+			/>
+			<ListItem
+				key={topicsLearning.id}
+				label="Learning"
+				value="learning"
+				count={topicsLearning.length}
+				href="/me/learning"
+				isActive={pathname === "/me/learning"}
+			/>
+			<ListItem
+				key={topicsLearned.id}
+				label="Learned"
+				value="learned"
+				count={topicsLearned.length}
+				href="/me/learned"
+				isActive={pathname === "/me/learned"}
+			/>
+		</div>
+	)
+}
+
+interface ListItemProps {
+	label: string
+	value: LearningStateValue
+	href: string
+	count: number
+	isActive: boolean
+}
+
+const ListItem: React.FC<ListItemProps> = ({ label, value, href, count, isActive }) => {
+	const le = LEARNING_STATES.find(l => l.value === value)
+
+	if (!le) return null
+
+	return (
+		<div className="group/reorder-page relative">
+			<div className="group/topic-link relative flex min-w-0 flex-1">
+				<Link
+					href={href}
+					className={cn(
+						"group-hover/topic-link:bg-accent relative flex h-8 w-full items-center gap-2 rounded-md p-1.5 font-medium",
+						{ "bg-accent text-accent-foreground": isActive },
+						le.className
+					)}
+				>
+					<div className="flex max-w-full flex-1 items-center gap-1.5 truncate text-sm">
+						<LaIcon name={le.icon} className="flex-shrink-0 opacity-60" />
+						<p className={cn("truncate opacity-95 group-hover/topic-link:opacity-100", le.className)}>{label}</p>
+					</div>
+				</Link>
+
+				{count > 0 && (
+					<span className="absolute right-2 top-1/2 z-[1] -translate-y-1/2 rounded p-1 text-sm">{count}</span>
+				)}
 			</div>
 		</div>
 	)
 }
+
+export default TopicSection
