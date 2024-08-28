@@ -6,34 +6,22 @@ import AiSearch from "../../custom/ai-search"
 import { Topic } from "@/lib/schema"
 import { PublicGlobalGroup } from "@/lib/schema/master/public-group"
 import { ID } from "jazz-tools"
+import Link from "next/link"
 
-interface ProfileTopicsProps {
-	topic: string
-}
-
-const ProfileTopics: React.FC<ProfileTopicsProps> = ({ topic }) => {
-	return (
-		<div className="bg-result flex cursor-pointer flex-row items-center justify-between rounded-lg p-3">
-			<p>{topic}</p>
-			<LaIcon
-				name="ChevronRight"
-				className="size-4 flex-shrink-0 cursor-pointer text-black/50 dark:text-white/50"
-				size={20}
-			/>
-		</div>
-	)
-}
-
-interface ProfileTitleProps {
+interface SearchTitleProps {
 	topics: string[]
 	topicTitle: string
 }
 
-const ProfileTitle: React.FC<ProfileTitleProps> = ({ topicTitle, topics }) => {
+const SearchTitle: React.FC<SearchTitleProps> = ({ topicTitle, topics }) => {
 	return (
-		<p className="pb-3 pl-2 text-base font-light text-black/50 dark:text-white/50">
-			{topicTitle} <span className="text-black dark:text-white">{topics.length}</span>
-		</p>
+		<div className="flex w-full items-center">
+			<h2 className="text-lg font-semibold">{topicTitle}</h2>
+			<div className="mx-4 flex-grow">
+				<div className="h-px bg-gray-300 dark:bg-gray-700"></div>
+			</div>
+			<span className="text-base font-light text-opacity-55">{topics.length}</span>
+		</div>
 	)
 }
 
@@ -55,10 +43,9 @@ export const SearchWrapper = () => {
 		const value = e.target.value
 		setSearchText(value)
 
-		// Filter topics based on the search text
 		const results = value
 			? globalGroup?.root.topics.filter(
-					(topic): topic is Topic => topic !== null && topic.prettyName.toLowerCase().includes(value.toLowerCase())
+					(topic): topic is Topic => topic !== null && topic.prettyName.toLowerCase().startsWith(value.toLowerCase())
 				)
 			: []
 		setSearchResults(results)
@@ -71,7 +58,7 @@ export const SearchWrapper = () => {
 
 	return (
 		<div className="flex h-full flex-auto flex-col overflow-hidden">
-			<div className="flex h-full w-full justify-center overflow-hidden">
+			<div className="flex h-full w-full justify-center overflow-y-auto">
 				<div className="w-full max-w-[70%] sm:px-6 lg:px-8">
 					<div className="relative mb-2 mt-5 flex w-full flex-row items-center transition-colors duration-300">
 						<div className="relative my-5 flex w-full items-center space-x-2">
@@ -82,7 +69,7 @@ export const SearchWrapper = () => {
 								value={searchText}
 								onChange={handleSearch}
 								placeholder="Search something..."
-								className="dark:bg-input w-full rounded-lg border border-gray-300 p-2 pl-8 focus:outline-none dark:border-neutral-600"
+								className="dark:bg-input w-full rounded-lg border border-neutral-300 p-2 pl-8 focus:outline-none dark:border-neutral-600"
 							/>
 
 							{searchText && (
@@ -94,12 +81,25 @@ export const SearchWrapper = () => {
 							)}
 						</div>
 					</div>
-					<div className="relative w-full">
+					<div className="relative w-full pb-5">
 						{searchResults.length > 0 ? (
-							<div className="space-y-1">
-								<ProfileTitle topicTitle="Topics" topics={searchResults.map(topic => topic.prettyName)} />
+							<div className="space-y-4">
+								<SearchTitle topicTitle="Topics" topics={searchResults.map(topic => topic.prettyName)} />
 								{searchResults.map((topic, index) => (
-									<ProfileTopics key={topic.id} topic={topic.prettyName} />
+									<div key={topic.id} className="flex min-w-0 items-center gap-x-4">
+										<LaIcon name="Square" className="size-4 flex-shrink-0 opacity-50" />
+										<div className="group">
+											<Link
+												href={`/${topic.name}`}
+												passHref
+												prefetch={false}
+												onClick={e => e.stopPropagation()}
+												className="hover:text-primary text-sm font-medium"
+											>
+												{topic.prettyName}
+											</Link>
+										</div>
+									</div>
 								))}
 							</div>
 						) : (
