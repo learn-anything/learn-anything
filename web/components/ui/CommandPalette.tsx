@@ -3,27 +3,62 @@
 import { AnimatePresence, motion } from "framer-motion"
 import { useEffect, useState, KeyboardEvent as ReactKeyboardEvent } from "react"
 import { Icon } from "../la-editor/components/ui/icon"
+import { linkShowCreateAtom } from "@/store/link"
+import { generateUniqueSlug } from "@/lib/utils"
+import { useAtom } from "jotai"
+import { PersonalPage } from "@/lib/schema/personal-page"
+import { useRouter } from "next/navigation"
+import { useAccount } from "@/lib/providers/jazz-provider"
+import { toast } from "sonner"
 
 export function CommandPalette() {
 	const [showPalette, setShowPalette] = useState(false)
+	const [showCreate, setShowCreate] = useAtom(linkShowCreateAtom)
+	const router = useRouter()
+	const { me } = useAccount()
+
 	const [commands, setCommands] = useState<
 		{ name: string; icon?: React.ReactNode; keybind?: string[]; action: () => void }[]
 	>([
 		{
 			name: "Create new link",
-			icon: <Icon name="FilePlus" />,
-			keybind: ["Ctrl", "K"],
+			icon: <Icon name="Link" />,
+			// keybind: ["Ctrl", "K"],
 			action: () => {
-				console.log("Creating new link")
+				if (window.location.pathname !== "/") {
+					router.push("/")
+				}
+				setShowCreate(true)
 			}
 		},
 		{
 			name: "Create page",
-			keybind: ["Ctrl", "P"],
+			icon: <Icon name="File" />,
+			// keybind: ["Ctrl", "P"],
 			action: () => {
-				console.log("Creating new page")
+				const personalPages = me?.root?.personalPages?.toJSON() || []
+				const slug = generateUniqueSlug(personalPages, "Untitled Page")
+
+				const newPersonalPage = PersonalPage.create(
+					{
+						title: "Untitled Page",
+						slug: slug,
+						content: ""
+					},
+					{ owner: me._owner }
+				)
+
+				me.root?.personalPages?.push(newPersonalPage)
+
+				router.push(`/pages/${newPersonalPage.id}`)
 			}
 		}
+		// {
+		// 	name: "Assign status..",
+		// 	// icon: <Icon name="File" />,
+		// 	// keybind: ["Ctrl", "P"],
+		// 	action: () => {}
+		// }
 	])
 	const [searchTerm, setSearchTerm] = useState("")
 	const [commandResults, setCommandResults] = useState(commands)
@@ -33,36 +68,36 @@ export function CommandPalette() {
 		const handleKeyDown = (event: KeyboardEvent) => {
 			if ((event.metaKey || event.ctrlKey) && event.key === "k") {
 				event.preventDefault()
-				setShowPalette(true)
+				setShowPalette(prev => !prev)
+			} else if (showPalette) {
+				if (["Escape", "Enter", "ArrowDown", "ArrowUp"].includes(event.key)) {
+					event.preventDefault()
+					event.stopPropagation()
+
+					// Handle the key events here
+					if (event.key === "Escape") {
+						setShowPalette(false)
+					} else if (event.key === "Enter" && commandResults.length > 0) {
+						commandResults[selectedIndex].action()
+						setShowPalette(false)
+					} else if (event.key === "ArrowDown") {
+						setSelectedIndex(prevIndex => (prevIndex < commandResults.length - 1 ? prevIndex + 1 : prevIndex))
+					} else if (event.key === "ArrowUp") {
+						setSelectedIndex(prevIndex => (prevIndex > 0 ? prevIndex - 1 : prevIndex))
+					}
+				}
 			}
 		}
 
-		document.addEventListener("keydown", handleKeyDown)
+		document.addEventListener("keydown", handleKeyDown, true)
 
 		return () => {
-			document.removeEventListener("keydown", handleKeyDown)
+			document.removeEventListener("keydown", handleKeyDown, true)
 		}
-	}, [])
+	}, [showPalette, commandResults, selectedIndex])
 
-	useEffect(() => {
-		const filteredCommands = commands.filter(command => command.name.toLowerCase().includes(searchTerm.toLowerCase()))
-		setCommandResults(filteredCommands)
-		setSelectedIndex(0)
-	}, [searchTerm, commands])
-
-	const handleKeyDown = (event: ReactKeyboardEvent<HTMLInputElement>) => {
-		if (event.key === "Enter" && commandResults.length > 0) {
-			event.preventDefault()
-			commandResults[selectedIndex].action()
-			setShowPalette(false)
-		} else if (event.key === "ArrowDown") {
-			event.preventDefault()
-			setSelectedIndex(prevIndex => (prevIndex < commandResults.length - 1 ? prevIndex + 1 : prevIndex))
-		} else if (event.key === "ArrowUp") {
-			event.preventDefault()
-			setSelectedIndex(prevIndex => (prevIndex > 0 ? prevIndex - 1 : prevIndex))
-		}
-	}
+	// Remove the separate handleKeyDown function for the input
+	// as we're now handling all key events in the global listener
 
 	if (!showPalette) return null
 
@@ -89,7 +124,6 @@ export function CommandPalette() {
 							className="w-full bg-transparent text-[18px] outline-none"
 							value={searchTerm}
 							onChange={e => setSearchTerm(e.target.value)}
-							onKeyDown={handleKeyDown}
 							placeholder="Search commands..."
 							aria-label="Search commands"
 							autoFocus
