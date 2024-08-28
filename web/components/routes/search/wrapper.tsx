@@ -43,11 +43,12 @@ export const SearchWrapper = () => {
 		const value = e.target.value
 		setSearchText(value)
 
-		const results = value
-			? globalGroup?.root.topics.filter(
-					(topic): topic is Topic => topic !== null && topic.prettyName.toLowerCase().startsWith(value.toLowerCase())
-				)
-			: []
+		const results =
+			value && globalGroup?.root.topics
+				? globalGroup.root.topics.filter(
+						(topic): topic is Topic => topic !== null && topic.prettyName.toLowerCase().startsWith(value.toLowerCase())
+					)
+				: []
 		setSearchResults(results)
 	}
 
