@@ -71,7 +71,8 @@ const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({ pageCount }) => (
 			className="size-6 flex-1 items-center justify-start rounded-md px-2 py-1 focus-visible:outline-none focus-visible:ring-0"
 		>
 			<p className="flex items-center text-xs font-medium">
-				Pages <span className="text-muted-foreground ml-1">{pageCount}</span>
+				Pages
+				{pageCount && <span className="text-muted-foreground ml-1">{pageCount}</span>}
 			</p>
 		</Button>
 		<div className={cn("flex items-center gap-px pr-2")}>
