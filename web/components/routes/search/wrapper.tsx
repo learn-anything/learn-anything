@@ -101,11 +101,14 @@ export const SearchWrapper = () => {
 											>
 												{topic.prettyName}
 												<span className="ml-2 text-xs opacity-45">
-													{topic.latestGlobalGuide?.sections?.reduce(
-														(total, section) => total + (section?.links?.length || 0),
-														0
-													) || 0}{" "}
-													links
+													{(() => {
+														const linkCount =
+															topic.latestGlobalGuide?.sections?.reduce(
+																(total, section) => total + (section?.links?.length || 0),
+																0
+															) || 0
+														return `${linkCount} ${linkCount === 1 ? "link" : "links"}`
+													})()}
 												</span>
 											</Link>
 										</div>
