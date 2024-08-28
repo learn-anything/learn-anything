@@ -100,6 +100,13 @@ export const SearchWrapper = () => {
 												className="hover:text-primary text-sm font-medium hover:opacity-70"
 											>
 												{topic.prettyName}
+												<span className="ml-2 text-xs opacity-45">
+													{topic.latestGlobalGuide?.sections?.reduce(
+														(total, section) => total + (section?.links?.length || 0),
+														0
+													) || 0}{" "}
+													links
+												</span>
 											</Link>
 										</div>
 									</div>
