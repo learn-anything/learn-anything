@@ -1,5 +1,5 @@
-import AuthHomeRoute from "@/components/routes/AuthHomeRoute"
+import { LinkRoute } from "@/components/routes/link/LinkRoute"
 
 export default function HomePage() {
-	return <AuthHomeRoute />
+	return <LinkRoute />
 }
