@@ -3,7 +3,7 @@ import { useFormContext } from "react-hook-form"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 import { LaIcon } from "@/components/custom/la-icon"
-import { LinkFormValues } from "../schema"
+import { LinkFormValues } from "./schema"
 
 export const NotesSection: React.FC = () => {
 	const form = useFormContext<LinkFormValues>()

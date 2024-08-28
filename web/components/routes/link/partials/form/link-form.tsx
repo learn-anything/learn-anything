@@ -8,18 +8,19 @@ import { createLinkSchema, LinkFormValues } from "./schema"
 import { cn, generateUniqueSlug } from "@/lib/utils"
 import { Form } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
-import { UrlInput } from "./partial/url-input"
-import { UrlBadge } from "./partial/url-badge"
-import { TitleInput } from "./partial/title-input"
-import { NotesSection } from "./partial/notes-section"
-import { TopicSelector } from "./partial/topic-selector"
-import { DescriptionInput } from "./partial/description-input"
+import { UrlInput } from "./url-input"
+import { UrlBadge } from "./url-badge"
+import { TitleInput } from "./title-input"
+import { NotesSection } from "./notes-section"
+import { TopicSelector } from "./topic-selector"
+import { DescriptionInput } from "./description-input"
 import { atom, useAtom } from "jotai"
 import { linkLearningStateSelectorAtom, linkTopicSelectorAtom } from "@/store/link"
 import { FormField, FormItem, FormLabel } from "@/components/ui/form"
 import { LearningStateSelector } from "@/components/custom/learning-state-selector"
 
 export const globalLinkFormExceptionRefsAtom = atom<React.RefObject<HTMLElement>[]>([])
+
 interface LinkFormProps extends React.ComponentPropsWithoutRef<"form"> {
 	onClose?: () => void
 	onSuccess?: () => void
