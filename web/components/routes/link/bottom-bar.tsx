@@ -57,6 +57,7 @@ export const LinkBottomBar: React.FC = () => {
 	const cancelBtnRef = useRef<HTMLButtonElement>(null)
 	const confirmBtnRef = useRef<HTMLButtonElement>(null)
 	const overlayRef = useRef<HTMLDivElement>(null)
+	const contentRef = useRef<HTMLDivElement>(null)
 
 	const deleteBtnRef = useRef<HTMLButtonElement>(null)
 	const editMoreBtnRef = useRef<HTMLButtonElement>(null)
@@ -68,6 +69,7 @@ export const LinkBottomBar: React.FC = () => {
 	useEffect(() => {
 		setGlobalLinkFormExceptionRefsAtom([
 			overlayRef,
+			contentRef,
 			deleteBtnRef,
 			editMoreBtnRef,
 			cancelBtnRef,
@@ -89,17 +91,16 @@ export const LinkBottomBar: React.FC = () => {
 			alertDialogOverlay: {
 				ref: overlayRef
 			},
-			customActions(onConfirm, onCancel) {
-				return (
-					<div className="flex items-center gap-2">
-						<Button variant="outline" onClick={onCancel} ref={cancelBtnRef}>
-							Cancel
-						</Button>
-						<Button variant="destructive" onClick={onConfirm} ref={confirmBtnRef}>
-							Delete
-						</Button>
-					</div>
-				)
+			alertDialogContent: {
+				ref: contentRef
+			},
+			cancelButton: {
+				variant: "outline",
+				ref: cancelBtnRef
+			},
+			confirmButton: {
+				variant: "destructive",
+				ref: confirmBtnRef
 			}
 		})
 
