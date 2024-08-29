@@ -56,6 +56,7 @@ export const LinkBottomBar: React.FC = () => {
 
 	const cancelBtnRef = useRef<HTMLButtonElement>(null)
 	const confirmBtnRef = useRef<HTMLButtonElement>(null)
+	const overlayRef = useRef<HTMLDivElement>(null)
 
 	const deleteBtnRef = useRef<HTMLButtonElement>(null)
 	const editMoreBtnRef = useRef<HTMLButtonElement>(null)
@@ -66,6 +67,7 @@ export const LinkBottomBar: React.FC = () => {
 
 	useEffect(() => {
 		setGlobalLinkFormExceptionRefsAtom([
+			overlayRef,
 			deleteBtnRef,
 			editMoreBtnRef,
 			cancelBtnRef,
@@ -83,6 +85,9 @@ export const LinkBottomBar: React.FC = () => {
 			description: "This action cannot be undone.",
 			alertDialogTitle: {
 				className: "text-base"
+			},
+			alertDialogOverlay: {
+				ref: overlayRef
 			},
 			customActions(onConfirm, onCancel) {
 				return (
