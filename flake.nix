@@ -1,6 +1,7 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    # TODO: switch to nixpkgs-unstable when 69f3b4defe91949a97ca751ada931525d391e0fc is there
+    nixpkgs.url = "github:nixos/nixpkgs/staging";
     flake-parts.url = "github:hercules-ci/flake-parts";
   };
   outputs =
@@ -9,11 +10,15 @@
       systems = nixpkgs.lib.platforms.all;
       perSystem =
         { pkgs, ... }:
+        let
+          cargo-tauri = pkgs.callPackage ./nix/cargo-tauri.nix { };
+        in
         {
           devShells.default = pkgs.mkShell {
             packages = [
               pkgs.bun
               pkgs.nodejs
+              cargo-tauri
             ];
           };
           # TODO: Package LA using Nix
