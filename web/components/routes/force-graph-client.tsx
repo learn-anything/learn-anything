@@ -2,26 +2,30 @@
 
 import * as react from "react"
 import * as fg from "@nothing-but/force-graph"
-import {ease, trig} from "@nothing-but/utils"
+import { ease, trig } from "@nothing-but/utils"
 
 import * as schedule from "@/lib/utils/schedule"
-import * as ws       from "@/lib/utils/window-size"
-import * as canvas   from "@/lib/utils/canvas"
+import * as ws from "@/lib/utils/window-size"
+import * as canvas from "@/lib/utils/canvas"
 
 import * as anim from "./anim"
 
 export type ConnectionItem = {
-	key:         string,
-	title:       string,
-	connections: string[],
+	key: string
+	title: string
+	connections: string[]
 }
 
 export type ForceGraphClientProps = {
-	items: ConnectionItem[],
+	items: ConnectionItem[]
 }
 
 export default function ForceGraphClient(props: ForceGraphClientProps) {
-	return <code><pre>{JSON.stringify(props.items, null, 4)}</pre></code>
+	return (
+		<code>
+			<pre>{JSON.stringify(props.items, null, 4)}</pre>
+		</code>
+	)
 }
 
 export type RawNode = {
@@ -91,9 +95,7 @@ const generateColorMap = (nodes: readonly fg.graph.Node[]): ColorMap => {
 	return color_map
 }
 
-const generateNodesFromRawData = (
-	raw_data: RawNode[]
-): [fg.graph.Node[], fg.graph.Edge[]] => {
+const generateNodesFromRawData = (raw_data: RawNode[]): [fg.graph.Node[], fg.graph.Edge[]] => {
 	const nodes_map = new Map<string, fg.graph.Node>()
 	const edges: fg.graph.Edge[] = []
 
@@ -137,10 +139,8 @@ const filterNodes = (
 	// regex matching all letters of the filter (out of order)
 	const regex = new RegExp(filter.split("").join(".*"), "i")
 
-	graph.nodes = nodes.filter((node) => regex.test(node.label))
-	graph.edges = edges.filter(
-		(edge) => regex.test(edge.a.label) && regex.test(edge.b.label)
-	)
+	graph.nodes = nodes.filter(node => regex.test(node.label))
+	graph.edges = edges.filter(edge => regex.test(edge.a.label) && regex.test(edge.b.label))
 
 	fg.graph.resetGraphGrid(graph.grid, graph.nodes)
 }
@@ -176,8 +176,7 @@ const simulateGraph = (
 	const origin_y = grid_radius + canvas.translate.y
 	const vmax = Math.max(vw, vh)
 	const push_radius =
-		(Math.min(TITLE_SIZE_PX, vw / 2, vh / 2) / vmax) *
-			(graph.grid.size / canvas.scale) +
+		(Math.min(TITLE_SIZE_PX, vw / 2, vh / 2) / vmax) * (graph.grid.size / canvas.scale) +
 		80 /* additional margin for when scrolled in */
 
 	for (const node of graph.nodes) {
@@ -193,10 +192,7 @@ const simulateGraph = (
 	}
 }
 
-const drawGraph = (
-	canvas: fg.canvas.CanvasState,
-	color_map: ColorMap
-): void => {
+const drawGraph = (canvas: fg.canvas.CanvasState, color_map: ColorMap): void => {
 	fg.canvas.resetFrame(canvas)
 	fg.canvas.drawEdges(canvas)
 
@@ -213,8 +209,7 @@ const drawGraph = (
 		const opacity = 0.6 + ((node.mass - 1) / 50) * 4
 
 		ctx.font = `${
-			canvas.max_size / 200 +
-			(((node.mass - 1) / 5) * (canvas.max_size / 100)) / canvas.scale
+			canvas.max_size / 200 + (((node.mass - 1) / 5) * (canvas.max_size / 100)) / canvas.scale
 		}px sans-serif`
 
 		ctx.fillStyle =
@@ -222,11 +217,7 @@ const drawGraph = (
 				? `rgba(129, 140, 248, ${opacity})`
 				: `hsl(${color_map[node.key as string]} / ${opacity})`
 
-		ctx.fillText(
-			node.label,
-			(x / graph.grid.size) * canvas.max_size,
-			(y / graph.grid.size) * canvas.max_size
-		)
+		ctx.fillText(node.label, (x / graph.grid.size) * canvas.max_size, (y / graph.grid.size) * canvas.max_size)
 	}
 }
 
@@ -242,7 +233,6 @@ export type ForceGraphProps = {
 }
 
 export const createForceGraph = (props: ForceGraphProps): react.JSX.Element => {
-
 	if (props.raw_nodes.length === 0) {
 		return <></>
 	}
@@ -285,7 +275,7 @@ export const createForceGraph = (props: ForceGraphProps): react.JSX.Element => {
 		let bump_end = anim.bump(0)
 		let frame_iter_limit = anim.frameIterationsLimit()
 
-		let loop = anim.animationLoop((time) => {
+		let loop = anim.animationLoop(time => {
 			let is_active = gestures.mode.type === fg.canvas.Mode.DraggingNode
 			let iterations = anim.calcIterations(frame_iter_limit, time)
 
@@ -306,22 +296,17 @@ export const createForceGraph = (props: ForceGraphProps): react.JSX.Element => {
 
 		let gestures = fg.canvas.canvasGestures({
 			canvas: canvas_state,
-			onGesture: (e) => {
+			onGesture: e => {
 				switch (e.type) {
-				case fg.canvas.GestureEventType.Translate:
-					bump_end = anim.bump(bump_end)
-					break
-				case fg.canvas.GestureEventType.NodeClick:
-					props.onNodeClick(e.node.key as string)
-					break
-				case fg.canvas.GestureEventType.NodeDrag:
-					fg.graph.changeNodePosition(
-						canvas_state.graph.grid,
-						e.node,
-						e.pos.x,
-						e.pos.y
-					)
-					break
+					case fg.canvas.GestureEventType.Translate:
+						bump_end = anim.bump(bump_end)
+						break
+					case fg.canvas.GestureEventType.NodeClick:
+						props.onNodeClick(e.node.key as string)
+						break
+					case fg.canvas.GestureEventType.NodeDrag:
+						fg.graph.changeNodePosition(canvas_state.graph.grid, e.node, e.pos.x, e.pos.y)
+						break
 				}
 			}
 		})
@@ -334,16 +319,18 @@ export const createForceGraph = (props: ForceGraphProps): react.JSX.Element => {
 		}
 	}, [canvas_el.current])
 
-	return <div className="absolute inset-0 overflow-hidden">
-		<canvas
-			ref={canvas_el}
-			style={{
-				position: "absolute",
-				top:    "-10%",
-				left:   "-10%",
-				width:  "120%",
-				height: "120%",
-			}}
-		/>
-	</div>
+	return (
+		<div className="absolute inset-0 overflow-hidden">
+			<canvas
+				ref={canvas_el}
+				style={{
+					position: "absolute",
+					top: "-10%",
+					left: "-10%",
+					width: "120%",
+					height: "120%"
+				}}
+			/>
+		</div>
+	)
 }
