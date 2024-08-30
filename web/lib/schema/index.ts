@@ -24,7 +24,6 @@ export class UserRoot extends CoMap {
 	personalLinks = co.ref(PersonalLinkLists)
 	personalPages = co.ref(PersonalPageLists)
 
-	// not implemented yet
 	topicsWantToLearn = co.ref(ListOfTopics)
 	topicsLearning = co.ref(ListOfTopics)
 	topicsLearned = co.ref(ListOfTopics)
@@ -53,7 +52,6 @@ export class LaAccount extends Account {
 					personalLinks: PersonalLinkLists.create([], { owner: this }),
 					personalPages: PersonalPageLists.create([], { owner: this }),
 
-					// not implemented yet
 					topicsWantToLearn: ListOfTopics.create([], { owner: this }),
 					topicsLearning: ListOfTopics.create([], { owner: this }),
 					topicsLearned: ListOfTopics.create([], { owner: this })

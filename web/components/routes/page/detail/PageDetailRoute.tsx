@@ -10,21 +10,19 @@ import { Content, EditorContent, useEditor } from "@tiptap/react"
 import { StarterKit } from "@/components/la-editor/extensions/starter-kit"
 import { Paragraph } from "@/components/la-editor/extensions/paragraph"
 import { useAccount, useCoState } from "@/lib/providers/jazz-provider"
-import { toast } from "sonner"
 import { EditorView } from "@tiptap/pm/view"
 import { Editor } from "@tiptap/core"
 import { generateUniqueSlug } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { LaIcon } from "@/components/custom/la-icon"
 import { pageTopicSelectorAtom } from "@/store/page"
-import { TopicSelector } from "@/components/routes/link/form/partial/topic-selector"
+import { TopicSelector } from "@/components/routes/link/partials/form/topic-selector"
+import { FocusClasses } from "@tiptap/extension-focus"
 import DeletePageModal from "@/components/custom/delete-modal"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
 
-const TITLE_PLACEHOLDER = "Page title"
+const TITLE_PLACEHOLDER = "Untitled"
 
-export function DetailPageWrapper({ pageId }: { pageId: string }) {
+export function PageDetailRoute({ pageId }: { pageId: string }) {
 	const page = useCoState(PersonalPage, pageId as ID<PersonalPage>)
 
 	if (!page) return <div>Loading...</div>
@@ -45,32 +43,52 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 	const titleEditorRef = useRef<Editor | null>(null)
 	const contentEditorRef = useRef<LAEditorRef>(null)
 	const [, setTopicSelectorOpen] = useAtom(pageTopicSelectorAtom)
-	const [selectedPageTopic, setSelectedPageTopic] = useState<Topic | null>(page.topic || null)
+	const [, setSelectedPageTopic] = useState<Topic | null>(page.topic || null)
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
+	const isTitleInitialMount = useRef(true)
+	const isContentInitialMount = useRef(true)
+
 	const updatePageContent = (content: Content, model: PersonalPage) => {
-		model.content = content
-	}
-
-	const handleTitleBlur = (editor: Editor) => {
-		const newTitle = editor.getText().trim()
-
-		if (!newTitle) {
-			toast.error("Update failed", {
-				description: "Title must be longer than or equal to 1 character"
-			})
-			editor.commands.setContent(page.title)
+		if (isContentInitialMount.current) {
+			isContentInitialMount.current = false
 			return
 		}
 
-		if (newTitle === page.title) return
+		console.log("Updating page content")
+		model.content = content
+		model.updatedAt = new Date()
+	}
 
+	const handleUpdateTitle = (editor: Editor) => {
+		if (isTitleInitialMount.current) {
+			isTitleInitialMount.current = false
+			return
+		}
+
+		/*
+		 * The logic changed, but we keep this commented code for reference
+		 */
+		// const newTitle = editor.getText().trim()
+
+		// if (!newTitle) {
+		// toast.error("Update failed", {
+		// 	description: "Title must be longer than or equal to 1 character"
+		// })
+		// 	editor.commands.setContent(page.title || "")
+		// 	return
+		// }
+
+		// if (newTitle === page.title) return
+
+		console.log("Updating page title")
 		const personalPages = me.root?.personalPages?.toJSON() || []
-		const slug = generateUniqueSlug(personalPages, page.slug)
+		const slug = generateUniqueSlug(personalPages, page.slug || "")
 
 		const trimmedTitle = editor.getText().trim()
 		page.title = trimmedTitle
 		page.slug = slug
+		page.updatedAt = new Date()
 
 		editor.commands.setContent(trimmedTitle)
 	}
@@ -108,7 +126,9 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 
 	const titleEditor = useEditor({
 		immediatelyRender: false,
+		autofocus: true,
 		extensions: [
+			FocusClasses,
 			Paragraph,
 			StarterKit.configure({
 				bold: false,
@@ -137,10 +157,12 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 			handleKeyDown: handleTitleKeyDown
 		},
 		onCreate: ({ editor }) => {
-			const capitalizedTitle = page.title.charAt(0).toUpperCase() + page.title.slice(1)
-			editor.commands.setContent(`<p>${capitalizedTitle}</p>`)
+			if (page.title) editor.commands.setContent(`<p>${page.title}</p>`)
 		},
-		onBlur: ({ editor }) => handleTitleBlur(editor)
+		onBlur: ({ editor }) => handleUpdateTitle(editor),
+		onUpdate: ({ editor }) => {
+			handleUpdateTitle(editor)
+		}
 	})
 
 	useEffect(() => {
@@ -149,6 +171,11 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 		}
 	}, [titleEditor])
 
+	useEffect(() => {
+		isTitleInitialMount.current = true
+		isContentInitialMount.current = true
+	}, [])
+
 	return (
 		<div tabIndex={0} className="relative flex grow flex-col overflow-y-auto">
 			<div className="relative mx-auto flex h-full w-[calc(100%-40px)] shrink-0 grow flex-col sm:w-[calc(100%-80px)]">
@@ -156,7 +183,7 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 					<div className="mb-2 mt-8 flex flex-row justify-between py-1.5">
 						<EditorContent
 							editor={titleEditor}
-							className="la-editor cursor-text select-text text-2xl font-semibold leading-[calc(1.33333)] tracking-[-0.00625rem]"
+							className="la-editor no-command grow cursor-text select-text text-2xl font-semibold leading-[calc(1.33333)] tracking-[-0.00625rem]"
 						/>
 						<div className="items-center space-x-4">
 							<TopicSelector
@@ -201,7 +228,7 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 				onConfirm={() => {
 					confirmDelete(page)
 				}}
-				title={page.title.charAt(0).toUpperCase() + page.title.slice(1)}
+				title={page.title || ""}
 			/>
 		</div>
 	)

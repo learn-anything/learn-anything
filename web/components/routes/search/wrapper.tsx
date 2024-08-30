@@ -94,15 +94,16 @@ export const SearchWrapper = () => {
 		setSearchResults({
 			topics:
 				globalGroup?.root.topics?.filter(
-					(topic): topic is Topic => topic !== null && topic.prettyName.toLowerCase().includes(value)
+					(topic: Topic | null): topic is Topic => topic !== null && topic.prettyName.toLowerCase().startsWith(value)
 				) || [],
 			links:
 				me?.root.personalLinks?.filter(
-					(link): link is PersonalLink => link !== null && link.title.toLowerCase().includes(value)
+					(link: PersonalLink | null): link is PersonalLink =>
+						link !== null && link.title.toLowerCase().startsWith(value)
 				) || [],
 			pages:
 				me?.root.personalPages?.filter(
-					(page): page is PersonalPage => page !== null && page.title.toLowerCase().includes(value)
+					(page): page is PersonalPage => page !== null && page.title.toLowerCase().startsWith(value)
 				) || []
 		})
 	}
@@ -146,7 +147,7 @@ export const SearchWrapper = () => {
 									<>
 										<SearchTitle title="Pages" count={searchResults.pages.length} />
 										{searchResults.pages.map(page => (
-											<SearchItem key={page.id} icon="Square" href={`/pages/${page.id}`} title={page.title} />
+											<SearchItem key={page.id} icon="Square" href={`/pages/${page.id}`} title={page.title || ""} />
 										))}
 									</>
 								)}
