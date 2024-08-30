@@ -3,7 +3,8 @@ import { Inter as FontSans } from "next/font/google"
 import { cn } from "@/lib/utils"
 import { ThemeProvider } from "@/lib/providers/theme-provider"
 import "./globals.css"
-import { JazzProvider } from "@/lib/providers/jazz-provider"
+
+import { ClerkProviderClient } from "@/components/custom/clerk/clerk-provider-client"
 import { JotaiProvider } from "@/lib/providers/jotai-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { ConfirmProvider } from "@/lib/providers/confirm-provider"
@@ -25,8 +26,8 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en" className="h-full w-full" suppressHydrationWarning>
-			<body className={cn("h-full w-full font-sans antialiased", fontSans.variable)}>
-				<JazzProvider>
+			<ClerkProviderClient>
+				<body className={cn("h-full w-full font-sans antialiased", fontSans.variable)}>
 					<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
 						<JotaiProvider>
 							<ConfirmProvider>
@@ -35,8 +36,8 @@ export default function RootLayout({
 							</ConfirmProvider>
 						</JotaiProvider>
 					</ThemeProvider>
-				</JazzProvider>
-			</body>
+				</body>
+			</ClerkProviderClient>
 		</html>
 	)
 }
