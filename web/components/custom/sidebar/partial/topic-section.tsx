@@ -50,7 +50,7 @@ const TopicSectionHeader: React.FC<TopicSectionHeaderProps> = ({ topicCount }) =
 		>
 			<p className="flex items-center text-xs font-medium">
 				Topics
-				{topicCount && <span className="text-muted-foreground ml-1">{topicCount}</span>}
+				{topicCount > 0 && <span className="text-muted-foreground ml-1">{topicCount}</span>}
 			</p>
 		</Button>
 	</div>

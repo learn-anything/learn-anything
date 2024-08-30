@@ -72,7 +72,7 @@ const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({ pageCount }) => (
 		>
 			<p className="flex items-center text-xs font-medium">
 				Pages
-				{pageCount && <span className="text-muted-foreground ml-1">{pageCount}</span>}
+				{pageCount > 0 && <span className="text-muted-foreground ml-1">{pageCount}</span>}
 			</p>
 		</Button>
 		<div className={cn("flex items-center gap-px pr-2")}>
@@ -85,6 +85,8 @@ const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({ pageCount }) => (
 const NewPageButton: React.FC = () => {
 	const { me } = useAccount()
 	const router = useRouter()
+
+	if (!me) return null
 
 	const handleClick = () => {
 		try {
