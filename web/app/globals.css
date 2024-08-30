@@ -3,12 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-	body {
-		@apply bg-background text-foreground;
-	}
-}
-
-@layer base {
 	:root {
 		--background: 0 0% 100%;
 		--foreground: 240 10% 3.9%;
@@ -28,6 +22,7 @@
 		--destructive-foreground: 0 0% 98%;
 		--border: 240 5.9% 90%;
 		--input: 240 5.9% 90%;
+		--result: 240 5.9% 96%;
 		--ring: 240 5.9% 10%;
 		--radius: 0.5rem;
 		--chart-1: 12 76% 61%;
@@ -39,7 +34,7 @@
 	}
 
 	.dark {
-		--background: 240 10% 3.9%;
+		--background: 240 10% 4.5%;
 		--foreground: 0 0% 98%;
 		--card: 240 10% 3.9%;
 		--card-foreground: 0 0% 98%;
@@ -56,14 +51,15 @@
 		--destructive: 0 62.8% 30.6%;
 		--destructive-foreground: 0 0% 98%;
 		--border: 240 3.7% 15.9%;
-		--input: 240 3.7% 15.9%;
+		--input: 220 9% 10%;
+		--result: 0 0% 7%;
 		--ring: 240 4.9% 83.9%;
 		--chart-1: 220 70% 50%;
 		--chart-2: 160 60% 45%;
 		--chart-3: 30 80% 55%;
 		--chart-4: 280 65% 60%;
 		--chart-5: 340 75% 55%;
-		--boxShadow: rgba(255,255,255, 0.04);
+		--boxShadow: rgba(255, 255, 255, 0.04);
 	}
 }
 

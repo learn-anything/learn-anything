@@ -3,7 +3,7 @@ import { useFormContext } from "react-hook-form"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { LaIcon } from "@/components/custom/la-icon"
-import { LinkFormValues } from "../schema"
+import { LinkFormValues } from "./schema"
 
 interface UrlBadgeProps {
 	urlFetched: string | null

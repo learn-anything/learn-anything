@@ -3,7 +3,13 @@ import { fontFamily } from "tailwindcss/defaultTheme"
 
 const config = {
 	darkMode: ["class"],
-	content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+	content: [
+		"./pages/**/*.{ts,tsx}",
+		"./components/**/*.{ts,tsx}",
+		"./app/**/*.{ts,tsx}",
+		"./src/**/*.{ts,tsx}",
+		"./lib/**/*.{ts,tsx}"
+	],
 	prefix: "",
 	safelist: [".dark"],
 	theme: {
@@ -17,6 +23,7 @@ const config = {
 		extend: {
 			colors: {
 				border: "hsl(var(--border))",
+				result: "hsl(var(--result))",
 				input: "hsl(var(--input))",
 				ring: "hsl(var(--ring))",
 				background: "hsl(var(--background))",

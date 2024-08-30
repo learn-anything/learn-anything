@@ -91,7 +91,11 @@ export const ProfileSection: React.FC = () => {
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
+<<<<<<< HEAD
 				<div className="flex min-w-2 grow flex-row"></div>
+=======
+				{/* <div className="flex min-w-2 grow flex-row"></div>
+>>>>>>> 7c68b66b7a987fc9b616fcc1d7581056ec630058
 				<div className="flex flex-row items-center gap-2">
 					<Button size="icon" variant="ghost" aria-label="Settings" className="size-7 p-0">
 						<LaIcon name="Settings" />
@@ -101,7 +105,11 @@ export const ProfileSection: React.FC = () => {
 							<LaIcon name="House" />
 						</Button>
 					</Link>
+<<<<<<< HEAD
 				</div>
+=======
+				</div> */}
+>>>>>>> 7c68b66b7a987fc9b616fcc1d7581056ec630058
 			</div>
 		</div>
 	)
