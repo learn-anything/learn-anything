@@ -21,15 +21,12 @@ export function PublicHomeRoute() {
 	}, [raw_graph_data])
 
 	return (
-		<>
-			<h1>I want to learn</h1>
-			<ForceGraphClient
-				raw_nodes={raw_graph_data}
-				onNodeClick={val => {
-					console.log("clicked", val)
-				}}
-				filter_query=""
-			/>
-		</>
+		<ForceGraphClient
+			raw_nodes={raw_graph_data}
+			onNodeClick={val => {
+				console.log("clicked", val)
+			}}
+			filter_query=""
+		/>
 	)
 }
