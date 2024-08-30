@@ -17,6 +17,7 @@ interface SearchItemProps {
 	href: string
 	title: string
 	subtitle?: string
+	topic?: Topic
 }
 
 const SearchTitle: React.FC<SearchTitleProps> = ({ title, count }) => (
@@ -29,7 +30,7 @@ const SearchTitle: React.FC<SearchTitleProps> = ({ title, count }) => (
 	</div>
 )
 
-const SearchItem: React.FC<SearchItemProps> = ({ icon, href, title, subtitle }) => (
+const SearchItem: React.FC<SearchItemProps> = ({ icon, href, title, subtitle, topic }) => (
 	<div className="hover:bg-result group flex min-w-0 items-center gap-x-4 rounded-md p-2">
 		<LaIcon
 			name={icon as "Square"}
@@ -55,6 +56,12 @@ const SearchItem: React.FC<SearchItemProps> = ({ icon, href, title, subtitle }) 
 				>
 					{subtitle}
 				</Link>
+			)}
+			{topic && (
+				<span className="ml-2 text-xs opacity-45">
+					{topic.latestGlobalGuide?.sections?.reduce((total, section) => total + (section?.links?.length || 0), 0) || 0}{" "}
+					links
+				</span>
 			)}
 		</div>
 	</div>
@@ -103,7 +110,8 @@ export const SearchWrapper = () => {
 				) || [],
 			pages:
 				me?.root.personalPages?.filter(
-					(page): page is PersonalPage => page !== null && page.title.toLowerCase().startsWith(value)
+					(page): page is PersonalPage =>
+						page !== null && page.title !== undefined && page.title.toLowerCase().startsWith(value)
 				) || []
 		})
 	}
@@ -155,7 +163,13 @@ export const SearchWrapper = () => {
 									<>
 										<SearchTitle title="Topics" count={searchResults.topics.length} />
 										{searchResults.topics.map(topic => (
-											<SearchItem key={topic.id} icon="Square" href={`/${topic.name}`} title={topic.prettyName} />
+											<SearchItem
+												key={topic.id}
+												icon="Square"
+												href={`/${topic.name}`}
+												title={topic.prettyName}
+												topic={topic}
+											/>
 										))}
 									</>
 								)}
@@ -167,7 +181,7 @@ export const SearchWrapper = () => {
 										className="cursor-pointer rounded-lg bg-blue-700 p-4 font-semibold text-white"
 										onClick={() => setShowAiSearch(true)}
 									>
-										✨ Didn't find what you were looking for? Ask AI
+										✨ Didn&apos;t find what you were looking for? Ask AI
 									</div>
 								)}
 								{showAiSearch && <AiSearch searchQuery={searchText} />}

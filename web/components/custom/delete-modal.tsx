@@ -20,7 +20,7 @@ export default function DeletePageModal({ isOpen, onClose, onConfirm, title }: D
 		<Dialog open={isOpen} onOpenChange={onClose}>
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>Delete "{title}"?</DialogTitle>
+					<DialogTitle>Delete &quot;{title}&quot;?</DialogTitle>
 					<DialogDescription>This action cannot be undone.</DialogDescription>
 				</DialogHeader>
 				<DialogFooter>

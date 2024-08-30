@@ -68,7 +68,7 @@ export const ProfileWrapper = () => {
 			<div className="flex h-screen flex-col py-3 text-black dark:text-white">
 				<div className="flex flex-1 flex-col rounded-3xl border border-neutral-800">
 					<p className="my-10 h-[74px] border-b border-neutral-900 text-center text-2xl font-semibold">
-						Oops! This account doesn't exist.
+						Oops! This account doesn&apos;t exist.
 					</p>
 					<p className="mb-5 text-center text-lg font-semibold">Try searching for another.</p>
 					<p className="mb-5 text-center text-lg font-semibold">

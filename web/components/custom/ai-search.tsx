@@ -22,7 +22,7 @@ const AiSearch: React.FC<AiSearchProps> = (props: { searchQuery: string }) => {
 		if (root_el.current) {
 			root_el.current.appendChild(md_el)
 		}
-	}, [root_el.current, md_el])
+	}, [md_el])
 
 	useEffect(() => {
 		let question = props.searchQuery
