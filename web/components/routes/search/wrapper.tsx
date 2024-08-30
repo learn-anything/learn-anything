@@ -116,6 +116,12 @@ export const SearchWrapper = () => {
 		})
 	}
 
+	const clearSearch = () => {
+		setSearchText("")
+		setSearchResults({ topics: [], links: [], pages: [] })
+		setShowAiSearch(false)
+	}
+
 	return (
 		<div className="flex h-full flex-auto flex-col overflow-hidden">
 			<div className="flex h-full w-full justify-center overflow-y-auto">
@@ -135,7 +141,7 @@ export const SearchWrapper = () => {
 								<LaIcon
 									name="X"
 									className="text-foreground/50 absolute right-3 size-4 flex-shrink-0 cursor-pointer"
-									onClick={() => setSearchText("")}
+									onClick={clearSearch}
 								/>
 							)}
 						</div>
