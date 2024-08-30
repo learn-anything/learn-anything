@@ -251,5 +251,3 @@ const ShowAllForm: React.FC = () => {
 		</DropdownMenu>
 	)
 }
-
-export default PageSection

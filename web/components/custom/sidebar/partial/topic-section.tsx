@@ -132,5 +132,3 @@ const ListItem: React.FC<ListItemProps> = ({ label, value, href, count, isActive
 		</div>
 	)
 }
-
-export default TopicSection
