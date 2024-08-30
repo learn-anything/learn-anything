@@ -1,31 +1,19 @@
 "use client"
-import { useCoState } from "@/lib/providers/jazz-provider"
-import { PublicGlobalGroup } from "@/lib/schema/global-topic-graph"
-import { glob } from "fs"
-import { ID } from "jazz-tools"
-import { useMemo } from "react"
 
-export default function PublicHomeRoute() {
-	// const globalGroup = useCoState(PublicGlobalGroup, "co_z6Tmg1sZTfwkPd4pV6qBV9T5SFU" as ID<PublicGlobalGroup>, {
-	// 	root: { topicGraph: [{ connectedTopics: [{}] }] }
-	// })
+import Link from "next/link"
+import { buttonVariants } from "../ui/button"
+import { cn } from "@/lib/utils"
 
-	// const graph = useMemo(() => {
-	// 	return globalGroup?.root.topicGraph?.map(
-	// 		topic =>
-	// 			({
-	// 				name: topic.name,
-	// 				prettyName: topic.prettyName,
-	// 				connectedTopics: topic.connectedTopics.map(connected => connected?.name)
-	// 			}) || []
-	// 	)
-	// }, [globalGroup?.root.topicGraph])
-	// const [{}]
-	// console.log(globalGroup, "graph")
+export const PublicHomeRoute: React.FC = () => {
 	return (
-		<>
-			<h1>I want to learn</h1>
-			<input type="text" />
-		</>
+		<div className="flex min-h-full flex-col justify-center">
+			<div className="mx-auto w-full max-w-2xl p-4 text-center">
+				<h1 className="text-center text-3xl font-bold">Welcome to the Public Home Route</h1>
+				<p className="text-muted-foreground text-center">This is a public route that anyone can access</p>
+				<Link href="/1password" className={cn("mt-4", buttonVariants({ variant: "default" }))}>
+					Go to random topic
+				</Link>
+			</div>
+		</div>
 	)
 }

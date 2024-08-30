@@ -7,45 +7,54 @@ import {
 	PointerSensor,
 	useSensor,
 	useSensors,
-	DragEndEvent
+	DragEndEvent,
+	DragStartEvent,
+	UniqueIdentifier
 } from "@dnd-kit/core"
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { PersonalLinkLists } from "@/lib/schema/personal-link"
-import { PersonalLink } from "@/lib/schema/personal-link"
 import { useAtom } from "jotai"
-import { linkEditIdAtom, linkSortAtom } from "@/store/link"
+import { linkSortAtom } from "@/store/link"
 import { useKey } from "react-use"
-import { useConfirm } from "@omit/react-confirm-dialog"
-import { ListItem } from "./list-item"
-import { useRef, useState, useCallback, useEffect } from "react"
+import { LinkItem } from "./partials/link-item"
+import { useRef, useState, useCallback, useEffect, useMemo } from "react"
 import { learningStateAtom } from "./header"
+import { useQueryState } from "nuqs"
 
-const LinkList = () => {
+interface LinkListProps {}
+
+const LinkList: React.FC<LinkListProps> = () => {
+	const [editId, setEditId] = useQueryState("editId")
 	const [activeLearningState] = useAtom(learningStateAtom)
-	const confirm = useConfirm()
+
 	const { me } = useAccount({
 		root: { personalLinks: [] }
 	})
-	const personalLinks = me?.root?.personalLinks || []
+	const personalLinks = useMemo(() => me?.root?.personalLinks || [], [me?.root?.personalLinks])
 
-	const [editId, setEditId] = useAtom(linkEditIdAtom)
 	const [sort] = useAtom(linkSortAtom)
 	const [focusedId, setFocusedId] = useState<string | null>(null)
-	const [draggingId, setDraggingId] = useState<string | null>(null)
+	const [draggingId, setDraggingId] = useState<UniqueIdentifier | null>(null)
 	const linkRefs = useRef<{ [key: string]: HTMLLIElement | null }>({})
-	const [showDeleteIconForLinkId, setShowDeleteIconForLinkId] = useState<string | null>(null)
 
-	let filteredLinks = personalLinks.filter(link => {
-		if (activeLearningState === "all") return true
-		if (!link?.learningState) return false
-		return link.learningState === activeLearningState
-	})
-	let sortedLinks =
-		sort === "title" && filteredLinks
-			? [...filteredLinks].sort((a, b) => (a?.title || "").localeCompare(b?.title || ""))
-			: filteredLinks
-	sortedLinks = sortedLinks || []
+	const filteredLinks = useMemo(
+		() =>
+			personalLinks.filter(link => {
+				if (activeLearningState === "all") return true
+				if (!link?.learningState) return false
+				return link.learningState === activeLearningState
+			}),
+		[personalLinks, activeLearningState]
+	)
+
+	const sortedLinks = useMemo(
+		() =>
+			sort === "title"
+				? [...filteredLinks].sort((a, b) => (a?.title || "").localeCompare(b?.title || ""))
+				: filteredLinks,
+		[filteredLinks, sort]
+	)
 
 	const sensors = useSensors(
 		useSensor(PointerSensor, {
@@ -67,6 +76,14 @@ const LinkList = () => {
 			setEditId(null)
 		}
 	})
+
+	const updateSequences = useCallback((links: PersonalLinkLists) => {
+		links.forEach((link, index) => {
+			if (link) {
+				link.sequence = index
+			}
+		})
+	}, [])
 
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
@@ -120,21 +137,16 @@ const LinkList = () => {
 
 		window.addEventListener("keydown", handleKeyDown)
 		return () => window.removeEventListener("keydown", handleKeyDown)
-	}, [me?.root?.personalLinks, sortedLinks, focusedId, editId, sort])
+	}, [me?.root?.personalLinks, sortedLinks, focusedId, editId, sort, updateSequences])
 
-	const updateSequences = (links: PersonalLinkLists) => {
-		links.forEach((link, index) => {
-			if (link) {
-				link.sequence = index
-			}
-		})
-	}
-
-	const handleDragStart = (event: any) => {
-		if (sort !== "manual") return
-		const { active } = event
-		setDraggingId(active.id)
-	}
+	const handleDragStart = useCallback(
+		(event: DragStartEvent) => {
+			if (sort !== "manual") return
+			const { active } = event
+			setDraggingId(active.id)
+		},
+		[sort]
+	)
 
 	const handleDragEnd = (event: DragEndEvent) => {
 		const { active, over } = event
@@ -181,20 +193,8 @@ const LinkList = () => {
 		setDraggingId(null)
 	}
 
-	const handleDelete = (linkItem: PersonalLink) => {
-		if (!me?.root?.personalLinks) return
-
-		const index = me.root.personalLinks.findIndex(item => item?.id === linkItem.id)
-		if (index === -1) {
-			console.error("Delete operation fail", { index, linkItem })
-			return
-		}
-
-		me.root.personalLinks.splice(index, 1)
-	}
-
 	return (
-		<div className="relative z-20">
+		<div className="mb-14 flex w-full flex-1 flex-col overflow-y-auto [scrollbar-gutter:stable]">
 			<DndContext
 				sensors={sensors}
 				collisionDetection={closestCenter}
@@ -206,9 +206,8 @@ const LinkList = () => {
 						{sortedLinks.map(
 							linkItem =>
 								linkItem && (
-									<ListItem
+									<LinkItem
 										key={linkItem.id}
-										confirm={confirm}
 										isEditing={editId === linkItem.id}
 										setEditId={setEditId}
 										personalLink={linkItem}
@@ -217,9 +216,6 @@ const LinkList = () => {
 										isDragging={draggingId === linkItem.id}
 										isFocused={focusedId === linkItem.id}
 										setFocusedId={setFocusedId}
-										onDelete={handleDelete}
-										showDeleteIconForLinkId={showDeleteIconForLinkId}
-										setShowDeleteIconForLinkId={setShowDeleteIconForLinkId}
 									/>
 								)
 						)}

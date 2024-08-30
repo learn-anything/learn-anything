@@ -88,6 +88,8 @@ const LearningTab = React.memo(() => {
 	)
 })
 
+LearningTab.displayName = "LearningTab"
+
 const FilterAndSort = React.memo(() => {
 	const [sort, setSort] = useAtom(linkSortAtom)
 	const [sortOpen, setSortOpen] = React.useState(false)

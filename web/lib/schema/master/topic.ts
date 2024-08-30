@@ -1,5 +1,6 @@
 import { co, CoList, CoMap } from "jazz-tools"
 
+// TODO: this should be GlobalLink but it's not because lookup of 100k elements is slow
 export class Link extends CoMap {
 	title = co.string
 	url = co.string

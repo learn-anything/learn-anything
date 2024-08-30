@@ -2,7 +2,7 @@ import * as React from "react"
 import { useFormContext } from "react-hook-form"
 import { FormField, FormItem, FormControl, FormLabel } from "@/components/ui/form"
 import { TextareaAutosize } from "@/components/custom/textarea-autosize"
-import { LinkFormValues } from "../schema"
+import { LinkFormValues } from "./schema"
 
 interface DescriptionInputProps {}
 

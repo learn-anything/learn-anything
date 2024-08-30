@@ -8,17 +8,19 @@ import { createLinkSchema, LinkFormValues } from "./schema"
 import { cn, generateUniqueSlug } from "@/lib/utils"
 import { Form } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
-import { UrlInput } from "./partial/url-input"
-import { UrlBadge } from "./partial/url-badge"
-import { TitleInput } from "./partial/title-input"
-import { NotesSection } from "./partial/notes-section"
-import { TopicSelector } from "./partial/topic-selector"
-import { DescriptionInput } from "./partial/description-input"
-import { LearningStateSelector } from "./partial/learning-state-selector"
+import { UrlInput } from "./url-input"
+import { UrlBadge } from "./url-badge"
+import { TitleInput } from "./title-input"
+import { NotesSection } from "./notes-section"
+import { TopicSelector } from "./topic-selector"
+import { DescriptionInput } from "./description-input"
 import { atom, useAtom } from "jotai"
 import { linkLearningStateSelectorAtom, linkTopicSelectorAtom } from "@/store/link"
+import { FormField, FormItem, FormLabel } from "@/components/ui/form"
+import { LearningStateSelector } from "@/components/custom/learning-state-selector"
 
 export const globalLinkFormExceptionRefsAtom = atom<React.RefObject<HTMLElement>[]>([])
+
 interface LinkFormProps extends React.ComponentPropsWithoutRef<"form"> {
 	onClose?: () => void
 	onSuccess?: () => void
@@ -34,7 +36,7 @@ const defaultValues: Partial<LinkFormValues> = {
 	description: "",
 	completed: false,
 	notes: "",
-	learningState: "wantToLearn",
+	learningState: undefined,
 	topic: null
 }
 
@@ -45,7 +47,7 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 	onClose,
 	exceptionsRefs = []
 }) => {
-	const [selectedTopic, setSelectedTopic] = React.useState<Topic | null>(null)
+	const [selectedTopic, setSelectedTopic] = React.useState<Topic | undefined>()
 	const [istopicSelectorOpen] = useAtom(linkTopicSelectorAtom)
 	const [islearningStateSelectorOpen] = useAtom(linkLearningStateSelectorAtom)
 	const [globalExceptionRefs] = useAtom(globalLinkFormExceptionRefsAtom)
@@ -134,12 +136,19 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 
 	const onSubmit = (values: LinkFormValues) => {
 		if (isFetching) return
+
 		try {
 			const personalLinks = me.root?.personalLinks?.toJSON() || []
 			const slug = generateUniqueSlug(personalLinks, values.title)
 
 			if (selectedLink) {
-				selectedLink.applyDiff({ ...values, slug, topic: selectedTopic })
+				const { topic, ...diffValues } = values
+
+				if (!selectedTopic) {
+					selectedLink.applyDiff({ ...diffValues, slug, updatedAt: new Date() })
+				} else {
+					selectedLink.applyDiff({ ...values, slug, topic: selectedTopic })
+				}
 			} else {
 				const newPersonalLink = PersonalLink.create(
 					{
@@ -188,7 +197,23 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 								{urlFetched && <TitleInput urlFetched={urlFetched} />}
 
 								<div className="flex flex-row items-center gap-2">
-									<LearningStateSelector />
+									<FormField
+										control={form.control}
+										name="learningState"
+										render={({ field }) => (
+											<FormItem className="space-y-0">
+												<FormLabel className="sr-only">Topic</FormLabel>
+												<LearningStateSelector
+													value={field.value}
+													onChange={value => {
+														// toggle, if already selected set undefined
+														form.setValue("learningState", field.value === value ? undefined : value)
+													}}
+													showSearch={false}
+												/>
+											</FormItem>
+										)}
+									/>
 									<TopicSelector onSelect={topic => setSelectedTopic(topic)} />
 								</div>
 							</div>

@@ -2,7 +2,7 @@
 	@apply pointer-events-none float-left h-0 w-full text-[var(--la-secondary)];
 }
 
-.la-editor .ProseMirror.ProseMirror-focused > p.has-focus.is-empty::before {
+.la-editor:not(.no-command) .ProseMirror.ProseMirror-focused > p.has-focus.is-empty::before {
 	content: "Type / for commands...";
 }
 

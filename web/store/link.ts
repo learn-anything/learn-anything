@@ -3,6 +3,7 @@ import { atomWithStorage } from "jotai/utils"
 
 export const linkSortAtom = atomWithStorage("sort", "manual")
 export const linkShowCreateAtom = atom(false)
-export const linkEditIdAtom = atom<string | number | null>(null)
+export const linkEditIdAtom = atom<string | null>(null)
 export const linkLearningStateSelectorAtom = atom(false)
 export const linkTopicSelectorAtom = atom(false)
+export const linkOpenPopoverForIdAtom = atom<string | null>(null)

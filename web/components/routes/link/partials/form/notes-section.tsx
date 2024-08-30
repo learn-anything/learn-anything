@@ -3,7 +3,7 @@ import { useFormContext } from "react-hook-form"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 import { LaIcon } from "@/components/custom/la-icon"
-import { LinkFormValues } from "../schema"
+import { LinkFormValues } from "./schema"
 
 export const NotesSection: React.FC = () => {
 	const form = useFormContext<LinkFormValues>()
@@ -18,7 +18,7 @@ export const NotesSection: React.FC = () => {
 					<FormControl>
 						<>
 							<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-								<LaIcon name="Pencil" aria-hidden="true" className="text-muted-foreground/70 size-3" />
+								<LaIcon name="Pencil" aria-hidden="true" className="text-muted-foreground/70" />
 							</div>
 
 							<Input

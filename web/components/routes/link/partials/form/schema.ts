@@ -8,7 +8,7 @@ export const createLinkSchema = z.object({
 	description: z.string().optional(),
 	completed: z.boolean().default(false),
 	notes: z.string().optional(),
-	learningState: z.enum(["wantToLearn", "learning", "learned"]),
+	learningState: z.enum(["wantToLearn", "learning", "learned"]).optional(),
 	topic: z.string().nullable().optional()
 })
 
