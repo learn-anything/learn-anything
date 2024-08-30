@@ -91,7 +91,7 @@ export const ProfileWrapper = () => {
 					onClick={clickEdit}
 					className="shadow-outer ml-auto flex h-[34px] cursor-pointer flex-row space-x-2 rounded-lg bg-white px-3 text-black shadow-[1px_1px_1px_1px_rgba(0,0,0,0.3)] hover:bg-black/10 dark:bg-[#222222] dark:text-white dark:hover:opacity-60"
 				>
-					<LaIcon name="UserCog" className="cursor-pointer text-neutral-200" />
+					<LaIcon name="UserCog" className="text-foreground cursor-pointer" />
 					<span>Edit Profile</span>
 				</Button>
 			</div>
