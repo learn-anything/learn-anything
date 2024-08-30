@@ -167,7 +167,7 @@ export const SearchWrapper = () => {
 										className="cursor-pointer rounded-lg bg-blue-700 p-4 font-semibold text-white"
 										onClick={() => setShowAiSearch(true)}
 									>
-										✨ Didn't find what you were looking for? Ask AI
+										✨ Didn&apos;t find what you were looking for? Ask AI
 									</div>
 								)}
 								{showAiSearch && <AiSearch searchQuery={searchText} />}

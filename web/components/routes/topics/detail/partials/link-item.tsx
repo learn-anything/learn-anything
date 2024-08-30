@@ -100,7 +100,7 @@ export const LinkItem = React.memo(
 					setOpenPopoverForId(null)
 					setIsPopoverOpen(false)
 				},
-				[personalLink, personalLinks, me, link, router, setOpenPopoverForId]
+				[personalLink, personalLinks, me, link, router, setOpenPopoverForId, topic]
 			)
 
 			const handlePopoverOpenChange = useCallback(
