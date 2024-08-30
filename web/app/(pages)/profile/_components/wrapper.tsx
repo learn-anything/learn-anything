@@ -68,7 +68,7 @@ export const ProfileWrapper = () => {
 			<div className="flex h-screen flex-col py-3 text-black dark:text-white">
 				<div className="flex flex-1 flex-col rounded-3xl border border-neutral-800">
 					<p className="my-10 h-[74px] border-b border-neutral-900 text-center text-2xl font-semibold">
-						Oops! This account doesn't exist.
+						Oops! This account doesn&apos;t exist.
 					</p>
 					<p className="mb-5 text-center text-lg font-semibold">Try searching for another.</p>
 					<p className="mb-5 text-center text-lg font-semibold">
@@ -91,7 +91,7 @@ export const ProfileWrapper = () => {
 					onClick={clickEdit}
 					className="shadow-outer ml-auto flex h-[34px] cursor-pointer flex-row space-x-2 rounded-lg bg-white px-3 text-black shadow-[1px_1px_1px_1px_rgba(0,0,0,0.3)] hover:bg-black/10 dark:bg-[#222222] dark:text-white dark:hover:opacity-60"
 				>
-					<LaIcon name="UserCog" className="cursor-pointer text-neutral-200" />
+					<LaIcon name="UserCog" className="text-foreground cursor-pointer" />
 					<span>Edit Profile</span>
 				</Button>
 			</div>
