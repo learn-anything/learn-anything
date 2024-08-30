@@ -5,7 +5,7 @@ import * as react from "react"
 import type * as force_graph from "./force-graph-client"
 
 let graph_data_promise = import("./graph-data.json").then(a => a.default)
-let ForceGraphClient = react.lazy(() => import("./force-graph-client"))
+let ForceGraphClient = react.lazy(() => import("./force-graph-client-lazy"))
 
 export function PublicHomeRoute() {
 	let raw_graph_data = react.use(graph_data_promise)
@@ -23,7 +23,13 @@ export function PublicHomeRoute() {
 	return (
 		<>
 			<h1>I want to learn</h1>
-			<ForceGraphClient items={graph_items} />
+			<ForceGraphClient
+				raw_nodes={raw_graph_data}
+				onNodeClick={val => {
+					console.log("clicked", val)
+				}}
+				filter_query=""
+			/>
 		</>
 	)
 }
