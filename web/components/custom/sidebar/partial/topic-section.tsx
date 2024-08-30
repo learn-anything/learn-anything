@@ -1,65 +1,3 @@
-<<<<<<< HEAD
-import { useState, useEffect, useRef } from "react"
-import { Button } from "@/components/ui/button"
-import { LaIcon } from "@/components/custom/la-icon"
-import { SidebarItem } from "../sidebar"
-
-const TOPICS = ["Nix", "Javascript", "Kubernetes", "Figma", "Hiring", "Java", "IOS", "Design"]
-
-export const TopicSection = () => {
-	const [selectedStatus, setSelectedStatus] = useState<string | null>(null)
-	const sectionRef = useRef<HTMLDivElement>(null)
-
-	const learningOptions = [
-		{ text: "To Learn", icon: <LaIcon name="NotebookPen" />, color: "text-black dark:text-white" },
-		{ text: "Learning", icon: <LaIcon name="GraduationCap" />, color: "text-[#D29752]" },
-		{ text: "Learned", icon: <LaIcon name="Check" />, color: "text-[#708F51]" }
-	]
-
-	const getStatusColor = (status: string | null) => {
-		if (!status) return "text-foreground"
-		const option = learningOptions.find(opt => opt.text === status)
-		return option ? option.color : "text-foreground"
-	}
-
-	const statusSelect = (status: string) => {
-		setSelectedStatus(status === "Show All" ? null : status)
-	}
-
-	const availableOptions = [
-		{
-			text: "Show All",
-			icon: <LaIcon name="BookOpen" />,
-			color: "text-black dark:text-white"
-		},
-		...learningOptions
-	]
-
-	return (
-		<div className="space-y-1 overflow-hidden" ref={sectionRef}>
-			<div className="text-foreground flex w-full items-center justify-between rounded-md px-2 py-2 text-xs font-medium">
-				<span className={getStatusColor(selectedStatus)}>
-					{selectedStatus ? `Topics: ${selectedStatus}` : "Topics"}
-				</span>
-			</div>
-
-			<div className="rounded-lg border border-neutral-200 bg-inherit dark:border-neutral-700">
-				{availableOptions.map(option => (
-					<Button
-						key={option.text}
-						onClick={() => statusSelect(option.text)}
-						className={`flex w-full items-center justify-start space-x-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-neutral-100 dark:hover:bg-neutral-100/20 ${option.color} bg-inherit shadow-none`}
-					>
-						{option.icon && <span className={option.color}>{option.icon}</span>}
-						<span>{option.text}</span>
-					</Button>
-				))}
-			</div>
-			<div className="scrollbar-hide space-y-1 overflow-y-auto opacity-70" style={{ maxHeight: "calc(100vh - 200px)" }}>
-				{TOPICS.map(topic => (
-					<SidebarItem key={topic} label={topic} url={`/${topic}`} />
-				))}
-=======
 import React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -112,7 +50,7 @@ const TopicSectionHeader: React.FC<TopicSectionHeaderProps> = ({ topicCount }) =
 		>
 			<p className="flex items-center text-xs font-medium">
 				Topics
-				{topicCount && <span className="text-muted-foreground ml-1">{topicCount}</span>}
+				{topicCount > 0 && <span className="text-muted-foreground ml-1">{topicCount}</span>}
 			</p>
 		</Button>
 	</div>
@@ -190,8 +128,9 @@ const ListItem: React.FC<ListItemProps> = ({ label, value, href, count, isActive
 				{count > 0 && (
 					<span className="absolute right-2 top-1/2 z-[1] -translate-y-1/2 rounded p-1 text-sm">{count}</span>
 				)}
->>>>>>> 7c68b66b7a987fc9b616fcc1d7581056ec630058
 			</div>
 		</div>
 	)
 }
+
+export default TopicSection

@@ -105,11 +105,8 @@ const LogoAndSearch: React.FC = React.memo(() => {
 	)
 })
 
-<<<<<<< HEAD
-=======
 LogoAndSearch.displayName = "LogoAndSearch"
 
->>>>>>> 7c68b66b7a987fc9b616fcc1d7581056ec630058
 const SidebarContent: React.FC = React.memo(() => {
 	return (
 		<>

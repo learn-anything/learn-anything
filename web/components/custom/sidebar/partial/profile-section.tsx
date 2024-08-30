@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import Link from "next/link"
+import { useAuth } from "@clerk/nextjs"
 
 const MenuItem = ({
 	icon,
@@ -48,9 +49,10 @@ const MenuItem = ({
 	)
 }
 export const ProfileSection: React.FC = () => {
-	const { me, logOut } = useAccount({
+	const { me } = useAccount({
 		profile: true
 	})
+	const { signOut } = useAuth()
 	const [menuOpen, setMenuOpen] = useState(false)
 
 	const closeMenu = () => setMenuOpen(false)
@@ -86,16 +88,12 @@ export const ProfileSection: React.FC = () => {
 							</DropdownMenuItem>
 							<DropdownMenuSeparator />
 							<DropdownMenuItem>
-								<MenuItem icon="LogOut" text="Log out" onClick={logOut} onClose={closeMenu} />
+								<MenuItem icon="LogOut" text="Log out" onClick={signOut} onClose={closeMenu} />
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
-<<<<<<< HEAD
-				<div className="flex min-w-2 grow flex-row"></div>
-=======
 				{/* <div className="flex min-w-2 grow flex-row"></div>
->>>>>>> 7c68b66b7a987fc9b616fcc1d7581056ec630058
 				<div className="flex flex-row items-center gap-2">
 					<Button size="icon" variant="ghost" aria-label="Settings" className="size-7 p-0">
 						<LaIcon name="Settings" />
@@ -105,11 +103,7 @@ export const ProfileSection: React.FC = () => {
 							<LaIcon name="House" />
 						</Button>
 					</Link>
-<<<<<<< HEAD
-				</div>
-=======
 				</div> */}
->>>>>>> 7c68b66b7a987fc9b616fcc1d7581056ec630058
 			</div>
 		</div>
 	)
