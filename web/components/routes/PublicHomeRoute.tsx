@@ -7,7 +7,7 @@ import type * as force_graph from "./force-graph-client"
 let graph_data_promise = import("./graph-data.json").then(a => a.default)
 let ForceGraphClient = react.lazy(() => import("./force-graph-client"))
 
-export default function PublicHomeRoute() {
+export function PublicHomeRoute() {
 	let raw_graph_data = react.use(graph_data_promise)
 
 	let graph_items = react.useMemo(() => {
