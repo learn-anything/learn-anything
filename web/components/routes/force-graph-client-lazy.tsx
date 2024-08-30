@@ -2,13 +2,10 @@
 
 import * as react    from "react"
 import * as fg       from "@nothing-but/force-graph"
-import {ease, trig}  from "@nothing-but/utils"
+import {ease, trig, raf}  from "@nothing-but/utils"
 
 import * as schedule from "@/lib/utils/schedule"
-import * as ws       from "@/lib/utils/window-size"
 import * as canvas   from "@/lib/utils/canvas"
-
-import * as anim     from "./anim"
 
 export type RawGraphNode = {
 	name:            string,
@@ -220,10 +217,10 @@ class State {
 	graph: fg.graph.Graph  = fg.graph.makeGraph(GRAPH_OPTIONS, [], [])
 	gestures: fg.canvas.CanvasGestures | null = null
 
-	loop: anim.AnimationLoop | null = null
+	loop: raf.AnimationLoop | null = null
 	bump_end = 0
 	alpha = 9
-	frame_iter_limit = anim.frameIterationsLimit()
+	frame_iter_limit = raf.frameIterationsLimit()
 	schedule_filter = schedule.scheduleIdle(filterNodes)
 	ro: ResizeObserver = new ResizeObserver(() => {})
 }
@@ -262,24 +259,24 @@ function init(
 	})
 	s.ro.observe(canvas_el)
 
-	let loop = s.loop = anim.animationLoop((time) => {
+	let loop = s.loop = raf.makeAnimationLoop((time) => {
 		let is_active = gestures.mode.type === fg.canvas.Mode.DraggingNode
-		let iterations = anim.calcIterations(s.frame_iter_limit, time)
+		let iterations = raf.calcIterations(s.frame_iter_limit, time)
 
 		for (let i = Math.min(iterations, 2); i >= 0; i--) {
-			s.alpha = anim.updateAlpha(s.alpha, is_active || time < s.bump_end)
+			s.alpha = raf.updateAlpha(s.alpha, is_active || time < s.bump_end)
 			simulateGraph(s.alpha, s.graph, canvas_state, window.innerWidth, window.innerHeight)
 		}
 		drawGraph(canvas_state, color_map)
 	})
-	anim.loopStart(loop)
+	raf.loopStart(loop)
 
 	let gestures = s.gestures = fg.canvas.canvasGestures({
 		canvas: canvas_state,
 		onGesture: (e) => {
 			switch (e.type) {
 			case fg.canvas.GestureEventType.Translate:
-				s.bump_end = anim.bump(s.bump_end)
+				s.bump_end = raf.bump(s.bump_end)
 				break
 			case fg.canvas.GestureEventType.NodeClick:
 				props.onNodeClick(e.node.key as string)
@@ -299,11 +296,11 @@ function init(
 
 function updateQuery(s: State, filter_query: string) {
 	s.schedule_filter.trigger(s.graph, s.nodes, s.edges, filter_query)
-	s.bump_end = anim.bump(s.bump_end)
+	s.bump_end = raf.bump(s.bump_end)
 }
 
 function cleanup(s: State) {
-	s.loop && anim.loopClear(s.loop)
+	s.loop && raf.loopClear(s.loop)
 	s.gestures && fg.canvas.cleanupCanvasGestures(s.gestures)
 	s.schedule_filter.clear()
 	s.ro.disconnect()

@@ -2,8 +2,6 @@
 
 import * as react from "react"
 
-import type * as force_graph from "./force-graph-client-lazy"
-
 let graph_data_promise = import("./graph-data.json").then(a => a.default)
 let ForceGraphClient   = react.lazy(() => import("./force-graph-client-lazy"))
 
