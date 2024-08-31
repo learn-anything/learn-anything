@@ -1,0 +1,20 @@
+[package]
+authors.workspace = true
+edition.workspace = true
+license-file.workspace = true
+name = "learn-anything"
+repository.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+[lib]
+crate-type = ["staticlib", "cdylib", "lib"]
+name = "app_lib"
+
+[build-dependencies]
+tauri-build = { version = "2.0.0-rc.6", features = [] }
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tauri = { version = "2.0.0-rc.6", features = [] }
