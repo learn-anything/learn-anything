@@ -328,7 +328,7 @@ export const createForceGraph = (props: ForceGraphProps): react.JSX.Element => {
 					top: "-10%",
 					left: "-10%",
 					width: "120%",
-					height: "120%"
+					height: "100%"
 				}}
 			/>
 		</div>

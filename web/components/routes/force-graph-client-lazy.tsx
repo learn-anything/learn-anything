@@ -1,16 +1,16 @@
 "use client"
 
-import * as react    from "react"
-import * as fg       from "@nothing-but/force-graph"
-import {ease, trig, raf}  from "@nothing-but/utils"
+import * as react from "react"
+import * as fg from "@nothing-but/force-graph"
+import { ease, trig, raf } from "@nothing-but/utils"
 
 import * as schedule from "@/lib/utils/schedule"
-import * as canvas   from "@/lib/utils/canvas"
+import * as canvas from "@/lib/utils/canvas"
 
 export type RawGraphNode = {
-	name:            string,
-	prettyName:      string,
-	connectedTopics: string[],
+	name: string
+	prettyName: string
+	connectedTopics: string[]
 }
 
 type HSL = [hue: number, saturation: number, lightness: number]
@@ -57,8 +57,7 @@ const visitColorNode = (
 	}
 }
 
-function generateColorMap(nodes: readonly fg.graph.Node[]): ColorMap
-{
+function generateColorMap(nodes: readonly fg.graph.Node[]): ColorMap {
 	const hls_map: HSLMap = new Map()
 
 	for (let i = 0; i < nodes.length; i++) {
@@ -75,8 +74,7 @@ function generateColorMap(nodes: readonly fg.graph.Node[]): ColorMap
 	return color_map
 }
 
-function generateNodesFromRawData(raw_data: RawGraphNode[]): [fg.graph.Node[], fg.graph.Edge[]]
-{
+function generateNodesFromRawData(raw_data: RawGraphNode[]): [fg.graph.Node[], fg.graph.Edge[]] {
 	const nodes_map = new Map<string, fg.graph.Node>()
 	const edges: fg.graph.Edge[] = []
 
@@ -120,22 +118,20 @@ function filterNodes(
 	// regex matching all letters of the filter (out of order)
 	const regex = new RegExp(filter.split("").join(".*"), "i")
 
-	graph.nodes = nodes.filter((node) => regex.test(node.label))
-	graph.edges = edges.filter(
-		(edge) => regex.test(edge.a.label) && regex.test(edge.b.label)
-	)
+	graph.nodes = nodes.filter(node => regex.test(node.label))
+	graph.edges = edges.filter(edge => regex.test(edge.a.label) && regex.test(edge.b.label))
 
 	fg.graph.resetGraphGrid(graph.grid, graph.nodes)
 }
 
 const GRAPH_OPTIONS: fg.graph.Options = {
-	min_move:         0.001,
+	min_move: 0.001,
 	inertia_strength: 0.3,
-	origin_strength:  0.01,
-	repel_distance:   40,
-	repel_strength:   2,
-	link_strength:    0.015,
-	grid_size:        500,
+	origin_strength: 0.01,
+	repel_distance: 40,
+	repel_strength: 2,
+	link_strength: 0.015,
+	grid_size: 500
 }
 
 const TITLE_SIZE_PX = 400
@@ -155,18 +151,17 @@ const simulateGraph = (
 		Push nodes away from the center (the title)
 	*/
 	let grid_radius = graph.grid.size / 2
-	let origin_x    = grid_radius + canvas.translate.x
-	let origin_y    = grid_radius + canvas.translate.y
-	let vmax        = Math.max(vw, vh)
+	let origin_x = grid_radius + canvas.translate.x
+	let origin_y = grid_radius + canvas.translate.y
+	let vmax = Math.max(vw, vh)
 	let push_radius =
-		(Math.min(TITLE_SIZE_PX, vw / 2, vh / 2) / vmax) *
-		(graph.grid.size / canvas.scale) +
+		(Math.min(TITLE_SIZE_PX, vw / 2, vh / 2) / vmax) * (graph.grid.size / canvas.scale) +
 		80 /* additional margin for when scrolled in */
 
 	for (let node of graph.nodes) {
-		let dist_x =  node.position.x - origin_x
+		let dist_x = node.position.x - origin_x
 		let dist_y = (node.position.y - origin_y) * 2
-		let dist   = Math.sqrt(dist_x * dist_x + dist_y * dist_y)
+		let dist = Math.sqrt(dist_x * dist_x + dist_y * dist_y)
 		if (dist > push_radius) continue
 
 		let strength = ease.in_expo((push_radius - dist) / push_radius)
@@ -176,45 +171,44 @@ const simulateGraph = (
 	}
 }
 
-const drawGraph = (
-	canvas: fg.canvas.CanvasState,
-	color_map: ColorMap
-): void => {
+const drawGraph = (canvas: fg.canvas.CanvasState, color_map: ColorMap): void => {
 	fg.canvas.resetFrame(canvas)
 	fg.canvas.drawEdges(canvas)
 
 	/*
 		Draw text nodes
 	*/
-	let {ctx, graph}    = canvas
-	let {width, height} = canvas.ctx.canvas
-	let max_size        = Math.max(width, height)
+	let { ctx, graph } = canvas
+	let { width, height } = canvas.ctx.canvas
+	let max_size = Math.max(width, height)
 
 	ctx.textAlign = "center"
 	ctx.textBaseline = "middle"
 
 	for (let node of graph.nodes) {
+		let opacity = 0.6 + ((node.mass - 1) / 50) * 4
 
-		let opacity = 0.6 + ((node.mass-1) / 50) * 4
+		ctx.font = `${max_size / 200 + (((node.mass - 1) / 5) * (max_size / 100)) / canvas.scale}px sans-serif`
 
-		ctx.font = `${max_size/200 + (((node.mass-1) / 5) * (max_size/100)) / canvas.scale}px sans-serif`
+		ctx.fillStyle =
+			node.anchor || canvas.hovered_node === node
+				? `rgba(129, 140, 248, ${opacity})`
+				: `hsl(${color_map[node.key as string]} / ${opacity})`
 
-		ctx.fillStyle = node.anchor || canvas.hovered_node === node
-			? `rgba(129, 140, 248, ${opacity})`
-			: `hsl(${color_map[node.key as string]} / ${opacity})`
-
-		ctx.fillText(node.label,
+		ctx.fillText(
+			node.label,
 			(node.position.x / graph.grid.size) * max_size,
-			(node.position.y / graph.grid.size) * max_size)
+			(node.position.y / graph.grid.size) * max_size
+		)
 	}
 }
 
-class State {	
+class State {
 	ctx: CanvasRenderingContext2D | null = null
 
 	nodes: fg.graph.Node[] = []
 	edges: fg.graph.Edge[] = []
-	graph: fg.graph.Graph  = fg.graph.makeGraph(GRAPH_OPTIONS, [], [])
+	graph: fg.graph.Graph = fg.graph.makeGraph(GRAPH_OPTIONS, [], [])
 	gestures: fg.canvas.CanvasGestures | null = null
 
 	loop: raf.AnimationLoop | null = null
@@ -226,29 +220,30 @@ class State {
 }
 
 function init(
-	s    : State,
+	s: State,
 	props: {
 		onNodeClick: (name: string) => void
 		raw_nodes: RawGraphNode[]
 		canvas_el: HTMLCanvasElement | null
-}) {
-	let {canvas_el, raw_nodes} = props
+	}
+) {
+	let { canvas_el, raw_nodes } = props
 
 	if (canvas_el == null) return
 
 	s.ctx = canvas_el.getContext("2d")
 	if (s.ctx == null) return
 
-	[s.nodes, s.edges] = generateNodesFromRawData(raw_nodes)
-	let color_map      = generateColorMap(s.nodes)
+	;[s.nodes, s.edges] = generateNodesFromRawData(raw_nodes)
+	let color_map = generateColorMap(s.nodes)
 
 	s.graph = fg.graph.makeGraph(GRAPH_OPTIONS, s.nodes.slice(), s.edges.slice())
 
 	let canvas_state = fg.canvas.canvasState({
-		ctx:           s.ctx,
-		graph:         s.graph,
-		max_scale:     3,
-		init_scale:    1.7,
+		ctx: s.ctx,
+		graph: s.graph,
+		max_scale: 3,
+		init_scale: 1.7,
 		init_grid_pos: trig.ZERO
 	})
 
@@ -259,7 +254,7 @@ function init(
 	})
 	s.ro.observe(canvas_el)
 
-	let loop = s.loop = raf.makeAnimationLoop((time) => {
+	let loop = (s.loop = raf.makeAnimationLoop(time => {
 		let is_active = gestures.mode.type === fg.canvas.Mode.DraggingNode
 		let iterations = raf.calcIterations(s.frame_iter_limit, time)
 
@@ -268,30 +263,25 @@ function init(
 			simulateGraph(s.alpha, s.graph, canvas_state, window.innerWidth, window.innerHeight)
 		}
 		drawGraph(canvas_state, color_map)
-	})
+	}))
 	raf.loopStart(loop)
 
-	let gestures = s.gestures = fg.canvas.canvasGestures({
+	let gestures = (s.gestures = fg.canvas.canvasGestures({
 		canvas: canvas_state,
-		onGesture: (e) => {
+		onGesture: e => {
 			switch (e.type) {
-			case fg.canvas.GestureEventType.Translate:
-				s.bump_end = raf.bump(s.bump_end)
-				break
-			case fg.canvas.GestureEventType.NodeClick:
-				props.onNodeClick(e.node.key as string)
-				break
-			case fg.canvas.GestureEventType.NodeDrag:
-				fg.graph.changeNodePosition(
-					canvas_state.graph.grid,
-					e.node,
-					e.pos.x,
-					e.pos.y
-				)
-				break
+				case fg.canvas.GestureEventType.Translate:
+					s.bump_end = raf.bump(s.bump_end)
+					break
+				case fg.canvas.GestureEventType.NodeClick:
+					props.onNodeClick(e.node.key as string)
+					break
+				case fg.canvas.GestureEventType.NodeDrag:
+					fg.graph.changeNodePosition(canvas_state.graph.grid, e.node, e.pos.x, e.pos.y)
+					break
 			}
 		}
-	})
+	}))
 }
 
 function updateQuery(s: State, filter_query: string) {
@@ -318,16 +308,15 @@ export type ForceGraphProps = {
 }
 
 export default function ForceGraphClient(props: ForceGraphProps): react.JSX.Element {
-
 	const [canvas_el, setCanvasEl] = react.useState<HTMLCanvasElement | null>(null)
 
 	const state = react.useRef(new State())
 
 	react.useEffect(() => {
 		init(state.current, {
-			canvas_el:   canvas_el,
+			canvas_el: canvas_el,
 			onNodeClick: props.onNodeClick,
-			raw_nodes:   props.raw_nodes,
+			raw_nodes: props.raw_nodes
 		})
 	}, [canvas_el])
 
@@ -339,16 +328,18 @@ export default function ForceGraphClient(props: ForceGraphProps): react.JSX.Elem
 		return () => cleanup(state.current)
 	}, [])
 
-	return <div className="absolute inset-0 overflow-hidden">
-		<canvas
-			ref={setCanvasEl}
-			style={{
-				position: "absolute",
-				top:    "-10%",
-				left:   "-10%",
-				width:  "120%",
-				height: "120%",
-			}}
-		/>
-	</div>
+	return (
+		<div className="absolute inset-0 overflow-hidden">
+			<canvas
+				ref={setCanvasEl}
+				style={{
+					position: "absolute",
+					top: "-10%",
+					left: "-10%",
+					width: "120%",
+					height: "120%"
+				}}
+			/>
+		</div>
+	)
 }
