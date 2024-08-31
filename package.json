@@ -5,7 +5,8 @@
     "web": "cd web && bun dev",
     "web:build": "bun run --filter '*' build",
     "cli": "bun run --watch cli/run.ts",
-    "seed": "bun --watch cli/seed.ts"
+    "seed": "bun --watch cli/seed.ts",
+    "tauri": "cargo tauri"
   },
   "workspaces": [
     "web"

@@ -9,17 +9,21 @@
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = nixpkgs.lib.platforms.all;
       perSystem =
-        { pkgs, ... }:
+        { pkgs, lib, ... }:
         let
           cargo-tauri = pkgs.callPackage ./nix/cargo-tauri.nix { };
         in
         {
           devShells.default = pkgs.mkShell {
-            packages = [
-              pkgs.bun
-              pkgs.nodejs
-              cargo-tauri
-            ];
+            packages =
+              [
+                pkgs.bun
+                pkgs.nodejs
+                cargo-tauri
+              ]
+              ++ lib.optionals pkgs.stdenv.isDarwin (
+                [ pkgs.libiconv ] ++ (with pkgs.darwin.apple_sdk.frameworks; [ WebKit ])
+              );
           };
           # TODO: Package LA using Nix
         };
