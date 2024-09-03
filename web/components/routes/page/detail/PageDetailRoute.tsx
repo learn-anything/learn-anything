@@ -82,7 +82,7 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 		// if (newTitle === page.title) return
 
 		console.log("Updating page title")
-		const personalPages = me.root?.personalPages?.toJSON() || []
+		const personalPages = me?.root?.personalPages?.toJSON() || []
 		const slug = generateUniqueSlug(personalPages, page.slug || "")
 
 		const trimmedTitle = editor.getText().trim()
