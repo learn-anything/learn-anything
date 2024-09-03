@@ -135,7 +135,7 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 	}
 
 	const onSubmit = (values: LinkFormValues) => {
-		if (isFetching) return
+		if (isFetching || !me) return
 
 		try {
 			const personalLinks = me.root?.personalLinks?.toJSON() || []
