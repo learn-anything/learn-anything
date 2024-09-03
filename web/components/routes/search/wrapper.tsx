@@ -3,10 +3,10 @@ import { useState } from "react"
 import { useAccount, useCoState } from "@/lib/providers/jazz-provider"
 import { LaIcon } from "@/components/custom/la-icon"
 import AiSearch from "../../custom/ai-search"
-import { ID } from "jazz-tools"
 import Link from "next/link"
 import { Topic, PersonalLink, PersonalPage } from "@/lib/schema"
 import { PublicGlobalGroup } from "@/lib/schema/master/public-group"
+import { JAZZ_GLOBAL_GROUP_ID } from "@/lib/constants"
 
 interface SearchTitleProps {
 	title: string
@@ -80,15 +80,11 @@ export const SearchWrapper = () => {
 		root: { personalLinks: [], personalPages: [] }
 	})
 
-	const globalGroup = useCoState(
-		PublicGlobalGroup,
-		process.env.NEXT_PUBLIC_JAZZ_GLOBAL_GROUP as ID<PublicGlobalGroup>,
-		{
-			root: {
-				topics: []
-			}
+	const globalGroup = useCoState(PublicGlobalGroup, JAZZ_GLOBAL_GROUP_ID, {
+		root: {
+			topics: []
 		}
-	)
+	})
 
 	const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value.toLowerCase()
