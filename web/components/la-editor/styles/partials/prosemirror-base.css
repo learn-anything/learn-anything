@@ -1,0 +1,86 @@
+.la-editor .ProseMirror {
+	@apply block flex-1 whitespace-pre-wrap outline-0 focus:outline-none;
+}
+
+.la-editor .ProseMirror .block-node:not(:last-child),
+.la-editor .ProseMirror .list-node:not(:last-child),
+.la-editor .ProseMirror .text-node:not(:last-child) {
+	@apply mb-2.5;
+}
+
+.la-editor .ProseMirror ol,
+.la-editor .ProseMirror ul {
+	@apply pl-6;
+}
+
+.la-editor .ProseMirror blockquote,
+.la-editor .ProseMirror dl,
+.la-editor .ProseMirror ol,
+.la-editor .ProseMirror p,
+.la-editor .ProseMirror pre,
+.la-editor .ProseMirror ul {
+	@apply m-0;
+}
+
+.la-editor .ProseMirror li {
+	@apply leading-7;
+}
+
+.la-editor .ProseMirror p {
+	@apply break-words;
+}
+
+.la-editor .ProseMirror li .text-node:has(+ .list-node),
+.la-editor .ProseMirror li > .list-node,
+.la-editor .ProseMirror li > .text-node,
+.la-editor .ProseMirror li p {
+	@apply mb-0;
+}
+
+.la-editor .ProseMirror blockquote {
+	@apply relative pl-3.5;
+}
+
+.la-editor .ProseMirror blockquote::before,
+.la-editor .ProseMirror blockquote.is-empty::before {
+	@apply bg-accent-foreground/15 absolute bottom-0 left-0 top-0 h-full w-1 rounded-sm content-[''];
+}
+
+.la-editor .ProseMirror hr {
+	@apply my-3 h-0.5 w-full border-none bg-[var(--la-hr)];
+}
+
+.la-editor .ProseMirror-focused hr.ProseMirror-selectednode {
+	@apply outline-muted-foreground rounded-full outline outline-2 outline-offset-1;
+}
+
+.la-editor .ProseMirror .ProseMirror-gapcursor {
+	@apply pointer-events-none absolute hidden;
+}
+
+.la-editor .ProseMirror .ProseMirror-hideselection {
+	@apply caret-transparent;
+}
+
+.la-editor .ProseMirror.resize-cursor {
+	@apply cursor-col-resize;
+}
+
+.la-editor .ProseMirror .selection {
+	@apply inline-block;
+}
+
+.la-editor .ProseMirror .selection,
+.la-editor .ProseMirror *::selection,
+::selection {
+	@apply bg-primary/40;
+}
+
+/* Override native selection when custom selection is present */
+.la-editor .ProseMirror .selection::selection {
+	background: transparent;
+}
+
+[data-theme="slash-command"] {
+	width: 1000vw;
+}
