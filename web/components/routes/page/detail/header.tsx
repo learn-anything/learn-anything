@@ -2,24 +2,33 @@
 
 import * as React from "react"
 import { ContentHeader, SidebarToggleButton } from "@/components/custom/content-header"
-import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb"
 import { PersonalPage } from "@/lib/schema/personal-page"
-import { ID } from "jazz-tools"
+import { useMedia } from "react-use"
+import { TopicSelector } from "@/components/custom/topic-selector"
 
-export const DetailPageHeader = ({ pageId }: { pageId: ID<PersonalPage> }) => {
+export const DetailPageHeader = ({ page }: { page: PersonalPage }) => {
+	const isMobile = useMedia("(max-width: 770px)")
+
 	return (
-		<ContentHeader>
-			<div className="flex min-w-0 gap-2">
-				<SidebarToggleButton />
+		isMobile && (
+			<>
+				<ContentHeader className="lg:min-h-0">
+					<div className="flex min-w-0 gap-2">
+						<SidebarToggleButton />
+					</div>
+				</ContentHeader>
 
-				<Breadcrumb className="flex flex-row items-center">
-					<BreadcrumbList className="sm:gap-2">
-						<BreadcrumbItem>
-							<BreadcrumbPage className="text-foreground font-medium">Pages</BreadcrumbPage>
-						</BreadcrumbItem>
-					</BreadcrumbList>
-				</Breadcrumb>
-			</div>
-		</ContentHeader>
+				<div className="flex flex-row items-start justify-between border-b px-6 py-2 max-lg:pl-4">
+					<TopicSelector
+						value={page.topic?.name}
+						onTopicChange={topic => {
+							page.topic = topic
+							page.updatedAt = new Date()
+						}}
+						align="start"
+					/>
+				</div>
+			</>
+		)
 	)
 }
