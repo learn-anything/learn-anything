@@ -2,10 +2,9 @@
 import * as react from "react"
 import { useCoState } from "@/lib/providers/jazz-provider"
 import { PublicGlobalGroup } from "@/lib/schema/master/public-group"
-import { ID } from "jazz-tools"
 import dynamic from "next/dynamic"
-import { Button } from "../ui/button"
 import Link from "next/link"
+import { JAZZ_GLOBAL_GROUP_ID } from "@/lib/constants"
 
 let graph_data_promise = import("./graph-data.json").then(a => a.default)
 const ForceGraphClient = dynamic(() => import("./force-graph-client-lazy"), { ssr: false })
@@ -16,15 +15,11 @@ export function PublicHomeRoute() {
 	const [placeholder, setPlaceholder] = react.useState("Search something...")
 	const [currentTopicIndex, setCurrentTopicIndex] = react.useState(0)
 	const [currentCharIndex, setCurrentCharIndex] = react.useState(0)
-	const globalGroup = useCoState(
-		PublicGlobalGroup,
-		process.env.NEXT_PUBLIC_JAZZ_GLOBAL_GROUP as ID<PublicGlobalGroup>,
-		{
-			root: {
-				topics: []
-			}
+	const globalGroup = useCoState(PublicGlobalGroup, JAZZ_GLOBAL_GROUP_ID, {
+		root: {
+			topics: []
 		}
-	)
+	})
 	const topics = globalGroup?.root.topics?.map(topic => topic?.prettyName) || []
 
 	react.useEffect(() => {
