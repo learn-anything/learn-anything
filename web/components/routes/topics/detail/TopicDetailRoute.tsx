@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useRef } from "react"
 import { TopicDetailHeader } from "./Header"
 import { TopicSections } from "./partials/topic-sections"
 import { useLinkNavigation } from "./use-link-navigation"
@@ -16,8 +16,10 @@ export const openPopoverForIdAtom = atom<string | null>(null)
 
 export function TopicDetailRoute({ topicName }: TopicDetailRouteProps) {
 	const { me } = useAccount({ root: { personalLinks: [] } })
-	const { topic, allLinks } = useTopicData(topicName)
-	const { activeIndex, setActiveIndex, containerRef, linkRefs } = useLinkNavigation(allLinks)
+	const { topic } = useTopicData(topicName, me)
+	// const { activeIndex, setActiveIndex, containerRef, linkRefs } = useLinkNavigation(allLinks)
+	const linksRefDummy = useRef<(HTMLLIElement | null)[]>([])
+	const containerRefDummy = useRef<HTMLDivElement>(null)
 
 	if (!topic || !me) {
 		return null
@@ -29,10 +31,10 @@ export function TopicDetailRoute({ topicName }: TopicDetailRouteProps) {
 			<TopicSections
 				topic={topic}
 				sections={topic.latestGlobalGuide?.sections}
-				activeIndex={activeIndex}
-				setActiveIndex={setActiveIndex}
-				linkRefs={linkRefs}
-				containerRef={containerRef}
+				activeIndex={0}
+				setActiveIndex={() => {}}
+				linkRefs={linksRefDummy}
+				containerRef={containerRefDummy}
 				me={me}
 				personalLinks={me.root.personalLinks}
 			/>
