@@ -2,20 +2,22 @@ import { useMemo } from "react"
 import { useCoState } from "@/lib/providers/jazz-provider"
 import { PublicGlobalGroup } from "@/lib/schema/master/public-group"
 import { ID } from "jazz-tools"
-import { Link } from "@/lib/schema"
+import { LaAccount, Link, Topic } from "@/lib/schema"
 
 const GLOBAL_GROUP_ID = process.env.NEXT_PUBLIC_JAZZ_GLOBAL_GROUP as ID<PublicGlobalGroup>
 
-export function useTopicData(topicName: string) {
-	const group = useCoState(PublicGlobalGroup, GLOBAL_GROUP_ID, {
-		root: { topics: [] }
-	})
+export function useTopicData(topicName: string, me?: LaAccount) {
+	const findTopic = useMemo(() => me && Topic.findUnique({ topicName }, GLOBAL_GROUP_ID, me), [me])
+	const topic = useCoState(Topic, findTopic, { latestGlobalGuide: { sections: [{ links: [{}] }] } })
 
-	// const topic = useCoState(Topic, "co_zS3TH4Lkj5MK9GEehinxhjjNTxB" as ID<Topic>, {})
-	const topic = useMemo(
-		() => group?.root.topics.find(topic => topic?.name === topicName),
-		[group?.root.topics, topicName]
-	)
+	const transformedData = useMemo(() => {
+		if (!topic?.latestGlobalGuide?.sections) return []
+
+		return topic.latestGlobalGuide.sections.flatMap(section => [
+			{ type: "section", data: section },
+			...(section?.links?.filter(link => !!link?.url).map(link => ({ type: "link", data: link })) || [])
+		])
+	}, [topic?.latestGlobalGuide?.sections])
 
 	const allLinks = useMemo(() => {
 		if (!topic?.latestGlobalGuide?.sections) return []
@@ -25,5 +27,5 @@ export function useTopicData(topicName: string) {
 		)
 	}, [topic?.latestGlobalGuide?.sections])
 
-	return { topic, allLinks }
+	return { topic, allLinks, transformedData }
 }

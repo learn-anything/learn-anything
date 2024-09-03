@@ -32,12 +32,12 @@ async function readJazz() {
 						]
 					}
 				}
-			],
-			forceGraphs: [
-				{
-					connections: [{}]
-				}
 			]
+			// forceGraphs: [
+			// 	{
+			// 		connections: [{}]
+			// 	}
+			// ]
 		}
 	})
 
@@ -49,18 +49,18 @@ async function readJazz() {
 	/*
 	 * Log forceGraphs
 	 */
-	const asJsonForceGraphs = globalGroup.root.forceGraphs.map(node => {
-		console.log({ node }, "node")
-		return {
-			name: node.name,
-			prettyName: node.prettyName,
-			connections: node.connections?.map(connection => {
-				return {
-					name: connection?.name
-				}
-			})
-		}
-	})
+	// const asJsonForceGraphs = globalGroup.root.forceGraphs.map(node => {
+	// 	console.log({ node }, "node")
+	// 	return {
+	// 		name: node.name,
+	// 		prettyName: node.prettyName,
+	// 		connections: node.connections?.map(connection => {
+	// 			return {
+	// 				name: connection?.name
+	// 			}
+	// 		})
+	// 	}
+	// })
 
 	const asJson = globalGroup.root.topics?.map(node => {
 		return {
@@ -82,7 +82,7 @@ async function readJazz() {
 		}
 	})
 
-	console.log({ asJsonForceGraphs }, "asJsonForceGraphs")
+	// console.log({ asJsonForceGraphs }, "asJsonForceGraphs")
 	console.log({ asJson }, "asJson")
 }
 

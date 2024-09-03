@@ -158,7 +158,7 @@ async function processJsonFiles(): Promise<[LinkManager, TopicJson[]]> {
 	let files = await fs.readdir(directory)
 	files.sort((a, b) => a.localeCompare(b)) // sort files alphabetically
 
-	files = files.slice(0, 1) // get only 1 file for testing
+	// files = files.slice(0, 1) // get only 1 file for testing
 
 	for (const file of files) {
 		if (path.extname(file) === ".json") {
@@ -253,8 +253,10 @@ async function saveProcessedData(linkLists: Link[], topics: TopicJson[], chunkSi
 						{ owner: globalGroup }
 					)
 				},
-				{ owner: globalGroup }
+				{ owner: globalGroup, unique: { topicName: topic.name } }
 			)
+
+			// console.log("Created topic", topic.name, topicModel.id, "in group", globalGroup.id, topicModel._raw.core.header)
 
 			if (!topic.latestGlobalGuide) {
 				console.error("No sections found in", topic.name)
@@ -391,7 +393,7 @@ async function saveForceGraph(connectionLists: Connection[], forceGraphs: ForceG
 				prettyName: forceGraph.prettyName,
 				connections: ListOfConnections.create([], { owner: globalGroup })
 			},
-			{ owner: globalGroup }
+			{ owner: globalGroup, unique: { forceGraphName: forceGraph.name } }
 		)
 
 		forceGraph.connections.map(connection => {
