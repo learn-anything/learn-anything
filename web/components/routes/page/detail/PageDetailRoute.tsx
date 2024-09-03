@@ -144,13 +144,16 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 		}
 
 		const personalPages = me?.root?.personalPages?.toJSON() || []
-		const slug = generateUniqueSlug(personalPages, page.slug || "")
+		const newTitle = editor.getText()
 
-		page.title = editor.getText()
-		page.slug = slug
-		page.updatedAt = new Date()
+		// Only update if the title has actually changed
+		if (newTitle !== page.title) {
+			const slug = generateUniqueSlug(personalPages, page.slug || "")
 
-		editor.commands.setContent(editor.getText())
+			page.title = newTitle
+			page.slug = slug
+			page.updatedAt = new Date()
+		}
 	}
 
 	const handleTitleKeyDown = useCallback((view: EditorView, event: KeyboardEvent) => {
