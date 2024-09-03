@@ -5,13 +5,15 @@
     "web": "cd web && bun dev",
     "web:build": "bun run --filter '*' build",
     "cli": "bun run --watch cli/run.ts",
-    "seed": "bun --watch cli/seed.ts"
+    "seed": "bun --watch cli/seed.ts",
+    "tauri": "tauri"
   },
   "workspaces": [
     "web"
   ],
   "dependencies": {
-    "jazz-nodejs": "0.7.35-unique.2",
+    "@tauri-apps/cli": "^2.0.0-rc.6",
+    "jazz-nodejs": "^0.7.34",
     "react-icons": "^5.3.0"
   },
   "devDependencies": {

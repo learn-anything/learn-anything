@@ -1,0 +1,6 @@
+[formatting]
+column_width = 120
+crlf = false
+indent_string = "\t"
+reorder_keys = true
+trailing_newline = true

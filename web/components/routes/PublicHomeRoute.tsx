@@ -4,9 +4,13 @@ import type * as force_graph from "./force-graph-client"
 import { useCoState } from "@/lib/providers/jazz-provider"
 import { PublicGlobalGroup } from "@/lib/schema/master/public-group"
 import { ID } from "jazz-tools"
+import dynamic from "next/dynamic"
+import { Button } from "../ui/button"
+import Link from "next/link"
 
 let graph_data_promise = import("./graph-data.json").then(a => a.default)
-let ForceGraphClient = react.lazy(() => import("./force-graph-client-lazy"))
+// let ForceGraphClient = react.lazy(() => import("./force-graph-client-lazy"))
+const ForceGraphClient = dynamic(() => import("./force-graph-client-lazy"), { ssr: false })
 
 export function PublicHomeRoute() {
 	let raw_graph_data = react.use(graph_data_promise)
@@ -66,6 +70,7 @@ export function PublicHomeRoute() {
 			/>
 			<div className="absolute left-0 top-0 z-20 p-4">
 				<h2 className="text-xl font-bold text-black dark:text-white">Learn Anything</h2>
+				<Link href={"/1password"}>Random Topic</Link>
 			</div>
 			<div className="absolute left-1/2 top-1/2 z-10 w-[60%] -translate-x-1/2 -translate-y-1/2 transform">
 				<div className="flex flex-col items-center justify-center gap-6">

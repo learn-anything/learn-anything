@@ -204,20 +204,20 @@ const drawGraph = (canvas: fg.canvas.CanvasState, color_map: ColorMap): void => 
 	ctx.textAlign = "center"
 	ctx.textBaseline = "middle"
 
+	const max_size = Math.max(canvas.ctx.canvas.width, canvas.ctx.canvas.height)
+
 	for (const node of graph.nodes) {
 		const { x, y } = node.position
 		const opacity = 0.6 + ((node.mass - 1) / 50) * 4
 
-		ctx.font = `${
-			canvas.max_size / 200 + (((node.mass - 1) / 5) * (canvas.max_size / 100)) / canvas.scale
-		}px sans-serif`
+		ctx.font = `${max_size / 200 + (((node.mass - 1) / 5) * (max_size / 100)) / canvas.scale}px sans-serif`
 
 		ctx.fillStyle =
 			node.anchor || canvas.hovered_node === node
 				? `rgba(129, 140, 248, ${opacity})`
 				: `hsl(${color_map[node.key as string]} / ${opacity})`
 
-		ctx.fillText(node.label, (x / graph.grid.size) * canvas.max_size, (y / graph.grid.size) * canvas.max_size)
+		ctx.fillText(node.label, (x / graph.grid.size) * max_size, (y / graph.grid.size) * max_size)
 	}
 }
 
@@ -240,7 +240,7 @@ export const createForceGraph = (props: ForceGraphProps): react.JSX.Element => {
 	let [nodes, edges] = generateNodesFromRawData(props.raw_nodes)
 
 	let color_map = generateColorMap(nodes)
-
+	let bump_end = anim.bump(0)
 	let graph = fg.graph.makeGraph(graph_options, nodes.slice(), edges.slice())
 
 	/*
@@ -272,7 +272,7 @@ export const createForceGraph = (props: ForceGraphProps): react.JSX.Element => {
 		let window_size = ws.useWindowSize()
 
 		let alpha = 0 // 0 - 1
-		let bump_end = anim.bump(0)
+
 		let frame_iter_limit = anim.frameIterationsLimit()
 
 		let loop = anim.animationLoop(time => {

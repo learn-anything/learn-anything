@@ -90,6 +90,9 @@ export const ProfileSection: React.FC = () => {
 							<DropdownMenuItem>
 								<MenuItem icon="LogOut" text="Log out" onClick={signOut} onClose={closeMenu} />
 							</DropdownMenuItem>
+							<DropdownMenuItem>
+								<MenuItem icon="CircleUser" text="Tauri" href="/tauri" onClose={closeMenu} />
+							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>

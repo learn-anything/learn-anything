@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input"
 
 export const SearchHeader = () => {
 	return (
-		<ContentHeader title="Search">
+		<ContentHeader>
 			<Input placeholder="Search something..." />
 		</ContentHeader>
 	)
