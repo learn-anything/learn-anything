@@ -3,7 +3,13 @@
  */
 import { NextRequest } from "next/server"
 import axios from "axios"
-import { DEFAULT_VALUES, GET } from "./route"
+import { GET } from "./route"
+
+const DEFAULT_VALUES = {
+	TITLE: "",
+	DESCRIPTION: "",
+	FAVICON: null
+}
 
 jest.mock("axios")
 const mockedAxios = axios as jest.Mocked<typeof axios>
