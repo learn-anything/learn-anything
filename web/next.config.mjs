@@ -3,6 +3,13 @@
 const isTauri = process.env.TAURI_ENV_DEBUG !== undefined
 const isProd = process.env.NODE_ENV === "production"
 const internalHost = process.env.TAURI_DEV_HOST || "localhost"
+const isIgnoreBuild = process.env.IGNORE_BUILD_ERRORS === "true"
+
+const ignoreBuild = {
+	typescript: {
+		ignoreBuildErrors: true
+	}
+}
 
 const commonConfig = {
 	reactStrictMode: false,
@@ -13,7 +20,8 @@ const commonConfig = {
 				hostname: "**"
 			}
 		]
-	}
+	},
+	...(isIgnoreBuild ? ignoreBuild : {})
 }
 
 const tauriConfig = {
@@ -24,9 +32,7 @@ const tauriConfig = {
 		unoptimized: true
 	},
 	assetPrefix: isProd ? null : `http://${internalHost}:3000`,
-	typescript: {
-		ignoreBuildErrors: true
-	}
+	...ignoreBuild
 }
 
 const webConfig = {
