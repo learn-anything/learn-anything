@@ -5,7 +5,7 @@ import { LaAccount } from "@/lib/schema"
 import { useClerk } from "@clerk/nextjs"
 import { createContext, useMemo, useState } from "react"
 import { AuthMethodCtx } from "jazz-react"
-import { BrowserClerkAuth as X } from "jazz-react-auth-clerk"
+import { BrowserClerkAuth as X, JazzClerkAuth as Z } from "jazz-react-auth-clerk"
 
 const Jazz = createJazzReactApp({
 	AccountSchema: LaAccount

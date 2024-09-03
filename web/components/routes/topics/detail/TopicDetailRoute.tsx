@@ -88,16 +88,16 @@ export function TopicDetailRoute({ topicName }: TopicDetailRouteProps) {
 							) : (
 								<LinkItem
 									key={index}
-									link={link}
-									topic={topic}
-									isActive={activeIndex === startIndex + index}
-									index={startIndex + index}
-									setActiveIndex={setActiveIndex}
-									ref={el => {
-										linkRefs.current[startIndex + index] = el
-									}}
-									me={me}
-									personalLinks={personalLinks}
+									link={data.data}
+									// topic={topic}
+									// isActive={activeIndex === startIndex + index}
+									// index={startIndex + index}
+									// setActiveIndex={setActiveIndex}
+									// ref={el => {
+									// 	linkRefs.current[startIndex + index] = el
+									// }}
+									// me={me}
+									// personalLinks={personalLinks}
 								/>
 							)
 						)}
