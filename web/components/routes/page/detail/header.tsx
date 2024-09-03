@@ -29,6 +29,7 @@ export const DetailPageHeader = ({ page, handleDelete }: { page: PersonalPage; h
 						}}
 						align="start"
 						variant="outline"
+						renderSelectedText={() => <span className="truncate">{page.topic?.prettyName || "Select a topic"}</span>}
 					/>
 					<Button size="sm" variant="outline" onClick={handleDelete}>
 						<LaIcon name="Trash" className="mr-2 size-3.5" />

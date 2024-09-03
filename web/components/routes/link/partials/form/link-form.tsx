@@ -232,7 +232,9 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 												<FormLabel className="sr-only">Topic</FormLabel>
 												<TopicSelector
 													{...field}
-													renderSelectedText={() => <span>{selectedTopic?.prettyName || "Select a topic"}</span>}
+													renderSelectedText={() => (
+														<span className="truncate">{selectedTopic?.prettyName || "Select a topic"}</span>
+													)}
 												/>
 											</FormItem>
 										)}

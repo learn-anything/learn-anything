@@ -90,7 +90,7 @@ export function PageDetailRoute({ pageId }: { pageId: string }) {
 					<div className="relative min-w-56 max-w-72 border-l">
 						<div className="flex">
 							<div className="flex h-10 flex-auto flex-row items-center justify-between px-5">
-								<span className="text-left text-sm font-medium">Page actions</span>
+								<span className="text-left text-[13px] font-medium">Page actions</span>
 							</div>
 
 							<div className="absolute bottom-0 left-0 right-0 top-10 space-y-3 overflow-y-auto px-4 py-1.5">
@@ -102,10 +102,13 @@ export function PageDetailRoute({ pageId }: { pageId: string }) {
 									}}
 									variant="ghost"
 									className="-ml-1.5"
+									renderSelectedText={() => (
+										<span className="truncate">{page.topic?.prettyName || "Select a topic"}</span>
+									)}
 								/>
 								<Button size="sm" variant="ghost" onClick={handleDelete} className="-ml-1.5">
 									<LaIcon name="Trash" className="mr-2 size-3.5" />
-									Delete
+									<span className="text-sm">Delete</span>
 								</Button>
 							</div>
 						</div>
