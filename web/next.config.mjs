@@ -26,7 +26,7 @@ const commonConfig = {
 
 const tauriConfig = {
 	...commonConfig,
-	output: "export",
+	// output: "export",
 	images: {
 		...commonConfig.images,
 		unoptimized: true
