@@ -14,5 +14,6 @@ private
 past-*
 output
 dist
+
 # rust
 /target/
