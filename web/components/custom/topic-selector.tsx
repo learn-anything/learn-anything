@@ -1,24 +1,28 @@
 import React, { useMemo, useCallback, useRef, forwardRef } from "react"
 import { atom, useAtom } from "jotai"
 import { useVirtualizer } from "@tanstack/react-virtual"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 import { LaIcon } from "@/components/custom/la-icon"
 import { Command, CommandInput, CommandList, CommandItem, CommandGroup } from "@/components/ui/command"
 import { useCoState } from "@/lib/providers/jazz-provider"
 import { PublicGlobalGroup } from "@/lib/schema/master/public-group"
-import { ListOfTopics } from "@/lib/schema"
+import { ListOfTopics, Topic } from "@/lib/schema"
 import { JAZZ_GLOBAL_GROUP_ID } from "@/lib/constants"
+import { VariantProps } from "class-variance-authority"
 
-interface TopicSelectorProps {
+interface TopicSelectorProps extends VariantProps<typeof buttonVariants> {
 	showSearch?: boolean
 	defaultLabel?: string
 	searchPlaceholder?: string
 	value?: string | null
 	onChange?: (value: string) => void
+	onTopicChange?: (value: Topic) => void
 	className?: string
 	renderSelectedText?: (value?: string | null) => React.ReactNode
+	side?: "bottom" | "top" | "right" | "left"
+	align?: "center" | "end" | "start"
 }
 
 export const topicSelectorAtom = atom(false)
@@ -31,8 +35,12 @@ export const TopicSelector = forwardRef<HTMLButtonElement, TopicSelectorProps>(
 			searchPlaceholder = "Search topic...",
 			value,
 			onChange,
+			onTopicChange,
 			className,
-			renderSelectedText
+			renderSelectedText,
+			side = "bottom",
+			align = "end",
+			...props
 		},
 		ref
 	) => {
@@ -40,11 +48,12 @@ export const TopicSelector = forwardRef<HTMLButtonElement, TopicSelectorProps>(
 		const group = useCoState(PublicGlobalGroup, JAZZ_GLOBAL_GROUP_ID, { root: { topics: [] } })
 
 		const handleSelect = useCallback(
-			(selectedTopicName: string) => {
+			(selectedTopicName: string, topic: Topic) => {
 				onChange?.(selectedTopicName)
+				onTopicChange?.(topic)
 				setIsTopicSelectorOpen(false)
 			},
-			[onChange, setIsTopicSelectorOpen]
+			[onChange, setIsTopicSelectorOpen, onTopicChange]
 		)
 
 		const displaySelectedText = useMemo(() => {
@@ -64,6 +73,7 @@ export const TopicSelector = forwardRef<HTMLButtonElement, TopicSelectorProps>(
 						role="combobox"
 						variant="secondary"
 						className={cn("gap-x-2 text-sm", className)}
+						{...props}
 					>
 						{displaySelectedText}
 						<LaIcon name="ChevronDown" />
@@ -71,8 +81,8 @@ export const TopicSelector = forwardRef<HTMLButtonElement, TopicSelectorProps>(
 				</PopoverTrigger>
 				<PopoverContent
 					className="w-52 rounded-lg p-0"
-					side="bottom"
-					align="end"
+					side={side}
+					align={align}
 					onCloseAutoFocus={e => e.preventDefault()}
 				>
 					{group?.root.topics && (
@@ -92,8 +102,8 @@ export const TopicSelector = forwardRef<HTMLButtonElement, TopicSelectorProps>(
 
 TopicSelector.displayName = "TopicSelector"
 
-interface TopicSelectorContentProps extends Omit<TopicSelectorProps, "onChange"> {
-	onSelect: (value: string) => void
+interface TopicSelectorContentProps extends Omit<TopicSelectorProps, "onChange" | "onTopicChange"> {
+	onSelect: (value: string, topic: Topic) => void
 	topics: ListOfTopics
 }
 
@@ -136,7 +146,7 @@ const TopicSelectorContent: React.FC<TopicSelectorContentProps> = React.memo(
 											<CommandItem
 												key={virtualRow.key}
 												value={topic.name}
-												onSelect={onSelect}
+												onSelect={value => onSelect(value, topic)}
 												style={{
 													position: "absolute",
 													top: 0,
