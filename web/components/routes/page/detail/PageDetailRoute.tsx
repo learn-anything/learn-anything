@@ -15,13 +15,66 @@ import { generateUniqueSlug } from "@/lib/utils"
 import { FocusClasses } from "@tiptap/extension-focus"
 import { DetailPageHeader } from "./header"
 import { useMedia } from "react-use"
-import TopicSelector from "@/components/custom/topic-selector"
+import { TopicSelector } from "@/components/custom/topic-selector"
+import { Button } from "@/components/ui/button"
+import { LaIcon } from "@/components/custom/la-icon"
+import { useConfirm } from "@omit/react-confirm-dialog"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 const TITLE_PLACEHOLDER = "Untitled"
 
 export function PageDetailRoute({ pageId }: { pageId: string }) {
+	const { me } = useAccount({ root: { personalLinks: [] } })
 	const isMobile = useMedia("(max-width: 770px)")
 	const page = useCoState(PersonalPage, pageId as ID<PersonalPage>)
+	const router = useRouter()
+
+	const confirm = useConfirm()
+
+	const handleDelete = async () => {
+		const result = await confirm({
+			title: "Delete page",
+			description: "Are you sure you want to delete this page?",
+			confirmText: "Delete",
+			cancelText: "Cancel",
+			cancelButton: {
+				variant: "outline"
+			},
+			confirmButton: {
+				variant: "destructive"
+			}
+		})
+
+		if (result) {
+			if (!me?.root.personalPages) return
+
+			try {
+				const index = me.root.personalPages.findIndex(item => item?.id === pageId)
+				if (index === -1) {
+					toast.error("Page not found.")
+					return
+				}
+
+				toast.success("Page deleted.", {
+					position: "bottom-right",
+					description: (
+						<span>
+							<strong>{page?.title}</strong> has been deleted.
+						</span>
+					)
+				})
+
+				me.root.personalPages.splice(index, 1)
+
+				// push without history
+				router.replace("/")
+			} catch (error) {
+				console.error("Delete operation fail", { error })
+				return
+			}
+		}
+	}
 
 	if (!page) return null
 
@@ -29,25 +82,31 @@ export function PageDetailRoute({ pageId }: { pageId: string }) {
 		<div className="absolute inset-0 flex flex-row overflow-hidden">
 			<div className="flex h-full w-full">
 				<div className="relative flex min-w-0 grow basis-[760px] flex-col">
-					<DetailPageHeader page={page} />
+					<DetailPageHeader page={page} handleDelete={handleDelete} />
 					<DetailPageForm page={page} />
 				</div>
 
 				{!isMobile && (
 					<div className="relative min-w-56 max-w-72 border-l">
 						<div className="flex">
-							<div className="flex h-10 flex-auto flex-row items-center justify-between px-4">
+							<div className="flex h-10 flex-auto flex-row items-center justify-between px-5">
 								<span className="text-left text-sm font-medium">Page actions</span>
 							</div>
 
-							<div className="absolute bottom-0 left-0 right-0 top-10 overflow-y-auto px-4 py-1.5">
+							<div className="absolute bottom-0 left-0 right-0 top-10 space-y-3 overflow-y-auto px-4 py-1.5">
 								<TopicSelector
 									value={page.topic?.name}
 									onTopicChange={topic => {
 										page.topic = topic
 										page.updatedAt = new Date()
 									}}
+									variant="ghost"
+									className="-ml-1.5"
 								/>
+								<Button size="sm" variant="ghost" onClick={handleDelete} className="-ml-1.5">
+									<LaIcon name="Trash" className="mr-2 size-3.5" />
+									Delete
+								</Button>
 							</div>
 						</div>
 					</div>
@@ -84,12 +143,11 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 		const personalPages = me?.root?.personalPages?.toJSON() || []
 		const slug = generateUniqueSlug(personalPages, page.slug || "")
 
-		const trimmedTitle = editor.getText().trim()
-		page.title = trimmedTitle
+		page.title = editor.getText()
 		page.slug = slug
 		page.updatedAt = new Date()
 
-		editor.commands.setContent(trimmedTitle)
+		editor.commands.setContent(editor.getText())
 	}
 
 	const handleTitleKeyDown = useCallback((view: EditorView, event: KeyboardEvent) => {
