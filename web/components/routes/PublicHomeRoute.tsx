@@ -1,6 +1,5 @@
 "use client"
 import * as react from "react"
-import type * as force_graph from "./force-graph-client"
 import { useCoState } from "@/lib/providers/jazz-provider"
 import { PublicGlobalGroup } from "@/lib/schema/master/public-group"
 import { ID } from "jazz-tools"
@@ -9,7 +8,6 @@ import { Button } from "../ui/button"
 import Link from "next/link"
 
 let graph_data_promise = import("./graph-data.json").then(a => a.default)
-// let ForceGraphClient = react.lazy(() => import("./force-graph-client-lazy"))
 const ForceGraphClient = dynamic(() => import("./force-graph-client-lazy"), { ssr: false })
 
 export function PublicHomeRoute() {
@@ -28,16 +26,6 @@ export function PublicHomeRoute() {
 		}
 	)
 	const topics = globalGroup?.root.topics?.map(topic => topic?.prettyName) || []
-
-	// let graph_items = react.useMemo(() => {
-	// 	return raw_graph_data.map(
-	// 		(item): force_graph.ConnectionItem => ({
-	// 			key: item.name,
-	// 			title: item.prettyName,
-	// 			connections: item.connectedTopics
-	// 		})
-	// 	)
-	// }, [raw_graph_data])
 
 	react.useEffect(() => {
 		if (topics.length === 0) return
