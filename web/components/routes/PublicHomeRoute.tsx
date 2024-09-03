@@ -4,9 +4,11 @@ import type * as force_graph from "./force-graph-client"
 import { useCoState } from "@/lib/providers/jazz-provider"
 import { PublicGlobalGroup } from "@/lib/schema/master/public-group"
 import { ID } from "jazz-tools"
+import dynamic from "next/dynamic"
 
 let graph_data_promise = import("./graph-data.json").then(a => a.default)
-let ForceGraphClient = react.lazy(() => import("./force-graph-client-lazy"))
+// let ForceGraphClient = react.lazy(() => import("./force-graph-client-lazy"))
+const ForceGraphClient = dynamic(() => import("./force-graph-client-lazy"), { ssr: false })
 
 export function PublicHomeRoute() {
 	let raw_graph_data = react.use(graph_data_promise)
