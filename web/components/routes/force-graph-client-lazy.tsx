@@ -82,6 +82,7 @@ function generateColorMap(g: fg.graph.Graph, nodes: readonly fg.graph.Node[]): C
 function generateNodesFromRawData(g: fg.graph.Graph, raw_data: RawGraphNode[]): void {
 	const nodes_map = new Map<string, fg.graph.Node>()
 
+	/* create nodes */
 	for (const raw of raw_data) {
 		const node = fg.graph.make_node()
 		node.key = raw.name
@@ -91,6 +92,7 @@ function generateNodesFromRawData(g: fg.graph.Graph, raw_data: RawGraphNode[]): 
 		nodes_map.set(raw.name, node)
 	}
 
+	/* connections */
 	for (const raw of raw_data) {
 		const node_a = nodes_map.get(raw.name)!
 
@@ -100,7 +102,13 @@ function generateNodesFromRawData(g: fg.graph.Graph, raw_data: RawGraphNode[]): 
 		}
 	}
 
-	fg.graph.spread_positions(g)
+	/* calc mass from number of connections */
+	for (const node of g.nodes) {
+		let edges = fg.graph.get_node_edges(g, node)
+		node.mass = fg.graph.node_mass_from_edges(edges.length)
+	}
+
+	fg.graph.randomize_positions(g)
 }
 
 function filterNodes(
@@ -110,17 +118,15 @@ function filterNodes(
 	fg.graph.clear_nodes(s.graph)
 
 	if (filter === "") {
-		s.graph.nodes.push(...s.nodes)
-		s.graph.edges.push(...s.edges)
+		fg.graph.add_nodes(s.graph, s.nodes)
+		fg.graph.add_edges(s.graph, s.edges)
 	} else {
 		// regex matching all letters of the filter (out of order)
 		const regex = new RegExp(filter.split("").join(".*"), "i")
 	
-		s.graph.nodes = s.nodes.filter(node => regex.test(node.label))
-		s.graph.edges = s.edges.filter(edge => regex.test(edge.a.label) && regex.test(edge.b.label))
+		fg.graph.add_nodes(s.graph, s.nodes.filter(node => regex.test(node.label)))
+		fg.graph.add_edges(s.graph, s.edges.filter(edge => regex.test(edge.a.label) && regex.test(edge.b.label)))
 	}
-
-	fg.graph.add_nodes_to_grid(s.graph, s.nodes)
 }
 
 const GRAPH_OPTIONS: fg.graph.Options = {
@@ -193,10 +199,14 @@ const drawGraph = (c: fg.canvas.CanvasState, color_map: ColorMap): void => {
 
 		if (fg.canvas.in_rect_xy(clip_rect, x, y)) {
 			
+			let base_size       = max_size / 220
+			let mass_boost_size = max_size / 140
+			let mass_boost      = (node.mass - 1) / 8 / c.scale
+
+			c.ctx.font = `${base_size + mass_boost * mass_boost_size}px sans-serif`
+	
 			let opacity = 0.6 + ((node.mass - 1) / 50) * 4
-	
-			c.ctx.font = `${max_size / 200 + (((node.mass - 1) / 5) * (max_size / 100)) / c.scale}px sans-serif`
-	
+
 			c.ctx.fillStyle = node.anchor || c.hovered_node === node
 				? `rgba(129, 140, 248, ${opacity})`
 				: `hsl(${color_map[node.key as string]} / ${opacity})`
@@ -218,8 +228,8 @@ class State {
 
 	raf_id: number = 0
 	bump_end = 0
-	alpha = 9
-	frame_iter_limit = raf.frameIterationsLimit()
+	alpha = 0
+	frame_iter_limit = raf.frameIterationsLimit(60)
 	schedule_filter = schedule.scheduleIdle(filterNodes)
 	ro: ResizeObserver = new ResizeObserver(() => {})
 }
@@ -264,12 +274,14 @@ function init(
 		let is_active = gestures.mode.type === fg.canvas.Mode.DraggingNode
 		let iterations = Math.min(2, raf.calcIterations(s.frame_iter_limit, time))
 
-		for (let i = iterations; i >= 0; i--) {
+		for (let i = iterations; i > 0; i--) {
 			s.alpha = raf.updateAlpha(s.alpha, is_active || time < s.bump_end)
 			simulateGraph(s.alpha, s.graph, canvas_state, window.innerWidth, window.innerHeight)
 		}
 		
-		drawGraph(canvas_state, color_map)
+		if (iterations > 0) {
+			drawGraph(canvas_state, color_map)
+		}
 
 		s.raf_id = requestAnimationFrame(loop)
 	}
