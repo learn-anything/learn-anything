@@ -1,12 +1,12 @@
 "use client"
 
-import React, { useRef } from "react"
+import React, { useMemo, useRef } from "react"
 import { TopicDetailHeader } from "./Header"
 import { TopicSections } from "./partials/topic-sections"
-import { useLinkNavigation } from "./use-link-navigation"
-import { useTopicData } from "@/hooks/use-topic-data"
 import { atom } from "jotai"
-import { useAccount } from "@/lib/providers/jazz-provider"
+import { useAccount, useCoState } from "@/lib/providers/jazz-provider"
+import { Topic } from "@/lib/schema"
+import { JAZZ_GLOBAL_GROUP_ID } from "@/lib/constants"
 
 interface TopicDetailRouteProps {
 	topicName: string
@@ -16,7 +16,9 @@ export const openPopoverForIdAtom = atom<string | null>(null)
 
 export function TopicDetailRoute({ topicName }: TopicDetailRouteProps) {
 	const { me } = useAccount({ root: { personalLinks: [] } })
-	const { topic } = useTopicData(topicName, me)
+
+	const topicID = useMemo(() => me && Topic.findUnique({ topicName }, JAZZ_GLOBAL_GROUP_ID, me), [topicName, me])
+	const topic = useCoState(Topic, topicID, { latestGlobalGuide: { sections: [{ links: [] }] } })
 	// const { activeIndex, setActiveIndex, containerRef, linkRefs } = useLinkNavigation(allLinks)
 	const linksRefDummy = useRef<(HTMLLIElement | null)[]>([])
 	const containerRefDummy = useRef<HTMLDivElement>(null)
