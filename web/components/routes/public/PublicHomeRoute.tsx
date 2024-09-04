@@ -21,8 +21,8 @@ export function PublicHomeRoute() {
 	const raw_graph_data = React.use(graph_data_promise) as GraphNode[]
 	const [filterQuery, setFilterQuery] = React.useState<string>("")
 
-	const handleTopicSelect = (topic: GraphNode) => {
-		router.push(`/${topic.name}`)
+	const handleTopicSelect = (topicName: string) => {
+		router.push(`/${topicName}`)
 	}
 
 	const handleInputChange = (value: string) => {
@@ -33,9 +33,7 @@ export function PublicHomeRoute() {
 		<div className="relative h-full w-screen">
 			<ForceGraphClient
 				raw_nodes={raw_graph_data}
-				onNodeClick={val => {
-					console.log("clicked", val)
-				}}
+				onNodeClick={val => handleTopicSelect(val)}
 				filter_query={filterQuery}
 			/>
 
@@ -54,7 +52,11 @@ export function PublicHomeRoute() {
 				>
 					I want to learn
 				</motion.h1>
-				<Autocomplete topics={raw_graph_data} onSelect={handleTopicSelect} onInputChange={handleInputChange} />
+				<Autocomplete
+					topics={raw_graph_data}
+					onSelect={topic => handleTopicSelect(topic.name)}
+					onInputChange={handleInputChange}
+				/>
 			</motion.div>
 		</div>
 	)
