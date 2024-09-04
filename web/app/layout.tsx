@@ -8,6 +8,7 @@ import { ClerkProviderClient } from "@/components/custom/clerk/clerk-provider-cl
 import { JotaiProvider } from "@/lib/providers/jotai-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { ConfirmProvider } from "@/lib/providers/confirm-provider"
+import { DeepLinkProvider } from "@/lib/providers/deep-link-provider"
 
 const fontSans = FontSans({
 	subsets: ["latin"],
@@ -27,16 +28,18 @@ export default function RootLayout({
 	return (
 		<html lang="en" className="h-full w-full" suppressHydrationWarning>
 			<ClerkProviderClient>
-				<body className={cn("h-full w-full font-sans antialiased", fontSans.variable)}>
-					<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-						<JotaiProvider>
-							<ConfirmProvider>
-								{children}
-								<Toaster expand={false} />
-							</ConfirmProvider>
-						</JotaiProvider>
-					</ThemeProvider>
-				</body>
+				<DeepLinkProvider>
+					<body className={cn("h-full w-full font-sans antialiased", fontSans.variable)}>
+						<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+							<JotaiProvider>
+								<ConfirmProvider>
+									{children}
+									<Toaster expand={false} />
+								</ConfirmProvider>
+							</JotaiProvider>
+						</ThemeProvider>
+					</body>
+				</DeepLinkProvider>
 			</ClerkProviderClient>
 		</html>
 	)
