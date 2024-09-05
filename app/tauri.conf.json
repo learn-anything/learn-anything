@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"identifier": "xyz.learnanything.desktop",
 	"build": {
-		"frontendDist": "../out",
+		"frontendDist": "https://dev.learn-anything.xyz",
 		"devUrl": "http://localhost:3000",
 		"beforeDevCommand": "bun dev",
 		"beforeBuildCommand": "bun run web:build"
