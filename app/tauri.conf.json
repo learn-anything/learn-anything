@@ -1,7 +1,7 @@
 {
 	"productName": "learn-anything",
 	"version": "0.1.0",
-	"identifier": "xyz.learn-anything",
+	"identifier": "xyz.learnanything.desktop",
 	"build": {
 		"frontendDist": "../out",
 		"devUrl": "http://localhost:3000",
