@@ -33,6 +33,7 @@
     "@radix-ui/react-toggle": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.2",
     "@tanstack/react-virtual": "^3.10.7",
+    "@tauri-apps/plugin-fs-watch": "https://github.com/tauri-apps/tauri-plugin-fs-watch#v2",
     "@tiptap/core": "^2.6.6",
     "@tiptap/extension-blockquote": "^2.6.6",
     "@tiptap/extension-bold": "^2.6.6",
@@ -88,6 +89,7 @@
     "streaming-markdown": "^0.0.14",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
+    "tauri-plugin-fs-watch-api": "https://github.com/tauri-apps/tauri-plugin-fs-watch#v1",
     "ts-node": "^10.9.2",
     "zod": "^3.23.8",
     "zsa": "^0.6.0"
