@@ -27,6 +27,9 @@ export class UserRoot extends CoMap {
 	topicsWantToLearn = co.ref(ListOfTopics)
 	topicsLearning = co.ref(ListOfTopics)
 	topicsLearned = co.ref(ListOfTopics)
+
+	// TODO: maybe should be in another place?
+	connectedFolderPath = co.optional.string
 }
 
 export class LaAccount extends Account {
@@ -50,6 +53,8 @@ export class LaAccount extends Account {
 					website: "",
 					bio: "",
 					is_public: false,
+
+					connectedFolderPath: "",
 
 					personalLinks: PersonalLinkLists.create([], { owner: this }),
 					personalPages: PersonalPageLists.create([], { owner: this }),
