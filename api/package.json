@@ -4,7 +4,8 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
-		"test": "vitest"
+		"test": "vitest",
+		"dev": "encore run"
 	},
 	"devDependencies": {
 		"@types/node": "^20.5.7",
@@ -12,7 +13,8 @@
 		"vitest": "^1.5.0"
 	},
 	"dependencies": {
-		"encore.dev": "^1.35.3"
+		"encore.dev": "^1.35.3",
+		"jazz-nodejs": "^0.7.34"
 	},
 	"optionalDependencies": {
 		"@rollup/rollup-linux-x64-gnu": "^4.13.0"
