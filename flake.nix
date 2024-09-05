@@ -22,7 +22,11 @@
                 cargo-tauri
               ]
               ++ lib.optionals pkgs.stdenv.isDarwin (
-                [ pkgs.libiconv ] ++ (with pkgs.darwin.apple_sdk.frameworks; [ WebKit ])
+                [ pkgs.libiconv ]
+                ++ (with pkgs.darwin.apple_sdk.frameworks; [
+                  WebKit
+                  OSAKit
+                ])
               );
           };
           # TODO: Package LA using Nix

@@ -1,0 +1,56 @@
+#!/usr/bin/env osascript -l JavaScript
+ObjC.import('stdlib')
+
+function run(argv) {
+	let args = parse_args(argv);
+	let url = args.browser(+args.index);
+	let app = Application.currentApplication();
+	app.includeStandardAdditions = true;
+	app.openLocation(`learn-anything://add-link?url=${encodeURIComponent(url)}`)
+}
+
+function parse_args(argv) {
+	let args = [];
+	let browser = undefined;
+	for (i of argv) {
+		if (!i.startsWith("-")) {
+			args.push(i);
+			continue;
+		}
+		if (i == "-s" || i == "--safari") {
+			if (browser != undefined) usage();
+			browser = safari;
+		} else if (i == "-c" || i == "--chrome") {
+			if (browser != undefined) usage();
+			browser = chrome;
+		} else {
+			usage();
+		}
+	}
+	if (args.length == 0) {
+		args = [0];
+	}
+	if (args.length > 1) {
+		usage();
+	}
+	if (browser == undefined) {
+		browser = safari;
+	}
+	return {
+		browser,
+		index: args[0],
+	};
+}
+
+function usage() {
+	console.log("Usage: lax [-s|--safari|-c|--chrome] [WINDOW]");
+	$.exit(1);
+}
+
+function safari(index) {
+	return Application("Safari").windows[index].currentTab.url();
+}
+
+function chrome(index) {
+	return Application("Google Chrome").windows[index].activeTab().url();
+}
