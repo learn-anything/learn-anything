@@ -147,7 +147,7 @@ export function Autocomplete({ topics = [], onSelect, onInputChange }: Autocompl
 											className="min-h-10 rounded-none px-3 py-1.5"
 										>
 											<span>{topic.prettyName}</span>
-											<span className="text-muted-foreground ml-auto text-xs">
+											<span className="text-muted-foreground/80 ml-auto text-xs">
 												{topic.connectedTopics.length > 0 && topic.connectedTopics.join(", ")}
 											</span>
 										</CommandItem>
