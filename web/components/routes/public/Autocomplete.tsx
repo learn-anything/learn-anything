@@ -13,7 +13,7 @@ interface GraphNode {
 
 interface AutocompleteProps {
 	topics: GraphNode[]
-	onSelect: (topic: GraphNode) => void
+	onSelect: (topic: string) => void
 	onInputChange: (value: string) => void
 }
 
@@ -46,18 +46,16 @@ export function Autocomplete({ topics = [], onSelect, onInputChange }: Autocompl
 
 	const handleSelect = useCallback(
 		(topic: GraphNode) => {
-			setInputValue(topic.prettyName)
+			// setInputValue(topicPrettyName)
 			setOpen(false)
-			onSelect(topic)
+			onSelect(topic.name)
 		},
 		[onSelect]
 	)
 
 	const handleKeyDown = useCallback(
 		(e: React.KeyboardEvent<HTMLDivElement>) => {
-			if (e.key === "Enter" && filteredTopics.length > 0) {
-				handleSelect(filteredTopics[0])
-			} else if ((e.key === "Backspace" || e.key === "Delete") && inputRef.current?.value === "") {
+			if ((e.key === "Backspace" || e.key === "Delete") && inputRef.current?.value === "") {
 				setOpen(true)
 				setIsInitialOpen(true)
 			}
@@ -65,7 +63,7 @@ export function Autocomplete({ topics = [], onSelect, onInputChange }: Autocompl
 				setHasInteracted(true)
 			}
 		},
-		[filteredTopics, handleSelect, hasInteracted]
+		[hasInteracted]
 	)
 
 	const handleInputChange = useCallback(
@@ -143,6 +141,7 @@ export function Autocomplete({ topics = [], onSelect, onInputChange }: Autocompl
 									{filteredTopics.map((topic, index) => (
 										<CommandItem
 											key={index}
+											value={topic.name}
 											onSelect={() => handleSelect(topic)}
 											className="min-h-10 rounded-none px-3 py-1.5"
 										>

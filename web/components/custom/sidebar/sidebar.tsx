@@ -14,6 +14,8 @@ import { LinkSection } from "./partial/link-section"
 import { PageSection } from "./partial/page-section"
 import { TopicSection } from "./partial/topic-section"
 import { ProfileSection } from "./partial/profile-section"
+import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
+import { SignInButton } from "@clerk/nextjs"
 
 interface SidebarContextType {
 	isCollapsed: boolean
@@ -109,7 +111,9 @@ const LogoAndSearch: React.FC = React.memo(() => {
 LogoAndSearch.displayName = "LogoAndSearch"
 
 const SidebarContent: React.FC = React.memo(() => {
+	const { me } = useAccountOrGuest()
 	const pathname = usePathname()
+
 	return (
 		<>
 			<nav className="bg-background relative flex h-full w-full shrink-0 flex-col">
@@ -118,12 +122,19 @@ const SidebarContent: React.FC = React.memo(() => {
 				</div>
 				<div tabIndex={-1} className="relative mb-0.5 mt-1.5 flex grow flex-col overflow-y-auto rounded-md px-3">
 					<div className="h-2 shrink-0" />
-					<LinkSection pathname={pathname} />
-					<PageSection pathname={pathname} />
-					<TopicSection pathname={pathname} />
+					{me._type === "Account" && <LinkSection pathname={pathname} />}
+					{me._type === "Account" && <PageSection pathname={pathname} />}
+					{me._type === "Account" && <TopicSection pathname={pathname} />}
 				</div>
 			</nav>
-			<ProfileSection />
+
+			{me._type === "Account" ? (
+				<ProfileSection />
+			) : (
+				<div className="visible absolute inset-x-0 bottom-0 z-10 flex gap-8 p-2.5">
+					<SignInButton>Fake profile section</SignInButton>
+				</div>
+			)}
 		</>
 	)
 })

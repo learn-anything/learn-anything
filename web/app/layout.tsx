@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/sonner"
 import { ConfirmProvider } from "@/lib/providers/confirm-provider"
 import { DeepLinkProvider } from "@/lib/providers/deep-link-provider"
 import { GeistMono, GeistSans } from "./fonts"
+import { JazzAndAuth } from "@/lib/providers/jazz-provider"
 
 export const metadata: Metadata = {
 	title: "Learn Anything",
@@ -27,7 +28,7 @@ export default function RootLayout({
 						<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
 							<JotaiProvider>
 								<ConfirmProvider>
-									{children}
+									<JazzAndAuth>{children}</JazzAndAuth>
 									<Toaster expand={false} />
 								</ConfirmProvider>
 							</JotaiProvider>
