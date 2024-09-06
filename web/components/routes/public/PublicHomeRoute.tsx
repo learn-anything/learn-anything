@@ -23,8 +23,8 @@ export function PublicHomeRoute() {
 	const raw_graph_data = React.use(graph_data_promise) as GraphNode[]
 	const [filterQuery, setFilterQuery] = React.useState<string>("")
 
-	const handleTopicSelect = (topicName: string) => {
-		router.push(`/${topicName}`)
+	const handleTopicSelect = (topic: string) => {
+		router.replace(`/${topic}`)
 	}
 
 	const handleInputChange = (value: string) => {
@@ -34,11 +34,7 @@ export function PublicHomeRoute() {
 	return (
 		<>
 			<div className="relative h-full w-screen">
-				<ForceGraphClient
-					raw_nodes={raw_graph_data}
-					onNodeClick={val => handleTopicSelect(val)}
-					filter_query={filterQuery}
-				/>
+				<ForceGraphClient raw_nodes={raw_graph_data} onNodeClick={handleTopicSelect} filter_query={filterQuery} />
 
 				<div className="absolute left-1/2 top-1/2 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 transform max-sm:px-5">
 					<motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
@@ -53,11 +49,7 @@ export function PublicHomeRoute() {
 						>
 							I want to learn
 						</motion.h1>
-						<Autocomplete
-							topics={raw_graph_data}
-							onSelect={topic => handleTopicSelect(topic.name)}
-							onInputChange={handleInputChange}
-						/>
+						<Autocomplete topics={raw_graph_data} onSelect={handleTopicSelect} onInputChange={handleInputChange} />
 					</motion.div>
 				</div>
 			</div>

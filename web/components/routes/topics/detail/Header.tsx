@@ -4,7 +4,7 @@ import * as React from "react"
 import { ContentHeader, SidebarToggleButton } from "@/components/custom/content-header"
 import { ListOfTopics, Topic } from "@/lib/schema"
 import { LearningStateSelector } from "@/components/custom/learning-state-selector"
-import { useAccount, useAccountOrGuest } from "@/lib/providers/jazz-provider"
+import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
 import { LearningStateValue } from "@/lib/constants"
 import { toast } from "sonner"
 
@@ -33,7 +33,7 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 		p = {
 			index: wantToLearnIndex,
 			// TODO: fix this type error by doing better conditionals on both index and p
-			topic: me?.root.topicsWantToLearn[wantToLearnIndex],
+			topic: me && me._type !== "Anonymous" ? me.root.topicsWantToLearn[wantToLearnIndex] : undefined,
 			learningState: "wantToLearn"
 		}
 	}
@@ -43,7 +43,7 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 	if (learningIndex !== -1) {
 		p = {
 			index: learningIndex,
-			topic: me?.root.topicsLearning[learningIndex],
+			topic: me && me._type !== "Anonymous" ? me?.root.topicsLearning[learningIndex] : undefined,
 			learningState: "learning"
 		}
 	}
@@ -53,7 +53,7 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 	if (learnedIndex !== -1) {
 		p = {
 			index: learnedIndex,
-			topic: me?.root.topicsLearned[learnedIndex],
+			topic: me && me._type !== "Anonymous" ? me?.root.topicsLearned[learnedIndex] : undefined,
 			learningState: "learned"
 		}
 	}
