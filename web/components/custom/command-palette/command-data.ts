@@ -39,6 +39,7 @@ export const commandGroups: Record<string, CommandGroupType> = {
 	],
 	searchLinks: [],
 	searchPages: [],
+	topics: [],
 	changeTheme: [
 		{
 			items: [

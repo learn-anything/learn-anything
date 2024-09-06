@@ -10,12 +10,15 @@ import { CommandGroup } from "./command-items"
 import { commandGroups, CommandItemType } from "./command-data"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { useRouter } from "next/navigation"
-import { searchSafeRegExp, toTitleCase } from "@/lib/utils"
+import { ensureUrlProtocol, searchSafeRegExp, toTitleCase } from "@/lib/utils"
+import { GraphNode } from "@/components/routes/public/PublicHomeRoute"
+
+let graph_data_promise = import("@/components/routes/public/graph-data.json").then(a => a.default)
 
 type ActivePageType = keyof typeof commandGroups
 
 const filterItems = (items: CommandItemType[], searchRegex: RegExp) =>
-	items.filter(item => searchRegex.test(item.label))
+	items.filter(item => searchRegex.test(item.label)).slice(0, 6)
 
 export function CommandPalette() {
 	const { me } = useAccount({ root: { personalLinks: [], personalPages: [] } })
@@ -26,6 +29,8 @@ export function CommandPalette() {
 	const [open, setOpen] = React.useState(false)
 	const [key, setKey] = React.useState(0)
 	const { setTheme } = useTheme()
+
+	const raw_graph_data = React.use(graph_data_promise) as GraphNode[]
 
 	React.useEffect(() => {
 		const down = (e: KeyboardEvent) => {
@@ -73,6 +78,19 @@ export function CommandPalette() {
 		}))
 	}, [])
 
+	const topics = React.useMemo(
+		() => ({
+			heading: "Topics",
+			items: raw_graph_data.map(topic => ({
+				icon: "Circle" as const,
+				label: topic?.prettyName || "",
+				action: "NAVIGATE",
+				payload: `/${topic?.name}`
+			}))
+		}),
+		[raw_graph_data]
+	)
+
 	const personalLinks = React.useMemo(
 		() => ({
 			heading: "Personal Links",
@@ -80,7 +98,7 @@ export function CommandPalette() {
 				me?.root.personalLinks?.map(link => ({
 					icon: "Link" as const,
 					label: link?.title || "Untitled",
-					action: "NAVIGATE",
+					action: "OPEN_LINK",
 					payload: link?.url || "#"
 				})) || []
 		}),
@@ -107,7 +125,7 @@ export function CommandPalette() {
 		if (activePage === "home") {
 			if (!inputValue) return commandGroups.home
 
-			return [...allCommands, personalLinks, personalPages]
+			return [...allCommands, personalLinks, personalPages, topics]
 				.map(group => ({
 					heading: group.heading,
 					items: filterItems(group.items, searchRegex)
@@ -155,6 +173,10 @@ export function CommandPalette() {
 					break
 				case "NAVIGATE":
 					router.push(payload)
+					setOpen(false)
+					break
+				case "OPEN_LINK":
+					window.open(ensureUrlProtocol(payload), "_blank")
 					setOpen(false)
 					break
 				default:

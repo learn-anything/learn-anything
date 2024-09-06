@@ -10,7 +10,7 @@ let graph_data_promise = import("./graph-data.json").then(a => a.default)
 
 const ForceGraphClient = dynamic(() => import("./force-graph-client-lazy"), { ssr: false })
 
-interface GraphNode {
+export interface GraphNode {
 	name: string
 	prettyName: string
 	connectedTopics: string[]
