@@ -5,6 +5,8 @@ import dynamic from "next/dynamic"
 import { motion } from "framer-motion"
 import { Autocomplete } from "./Autocomplete"
 import { useRouter } from "next/navigation"
+import { cn } from "@/lib/utils"
+import { raleway } from "@/app/fonts"
 
 let graph_data_promise = import("./graph-data.json").then(a => a.default)
 
@@ -38,10 +40,13 @@ export function PublicHomeRoute() {
 					filter_query={filterQuery}
 				/>
 
-				<div className="absolute left-1/2 top-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2 transform max-sm:px-5">
+				<div className="absolute left-1/2 top-1/2 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 transform max-sm:px-5">
 					<motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
 						<motion.h1
-							className="mb-2 text-center text-3xl font-bold uppercase sm:mb-4 md:text-5xl"
+							className={cn(
+								"mb-2 text-center text-5xl font-bold tracking-tight sm:mb-4 md:text-7xl",
+								raleway.className
+							)}
 							initial={{ opacity: 0, y: -20 }}
 							animate={{ opacity: 1, y: 0 }}
 							transition={{ duration: 0.5, delay: 0.2 }}
