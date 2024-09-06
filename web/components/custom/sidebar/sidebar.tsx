@@ -78,7 +78,7 @@ const LogoAndSearch: React.FC = React.memo(() => {
 	return (
 		<div className="px-3">
 			<div className="mt-2 flex h-10 max-w-full items-center">
-				<Link href="/explore" className="px-2">
+				<Link href="/" className="px-2">
 					<Logo className="size-7" />
 				</Link>
 				<div className="flex min-w-2 grow flex-row" />

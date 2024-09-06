@@ -1,6 +1,5 @@
 import { SignedInClient } from "@/components/custom/clerk/signed-in-client"
 import { Sidebar } from "@/components/custom/sidebar/sidebar"
-import { PublicHomeRoute } from "@/components/routes/public/PublicHomeRoute"
 import { JazzClerkAuth, JazzProvider } from "@/lib/providers/jazz-provider"
 import { currentUser } from "@clerk/nextjs/server"
 import { CommandPalette } from "@/components/custom/command-palette/command-palette"
@@ -9,7 +8,7 @@ export default async function PageLayout({ children }: { children: React.ReactNo
 	const user = await currentUser()
 
 	if (!user) {
-		return <PublicHomeRoute />
+		return children
 	}
 
 	return (

@@ -14,7 +14,7 @@ export const LinkSection: React.FC<{ pathname: string }> = ({ pathname }) => {
 	})
 
 	const linkCount = me?.root.personalLinks?.length || 0
-	const isActive = pathname === "/"
+	const isActive = pathname === "/links"
 
 	if (!me) return null
 
@@ -39,7 +39,7 @@ const LinkSectionHeader: React.FC<LinkSectionHeaderProps> = ({ linkCount, isActi
 		)}
 	>
 		<Link
-			href="/"
+			href="/links"
 			className={cn(
 				"size-6 flex-1 items-center justify-start rounded-md px-2 py-1",
 				"focus-visible:outline-none focus-visible:ring-0",
@@ -78,7 +78,7 @@ interface ListItemProps {
 const ListItem: React.FC<ListItemProps> = ({ label, href, count, isActive }) => {
 	return (
 		<div className="group/reorder-page relative">
-			<div className="group/topic-link relative flex min-w-0 flex-1">
+			{/* <div className="group/topic-link relative flex min-w-0 flex-1">
 				<Link
 					href={href}
 					className={cn(
@@ -94,7 +94,7 @@ const ListItem: React.FC<ListItemProps> = ({ label, href, count, isActive }) => 
 				{count > 0 && (
 					<span className="absolute right-2 top-1/2 z-[1] -translate-y-1/2 rounded p-1 text-sm">{count}</span>
 				)}
-			</div>
+			</div> */}
 		</div>
 	)
 }
