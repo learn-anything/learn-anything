@@ -71,3 +71,5 @@
 		@apply bg-background text-foreground;
 	}
 }
+
+@import "./command-palette.css";
