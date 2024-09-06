@@ -10,7 +10,7 @@ import { CommandGroup } from "./command-items"
 import { commandGroups, CommandItemType } from "./command-data"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { useRouter } from "next/navigation"
-import { searchSafeRegExp } from "@/lib/utils"
+import { searchSafeRegExp, toTitleCase } from "@/lib/utils"
 
 type ActivePageType = keyof typeof commandGroups
 
@@ -68,7 +68,7 @@ export function CommandPalette() {
 
 	const allCommands = React.useMemo(() => {
 		return Object.entries(commandGroups).map(([key, value]) => ({
-			heading: key,
+			heading: toTitleCase(key),
 			items: value.flatMap(subgroup => subgroup.items)
 		}))
 	}, [])
