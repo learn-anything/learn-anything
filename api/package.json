@@ -14,7 +14,6 @@
 	"dependencies": {
 		"encore.dev": "^1.35.3"
 	},
-	"packageManager": "bun@1.0.27",
 	"optionalDependencies": {
 		"@rollup/rollup-linux-x64-gnu": "^4.13.0"
 	}
