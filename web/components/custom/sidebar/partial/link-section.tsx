@@ -3,11 +3,10 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
 import { LaIcon } from "@/components/custom/la-icon"
 import { PersonalLinkLists } from "@/lib/schema/personal-link"
 
-export const LinkSection: React.FC = () => {
+export const LinkSection: React.FC<{ pathname: string }> = ({ pathname }) => {
 	const { me } = useAccount({
 		root: {
 			personalLinks: []
@@ -15,12 +14,13 @@ export const LinkSection: React.FC = () => {
 	})
 
 	const linkCount = me?.root.personalLinks?.length || 0
+	const isActive = pathname === "/"
 
 	if (!me) return null
 
 	return (
 		<div className="group/pages flex flex-col gap-px py-2">
-			<LinkSectionHeader linkCount={linkCount} />
+			<LinkSectionHeader linkCount={linkCount} isActive={isActive} />
 			<List personalLinks={me.root.personalLinks} />
 		</div>
 	)
@@ -28,18 +28,22 @@ export const LinkSection: React.FC = () => {
 
 interface LinkSectionHeaderProps {
 	linkCount: number
+	isActive: boolean
 }
 
-const LinkSectionHeader: React.FC<LinkSectionHeaderProps> = ({ linkCount }) => (
+const LinkSectionHeader: React.FC<LinkSectionHeaderProps> = ({ linkCount, isActive }) => (
 	<div
-		className={cn("flex min-h-[30px] items-center gap-px rounded-md", "hover:bg-accent hover:text-accent-foreground")}
+		className={cn(
+			"flex min-h-[30px] items-center gap-px rounded-md",
+			isActive ? "bg-accent text-accent-foreground" : "hover:bg-accent hover:text-accent-foreground"
+		)}
 	>
 		<Link
 			href="/"
 			className={cn(
 				"size-6 flex-1 items-center justify-start rounded-md px-2 py-1",
 				"focus-visible:outline-none focus-visible:ring-0",
-				"hover:bg-accent hover:text-accent-foreground"
+				isActive ? "bg-accent text-accent-foreground" : "hover:bg-accent hover:text-accent-foreground"
 			)}
 		>
 			<p className="flex items-center text-xs font-medium">
@@ -83,7 +87,6 @@ const ListItem: React.FC<ListItemProps> = ({ label, href, count, isActive }) => 
 					)}
 				>
 					<div className="flex max-w-full flex-1 items-center gap-1.5 truncate text-sm">
-						<LaIcon name="Link" className="flex-shrink-0 opacity-60" />
 						<p className={cn("truncate opacity-95 group-hover/topic-link:opacity-100")}>{label}</p>
 					</div>
 				</Link>
