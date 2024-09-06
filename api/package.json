@@ -4,7 +4,6 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
-		"test": "vitest",
 		"dev": "encore run"
 	},
 	"devDependencies": {
