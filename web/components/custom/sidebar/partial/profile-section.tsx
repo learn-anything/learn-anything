@@ -1,7 +1,7 @@
+import { useAccount } from "@/lib/providers/jazz-provider"
 import { LaIcon } from "../../la-icon"
 import { useState } from "react"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+import { useAuth } from "@clerk/nextjs"
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -9,9 +9,8 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
-import { useAccount } from "@/lib/providers/jazz-provider"
+import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import Link from "next/link"
-import { useAuth } from "@clerk/nextjs"
 
 const MenuItem = ({
 	icon,
@@ -52,7 +51,7 @@ export const ProfileSection: React.FC = () => {
 	const { me } = useAccount({
 		profile: true
 	})
-	const { signOut } = useAuth()
+	const { signOut, isSignedIn } = useAuth()
 	const [menuOpen, setMenuOpen] = useState(false)
 
 	const closeMenu = () => setMenuOpen(false)
@@ -67,11 +66,16 @@ export const ProfileSection: React.FC = () => {
 								aria-label="Profile"
 								className="hover:bg-accent focus-visible:ring-ring hover:text-accent-foreground flex items-center gap-1.5 truncate rounded pl-1 pr-1.5 focus-visible:outline-none focus-visible:ring-1"
 							>
-								<Avatar className="size-6">
-									<AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-									{/* <AvatarFallback>CN</AvatarFallback> */}
-								</Avatar>
-								<span className="truncate text-left text-sm font-medium -tracking-wider">{me?.profile?.name}</span>
+								{isSignedIn ? (
+									<Avatar className="size-6">
+										<AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+									</Avatar>
+								) : (
+									<LaIcon name="User" />
+								)}
+								<span className="truncate text-left text-sm font-medium -tracking-wider">
+									{isSignedIn ? me?.profile?.name : "guest"}
+								</span>
 								<LaIcon
 									name="ChevronDown"
 									className={`size-4 shrink-0 transition-transform duration-300 ${menuOpen ? "rotate-180" : ""}`}
@@ -79,32 +83,33 @@ export const ProfileSection: React.FC = () => {
 							</button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent className="w-56" align="start" side="top">
-							<DropdownMenuItem>
-								<MenuItem icon="CircleUser" text="My profile" href="/profile" onClose={closeMenu} />
-							</DropdownMenuItem>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem>
-								<MenuItem icon="Settings" text="Settings" href="/settings" onClose={closeMenu} />
-							</DropdownMenuItem>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem>
-								<MenuItem icon="LogOut" text="Log out" onClick={signOut} onClose={closeMenu} />
-							</DropdownMenuItem>
+							{isSignedIn ? (
+								<>
+									<DropdownMenuItem>
+										<MenuItem icon="CircleUser" text="My profile" href="/profile" onClose={closeMenu} />
+									</DropdownMenuItem>
+									<DropdownMenuSeparator />
+									<DropdownMenuItem>
+										<MenuItem icon="LogOut" text="Log out" onClick={signOut} onClose={closeMenu} />
+									</DropdownMenuItem>
+									<DropdownMenuSeparator />
+									<DropdownMenuItem>
+										<MenuItem icon="CircleUser" text="Tauri" href="/tauri" onClose={closeMenu} />
+									</DropdownMenuItem>
+								</>
+							) : (
+								<DropdownMenuItem>
+									<MenuItem icon="LogIn" text="Sign in" href="/sign-in" onClose={closeMenu} />
+								</DropdownMenuItem>
+							)}
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
-				{/* <div className="flex min-w-2 grow flex-row"></div>
-				<div className="flex flex-row items-center gap-2">
-					<Button size="icon" variant="ghost" aria-label="Settings" className="size-7 p-0">
-						<LaIcon name="Settings" />
-					</Button>
-					<Link href="/">
-						<Button size="icon" variant="ghost" aria-label="Settings" className="size-7 p-0">
-							<LaIcon name="House" />
-						</Button>
-					</Link>
-				</div> */}
 			</div>
 		</div>
 	)
 }
+
+/* <DropdownMenuItem>
+								<MenuItem icon="Settings" text="Settings" href="/settings" onClose={closeMenu} />
+							</DropdownMenuItem> */

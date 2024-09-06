@@ -46,20 +46,32 @@ const SHOWS: Option<ShowOption>[] = [
 const pageSortAtom = atomWithStorage<SortOption>("pageSort", "title")
 const pageShowAtom = atomWithStorage<ShowOption>("pageShow", 5)
 
-export const PageSection: React.FC = () => {
-	const { me } = useAccount({ root: { personalPages: [] } })
+export const PageSection: React.FC<{ pathname?: string }> = ({ pathname }) => {
+	const { me } = useAccount({
+		root: {
+			personalPages: []
+		}
+	})
+
+	const [sort, setSort] = useAtom(pageSortAtom)
+	const [show, setShow] = useAtom(pageShowAtom)
+
 	const pageCount = me?.root.personalPages?.length || 0
+	const isActive = pathname ? pathname.startsWith("/pages") : false
+
+	if (!me) return null
 
 	return (
 		<div className="group/pages flex flex-col gap-px py-2">
-			<PageSectionHeader pageCount={pageCount} />
-			{me?.root.personalPages && <PageList personalPages={me.root.personalPages} />}
+			<PageSectionHeader pageCount={pageCount} isActive={isActive} />
+			<PageList personalPages={me.root.personalPages} sort={sort} show={show} />
 		</div>
 	)
 }
 
 interface PageSectionHeaderProps {
 	pageCount: number
+	isActive: boolean
 }
 
 const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({ pageCount }) => (
@@ -121,6 +133,8 @@ const NewPageButton: React.FC = () => {
 
 interface PageListProps {
 	personalPages: PersonalPageLists
+	sort: SortOption
+	show: ShowOption
 }
 
 const PageList: React.FC<PageListProps> = ({ personalPages }) => {

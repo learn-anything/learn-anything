@@ -13,7 +13,7 @@ export const NotesSection: React.FC = () => {
 			control={form.control}
 			name="notes"
 			render={({ field }) => (
-				<FormItem className="relative space-y-0">
+				<FormItem className="relative grow space-y-0">
 					<FormLabel className="sr-only">Note</FormLabel>
 					<FormControl>
 						<>

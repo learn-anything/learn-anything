@@ -1,10 +1,10 @@
 "use client"
 
 import { Sidebar } from "@/components/custom/sidebar/sidebar"
-import { PublicHomeRoute } from "@/components/routes/PublicHomeRoute"
-import { CommandPalette } from "@/components/ui/CommandPalette"
+import { CommandPalette } from "@/components/custom/command-palette/command-palette"
 import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
 import { usePathname } from "next/navigation"
+import PublicHomeRoute from "@/components/routes/public/PublicHomeRoute"
 
 export default function PageLayout({ children }: { children: React.ReactNode }) {
 	const { me } = useAccountOrGuest()

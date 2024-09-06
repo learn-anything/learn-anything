@@ -1,0 +1,11 @@
+[workspace]
+members = ["app"]
+resolver = "2"
+
+[workspace.package]
+authors = ["Alice Carroll <learn-anything@alice-carroll.pet>"]
+edition = "2021"
+license-file = "license"
+repository = "https://github.com/learn-anything/learn-anything.xyz"
+rust-version = "1.80"
+version = "0.1.0"

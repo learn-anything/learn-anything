@@ -12,12 +12,13 @@ import { UrlInput } from "./url-input"
 import { UrlBadge } from "./url-badge"
 import { TitleInput } from "./title-input"
 import { NotesSection } from "./notes-section"
-import { TopicSelector } from "./topic-selector"
 import { DescriptionInput } from "./description-input"
 import { atom, useAtom } from "jotai"
-import { linkLearningStateSelectorAtom, linkTopicSelectorAtom } from "@/store/link"
+import { linkLearningStateSelectorAtom } from "@/store/link"
 import { FormField, FormItem, FormLabel } from "@/components/ui/form"
 import { LearningStateSelector } from "@/components/custom/learning-state-selector"
+import { TopicSelector, topicSelectorAtom } from "@/components/custom/topic-selector"
+import { JAZZ_GLOBAL_GROUP_ID } from "@/lib/constants"
 
 export const globalLinkFormExceptionRefsAtom = atom<React.RefObject<HTMLElement>[]>([])
 
@@ -47,8 +48,7 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 	onClose,
 	exceptionsRefs = []
 }) => {
-	const [selectedTopic, setSelectedTopic] = React.useState<Topic | undefined>()
-	const [istopicSelectorOpen] = useAtom(linkTopicSelectorAtom)
+	const [istopicSelectorOpen] = useAtom(topicSelectorAtom)
 	const [islearningStateSelectorOpen] = useAtom(linkLearningStateSelectorAtom)
 	const [globalExceptionRefs] = useAtom(globalLinkFormExceptionRefsAtom)
 
@@ -64,6 +64,14 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 		defaultValues,
 		mode: "all"
 	})
+
+	const topicName = form.watch("topic")
+	const findTopic = React.useMemo(
+		() => me && Topic.findUnique({ topicName }, JAZZ_GLOBAL_GROUP_ID, me),
+		[topicName, me]
+	)
+
+	const selectedTopic = useCoState(Topic, findTopic, {})
 
 	const allExceptionRefs = React.useMemo(
 		() => [...exceptionsRefs, ...globalExceptionRefs],
@@ -101,10 +109,11 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 				description: selectedLink.description,
 				completed: selectedLink.completed,
 				notes: selectedLink.notes,
-				learningState: selectedLink.learningState
+				learningState: selectedLink.learningState,
+				topic: selectedLink.topic?.name
 			})
 		}
-	}, [selectedLink, form])
+	}, [selectedLink, selectedLink?.topic, form])
 
 	const fetchMetadata = async (url: string) => {
 		setIsFetching(true)
@@ -135,7 +144,7 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 	}
 
 	const onSubmit = (values: LinkFormValues) => {
-		if (isFetching) return
+		if (isFetching || !me) return
 
 		try {
 			const personalLinks = me.root?.personalLinks?.toJSON() || []
@@ -214,7 +223,22 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 											</FormItem>
 										)}
 									/>
-									<TopicSelector onSelect={topic => setSelectedTopic(topic)} />
+
+									<FormField
+										control={form.control}
+										name="topic"
+										render={({ field }) => (
+											<FormItem className="space-y-0">
+												<FormLabel className="sr-only">Topic</FormLabel>
+												<TopicSelector
+													{...field}
+													renderSelectedText={() => (
+														<span className="truncate">{selectedTopic?.prettyName || "Select a topic"}</span>
+													)}
+												/>
+											</FormItem>
+										)}
+									/>
 								</div>
 							</div>
 
@@ -222,17 +246,7 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 							<UrlBadge urlFetched={urlFetched} handleResetUrl={handleResetUrl} />
 						</div>
 
-						<div
-							className="flex flex-row items-center justify-between gap-2 rounded-b-md border-t px-3 py-2"
-							onClick={e => {
-								if (!(e.target as HTMLElement).closest("button")) {
-									const notesInput = e.currentTarget.querySelector("input")
-									if (notesInput) {
-										notesInput.focus()
-									}
-								}
-							}}
-						>
+						<div className="flex flex-row items-center justify-between gap-2 rounded-b-md border-t px-3 py-2">
 							<NotesSection />
 
 							{isFetching ? (

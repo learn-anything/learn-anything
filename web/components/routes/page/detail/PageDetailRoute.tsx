@@ -1,10 +1,8 @@
 "use client"
 
-import * as React from "react"
-import { useAtom } from "jotai"
+import React, { useCallback, useRef, useEffect } from "react"
 import { ID } from "jazz-tools"
-import { PersonalPage, Topic } from "@/lib/schema"
-import { useCallback, useRef, useEffect, useState } from "react"
+import { PersonalPage } from "@/lib/schema"
 import { LAEditor, LAEditorRef } from "@/components/la-editor"
 import { Content, EditorContent, useEditor } from "@tiptap/react"
 import { StarterKit } from "@/components/la-editor/extensions/starter-kit"
@@ -13,39 +11,101 @@ import { useAccount, useCoState } from "@/lib/providers/jazz-provider"
 import { EditorView } from "@tiptap/pm/view"
 import { Editor } from "@tiptap/core"
 import { generateUniqueSlug } from "@/lib/utils"
+import { FocusClasses } from "@tiptap/extension-focus"
+import { DetailPageHeader } from "./header"
+import { useMedia } from "react-use"
+import { TopicSelector } from "@/components/custom/topic-selector"
 import { Button } from "@/components/ui/button"
 import { LaIcon } from "@/components/custom/la-icon"
-import { pageTopicSelectorAtom } from "@/store/page"
-import { TopicSelector } from "@/components/routes/link/partials/form/topic-selector"
-import { FocusClasses } from "@tiptap/extension-focus"
-import DeletePageModal from "@/components/custom/delete-modal"
+import { useConfirm } from "@omit/react-confirm-dialog"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 const TITLE_PLACEHOLDER = "Untitled"
 
 export function PageDetailRoute({ pageId }: { pageId: string }) {
+	const { me } = useAccount({ root: { personalLinks: [] } })
+	const isMobile = useMedia("(max-width: 770px)")
 	const page = useCoState(PersonalPage, pageId as ID<PersonalPage>)
+	const router = useRouter()
+	const confirm = useConfirm()
 
-	if (!page) return <div>Loading...</div>
+	const handleDelete = async () => {
+		const result = await confirm({
+			title: "Delete page",
+			description: "Are you sure you want to delete this page?",
+			confirmText: "Delete",
+			cancelText: "Cancel",
+			cancelButton: { variant: "outline" },
+			confirmButton: { variant: "destructive" }
+		})
+
+		if (result && me?.root.personalPages) {
+			try {
+				const index = me.root.personalPages.findIndex(item => item?.id === pageId)
+				if (index === -1) {
+					toast.error("Page not found.")
+					return
+				}
+
+				me.root.personalPages.splice(index, 1)
+				toast.success("Page deleted.", { position: "bottom-right" })
+				router.replace("/")
+			} catch (error) {
+				console.error("Delete operation fail", { error })
+			}
+		}
+	}
+
+	if (!page) return null
 
 	return (
-		<div className="flex flex-row">
+		<div className="absolute inset-0 flex flex-row overflow-hidden">
 			<div className="flex h-full w-full">
 				<div className="relative flex min-w-0 grow basis-[760px] flex-col">
+					<DetailPageHeader page={page} handleDelete={handleDelete} isMobile={isMobile} />
 					<DetailPageForm page={page} />
 				</div>
+				{!isMobile && <SidebarActions page={page} handleDelete={handleDelete} />}
 			</div>
 		</div>
 	)
 }
 
-export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
+const SidebarActions = ({ page, handleDelete }: { page: PersonalPage; handleDelete: () => void }) => (
+	<div className="relative min-w-56 max-w-72 border-l">
+		<div className="flex">
+			<div className="flex h-10 flex-auto flex-row items-center justify-between px-5">
+				<span className="text-left text-[13px] font-medium">Page actions</span>
+			</div>
+			<div className="absolute bottom-0 left-0 right-0 top-10 space-y-3 overflow-y-auto px-4 py-1.5">
+				<div className="flex flex-row">
+					<TopicSelector
+						value={page.topic?.name}
+						onTopicChange={topic => {
+							page.topic = topic
+							page.updatedAt = new Date()
+						}}
+						variant="ghost"
+						className="-ml-1.5"
+						renderSelectedText={() => <span className="truncate">{page.topic?.prettyName || "Select a topic"}</span>}
+					/>
+				</div>
+				<div className="flex flex-row">
+					<Button size="sm" variant="ghost" onClick={handleDelete} className="-ml-1.5">
+						<LaIcon name="Trash" className="mr-2 size-3.5" />
+						<span className="text-sm">Delete</span>
+					</Button>
+				</div>
+			</div>
+		</div>
+	</div>
+)
+
+const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 	const { me } = useAccount()
 	const titleEditorRef = useRef<Editor | null>(null)
 	const contentEditorRef = useRef<LAEditorRef>(null)
-	const [, setTopicSelectorOpen] = useAtom(pageTopicSelectorAtom)
-	const [, setSelectedPageTopic] = useState<Topic | null>(page.topic || null)
-	const [deleteModalOpen, setDeleteModalOpen] = useState(false)
-
 	const isTitleInitialMount = useRef(true)
 	const isContentInitialMount = useRef(true)
 
@@ -54,8 +114,6 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 			isContentInitialMount.current = false
 			return
 		}
-
-		console.log("Updating page content")
 		model.content = content
 		model.updatedAt = new Date()
 	}
@@ -66,35 +124,46 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 			return
 		}
 
-		/*
-		 * The logic changed, but we keep this commented code for reference
-		 */
-		// const newTitle = editor.getText().trim()
-
-		// if (!newTitle) {
-		// toast.error("Update failed", {
-		// 	description: "Title must be longer than or equal to 1 character"
-		// })
-		// 	editor.commands.setContent(page.title || "")
-		// 	return
-		// }
-
-		// if (newTitle === page.title) return
-
-		console.log("Updating page title")
-		const personalPages = me.root?.personalPages?.toJSON() || []
-		const slug = generateUniqueSlug(personalPages, page.slug || "")
-
-		const trimmedTitle = editor.getText().trim()
-		page.title = trimmedTitle
-		page.slug = slug
-		page.updatedAt = new Date()
-
-		editor.commands.setContent(trimmedTitle)
+		const newTitle = editor.getText()
+		if (newTitle !== page.title) {
+			const personalPages = me?.root?.personalPages?.toJSON() || []
+			const slug = generateUniqueSlug(personalPages, page.slug || "")
+			page.title = newTitle
+			page.slug = slug
+			page.updatedAt = new Date()
+		}
 	}
 
 	const handleTitleKeyDown = useCallback((view: EditorView, event: KeyboardEvent) => {
 		const editor = titleEditorRef.current
+		if (!editor) return false
+
+		const { state } = editor
+		const { selection } = state
+		const { $anchor } = selection
+
+		switch (event.key) {
+			case "ArrowRight":
+			case "ArrowDown":
+				if ($anchor.pos === state.doc.content.size - 1) {
+					event.preventDefault()
+					contentEditorRef.current?.editor?.commands.focus("start")
+					return true
+				}
+				break
+			case "Enter":
+				if (!event.shiftKey) {
+					event.preventDefault()
+					contentEditorRef.current?.editor?.commands.focus("start")
+					return true
+				}
+				break
+		}
+		return false
+	}, [])
+
+	const handleContentKeyDown = useCallback((view: EditorView, event: KeyboardEvent) => {
+		const editor = contentEditorRef.current?.editor
 		if (!editor) return false
 
 		const { state } = editor
@@ -108,21 +177,6 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 		}
 		return false
 	}, [])
-
-	const handleContentKeyDown = useCallback((view: EditorView, event: KeyboardEvent) => {
-		const editor = contentEditorRef.current?.editor
-		if (!editor) return false
-		const { state } = editor
-		const { selection } = state
-		const { $anchor } = selection
-		return false
-	}, [])
-
-	const confirmDelete = (page: PersonalPage) => {
-		console.log("Deleting page:", page.id)
-		setDeleteModalOpen(false)
-		//TODO: add delete logic
-	}
 
 	const titleEditor = useEditor({
 		immediatelyRender: false,
@@ -139,10 +193,7 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 				strike: false,
 				focus: false,
 				gapcursor: false,
-				history: false,
-				placeholder: {
-					placeholder: TITLE_PLACEHOLDER
-				}
+				placeholder: { placeholder: TITLE_PLACEHOLDER }
 			})
 		],
 		editorProps: {
@@ -152,7 +203,8 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 				"aria-readonly": "false",
 				"aria-multiline": "false",
 				"aria-label": TITLE_PLACEHOLDER,
-				translate: "no"
+				translate: "no",
+				class: "focus:outline-none"
 			},
 			handleKeyDown: handleTitleKeyDown
 		},
@@ -160,9 +212,7 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 			if (page.title) editor.commands.setContent(`<p>${page.title}</p>`)
 		},
 		onBlur: ({ editor }) => handleUpdateTitle(editor),
-		onUpdate: ({ editor }) => {
-			handleUpdateTitle(editor)
-		}
+		onUpdate: ({ editor }) => handleUpdateTitle(editor)
 	})
 
 	useEffect(() => {
@@ -177,37 +227,20 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 	}, [])
 
 	return (
-		<div tabIndex={0} className="relative flex grow flex-col overflow-y-auto">
-			<div className="relative mx-auto flex h-full w-[calc(100%-40px)] shrink-0 grow flex-col sm:w-[calc(100%-80px)]">
+		<div className="relative flex grow flex-col overflow-y-auto [scrollbar-gutter:stable]">
+			<div className="relative mx-auto flex h-full w-[calc(100%-80px)] shrink-0 grow flex-col max-lg:w-[calc(100%-40px)] max-lg:max-w-[unset]">
 				<form className="flex shrink-0 flex-col">
-					<div className="mb-2 mt-8 flex flex-row justify-between py-1.5">
+					<div className="mb-2 mt-8 py-1.5">
 						<EditorContent
 							editor={titleEditor}
 							className="la-editor no-command grow cursor-text select-text text-2xl font-semibold leading-[calc(1.33333)] tracking-[-0.00625rem]"
 						/>
-						<div className="items-center space-x-4">
-							<TopicSelector
-								onSelect={topic => {
-									page.topic = topic
-									setSelectedPageTopic(topic)
-									setTopicSelectorOpen(false)
-								}}
-							/>
-							<Button
-								type="button"
-								variant="secondary"
-								className="text-foreground bg-truncat"
-								onClick={() => setDeleteModalOpen(true)}
-							>
-								<LaIcon name="Trash" className="h-4 w-4" />
-							</Button>
-						</div>
 					</div>
 					<div className="flex flex-auto flex-col">
 						<div className="relative flex h-full max-w-full grow flex-col items-stretch p-0">
 							<LAEditor
 								ref={contentEditorRef}
-								editorClassName="-mx-3.5 px-3.5 py-2.5 flex-auto"
+								editorClassName="-mx-3.5 px-3.5 py-2.5 flex-auto focus:outline-none"
 								value={page.content}
 								placeholder="Add content..."
 								output="json"
@@ -221,15 +254,6 @@ export const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 					</div>
 				</form>
 			</div>
-
-			<DeletePageModal
-				isOpen={deleteModalOpen}
-				onClose={() => setDeleteModalOpen(false)}
-				onConfirm={() => {
-					confirmDelete(page)
-				}}
-				title={page.title || ""}
-			/>
 		</div>
 	)
 }

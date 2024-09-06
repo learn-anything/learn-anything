@@ -10,6 +10,7 @@ import { Logo } from "@/components/custom/logo"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { isCollapseAtom } from "@/store/sidebar"
+import { LinkSection } from "./partial/link-section"
 import { PageSection } from "./partial/page-section"
 import { TopicSection } from "./partial/topic-section"
 import { ProfileSection } from "./partial/profile-section"
@@ -111,6 +112,7 @@ LogoAndSearch.displayName = "LogoAndSearch"
 
 const SidebarContent: React.FC = React.memo(() => {
 	const { me } = useAccountOrGuest()
+	const pathname = usePathname()
 
 	return (
 		<>
@@ -120,10 +122,12 @@ const SidebarContent: React.FC = React.memo(() => {
 				</div>
 				<div tabIndex={-1} className="relative mb-0.5 mt-1.5 flex grow flex-col overflow-y-auto rounded-md px-3">
 					<div className="h-2 shrink-0" />
-					{me._type === "Account" && <PageSection />}
-					{me._type === "Account" && <TopicSection />}
+					{me._type === "Account" && <LinkSection pathname={pathname} />}
+					{me._type === "Account" && <PageSection pathname={pathname} />}
+					{me._type === "Account" && <TopicSection pathname={pathname} />}
 				</div>
 			</nav>
+
 			{me._type === "Account" ? (
 				<ProfileSection />
 			) : (

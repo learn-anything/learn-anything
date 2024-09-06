@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { LinkItem } from "./link-item"
 import { LaAccount, PersonalLinkLists, Section as SectionSchema, Topic, UserRoot } from "@/lib/schema"
 import { Skeleton } from "@/components/ui/skeleton"
-import { Loader2 } from "lucide-react"
+import { LaIcon } from "@/components/custom/la-icon"
 
 interface SectionProps {
 	topic: Topic
@@ -13,15 +13,8 @@ interface SectionProps {
 	setActiveIndex: (index: number) => void
 }
 
-export function Section({
-	topic,
-	section,
-	activeIndex,
-	setActiveIndex,
-	startIndex,
-	linkRefs,
-}: SectionProps) {
-	const [nLinksToLoad, setNLinksToLoad] = useState(10);
+export function Section({ topic, section, activeIndex, setActiveIndex, startIndex, linkRefs }: SectionProps) {
+	const [nLinksToLoad, setNLinksToLoad] = useState(10)
 
 	const linksToLoad = useMemo(() => {
 		return section.links?.slice(0, nLinksToLoad)
@@ -35,23 +28,22 @@ export function Section({
 			</div>
 
 			<div className="flex flex-col gap-px py-2">
-				{linksToLoad?.map(
-					(link, index) =>
-						link?.url ? (
-							<LinkItem
-								key={index}
-								topic={topic}
-								link={link}
-								isActive={activeIndex === startIndex + index}
-								index={startIndex + index}
-								setActiveIndex={setActiveIndex}
-								ref={el => {
-									linkRefs.current[startIndex + index] = el
-								}}
-							/>
-						) : (
-							<Skeleton key={index} className="h-14 xl:h-11 w-full" />
-						)
+				{linksToLoad?.map((link, index) =>
+					link?.url ? (
+						<LinkItem
+							key={index}
+							topic={topic}
+							link={link}
+							isActive={activeIndex === startIndex + index}
+							index={startIndex + index}
+							setActiveIndex={setActiveIndex}
+							ref={el => {
+								linkRefs.current[startIndex + index] = el
+							}}
+						/>
+					) : (
+						<Skeleton key={index} className="h-14 w-full xl:h-11" />
+					)
 				)}
 				{section.links?.length && section.links?.length > nLinksToLoad && (
 					<LoadMoreSpinner onLoadMore={() => setNLinksToLoad(n => n + 10)} />
@@ -78,23 +70,25 @@ const LoadMoreSpinner = ({ onLoadMore }: { onLoadMore: () => void }) => {
 		const observer = new IntersectionObserver(handleIntersection, {
 			root: null,
 			rootMargin: "0px",
-			threshold: 1.0,
+			threshold: 1.0
 		})
 
-		if (spinnerRef.current) {
-			observer.observe(spinnerRef.current)
+		const currentSpinnerRef = spinnerRef.current
+
+		if (currentSpinnerRef) {
+			observer.observe(currentSpinnerRef)
 		}
 
 		return () => {
-			if (spinnerRef.current) {
-				observer.unobserve(spinnerRef.current)
+			if (currentSpinnerRef) {
+				observer.unobserve(currentSpinnerRef)
 			}
 		}
 	}, [handleIntersection])
 
 	return (
 		<div ref={spinnerRef} className="flex justify-center py-4">
-			<Loader2 className="h-6 w-6 animate-spin" />
+			<LaIcon name="Loader" className="size-6 animate-spin" />
 		</div>
 	)
 }

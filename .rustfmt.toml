@@ -1,0 +1,22 @@
+#:schema https://json.schemastore.org/rustfmt.json
+edition = "2021"
+format_code_in_doc_comments = true
+format_macro_bodies = true
+format_macro_matchers = true
+format_strings = true
+group_imports = "StdExternalCrate"
+hex_literal_case = "Upper"
+imports_granularity = "Crate"
+imports_layout = "HorizontalVertical"
+match_arm_blocks = true
+match_block_trailing_comma = true
+reorder_impl_items = true
+unstable_features = true
+use_field_init_shorthand = true
+use_small_heuristics = "Max"
+use_try_shorthand = true
+wrap_comments = true
+
+hard_tabs = true
+max_width = 120
+newline_style = "Unix"

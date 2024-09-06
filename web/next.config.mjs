@@ -5,7 +5,6 @@ const isProd = process.env.NODE_ENV === "production"
 const internalHost = process.env.TAURI_DEV_HOST || "localhost"
 const isIgnoreBuild = process.env.IGNORE_BUILD_ERRORS === "true"
 
-console.log(isIgnoreBuild)
 const ignoreBuild = {
 	typescript: {
 		ignoreBuildErrors: true
@@ -27,7 +26,7 @@ const commonConfig = {
 
 const tauriConfig = {
 	...commonConfig,
-	output: "export",
+	// output: "export",
 	images: {
 		...commonConfig.images,
 		unoptimized: true

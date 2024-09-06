@@ -27,7 +27,8 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 		learningState: LearningStateValue
 	} | null = null
 
-	const wantToLearnIndex = me?._type === "Anonymous" ? -1 : me?.root.topicsWantToLearn.findIndex(t => t?.id === topic.id) ?? -1
+	const wantToLearnIndex =
+		me?._type === "Anonymous" ? -1 : (me?.root.topicsWantToLearn.findIndex(t => t?.id === topic.id) ?? -1)
 	if (wantToLearnIndex !== -1) {
 		p = {
 			index: wantToLearnIndex,
@@ -37,7 +38,8 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 		}
 	}
 
-	const learningIndex = me?._type === "Anonymous" ? -1 : me?.root.topicsLearning.findIndex(t => t?.id === topic.id) ?? -1
+	const learningIndex =
+		me?._type === "Anonymous" ? -1 : (me?.root.topicsLearning.findIndex(t => t?.id === topic.id) ?? -1)
 	if (learningIndex !== -1) {
 		p = {
 			index: learningIndex,
@@ -46,7 +48,8 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 		}
 	}
 
-	const learnedIndex = me?._type === "Anonymous" ? -1 : me?.root.topicsLearned.findIndex(t => t?.id === topic.id) ?? -1
+	const learnedIndex =
+		me?._type === "Anonymous" ? -1 : (me?.root.topicsLearned.findIndex(t => t?.id === topic.id) ?? -1)
 	if (learnedIndex !== -1) {
 		p = {
 			index: learnedIndex,

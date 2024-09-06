@@ -1,12 +1,11 @@
 "use client"
 
-import React, { useRef } from "react"
+import React, { useMemo, useRef } from "react"
 import { TopicDetailHeader } from "./Header"
 import { TopicSections } from "./partials/topic-sections"
-import { useLinkNavigation } from "./use-link-navigation"
-import { useTopicData } from "@/hooks/use-topic-data"
 import { atom } from "jotai"
 import { useAccount, useAccountOrGuest } from "@/lib/providers/jazz-provider"
+import { useTopicData } from "@/hooks/use-topic-data"
 
 interface TopicDetailRouteProps {
 	topicName: string

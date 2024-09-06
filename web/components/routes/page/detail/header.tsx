@@ -1,25 +1,43 @@
-"use client"
-
-import * as React from "react"
+import React from "react"
 import { ContentHeader, SidebarToggleButton } from "@/components/custom/content-header"
-import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb"
 import { PersonalPage } from "@/lib/schema/personal-page"
-import { ID } from "jazz-tools"
+import { TopicSelector } from "@/components/custom/topic-selector"
+import { Button } from "@/components/ui/button"
+import { LaIcon } from "@/components/custom/la-icon"
 
-export const DetailPageHeader = ({ pageId }: { pageId: ID<PersonalPage> }) => {
+interface DetailPageHeaderProps {
+	page: PersonalPage
+	handleDelete: () => void
+	isMobile: boolean
+}
+
+export const DetailPageHeader: React.FC<DetailPageHeaderProps> = ({ page, handleDelete, isMobile }) => {
+	if (!isMobile) return null
+
 	return (
-		<ContentHeader>
-			<div className="flex min-w-0 gap-2">
-				<SidebarToggleButton />
+		<>
+			<ContentHeader className="lg:min-h-0">
+				<div className="flex min-w-0 gap-2">
+					<SidebarToggleButton />
+				</div>
+			</ContentHeader>
 
-				<Breadcrumb className="flex flex-row items-center">
-					<BreadcrumbList className="sm:gap-2">
-						<BreadcrumbItem>
-							<BreadcrumbPage className="text-foreground font-medium">Pages</BreadcrumbPage>
-						</BreadcrumbItem>
-					</BreadcrumbList>
-				</Breadcrumb>
+			<div className="flex flex-row items-start gap-1.5 border-b px-6 py-2 max-lg:pl-4">
+				<TopicSelector
+					value={page.topic?.name}
+					onTopicChange={topic => {
+						page.topic = topic
+						page.updatedAt = new Date()
+					}}
+					align="start"
+					variant="outline"
+					renderSelectedText={() => <span className="truncate">{page.topic?.prettyName || "Select a topic"}</span>}
+				/>
+				<Button size="sm" variant="outline" onClick={handleDelete}>
+					<LaIcon name="Trash" className="mr-2 size-3.5" />
+					Delete
+				</Button>
 			</div>
-		</ContentHeader>
+		</>
 	)
 }
