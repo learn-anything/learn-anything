@@ -2,6 +2,7 @@ import { api, APIError } from "encore.dev/api"
 // import { startWorker } from "jazz-nodejs"
 // import { ID } from "jazz-tools"
 import { secret } from "encore.dev/config"
+import log from "encore.dev/log"
 
 const jazzWorkerAccountId = secret("jazzWorkerAccountId")
 const jazzWorkerSecret = secret("jazzWorkerSecret")
@@ -11,6 +12,7 @@ export const testRoute = api(
 	{ expose: true, method: "GET", path: "/test" },
 	async ({}: {}): Promise<void> => {
 		console.log(jazzPublicGlobalGroup(), "group")
+		log.info("better logs from encore")
 	}
 )
 
