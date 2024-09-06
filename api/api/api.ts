@@ -1,6 +1,6 @@
 import { api, APIError } from "encore.dev/api"
-import { startWorker } from "jazz-nodejs"
-import { ID } from "jazz-tools"
+// import { startWorker } from "jazz-nodejs"
+// import { ID } from "jazz-tools"
 
 const JAZZ_WORKER_ACCOUNT_ID = process.env.JAZZ_WORKER_ACCOUNT_ID
 const JAZZ_WORKER_SECRET = process.env.JAZZ_WORKER_SECRET
@@ -20,10 +20,10 @@ export const getTopic = api(
 			url: string
 		}[]
 	}> => {
-		const { worker } = await startWorker({
-			accountID: "co_zhvp7ryXJzDvQagX61F6RCZFJB9",
-			accountSecret: JAZZ_WORKER_SECRET
-		})
+		// const { worker } = await startWorker({
+		// 	accountID: "co_zhvp7ryXJzDvQagX61F6RCZFJB9",
+		// 	accountSecret: JAZZ_WORKER_SECRET
+		// })
 
 		// TODO: how to get the import from outside this package?
 		// const globalGroupId = process.env.JAZZ_PUBLIC_GLOBAL_GROUP as ID<any>

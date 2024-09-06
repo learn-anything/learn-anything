@@ -10,8 +10,7 @@
 		"app:build": "bun tauri build -b dmg -v"
 	},
 	"workspaces": [
-		"web",
-		"api"
+		"web"
 	],
 	"dependencies": {
 		"@tauri-apps/cli": "^2.0.0-rc.11",

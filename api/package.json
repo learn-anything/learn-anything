@@ -12,9 +12,9 @@
 		"vitest": "^1.5.0"
 	},
 	"dependencies": {
-		"encore.dev": "^1.35.3",
-		"jazz-nodejs": "^0.7.34"
+		"encore.dev": "^1.35.3"
 	},
+	"packageManager": "bun@1.0.27",
 	"optionalDependencies": {
 		"@rollup/rollup-linux-x64-gnu": "^4.13.0"
 	}

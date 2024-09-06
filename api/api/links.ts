@@ -2,7 +2,7 @@
 // it is responsible for adding and getting links into LA from API
 
 import { api, APIError } from "encore.dev/api"
-import { startWorker } from "jazz-nodejs"
+// import { startWorker } from "jazz-nodejs"
 
 const JAZZ_WORKER_SECRET = process.env.JAZZ_WORKER_SECRET
 
