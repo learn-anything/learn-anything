@@ -1,21 +1,17 @@
 "use client"
 
 import * as React from "react"
-import { Command } from "cmdk"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
+import { Command } from "cmdk"
 import { Dialog, DialogPortal, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
-import { useTheme } from "next-themes"
-import { toast } from "sonner"
 import { CommandGroup } from "./command-items"
-import { commandGroups, CommandItemType } from "./command-data"
+import { CommandAction, CommandItemType, createCommandGroups } from "./command-data"
 import { useAccount } from "@/lib/providers/jazz-provider"
-import { useRouter } from "next/navigation"
-import { ensureUrlProtocol, searchSafeRegExp, toTitleCase } from "@/lib/utils"
+import { searchSafeRegExp, toTitleCase } from "@/lib/utils"
 import { GraphNode } from "@/components/routes/public/PublicHomeRoute"
+import { useCommandActions } from "./hooks/use-command-actions"
 
 let graph_data_promise = import("@/components/routes/public/graph-data.json").then(a => a.default)
-
-type ActivePageType = keyof typeof commandGroups
 
 const filterItems = (items: CommandItemType[], searchRegex: RegExp) =>
 	items.filter(item => searchRegex.test(item.label)).slice(0, 6)
@@ -23,12 +19,12 @@ const filterItems = (items: CommandItemType[], searchRegex: RegExp) =>
 export function CommandPalette() {
 	const { me } = useAccount({ root: { personalLinks: [], personalPages: [] } })
 	const dialogRef = React.useRef<HTMLDivElement | null>(null)
-	const router = useRouter()
 	const [inputValue, setInputValue] = React.useState("")
-	const [activePage, setActivePage] = React.useState<ActivePageType>("home")
+	const [activePage, setActivePage] = React.useState("home")
 	const [open, setOpen] = React.useState(false)
-	const [key, setKey] = React.useState(0)
-	const { setTheme } = useTheme()
+
+	const actions = useCommandActions()
+	const commandGroups = React.useMemo(() => me && createCommandGroups(actions, me), [actions, me])
 
 	const raw_graph_data = React.use(graph_data_promise) as GraphNode[]
 
@@ -44,6 +40,17 @@ export function CommandPalette() {
 		return () => document.removeEventListener("keydown", down)
 	}, [])
 
+	const bounce = React.useCallback(() => {
+		if (dialogRef.current) {
+			dialogRef.current.style.transform = "scale(0.99) translateX(-50%)"
+			setTimeout(() => {
+				if (dialogRef.current) {
+					dialogRef.current.style.transform = ""
+				}
+			}, 100)
+		}
+	}, [])
+
 	const handleKeyDown = React.useCallback(
 		(e: React.KeyboardEvent) => {
 			if (e.key === "Enter") {
@@ -57,26 +64,17 @@ export function CommandPalette() {
 				bounce()
 			}
 		},
-		[activePage, inputValue]
+		[activePage, inputValue, bounce]
 	)
 
-	const bounce = React.useCallback(() => {
-		if (dialogRef.current) {
-			dialogRef.current.style.transform = "scale(0.99) translateX(-50%)"
-			setTimeout(() => {
-				if (dialogRef.current) {
-					dialogRef.current.style.transform = ""
-				}
-			}, 100)
-		}
-	}, [])
-
 	const allCommands = React.useMemo(() => {
+		if (!commandGroups) return []
+
 		return Object.entries(commandGroups).map(([key, value]) => ({
 			heading: toTitleCase(key),
 			items: value.flatMap(subgroup => subgroup.items)
 		}))
-	}, [])
+	}, [commandGroups])
 
 	const topics = React.useMemo(
 		() => ({
@@ -84,11 +82,10 @@ export function CommandPalette() {
 			items: raw_graph_data.map(topic => ({
 				icon: "Circle" as const,
 				label: topic?.prettyName || "",
-				action: "NAVIGATE",
-				payload: `/${topic?.name}`
+				action: () => actions.navigateTo(`/${topic?.name}`)
 			}))
 		}),
-		[raw_graph_data]
+		[raw_graph_data, actions]
 	)
 
 	const personalLinks = React.useMemo(
@@ -98,11 +95,10 @@ export function CommandPalette() {
 				me?.root.personalLinks?.map(link => ({
 					icon: "Link" as const,
 					label: link?.title || "Untitled",
-					action: "OPEN_LINK",
-					payload: link?.url || "#"
+					action: () => actions.openLinkInNewTab(link?.url || "#")
 				})) || []
 		}),
-		[me?.root.personalLinks]
+		[me?.root.personalLinks, actions]
 	)
 
 	const personalPages = React.useMemo(
@@ -112,14 +108,15 @@ export function CommandPalette() {
 				me?.root.personalPages?.map(page => ({
 					icon: "FileText" as const,
 					label: page?.title || "Untitled",
-					action: "NAVIGATE",
-					payload: `/pages/${page?.id}`
+					action: () => actions.navigateTo(`/pages/${page?.id}`)
 				})) || []
 		}),
-		[me?.root.personalPages]
+		[me?.root.personalPages, actions]
 	)
 
 	const getFilteredCommands = React.useCallback(() => {
+		if (!commandGroups) return []
+
 		const searchRegex = searchSafeRegExp(inputValue)
 
 		if (activePage === "home") {
@@ -148,49 +145,50 @@ export function CommandPalette() {
 					}))
 					.filter(group => group.items.length > 0)
 		}
-	}, [inputValue, activePage, allCommands, personalLinks, personalPages])
+	}, [inputValue, activePage, allCommands, personalLinks, personalPages, commandGroups, topics])
 
 	const handleAction = React.useCallback(
-		(action: string, payload?: any) => {
+		(action: CommandAction, payload?: any) => {
+			const closeDialog = () => {
+				setOpen(false)
+			}
+
+			if (typeof action === "function") {
+				action()
+				closeDialog()
+				return
+			}
+
 			switch (action) {
-				case "CHANGE_THEME":
-					setTheme(payload)
-					toast.success(`Theme changed to ${payload}.`, { position: "bottom-right" })
-					setOpen(false)
-					break
-				case "COPY_URL":
-					navigator.clipboard.writeText(window.location.href)
-					toast.success("URL copied to clipboard.", { position: "bottom-right" })
-					setOpen(false)
-					break
 				case "CHANGE_PAGE":
-					if (payload in commandGroups) {
-						setActivePage(payload as ActivePageType)
+					if (payload) {
+						setActivePage(payload)
 						setInputValue("")
+						bounce()
 					} else {
 						console.error(`Invalid page: ${payload}`)
 					}
 					break
-				case "NAVIGATE":
-					router.push(payload)
-					setOpen(false)
-					break
-				case "OPEN_LINK":
-					window.open(ensureUrlProtocol(payload), "_blank")
-					setOpen(false)
-					break
 				default:
 					console.log(`Unhandled action: ${action}`)
+					closeDialog()
 			}
 		},
-		[router, setTheme]
+		[bounce]
 	)
 
 	const filteredCommands = React.useMemo(() => getFilteredCommands(), [getFilteredCommands])
 
-	React.useEffect(() => {
-		setKey(prevKey => prevKey + 1)
+	const commandKey = React.useMemo(() => {
+		return filteredCommands
+			.map(group => {
+				const itemsKey = group.items.map(item => `${item.label}-${item.action}`).join("|")
+				return `${group.heading}:${itemsKey}`
+			})
+			.join("__")
 	}, [filteredCommands])
+
+	if (!me) return null
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
@@ -202,7 +200,7 @@ export function CommandPalette() {
 						<DialogDescription>Search for commands and actions</DialogDescription>
 					</DialogHeader>
 
-					<Command key={key} onKeyDown={handleKeyDown}>
+					<Command key={commandKey} onKeyDown={handleKeyDown}>
 						<div cmdk-input-wrapper="">
 							<Command.Input
 								autoFocus

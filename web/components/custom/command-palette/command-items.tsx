@@ -1,10 +1,11 @@
 import { Command } from "cmdk"
 import { CommandSeparator, CommandShortcut } from "@/components/ui/command"
 import { LaIcon } from "../la-icon"
-import { CommandItemType } from "./command-data"
+import { CommandItemType, CommandAction } from "./command-data"
 
-export interface CommandItemProps extends CommandItemType {
-	handleAction: (action: string, payload?: any) => void
+export interface CommandItemProps extends Omit<CommandItemType, "action"> {
+	action: CommandAction
+	handleAction: (action: CommandAction, payload?: any) => void
 }
 
 export const CommandItem: React.FC<CommandItemProps> = ({ icon, label, action, payload, shortcut, handleAction }) => (
@@ -14,11 +15,10 @@ export const CommandItem: React.FC<CommandItemProps> = ({ icon, label, action, p
 		{shortcut && <CommandShortcut>{shortcut}</CommandShortcut>}
 	</Command.Item>
 )
-
 export interface CommandGroupProps {
 	heading?: string
 	items: CommandItemType[]
-	handleAction: (action: string, payload?: any) => void
+	handleAction: (action: CommandAction, payload?: any) => void
 	isLastGroup: boolean
 }
 
