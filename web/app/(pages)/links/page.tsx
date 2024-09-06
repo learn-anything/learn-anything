@@ -1,5 +1,5 @@
 import { LinkRoute } from "@/components/routes/link/LinkRoute"
 
-export default function HomePage() {
+export default function LinksPage() {
 	return <LinkRoute />
 }
