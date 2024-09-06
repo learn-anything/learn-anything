@@ -4,7 +4,7 @@ import React, { useState, useRef, useCallback, useMemo } from "react"
 import { Command, CommandGroup, CommandItem, CommandList } from "@/components/ui/command"
 import { Command as CommandPrimitive } from "cmdk"
 import { motion, AnimatePresence } from "framer-motion"
-import { cn } from "@/lib/utils"
+import { cn, searchSafeRegExp } from "@/lib/utils"
 
 interface GraphNode {
 	name: string
@@ -27,7 +27,8 @@ export function Autocomplete({ topics = [], onSelect, onInputChange }: Autocompl
 		if (!inputValue) {
 			return topics.slice(0, 5)
 		}
-		const regex = new RegExp(inputValue.split("").join(".*"), "i")
+
+		const regex = searchSafeRegExp(inputValue)
 		return topics.filter(
 			topic =>
 				regex.test(topic.name) ||

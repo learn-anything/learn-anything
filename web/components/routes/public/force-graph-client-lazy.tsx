@@ -2,10 +2,10 @@
 
 import * as react from "react"
 import * as fg from "@nothing-but/force-graph"
-import { ease, trig, raf, color } from "@nothing-but/utils"
-
 import * as schedule from "@/lib/utils/schedule"
 import * as canvas from "@/lib/utils/canvas"
+import { searchSafeRegExp } from "@/lib/utils"
+import { ease, trig, raf, color } from "@nothing-but/utils"
 
 export type RawGraphNode = {
 	name: string
@@ -18,8 +18,8 @@ const COLORS: readonly color.HSL[] = [
 	[15, 87, 66],
 	[31, 90, 69],
 	[15, 87, 66],
-	[31, 90, 69],  
-	[344, 87, 70],
+	[31, 90, 69],
+	[344, 87, 70]
 ]
 
 type ColorMap = Record<string, color.HSL>
@@ -31,16 +31,15 @@ function generateColorMap(g: fg.graph.Graph): ColorMap {
 		hsl_map[g.nodes[i].key as string] = COLORS[i % COLORS.length]
 	}
 
-	for (let {a, b} of g.edges) {
-
+	for (let { a, b } of g.edges) {
 		let a_hsl = hsl_map[a.key as string]
 		let b_hsl = hsl_map[b.key as string]
 
-		let am = a.mass-1
-		let bm = b.mass-1
+		let am = a.mass - 1
+		let bm = b.mass - 1
 
-		hsl_map[a.key as string] = color.mix(a_hsl, b_hsl, am*am*am, bm)
-		hsl_map[b.key as string] = color.mix(a_hsl, b_hsl, am, bm*bm*bm)
+		hsl_map[a.key as string] = color.mix(a_hsl, b_hsl, am * am * am, bm)
+		hsl_map[b.key as string] = color.mix(a_hsl, b_hsl, am, bm * bm * bm)
 	}
 
 	return hsl_map
@@ -76,10 +75,7 @@ function generateNodesFromRawData(g: fg.graph.Graph, raw_data: RawGraphNode[]): 
 	}
 }
 
-function filterNodes(
-	s: State,
-	filter: string
-): void {
+function filterNodes(s: State, filter: string): void {
 	fg.graph.clear_nodes(s.graph)
 
 	if (filter === "") {
@@ -87,10 +83,16 @@ function filterNodes(
 		fg.graph.add_edges(s.graph, s.edges)
 	} else {
 		// regex matching all letters of the filter (out of order)
-		const regex = new RegExp(filter.split("").join(".*"), "i")
-	
-		fg.graph.add_nodes(s.graph, s.nodes.filter(node => regex.test(node.label)))
-		fg.graph.add_edges(s.graph, s.edges.filter(edge => regex.test(edge.a.label) && regex.test(edge.b.label)))
+		const regex = searchSafeRegExp(filter)
+
+		fg.graph.add_nodes(
+			s.graph,
+			s.nodes.filter(node => regex.test(node.label))
+		)
+		fg.graph.add_edges(
+			s.graph,
+			s.edges.filter(edge => regex.test(edge.a.label) && regex.test(edge.b.label))
+		)
 	}
 }
 
@@ -129,7 +131,6 @@ const simulateGraph = (
 		80 /* additional margin for when scrolled in */
 
 	for (let node of graph.nodes) {
-
 		let dist_x = node.pos.x - origin_x
 		let dist_y = (node.pos.y - origin_y) * 2
 		let dist = Math.sqrt(dist_x * dist_x + dist_y * dist_y)
@@ -150,32 +151,31 @@ const drawGraph = (c: fg.canvas.CanvasState, color_map: ColorMap): void => {
 		Draw text nodes
 	*/
 	let grid_size = c.graph.options.grid_size
-	let max_size  = Math.max(c.ctx.canvas.width, c.ctx.canvas.height)
+	let max_size = Math.max(c.ctx.canvas.width, c.ctx.canvas.height)
 
-	let clip_rect = fg.canvas.get_ctx_clip_rect(c.ctx, {x: 100, y: 20})
+	let clip_rect = fg.canvas.get_ctx_clip_rect(c.ctx, { x: 100, y: 20 })
 
 	c.ctx.textAlign = "center"
 	c.ctx.textBaseline = "middle"
 
 	for (let node of c.graph.nodes) {
-
-		let x = node.pos.x / grid_size * max_size
-		let y = node.pos.y / grid_size * max_size
+		let x = (node.pos.x / grid_size) * max_size
+		let y = (node.pos.y / grid_size) * max_size
 
 		if (fg.canvas.in_rect_xy(clip_rect, x, y)) {
-			
-			let base_size       = max_size / 220
+			let base_size = max_size / 220
 			let mass_boost_size = max_size / 140
-			let mass_boost      = (node.mass - 1) / 8 / c.scale
+			let mass_boost = (node.mass - 1) / 8 / c.scale
 
 			c.ctx.font = `${base_size + mass_boost * mass_boost_size}px sans-serif`
-	
+
 			let opacity = 0.6 + ((node.mass - 1) / 50) * 4
 
-			c.ctx.fillStyle = node.anchor || c.hovered_node === node
-				? `rgba(129, 140, 248, ${opacity})`
-				: color.hsl_to_hsla_string(color_map[node.key as string], opacity)
-	
+			c.ctx.fillStyle =
+				node.anchor || c.hovered_node === node
+					? `rgba(129, 140, 248, ${opacity})`
+					: color.hsl_to_hsla_string(color_map[node.key as string], opacity)
+
 			c.ctx.fillText(node.label, x, y)
 		}
 	}
@@ -207,7 +207,7 @@ function init(
 		canvas_el: HTMLCanvasElement | null
 	}
 ) {
-	let {canvas_el, raw_nodes} = props
+	let { canvas_el, raw_nodes } = props
 
 	if (canvas_el == null) return
 
@@ -247,7 +247,7 @@ function init(
 			s.alpha = raf.updateAlpha(s.alpha, is_active || time < s.bump_end)
 			simulateGraph(s.alpha, s.graph, canvas_state, window.innerWidth, window.innerHeight)
 		}
-		
+
 		if (iterations > 0) {
 			drawGraph(canvas_state, color_map)
 		}
@@ -260,15 +260,15 @@ function init(
 		canvas: canvas_state,
 		onGesture: e => {
 			switch (e.type) {
-			case fg.canvas.GestureEventType.Translate:
-				s.bump_end = raf.bump(s.bump_end)
-				break
-			case fg.canvas.GestureEventType.NodeClick:
-				props.onNodeClick(e.node.key as string)
-				break
-			case fg.canvas.GestureEventType.NodeDrag:
-				fg.graph.set_position(canvas_state.graph, e.node, e.pos)
-				break
+				case fg.canvas.GestureEventType.Translate:
+					s.bump_end = raf.bump(s.bump_end)
+					break
+				case fg.canvas.GestureEventType.NodeClick:
+					props.onNodeClick(e.node.key as string)
+					break
+				case fg.canvas.GestureEventType.NodeDrag:
+					fg.graph.set_position(canvas_state.graph, e.node, e.pos)
+					break
 			}
 		}
 	}))
