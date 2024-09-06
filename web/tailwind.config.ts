@@ -79,7 +79,9 @@ const config = {
 
 			// learn anything custom
 			fontFamily: {
-				sans: ["var(--font-sans)", ...fontFamily.sans]
+				// sans: ["var(--font-sans)", ...fontFamily.sans],
+				sans: ["var(--font-geist-sans)"],
+				mono: ["var(--font-geist-mono)"]
 			},
 
 			backgroundImage: {

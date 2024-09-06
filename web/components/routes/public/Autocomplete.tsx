@@ -103,7 +103,7 @@ export function Autocomplete({ topics = [], onSelect, onInputChange }: Autocompl
 	return (
 		<Command
 			key={commandKey}
-			className={cn("relative overflow-visible", {
+			className={cn("relative mx-auto max-w-md overflow-visible shadow-md", {
 				"rounded-lg border": !open,
 				"rounded-none rounded-t-lg border-l border-r border-t": open
 			})}
