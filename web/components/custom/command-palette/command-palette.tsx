@@ -3,15 +3,19 @@
 import * as React from "react"
 import { Command } from "cmdk"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
-import { Dialog, DialogPortal, DialogHeader, DialogTitle, DialogDescription } from "../../ui/dialog"
+import { Dialog, DialogPortal, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { useTheme } from "next-themes"
 import { toast } from "sonner"
 import { CommandGroup } from "./command-items"
 import { commandGroups, CommandItemType } from "./command-data"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { useRouter } from "next/navigation"
+import { searchSafeRegExp } from "@/lib/utils"
 
 type ActivePageType = keyof typeof commandGroups
+
+const filterItems = (items: CommandItemType[], searchRegex: RegExp) =>
+	items.filter(item => searchRegex.test(item.label))
 
 export function CommandPalette() {
 	const { me } = useAccount({ root: { personalLinks: [], personalPages: [] } })
@@ -20,6 +24,7 @@ export function CommandPalette() {
 	const [inputValue, setInputValue] = React.useState("")
 	const [activePage, setActivePage] = React.useState<ActivePageType>("home")
 	const [open, setOpen] = React.useState(false)
+	const [key, setKey] = React.useState(0)
 	const { setTheme } = useTheme()
 
 	React.useEffect(() => {
@@ -61,6 +66,80 @@ export function CommandPalette() {
 		}
 	}
 
+	const allCommands = React.useMemo(() => {
+		return Object.entries(commandGroups).map(([key, value]) => ({
+			heading: key,
+			items: value.flatMap(subgroup => subgroup.items)
+		}))
+	}, [])
+
+	const personalLinks = React.useMemo(
+		() => ({
+			heading: "Personal Links",
+			items:
+				me?.root.personalLinks?.map(link => ({
+					icon: "Link" as const,
+					label: link?.title || "Untitled",
+					action: "NAVIGATE",
+					payload: link?.url || "#"
+				})) || []
+		}),
+		[me?.root.personalLinks]
+	)
+
+	const personalPages = React.useMemo(
+		() => ({
+			heading: "Personal Pages",
+			items:
+				me?.root.personalPages?.map(page => ({
+					icon: "FileText" as const,
+					label: page?.title || "Untitled",
+					action: "NAVIGATE",
+					payload: `/pages/${page?.id}`
+				})) || []
+		}),
+		[me?.root.personalPages]
+	)
+
+	const getFilteredCommands = () => {
+		const searchRegex = searchSafeRegExp(inputValue)
+
+		if (activePage === "home") {
+			if (!inputValue) return commandGroups.home
+
+			const pages = [...allCommands, personalLinks, personalPages]
+				.map(group => {
+					const filteredItems = filterItems(group.items, searchRegex)
+					return {
+						heading: group.heading,
+						items: filteredItems
+					}
+				})
+				.filter(group => group.items.length > 0)
+
+			return pages
+		}
+
+		switch (activePage) {
+			case "searchLinks":
+				return [...commandGroups.searchLinks, { items: filterItems(personalLinks.items, searchRegex) }]
+			case "searchPages":
+				return [...commandGroups.searchPages, { items: filterItems(personalPages.items, searchRegex) }]
+			default:
+				const pageCommands = commandGroups[activePage]
+				if (!inputValue) return pageCommands
+				return pageCommands
+					.map(group => {
+						const items = filterItems(group.items, searchRegex)
+						return {
+							heading: group.heading,
+							items
+						}
+					})
+					.filter(group => group.items.length > 0)
+		}
+	}
+
 	const handleAction = (action: string, payload?: any) => {
 		switch (action) {
 			case "CHANGE_THEME":
@@ -76,6 +155,7 @@ export function CommandPalette() {
 			case "CHANGE_PAGE":
 				if (payload in commandGroups) {
 					setActivePage(payload as ActivePageType)
+					setInputValue("") // Clear the input when changing pages
 				} else {
 					console.error(`Invalid page: ${payload}`)
 				}
@@ -89,47 +169,14 @@ export function CommandPalette() {
 		}
 	}
 
-	const getCommandGroups = () => {
-		if (activePage === "searchLinks") {
-			if (!me?.root.personalLinks) return []
+	const filteredCommands = React.useMemo(() => {
+		const commands = getFilteredCommands()
+		return commands
+	}, [inputValue, activePage, me?.root.personalLinks, me?.root.personalPages])
 
-			return [
-				{
-					items: me.root.personalLinks.map(link => {
-						const item: CommandItemType = {
-							icon: "Link",
-							label: link?.title || "Untitled",
-							action: "NAVIGATE",
-							payload: link?.url || "#"
-						}
-
-						return item
-					})
-				}
-			]
-		}
-
-		if (activePage === "searchPages") {
-			if (!me?.root.personalPages) return []
-
-			return [
-				{
-					items: me.root.personalPages.map(page => {
-						const item: CommandItemType = {
-							icon: "FileText",
-							label: page?.title || "Untitled",
-							action: "NAVIGATE",
-							payload: `/pages/${page?.id}`
-						}
-
-						return item
-					})
-				}
-			]
-		}
-
-		return commandGroups[activePage]
-	}
+	React.useEffect(() => {
+		setKey(prevKey => prevKey + 1)
+	}, [filteredCommands])
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
@@ -141,7 +188,7 @@ export function CommandPalette() {
 						<DialogDescription>Search for commands and actions</DialogDescription>
 					</DialogHeader>
 
-					<Command onKeyDown={handleKeyDown}>
+					<Command key={key} onKeyDown={handleKeyDown}>
 						<div cmdk-input-wrapper="">
 							<div className="flex items-center">
 								<Command.Input
@@ -155,10 +202,11 @@ export function CommandPalette() {
 
 						<Command.List>
 							<Command.Empty>No results found.</Command.Empty>
-							{getCommandGroups().map((group, index, array) => (
+							{filteredCommands.map((group, index, array) => (
 								<CommandGroup
-									key={index}
-									{...group}
+									key={`${group.heading}-${index}`}
+									heading={group.heading}
+									items={group.items}
 									handleAction={handleAction}
 									isLastGroup={index === array.length - 1}
 								/>

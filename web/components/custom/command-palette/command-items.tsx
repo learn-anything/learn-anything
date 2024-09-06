@@ -22,16 +22,21 @@ export interface CommandGroupProps {
 	isLastGroup: boolean
 }
 
-export const CommandGroup: React.FC<CommandGroupProps> = ({ heading, items, handleAction, isLastGroup }) => (
-	<>
-		{heading && (
-			<Command.Group heading={heading}>
-				{items.map((item, index) => (
-					<CommandItem key={index} {...item} handleAction={handleAction} />
-				))}
-			</Command.Group>
-		)}
-		{!heading && items.map((item, index) => <CommandItem key={index} {...item} handleAction={handleAction} />)}
-		{!isLastGroup && <CommandSeparator className="my-1.5" />}
-	</>
-)
+export const CommandGroup: React.FC<CommandGroupProps> = ({ heading, items, handleAction, isLastGroup }) => {
+	return (
+		<>
+			{heading ? (
+				<Command.Group heading={heading}>
+					{items.map((item, index) => (
+						<CommandItem key={`${heading}-${item.label}-${index}`} {...item} handleAction={handleAction} />
+					))}
+				</Command.Group>
+			) : (
+				items.map((item, index) => (
+					<CommandItem key={`item-${item.label}-${index}`} {...item} handleAction={handleAction} />
+				))
+			)}
+			{!isLastGroup && <CommandSeparator className="my-1.5" />}
+		</>
+	)
+}
