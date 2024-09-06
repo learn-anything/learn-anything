@@ -26,28 +26,28 @@ export const get = api(
 		})
 
 		// TODO: how to get the import from outside this package?
-		const globalGroupId = process.env.JAZZ_PUBLIC_GLOBAL_GROUP as ID<any>
-		const globalGroup = await PublicGlobalGroup.load(globalGroupId, worker, {
-			root: {
-				topics: [
-					{
-						latestGlobalGuide: {
-							sections: [
-								{
-									links: [{}]
-								}
-							]
-						}
-					}
-				],
-				forceGraphs: [
-					{
-						connections: [{}]
-					}
-				]
-			}
-		})
-		if (!globalGroup) throw APIError.notFound
+		// const globalGroupId = process.env.JAZZ_PUBLIC_GLOBAL_GROUP as ID<any>
+		// const globalGroup = await PublicGlobalGroup.load(globalGroupId, worker, {
+		// 	root: {
+		// 		topics: [
+		// 			{
+		// 				latestGlobalGuide: {
+		// 					sections: [
+		// 						{
+		// 							links: [{}]
+		// 						}
+		// 					]
+		// 				}
+		// 			}
+		// 		],
+		// 		forceGraphs: [
+		// 			{
+		// 				connections: [{}]
+		// 			}
+		// 		]
+		// 	}
+		// })
+		// if (!globalGroup) throw APIError.notFound("GlobalGroup not found")
 
 		// const globalGroupId = process.env.JAZZ_PUBLIC_GLOBAL_GROUP as ID<any>
 		// console.log(globalGroupId)
