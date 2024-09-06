@@ -7,7 +7,7 @@ const JAZZ_WORKER_SECRET = process.env.JAZZ_WORKER_SECRET
 const JAZZ_PUBLIC_GLOBAL_GROUP = process.env.JAZZ_PUBLIC_GLOBAL_GROUP
 
 // return all content for GlobalTopic
-export const get = api(
+export const getTopic = api(
 	{ expose: true, method: "GET", path: "/topic/:topic" },
 	async ({
 		topic
