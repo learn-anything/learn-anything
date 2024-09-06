@@ -26,3 +26,25 @@ export const addPersonalLink = api(
 		}
 	}
 )
+
+export const get = api(
+	{ expose: true, method: "GET", path: "/global-link-details/:url" },
+	async ({
+		url
+	}: {
+		url: string
+	}): Promise<{
+		title: string
+		summary?: string
+	}> => {
+		// const { worker } = await startWorker({
+		// 	accountID: "co_zhvp7ryXJzDvQagX61F6RCZFJB9",
+		// 	accountSecret: JAZZ_WORKER_SECRET
+		// })
+
+		return {
+			title: "Jazz",
+			summary: "Jazz is local first framework for building web apps"
+		}
+	}
+)
