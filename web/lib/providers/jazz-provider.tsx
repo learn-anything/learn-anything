@@ -3,14 +3,13 @@
 import { createJazzReactApp } from "jazz-react"
 import { LaAccount } from "@/lib/schema"
 import { useClerk } from "@clerk/nextjs"
-import { createContext, useMemo, useState } from "react"
 import { useJazzClerkAuth } from "jazz-react-auth-clerk"
 
 const Jazz = createJazzReactApp({
 	AccountSchema: LaAccount
 })
 
-export const { useAccount, useCoState, useAcceptInvite } = Jazz
+export const { useAccount, useAccountOrGuest, useCoState, useAcceptInvite } = Jazz
 
 export function JazzAndAuth({ children }: { children: React.ReactNode }) {
 	const clerk = useClerk()
@@ -28,9 +27,3 @@ export function JazzAndAuth({ children }: { children: React.ReactNode }) {
 		</>
 	)
 }
-
-export const JazzClerkAuthCtx = createContext<{
-	errors: string[]
-}>({
-	errors: []
-})

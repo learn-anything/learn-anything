@@ -8,14 +8,14 @@ import { generateUniqueSlug } from "@/lib/utils"
 import { useAtom } from "jotai"
 import { PersonalPage } from "@/lib/schema/personal-page"
 import { useRouter } from "next/navigation"
-import { useAccount } from "@/lib/providers/jazz-provider"
+import { useAccount, useAccountOrGuest } from "@/lib/providers/jazz-provider"
 import { toast } from "sonner"
 
 export function CommandPalette() {
 	const [showPalette, setShowPalette] = useState(false)
 	const [showCreate, setShowCreate] = useAtom(linkShowCreateAtom)
 	const router = useRouter()
-	const { me } = useAccount()
+	const { me } = useAccountOrGuest()
 
 	const [commands, setCommands] = useState<
 		{ name: string; icon?: React.ReactNode; keybind?: string[]; action: () => void }[]
@@ -25,6 +25,11 @@ export function CommandPalette() {
 			icon: <Icon name="Link" />,
 			// keybind: ["Ctrl", "K"],
 			action: () => {
+				if (me?._type === "Anonymous") {
+					// TODO: do something smarter
+					toast.error("You need to be logged in to create a new link")
+					return
+				}
 				if (window.location.pathname !== "/") {
 					router.push("/")
 				}
@@ -36,6 +41,11 @@ export function CommandPalette() {
 			icon: <Icon name="File" />,
 			// keybind: ["Ctrl", "P"],
 			action: () => {
+				if (me?._type === "Anonymous") {
+					// TODO: do something smarter
+					toast.error("You need to be logged in to create a new page")
+					return
+				}
 				const personalPages = me?.root?.personalPages?.toJSON() || []
 				const slug = generateUniqueSlug(personalPages, "Untitled Page")
 

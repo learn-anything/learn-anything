@@ -9,12 +9,6 @@ interface TopicSectionsProps {
 	setActiveIndex: (index: number) => void
 	linkRefs: React.MutableRefObject<(HTMLLIElement | null)[]>
 	containerRef: React.RefObject<HTMLDivElement>
-	me: {
-		root: {
-			personalLinks: PersonalLinkLists
-		} & UserRoot
-	} & LaAccount
-	personalLinks: PersonalLinkLists
 }
 
 export function TopicSections({
@@ -24,8 +18,6 @@ export function TopicSections({
 	setActiveIndex,
 	linkRefs,
 	containerRef,
-	me,
-	personalLinks
 }: TopicSectionsProps) {
 	return (
 		<div ref={containerRef} className="flex w-full flex-1 flex-col overflow-y-auto [scrollbar-gutter:stable]">
@@ -42,8 +34,6 @@ export function TopicSections({
 									setActiveIndex={setActiveIndex}
 									startIndex={sections.slice(0, sectionIndex).reduce((acc, s) => acc + (s?.links?.length || 0), 0)}
 									linkRefs={linkRefs}
-									me={me}
-									personalLinks={personalLinks}
 								/>
 							)
 					)}

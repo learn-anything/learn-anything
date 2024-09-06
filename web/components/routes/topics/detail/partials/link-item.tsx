@@ -13,6 +13,7 @@ import { cn, ensureUrlProtocol, generateUniqueSlug } from "@/lib/utils"
 import { LaAccount, Link as LinkSchema, PersonalLink, PersonalLinkLists, Topic, UserRoot } from "@/lib/schema"
 import { openPopoverForIdAtom } from "../TopicDetailRoute"
 import { LEARNING_STATES, LearningStateValue } from "@/lib/constants"
+import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
 
 interface LinkItemProps {
 	topic: Topic
@@ -20,23 +21,24 @@ interface LinkItemProps {
 	isActive: boolean
 	index: number
 	setActiveIndex: (index: number) => void
-	me: {
-		root: {
-			personalLinks: PersonalLinkLists
-		} & UserRoot
-	} & LaAccount
-	personalLinks: PersonalLinkLists
 }
 
 export const LinkItem = React.memo(
 	React.forwardRef<HTMLLIElement, LinkItemProps>(
-		({ topic, link, isActive, index, setActiveIndex, me, personalLinks }, ref) => {
+		({ topic, link, isActive, index, setActiveIndex }, ref) => {
 			const router = useRouter()
 			const [, setOpenPopoverForId] = useAtom(openPopoverForIdAtom)
 			const [isPopoverOpen, setIsPopoverOpen] = useState(false)
 
+			const { me } = useAccountOrGuest({ root: { personalLinks: [] } });
+
+			const personalLinks = useMemo(() => {
+				if (!me || me._type === "Anonymous") return undefined;
+				return me?.root?.personalLinks || []
+			}, [me])
+
 			const personalLink = useMemo(() => {
-				return personalLinks.find(pl => pl?.link?.id === link.id)
+				return personalLinks?.find(pl => pl?.link?.id === link.id)
 			}, [personalLinks, link.id])
 
 			const selectedLearningState = useMemo(() => {
@@ -53,6 +55,14 @@ export const LinkItem = React.memo(
 
 			const handleSelectLearningState = useCallback(
 				(learningState: LearningStateValue) => {
+					if (!personalLinks || !me || me?._type === "Anonymous") {
+						if (me?._type === "Anonymous") {
+							// TODO: handle better
+							toast.error("You need to sign in to add links to your personal list.")
+						}
+						return
+					};
+
 					const defaultToast = {
 						duration: 5000,
 						position: "bottom-right" as const,

@@ -8,6 +8,7 @@ import { ClerkProviderClient } from "@/components/custom/clerk/clerk-provider-cl
 import { JotaiProvider } from "@/lib/providers/jotai-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { ConfirmProvider } from "@/lib/providers/confirm-provider"
+import { JazzAndAuth } from "@/lib/providers/jazz-provider"
 
 const fontSans = FontSans({
 	subsets: ["latin"],
@@ -31,7 +32,7 @@ export default function RootLayout({
 					<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
 						<JotaiProvider>
 							<ConfirmProvider>
-								{children}
+								<JazzAndAuth>{children}</JazzAndAuth>
 								<Toaster expand={false} />
 							</ConfirmProvider>
 						</JotaiProvider>

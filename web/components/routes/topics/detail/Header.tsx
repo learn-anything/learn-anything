@@ -4,15 +4,16 @@ import * as React from "react"
 import { ContentHeader, SidebarToggleButton } from "@/components/custom/content-header"
 import { ListOfTopics, Topic } from "@/lib/schema"
 import { LearningStateSelector } from "@/components/custom/learning-state-selector"
-import { useAccount } from "@/lib/providers/jazz-provider"
+import { useAccount, useAccountOrGuest } from "@/lib/providers/jazz-provider"
 import { LearningStateValue } from "@/lib/constants"
+import { toast } from "sonner"
 
 interface TopicDetailHeaderProps {
 	topic: Topic
 }
 
 export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }: TopicDetailHeaderProps) {
-	const { me } = useAccount({
+	const { me } = useAccountOrGuest({
 		root: {
 			topicsWantToLearn: [],
 			topicsLearning: [],
@@ -26,16 +27,17 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 		learningState: LearningStateValue
 	} | null = null
 
-	const wantToLearnIndex = me?.root.topicsWantToLearn.findIndex(t => t?.id === topic.id) ?? -1
+	const wantToLearnIndex = me?._type === "Anonymous" ? -1 : me?.root.topicsWantToLearn.findIndex(t => t?.id === topic.id) ?? -1
 	if (wantToLearnIndex !== -1) {
 		p = {
 			index: wantToLearnIndex,
+			// TODO: fix this type error by doing better conditionals on both index and p
 			topic: me?.root.topicsWantToLearn[wantToLearnIndex],
 			learningState: "wantToLearn"
 		}
 	}
 
-	const learningIndex = me?.root.topicsLearning.findIndex(t => t?.id === topic.id) ?? -1
+	const learningIndex = me?._type === "Anonymous" ? -1 : me?.root.topicsLearning.findIndex(t => t?.id === topic.id) ?? -1
 	if (learningIndex !== -1) {
 		p = {
 			index: learningIndex,
@@ -44,7 +46,7 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 		}
 	}
 
-	const learnedIndex = me?.root.topicsLearned.findIndex(t => t?.id === topic.id) ?? -1
+	const learnedIndex = me?._type === "Anonymous" ? -1 : me?.root.topicsLearned.findIndex(t => t?.id === topic.id) ?? -1
 	if (learnedIndex !== -1) {
 		p = {
 			index: learnedIndex,
@@ -54,6 +56,12 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 	}
 
 	const handleAddToProfile = (learningState: LearningStateValue) => {
+		if (me?._type === "Anonymous") {
+			// TODO: handle better
+			toast.error("You need to sign in to add links to your personal list.")
+			return
+		}
+
 		const topicLists: Record<LearningStateValue, (ListOfTopics | null) | undefined> = {
 			wantToLearn: me?.root.topicsWantToLearn,
 			learning: me?.root.topicsLearning,
