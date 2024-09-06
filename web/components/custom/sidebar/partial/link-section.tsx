@@ -3,8 +3,10 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { cn } from "@/lib/utils"
-import { LaIcon } from "@/components/custom/la-icon"
 import { PersonalLinkLists } from "@/lib/schema/personal-link"
+import { useQueryState, parseAsStringLiteral } from "nuqs"
+import { LEARNING_STATES } from "@/lib/constants"
+import { useRouter } from "next/navigation"
 
 export const LinkSection: React.FC<{ pathname: string }> = ({ pathname }) => {
 	const { me } = useAccount({
@@ -54,16 +56,38 @@ const LinkSectionHeader: React.FC<LinkSectionHeaderProps> = ({ linkCount, isActi
 	</div>
 )
 
+const ALL_STATES = ["all", ...LEARNING_STATES.map(ls => ls.value)]
 interface ListProps {
 	personalLinks: PersonalLinkLists
 }
 
 const List: React.FC<ListProps> = ({ personalLinks }) => {
 	const pathname = usePathname()
+	const [activeState] = useQueryState("state", parseAsStringLiteral(ALL_STATES))
+	const toLearnCount = personalLinks.filter(link => link?.learningState === "wantToLearn").length
+	const learningCount = personalLinks.filter(link => link?.learningState === "learning").length
+	const learnedCount = personalLinks.filter(link => link?.learningState === "learned").length
 
 	return (
 		<div className="flex flex-col gap-px">
-			<ListItem label="All Links" href="/links" count={personalLinks.length} isActive={pathname === "/links"} />
+			<ListItem
+				label="To Learn"
+				href="/links?state=wantToLearn"
+				count={toLearnCount}
+				isActive={pathname === "/links" && activeState === "wantToLearn"}
+			/>
+			<ListItem
+				label="Learning"
+				href="/links?state=learning"
+				count={learningCount}
+				isActive={pathname === "/links" && activeState === "learning"}
+			/>
+			<ListItem
+				label="Learned"
+				href="/links?state=learned"
+				count={learnedCount}
+				isActive={pathname === "/links" && activeState === "learned"}
+			/>
 		</div>
 	)
 }
@@ -78,13 +102,10 @@ interface ListItemProps {
 const ListItem: React.FC<ListItemProps> = ({ label, href, count, isActive }) => {
 	return (
 		<div className="group/reorder-page relative">
-			{/* <div className="group/topic-link relative flex min-w-0 flex-1">
+			<div className="group/topic-link relative flex min-w-0 flex-1">
 				<Link
 					href={href}
-					className={cn(
-						"group-hover/topic-link:bg-accent relative flex h-8 w-full items-center gap-2 rounded-md p-1.5 font-medium",
-						{ "bg-accent text-accent-foreground": isActive }
-					)}
+					className="group-hover/topic-link:bg-accent relative flex h-8 w-full items-center gap-2 rounded-md p-1.5 font-medium"
 				>
 					<div className="flex max-w-full flex-1 items-center gap-1.5 truncate text-sm">
 						<p className={cn("truncate opacity-95 group-hover/topic-link:opacity-100")}>{label}</p>
@@ -94,7 +115,7 @@ const ListItem: React.FC<ListItemProps> = ({ label, href, count, isActive }) => 
 				{count > 0 && (
 					<span className="absolute right-2 top-1/2 z-[1] -translate-y-1/2 rounded p-1 text-sm">{count}</span>
 				)}
-			</div> */}
+			</div>
 		</div>
 	)
 }
