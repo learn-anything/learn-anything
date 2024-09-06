@@ -40,27 +40,27 @@ export function PublicHomeRoute() {
 					filter_query={filterQuery}
 				/>
 
-				<motion.div
-					className="absolute left-1/2 top-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2 transform max-sm:px-5"
-					initial={{ opacity: 0, y: 20 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.5 }}
-					style={{ x: "-50%", y: "-50%" }}
-				>
-					<motion.h1
-						className="mb-2 text-center text-3xl font-bold uppercase sm:mb-4 md:text-5xl"
-						initial={{ opacity: 0, y: -20 }}
+				<div className="absolute left-1/2 top-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2 transform max-sm:px-5">
+					<motion.div
+						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.5, delay: 0.2 }}
+						transition={{ duration: 0.5 }}
 					>
-						I want to learn
-					</motion.h1>
-					<Autocomplete
-						topics={raw_graph_data}
-						onSelect={topic => handleTopicSelect(topic.name)}
-						onInputChange={handleInputChange}
-					/>
-				</motion.div>
+						<motion.h1
+							className="mb-2 text-center text-3xl font-bold uppercase sm:mb-4 md:text-5xl"
+							initial={{ opacity: 0, y: -20 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ duration: 0.5, delay: 0.2 }}
+						>
+							I want to learn
+						</motion.h1>
+						<Autocomplete
+							topics={raw_graph_data}
+							onSelect={topic => handleTopicSelect(topic.name)}
+							onInputChange={handleInputChange}
+						/>
+					</motion.div>
+				</div>
 			</div>
 		</>
 	)
