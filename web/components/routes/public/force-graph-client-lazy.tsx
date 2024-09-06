@@ -2,7 +2,7 @@
 
 import * as react from "react"
 import * as fg from "@nothing-but/force-graph"
-import { ease, trig, raf } from "@nothing-but/utils"
+import { ease, trig, raf, color } from "@nothing-but/utils"
 
 import * as schedule from "@/lib/utils/schedule"
 import * as canvas from "@/lib/utils/canvas"
@@ -13,70 +13,37 @@ export type RawGraphNode = {
 	connectedTopics: string[]
 }
 
-type HSL = [hue: number, saturation: number, lightness: number]
-
-const COLORS: readonly HSL[] = [
+const COLORS: readonly color.HSL[] = [
 	[3, 86, 64],
+	[15, 87, 66],
 	[31, 90, 69],
-	[15, 87, 66]
+	[15, 87, 66],
+	[31, 90, 69],  
+	[344, 87, 70],
 ]
 
-/* use a plain object instead of Map for faster lookups */
-type ColorMap = {[key: string]: string}
-type HSLMap   = Map<fg.graph.Node, HSL>
+type ColorMap = Record<string, color.HSL>
 
-const MAX_COLOR_ITERATIONS = 10
+function generateColorMap(g: fg.graph.Graph): ColorMap {
+	const hsl_map: ColorMap = {}
 
-/**
- * Add a color to a node and all its connected nodes.
- */
-function visitColorNode(
-	g:         fg.graph.Graph,
-	prev:      fg.graph.Node,
-	node:      fg.graph.Node,
-	hsl_map:   HSLMap,
-	add:       HSL,
-	iteration: number = 1
-): void {
-	if (iteration > MAX_COLOR_ITERATIONS) return
-
-	const color = hsl_map.get(node)
-
-	if (!color) {
-		hsl_map.set(node, [...add])
-	} else {
-		const add_strength = MAX_COLOR_ITERATIONS / iteration
-		color[0] = (color[0] + add[0] * add_strength) / (1 + add_strength)
-		color[1] = (color[1] + add[1] * add_strength) / (1 + add_strength)
-		color[2] = (color[2] + add[2] * add_strength) / (1 + add_strength)
+	for (let i = 0; i < g.nodes.length; i++) {
+		hsl_map[g.nodes[i].key as string] = COLORS[i % COLORS.length]
 	}
 
-	for (let edge of g.edges) {
-		let b: fg.graph.Node
-		if      (edge.a === node) b = edge.b
-		else if (edge.b === node) b = edge.a
-		else continue
-		if (b !== prev) {
-			visitColorNode(g, node, b, hsl_map, add, iteration + 1)
-		}
-	}
-}
+	for (let {a, b} of g.edges) {
 
-function generateColorMap(g: fg.graph.Graph, nodes: readonly fg.graph.Node[]): ColorMap {
-	const hls_map: HSLMap = new Map()
+		let a_hsl = hsl_map[a.key as string]
+		let b_hsl = hsl_map[b.key as string]
 
-	for (let i = 0; i < nodes.length; i++) {
-		const node = nodes[i]!
-		const color = COLORS[i % COLORS.length]!
-		visitColorNode(g, node, node, hls_map, color)
+		let am = a.mass-1
+		let bm = b.mass-1
+
+		hsl_map[a.key as string] = color.mix(a_hsl, b_hsl, am*am*am, bm)
+		hsl_map[b.key as string] = color.mix(a_hsl, b_hsl, am, bm*bm*bm)
 	}
 
-	const color_map: ColorMap = {}
-	for (const [node, [hue, saturation, lightness]] of hls_map.entries()) {
-		color_map[node.key as string] = `${hue} ${saturation}% ${lightness}%`
-	}
-
-	return color_map
+	return hsl_map
 }
 
 function generateNodesFromRawData(g: fg.graph.Graph, raw_data: RawGraphNode[]): void {
@@ -107,8 +74,6 @@ function generateNodesFromRawData(g: fg.graph.Graph, raw_data: RawGraphNode[]): 
 		let edges = fg.graph.get_node_edges(g, node)
 		node.mass = fg.graph.node_mass_from_edges(edges.length)
 	}
-
-	fg.graph.randomize_positions(g)
 }
 
 function filterNodes(
@@ -135,7 +100,7 @@ const GRAPH_OPTIONS: fg.graph.Options = {
 	origin_strength: 0.01,
 	repel_distance: 40,
 	repel_strength: 2,
-	link_strength: 0.015,
+	link_strength: 0.03,
 	grid_size: 500
 }
 
@@ -209,7 +174,7 @@ const drawGraph = (c: fg.canvas.CanvasState, color_map: ColorMap): void => {
 
 			c.ctx.fillStyle = node.anchor || c.hovered_node === node
 				? `rgba(129, 140, 248, ${opacity})`
-				: `hsl(${color_map[node.key as string]} / ${opacity})`
+				: color.hsl_to_hsla_string(color_map[node.key as string], opacity)
 	
 			c.ctx.fillText(node.label, x, y)
 		}
@@ -250,10 +215,12 @@ function init(
 	if (s.ctx == null) return
 
 	generateNodesFromRawData(s.graph, raw_nodes)
+	fg.graph.set_positions_smart(s.graph)
+
 	s.nodes = s.graph.nodes.slice()
 	s.edges = s.graph.edges.slice()
 
-	let color_map = generateColorMap(s.graph, s.nodes)
+	let color_map = generateColorMap(s.graph)
 
 	let canvas_state = fg.canvas.canvasState({
 		ctx: s.ctx,
@@ -269,6 +236,8 @@ function init(
 		}
 	})
 	s.ro.observe(canvas_el)
+
+	simulateGraph(6, s.graph, canvas_state, window.innerWidth, window.innerHeight)
 
 	function loop(time: number) {
 		let is_active = gestures.mode.type === fg.canvas.Mode.DraggingNode
