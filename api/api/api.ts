@@ -1,10 +1,11 @@
 import { api, APIError } from "encore.dev/api"
 // import { startWorker } from "jazz-nodejs"
 // import { ID } from "jazz-tools"
+import { secret } from "encore.dev/config"
 
-const JAZZ_WORKER_ACCOUNT_ID = process.env.JAZZ_WORKER_ACCOUNT_ID
-const JAZZ_WORKER_SECRET = process.env.JAZZ_WORKER_SECRET
-const JAZZ_PUBLIC_GLOBAL_GROUP = process.env.JAZZ_PUBLIC_GLOBAL_GROUP
+const jazzWorkerAccountId = secret("jazzWorkerAccountId")
+const jazzWorkerSecret = secret("jazzWorkerSecret")
+const jazzPublicGlobalGroup = secret("jazzPublicGlobalGroup")
 
 // return all content for GlobalTopic
 export const getTopic = api(

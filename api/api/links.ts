@@ -3,8 +3,9 @@
 
 import { api, APIError } from "encore.dev/api"
 // import { startWorker } from "jazz-nodejs"
+import { secret } from "encore.dev/config"
 
-const JAZZ_WORKER_SECRET = process.env.JAZZ_WORKER_SECRET
+const jazzWorkerSecret = secret("jazzWorkerSecret")
 
 export const addPersonalLink = api(
 	{ expose: true, method: "POST", path: "/save-link" },
