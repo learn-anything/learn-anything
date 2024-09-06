@@ -5,7 +5,6 @@ import dynamic from "next/dynamic"
 import { motion } from "framer-motion"
 import { Autocomplete } from "./Autocomplete"
 import { useRouter } from "next/navigation"
-import { useAccount } from "@/lib/providers/jazz-provider"
 
 let graph_data_promise = import("./graph-data.json").then(a => a.default)
 
