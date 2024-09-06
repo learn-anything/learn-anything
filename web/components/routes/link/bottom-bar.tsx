@@ -14,6 +14,7 @@ import { PersonalLink } from "@/lib/schema"
 import { ID } from "jazz-tools"
 import { globalLinkFormExceptionRefsAtom } from "./partials/form/link-form"
 import { toast } from "sonner"
+import { useKeybind } from "@/lib/providers/keybind-provider"
 
 interface ToolbarButtonProps {
 	icon: keyof typeof icons
@@ -63,6 +64,8 @@ export const LinkBottomBar: React.FC = () => {
 	const editMoreBtnRef = useRef<HTMLButtonElement>(null)
 	const plusBtnRef = useRef<HTMLButtonElement>(null)
 	const plusMoreBtnRef = useRef<HTMLButtonElement>(null)
+
+	const { addKeybind, removeKeybind } = useKeybind()
 
 	const confirm = useConfirm()
 
@@ -150,6 +153,13 @@ export const LinkBottomBar: React.FC = () => {
 
 	const shortcutKeys = getSpecialShortcut("expandToolbar")
 	const shortcutText = formatShortcut(shortcutKeys)
+
+	useEffect(() => {
+		if (personalLink) {
+			addKeybind({ key: "Control+x", callback: handleDelete })
+			return () => removeKeybind("Control+x")
+		}
+	}, [personalLink])
 
 	return (
 		<motion.div
