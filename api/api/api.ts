@@ -7,6 +7,13 @@ const jazzWorkerAccountId = secret("jazzWorkerAccountId")
 const jazzWorkerSecret = secret("jazzWorkerSecret")
 const jazzPublicGlobalGroup = secret("jazzPublicGlobalGroup")
 
+export const testRoute = api(
+	{ expose: true, method: "GET", path: "/test" },
+	async ({}: {}): Promise<void> => {
+		console.log(jazzPublicGlobalGroup(), "group")
+	}
+)
+
 // return all content for GlobalTopic
 export const getTopic = api(
 	{ expose: true, method: "GET", path: "/topic/:topic" },
