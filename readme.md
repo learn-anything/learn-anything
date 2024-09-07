@@ -1,22 +1,33 @@
-# [Learn-Anything.xyz](https://learn-anything.xyz)
+# Learn-Anything.xyz
+
+[![X](https://img.shields.io/badge/learnanything-100000?logo=X&color=black)](https://x.com/learnanything_)
+
+[Learn-Anything.xyz](https://learn-anything.xyz) is an open-source learning platform.
 
 ## Setup
 
-Using [Bun](https://bun.sh).
+[Bun](https://bun.sh) is required to run this project.
 
-```
+Install dependencies:
+
+```bash
 bun i
 ```
 
-[Jazz](https://jazz.tools/) is used for all global/local state management.
+## Run Website
 
-## Run website
+To start the website locally:
 
-```
+```bash
 bun web
 ```
 
-## Contribute
+## Development
+
+- [Jazz](https://jazz.tools/) is used for all global/local state management.
+- The project is currently in an unstable state but actively improving.
+
+## Contributing
 
 Currently things are unstable but will improve.
 
@@ -29,5 +40,3 @@ Can always submit draft PRs with good ideas/fixes. We will help along the way to
 Community chat in [Discord server](https://discord.gg/bxtD8x6aNF).
 
 Internal dev chat in Telegram (can email `join@learn-anything.xyz` to join core team). We will reach out with offer to join if you contribute to repo in form of PRs too.
-
-[![X](https://img.shields.io/badge/learnanything-100000?logo=X&color=black)](https://x.com/learnanything_)
