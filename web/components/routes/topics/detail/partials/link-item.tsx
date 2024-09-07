@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useAtom } from "jotai"
 import { toast } from "sonner"
 
@@ -14,6 +14,7 @@ import { Link as LinkSchema, PersonalLink, Topic } from "@/lib/schema"
 import { openPopoverForIdAtom } from "../TopicDetailRoute"
 import { LEARNING_STATES, LearningStateValue } from "@/lib/constants"
 import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
+import { useClerk } from "@clerk/nextjs"
 
 interface LinkItemProps {
 	topic: Topic
@@ -25,6 +26,8 @@ interface LinkItemProps {
 
 export const LinkItem = React.memo(
 	React.forwardRef<HTMLLIElement, LinkItemProps>(({ topic, link, isActive, index, setActiveIndex }, ref) => {
+		const clerk = useClerk()
+		const pathname = usePathname()
 		const router = useRouter()
 		const [, setOpenPopoverForId] = useAtom(openPopoverForIdAtom)
 		const [isPopoverOpen, setIsPopoverOpen] = useState(false)
@@ -55,11 +58,9 @@ export const LinkItem = React.memo(
 		const handleSelectLearningState = useCallback(
 			(learningState: LearningStateValue) => {
 				if (!personalLinks || !me || me?._type === "Anonymous") {
-					if (me?._type === "Anonymous") {
-						// TODO: handle better
-						toast.error("You need to sign in to add links to your personal list.")
-					}
-					return
+					return clerk.redirectToSignIn({
+						redirectUrl: pathname
+					})
 				}
 
 				const defaultToast = {

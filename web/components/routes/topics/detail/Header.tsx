@@ -6,13 +6,16 @@ import { ListOfTopics, Topic } from "@/lib/schema"
 import { LearningStateSelector } from "@/components/custom/learning-state-selector"
 import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
 import { LearningStateValue } from "@/lib/constants"
-import { toast } from "sonner"
+import { useClerk } from "@clerk/nextjs"
+import { usePathname } from "next/navigation"
 
 interface TopicDetailHeaderProps {
 	topic: Topic
 }
 
 export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }: TopicDetailHeaderProps) {
+	const clerk = useClerk()
+	const pathname = usePathname()
 	const { me } = useAccountOrGuest({
 		root: {
 			topicsWantToLearn: [],
@@ -59,8 +62,9 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 
 	const handleAddToProfile = (learningState: LearningStateValue) => {
 		if (me?._type === "Anonymous") {
-			toast.error("You need to sign in to add links to your personal list.")
-			return
+			return clerk.redirectToSignIn({
+				redirectUrl: pathname
+			})
 		}
 
 		const topicLists: Record<LearningStateValue, (ListOfTopics | null) | undefined> = {
