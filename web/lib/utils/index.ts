@@ -37,3 +37,4 @@ export function shuffleArray<T>(array: T[]): T[] {
 export * from "./urls"
 export * from "./slug"
 export * from "./keyboard"
+export * from "./htmlLikeElementUtil"
