@@ -7,6 +7,8 @@ import { Autocomplete } from "./Autocomplete"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { raleway } from "@/app/fonts"
+import { useAccount } from "@/lib/providers/jazz-provider"
+import TextBlurTransition from "@/components/custom/text-blur-transition"
 
 let graph_data_promise = import("./graph-data.json").then(a => a.default)
 
@@ -33,25 +35,41 @@ export function PublicHomeRoute() {
 
 	return (
 		<>
-			<div className="relative h-full w-screen">
-				<ForceGraphClient raw_nodes={raw_graph_data} onNodeClick={handleTopicSelect} filter_query={filterQuery} />
+			<div className="relative h-full w-screen overflow-hidden">
+				<ForceGraphClient
+					raw_nodes={raw_graph_data}
+					onNodeClick={val => handleTopicSelect(val)}
+					filter_query={filterQuery}
+				/>
 
-				<div className="absolute left-1/2 top-1/2 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 transform max-sm:px-5">
-					<motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-						<motion.h1
-							className={cn(
-								"mb-2 text-center text-5xl font-bold tracking-tight sm:mb-4 md:text-7xl",
-								raleway.className
-							)}
-							initial={{ opacity: 0, y: -20 }}
-							animate={{ opacity: 1, y: 0 }}
-							transition={{ duration: 0.5, delay: 0.2 }}
-						>
-							I want to learn
-						</motion.h1>
-						<Autocomplete topics={raw_graph_data} onSelect={handleTopicSelect} onInputChange={handleInputChange} />
-					</motion.div>
-				</div>
+				<motion.div
+					className="absolute left-1/2 top-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2 transform max-sm:px-5"
+					initial={{ opacity: 0, y: 20 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.5 }}
+					style={{ x: "-50%", y: "-50%" }}
+				>
+					<div
+						className="absolute left-1/2 top-1/2 h-[350px] w-[500px] -translate-x-1/2 -translate-y-1/2 transform md:h-[450px] md:w-[700px]"
+						style={{
+							background:
+								"radial-gradient(ellipse 80% 60% at 50% 50%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.5) 40%, rgba(0, 0, 0, 0) 70%)",
+							backgroundSize: "100% 100%",
+							backgroundPosition: "center",
+							backgroundRepeat: "no-repeat"
+						}}
+					></div>
+					<TextBlurTransition
+						className={cn("mb-2 text-center text-5xl font-bold tracking-tight sm:mb-4 md:text-7xl", raleway.className)}
+					>
+						I want to learn
+					</TextBlurTransition>
+					<Autocomplete
+						topics={raw_graph_data}
+						onSelect={topic => handleTopicSelect(topic.name)}
+						onInputChange={handleInputChange}
+					/>
+				</motion.div>
 			</div>
 		</>
 	)
