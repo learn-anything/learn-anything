@@ -13,6 +13,11 @@ import { PersonalPageLists } from "./personal-page"
 import { PersonalLinkLists } from "./personal-link"
 import { ListOfTopics } from "./master/topic"
 
+declare module "jazz-tools" {
+	interface Profile {
+		avatarUrl?: string
+	}
+}
 export class UserRoot extends CoMap {
 	name = co.string
 	username = co.string
@@ -33,7 +38,7 @@ export class LaAccount extends Account {
 	profile = co.ref(Profile)
 	root = co.ref(UserRoot)
 
-	migrate(this: LaAccount, creationProps?: { name: string }) {
+	migrate(this: LaAccount, creationProps?: { name: string; avatarUrl?: string }) {
 		// since we dont have a custom AuthProvider yet.
 		// and still using the DemoAuth. the creationProps will only accept name.
 		// so just do default profile create provided by jazz-tools
@@ -46,7 +51,7 @@ export class LaAccount extends Account {
 				{
 					name: creationProps.name,
 					username: creationProps.name,
-					avatar: "",
+					avatar: creationProps.avatarUrl || "",
 					website: "",
 					bio: "",
 					is_public: false,

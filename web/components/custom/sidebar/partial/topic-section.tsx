@@ -8,7 +8,7 @@ import { LaIcon } from "@/components/custom/la-icon"
 import { ListOfTopics } from "@/lib/schema"
 import { LEARNING_STATES, LearningStateValue } from "@/lib/constants"
 
-export const TopicSection: React.FC = () => {
+export const TopicSection: React.FC<{ pathname: string }> = ({ pathname }) => {
 	const { me } = useAccount({
 		root: {
 			topicsWantToLearn: [],
@@ -22,11 +22,13 @@ export const TopicSection: React.FC = () => {
 		(me?.root.topicsLearning?.length || 0) +
 		(me?.root.topicsLearned?.length || 0)
 
+	const isActive = pathname.startsWith("/topics")
+
 	if (!me) return null
 
 	return (
 		<div className="group/pages flex flex-col gap-px py-2">
-			<TopicSectionHeader topicCount={topicCount} />
+			<TopicSectionHeader topicCount={topicCount} isActive={isActive} />
 			<List
 				topicsWantToLearn={me.root.topicsWantToLearn}
 				topicsLearning={me.root.topicsLearning}
@@ -38,11 +40,15 @@ export const TopicSection: React.FC = () => {
 
 interface TopicSectionHeaderProps {
 	topicCount: number
+	isActive: boolean
 }
 
-const TopicSectionHeader: React.FC<TopicSectionHeaderProps> = ({ topicCount }) => (
+const TopicSectionHeader: React.FC<TopicSectionHeaderProps> = ({ topicCount, isActive }) => (
 	<div
-		className={cn("flex min-h-[30px] items-center gap-px rounded-md", "hover:bg-accent hover:text-accent-foreground")}
+		className={cn(
+			"flex min-h-[30px] items-center gap-px rounded-md",
+			isActive ? "bg-accent text-accent-foreground" : "hover:bg-accent hover:text-accent-foreground"
+		)}
 	>
 		<Button
 			variant="ghost"

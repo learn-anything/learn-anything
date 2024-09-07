@@ -11,24 +11,9 @@ interface SectionProps {
 	startIndex: number
 	linkRefs: React.MutableRefObject<(HTMLLIElement | null)[]>
 	setActiveIndex: (index: number) => void
-	me: {
-		root: {
-			personalLinks: PersonalLinkLists
-		} & UserRoot
-	} & LaAccount
-	personalLinks: PersonalLinkLists
 }
 
-export function Section({
-	topic,
-	section,
-	activeIndex,
-	setActiveIndex,
-	startIndex,
-	linkRefs,
-	me,
-	personalLinks
-}: SectionProps) {
+export function Section({ topic, section, activeIndex, setActiveIndex, startIndex, linkRefs }: SectionProps) {
 	const [nLinksToLoad, setNLinksToLoad] = useState(10)
 
 	const linksToLoad = useMemo(() => {
@@ -55,8 +40,6 @@ export function Section({
 							ref={el => {
 								linkRefs.current[startIndex + index] = el
 							}}
-							me={me}
-							personalLinks={personalLinks}
 						/>
 					) : (
 						<Skeleton key={index} className="h-14 w-full xl:h-11" />

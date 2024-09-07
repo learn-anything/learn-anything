@@ -4,15 +4,19 @@ import * as React from "react"
 import { ContentHeader, SidebarToggleButton } from "@/components/custom/content-header"
 import { ListOfTopics, Topic } from "@/lib/schema"
 import { LearningStateSelector } from "@/components/custom/learning-state-selector"
-import { useAccount } from "@/lib/providers/jazz-provider"
+import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
 import { LearningStateValue } from "@/lib/constants"
+import { useClerk } from "@clerk/nextjs"
+import { usePathname } from "next/navigation"
 
 interface TopicDetailHeaderProps {
 	topic: Topic
 }
 
 export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }: TopicDetailHeaderProps) {
-	const { me } = useAccount({
+	const clerk = useClerk()
+	const pathname = usePathname()
+	const { me } = useAccountOrGuest({
 		root: {
 			topicsWantToLearn: [],
 			topicsLearning: [],
@@ -26,34 +30,43 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 		learningState: LearningStateValue
 	} | null = null
 
-	const wantToLearnIndex = me?.root.topicsWantToLearn.findIndex(t => t?.id === topic.id) ?? -1
+	const wantToLearnIndex =
+		me?._type === "Anonymous" ? -1 : (me?.root.topicsWantToLearn.findIndex(t => t?.id === topic.id) ?? -1)
 	if (wantToLearnIndex !== -1) {
 		p = {
 			index: wantToLearnIndex,
-			topic: me?.root.topicsWantToLearn[wantToLearnIndex],
+			topic: me && me._type !== "Anonymous" ? me.root.topicsWantToLearn[wantToLearnIndex] : undefined,
 			learningState: "wantToLearn"
 		}
 	}
 
-	const learningIndex = me?.root.topicsLearning.findIndex(t => t?.id === topic.id) ?? -1
+	const learningIndex =
+		me?._type === "Anonymous" ? -1 : (me?.root.topicsLearning.findIndex(t => t?.id === topic.id) ?? -1)
 	if (learningIndex !== -1) {
 		p = {
 			index: learningIndex,
-			topic: me?.root.topicsLearning[learningIndex],
+			topic: me && me._type !== "Anonymous" ? me?.root.topicsLearning[learningIndex] : undefined,
 			learningState: "learning"
 		}
 	}
 
-	const learnedIndex = me?.root.topicsLearned.findIndex(t => t?.id === topic.id) ?? -1
+	const learnedIndex =
+		me?._type === "Anonymous" ? -1 : (me?.root.topicsLearned.findIndex(t => t?.id === topic.id) ?? -1)
 	if (learnedIndex !== -1) {
 		p = {
 			index: learnedIndex,
-			topic: me?.root.topicsLearned[learnedIndex],
+			topic: me && me._type !== "Anonymous" ? me?.root.topicsLearned[learnedIndex] : undefined,
 			learningState: "learned"
 		}
 	}
 
 	const handleAddToProfile = (learningState: LearningStateValue) => {
+		if (me?._type === "Anonymous") {
+			return clerk.redirectToSignIn({
+				redirectUrl: pathname
+			})
+		}
+
 		const topicLists: Record<LearningStateValue, (ListOfTopics | null) | undefined> = {
 			wantToLearn: me?.root.topicsWantToLearn,
 			learning: me?.root.topicsLearning,
