@@ -1,12 +1,12 @@
 "use client"
 
 import { useAccount } from "@/lib/providers/jazz-provider"
+import { useState, useRef, useCallback } from "react"
 import { useParams } from "next/navigation"
-import { useState, useRef } from "react"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Input } from "@/components/ui/input"
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 
 interface ProfileStatsProps {
 	number: number
@@ -30,31 +30,46 @@ export const ProfileWrapper = () => {
 
 	const [isEditing, setIsEditing] = useState(false)
 	const [newName, setNewName] = useState(account.me?.profile?.name || "")
-	const [originalName, setOriginalName] = useState(account.me?.profile?.name || "")
+	const [error, setError] = useState("")
 
 	const editProfileClicked = () => {
-		setIsEditing(!isEditing)
+		setIsEditing(true)
+		setError("")
 	}
 
 	const changeName = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setNewName(e.target.value)
+		setError("")
 	}
+
+	const validateName = useCallback((name: string) => {
+		if (name.trim().length < 2) {
+			return "Name must be at least 2 characters long"
+		}
+		if (name.trim().length > 40) {
+			return "Name must not exceed 40 characters"
+		}
+		return ""
+	}, [])
 
 	const saveProfile = () => {
-		if (newName.trim() !== "") {
-			if (account.me && account.me.profile) {
-				account.me.profile.name = newName.trim()
-			}
-			setOriginalName(newName.trim())
-			setIsEditing(false)
+		const validationError = validateName(newName)
+		if (validationError) {
+			setError(validationError)
+			return
 		}
+
+		if (account.me && account.me.profile) {
+			account.me.profile.name = newName.trim()
+			console.log("Updating name to:", newName.trim())
+		}
+		setIsEditing(false)
 	}
 
-	const clickOutside = () => {
-		if (isEditing) {
-			setNewName(originalName)
-			setIsEditing(false)
-		}
+	const cancelEditing = () => {
+		setNewName(account.me?.profile?.name || "")
+		setIsEditing(false)
+		setError("")
 	}
 
 	const editAvatar = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,7 +90,7 @@ export const ProfileWrapper = () => {
 					<p className="mb-5 text-center text-lg font-semibold">
 						The link you followed may be broken, or the page may have been removed. Go back to
 						<Link href="/">
-							<span className="">homepage</span>
+							<span className=""> homepage</span>
 						</Link>
 						.
 					</p>
@@ -87,7 +102,7 @@ export const ProfileWrapper = () => {
 	return (
 		<div className="flex flex-1 flex-col text-black dark:text-white">
 			<div className="flex items-center justify-between p-[20px]">
-				<p className="text-2xl font-semibold">Profile</p>
+				<p className="text-2xl font-semibold opacity-70">Profile</p>
 			</div>
 			<p className="text-2xl font-semibold">{username}</p>
 			<div className="flex flex-col items-center border-b border-neutral-900 bg-inherit pb-5">
@@ -102,22 +117,35 @@ export const ProfileWrapper = () => {
 
 					<div className="ml-6 flex-1">
 						{isEditing ? (
-							<Input
-								value={newName}
-								onChange={changeName}
-								className="border-result mb-3 mr-3 text-[25px] font-semibold"
-								onBlur={clickOutside}
-							/>
+							<>
+								<Input
+									value={newName}
+									onChange={changeName}
+									className="border-result mb-3 mr-3 text-[25px] font-semibold"
+								/>
+								{error && <p className="text-red-500 text-opacity-70">{error}</p>}
+							</>
 						) : (
 							<p className="mb-3 text-[25px] font-semibold">{account.me?.profile?.name}</p>
 						)}
 					</div>
-					<Button
-						onClick={isEditing ? saveProfile : editProfileClicked}
-						className="shadow-outer ml-auto flex h-[34px] cursor-pointer flex-row items-center justify-center space-x-2 rounded-lg bg-white px-3 text-center font-medium text-black shadow-[1px_1px_1px_1px_rgba(0,0,0,0.3)] hover:bg-black/10 dark:bg-[#222222] dark:text-white dark:hover:opacity-60"
-					>
-						{isEditing ? "Save" : "Edit profile"}
-					</Button>
+					{isEditing ? (
+						<div>
+							<Button onClick={saveProfile} className="mr-2">
+								Save
+							</Button>
+							<Button onClick={cancelEditing} variant="outline">
+								Cancel
+							</Button>
+						</div>
+					) : (
+						<Button
+							onClick={editProfileClicked}
+							className="shadow-outer ml-auto flex h-[34px] cursor-pointer flex-row items-center justify-center space-x-2 rounded-lg bg-white px-3 text-center font-medium text-black shadow-[1px_1px_1px_1px_rgba(0,0,0,0.3)] hover:bg-black/10 dark:bg-[#222222] dark:text-white dark:hover:opacity-60"
+						>
+							Edit profile
+						</Button>
+					)}
 				</div>
 			</div>
 			<div className="mt-10 flex justify-center">
