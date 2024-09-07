@@ -8,15 +8,11 @@
 
 [Bun](https://bun.sh) is required to run this project.
 
-Install dependencies:
-
 ```bash
 bun i
 ```
 
 ## Run Website
-
-To start the website locally:
 
 ```bash
 bun web
