@@ -4,8 +4,6 @@
 
 [Learn-Anything.xyz](https://learn-anything.xyz) is an open-source learning platform.
 
-Visit the website at: https://learn-anything.xyz
-
 ## Setup
 
 [Bun](https://bun.sh) is required to run this project.
@@ -31,19 +29,14 @@ bun web
 
 ## Contributing
 
-We welcome contributions! Here's how you can get involved:
+Currently things are unstable but will improve.
 
-1. Join our [Discord](https://discord.gg/bxtD8x6aNF) and ask for help in the `#dev` channel.
-2. Submit draft PRs with your ideas or fixes. We'll guide you through the process.
+If you want to help contribute to code, ask for help on [Discord](https://discord.gg/bxtD8x6aNF)'s `#dev` channel. You will be onboarded and unblocked fast.
 
-## Community
+Can always submit draft PRs with good ideas/fixes. We will help along the way to make it merge ready.
 
-- **Public Chat**: Join our [Discord server](https://discord.gg/bxtD8x6aNF).
-- **Internal Dev Chat**: Available on Telegram.
-  - Email `join@learn-anything.xyz` to join the core team.
-  - Active contributors may receive invitations to join.
+## Chat
 
-## Notes
+Community chat in [Discord server](https://discord.gg/bxtD8x6aNF).
 
-- The project is in active development. Expect frequent changes.
-- We prioritize quick onboarding and unblocking of contributors.
+Internal dev chat in Telegram (can email `join@learn-anything.xyz` to join core team). We will reach out with offer to join if you contribute to repo in form of PRs too.
