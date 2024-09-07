@@ -69,7 +69,7 @@ export const LinkItem = React.memo(
 					closeButton: true,
 					action: {
 						label: "Go to list",
-						onClick: () => router.push("/")
+						onClick: () => router.push("/links")
 					}
 				}
 
