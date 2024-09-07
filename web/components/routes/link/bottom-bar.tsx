@@ -191,7 +191,7 @@ export const LinkBottomBar: React.FC = () => {
 								ref={plusBtnRef}
 							/>
 						)}
-						<ToolbarButton icon={"Ellipsis"} ref={plusMoreBtnRef} />
+						{/* <ToolbarButton icon={"Ellipsis"} ref={plusMoreBtnRef} /> */}
 					</motion.div>
 				)}
 			</AnimatePresence>
