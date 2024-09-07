@@ -1,7 +1,6 @@
-import { useAccount } from "@/lib/providers/jazz-provider"
-import { LaIcon } from "../../la-icon"
+import { LaIcon } from "@/components/custom/la-icon"
 import { useState } from "react"
-import { useAuth } from "@clerk/nextjs"
+import { SignInButton, useAuth, useUser } from "@clerk/nextjs"
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -11,97 +10,68 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import Link from "next/link"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { usePathname } from "next/navigation"
 
-const MenuItem = ({
-	icon,
-	text,
-	href,
-	onClick,
-	onClose
-}: {
-	icon: string
-	text: string
-	href?: string
-	onClick?: () => void
-	onClose: () => void
-}) => {
-	const handleClick = () => {
-		onClose()
-		if (onClick) {
-			onClick()
-		}
+export const ProfileSection: React.FC = () => {
+	const { user, isSignedIn } = useUser()
+	const { signOut } = useAuth()
+	const [menuOpen, setMenuOpen] = useState(false)
+	const pathname = usePathname()
+
+	if (!isSignedIn) {
+		return (
+			<div className="flex flex-col gap-px border-t border-transparent px-3 py-2 pb-3 pt-1.5">
+				<SignInButton mode="modal" forceRedirectUrl={pathname}>
+					<Button variant="outline" className="flex w-full items-center gap-2">
+						<LaIcon name="LogIn" />
+						Sign in
+					</Button>
+				</SignInButton>
+			</div>
+		)
 	}
 
 	return (
-		<div className="relative flex flex-1 items-center gap-2">
-			<LaIcon name={icon as any} />
-			{href ? (
-				<Link href={href} onClick={onClose}>
-					<span className="line-clamp-1 flex-1">{text}</span>
-				</Link>
-			) : (
-				<span className="line-clamp-1 flex-1" onClick={handleClick}>
-					{text}
-				</span>
-			)}
-		</div>
-	)
-}
-export const ProfileSection: React.FC = () => {
-	const { me } = useAccount({
-		profile: true
-	})
-	const { signOut, isSignedIn } = useAuth()
-	const [menuOpen, setMenuOpen] = useState(false)
-
-	const closeMenu = () => setMenuOpen(false)
-
-	return (
-		<div className="visible absolute inset-x-0 bottom-0 z-10 flex gap-8 p-2.5">
+		<div className="flex flex-col gap-px border-t border-transparent px-3 py-2 pb-3 pt-1.5">
 			<div className="flex h-10 min-w-full items-center">
 				<div className="flex min-w-0">
 					<DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
 						<DropdownMenuTrigger asChild>
-							<button
+							<Button
+								variant="ghost"
 								aria-label="Profile"
-								className="hover:bg-accent focus-visible:ring-ring hover:text-accent-foreground flex items-center gap-1.5 truncate rounded pl-1 pr-1.5 focus-visible:outline-none focus-visible:ring-1"
+								className="hover:bg-accent focus-visible:ring-ring hover:text-accent-foreground flex h-auto items-center gap-1.5 truncate rounded py-1 pl-1 pr-1.5 focus-visible:outline-none focus-visible:ring-1"
 							>
-								{isSignedIn ? (
-									<Avatar className="size-6">
-										<AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-									</Avatar>
-								) : (
-									<LaIcon name="User" />
-								)}
-								<span className="truncate text-left text-sm font-medium -tracking-wider">
-									{isSignedIn ? me?.profile?.name : "guest"}
-								</span>
+								<Avatar className="size-6">
+									<AvatarImage src={user.imageUrl} alt={user.fullName || ""} />
+								</Avatar>
+								<span className="truncate text-left text-sm font-medium -tracking-wider">{user.fullName}</span>
 								<LaIcon
 									name="ChevronDown"
-									className={`size-4 shrink-0 transition-transform duration-300 ${menuOpen ? "rotate-180" : ""}`}
+									className={cn("size-4 shrink-0 transition-transform duration-300", {
+										"rotate-180": menuOpen
+									})}
 								/>
-							</button>
+							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent className="w-56" align="start" side="top">
-							{isSignedIn ? (
-								<>
-									<DropdownMenuItem>
-										<MenuItem icon="CircleUser" text="My profile" href="/profile" onClose={closeMenu} />
-									</DropdownMenuItem>
-									<DropdownMenuSeparator />
-									<DropdownMenuItem>
-										<MenuItem icon="LogOut" text="Log out" onClick={signOut} onClose={closeMenu} />
-									</DropdownMenuItem>
-									<DropdownMenuSeparator />
-									<DropdownMenuItem>
-										<MenuItem icon="CircleUser" text="Tauri" href="/tauri" onClose={closeMenu} />
-									</DropdownMenuItem>
-								</>
-							) : (
-								<DropdownMenuItem>
-									<MenuItem icon="LogIn" text="Sign in" href="/sign-in" onClose={closeMenu} />
-								</DropdownMenuItem>
-							)}
+							<DropdownMenuItem asChild>
+								<Link href="/profile">
+									<div className="relative flex flex-1 items-center gap-2">
+										<LaIcon name="CircleUser" />
+										<span className="line-clamp-1 flex-1">My profile</span>
+									</div>
+								</Link>
+							</DropdownMenuItem>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem onClick={() => signOut()}>
+								<div className="relative flex flex-1 items-center gap-2">
+									<LaIcon name="LogOut" />
+									<span className="line-clamp-1 flex-1">Log out</span>
+								</div>
+							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
@@ -109,7 +79,3 @@ export const ProfileSection: React.FC = () => {
 		</div>
 	)
 }
-
-/* <DropdownMenuItem>
-								<MenuItem icon="Settings" text="Settings" href="/settings" onClose={closeMenu} />
-							</DropdownMenuItem> */

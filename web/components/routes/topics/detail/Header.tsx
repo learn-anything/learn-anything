@@ -32,7 +32,6 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 	if (wantToLearnIndex !== -1) {
 		p = {
 			index: wantToLearnIndex,
-			// TODO: fix this type error by doing better conditionals on both index and p
 			topic: me && me._type !== "Anonymous" ? me.root.topicsWantToLearn[wantToLearnIndex] : undefined,
 			learningState: "wantToLearn"
 		}
@@ -60,7 +59,6 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 
 	const handleAddToProfile = (learningState: LearningStateValue) => {
 		if (me?._type === "Anonymous") {
-			// TODO: handle better
 			toast.error("You need to sign in to add links to your personal list.")
 			return
 		}
