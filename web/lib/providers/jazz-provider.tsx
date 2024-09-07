@@ -26,19 +26,14 @@ export function JazzAndAuth({ children }: ChildrenProps) {
 export function JazzAuth({ children }: ChildrenProps) {
 	const clerk = useClerk()
 	const { isLoaded } = useAuth()
-	const [authMethod, state] = useJazzClerkAuth(clerk)
+	const [authMethod] = useJazzClerkAuth(clerk)
 
 	if (!isLoaded) return null
 
 	return (
-		<>
-			{state.errors.map((error: string) => (
-				<div key={error}>{error}</div>
-			))}
-			<Jazz.Provider auth={authMethod || "guest"} peer={JAZZ_PEER_URL}>
-				{children}
-			</Jazz.Provider>
-		</>
+		<Jazz.Provider auth={authMethod || "guest"} peer={JAZZ_PEER_URL}>
+			{children}
+		</Jazz.Provider>
 	)
 }
 
