@@ -123,8 +123,8 @@ const LearningTab = React.memo(() => {
 				handleTabChange(value as string)
 			}}
 			options={ALL_STATES}
-			className="bg-secondary flex rounded-lg"
-			highlighterClassName="bg-secondary-foreground/10 rounded-lg"
+			className="bg-muted flex rounded-lg"
+			highlighterClassName="bg-muted-foreground/10 rounded-md"
 			radioClassName={cn(
 				"relative mx-2 flex h-8 cursor-pointer items-center justify-center rounded-full px-1 text-sm text-secondary-foreground/60 data-[checked]:text-secondary-foreground font-medium transition-colors focus:outline-none"
 			)}
