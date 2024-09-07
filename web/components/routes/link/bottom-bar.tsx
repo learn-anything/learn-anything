@@ -15,34 +15,36 @@ import { ID } from "jazz-tools"
 import { globalLinkFormExceptionRefsAtom } from "./partials/form/link-form"
 import { toast } from "sonner"
 
-interface ToolbarButtonProps {
+interface ToolbarButtonProps extends React.ComponentPropsWithoutRef<typeof Button> {
 	icon: keyof typeof icons
 	onClick?: (e: React.MouseEvent) => void
 	tooltip?: string
 }
 
-const ToolbarButton = React.forwardRef<HTMLButtonElement, ToolbarButtonProps>(({ icon, onClick, tooltip }, ref) => {
-	const button = (
-		<Button variant="ghost" className="h-8 min-w-14" onClick={onClick} ref={ref}>
-			<LaIcon name={icon} />
-		</Button>
-	)
-
-	if (tooltip) {
-		return (
-			<TooltipProvider>
-				<Tooltip delayDuration={0}>
-					<TooltipTrigger asChild>{button}</TooltipTrigger>
-					<TooltipContent>
-						<p>{tooltip}</p>
-					</TooltipContent>
-				</Tooltip>
-			</TooltipProvider>
+const ToolbarButton = React.forwardRef<HTMLButtonElement, ToolbarButtonProps>(
+	({ icon, onClick, tooltip, ...props }, ref) => {
+		const button = (
+			<Button variant="ghost" className="h-8 min-w-14" onClick={onClick} ref={ref} {...props}>
+				<LaIcon name={icon} />
+			</Button>
 		)
-	}
 
-	return button
-})
+		if (tooltip) {
+			return (
+				<TooltipProvider>
+					<Tooltip delayDuration={0}>
+						<TooltipTrigger asChild>{button}</TooltipTrigger>
+						<TooltipContent>
+							<p>{tooltip}</p>
+						</TooltipContent>
+					</Tooltip>
+				</TooltipProvider>
+			)
+		}
+
+		return button
+	}
+)
 
 ToolbarButton.displayName = "ToolbarButton"
 
@@ -168,7 +170,12 @@ export const LinkBottomBar: React.FC = () => {
 						transition={{ duration: 0.1 }}
 					>
 						<ToolbarButton icon={"ArrowLeft"} onClick={() => setEditId(null)} />
-						<ToolbarButton icon={"Trash"} onClick={handleDelete} ref={deleteBtnRef} />
+						<ToolbarButton
+							icon={"Trash"}
+							onClick={handleDelete}
+							className="text-destructive hover:text-destructive"
+							ref={deleteBtnRef}
+						/>
 						<ToolbarButton icon={"Ellipsis"} ref={editMoreBtnRef} />
 					</motion.div>
 				)}
