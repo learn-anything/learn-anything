@@ -2,7 +2,7 @@
 
 import { createJazzReactApp } from "jazz-react"
 import { LaAccount } from "@/lib/schema"
-import { useClerk } from "@clerk/nextjs"
+import { useAuth, useClerk } from "@clerk/nextjs"
 import { useJazzClerkAuth } from "jazz-react-auth-clerk"
 
 const Jazz = createJazzReactApp({
@@ -13,15 +13,17 @@ export const { useAccount, useAccountOrGuest, useCoState, useAcceptInvite } = Ja
 
 export function JazzAndAuth({ children }: { children: React.ReactNode }) {
 	const clerk = useClerk()
+	const { isLoaded } = useAuth()
+	const [authMethod, state] = useJazzClerkAuth(clerk)
 
-	const [auth, state] = useJazzClerkAuth(clerk)
+	if (!isLoaded) return null
 
 	return (
 		<>
-			{state.errors.map((error) => (
+			{state.errors.map(error => (
 				<div key={error}>{error}</div>
 			))}
-			<Jazz.Provider auth={auth || "guest"} peer="wss://mesh.jazz.tools/?key=example@gmail.com">
+			<Jazz.Provider auth={authMethod || "guest"} peer="wss://mesh.jazz.tools/?key=example@gmail.com">
 				{children}
 			</Jazz.Provider>
 		</>
