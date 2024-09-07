@@ -6,6 +6,7 @@ import { motion } from "framer-motion"
 import { Autocomplete } from "./Autocomplete"
 import { useRouter } from "next/navigation"
 import { useAccount } from "@/lib/providers/jazz-provider"
+import TextBlurTransition from "@/components/custom/text-blur-transition"
 
 let graph_data_promise = import("./graph-data.json").then(a => a.default)
 
@@ -33,7 +34,7 @@ export function PublicHomeRoute() {
 
 	return (
 		<>
-			<div className="relative h-full w-screen">
+			<div className="relative h-full w-screen overflow-hidden">
 				<ForceGraphClient
 					raw_nodes={raw_graph_data}
 					onNodeClick={val => handleTopicSelect(val)}
@@ -47,14 +48,19 @@ export function PublicHomeRoute() {
 					transition={{ duration: 0.5 }}
 					style={{ x: "-50%", y: "-50%" }}
 				>
-					<motion.h1
-						className="mb-2 text-center text-3xl font-bold uppercase sm:mb-4 md:text-5xl"
-						initial={{ opacity: 0, y: -20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.5, delay: 0.2 }}
-					>
+					<div
+						className="absolute left-1/2 top-1/2 h-[350px] w-[500px] -translate-x-1/2 -translate-y-1/2 transform md:h-[450px] md:w-[700px]"
+						style={{
+							background:
+								"radial-gradient(ellipse 80% 60% at 50% 50%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.5) 40%, rgba(0, 0, 0, 0) 70%)",
+							backgroundSize: "100% 100%",
+							backgroundPosition: "center",
+							backgroundRepeat: "no-repeat"
+						}}
+					></div>
+					<TextBlurTransition className="mb-1 text-center text-3xl font-bold uppercase sm:mb-4 md:text-5xl">
 						I want to learn
-					</motion.h1>
+					</TextBlurTransition>
 					<Autocomplete
 						topics={raw_graph_data}
 						onSelect={topic => handleTopicSelect(topic.name)}
