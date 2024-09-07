@@ -3,22 +3,22 @@ import js from "@eslint/js"
 
 const compat = new FlatCompat()
 
+const typescriptConfig = compat.extends(
+	"eslint:recommended",
+	"plugin:@typescript-eslint/recommended-type-checked",
+	"plugin:@typescript-eslint/stylistic-type-checked",
+	"prettier"
+)
+
+const javascriptConfig = js.configs.recommended
+
 export default [
 	{
-		...compat
-			.extends(
-				"eslint:recommended",
-				"plugin:@typescript-eslint/recommended-type-checked",
-				"plugin:@typescript-eslint/stylistic-type-checked",
-				"prettier"
-			)
-			.map(c => ({
-				...c,
-				files: ["**/*.{ts,tsx,mts}"]
-			}))
+		files: ["**/*.{ts,tsx,mts}"],
+		...typescriptConfig
 	},
 	{
 		files: ["**/*.{js,jsx,cjs,mjs}"],
-		...js.configs.recommended
+		...javascriptConfig
 	}
 ]
