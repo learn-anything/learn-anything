@@ -5,7 +5,7 @@ export default function TextBlurTransition(props: { children: string; className?
 	const words = props.children.split(" ")
 
 	return (
-		<motion.div className={cn("flex w-full flex-wrap justify-center gap-3 transition-all", props.className)}>
+		<motion.div className={cn("flex w-full justify-center gap-3 transition-all", props.className)}>
 			{words.map((word, index) => {
 				return (
 					<motion.div
