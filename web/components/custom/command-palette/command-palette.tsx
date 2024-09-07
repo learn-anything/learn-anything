@@ -14,7 +14,7 @@ import { useCommandActions } from "./hooks/use-command-actions"
 let graph_data_promise = import("@/components/routes/public/graph-data.json").then(a => a.default)
 
 const filterItems = (items: CommandItemType[], searchRegex: RegExp) =>
-	items.filter(item => searchRegex.test(item.label)).slice(0, 6)
+	items.filter(item => searchRegex.test(item.value)).slice(0, 6)
 
 export function CommandPalette() {
 	const { me } = useAccount({ root: { personalLinks: [], personalPages: [] } })
@@ -81,6 +81,7 @@ export function CommandPalette() {
 			heading: "Topics",
 			items: raw_graph_data.map(topic => ({
 				icon: "Circle" as const,
+				value: topic?.prettyName || "",
 				label: topic?.prettyName || "",
 				action: () => actions.navigateTo(`/${topic?.name}`)
 			}))
@@ -94,6 +95,7 @@ export function CommandPalette() {
 			items:
 				me?.root.personalLinks?.map(link => ({
 					icon: "Link" as const,
+					value: link?.title || "Untitled",
 					label: link?.title || "Untitled",
 					action: () => actions.openLinkInNewTab(link?.url || "#")
 				})) || []
@@ -107,6 +109,7 @@ export function CommandPalette() {
 			items:
 				me?.root.personalPages?.map(page => ({
 					icon: "FileText" as const,
+					value: page?.title || "Untitled",
 					label: page?.title || "Untitled",
 					action: () => actions.navigateTo(`/pages/${page?.id}`)
 				})) || []

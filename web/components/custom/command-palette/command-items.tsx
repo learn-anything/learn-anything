@@ -2,16 +2,21 @@ import { Command } from "cmdk"
 import { CommandSeparator, CommandShortcut } from "@/components/ui/command"
 import { LaIcon } from "../la-icon"
 import { CommandItemType, CommandAction } from "./command-data"
+import { HTMLLikeElement, renderHTMLLikeElement } from "@/lib/utils"
 
 export interface CommandItemProps extends Omit<CommandItemType, "action"> {
 	action: CommandAction
 	handleAction: (action: CommandAction, payload?: any) => void
 }
 
+const HTMLLikeRenderer: React.FC<{ content: HTMLLikeElement | string }> = ({ content }) => {
+	return <>{renderHTMLLikeElement(content)}</>
+}
+
 export const CommandItem: React.FC<CommandItemProps> = ({ icon, label, action, payload, shortcut, handleAction }) => (
 	<Command.Item onSelect={() => handleAction(action, payload)}>
 		{icon && <LaIcon name={icon} />}
-		<span>{label}</span>
+		<HTMLLikeRenderer content={label} />
 		{shortcut && <CommandShortcut>{shortcut}</CommandShortcut>}
 	</Command.Item>
 )
