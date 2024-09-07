@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils"
 import { PersonalLinkLists } from "@/lib/schema/personal-link"
 import { useQueryState, parseAsStringLiteral } from "nuqs"
 import { LEARNING_STATES } from "@/lib/constants"
-import { useRouter } from "next/navigation"
 
 export const LinkSection: React.FC<{ pathname: string }> = ({ pathname }) => {
 	const { me } = useAccount({

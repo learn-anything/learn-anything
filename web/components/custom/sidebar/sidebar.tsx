@@ -15,7 +15,6 @@ import { PageSection } from "./partial/page-section"
 import { TopicSection } from "./partial/topic-section"
 import { ProfileSection } from "./partial/profile-section"
 import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
-import { SignInButton } from "@clerk/nextjs"
 
 interface SidebarContextType {
 	isCollapsed: boolean
@@ -126,15 +125,9 @@ const SidebarContent: React.FC = React.memo(() => {
 					{me._type === "Account" && <PageSection pathname={pathname} />}
 					{me._type === "Account" && <TopicSection pathname={pathname} />}
 				</div>
-			</nav>
 
-			{me._type === "Account" ? (
 				<ProfileSection />
-			) : (
-				<div className="visible absolute inset-x-0 bottom-0 z-10 flex gap-8 p-2.5">
-					<SignInButton>Fake profile section</SignInButton>
-				</div>
-			)}
+			</nav>
 		</>
 	)
 })
