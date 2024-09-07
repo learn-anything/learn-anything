@@ -4,6 +4,7 @@ import { createJazzReactApp } from "jazz-react"
 import { LaAccount } from "@/lib/schema"
 import { useAuth, useClerk } from "@clerk/nextjs"
 import { useJazzClerkAuth } from "jazz-react-auth-clerk"
+import { usePathname } from "next/navigation"
 
 const Jazz = createJazzReactApp({
 	AccountSchema: LaAccount
@@ -11,7 +12,18 @@ const Jazz = createJazzReactApp({
 
 export const { useAccount, useAccountOrGuest, useCoState, useAcceptInvite } = Jazz
 
-export function JazzAndAuth({ children }: { children: React.ReactNode }) {
+const JAZZ_PEER_URL = "wss://mesh.jazz.tools/?key=example@gmail.com"
+
+interface ChildrenProps {
+	children: React.ReactNode
+}
+
+export function JazzAndAuth({ children }: ChildrenProps) {
+	const pathname = usePathname()
+	return pathname === "/" ? <JazzGuest>{children}</JazzGuest> : <JazzAuth>{children}</JazzAuth>
+}
+
+export function JazzAuth({ children }: ChildrenProps) {
 	const clerk = useClerk()
 	const { isLoaded } = useAuth()
 	const [authMethod, state] = useJazzClerkAuth(clerk)
@@ -20,12 +32,20 @@ export function JazzAndAuth({ children }: { children: React.ReactNode }) {
 
 	return (
 		<>
-			{state.errors.map(error => (
+			{state.errors.map((error: string) => (
 				<div key={error}>{error}</div>
 			))}
-			<Jazz.Provider auth={authMethod || "guest"} peer="wss://mesh.jazz.tools/?key=example@gmail.com">
+			<Jazz.Provider auth={authMethod || "guest"} peer={JAZZ_PEER_URL}>
 				{children}
 			</Jazz.Provider>
 		</>
+	)
+}
+
+export function JazzGuest({ children }: ChildrenProps) {
+	return (
+		<Jazz.Provider auth="guest" peer={JAZZ_PEER_URL}>
+			{children}
+		</Jazz.Provider>
 	)
 }
