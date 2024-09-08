@@ -1,4 +1,4 @@
-# [Learn-Anything.xyz](https://learn-anything.xyz)
+# [learn-anything.xyz](https://learn-anything.xyz)
 
 > Organize world's knowledge, explore connections and curate learning paths
 
@@ -7,7 +7,7 @@
 - [api](api) - http services (using TS/[Encore](https://encore.dev/))
 - [app](app) - desktop app (wrapping the [website](web) with desktop specific logic) (using [Tauri](https://v2.tauri.app/))
 - [cli](cli) - cli (using [Go](https://go.dev))
-- [docs](https://github.com/learn-anything/docs) - public docs hosted on [docs.learn-anything.xyz](https://docs.learn-anything.xyz/) (separate repo, to be managed by LA itself soon)
+- [docs](https://github.com/learn-anything/docs) - public docs hosted on [docs.learn-anything.xyz](https://docs.learn-anything.xyz/)
 - [lib](lib) - shared utility functions in TS
 - [nix](nix) - shared nix code
 - [scripts](scripts) - utility scripts in TS
@@ -24,7 +24,8 @@ Using [Bun](https://bun.sh):
 bun i
 ```
 
-> [!NOTE] > `bun setup` is not yet done but will be a command to fully bootstrap a local working env for the project, without it, running `bun web` is impossible yet
+> [!NOTE]
+> bun setup is not yet done but will be a command to fully bootstrap a local working env for the project, without it, running `bun web` is impossible yet
 
 ```
 bun setup
