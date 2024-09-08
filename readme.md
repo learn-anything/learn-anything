@@ -1,38 +1,46 @@
-# Learn-Anything.xyz
+# [Learn-Anything.xyz](https://learn-anything.xyz)
 
-[![X](https://img.shields.io/badge/learnanything-100000?logo=X&color=black)](https://x.com/learnanything_)
-
-[Learn-Anything.xyz](https://learn-anything.xyz) is an open-source learning platform.
+> Organize world's knowledge, explore connections and curate learning paths
 
 ## Setup
 
-[Bun](https://bun.sh) is required to run this project.
+Using [Bun](https://bun.sh):
 
-```bash
+```
 bun i
 ```
 
-## Run Website
+> [!NOTE]
+> Project is currently in unstable state but actively improving. Reach out on [Discord](https://discord.gg/bxtD8x6aNF) for help.
 
-```bash
+## Run website
+
+> [!NOTE]
+> Requires jazz to be seeded, docs for this are TODO:
+
+```
 bun web
 ```
 
-## Development
+## Stack
 
-- [Jazz](https://jazz.tools/) is used for all global/local state management.
-- The project is currently in an unstable state but actively improving.
+- [React](https://react.dev/)/[Next.js](https://nextjs.org/) - website built on this
+- [Encore](https://encore.dev/) - http services in ts/node
+- [Jazz](https://jazz.tools/) - global/local state management in both react and encore ts http services
+- [Tauri](https://v2.tauri.app/)/[Rust](https://www.rust-lang.org) - desktop app (wrapping the website with desktop specific logic)
 
 ## Contributing
 
-Currently things are unstable but will improve.
-
 If you want to help contribute to code, ask for help on [Discord](https://discord.gg/bxtD8x6aNF)'s `#dev` channel. You will be onboarded and unblocked fast.
+
+Can see [existing issues](../../issues) for things being worked on. See [main issue](../../issues/110) for what's in focus right now.
+
+Can [open new issue](../../issues/new/choose) (search existing ones for duplicates first) or start discussion on [GitHub](../../discussions) or [Discord](https://discord.gg/bxtD8x6aNF).
 
 Can always submit draft PRs with good ideas/fixes. We will help along the way to make it merge ready.
 
-## Chat
+## Join core team
 
-Community chat in [Discord server](https://discord.gg/bxtD8x6aNF).
+We are a small team of core developers right now but are always looking to expand. We will reach out with offer to join us if you contribute to repo in form of PRs.
 
-Internal dev chat in Telegram (can email `join@learn-anything.xyz` to join core team). We will reach out with offer to join if you contribute to repo in form of PRs too.
+[![Discord](https://img.shields.io/badge/Discord-100000?style=flat&logo=discord&logoColor=white&labelColor=black&color=black)](https://discord.com/invite/bxtD8x6aNF) [![X](https://img.shields.io/badge/learnanything-100000?logo=X&color=black)](https://x.com/learnanything_)
