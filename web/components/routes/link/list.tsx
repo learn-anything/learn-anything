@@ -20,10 +20,12 @@ import { useKey } from "react-use"
 import { LinkItem } from "./partials/link-item"
 import { useQueryState } from "nuqs"
 import { learningStateAtom } from "./header"
+import { commandPaletteOpenAtom } from "@/components/custom/command-palette/command-palette"
 
 interface LinkListProps {}
 
 const LinkList: React.FC<LinkListProps> = () => {
+	const [isCommandPalettePpen] = useAtom(commandPaletteOpenAtom)
 	const [editId, setEditId] = useQueryState("editId")
 	const [activeLearningState] = useAtom(learningStateAtom)
 	const [activeItemIndex, setActiveItemIndex] = useState<number | null>(null)
@@ -81,7 +83,7 @@ const LinkList: React.FC<LinkListProps> = () => {
 
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
-			if (!me?.root?.personalLinks || sortedLinks.length === 0 || editId !== null) return
+			if (isCommandPalettePpen || !me?.root?.personalLinks || sortedLinks.length === 0 || editId !== null) return
 
 			if (e.key === "ArrowUp" || e.key === "ArrowDown") {
 				e.preventDefault()
@@ -114,7 +116,7 @@ const LinkList: React.FC<LinkListProps> = () => {
 
 		window.addEventListener("keydown", handleKeyDown)
 		return () => window.removeEventListener("keydown", handleKeyDown)
-	}, [me?.root?.personalLinks, sortedLinks, editId, sort, updateSequences])
+	}, [me?.root?.personalLinks, sortedLinks, editId, sort, updateSequences, isCommandPalettePpen])
 
 	const handleDragStart = useCallback(
 		(event: DragStartEvent) => {
