@@ -11,7 +11,7 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 import { LearningStateSelectorContent } from "@/components/custom/learning-state-selector"
 import { PersonalLink } from "@/lib/schema/personal-link"
 import { LinkForm } from "./form/link-form"
-import { cn } from "@/lib/utils"
+import { cn, ensureUrlProtocol } from "@/lib/utils"
 import { LEARNING_STATES, LearningStateValue } from "@/lib/constants"
 import { linkOpenPopoverForIdAtom } from "@/store/link"
 
@@ -144,7 +144,7 @@ export const LinkItem: React.FC<LinkItemProps> = ({
 						<div className="text-muted-foreground flex min-w-0 shrink items-center gap-x-1">
 							<LaIcon name="Link" aria-hidden="true" className="size-3 flex-none" />
 							<Link
-								href={personalLink.url}
+								href={ensureUrlProtocol(personalLink.url)}
 								passHref
 								prefetch={false}
 								target="_blank"
