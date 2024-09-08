@@ -25,9 +25,10 @@ import { commandPaletteOpenAtom } from "@/components/custom/command-palette/comm
 interface LinkListProps {
 	activeItemIndex: number | null
 	setActiveItemIndex: React.Dispatch<React.SetStateAction<number | null>>
+	disableEnterKey: boolean
 }
 
-const LinkList: React.FC<LinkListProps> = ({ activeItemIndex, setActiveItemIndex }) => {
+const LinkList: React.FC<LinkListProps> = ({ activeItemIndex, setActiveItemIndex, disableEnterKey }) => {
 	const [isCommandPalettePpen] = useAtom(commandPaletteOpenAtom)
 	const [editId, setEditId] = useQueryState("editId")
 	const [activeLearningState] = useAtom(learningStateAtom)
@@ -123,11 +124,13 @@ const LinkList: React.FC<LinkListProps> = ({ activeItemIndex, setActiveItemIndex
 
 					return newIndex
 				})
-			} else if (e.key === "Enter" && activeItemIndex !== null) {
+			} else if (e.key === "Enter" && !disableEnterKey) {
 				e.preventDefault()
-				const activeLink = sortedLinks[activeItemIndex]
-				if (activeLink) {
-					setEditId(activeLink.id)
+				if (activeItemIndex !== null) {
+					const activeLink = sortedLinks[activeItemIndex]
+					if (activeLink) {
+						setEditId(activeLink.id)
+					}
 				}
 			}
 		}
@@ -143,7 +146,8 @@ const LinkList: React.FC<LinkListProps> = ({ activeItemIndex, setActiveItemIndex
 		isCommandPalettePpen,
 		activeItemIndex,
 		setEditId,
-		setActiveItemIndex
+		setActiveItemIndex,
+		disableEnterKey
 	])
 
 	const handleDragStart = useCallback(
