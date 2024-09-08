@@ -10,18 +10,21 @@ import { useAccount } from "@/lib/providers/jazz-provider"
 import { searchSafeRegExp, toTitleCase } from "@/lib/utils"
 import { GraphNode } from "@/components/routes/public/PublicHomeRoute"
 import { useCommandActions } from "./hooks/use-command-actions"
+import { atom, useAtom } from "jotai"
 
 let graph_data_promise = import("@/components/routes/public/graph-data.json").then(a => a.default)
 
 const filterItems = (items: CommandItemType[], searchRegex: RegExp) =>
 	items.filter(item => searchRegex.test(item.value)).slice(0, 6)
 
+export const commandPaletteOpenAtom = atom(false)
+
 export function CommandPalette() {
 	const { me } = useAccount({ root: { personalLinks: [], personalPages: [] } })
 	const dialogRef = React.useRef<HTMLDivElement | null>(null)
 	const [inputValue, setInputValue] = React.useState("")
 	const [activePage, setActivePage] = React.useState("home")
-	const [open, setOpen] = React.useState(false)
+	const [open, setOpen] = useAtom(commandPaletteOpenAtom)
 
 	const actions = useCommandActions()
 	const commandGroups = React.useMemo(() => me && createCommandGroups(actions, me), [actions, me])
@@ -38,7 +41,7 @@ export function CommandPalette() {
 
 		document.addEventListener("keydown", down)
 		return () => document.removeEventListener("keydown", down)
-	}, [])
+	}, [setOpen])
 
 	const bounce = React.useCallback(() => {
 		if (dialogRef.current) {
@@ -177,7 +180,7 @@ export function CommandPalette() {
 					closeDialog()
 			}
 		},
-		[bounce]
+		[bounce, setOpen]
 	)
 
 	const filteredCommands = React.useMemo(() => getFilteredCommands(), [getFilteredCommands])

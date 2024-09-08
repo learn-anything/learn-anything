@@ -24,11 +24,6 @@ export const learningStateAtom = atom<string>("all")
 export const LinkHeader = React.memo(() => {
 	const isTablet = useMedia("(max-width: 1024px)")
 
-	const [activeState, setActiveState] = useQueryState(
-		"state",
-		parseAsStringLiteral(["all", "ToLearn", "learning", "learned"]).withDefault("all")
-	)
-
 	return (
 		<>
 			<ContentHeader className="px-6 py-5 max-lg:px-4">
@@ -56,42 +51,6 @@ export const LinkHeader = React.memo(() => {
 })
 
 LinkHeader.displayName = "LinkHeader"
-
-// const LearningTab = React.memo(() => {
-// 	const [activeTab, setActiveTab] = useAtom(learningStateAtom)
-// 	const [activeState, setActiveState] = useQueryState(
-// 		"state",
-// 		parseAsStringLiteral(Object.values(ALL_STATES_STRING)).withDefault(ALL_STATES_STRING[0])
-// 	)
-
-// 	const handleTabChange = React.useCallback(
-// 		(value: string) => {
-// 			setActiveTab(value)
-// 			setActiveState(value)
-// 		},
-// 		[setActiveTab, setActiveState]
-// 	)
-
-// 	React.useEffect(() => {
-// 		setActiveTab(activeState)
-// 	}, [activeState, setActiveTab])
-
-// 	return (
-// 		<FancySwitch
-// 			value={activeTab}
-// 			onChange={value => {
-// 				handleTabChange(value as string)
-// 			}}
-// 			options={ALL_STATES}
-// 			className="bg-secondary flex rounded-lg"
-// 			highlighterClassName="bg-secondary-foreground/10 rounded-lg"
-// 			radioClassName={cn(
-// 				"relative mx-2 flex h-8 cursor-pointer items-center justify-center rounded-full px-1 text-sm text-secondary-foreground/60 data-[checked]:text-secondary-foreground font-medium transition-colors focus:outline-none"
-// 			)}
-// 			highlighterIncludeMargin={true}
-// 		/>
-// 	)
-// })
 
 const LearningTab = React.memo(() => {
 	const [activeTab, setActiveTab] = useAtom(learningStateAtom)

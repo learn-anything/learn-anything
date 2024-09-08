@@ -1,5 +1,3 @@
-"use client"
-
 import React, { useCallback, useMemo } from "react"
 import Image from "next/image"
 import Link from "next/link"
@@ -13,9 +11,9 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 import { LearningStateSelectorContent } from "@/components/custom/learning-state-selector"
 import { PersonalLink } from "@/lib/schema/personal-link"
 import { LinkForm } from "./form/link-form"
-import { cn } from "@/lib/utils"
+import { cn, ensureUrlProtocol } from "@/lib/utils"
 import { LEARNING_STATES, LearningStateValue } from "@/lib/constants"
-import { linkOpenPopoverForIdAtom, linkShowCreateAtom } from "@/store/link"
+import { linkOpenPopoverForIdAtom } from "@/store/link"
 
 interface LinkItemProps {
 	personalLink: PersonalLink
@@ -23,9 +21,9 @@ interface LinkItemProps {
 	isEditing: boolean
 	setEditId: (id: string | null) => void
 	isDragging: boolean
-	isFocused: boolean
-	setFocusedId: (id: string | null) => void
-	registerRef: (id: string, ref: HTMLLIElement | null) => void
+	isActive: boolean
+	setActiveItemIndex: (index: number | null) => void
+	index: number
 }
 
 export const LinkItem: React.FC<LinkItemProps> = ({
@@ -34,9 +32,9 @@ export const LinkItem: React.FC<LinkItemProps> = ({
 	personalLink,
 	disabled = false,
 	isDragging,
-	isFocused,
-	setFocusedId,
-	registerRef
+	isActive,
+	setActiveItemIndex,
+	index
 }) => {
 	const [openPopoverForId, setOpenPopoverForId] = useAtom(linkOpenPopoverForIdAtom)
 	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: personalLink.id, disabled })
@@ -48,14 +46,6 @@ export const LinkItem: React.FC<LinkItemProps> = ({
 			pointerEvents: isDragging ? "none" : "auto"
 		}),
 		[transform, transition, isDragging]
-	)
-
-	const refCallback = useCallback(
-		(node: HTMLLIElement | null) => {
-			setNodeRef(node)
-			registerRef(personalLink.id, node)
-		},
-		[setNodeRef, registerRef, personalLink.id]
 	)
 
 	const handleKeyDown = useCallback(
@@ -92,90 +82,84 @@ export const LinkItem: React.FC<LinkItemProps> = ({
 
 	return (
 		<li
-			ref={refCallback}
+			ref={setNodeRef}
 			style={style as React.CSSProperties}
 			{...attributes}
 			{...listeners}
 			tabIndex={0}
-			onFocus={() => setFocusedId(personalLink.id)}
-			onBlur={() => setFocusedId(null)}
+			onFocus={() => setActiveItemIndex(index)}
+			onBlur={() => setActiveItemIndex(null)}
 			onKeyDown={handleKeyDown}
-			className={cn("relative flex h-14 cursor-default items-center outline-none xl:h-11", {
-				"bg-muted-foreground/10": isFocused,
-				"hover:bg-muted/50": !isFocused
-			})}
+			className={cn(
+				"relative cursor-default outline-none",
+				"grid grid-cols-[auto_1fr_auto] items-center gap-x-2 px-2 py-2 sm:px-4 sm:py-2",
+				{
+					"bg-muted-foreground/10": isActive,
+					"hover:bg-muted/50": !isActive
+				}
+			)}
 			onDoubleClick={handleRowDoubleClick}
 		>
-			<div className="flex grow justify-between gap-x-6 px-6 max-lg:px-4">
-				<div className="flex min-w-0 items-center gap-x-4">
-					<Popover
-						open={openPopoverForId === personalLink.id}
-						onOpenChange={(open: boolean) => setOpenPopoverForId(open ? personalLink.id : null)}
-					>
-						<PopoverTrigger asChild>
-							<Button size="sm" type="button" role="combobox" variant="secondary" className="size-7 shrink-0 p-0">
-								{selectedLearningState?.icon ? (
-									<LaIcon name={selectedLearningState.icon} className={cn(selectedLearningState.className)} />
-								) : (
-									<LaIcon name="Circle" />
-								)}
-							</Button>
-						</PopoverTrigger>
-						<PopoverContent
-							className="w-52 rounded-lg p-0"
-							side="bottom"
-							align="start"
-							onCloseAutoFocus={e => e.preventDefault()}
-						>
-							<LearningStateSelectorContent
-								showSearch={false}
-								searchPlaceholder="Search state..."
-								value={personalLink.learningState}
-								onSelect={handleLearningStateSelect}
-							/>
-						</PopoverContent>
-					</Popover>
+			<Popover
+				open={openPopoverForId === personalLink.id}
+				onOpenChange={(open: boolean) => setOpenPopoverForId(open ? personalLink.id : null)}
+			>
+				<PopoverTrigger asChild>
+					<Button size="sm" type="button" role="combobox" variant="secondary" className="size-7 shrink-0 p-0">
+						{selectedLearningState?.icon ? (
+							<LaIcon name={selectedLearningState.icon} className={cn(selectedLearningState.className)} />
+						) : (
+							<LaIcon name="Circle" />
+						)}
+					</Button>
+				</PopoverTrigger>
+				<PopoverContent
+					className="w-52 rounded-lg p-0"
+					side="bottom"
+					align="start"
+					onCloseAutoFocus={e => e.preventDefault()}
+				>
+					<LearningStateSelectorContent
+						showSearch={false}
+						searchPlaceholder="Search state..."
+						value={personalLink.learningState}
+						onSelect={handleLearningStateSelect}
+					/>
+				</PopoverContent>
+			</Popover>
 
-					{personalLink.icon && (
-						<Image
-							src={personalLink.icon}
-							alt={personalLink.title}
-							className="size-5 rounded-full"
-							width={16}
-							height={16}
-						/>
-					)}
-					<div className="w-full min-w-0 flex-auto">
-						<div className="gap-x-2 space-y-0.5 xl:flex xl:flex-row">
-							<p className="text-primary hover:text-primary line-clamp-1 text-sm font-medium xl:truncate">
-								{personalLink.title}
-							</p>
-							{personalLink.url && (
-								<div className="group flex items-center gap-x-1">
-									<LaIcon
-										name="Link"
-										aria-hidden="true"
-										className="text-muted-foreground group-hover:text-primary flex-none"
-									/>
-									<Link
-										href={personalLink.url}
-										passHref
-										prefetch={false}
-										target="_blank"
-										onClick={e => e.stopPropagation()}
-										className="text-muted-foreground hover:text-primary text-xs"
-									>
-										<span className="xl:truncate">{personalLink.url}</span>
-									</Link>
-								</div>
-							)}
+			<div className="flex min-w-0 flex-col items-start gap-y-1 overflow-hidden md:flex-row md:items-center md:gap-x-2">
+				{personalLink.icon && (
+					<Image
+						src={personalLink.icon}
+						alt={personalLink.title}
+						className="size-5 shrink-0 rounded-full"
+						width={16}
+						height={16}
+					/>
+				)}
+				<div className="flex min-w-0 flex-col items-start gap-y-1 overflow-hidden md:flex-row md:items-center md:gap-x-2">
+					<p className="text-primary hover:text-primary truncate text-sm font-medium">{personalLink.title}</p>
+					{personalLink.url && (
+						<div className="text-muted-foreground flex min-w-0 shrink items-center gap-x-1">
+							<LaIcon name="Link" aria-hidden="true" className="size-3 flex-none" />
+							<Link
+								href={ensureUrlProtocol(personalLink.url)}
+								passHref
+								prefetch={false}
+								target="_blank"
+								onClick={e => e.stopPropagation()}
+								className="hover:text-primary truncate text-xs"
+							>
+								{personalLink.url}
+							</Link>
 						</div>
-					</div>
+					)}
 				</div>
+			</div>
 
-				<div className="flex shrink-0 items-center gap-x-4">
-					{personalLink.topic && <Badge variant="secondary">{personalLink.topic.prettyName}</Badge>}
-				</div>
+			<div className="flex shrink-0 items-center justify-end">
+				{personalLink.topic && <Badge variant="secondary">{personalLink.topic.prettyName}</Badge>}
 			</div>
 		</li>
 	)

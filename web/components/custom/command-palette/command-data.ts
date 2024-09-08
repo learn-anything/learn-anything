@@ -5,7 +5,7 @@ import { HTMLLikeElement } from "@/lib/utils"
 
 export type CommandAction = string | (() => void)
 
-export type CommandItemType = {
+export interface CommandItemType {
 	icon?: keyof typeof icons
 	value: string
 	label: HTMLLikeElement | string
@@ -14,10 +14,25 @@ export type CommandItemType = {
 	shortcut?: string
 }
 
-export type CommandGroupType = {
+export type CommandGroupType = Array<{
 	heading?: string
 	items: CommandItemType[]
-}[]
+}>
+
+const createNavigationItem = (
+	icon: keyof typeof icons,
+	value: string,
+	path: string,
+	actions: ReturnType<typeof useCommandActions>
+): CommandItemType => ({
+	icon,
+	value: `Go to ${value}`,
+	label: {
+		tag: "span",
+		children: ["Go to ", { tag: "span", attributes: { className: "font-semibold" }, children: [value] }]
+	},
+	action: () => actions.navigateTo(path)
+})
 
 export const createCommandGroups = (
 	actions: ReturnType<typeof useCommandActions>,
@@ -81,51 +96,11 @@ export const createCommandGroups = (
 		{
 			heading: "Navigation",
 			items: [
-				{
-					icon: "ArrowRight",
-					value: "Go to Links",
-					label: {
-						tag: "span",
-						children: ["Go to ", { tag: "span", attributes: { className: "font-semibold" }, children: ["links"] }]
-					},
-					action: () => actions.navigateTo("/links")
-				},
-				{
-					icon: "ArrowRight",
-					value: "Go to Pages",
-					label: {
-						tag: "span",
-						children: ["Go to ", { tag: "span", attributes: { className: "font-semibold" }, children: ["pages"] }]
-					},
-					action: () => actions.navigateTo("/pages")
-				},
-				{
-					icon: "ArrowRight",
-					value: "Go to Search",
-					label: {
-						tag: "span",
-						children: ["Go to ", { tag: "span", attributes: { className: "font-semibold" }, children: ["search"] }]
-					},
-					action: () => actions.navigateTo("/search")
-				},
-				{
-					icon: "ArrowRight",
-					value: "Go to Profile",
-					label: {
-						tag: "span",
-						children: ["Go to ", { tag: "span", attributes: { className: "font-semibold" }, children: ["profile"] }]
-					},
-					action: () => actions.navigateTo("/profile")
-				},
-				{
-					icon: "ArrowRight",
-					value: "Go to Settings",
-					label: {
-						tag: "span",
-						children: ["Go to ", { tag: "span", attributes: { className: "font-semibold" }, children: ["settings"] }]
-					},
-					action: () => actions.navigateTo("/settings")
-				}
+				createNavigationItem("ArrowRight", "Links", "/links", actions),
+				createNavigationItem("ArrowRight", "Pages", "/pages", actions),
+				createNavigationItem("ArrowRight", "Search", "/search", actions),
+				createNavigationItem("ArrowRight", "Profile", "/profile", actions),
+				createNavigationItem("ArrowRight", "Settings", "/settings", actions)
 			]
 		}
 	],
@@ -149,7 +124,7 @@ export const createCommandGroups = (
 				},
 				{
 					icon: "Monitor",
-					value: "changeThemeToSystem",
+					value: "Change Theme to System",
 					label: "Change Theme to System",
 					action: () => actions.changeTheme("system")
 				}

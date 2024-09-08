@@ -1,5 +1,4 @@
-"use client"
-
+import React, { useCallback, useEffect, useMemo } from "react"
 import {
 	DndContext,
 	closestCenter,
@@ -11,6 +10,7 @@ import {
 	DragStartEvent,
 	UniqueIdentifier
 } from "@dnd-kit/core"
+import { Primitive } from "@radix-ui/react-primitive"
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { PersonalLinkLists } from "@/lib/schema/personal-link"
@@ -18,15 +18,21 @@ import { useAtom } from "jotai"
 import { linkSortAtom } from "@/store/link"
 import { useKey } from "react-use"
 import { LinkItem } from "./partials/link-item"
-import { useRef, useState, useCallback, useEffect, useMemo } from "react"
-import { learningStateAtom } from "./header"
 import { useQueryState } from "nuqs"
+import { learningStateAtom } from "./header"
+import { commandPaletteOpenAtom } from "@/components/custom/command-palette/command-palette"
 
-interface LinkListProps {}
+interface LinkListProps {
+	activeItemIndex: number | null
+	setActiveItemIndex: React.Dispatch<React.SetStateAction<number | null>>
+	disableEnterKey: boolean
+}
 
-const LinkList: React.FC<LinkListProps> = () => {
+const LinkList: React.FC<LinkListProps> = ({ activeItemIndex, setActiveItemIndex, disableEnterKey }) => {
+	const [isCommandPalettePpen] = useAtom(commandPaletteOpenAtom)
 	const [editId, setEditId] = useQueryState("editId")
 	const [activeLearningState] = useAtom(learningStateAtom)
+	const [draggingId, setDraggingId] = React.useState<UniqueIdentifier | null>(null)
 
 	const { me } = useAccount({
 		root: { personalLinks: [] }
@@ -34,9 +40,6 @@ const LinkList: React.FC<LinkListProps> = () => {
 	const personalLinks = useMemo(() => me?.root?.personalLinks || [], [me?.root?.personalLinks])
 
 	const [sort] = useAtom(linkSortAtom)
-	const [focusedId, setFocusedId] = useState<string | null>(null)
-	const [draggingId, setDraggingId] = useState<UniqueIdentifier | null>(null)
-	const linkRefs = useRef<{ [key: string]: HTMLLIElement | null }>({})
 
 	const filteredLinks = useMemo(
 		() =>
@@ -67,15 +70,21 @@ const LinkList: React.FC<LinkListProps> = () => {
 		})
 	)
 
-	const registerRef = useCallback((id: string, ref: HTMLLIElement | null) => {
-		linkRefs.current[id] = ref
-	}, [])
-
 	useKey("Escape", () => {
 		if (editId) {
 			setEditId(null)
 		}
 	})
+
+	// on mounted, if editId is set, set activeItemIndex to the index of the item with the editId
+	useEffect(() => {
+		if (editId) {
+			const index = sortedLinks.findIndex(link => link?.id === editId)
+			if (index !== -1) {
+				setActiveItemIndex(index)
+			}
+		}
+	}, [editId, sortedLinks, setActiveItemIndex])
 
 	const updateSequences = useCallback((links: PersonalLinkLists) => {
 		links.forEach((link, index) => {
@@ -87,49 +96,40 @@ const LinkList: React.FC<LinkListProps> = () => {
 
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
-			if (!me?.root?.personalLinks || sortedLinks.length === 0 || editId !== null) return
-
-			const currentIndex = sortedLinks.findIndex(link => link?.id === focusedId)
+			if (isCommandPalettePpen || !me?.root?.personalLinks || sortedLinks.length === 0 || editId !== null) return
 
 			if (e.key === "ArrowUp" || e.key === "ArrowDown") {
 				e.preventDefault()
-				const newIndex =
-					e.key === "ArrowUp" ? Math.max(0, currentIndex - 1) : Math.min(sortedLinks.length - 1, currentIndex + 1)
+				setActiveItemIndex(prevIndex => {
+					if (prevIndex === null) return 0
+					const newIndex =
+						e.key === "ArrowUp" ? Math.max(0, prevIndex - 1) : Math.min(sortedLinks.length - 1, prevIndex + 1)
 
-				if (e.metaKey && sort === "manual") {
-					const currentLink = me.root.personalLinks[currentIndex]
-					if (!currentLink) return
+					if (e.metaKey && sort === "manual") {
+						const linksArray = [...me.root.personalLinks]
+						const newLinks = arrayMove(linksArray, prevIndex, newIndex)
 
-					const linksArray = [...me.root.personalLinks]
-					const newLinks = arrayMove(linksArray, currentIndex, newIndex)
-
-					while (me.root.personalLinks.length > 0) {
-						me.root.personalLinks.pop()
-					}
-
-					newLinks.forEach(link => {
-						if (link) {
-							me.root.personalLinks.push(link)
+						while (me.root.personalLinks.length > 0) {
+							me.root.personalLinks.pop()
 						}
-					})
 
-					updateSequences(me.root.personalLinks)
-
-					const newFocusedLink = me.root.personalLinks[newIndex]
-					if (newFocusedLink) {
-						setFocusedId(newFocusedLink.id)
-
-						requestAnimationFrame(() => {
-							linkRefs.current[newFocusedLink.id]?.focus()
+						newLinks.forEach(link => {
+							if (link) {
+								me.root.personalLinks.push(link)
+							}
 						})
+
+						updateSequences(me.root.personalLinks)
 					}
-				} else {
-					const newFocusedLink = sortedLinks[newIndex]
-					if (newFocusedLink) {
-						setFocusedId(newFocusedLink.id)
-						requestAnimationFrame(() => {
-							linkRefs.current[newFocusedLink.id]?.focus()
-						})
+
+					return newIndex
+				})
+			} else if (e.key === "Enter" && !disableEnterKey) {
+				e.preventDefault()
+				if (activeItemIndex !== null) {
+					const activeLink = sortedLinks[activeItemIndex]
+					if (activeLink) {
+						setEditId(activeLink.id)
 					}
 				}
 			}
@@ -137,7 +137,18 @@ const LinkList: React.FC<LinkListProps> = () => {
 
 		window.addEventListener("keydown", handleKeyDown)
 		return () => window.removeEventListener("keydown", handleKeyDown)
-	}, [me?.root?.personalLinks, sortedLinks, focusedId, editId, sort, updateSequences])
+	}, [
+		me?.root?.personalLinks,
+		sortedLinks,
+		editId,
+		sort,
+		updateSequences,
+		isCommandPalettePpen,
+		activeItemIndex,
+		setEditId,
+		setActiveItemIndex,
+		disableEnterKey
+	])
 
 	const handleDragStart = useCallback(
 		(event: DragStartEvent) => {
@@ -185,6 +196,7 @@ const LinkList: React.FC<LinkListProps> = () => {
 				})
 
 				updateSequences(me.root.personalLinks)
+				setActiveItemIndex(newIndex)
 			} catch (error) {
 				console.error("Error during link reordering:", error)
 			}
@@ -194,7 +206,10 @@ const LinkList: React.FC<LinkListProps> = () => {
 	}
 
 	return (
-		<div className="mb-14 flex w-full flex-1 flex-col overflow-y-auto [scrollbar-gutter:stable]">
+		<Primitive.div
+			className="mb-14 flex w-full flex-1 flex-col overflow-y-auto outline-none [scrollbar-gutter:stable]"
+			tabIndex={0}
+		>
 			<DndContext
 				sensors={sensors}
 				collisionDetection={closestCenter}
@@ -204,7 +219,7 @@ const LinkList: React.FC<LinkListProps> = () => {
 				<SortableContext items={sortedLinks.map(item => item?.id || "") || []} strategy={verticalListSortingStrategy}>
 					<ul role="list" className="divide-primary/5 divide-y">
 						{sortedLinks.map(
-							linkItem =>
+							(linkItem, index) =>
 								linkItem && (
 									<LinkItem
 										key={linkItem.id}
@@ -212,17 +227,17 @@ const LinkList: React.FC<LinkListProps> = () => {
 										setEditId={setEditId}
 										personalLink={linkItem}
 										disabled={sort !== "manual" || editId !== null}
-										registerRef={registerRef}
 										isDragging={draggingId === linkItem.id}
-										isFocused={focusedId === linkItem.id}
-										setFocusedId={setFocusedId}
+										isActive={activeItemIndex === index}
+										setActiveItemIndex={setActiveItemIndex}
+										index={index}
 									/>
 								)
 						)}
 					</ul>
 				</SortableContext>
 			</DndContext>
-		</div>
+		</Primitive.div>
 	)
 }
 
