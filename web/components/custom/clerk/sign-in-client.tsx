@@ -1,7 +1,16 @@
-"use client"
+import { SignUp } from "@clerk/nextjs"
 
-import { SignIn } from "@clerk/nextjs"
-
-export const SignInClient = () => {
-	return <SignIn />
+export const SignUpClient = () => {
+	return (
+		<div className="flex justify-center">
+			<SignUp
+				appearance={{
+					elements: {
+						formButtonPrimary: "bg-primary text-primary-foreground",
+						card: "shadow-none"
+					}
+				}}
+			/>
+		</div>
+	)
 }
