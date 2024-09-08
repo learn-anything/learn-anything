@@ -1,9 +1,9 @@
-import { SignUp } from "@clerk/nextjs"
+import { SignIn } from "@clerk/nextjs"
 
-export const SignUpClient = () => {
+export const SignInClient = () => {
 	return (
 		<div className="flex justify-center">
-			<SignUp
+			<SignIn
 				appearance={{
 					elements: {
 						formButtonPrimary: "bg-primary text-primary-foreground",
