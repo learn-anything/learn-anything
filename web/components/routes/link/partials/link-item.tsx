@@ -1,5 +1,3 @@
-"use client"
-
 import React, { useCallback, useMemo } from "react"
 import Image from "next/image"
 import Link from "next/link"
@@ -15,7 +13,7 @@ import { PersonalLink } from "@/lib/schema/personal-link"
 import { LinkForm } from "./form/link-form"
 import { cn } from "@/lib/utils"
 import { LEARNING_STATES, LearningStateValue } from "@/lib/constants"
-import { linkOpenPopoverForIdAtom, linkShowCreateAtom } from "@/store/link"
+import { linkOpenPopoverForIdAtom } from "@/store/link"
 
 interface LinkItemProps {
 	personalLink: PersonalLink
@@ -23,9 +21,9 @@ interface LinkItemProps {
 	isEditing: boolean
 	setEditId: (id: string | null) => void
 	isDragging: boolean
-	isFocused: boolean
-	setFocusedId: (id: string | null) => void
-	registerRef: (id: string, ref: HTMLLIElement | null) => void
+	isActive: boolean
+	setActiveItemIndex: (index: number | null) => void
+	index: number
 }
 
 export const LinkItem: React.FC<LinkItemProps> = ({
@@ -34,9 +32,9 @@ export const LinkItem: React.FC<LinkItemProps> = ({
 	personalLink,
 	disabled = false,
 	isDragging,
-	isFocused,
-	setFocusedId,
-	registerRef
+	isActive,
+	setActiveItemIndex,
+	index
 }) => {
 	const [openPopoverForId, setOpenPopoverForId] = useAtom(linkOpenPopoverForIdAtom)
 	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: personalLink.id, disabled })
@@ -48,14 +46,6 @@ export const LinkItem: React.FC<LinkItemProps> = ({
 			pointerEvents: isDragging ? "none" : "auto"
 		}),
 		[transform, transition, isDragging]
-	)
-
-	const refCallback = useCallback(
-		(node: HTMLLIElement | null) => {
-			setNodeRef(node)
-			registerRef(personalLink.id, node)
-		},
-		[setNodeRef, registerRef, personalLink.id]
 	)
 
 	const handleKeyDown = useCallback(
@@ -92,17 +82,17 @@ export const LinkItem: React.FC<LinkItemProps> = ({
 
 	return (
 		<li
-			ref={refCallback}
+			ref={setNodeRef}
 			style={style as React.CSSProperties}
 			{...attributes}
 			{...listeners}
 			tabIndex={0}
-			onFocus={() => setFocusedId(personalLink.id)}
-			onBlur={() => setFocusedId(null)}
+			onFocus={() => setActiveItemIndex(index)}
+			onBlur={() => setActiveItemIndex(null)}
 			onKeyDown={handleKeyDown}
 			className={cn("relative flex h-14 cursor-default items-center outline-none xl:h-11", {
-				"bg-muted-foreground/10": isFocused,
-				"hover:bg-muted/50": !isFocused
+				"bg-muted-foreground/10": isActive,
+				"hover:bg-muted/50": !isActive
 			})}
 			onDoubleClick={handleRowDoubleClick}
 		>

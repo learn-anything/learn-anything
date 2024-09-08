@@ -21,7 +21,8 @@ export function LinkRoute() {
 		<div className="flex h-full flex-auto flex-col overflow-hidden">
 			<LinkHeader />
 			<LinkManage />
-			<LinkList />
+			{/* Refresh list everytime editId is changed */}
+			<LinkList key={nuqsEditId} />
 			<LinkBottomBar />
 		</div>
 	)
