@@ -19,7 +19,6 @@ pnpm-lock.yaml
 .next
 
 # repos
-cli
 private
 docs
 

@@ -4,8 +4,8 @@
 		"dev": "bun web",
 		"web": "cd web && bun dev",
 		"web:build": "bun run --filter '*' build",
-		"cli": "bun run --watch cli/run.ts",
-		"seed": "bun --watch cli/seed.ts",
+		"cli": "bun run --watch scripts/run.ts",
+		"seed": "bun --watch scripts/seed.ts",
 		"tauri": "tauri",
 		"app:build": "bun tauri build -b dmg -v"
 	},

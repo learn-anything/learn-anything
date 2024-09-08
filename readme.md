@@ -2,7 +2,21 @@
 
 > Organize world's knowledge, explore connections and curate learning paths
 
+## Files
+
+- [api](api) - http services (using TS/[Encore](https://encore.dev/))
+- [app](app) - desktop app (wrapping the [website](web) with desktop specific logic) (using [Tauri](https://v2.tauri.app/))
+- [cli](cli) - cli (using [Go](https://go.dev))
+- [docs](https://github.com/learn-anything/docs) - public docs hosted on [docs.learn-anything.xyz](https://docs.learn-anything.xyz/) (separate repo, to be managed by LA itself soon)
+- [lib](lib) - shared utility functions in TS
+- [nix](nix) - shared nix code
+- [scripts](scripts) - utility scripts in TS
+- [web](web) - website hosted on [learn-anything.xyz](https://learn-anything.xyz) (using [React](https://react.dev/)/[Next.js](https://nextjs.org/) + [Jazz](https://jazz.tools/) for local/global state)
+
 ## Setup
+
+> [!NOTE]
+> Project is currently in unstable state but actively improving. Reach out on [Discord](https://discord.gg/bxtD8x6aNF) for help.
 
 Using [Bun](https://bun.sh):
 
@@ -10,24 +24,17 @@ Using [Bun](https://bun.sh):
 bun i
 ```
 
-> [!NOTE]
-> Project is currently in unstable state but actively improving. Reach out on [Discord](https://discord.gg/bxtD8x6aNF) for help.
+> [!NOTE] > `bun setup` is not yet done but will be a command to fully bootstrap a local working env for the project, without it, running `bun web` is impossible yet
+
+```
+bun setup
+```
 
 ## Run website
-
-> [!NOTE]
-> Requires jazz to be seeded, docs for this are TODO:
 
 ```
 bun web
 ```
-
-## Stack
-
-- [React](https://react.dev/)/[Next.js](https://nextjs.org/) - website built on this
-- [Encore](https://encore.dev/) - http services in ts/node
-- [Jazz](https://jazz.tools/) - global/local state management in both react and encore ts http services
-- [Tauri](https://v2.tauri.app/)/[Rust](https://www.rust-lang.org) - desktop app (wrapping the website with desktop specific logic)
 
 ## Contributing
 
