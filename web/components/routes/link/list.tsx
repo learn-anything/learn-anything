@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo } from "react"
 import {
 	DndContext,
 	closestCenter,
@@ -22,13 +22,16 @@ import { useQueryState } from "nuqs"
 import { learningStateAtom } from "./header"
 import { commandPaletteOpenAtom } from "@/components/custom/command-palette/command-palette"
 
-interface LinkListProps {}
+interface LinkListProps {
+	activeItemIndex: number | null
+	setActiveItemIndex: React.Dispatch<React.SetStateAction<number | null>>
+}
 
-const LinkList: React.FC<LinkListProps> = () => {
+const LinkList: React.FC<LinkListProps> = ({ activeItemIndex, setActiveItemIndex }) => {
 	const [isCommandPalettePpen] = useAtom(commandPaletteOpenAtom)
 	const [editId, setEditId] = useQueryState("editId")
 	const [activeLearningState] = useAtom(learningStateAtom)
-	const [activeItemIndex, setActiveItemIndex] = useState<number | null>(null)
+	const [draggingId, setDraggingId] = React.useState<UniqueIdentifier | null>(null)
 
 	const { me } = useAccount({
 		root: { personalLinks: [] }
@@ -36,7 +39,6 @@ const LinkList: React.FC<LinkListProps> = () => {
 	const personalLinks = useMemo(() => me?.root?.personalLinks || [], [me?.root?.personalLinks])
 
 	const [sort] = useAtom(linkSortAtom)
-	const [draggingId, setDraggingId] = useState<UniqueIdentifier | null>(null)
 
 	const filteredLinks = useMemo(
 		() =>
@@ -72,6 +74,16 @@ const LinkList: React.FC<LinkListProps> = () => {
 			setEditId(null)
 		}
 	})
+
+	// on mounted, if editId is set, set activeItemIndex to the index of the item with the editId
+	useEffect(() => {
+		if (editId) {
+			const index = sortedLinks.findIndex(link => link?.id === editId)
+			if (index !== -1) {
+				setActiveItemIndex(index)
+			}
+		}
+	}, [editId, sortedLinks, setActiveItemIndex])
 
 	const updateSequences = useCallback((links: PersonalLinkLists) => {
 		links.forEach((link, index) => {
@@ -111,12 +123,28 @@ const LinkList: React.FC<LinkListProps> = () => {
 
 					return newIndex
 				})
+			} else if (e.key === "Enter" && activeItemIndex !== null) {
+				e.preventDefault()
+				const activeLink = sortedLinks[activeItemIndex]
+				if (activeLink) {
+					setEditId(activeLink.id)
+				}
 			}
 		}
 
 		window.addEventListener("keydown", handleKeyDown)
 		return () => window.removeEventListener("keydown", handleKeyDown)
-	}, [me?.root?.personalLinks, sortedLinks, editId, sort, updateSequences, isCommandPalettePpen])
+	}, [
+		me?.root?.personalLinks,
+		sortedLinks,
+		editId,
+		sort,
+		updateSequences,
+		isCommandPalettePpen,
+		activeItemIndex,
+		setEditId,
+		setActiveItemIndex
+	])
 
 	const handleDragStart = useCallback(
 		(event: DragStartEvent) => {
