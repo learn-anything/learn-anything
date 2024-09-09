@@ -12,7 +12,18 @@ const Jazz = createJazzReactApp({
 
 export const { useAccount, useAccountOrGuest, useCoState, useAcceptInvite } = Jazz
 
-const JAZZ_PEER_URL = "wss://mesh.jazz.tools/?key=example@gmail.com"
+function assertPeerUrl(url: string | undefined): asserts url is `wss://${string}` | `ws://${string}` {
+	if (!url) {
+		throw new Error("NEXT_PUBLIC_JAZZ_PEER_URL is not defined")
+	}
+	if (!url.startsWith("wss://") && !url.startsWith("ws://")) {
+		throw new Error("NEXT_PUBLIC_JAZZ_PEER_URL must start with wss:// or ws://")
+	}
+}
+
+const rawUrl = process.env.NEXT_PUBLIC_JAZZ_PEER_URL
+assertPeerUrl(rawUrl)
+const JAZZ_PEER_URL = rawUrl
 
 interface ChildrenProps {
 	children: React.ReactNode
