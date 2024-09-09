@@ -21,6 +21,8 @@ import { LinkItem } from "./partials/link-item"
 import { useQueryState } from "nuqs"
 import { learningStateAtom } from "./header"
 import { commandPaletteOpenAtom } from "@/components/custom/command-palette/command-palette"
+import { useConfirm } from "@omit/react-confirm-dialog"
+import { toast } from "sonner"
 
 interface LinkListProps {
 	activeItemIndex: number | null
@@ -33,6 +35,7 @@ const LinkList: React.FC<LinkListProps> = ({ activeItemIndex, setActiveItemIndex
 	const [editId, setEditId] = useQueryState("editId")
 	const [activeLearningState] = useAtom(learningStateAtom)
 	const [draggingId, setDraggingId] = React.useState<UniqueIdentifier | null>(null)
+	const confirm = useConfirm()
 
 	const { me } = useAccount({
 		root: { personalLinks: [] }
@@ -75,6 +78,55 @@ const LinkList: React.FC<LinkListProps> = ({ activeItemIndex, setActiveItemIndex
 			setEditId(null)
 		}
 	})
+
+	useKey(
+		event => (event.metaKey || event.ctrlKey) && event.key === "Backspace",
+		async () => {
+			if (activeItemIndex !== null) {
+				const activeLink = sortedLinks[activeItemIndex]
+				if (activeLink) {
+					console.log("Delete link", activeLink.toJSON())
+
+					const result = await confirm({
+						title: `Delete "${activeLink.title}"?`,
+						description: "This action cannot be undone.",
+						alertDialogTitle: {
+							className: "text-base"
+						},
+						cancelButton: {
+							variant: "outline"
+						},
+						confirmButton: {
+							variant: "destructive"
+						}
+					})
+
+					if (result) {
+						if (!me?.root.personalLinks) return
+
+						const index = me.root.personalLinks.findIndex(item => item?.id === activeLink.id)
+						if (index === -1) {
+							console.error("Delete operation fail", { index, activeLink })
+							return
+						}
+
+						toast.success("Link deleted.", {
+							position: "bottom-right",
+							description: (
+								<span>
+									<strong>{activeLink.title}</strong> has been deleted.
+								</span>
+							)
+						})
+
+						me.root.personalLinks.splice(index, 1)
+						setEditId(null)
+					}
+				}
+			}
+		},
+		{ event: "keydown" }
+	)
 
 	// on mounted, if editId is set, set activeItemIndex to the index of the item with the editId
 	useEffect(() => {
