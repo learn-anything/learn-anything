@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { Command } from "cmdk"
@@ -70,15 +68,6 @@ export function CommandPalette() {
 		[activePage, inputValue, bounce]
 	)
 
-	const allCommands = React.useMemo(() => {
-		if (!commandGroups) return []
-
-		return Object.entries(commandGroups).map(([key, value]) => ({
-			heading: toTitleCase(key),
-			items: value.flatMap(subgroup => subgroup.items)
-		}))
-	}, [commandGroups])
-
 	const topics = React.useMemo(
 		() => ({
 			heading: "Topics",
@@ -126,14 +115,22 @@ export function CommandPalette() {
 		const searchRegex = searchSafeRegExp(inputValue)
 
 		if (activePage === "home") {
-			if (!inputValue) return commandGroups.home
+			const filteredGroups = Object.entries(commandGroups)
+				.map(([key, groups]) => {
+					return groups.map(group => ({
+						heading: group.heading,
+						items: filterItems(group.items, searchRegex)
+					}))
+				})
+				.flat()
 
-			return [...allCommands, personalLinks, personalPages, topics]
-				.map(group => ({
-					heading: group.heading,
-					items: filterItems(group.items, searchRegex)
-				}))
-				.filter(group => group.items.length > 0)
+			const additionalGroups = [
+				{ heading: personalLinks.heading, items: filterItems(personalLinks.items, searchRegex) },
+				{ heading: personalPages.heading, items: filterItems(personalPages.items, searchRegex) },
+				{ heading: topics.heading, items: filterItems(topics.items, searchRegex) }
+			]
+
+			return [...filteredGroups, ...additionalGroups].filter(group => group.items.length > 0)
 		}
 
 		switch (activePage) {
@@ -151,7 +148,7 @@ export function CommandPalette() {
 					}))
 					.filter(group => group.items.length > 0)
 		}
-	}, [inputValue, activePage, allCommands, personalLinks, personalPages, commandGroups, topics])
+	}, [inputValue, activePage, commandGroups, personalLinks, personalPages, topics])
 
 	const handleAction = React.useCallback(
 		(action: CommandAction, payload?: any) => {
