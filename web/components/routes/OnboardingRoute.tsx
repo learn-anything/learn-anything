@@ -1,3 +1,6 @@
+import { LaIcon } from "../custom/la-icon"
+import { useState } from "react"
+
 const steps = [
 	{
 		number: 1,
