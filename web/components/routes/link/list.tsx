@@ -167,7 +167,6 @@ const LinkList: React.FC<LinkListProps> = ({ activeItemIndex, setActiveItemIndex
 					return newIndex
 				})
 			} else if (e.key === "Enter" && !disableEnterKey) {
-				console.log("Enter key pressed", { activeItemIndex, sortedLinks, disableEnterKey })
 				e.preventDefault()
 				if (activeItemIndex !== null) {
 					const activeLink = sortedLinks[activeItemIndex]
