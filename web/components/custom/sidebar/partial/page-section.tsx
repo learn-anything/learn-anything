@@ -57,7 +57,8 @@ export const PageSection: React.FC<{ pathname?: string }> = ({ pathname }) => {
 	const [show, setShow] = useAtom(pageShowAtom)
 
 	const pageCount = me?.root.personalPages?.length || 0
-	const isActive = pathname ? pathname.startsWith("/pages") : false
+	// const isActive = pathname ? pathname.startsWith("/pages") : false
+	const isActive = pathname === "/pages"
 
 	if (!me) return null
 
@@ -74,21 +75,24 @@ interface PageSectionHeaderProps {
 	isActive: boolean
 }
 
-const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({ pageCount }) => (
+const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({ pageCount, isActive }) => (
 	<div
-		className={cn("flex min-h-[30px] items-center gap-px rounded-md", "hover:bg-accent hover:text-accent-foreground")}
+		className={cn(
+			"flex min-h-[30px] items-center gap-px rounded-md",
+			isActive ? "bg-accent text-accent-foreground" : "hover:bg-accent hover:text-accent-foreground"
+		)}
 	>
 		<Link
 			href="/pages"
-			className="size-6 flex-1 items-center justify-start rounded-md px-2 py-1 focus-visible:outline-none focus-visible:ring-0"
+			className="flex flex-1 items-center justify-start rounded-md px-2 py-1 focus-visible:outline-none focus-visible:ring-0"
 		>
-			<p className="flex items-center text-xs font-medium">
+			<p className="text-xs">
 				Pages
 				{pageCount > 0 && <span className="text-muted-foreground ml-1">{pageCount}</span>}
 			</p>
 		</Link>
 
-		<div className={cn("flex items-center gap-px pr-2")}>
+		<div className="flex items-center gap-px pr-2">
 			<ShowAllForm />
 			<NewPageButton />
 		</div>
