@@ -82,7 +82,7 @@ export const LinkItem = React.memo(
 						toast.success("Link learning state updated", defaultToast)
 					}
 				} else {
-					const slug = generateUniqueSlug(personalLinks.toJSON(), link.title)
+					const slug = generateUniqueSlug(link.title)
 					const newPersonalLink = PersonalLink.create(
 						{
 							url: link.url,

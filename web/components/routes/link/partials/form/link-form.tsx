@@ -147,8 +147,7 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 		if (isFetching || !me) return
 
 		try {
-			const personalLinks = me.root?.personalLinks?.toJSON() || []
-			const slug = generateUniqueSlug(personalLinks, values.title)
+			const slug = generateUniqueSlug(values.title)
 
 			if (selectedLink) {
 				const { topic, ...diffValues } = values
