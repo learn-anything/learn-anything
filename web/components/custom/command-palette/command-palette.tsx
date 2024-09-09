@@ -12,7 +12,7 @@ import { GraphNode } from "@/components/routes/public/PublicHomeRoute"
 import { useCommandActions } from "./hooks/use-command-actions"
 import { atom, useAtom } from "jotai"
 
-let graph_data_promise = import("@/components/routes/public/graph-data.json").then(a => a.default)
+const graph_data_promise = import("@/components/routes/public/graph-data.json").then(a => a.default)
 
 const filterItems = (items: CommandItemType[], searchRegex: RegExp) =>
 	items.filter(item => searchRegex.test(item.value)).slice(0, 6)

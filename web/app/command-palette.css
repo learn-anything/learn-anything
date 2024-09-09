@@ -69,14 +69,14 @@
 [la-dialog][cmdk-dialog] {
 	top: 15%;
 	transform: translateX(-50%);
-	width: 640px;
+	max-width: 640px;
 	background: var(--cmdk-bg);
 	box-shadow: var(--cmdk-shadow);
 	transform-origin: left;
 	animation: scaleIn 0.2s ease;
 	transition: transform 0.1s ease;
 	border: 0.5px solid var(--cmdk-border-color);
-	@apply fixed left-1/2 z-50 overflow-hidden rounded-lg outline-none;
+	@apply fixed left-1/2 z-50 w-full overflow-hidden rounded-lg outline-none;
 }
 
 [la-dialog][cmdk-dialog][data-state="closed"] {
