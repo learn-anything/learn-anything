@@ -34,7 +34,7 @@ export const PageItem = React.forwardRef<HTMLAnchorElement, PageItemProps>(({ pa
 		>
 			<div className="flex h-full items-center gap-4">
 				<Column.Wrapper style={columnStyles.title}>
-					<Column.Text className="truncate text-[13px] font-medium">{page.title}</Column.Text>
+					<Column.Text className="truncate text-[13px] font-medium">{page.title || "Untitled"}</Column.Text>
 				</Column.Wrapper>
 
 				{!isTablet && (
