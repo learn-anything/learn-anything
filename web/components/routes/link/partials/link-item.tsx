@@ -92,7 +92,7 @@ export const LinkItem: React.FC<LinkItemProps> = ({
 			onKeyDown={handleKeyDown}
 			className={cn(
 				"relative cursor-default outline-none",
-				"grid grid-cols-[auto_1fr_auto] items-center gap-x-2 px-2 py-2 sm:px-4 sm:py-2",
+				"grid grid-cols-[auto_1fr_auto] items-center gap-x-2 py-2 max-lg:px-4 sm:px-5 sm:py-2",
 				{
 					"bg-muted-foreground/10": isActive,
 					"hover:bg-muted/50": !isActive
