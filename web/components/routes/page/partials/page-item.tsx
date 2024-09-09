@@ -3,7 +3,9 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { PersonalPage } from "@/lib/schema"
 import { Badge } from "@/components/ui/badge"
-import { Column, COLUMN_STYLES } from "./list"
+import { Column } from "./column"
+import { useMedia } from "react-use"
+import { useColumnStyles } from "../hooks/use-column-styles"
 
 interface PageItemProps {
 	page: PersonalPage
@@ -11,6 +13,9 @@ interface PageItemProps {
 }
 
 export const PageItem = React.forwardRef<HTMLAnchorElement, PageItemProps>(({ page, isActive }, ref) => {
+	const isTablet = useMedia("(max-width: 640px)")
+	const columnStyles = useColumnStyles()
+
 	return (
 		<Link
 			ref={ref}
@@ -28,16 +33,22 @@ export const PageItem = React.forwardRef<HTMLAnchorElement, PageItemProps>(({ pa
 			aria-selected={isActive}
 		>
 			<div className="flex h-full items-center gap-1.5">
-				<Column.Wrapper style={COLUMN_STYLES.title}>
+				<Column.Wrapper style={columnStyles.title}>
 					<Column.Text className="text-[13px] font-medium">{page.title}</Column.Text>
 				</Column.Wrapper>
-				<Column.Wrapper style={COLUMN_STYLES.content}>
-					<Column.Text className="text-[13px]">{page.slug}</Column.Text>
-				</Column.Wrapper>
-				<Column.Wrapper style={COLUMN_STYLES.topic}>
-					{page.topic && <Badge variant="secondary">{page.topic.prettyName}</Badge>}
-				</Column.Wrapper>
-				<Column.Wrapper style={COLUMN_STYLES.updated} className="justify-end">
+
+				{!isTablet && (
+					<>
+						<Column.Wrapper style={columnStyles.content}>
+							<Column.Text className="text-[13px]">{page.slug}</Column.Text>
+						</Column.Wrapper>
+						<Column.Wrapper style={columnStyles.topic}>
+							{page.topic && <Badge variant="secondary">{page.topic.prettyName}</Badge>}
+						</Column.Wrapper>
+					</>
+				)}
+
+				<Column.Wrapper style={columnStyles.updated} className="justify-end">
 					<Column.Text className="text-[13px]">{page.updatedAt.toLocaleDateString()}</Column.Text>
 				</Column.Wrapper>
 			</div>
