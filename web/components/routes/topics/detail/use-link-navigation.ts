@@ -27,7 +27,6 @@ export function useLinkNavigation(allLinks: (LinkSchema | null)[]) {
 
 	const handleKeyDown = useCallback(
 		(e: KeyboardEvent) => {
-			console.log("handleKeyDown")
 			if (e.key === "ArrowDown") {
 				e.preventDefault()
 				setActiveIndex(prevIndex => {

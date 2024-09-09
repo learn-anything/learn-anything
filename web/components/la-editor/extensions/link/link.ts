@@ -49,7 +49,6 @@ export const Link = TiptapLink.extend({
 						 * This will move the cursor to the end of the link.
 						 */
 						if (event.key === "Escape" && selection.empty !== true) {
-							console.log("Link handleKeyDown")
 							editor.commands.focus(selection.to, { scrollIntoView: false })
 						}
 

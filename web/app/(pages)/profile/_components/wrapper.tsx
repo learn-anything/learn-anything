@@ -33,7 +33,6 @@ export const ProfileWrapper = () => {
 	const editAvatar = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0]
 		if (file) {
-			console.log("File selected:", file)
 			const imageUrl = URL.createObjectURL(file)
 			if (account.me && account.me.profile) {
 				account.me.profile.avatarUrl = imageUrl
@@ -74,7 +73,6 @@ export const ProfileWrapper = () => {
 
 		if (account.me && account.me.profile) {
 			account.me.profile.name = newName.trim()
-			console.log("Updating name to:", newName.trim())
 		}
 		setIsEditing(false)
 	}

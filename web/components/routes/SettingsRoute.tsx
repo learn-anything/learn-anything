@@ -97,7 +97,6 @@ export const SettingsRoute = () => {
 	const [topInboxHotkey, setTopInboxHotkey] = useState("")
 
 	const saveSettings = () => {
-		console.log("Saving settings:", { inboxHotkey, topInboxHotkey })
 		toast.success("Settings saved", {
 			description: "Your hotkey settings have been updated."
 		})

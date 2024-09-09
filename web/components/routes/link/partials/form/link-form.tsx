@@ -135,7 +135,6 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 					shouldValidate: true
 				})
 			form.setFocus("title")
-			console.log(form.formState.isValid, "form state after....")
 		} catch (err) {
 			console.error("Failed to fetch metadata", err)
 		} finally {

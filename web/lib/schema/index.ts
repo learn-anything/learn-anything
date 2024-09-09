@@ -44,8 +44,6 @@ export class LaAccount extends Account {
 		// so just do default profile create provided by jazz-tools
 		super.migrate(creationProps)
 
-		console.log("In migration", this._refs.root, creationProps)
-
 		if (!this._refs.root && creationProps) {
 			this.root = UserRoot.create(
 				{
