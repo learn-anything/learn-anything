@@ -15,6 +15,20 @@ export const metadata: Metadata = {
 	description: "Organize world's knowledge, explore connections and curate learning paths"
 }
 
+const Providers = ({ children }: { children: React.ReactNode }) => (
+	<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+		<ClerkProviderClient>
+			<DeepLinkProvider>
+				<JotaiProvider>
+					<ConfirmProvider>
+						<JazzAndAuth>{children}</JazzAndAuth>
+					</ConfirmProvider>
+				</JotaiProvider>
+			</DeepLinkProvider>
+		</ClerkProviderClient>
+	</ThemeProvider>
+)
+
 export default function RootLayout({
 	children
 }: Readonly<{
@@ -22,20 +36,12 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en" className="h-full w-full" suppressHydrationWarning>
-			<ClerkProviderClient>
-				<DeepLinkProvider>
-					<body className={cn("h-full w-full font-sans antialiased", GeistSans.variable, GeistMono.variable)}>
-						<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-							<JotaiProvider>
-								<ConfirmProvider>
-									<JazzAndAuth>{children}</JazzAndAuth>
-									<Toaster expand={false} />
-								</ConfirmProvider>
-							</JotaiProvider>
-						</ThemeProvider>
-					</body>
-				</DeepLinkProvider>
-			</ClerkProviderClient>
+			<body className={cn("h-full w-full font-sans antialiased", GeistSans.variable, GeistMono.variable)}>
+				<Providers>
+					{children}
+					<Toaster expand={false} />
+				</Providers>
+			</body>
 		</html>
 	)
 }
