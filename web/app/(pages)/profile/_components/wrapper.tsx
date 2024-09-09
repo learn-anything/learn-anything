@@ -1,12 +1,13 @@
 "use client"
 
 import { useAccount } from "@/lib/providers/jazz-provider"
+import { useUser } from "@clerk/nextjs"
 import { useState, useRef, useCallback } from "react"
 import { useParams } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarImage } from "@/components/ui/avatar"
 
 interface ProfileStatsProps {
 	number: number
@@ -26,7 +27,19 @@ export const ProfileWrapper = () => {
 	const account = useAccount()
 	const params = useParams()
 	const username = params.username as string
+	const { user, isSignedIn } = useUser()
 	const avatarInputRef = useRef<HTMLInputElement>(null)
+
+	const editAvatar = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const file = event.target.files?.[0]
+		if (file) {
+			console.log("File selected:", file)
+			const imageUrl = URL.createObjectURL(file)
+			if (account.me && account.me.profile) {
+				account.me.profile.avatarUrl = imageUrl
+			}
+		}
+	}
 
 	const [isEditing, setIsEditing] = useState(false)
 	const [newName, setNewName] = useState(account.me?.profile?.name || "")
@@ -72,13 +85,6 @@ export const ProfileWrapper = () => {
 		setError("")
 	}
 
-	const editAvatar = (event: React.ChangeEvent<HTMLInputElement>) => {
-		const file = event.target.files?.[0]
-		if (file) {
-			console.log("File selected:", file)
-		}
-	}
-
 	if (!account.me || !account.me.profile) {
 		return (
 			<div className="flex h-screen flex-col py-3 text-black dark:text-white">
@@ -107,14 +113,12 @@ export const ProfileWrapper = () => {
 			<p className="text-2xl font-semibold">{username}</p>
 			<div className="flex flex-col items-center border-b border-neutral-900 bg-inherit pb-5">
 				<div className="flex w-full max-w-2xl align-top">
-					<Avatar className="mr-3 h-[130px] w-[130px] hover:opacity-80">
-						<AvatarImage src={account.me?.profile?.avatarUrl} alt={account.me?.profile?.name} />
-						<AvatarFallback onClick={() => avatarInputRef.current?.click()} className="cursor-pointer">
-							{account.me?.profile?.name?.charAt(0)}
-						</AvatarFallback>
-					</Avatar>
+					<Button onClick={() => avatarInputRef.current?.click()} variant="ghost" className="p-0 hover:bg-transparent">
+						<Avatar className="size-20">
+							<AvatarImage src={account.me?.profile?.avatarUrl || user?.imageUrl} alt={user?.fullName || ""} />
+						</Avatar>
+					</Button>
 					<input type="file" ref={avatarInputRef} onChange={editAvatar} accept="image/*" style={{ display: "none" }} />
-
 					<div className="ml-6 flex-1">
 						{isEditing ? (
 							<>
@@ -160,47 +164,4 @@ export const ProfileWrapper = () => {
 			</div>
 		</div>
 	)
-}
-
-{
-	// interface ProfileLinksProps {
-	// 	linklabel?: string
-	// 	link?: string
-	// 	topic?: string
-	// }
-	// interface ProfilePagesProps {
-	// 	topic?: string
-	// }
-	// const ProfileLinks: React.FC<ProfileLinksProps> = ({ linklabel, link, topic }) => {
-	// 	return (
-	// 		<div className="flex flex-row items-center justify-between bg-[#121212] p-3 text-black dark:text-white">
-	// 			<div className="flex flex-row items-center space-x-3">
-	// 				<p className="text-base text-opacity-90">{linklabel || "Untitled"}</p>
-	// 				<div className="flex cursor-pointer flex-row items-center gap-1">
-	// 					<LaIcon name="Link" />
-	// 					<p className="text-sm text-opacity-10">{link || "#"}</p>
-	// 				</div>
-	// 			</div>
-	// 			<div className="text0opacity-50 bg-[#1a1a1a] p-2">{topic || "Uncategorized"}</div>
-	// 		</div>
-	// 	)
-	// }
-	// const ProfilePages: React.FC<ProfilePagesProps> = ({ topic }) => {
-	// 	return (
-	// 		<div className="flex flex-row items-center justify-between rounded-lg bg-[#121212] p-3 text-black dark:text-white">
-	// 			<div className="rounded-lg bg-[#1a1a1a] p-2 text-opacity-50">{topic || "Uncategorized"}</div>
-	// 		</div>
-	// 	)
-	// }
-	/* <a href={account.me.root?.website || "#"} className="mb-1 flex flex-row items-center text-sm font-light">
-							<Icon name="Link" />
-							<p className="pl-1">{account.me.root?.website}</p>
-						</a> */
-	/* <Button
-					onClick={clickEdit}
-					className="shadow-outer ml-auto flex h-[34px] cursor-pointer flex-row space-x-2 rounded-lg bg-white px-3 text-black shadow-[1px_1px_1px_1px_rgba(0,0,0,0.3)] hover:bg-black/10 dark:bg-[#222222] dark:text-white dark:hover:opacity-60"
-				>
-					<LaIcon name="UserCog" className="text-foreground cursor-pointer" />
-					<span>Edit Profile</span>
-				</Button> */
 }
