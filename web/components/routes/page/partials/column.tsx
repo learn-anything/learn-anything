@@ -10,7 +10,7 @@ interface ColumnTextProps extends React.HTMLAttributes<HTMLSpanElement> {}
 const ColumnWrapper = React.forwardRef<HTMLDivElement, ColumnWrapperProps>(
 	({ children, className, style, ...props }, ref) => (
 		<div
-			className={cn("flex grow flex-row items-center justify-start truncate", className)}
+			className={cn("flex grow flex-row items-center justify-start", className)}
 			style={{
 				width: "var(--width)",
 				minWidth: "var(--min-width, min-content)",

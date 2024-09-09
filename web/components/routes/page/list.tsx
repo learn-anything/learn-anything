@@ -46,13 +46,13 @@ export const ColumnHeader: React.FC = () => {
 	const columnStyles = useColumnStyles()
 
 	return (
-		<div className="flex h-8 shrink-0 grow-0 flex-row gap-1.5 border-b max-lg:px-4 sm:px-6">
+		<div className="flex h-8 shrink-0 grow-0 flex-row gap-4 border-b max-lg:px-4 sm:px-6">
 			<Column.Wrapper style={columnStyles.title}>
 				<Column.Text>Title</Column.Text>
 			</Column.Wrapper>
-			<Column.Wrapper style={columnStyles.content}>
+			{/* <Column.Wrapper style={columnStyles.content}>
 				<Column.Text>Content</Column.Text>
-			</Column.Wrapper>
+			</Column.Wrapper> */}
 			<Column.Wrapper style={columnStyles.topic}>
 				<Column.Text>Topic</Column.Text>
 			</Column.Wrapper>

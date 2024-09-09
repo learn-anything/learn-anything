@@ -32,16 +32,16 @@ export const PageItem = React.forwardRef<HTMLAnchorElement, PageItemProps>(({ pa
 			role="listitem"
 			aria-selected={isActive}
 		>
-			<div className="flex h-full items-center gap-1.5">
+			<div className="flex h-full items-center gap-4">
 				<Column.Wrapper style={columnStyles.title}>
-					<Column.Text className="text-[13px] font-medium">{page.title}</Column.Text>
+					<Column.Text className="truncate text-[13px] font-medium">{page.title}</Column.Text>
 				</Column.Wrapper>
 
 				{!isTablet && (
 					<>
-						<Column.Wrapper style={columnStyles.content}>
+						{/* <Column.Wrapper style={columnStyles.content}>
 							<Column.Text className="text-[13px]">{page.slug}</Column.Text>
-						</Column.Wrapper>
+						</Column.Wrapper> */}
 						<Column.Wrapper style={columnStyles.topic}>
 							{page.topic && <Badge variant="secondary">{page.topic.prettyName}</Badge>}
 						</Column.Wrapper>
