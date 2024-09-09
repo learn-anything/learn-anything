@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { Command } from "cmdk"
@@ -7,15 +5,15 @@ import { Dialog, DialogPortal, DialogHeader, DialogTitle, DialogDescription } fr
 import { CommandGroup } from "./command-items"
 import { CommandAction, CommandItemType, createCommandGroups } from "./command-data"
 import { useAccount } from "@/lib/providers/jazz-provider"
-import { searchSafeRegExp, toTitleCase } from "@/lib/utils"
+import { searchSafeRegExp } from "@/lib/utils"
 import { GraphNode } from "@/components/routes/public/PublicHomeRoute"
 import { useCommandActions } from "./hooks/use-command-actions"
 import { atom, useAtom } from "jotai"
 
-let graph_data_promise = import("@/components/routes/public/graph-data.json").then(a => a.default)
+const graph_data_promise = import("@/components/routes/public/graph-data.json").then(a => a.default)
 
 const filterItems = (items: CommandItemType[], searchRegex: RegExp) =>
-	items.filter(item => searchRegex.test(item.value))
+	items.filter(item => searchRegex.test(item.value)).slice(0, 10)
 
 export const commandPaletteOpenAtom = atom(false)
 
@@ -70,15 +68,6 @@ export function CommandPalette() {
 		[activePage, inputValue, bounce]
 	)
 
-	const allCommands = React.useMemo(() => {
-		if (!commandGroups) return []
-
-		return Object.entries(commandGroups).map(([key, value]) => ({
-			heading: toTitleCase(key),
-			items: value.flatMap(subgroup => subgroup.items)
-		}))
-	}, [commandGroups])
-
 	const topics = React.useMemo(
 		() => ({
 			heading: "Topics",
@@ -126,9 +115,15 @@ export function CommandPalette() {
 		const searchRegex = searchSafeRegExp(inputValue)
 
 		if (activePage === "home") {
-			if (!inputValue) return commandGroups.home
+			if (!inputValue) {
+				// Only show items from the home object when there's no search input
+				return commandGroups.home
+			}
 
-			return [...allCommands, personalLinks, personalPages, topics]
+			// When there's a search input, search across all categories
+			const allGroups = [...Object.values(commandGroups).flat(), personalLinks, personalPages, topics]
+
+			return allGroups
 				.map(group => ({
 					heading: group.heading,
 					items: filterItems(group.items, searchRegex)
@@ -136,6 +131,7 @@ export function CommandPalette() {
 				.filter(group => group.items.length > 0)
 		}
 
+		// Handle other active pages (searchLinks, searchPages, etc.)
 		switch (activePage) {
 			case "searchLinks":
 				return [...commandGroups.searchLinks, { items: filterItems(personalLinks.items, searchRegex) }]
@@ -151,7 +147,7 @@ export function CommandPalette() {
 					}))
 					.filter(group => group.items.length > 0)
 		}
-	}, [inputValue, activePage, allCommands, personalLinks, personalPages, commandGroups, topics])
+	}, [inputValue, activePage, commandGroups, personalLinks, personalPages, topics])
 
 	const handleAction = React.useCallback(
 		(action: CommandAction, payload?: any) => {

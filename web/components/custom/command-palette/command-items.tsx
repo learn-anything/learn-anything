@@ -1,6 +1,7 @@
+import * as React from "react"
 import { Command } from "cmdk"
 import { CommandSeparator, CommandShortcut } from "@/components/ui/command"
-import { LaIcon } from "../la-icon"
+import { LaIcon } from "@/components/custom/la-icon"
 import { CommandItemType, CommandAction } from "./command-data"
 import { HTMLLikeElement, renderHTMLLikeElement } from "@/lib/utils"
 
@@ -9,17 +10,24 @@ export interface CommandItemProps extends Omit<CommandItemType, "action"> {
 	handleAction: (action: CommandAction, payload?: any) => void
 }
 
-const HTMLLikeRenderer: React.FC<{ content: HTMLLikeElement | string }> = ({ content }) => {
+const HTMLLikeRenderer: React.FC<{ content: HTMLLikeElement | string }> = React.memo(({ content }) => {
 	return <>{renderHTMLLikeElement(content)}</>
-}
+})
 
-export const CommandItem: React.FC<CommandItemProps> = ({ icon, label, action, payload, shortcut, handleAction }) => (
-	<Command.Item onSelect={() => handleAction(action, payload)}>
-		{icon && <LaIcon name={icon} />}
-		<HTMLLikeRenderer content={label} />
-		{shortcut && <CommandShortcut>{shortcut}</CommandShortcut>}
-	</Command.Item>
+HTMLLikeRenderer.displayName = "HTMLLikeRenderer"
+
+export const CommandItem: React.FC<CommandItemProps> = React.memo(
+	({ icon, label, action, payload, shortcut, handleAction }) => (
+		<Command.Item onSelect={() => handleAction(action, payload)}>
+			{icon && <LaIcon name={icon} />}
+			<HTMLLikeRenderer content={label} />
+			{shortcut && <CommandShortcut>{shortcut}</CommandShortcut>}
+		</Command.Item>
+	)
 )
+
+CommandItem.displayName = "CommandItem"
+
 export interface CommandGroupProps {
 	heading?: string
 	items: CommandItemType[]
@@ -27,7 +35,7 @@ export interface CommandGroupProps {
 	isLastGroup: boolean
 }
 
-export const CommandGroup: React.FC<CommandGroupProps> = ({ heading, items, handleAction, isLastGroup }) => {
+export const CommandGroup: React.FC<CommandGroupProps> = React.memo(({ heading, items, handleAction, isLastGroup }) => {
 	return (
 		<>
 			{heading ? (
@@ -44,4 +52,6 @@ export const CommandGroup: React.FC<CommandGroupProps> = ({ heading, items, hand
 			{!isLastGroup && <CommandSeparator className="my-1.5" />}
 		</>
 	)
-}
+})
+
+CommandGroup.displayName = "CommandGroup"

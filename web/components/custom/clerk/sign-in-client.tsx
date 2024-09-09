@@ -1,7 +1,16 @@
-"use client"
-
 import { SignIn } from "@clerk/nextjs"
 
 export const SignInClient = () => {
-	return <SignIn />
+	return (
+		<div className="flex justify-center">
+			<SignIn
+				appearance={{
+					elements: {
+						formButtonPrimary: "bg-primary text-primary-foreground",
+						card: "shadow-none"
+					}
+				}}
+			/>
+		</div>
+	)
 }

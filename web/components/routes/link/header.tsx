@@ -26,11 +26,11 @@ export const LinkHeader = React.memo(() => {
 
 	return (
 		<>
-			<ContentHeader className="px-6 py-5 max-lg:px-4">
+			<ContentHeader className="px-6 max-lg:px-4 lg:py-5">
 				<div className="flex min-w-0 shrink-0 items-center gap-1.5">
 					<SidebarToggleButton />
 					<div className="flex min-h-0 items-center">
-						<span className="truncate text-left text-xl font-bold">Links</span>
+						<span className="truncate text-left font-bold lg:text-xl">Links</span>
 					</div>
 				</div>
 

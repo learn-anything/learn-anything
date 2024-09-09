@@ -93,7 +93,7 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 			<div className="flex min-w-0 shrink-0 items-center gap-1.5">
 				<SidebarToggleButton />
 				<div className="flex min-h-0 items-center">
-					<span className="truncate text-left text-xl font-bold">{topic.prettyName}</span>
+					<span className="truncate text-left font-bold lg:text-xl">{topic.prettyName}</span>
 				</div>
 			</div>
 

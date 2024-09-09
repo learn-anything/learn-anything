@@ -4,15 +4,17 @@
 		"dev": "bun web",
 		"web": "cd web && bun dev",
 		"web:build": "bun run --filter '*' build",
-		"cli": "bun run --watch cli/run.ts",
-		"seed": "bun --watch cli/seed.ts",
+		"ts": "bun run --watch scripts/run.ts",
+		"seed": "bun --watch scripts/seed.ts",
 		"tauri": "tauri",
+		"app": "tauri dev",
 		"app:build": "bun tauri build -b dmg -v"
 	},
 	"workspaces": [
 		"web"
 	],
 	"dependencies": {
+		"@clerk/themes": "^2.1.27",
 		"@tauri-apps/cli": "^2.0.0-rc.12",
 		"@tauri-apps/plugin-fs": "^2.0.0-rc.2",
 		"jazz-nodejs": "0.7.35-guest-auth.5",

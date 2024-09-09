@@ -1,19 +1,27 @@
+# general
 .DS_Store
 .env
 .env*.local
+output
+dist
+
 # ts
 node_modules
 package-lock.json
 pnpm-lock.yaml
 .vercel
-# next
-.next-types
-.next
-# other
-private
-past-*
-output
-dist
 
 # rust
 /target/
+
+# next
+.next-types
+.next
+
+# repos
+private
+docs
+
+# other
+past.*
+x.*
