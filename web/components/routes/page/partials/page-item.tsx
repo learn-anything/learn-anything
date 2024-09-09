@@ -30,7 +30,6 @@ export const PageItem = React.forwardRef<HTMLAnchorElement, PageItemProps>(({ pa
 			)}
 			href={`/pages/${page.id}`}
 			role="listitem"
-			aria-selected={isActive}
 		>
 			<div className="flex h-full items-center gap-4">
 				<Column.Wrapper style={columnStyles.title}>

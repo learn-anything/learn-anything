@@ -26,11 +26,15 @@ const ColumnWrapper = React.forwardRef<HTMLDivElement, ColumnWrapperProps>(
 	)
 )
 
+ColumnWrapper.displayName = "ColumnWrapper"
+
 const ColumnText = React.forwardRef<HTMLSpanElement, ColumnTextProps>(({ children, className, ...props }, ref) => (
 	<span className={cn("text-left text-xs", className)} ref={ref} {...props}>
 		{children}
 	</span>
 ))
+
+ColumnText.displayName = "ColumnText"
 
 export const Column = {
 	Wrapper: ColumnWrapper,
