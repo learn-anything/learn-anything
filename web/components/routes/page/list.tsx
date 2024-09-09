@@ -64,7 +64,7 @@ export const ColumnHeader: React.FC = () => {
 			<Column.Wrapper style={columnStyles.topic}>
 				<Column.Text>Topic</Column.Text>
 			</Column.Wrapper>
-			<Column.Wrapper style={columnStyles.updated} className="justify-end">
+			<Column.Wrapper style={columnStyles.updated}>
 				<Column.Text>Updated</Column.Text>
 			</Column.Wrapper>
 		</div>

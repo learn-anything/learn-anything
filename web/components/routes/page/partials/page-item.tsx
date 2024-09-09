@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Column } from "./column"
 import { useMedia } from "react-use"
 import { useColumnStyles } from "../hooks/use-column-styles"
+import { format } from "date-fns"
 
 interface PageItemProps {
 	page: PersonalPage
@@ -47,8 +48,8 @@ export const PageItem = React.forwardRef<HTMLAnchorElement, PageItemProps>(({ pa
 					</>
 				)}
 
-				<Column.Wrapper style={columnStyles.updated} className="justify-end">
-					<Column.Text className="text-[13px]">{page.updatedAt.toLocaleDateString()}</Column.Text>
+				<Column.Wrapper style={columnStyles.updated} className="flex justify-end">
+					<Column.Text className="text-[13px]">{format(new Date(page.updatedAt), "d MMM yyyy")}</Column.Text>
 				</Column.Wrapper>
 			</div>
 		</Link>
