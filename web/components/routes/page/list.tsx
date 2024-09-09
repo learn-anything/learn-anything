@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo, useCallback } from "react"
 import { Primitive } from "@radix-ui/react-primitive"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { useAtom } from "jotai"
@@ -8,6 +8,8 @@ import { useKeyboardNavigation } from "./hooks/use-keyboard-navigation"
 import { useMedia } from "react-use"
 import { Column } from "./partials/column"
 import { useColumnStyles } from "./hooks/use-column-styles"
+import { PersonalPage, PersonalPageLists } from "@/lib/schema"
+import { useRouter } from "next/navigation"
 
 interface PageListProps {
 	activeItemIndex: number | null
@@ -19,14 +21,23 @@ export const PageList: React.FC<PageListProps> = ({ activeItemIndex, setActiveIt
 	const isTablet = useMedia("(max-width: 640px)")
 	const [isCommandPaletteOpen] = useAtom(commandPaletteOpenAtom)
 	const { me } = useAccount({ root: { personalPages: [] } })
-	const personalPages = me?.root?.personalPages || []
+	const personalPages = useMemo(() => me?.root?.personalPages, [me?.root?.personalPages])
+	const router = useRouter()
 
-	const { listRef, itemRefs } = useKeyboardNavigation({
-		itemCount: personalPages.length,
+	const handleEnter = useCallback(
+		(selectedPage: PersonalPage) => {
+			router.push(`/pages/${selectedPage.id}`)
+		},
+		[router]
+	)
+
+	const { listRef, setItemRef } = useKeyboardNavigation({
+		personalPages,
 		activeItemIndex,
 		setActiveItemIndex,
 		isCommandPaletteOpen,
-		disableEnterKey
+		disableEnterKey,
+		onEnter: handleEnter
 	})
 
 	return (
@@ -34,7 +45,7 @@ export const PageList: React.FC<PageListProps> = ({ activeItemIndex, setActiveIt
 			{!isTablet && <ColumnHeader />}
 			<PageListItems
 				listRef={listRef}
-				itemRefs={itemRefs}
+				setItemRef={setItemRef}
 				personalPages={personalPages}
 				activeItemIndex={activeItemIndex}
 			/>
@@ -50,9 +61,6 @@ export const ColumnHeader: React.FC = () => {
 			<Column.Wrapper style={columnStyles.title}>
 				<Column.Text>Title</Column.Text>
 			</Column.Wrapper>
-			{/* <Column.Wrapper style={columnStyles.content}>
-				<Column.Text>Content</Column.Text>
-			</Column.Wrapper> */}
 			<Column.Wrapper style={columnStyles.topic}>
 				<Column.Text>Topic</Column.Text>
 			</Column.Wrapper>
@@ -65,26 +73,24 @@ export const ColumnHeader: React.FC = () => {
 
 interface PageListItemsProps {
 	listRef: React.RefObject<HTMLDivElement>
-	itemRefs: React.MutableRefObject<(HTMLAnchorElement | null)[]>
-	personalPages: any[]
+	setItemRef: (el: HTMLAnchorElement | null, index: number) => void
+	personalPages?: PersonalPageLists | null
 	activeItemIndex: number | null
 }
 
-const PageListItems: React.FC<PageListItemsProps> = ({ listRef, itemRefs, personalPages, activeItemIndex }) => (
+const PageListItems: React.FC<PageListItemsProps> = ({ listRef, setItemRef, personalPages, activeItemIndex }) => (
 	<Primitive.div
 		ref={listRef}
-		className="flex flex-1 flex-col overflow-y-auto outline-none [scrollbar-gutter:stable]"
+		className="divide-primary/5 flex flex-1 flex-col divide-y overflow-y-auto outline-none [scrollbar-gutter:stable]"
 		tabIndex={-1}
 		role="list"
 	>
-		{personalPages.map(
+		{personalPages?.map(
 			(page, index) =>
 				page?.id && (
 					<PageItem
 						key={page.id}
-						ref={(el: HTMLAnchorElement | null) => {
-							itemRefs.current[index] = el
-						}}
+						ref={(el: HTMLAnchorElement | null) => setItemRef(el, index)}
 						page={page}
 						isActive={index === activeItemIndex}
 					/>

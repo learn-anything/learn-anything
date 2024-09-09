@@ -1,22 +1,26 @@
-import { useEffect, useRef, useCallback } from "react"
+import React, { useEffect, useRef, useCallback } from "react"
+import { PersonalPage, PersonalPageLists } from "@/lib/schema"
 
 interface UseKeyboardNavigationProps {
-	itemCount: number
+	personalPages?: PersonalPageLists | null
 	activeItemIndex: number | null
 	setActiveItemIndex: React.Dispatch<React.SetStateAction<number | null>>
 	isCommandPaletteOpen: boolean
 	disableEnterKey: boolean
+	onEnter?: (selectedPage: PersonalPage) => void
 }
 
 export const useKeyboardNavigation = ({
-	itemCount,
+	personalPages,
 	activeItemIndex,
 	setActiveItemIndex,
 	isCommandPaletteOpen,
-	disableEnterKey
+	disableEnterKey,
+	onEnter
 }: UseKeyboardNavigationProps) => {
 	const listRef = useRef<HTMLDivElement>(null)
 	const itemRefs = useRef<(HTMLAnchorElement | null)[]>([])
+	const itemCount = personalPages?.length || 0
 
 	const scrollIntoView = useCallback((index: number) => {
 		if (itemRefs.current[index]) {
@@ -32,28 +36,34 @@ export const useKeyboardNavigation = ({
 		}
 	}, [activeItemIndex, scrollIntoView])
 
-	useEffect(() => {
-		const handleKeyDown = (e: KeyboardEvent) => {
+	const handleKeyDown = useCallback(
+		(e: KeyboardEvent) => {
 			if (isCommandPaletteOpen) return
 
 			if (e.key === "ArrowUp" || e.key === "ArrowDown") {
 				e.preventDefault()
 				setActiveItemIndex(prevIndex => {
 					if (prevIndex === null) return 0
-					const newIndex = e.key === "ArrowUp" ? Math.max(0, prevIndex - 1) : Math.min(itemCount - 1, prevIndex + 1)
+					const newIndex = e.key === "ArrowUp" ? (prevIndex - 1 + itemCount) % itemCount : (prevIndex + 1) % itemCount
 					return newIndex
 				})
-			} else if (e.key === "Enter" && !disableEnterKey) {
+			} else if (e.key === "Enter" && !disableEnterKey && activeItemIndex !== null && personalPages) {
 				e.preventDefault()
-				if (activeItemIndex !== null) {
-					// Handle active page selection
-				}
+				const selectedPage = personalPages[activeItemIndex]
+				if (selectedPage) onEnter?.(selectedPage)
 			}
-		}
+		},
+		[itemCount, isCommandPaletteOpen, activeItemIndex, setActiveItemIndex, disableEnterKey, personalPages, onEnter]
+	)
 
+	useEffect(() => {
 		window.addEventListener("keydown", handleKeyDown)
 		return () => window.removeEventListener("keydown", handleKeyDown)
-	}, [itemCount, isCommandPaletteOpen, activeItemIndex, setActiveItemIndex, disableEnterKey])
+	}, [handleKeyDown])
 
-	return { listRef, itemRefs }
+	const setItemRef = useCallback((el: HTMLAnchorElement | null, index: number) => {
+		itemRefs.current[index] = el
+	}, [])
+
+	return { listRef, setItemRef }
 }
