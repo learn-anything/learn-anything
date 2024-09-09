@@ -102,7 +102,17 @@ export default function OnboardingRoute() {
 		if (me.root.personalLinks.some(link => link?.topic?.name === "typescript") && !isAddLinkDone) {
 			setIsAddLinkDone(true)
 		}
-	}, [me, isCreateLinkDone, isCreatePageDone, setIsCreateLinkDone, setIsCreatePageDone])
+	}, [
+		me,
+		isCreateLinkDone,
+		isCreatePageDone,
+		setIsCreateLinkDone,
+		setIsCreatePageDone,
+		isAddLinkDone,
+		setIsAddLinkDone,
+		isStartTrackingDone,
+		setIsStartTrackingDone
+	])
 
 	const completedSteps = [isCreateLinkDone, isCreatePageDone, isStartTrackingDone, isAddLinkDone].filter(Boolean).length
 
