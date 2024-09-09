@@ -78,15 +78,16 @@ const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({ pageCount }) => (
 	<div
 		className={cn("flex min-h-[30px] items-center gap-px rounded-md", "hover:bg-accent hover:text-accent-foreground")}
 	>
-		<Button
-			variant="ghost"
+		<Link
+			href="/pages"
 			className="size-6 flex-1 items-center justify-start rounded-md px-2 py-1 focus-visible:outline-none focus-visible:ring-0"
 		>
 			<p className="flex items-center text-xs font-medium">
 				Pages
 				{pageCount > 0 && <span className="text-muted-foreground ml-1">{pageCount}</span>}
 			</p>
-		</Button>
+		</Link>
+
 		<div className={cn("flex items-center gap-px pr-2")}>
 			<ShowAllForm />
 			<NewPageButton />

@@ -118,7 +118,7 @@ const ListItem: React.FC<ListItemProps> = ({ label, value, href, count, isActive
 		<div className="group/reorder-page relative">
 			<div className="group/topic-link relative flex min-w-0 flex-1">
 				<Link
-					href={href}
+					href={"#"}
 					className={cn(
 						"group-hover/topic-link:bg-accent relative flex h-8 w-full items-center gap-2 rounded-md p-1.5 font-medium",
 						{ "bg-accent text-accent-foreground": isActive },
