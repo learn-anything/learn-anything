@@ -48,16 +48,6 @@ export const LinkItem: React.FC<LinkItemProps> = ({
 		[transform, transition, isDragging]
 	)
 
-	const handleKeyDown = useCallback(
-		(e: React.KeyboardEvent) => {
-			if (e.key === "Enter") {
-				e.preventDefault()
-				setEditId(personalLink.id)
-			}
-		},
-		[setEditId, personalLink.id]
-	)
-
 	const handleSuccess = useCallback(() => setEditId(null), [setEditId])
 	const handleOnClose = useCallback(() => setEditId(null), [setEditId])
 	const handleRowDoubleClick = useCallback(() => setEditId(personalLink.id), [setEditId, personalLink.id])
@@ -89,7 +79,6 @@ export const LinkItem: React.FC<LinkItemProps> = ({
 			tabIndex={0}
 			onFocus={() => setActiveItemIndex(index)}
 			onBlur={() => setActiveItemIndex(null)}
-			onKeyDown={handleKeyDown}
 			className={cn(
 				"relative cursor-default outline-none",
 				"grid grid-cols-[auto_1fr_auto] items-center gap-x-2 py-2 max-lg:px-4 sm:px-5 sm:py-2",
