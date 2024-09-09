@@ -126,8 +126,7 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 
 		const newTitle = editor.getText()
 		if (newTitle !== page.title) {
-			const personalPages = me?.root?.personalPages?.toJSON() || []
-			const slug = generateUniqueSlug(personalPages, page.slug || "")
+			const slug = generateUniqueSlug(page.title?.toString() || "")
 			page.title = newTitle
 			page.slug = slug
 			page.updatedAt = new Date()

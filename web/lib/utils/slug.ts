@@ -1,36 +1,14 @@
 import slugify from "slugify"
+import crypto from "crypto"
 
-type SlugLikeProperty = string | undefined
+export function generateUniqueSlug(title: string, maxLength: number = 60): string {
+	const baseSlug = slugify(title, {
+		lower: true,
+		strict: true
+	})
+	const randomSuffix = crypto.randomBytes(4).toString("hex")
 
-interface Data {
-	[key: string]: any
-}
+	const truncatedSlug = baseSlug.slice(0, Math.min(maxLength, 75) - 9)
 
-export function generateUniqueSlug(
-	existingItems: Data[],
-	title: string,
-	slugProperty: string = "slug",
-	maxLength: number = 50
-): string {
-	const baseSlug = slugify(title, { lower: true, strict: true })
-	let uniqueSlug = baseSlug.slice(0, maxLength)
-	let num = 1
-
-	if (!existingItems || existingItems.length === 0) {
-		return uniqueSlug
-	}
-
-	const isSlugTaken = (slug: string) =>
-		existingItems.some(item => {
-			const itemSlug = item[slugProperty] as SlugLikeProperty
-			return itemSlug === slug
-		})
-
-	while (isSlugTaken(uniqueSlug)) {
-		const suffix = `-${num}`
-		uniqueSlug = `${baseSlug.slice(0, maxLength - suffix.length)}${suffix}`
-		num++
-	}
-
-	return uniqueSlug
+	return `${truncatedSlug}-${randomSuffix}`
 }

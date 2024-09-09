@@ -27,11 +27,11 @@ async function devSeed() {
 	const pageOneTitle = "Physics"
 	const pageTwoTitle = "Karabiner"
 	const page1 = PersonalPage.create(
-		{ title: pageOneTitle, slug: generateUniqueSlug([], pageOneTitle), content: "Physics is great" },
+		{ title: pageOneTitle, slug: generateUniqueSlug(pageOneTitle), content: "Physics is great" },
 		{ owner: user }
 	)
 	const page2 = PersonalPage.create(
-		{ title: pageTwoTitle, slug: generateUniqueSlug([], pageTwoTitle), content: "Karabiner is great" },
+		{ title: pageTwoTitle, slug: generateUniqueSlug(pageTwoTitle), content: "Karabiner is great" },
 		{ owner: user }
 	)
 	user.root.personalPages?.push(page1)
