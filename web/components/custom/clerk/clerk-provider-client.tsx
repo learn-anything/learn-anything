@@ -1,31 +1,22 @@
 "use client"
+
 import { ClerkProvider } from "@clerk/nextjs"
 import { dark } from "@clerk/themes"
-import { useEffect, useState } from "react"
+import { useTheme } from "next-themes"
 
-export const ClerkProviderClient = ({ children }: { children: React.ReactNode }) => {
-	const [darkMode, setDarkMode] = useState(false)
+interface ClerkProviderClientProps {
+	children: React.ReactNode
+}
 
-	useEffect(() => {
-		const updateTheme = () => {
-			setDarkMode(document.documentElement.classList.contains("dark"))
-		}
-		updateTheme()
+export const ClerkProviderClient: React.FC<ClerkProviderClientProps> = ({ children }) => {
+	const { theme, systemTheme } = useTheme()
 
-		const observer = new MutationObserver(updateTheme)
-		observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] })
+	const isDarkTheme = theme === "dark" || (theme === "system" && systemTheme === "dark")
 
-		return () => observer.disconnect()
-	}, [])
+	const appearance = {
+		baseTheme: isDarkTheme ? dark : undefined,
+		variables: { colorPrimary: isDarkTheme ? "#dddddd" : "#2e2e2e" }
+	}
 
-	return (
-		<ClerkProvider
-			appearance={{
-				baseTheme: darkMode ? dark : undefined,
-				variables: { colorPrimary: darkMode ? "#dddddd" : "#2e2e2e" }
-			}}
-		>
-			{children}
-		</ClerkProvider>
-	)
+	return <ClerkProvider appearance={appearance}>{children}</ClerkProvider>
 }
