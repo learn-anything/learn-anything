@@ -5,16 +5,19 @@ import { LinkHeader } from "@/components/routes/link/header"
 import { LinkList } from "@/components/routes/link/list"
 import { LinkManage } from "@/components/routes/link/manage"
 import { useQueryState } from "nuqs"
-import { useAtom } from "jotai"
+import { atom, useAtom } from "jotai"
 import { linkEditIdAtom } from "@/store/link"
 import { LinkBottomBar } from "./bottom-bar"
 import { commandPaletteOpenAtom } from "@/components/custom/command-palette/command-palette"
+
+export const isDeleteConfirmShownAtom = atom(false)
 
 export function LinkRoute(): React.ReactElement {
 	const [, setEditId] = useAtom(linkEditIdAtom)
 	const [nuqsEditId] = useQueryState("editId")
 	const [activeItemIndex, setActiveItemIndex] = useState<number | null>(null)
 	const [isCommandPaletteOpen] = useAtom(commandPaletteOpenAtom)
+	const [isDeleteConfirmShown] = useAtom(isDeleteConfirmShownAtom)
 	const [disableEnterKey, setDisableEnterKey] = useState(false)
 
 	useEffect(() => {
@@ -31,6 +34,10 @@ export function LinkRoute(): React.ReactElement {
 			handleCommandPaletteClose()
 		}
 	}, [isCommandPaletteOpen, handleCommandPaletteClose])
+
+	useEffect(() => {
+		setDisableEnterKey(isDeleteConfirmShown || isCommandPaletteOpen)
+	}, [isDeleteConfirmShown, isCommandPaletteOpen])
 
 	return (
 		<div className="flex h-full flex-auto flex-col overflow-hidden">

@@ -22,7 +22,8 @@ import { useQueryState } from "nuqs"
 import { learningStateAtom } from "./header"
 import { commandPaletteOpenAtom } from "@/components/custom/command-palette/command-palette"
 import { useConfirm } from "@omit/react-confirm-dialog"
-import { toast } from "sonner"
+import { useLinkActions } from "./hooks/use-link-actions"
+import { isDeleteConfirmShownAtom } from "./LinkRoute"
 
 interface LinkListProps {
 	activeItemIndex: number | null
@@ -32,9 +33,12 @@ interface LinkListProps {
 
 const LinkList: React.FC<LinkListProps> = ({ activeItemIndex, setActiveItemIndex, disableEnterKey }) => {
 	const [isCommandPalettePpen] = useAtom(commandPaletteOpenAtom)
+	const [, setIsDeleteConfirmShown] = useAtom(isDeleteConfirmShownAtom)
 	const [editId, setEditId] = useQueryState("editId")
 	const [activeLearningState] = useAtom(learningStateAtom)
 	const [draggingId, setDraggingId] = React.useState<UniqueIdentifier | null>(null)
+
+	const { deleteLink } = useLinkActions()
 	const confirm = useConfirm()
 
 	const { me } = useAccount({
@@ -83,10 +87,9 @@ const LinkList: React.FC<LinkListProps> = ({ activeItemIndex, setActiveItemIndex
 		event => (event.metaKey || event.ctrlKey) && event.key === "Backspace",
 		async () => {
 			if (activeItemIndex !== null) {
+				setIsDeleteConfirmShown(true)
 				const activeLink = sortedLinks[activeItemIndex]
 				if (activeLink) {
-					console.log("Delete link", activeLink.toJSON())
-
 					const result = await confirm({
 						title: `Delete "${activeLink.title}"?`,
 						description: "This action cannot be undone.",
@@ -102,25 +105,12 @@ const LinkList: React.FC<LinkListProps> = ({ activeItemIndex, setActiveItemIndex
 					})
 
 					if (result) {
-						if (!me?.root.personalLinks) return
+						if (!me) return
+						deleteLink(me, activeLink)
 
-						const index = me.root.personalLinks.findIndex(item => item?.id === activeLink.id)
-						if (index === -1) {
-							console.error("Delete operation fail", { index, activeLink })
-							return
-						}
-
-						toast.success("Link deleted.", {
-							position: "bottom-right",
-							description: (
-								<span>
-									<strong>{activeLink.title}</strong> has been deleted.
-								</span>
-							)
-						})
-
-						me.root.personalLinks.splice(index, 1)
-						setEditId(null)
+						setIsDeleteConfirmShown(false)
+					} else {
+						setIsDeleteConfirmShown(false)
 					}
 				}
 			}
@@ -177,6 +167,7 @@ const LinkList: React.FC<LinkListProps> = ({ activeItemIndex, setActiveItemIndex
 					return newIndex
 				})
 			} else if (e.key === "Enter" && !disableEnterKey) {
+				console.log("Enter key pressed")
 				e.preventDefault()
 				if (activeItemIndex !== null) {
 					const activeLink = sortedLinks[activeItemIndex]

@@ -13,7 +13,7 @@ import { useAccount, useCoState } from "@/lib/providers/jazz-provider"
 import { PersonalLink } from "@/lib/schema"
 import { ID } from "jazz-tools"
 import { globalLinkFormExceptionRefsAtom } from "./partials/form/link-form"
-import { toast } from "sonner"
+import { useLinkActions } from "./hooks/use-link-actions"
 
 interface ToolbarButtonProps extends React.ComponentPropsWithoutRef<typeof Button> {
 	icon: keyof typeof icons
@@ -66,6 +66,7 @@ export const LinkBottomBar: React.FC = () => {
 	const plusBtnRef = useRef<HTMLButtonElement>(null)
 	const plusMoreBtnRef = useRef<HTMLButtonElement>(null)
 
+	const { deleteLink } = useLinkActions()
 	const confirm = useConfirm()
 
 	useEffect(() => {
@@ -107,24 +108,8 @@ export const LinkBottomBar: React.FC = () => {
 		})
 
 		if (result) {
-			if (!me?.root.personalLinks) return
-
-			const index = me.root.personalLinks.findIndex(item => item?.id === personalLink.id)
-			if (index === -1) {
-				console.error("Delete operation fail", { index, personalLink })
-				return
-			}
-
-			toast.success("Link deleted.", {
-				position: "bottom-right",
-				description: (
-					<span>
-						<strong>{personalLink.title}</strong> has been deleted.
-					</span>
-				)
-			})
-
-			me.root.personalLinks.splice(index, 1)
+			if (!me) return
+			deleteLink(me, personalLink)
 			setEditId(null)
 		}
 	}
