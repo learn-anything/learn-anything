@@ -1,6 +1,0 @@
-.column {
-	width: var(--width);
-	min-width: var(--min-width, min-content);
-	max-width: min(var(--width), var(--max-width));
-	flex-basis: var(--width);
-}

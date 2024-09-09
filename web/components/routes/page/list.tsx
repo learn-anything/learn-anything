@@ -6,8 +6,6 @@ import { useAtom } from "jotai"
 import { commandPaletteOpenAtom } from "@/components/custom/command-palette/command-palette"
 import { PageItem } from "./page-item"
 import { useKeyboardNavigation } from "./hooks/use-keyboard-navigation"
-import styles from "./list.module.css"
-
 interface PageListProps {
 	activeItemIndex: number | null
 	setActiveItemIndex: React.Dispatch<React.SetStateAction<number | null>>
@@ -20,25 +18,6 @@ export const COLUMN_STYLES = {
 	topic: { "--width": "65px", "--min-width": "120px", "--max-width": "200px" },
 	updated: { "--width": "82px", "--min-width": "82px", "--max-width": "82px" }
 }
-
-interface ColumnHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
-	style: { [key: string]: string }
-}
-
-export const ColumnHeader = React.forwardRef<HTMLDivElement, ColumnHeaderProps>(
-	({ children, style, ...props }, ref) => {
-		return (
-			<div
-				className={cn("flex-start flex shrink-[2] grow flex-row items-center truncate", styles.column)}
-				style={style}
-				ref={ref}
-				{...props}
-			>
-				{children}
-			</div>
-		)
-	}
-)
 
 export const PageList: React.FC<PageListProps> = ({ activeItemIndex, setActiveItemIndex, disableEnterKey }) => {
 	const [isCommandPaletteOpen] = useAtom(commandPaletteOpenAtom)
@@ -55,19 +34,19 @@ export const PageList: React.FC<PageListProps> = ({ activeItemIndex, setActiveIt
 
 	return (
 		<div className="flex h-full w-full flex-col">
-			<div className="flex h-8 shrink-0 grow-0 flex-row gap-1.5 border-b max-lg:px-4 sm:px-5">
-				<ColumnHeader style={COLUMN_STYLES.title}>
-					<span className="text-left text-xs">Title</span>
-				</ColumnHeader>
-				<ColumnHeader style={COLUMN_STYLES.content}>
-					<span className="text-left text-xs">Content</span>
-				</ColumnHeader>
-				<ColumnHeader style={COLUMN_STYLES.topic}>
-					<span className="text-left text-xs">Topic</span>
-				</ColumnHeader>
-				<ColumnHeader style={COLUMN_STYLES.updated}>
-					<span className="text-left text-xs">Updated</span>
-				</ColumnHeader>
+			<div className="flex h-8 shrink-0 grow-0 flex-row gap-1.5 border-b max-lg:px-4 sm:px-6">
+				<Column.Wrapper style={COLUMN_STYLES.title}>
+					<Column.Text>Title</Column.Text>
+				</Column.Wrapper>
+				<Column.Wrapper style={COLUMN_STYLES.content}>
+					<Column.Text>Content</Column.Text>
+				</Column.Wrapper>
+				<Column.Wrapper style={COLUMN_STYLES.topic}>
+					<Column.Text>Topic</Column.Text>
+				</Column.Wrapper>
+				<Column.Wrapper style={COLUMN_STYLES.updated} className="justify-end">
+					<Column.Text>Updated</Column.Text>
+				</Column.Wrapper>
 			</div>
 
 			<Primitive.div
@@ -84,14 +63,52 @@ export const PageList: React.FC<PageListProps> = ({ activeItemIndex, setActiveIt
 								ref={(el: HTMLAnchorElement | null) => {
 									itemRefs.current[index] = el
 								}}
-								index={index}
 								page={page}
 								isActive={index === activeItemIndex}
-								setActiveItemIndex={setActiveItemIndex}
 							/>
 						)
 				)}
 			</Primitive.div>
 		</div>
 	)
+}
+
+interface ColumnWrapperProps extends React.HTMLAttributes<HTMLDivElement> {
+	style?: { [key: string]: string }
+}
+
+interface ColumnTextProps extends React.HTMLAttributes<HTMLSpanElement> {}
+
+const ColumnWrapper = React.forwardRef<HTMLDivElement, ColumnWrapperProps>(
+	({ children, className, style, ...props }, ref) => {
+		return (
+			<div
+				className={cn("flex grow flex-row items-center justify-start truncate", className)}
+				style={{
+					width: "var(--width)",
+					minWidth: "var(--min-width, min-content)",
+					maxWidth: "min(var(--width), var(--max-width))",
+					flexBasis: "var(--width)",
+					...style
+				}}
+				ref={ref}
+				{...props}
+			>
+				{children}
+			</div>
+		)
+	}
+)
+
+const ColumnText = React.forwardRef<HTMLSpanElement, ColumnTextProps>(({ children, className, ...props }, ref) => {
+	return (
+		<span className={cn("text-left text-xs", className)} ref={ref} {...props}>
+			{children}
+		</span>
+	)
+})
+
+export const Column = {
+	Wrapper: ColumnWrapper,
+	Text: ColumnText
 }
