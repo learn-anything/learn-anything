@@ -1,7 +1,15 @@
 "use client"
 
+import React, { useEffect } from "react"
+import { atomWithStorage } from "jotai/utils"
 import { LaIcon } from "../custom/la-icon"
-import { useState } from "react"
+import { useAccount } from "@/lib/providers/jazz-provider"
+import { useAtom } from "jotai"
+
+const isCreateLinkDoneAtom = atomWithStorage("isCreateLinkDone", false)
+const isCreatePageDoneAtom = atomWithStorage("isCreatePageDone", false)
+const isStartTrackingDoneAtom = atomWithStorage("isStartTrackingDone", false)
+const isAddLinkDoneAtom = atomWithStorage("isAddLinkDone", false)
 
 const steps = [
 	{
@@ -55,7 +63,7 @@ const StepItem = ({
 			<h3 className="font-semibold">{title}</h3>
 			<p className="w-[90%] leading-relaxed opacity-70">{description}</p>
 			<div className="flex flex-row items-center gap-2">
-				<LaIcon name={done ? "SquareCheck" : "Square"} className={` ${done ? "text-green-500" : ""}`} />
+				<LaIcon name={done ? "SquareCheck" : "Square"} className={`${done ? "text-green-500" : ""}`} />
 				<p>{task}</p>
 			</div>
 		</div>
@@ -63,13 +71,40 @@ const StepItem = ({
 )
 
 export default function OnboardingRoute() {
-	const [completedSteps, setCompletedSteps] = useState<number[]>([])
+	const { me } = useAccount({
+		root: {
+			personalPages: [],
+			personalLinks: [],
+			topicsWantToLearn: []
+		}
+	})
 
-	const stepComplete = (stepNumber: number) => {
-		setCompletedSteps(prev =>
-			prev.includes(stepNumber) ? prev.filter(num => num !== stepNumber) : [...prev, stepNumber]
-		)
-	}
+	const [isCreateLinkDone, setIsCreateLinkDone] = useAtom(isCreateLinkDoneAtom)
+	const [isCreatePageDone, setIsCreatePageDone] = useAtom(isCreatePageDoneAtom)
+	const [isStartTrackingDone, setIsStartTrackingDone] = useAtom(isStartTrackingDoneAtom)
+	const [isAddLinkDone, setIsAddLinkDone] = useAtom(isAddLinkDoneAtom)
+
+	useEffect(() => {
+		if (!me) return
+
+		if (me.root.personalLinks.length > 0 && !isCreateLinkDone) {
+			setIsCreateLinkDone(true)
+		}
+
+		if (me.root.personalPages.length > 0 && !isCreatePageDone) {
+			setIsCreatePageDone(true)
+		}
+
+		if (me.root.topicsWantToLearn.length > 0 && !isStartTrackingDone) {
+			setIsStartTrackingDone(true)
+		}
+
+		if (me.root.personalLinks.some(link => link?.topic?.name === "typescript") && !isAddLinkDone) {
+			setIsAddLinkDone(true)
+		}
+	}, [me, isCreateLinkDone, isCreatePageDone, setIsCreateLinkDone, setIsCreatePageDone])
+
+	const completedSteps = [isCreateLinkDone, isCreatePageDone, isStartTrackingDone, isAddLinkDone].filter(Boolean).length
 
 	return (
 		<div className="flex flex-1 flex-col space-y-8 text-sm text-black dark:text-white">
@@ -78,9 +113,16 @@ export default function OnboardingRoute() {
 			</div>
 			<div className="mx-auto w-[70%] rounded-lg border border-neutral-200 bg-inherit p-6 shadow dark:border-neutral-900">
 				<h2 className="mb-4 text-lg font-semibold">Complete the steps below to get started</h2>
+				<p className="mb-4">
+					Completed {completedSteps} out of {steps.length} steps
+				</p>
 				<div className="divide-y">
-					{steps.map(step => (
-						<StepItem key={step.number} {...step} done={step.number === 1} />
+					{steps.map((step, index) => (
+						<StepItem
+							key={step.number}
+							{...step}
+							done={[isCreateLinkDone, isCreatePageDone, isStartTrackingDone, isAddLinkDone][index]}
+						/>
 					))}
 				</div>
 			</div>
