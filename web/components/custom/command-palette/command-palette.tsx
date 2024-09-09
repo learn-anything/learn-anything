@@ -15,7 +15,7 @@ import { atom, useAtom } from "jotai"
 let graph_data_promise = import("@/components/routes/public/graph-data.json").then(a => a.default)
 
 const filterItems = (items: CommandItemType[], searchRegex: RegExp) =>
-	items.filter(item => searchRegex.test(item.value)).slice(0, 6)
+	items.filter(item => searchRegex.test(item.value))
 
 export const commandPaletteOpenAtom = atom(false)
 
