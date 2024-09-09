@@ -16,7 +16,7 @@
     "@nothing-but/force-graph": "^0.9.4",
     "@nothing-but/utils": "^0.16.0",
     "@omit/react-confirm-dialog": "^1.1.5",
-    "@omit/react-fancy-switch": "^0.1.2",
+    "@omit/react-fancy-switch": "^0.1.3",
     "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-checkbox": "^1.1.1",
     "@radix-ui/react-context-menu": "^2.2.1",
