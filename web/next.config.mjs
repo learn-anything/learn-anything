@@ -41,6 +41,6 @@ const webConfig = {
 
 const nextConfig = isTauri ? tauriConfig : webConfig
 
-console.log(`Using ${isTauri ? "Tauri" : "Web"} config`)
+// console.log(`Using ${isTauri ? "Tauri" : "Web"} config`)
 
 export default nextConfig
