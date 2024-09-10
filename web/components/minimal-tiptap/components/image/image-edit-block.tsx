@@ -41,6 +41,11 @@ const ImageEditBlock = ({ editor, className, close, ...props }: ImageEditBlockPr
 
 		try {
 			const [response, err] = await storeImage(formData)
+
+			if (err) {
+				throw new Error(err.fieldErrors?.file?.join(", "))
+			}
+
 			if (response?.fileModel) {
 				editor.chain().setImage({ src: response.fileModel.content.src }).focus().run()
 				close()
@@ -48,7 +53,6 @@ const ImageEditBlock = ({ editor, className, close, ...props }: ImageEditBlockPr
 				throw new Error("Failed to upload image")
 			}
 		} catch (error) {
-			console.error("Error uploading file:", error)
 			setError(error instanceof Error ? error.message : "An unknown error occurred")
 		} finally {
 			setIsUploading(false)
@@ -62,7 +66,7 @@ const ImageEditBlock = ({ editor, className, close, ...props }: ImageEditBlockPr
 
 	return (
 		<form onSubmit={handleSubmit}>
-			<div className={cn("space-y-6", className)} {...props}>
+			<div className={cn("space-y-5", className)} {...props}>
 				<div className="space-y-1">
 					<Label>Attach an image link</Label>
 					<div className="flex">
