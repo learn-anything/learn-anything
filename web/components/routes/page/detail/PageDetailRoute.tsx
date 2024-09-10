@@ -22,13 +22,13 @@ import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 
 const TITLE_PLACEHOLDER = "Untitled"
+const router = useRouter()
 
 const emptyPage = (page: PersonalPage): boolean => {
 	return (!page.title || page.title.trim() === "") && (!page.content || Object.keys(page.content).length === 0)
 }
 
 export const deleteEmptyPage = (currentPageId: string | null) => {
-	const router = useRouter()
 	const { me } = useAccount({
 		root: {
 			personalPages: []
