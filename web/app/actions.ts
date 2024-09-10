@@ -32,18 +32,17 @@ export const sendFeedback = authedProcedure
 export const storeImage = authedProcedure
 	.input(
 		z.object({
-			file: z.custom<File>(file => {
-				if (!(file instanceof File)) {
-					throw new Error("Not a file")
-				}
-				if (!ALLOWED_FILE_TYPES.includes(file.type)) {
-					throw new Error("Invalid file type. Only JPEG, PNG, GIF, and WebP images are allowed.")
-				}
-				if (file.size > MAX_FILE_SIZE) {
-					throw new Error("File size exceeds the maximum limit of 1 MB.")
-				}
-				return true
-			})
+			file: z
+				.any()
+				.refine(file => file instanceof File, {
+					message: "Not a file"
+				})
+				.refine(file => ALLOWED_FILE_TYPES.includes(file.type), {
+					message: "Invalid file type. Only JPEG, PNG, GIF, and WebP images are allowed."
+				})
+				.refine(file => file.size <= MAX_FILE_SIZE, {
+					message: "File size exceeds the maximum limit of 1 MB."
+				})
 		}),
 		{ type: "formData" }
 	)
