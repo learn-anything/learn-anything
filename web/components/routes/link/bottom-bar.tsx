@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { icons, ZapIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { getSpecialShortcut, formatShortcut, isMacOS } from "@/lib/utils"
 import { LaIcon } from "@/components/custom/la-icon"
 import { useAtom } from "jotai"
@@ -32,14 +32,12 @@ const ToolbarButton = React.forwardRef<HTMLButtonElement, ToolbarButtonProps>(
 
 		if (tooltip) {
 			return (
-				<TooltipProvider>
-					<Tooltip delayDuration={0}>
-						<TooltipTrigger asChild>{button}</TooltipTrigger>
-						<TooltipContent>
-							<p>{tooltip}</p>
-						</TooltipContent>
-					</Tooltip>
-				</TooltipProvider>
+				<Tooltip delayDuration={0}>
+					<TooltipTrigger asChild>{button}</TooltipTrigger>
+					<TooltipContent>
+						<p>{tooltip}</p>
+					</TooltipContent>
+				</Tooltip>
 			)
 		}
 

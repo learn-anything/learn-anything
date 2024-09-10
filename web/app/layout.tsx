@@ -9,6 +9,7 @@ import { ConfirmProvider } from "@/lib/providers/confirm-provider"
 import { DeepLinkProvider } from "@/lib/providers/deep-link-provider"
 import { GeistMono, GeistSans } from "./fonts"
 import { JazzAndAuth } from "@/lib/providers/jazz-provider"
+import { TooltipProvider } from "@/components/ui/tooltip"
 
 export const metadata: Metadata = {
 	title: "Learn Anything",
@@ -20,9 +21,11 @@ const Providers = ({ children }: { children: React.ReactNode }) => (
 		<ClerkProviderClient>
 			<DeepLinkProvider>
 				<JotaiProvider>
-					<ConfirmProvider>
-						<JazzAndAuth>{children}</JazzAndAuth>
-					</ConfirmProvider>
+					<TooltipProvider>
+						<ConfirmProvider>
+							<JazzAndAuth>{children}</JazzAndAuth>
+						</ConfirmProvider>
+					</TooltipProvider>
 				</JotaiProvider>
 			</DeepLinkProvider>
 		</ClerkProviderClient>
