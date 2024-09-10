@@ -64,7 +64,7 @@ const StepItem = ({
 			<p className="w-[90%] leading-relaxed opacity-70">{description}</p>
 			<div className="flex flex-row items-center gap-2">
 				<LaIcon name={done ? "SquareCheck" : "Square"} className={`${done ? "text-green-500" : ""}`} />
-				<p>{task}</p>
+				<p className={`${done ? "opacity-35" : ""}`}>{task}</p>
 			</div>
 		</div>
 	</div>
@@ -117,9 +117,9 @@ export default function OnboardingRoute() {
 	const completedSteps = [isCreateLinkDone, isCreatePageDone, isStartTrackingDone, isAddLinkDone].filter(Boolean).length
 
 	return (
-		<div className="flex flex-1 flex-col space-y-8 text-sm text-black dark:text-white">
+		<div className="flex flex-1 flex-col space-y-4 text-sm text-black dark:text-white">
 			<div className="ml-10 flex flex-col items-start border-b border-neutral-200 bg-inherit dark:border-neutral-900">
-				<p className="h-[74px] p-[20px] text-2xl font-semibold opacity-60">Onboarding</p>
+				<p className="h-[70px] p-[20px] text-2xl font-semibold opacity-60">Onboarding</p>
 			</div>
 			<div className="mx-auto w-[70%] rounded-lg border border-neutral-200 bg-inherit p-6 shadow dark:border-neutral-900">
 				<h2 className="mb-4 text-lg font-semibold">Complete the steps below to get started</h2>

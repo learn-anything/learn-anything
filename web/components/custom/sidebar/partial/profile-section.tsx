@@ -86,6 +86,16 @@ export const ProfileSection: React.FC = () => {
 							</DropdownMenuItem>
 							<DropdownMenuSeparator />
 
+							<DropdownMenuItem asChild>
+								<Link href="https://github.com/learn-anything">
+									<div className="relative flex flex-1 items-center gap-2">
+										<LaIcon name="Github" />
+										<span className="line-clamp-1 flex-1">GitHub</span>
+									</div>
+								</Link>
+							</DropdownMenuItem>
+							<DropdownMenuSeparator />
+
 							<DropdownMenuItem onClick={() => signOut()}>
 								<div className="relative flex flex-1 items-center gap-2">
 									<LaIcon name="LogOut" />
