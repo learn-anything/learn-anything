@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { LaIcon } from "@/components/custom/la-icon"
 import { toast } from "sonner"
 import Link from "next/link"
+import { useEffect } from "react"
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -57,7 +58,6 @@ export const PageSection: React.FC<{ pathname?: string }> = ({ pathname }) => {
 	const [show, setShow] = useAtom(pageShowAtom)
 
 	const pageCount = me?.root.personalPages?.length || 0
-	// const isActive = pathname ? pathname.startsWith("/pages") : false
 	const isActive = pathname === "/pages"
 
 	if (!me) return null

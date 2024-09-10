@@ -23,12 +23,44 @@ import { useRouter } from "next/navigation"
 
 const TITLE_PLACEHOLDER = "Untitled"
 
+const emptyPage = (page: PersonalPage): boolean => {
+	return (!page.title || page.title.trim() === "") && (!page.content || Object.keys(page.content).length === 0)
+}
+
+export const deleteEmptyPage = (currentPageId: string | null) => {
+	const router = useRouter()
+	const { me } = useAccount({
+		root: {
+			personalPages: []
+		}
+	})
+
+	useEffect(() => {
+		const handleRouteChange = () => {
+			if (!currentPageId || !me?.root?.personalPages) return
+
+			const currentPage = me.root.personalPages.find(page => page?.id === currentPageId)
+			if (currentPage && emptyPage(currentPage)) {
+				const index = me.root.personalPages.findIndex(page => page?.id === currentPageId)
+				if (index !== -1) {
+					me.root.personalPages.splice(index, 1)
+				}
+			}
+		}
+
+		return () => {
+			handleRouteChange()
+		}
+	}, [currentPageId, me, router])
+}
+
 export function PageDetailRoute({ pageId }: { pageId: string }) {
 	const { me } = useAccount({ root: { personalLinks: [] } })
 	const isMobile = useMedia("(max-width: 770px)")
 	const page = useCoState(PersonalPage, pageId as ID<PersonalPage>)
 	const router = useRouter()
 	const confirm = useConfirm()
+	deleteEmptyPage(pageId)
 
 	const handleDelete = async () => {
 		const result = await confirm({
