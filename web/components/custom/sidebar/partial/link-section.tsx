@@ -1,6 +1,6 @@
 import React from "react"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { cn } from "@/lib/utils"
 import { PersonalLinkLists } from "@/lib/schema/personal-link"
@@ -33,23 +33,18 @@ interface LinkSectionHeaderProps {
 }
 
 const LinkSectionHeader: React.FC<LinkSectionHeaderProps> = ({ linkCount, isActive }) => {
-	const pathname = usePathname()
-	const [state] = useQueryState("state", parseAsStringLiteral(LEARNING_STATES.map(ls => ls.value)))
-	const isLinksActive = pathname.startsWith("/links") && !state
-
 	return (
-		<div className="flex gap-px rounded-md">
+		<div
+			className={cn(
+				"flex min-h-7 items-center gap-px rounded-md",
+				isActive ? "bg-accent text-accent-foreground" : "hover:bg-accent hover:text-accent-foreground"
+			)}
+		>
 			<Link
 				href="/links"
-				className={cn(
-					"flex size-6 flex-1 items-center justify-start rounded-md px-2 py-1",
-					"focus-visible:outline-none focus-visible:ring-0",
-					isLinksActive
-						? "bg-accent text-accent-foreground items-center justify-center py-4"
-						: "hover:bg-accent hover:text-accent-foreground"
-				)}
+				className="flex flex-1 items-center justify-start rounded-md px-2 py-1 focus-visible:outline-none focus-visible:ring-0"
 			>
-				<p className="flex w-full items-center text-xs font-medium">
+				<p className="text-xs">
 					Links
 					{linkCount > 0 && <span className="text-muted-foreground ml-1">{linkCount}</span>}
 				</p>
@@ -58,7 +53,6 @@ const LinkSectionHeader: React.FC<LinkSectionHeaderProps> = ({ linkCount, isActi
 	)
 }
 
-const ALL_STATES = ["all", ...LEARNING_STATES.map(ls => ls.value)]
 interface ListProps {
 	personalLinks: PersonalLinkLists
 }
