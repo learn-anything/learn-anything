@@ -13,6 +13,7 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { usePathname } from "next/navigation"
+import { Feedback } from "./feedback"
 
 export const ProfileSection: React.FC = () => {
 	const { user, isSignedIn } = useUser()
@@ -105,6 +106,8 @@ export const ProfileSection: React.FC = () => {
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
+
+				<Feedback />
 			</div>
 		</div>
 	)
