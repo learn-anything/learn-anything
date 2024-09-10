@@ -1,4 +1,4 @@
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Toggle } from "@/components/ui/toggle"
 
 import * as React from "react"
@@ -16,31 +16,29 @@ const ToolbarButton = React.forwardRef<HTMLButtonElement, ToolbarButtonProps>(fu
 	ref
 ) {
 	return (
-		<TooltipProvider delayDuration={0}>
-			<Tooltip>
-				<TooltipTrigger asChild>
-					<Toggle
-						size="sm"
-						ref={ref}
-						className={cn(
-							"size-7 rounded-md p-0",
-							{
-								"bg-primary/10 text-primary hover:bg-primary/10 hover:text-primary": isActive
-							},
-							className
-						)}
-						{...props}
-					>
-						{children}
-					</Toggle>
-				</TooltipTrigger>
-				{tooltip && (
-					<TooltipContent {...tooltipOptions}>
-						<div className="flex flex-col items-center text-center">{tooltip}</div>
-					</TooltipContent>
-				)}
-			</Tooltip>
-		</TooltipProvider>
+		<Tooltip>
+			<TooltipTrigger asChild>
+				<Toggle
+					size="sm"
+					ref={ref}
+					className={cn(
+						"size-7 rounded-md p-0",
+						{
+							"bg-primary/10 text-primary hover:bg-primary/10 hover:text-primary": isActive
+						},
+						className
+					)}
+					{...props}
+				>
+					{children}
+				</Toggle>
+			</TooltipTrigger>
+			{tooltip && (
+				<TooltipContent {...tooltipOptions}>
+					<div className="flex flex-col items-center text-center">{tooltip}</div>
+				</TooltipContent>
+			)}
+		</Tooltip>
 	)
 })
 
