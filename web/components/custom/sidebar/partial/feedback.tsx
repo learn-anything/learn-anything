@@ -1,3 +1,5 @@
+"use client"
+
 import { Button, buttonVariants } from "@/components/ui/button"
 import {
 	Dialog,
@@ -11,16 +13,53 @@ import {
 	DialogPrimitive
 } from "@/components/ui/dialog"
 import { LaIcon } from "@/components/custom/la-icon"
-import { MinimalTiptapEditor } from "@/components/minimal-tiptap"
-import { useState } from "react"
-import { Content } from "@tiptap/react"
+import { MinimalTiptapEditor, MinimalTiptapEditorRef } from "@/components/minimal-tiptap"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { useRef, useState } from "react"
 import { cn } from "@/lib/utils"
+import { sendFeedback } from "@/app/actions"
+import { useServerAction } from "zsa-react"
+import { z } from "zod"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { toast } from "sonner"
+import { Spinner } from "@/components/custom/spinner"
+
+const formSchema = z.object({
+	content: z.string().min(1, {
+		message: "Feedback cannot be empty"
+	})
+})
 
 export function Feedback() {
-	const [value, setValue] = useState<Content>("")
+	const [open, setOpen] = useState(false)
+	const editorRef = useRef<MinimalTiptapEditorRef>(null)
+	const { isPending, execute } = useServerAction(sendFeedback)
+
+	const form = useForm<z.infer<typeof formSchema>>({
+		resolver: zodResolver(formSchema),
+		defaultValues: {
+			content: ""
+		}
+	})
+
+	async function onSubmit(values: z.infer<typeof formSchema>) {
+		const [, err] = await execute(values)
+
+		if (err) {
+			toast.error("Failed to send feedback")
+			console.error(err)
+			return
+		}
+
+		form.reset({ content: "" })
+		editorRef.current?.editor?.commands.clearContent()
+		setOpen(false)
+		toast.success("Feedback sent")
+	}
 
 	return (
-		<Dialog>
+		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
 				<Button size="icon" className="shrink-0" variant="ghost">
 					<LaIcon name="CircleHelp" />
@@ -35,32 +74,62 @@ export function Feedback() {
 						"flex flex-col p-4 sm:max-w-2xl"
 					)}
 				>
-					<DialogHeader>
-						<DialogTitle>Share feedback</DialogTitle>
-						<DialogDescription className="sr-only">
-							Your feedback helps us improve. Please share your thoughts, ideas, and suggestions
-						</DialogDescription>
-					</DialogHeader>
+					<Form {...form}>
+						<form onSubmit={form.handleSubmit(onSubmit)}>
+							<DialogHeader className="mb-5">
+								<DialogTitle>Share feedback</DialogTitle>
+								<DialogDescription className="sr-only">
+									Your feedback helps us improve. Please share your thoughts, ideas, and suggestions
+								</DialogDescription>
+							</DialogHeader>
 
-					<MinimalTiptapEditor
-						value={value}
-						onChange={setValue}
-						throttleDelay={500}
-						className="border-muted-foreground/50 mt-2 min-h-52 rounded-lg"
-						editorContentClassName="p-4 overflow-auto flex grow"
-						output="html"
-						placeholder="Your feedback helps us improve. Please share your thoughts, ideas, and suggestions."
-						autofocus={true}
-						immediatelyRender={true}
-						editable={true}
-						injectCSS={true}
-						editorClassName="focus:outline-none"
-					/>
+							<FormField
+								control={form.control}
+								name="content"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel className="sr-only">Content</FormLabel>
+										<FormControl>
+											<MinimalTiptapEditor
+												{...field}
+												ref={editorRef}
+												throttleDelay={500}
+												className={cn(
+													"border-muted-foreground/40 focus-within:border-muted-foreground/80 min-h-52 rounded-lg",
+													{
+														"border-destructive focus-within:border-destructive": form.formState.errors.content
+													}
+												)}
+												editorContentClassName="p-4 overflow-auto flex grow"
+												output="html"
+												placeholder="Your feedback helps us improve. Please share your thoughts, ideas, and suggestions."
+												autofocus={true}
+												immediatelyRender={true}
+												editable={true}
+												injectCSS={true}
+												editorClassName="focus:outline-none"
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 
-					<DialogFooter>
-						<DialogPrimitive.Close className={buttonVariants({ variant: "outline" })}>Cancel</DialogPrimitive.Close>
-						<Button type="submit">Send feedback</Button>
-					</DialogFooter>
+							<DialogFooter className="mt-4">
+								<DialogPrimitive.Close className={buttonVariants({ variant: "outline" })}>Cancel</DialogPrimitive.Close>
+								<Button type="submit">
+									{isPending ? (
+										<>
+											<Spinner className="mr-2" />
+											<span>Sending feedback...</span>
+										</>
+									) : (
+										"Send feedback"
+									)}
+								</Button>
+							</DialogFooter>
+						</form>
+					</Form>
 				</DialogPrimitive.Content>
 			</DialogPortal>
 		</Dialog>

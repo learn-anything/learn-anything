@@ -50,7 +50,11 @@ const Toolbar = ({ editor }: { editor: Editor }) => (
 	</div>
 )
 
-export const MinimalTiptapEditor = React.forwardRef<HTMLDivElement, MinimalTiptapProps>(
+export type MinimalTiptapEditorRef = {
+	editor: Editor | null
+}
+
+export const MinimalTiptapEditor = React.forwardRef<MinimalTiptapEditorRef, MinimalTiptapProps>(
 	({ value, onChange, className, editorContentClassName, ...props }, ref) => {
 		const editor = useMinimalTiptapEditor({
 			value,
@@ -58,13 +62,20 @@ export const MinimalTiptapEditor = React.forwardRef<HTMLDivElement, MinimalTipta
 			...props
 		})
 
+		React.useImperativeHandle(
+			ref,
+			() => ({
+				editor: editor || null
+			}),
+			[editor]
+		)
+
 		if (!editor) {
 			return null
 		}
 
 		return (
 			<div
-				ref={ref}
 				className={cn(
 					"border-input focus-within:border-primary flex h-auto min-h-72 w-full flex-col rounded-md border shadow-sm",
 					className

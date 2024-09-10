@@ -103,7 +103,6 @@ const SidebarActions = ({ page, handleDelete }: { page: PersonalPage; handleDele
 )
 
 const DetailPageForm = ({ page }: { page: PersonalPage }) => {
-	const { me } = useAccount()
 	const titleEditorRef = useRef<Editor | null>(null)
 	const contentEditorRef = useRef<LAEditorRef>(null)
 	const isTitleInitialMount = useRef(true)

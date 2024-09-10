@@ -5,6 +5,8 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 
+import { storeImage } from "@/app/actions"
+
 interface ImageEditBlockProps extends React.HTMLAttributes<HTMLDivElement> {
 	editor: Editor
 	close: () => void
@@ -13,6 +15,8 @@ interface ImageEditBlockProps extends React.HTMLAttributes<HTMLDivElement> {
 const ImageEditBlock = ({ editor, className, close, ...props }: ImageEditBlockProps) => {
 	const fileInputRef = useRef<HTMLInputElement>(null)
 	const [link, setLink] = useState<string>("")
+	const [isUploading, setIsUploading] = useState<boolean>(false)
+	const [error, setError] = useState<string | null>(null)
 
 	const handleClick = (e: React.MouseEvent) => {
 		e.preventDefault()
@@ -25,19 +29,30 @@ const ImageEditBlock = ({ editor, className, close, ...props }: ImageEditBlockPr
 		close()
 	}
 
-	const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const files = e.target.files
-		if (!files) return
+		if (!files || files.length === 0) return
 
-		const reader = new FileReader()
-		reader.onload = e => {
-			const src = e.target?.result as string
-			editor.chain().setImage({ src }).focus().run()
+		setIsUploading(true)
+		setError(null)
+
+		const formData = new FormData()
+		formData.append("file", files[0])
+
+		try {
+			const [response, err] = await storeImage(formData)
+			if (response?.fileModel) {
+				editor.chain().setImage({ src: response.fileModel.content.src }).focus().run()
+				close()
+			} else {
+				throw new Error("Failed to upload image")
+			}
+		} catch (error) {
+			console.error("Error uploading file:", error)
+			setError(error instanceof Error ? error.message : "An unknown error occurred")
+		} finally {
+			setIsUploading(false)
 		}
-
-		reader.readAsDataURL(files[0])
-
-		close()
 	}
 
 	const handleSubmit = (e: React.FormEvent) => {
@@ -64,10 +79,17 @@ const ImageEditBlock = ({ editor, className, close, ...props }: ImageEditBlockPr
 						</Button>
 					</div>
 				</div>
-				<Button className="w-full" onClick={handleClick}>
-					Upload from your computer
+				<Button className="w-full" onClick={handleClick} disabled={isUploading}>
+					{isUploading ? "Uploading..." : "Upload from your computer"}
 				</Button>
-				<input type="file" accept="image/*" ref={fileInputRef} multiple className="hidden" onChange={handleFile} />
+				<input
+					type="file"
+					accept="image/jpeg,image/png,image/gif,image/webp"
+					ref={fileInputRef}
+					className="hidden"
+					onChange={handleFile}
+				/>
+				{error && <div className="text-destructive text-sm">{error}</div>}
 			</div>
 		</form>
 	)
