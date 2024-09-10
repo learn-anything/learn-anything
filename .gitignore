@@ -4,6 +4,7 @@
 .env*.local
 output
 dist
+.idea
 
 # ts
 node_modules
