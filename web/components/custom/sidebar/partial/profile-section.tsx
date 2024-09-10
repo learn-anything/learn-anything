@@ -13,6 +13,7 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { usePathname } from "next/navigation"
+import { Feedback } from "./feedback"
 
 export const ProfileSection: React.FC = () => {
 	const { user, isSignedIn } = useUser()
@@ -58,7 +59,7 @@ export const ProfileSection: React.FC = () => {
 						</DropdownMenuTrigger>
 						<DropdownMenuContent className="w-56" align="start" side="top">
 							<DropdownMenuItem asChild>
-								<Link href="/profile">
+								<Link className="cursor-pointer" href="/profile">
 									<div className="relative flex flex-1 items-center gap-2">
 										<LaIcon name="CircleUser" />
 										<span className="line-clamp-1 flex-1">My profile</span>
@@ -67,7 +68,7 @@ export const ProfileSection: React.FC = () => {
 							</DropdownMenuItem>
 							<DropdownMenuSeparator />
 							<DropdownMenuItem asChild>
-								<Link href="/onboarding">
+								<Link className="cursor-pointer" href="/onboarding">
 									<div className="relative flex flex-1 items-center gap-2">
 										<LaIcon name="LayoutList" />
 										<span className="line-clamp-1 flex-1">Onboarding</span>
@@ -75,8 +76,29 @@ export const ProfileSection: React.FC = () => {
 								</Link>
 							</DropdownMenuItem>
 							<DropdownMenuSeparator />
+
+							<DropdownMenuItem asChild>
+								<Link className="cursor-pointer" href="https://docs.learn-anything.xyz/">
+									<div className="relative flex flex-1 items-center gap-2">
+										<LaIcon name="Sticker" />
+										<span className="line-clamp-1 flex-1">Docs</span>
+									</div>
+								</Link>
+							</DropdownMenuItem>
+							<DropdownMenuSeparator />
+
+							<DropdownMenuItem asChild>
+								<Link className="cursor-pointer" href="https://github.com/learn-anything">
+									<div className="relative flex flex-1 items-center gap-2">
+										<LaIcon name="Github" />
+										<span className="line-clamp-1 flex-1">GitHub</span>
+									</div>
+								</Link>
+							</DropdownMenuItem>
+							<DropdownMenuSeparator />
+
 							<DropdownMenuItem onClick={() => signOut()}>
-								<div className="relative flex flex-1 items-center gap-2">
+								<div className="relative flex flex-1 cursor-pointer items-center gap-2">
 									<LaIcon name="LogOut" />
 									<span className="line-clamp-1 flex-1">Log out</span>
 								</div>
@@ -84,6 +106,8 @@ export const ProfileSection: React.FC = () => {
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
+
+				<Feedback />
 			</div>
 		</div>
 	)

@@ -1,0 +1,71 @@
+"use server"
+
+import { authedProcedure } from "@/lib/utils/auth-procedure"
+import { create } from "ronin"
+import { z } from "zod"
+import { ZSAError } from "zsa"
+
+const MAX_FILE_SIZE = 1 * 1024 * 1024
+const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"]
+
+export const sendFeedback = authedProcedure
+	.input(
+		z.object({
+			content: z.string()
+		})
+	)
+	.handler(async ({ input, ctx }) => {
+		const { clerkUser } = ctx
+		const { content } = input
+
+		try {
+			await create.feedback.with({
+				message: content,
+				emailFrom: clerkUser?.emailAddresses[0].emailAddress
+			})
+		} catch (error) {
+			console.error(error)
+			throw new ZSAError("ERROR", "Failed to send feedback")
+		}
+	})
+
+export const storeImage = authedProcedure
+	.input(
+		z.object({
+			file: z.custom<File>(file => {
+				if (!(file instanceof File)) {
+					throw new Error("Not a file")
+				}
+				if (!ALLOWED_FILE_TYPES.includes(file.type)) {
+					throw new Error("Invalid file type. Only JPEG, PNG, GIF, and WebP images are allowed.")
+				}
+				if (file.size > MAX_FILE_SIZE) {
+					throw new Error("File size exceeds the maximum limit of 1 MB.")
+				}
+				return true
+			})
+		}),
+		{ type: "formData" }
+	)
+	.handler(async ({ ctx, input }) => {
+		const { file } = input
+		const { clerkUser } = ctx
+
+		if (!clerkUser?.id) {
+			throw new ZSAError("NOT_AUTHORIZED", "You are not authorized to upload files")
+		}
+
+		try {
+			const fileModel = await create.image.with({
+				content: file,
+				name: file.name,
+				type: file.type,
+				size: file.size
+			})
+
+			return { fileModel }
+		} catch (error) {
+			console.error(error)
+			throw new ZSAError("ERROR", "Failed to store image")
+		}
+	})
