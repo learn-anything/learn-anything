@@ -9,7 +9,8 @@ const ROUTE_PATTERNS = {
 		"/profile(.*)",
 		"/search(.*)",
 		"/settings(.*)",
-		"/tauri(.*)"
+		"/tauri(.*)",
+		"/onboarding(.*)"
 	]
 }
 

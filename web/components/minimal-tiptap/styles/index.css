@@ -1,0 +1,182 @@
+@import './partials/code.css';
+@import './partials/placeholder.css';
+@import './partials/lists.css';
+@import './partials/typography.css';
+
+:root {
+  --mt-font-size-regular: 0.9375rem;
+
+  --mt-code-background: #082b781f;
+  --mt-code-color: #d4d4d4;
+  --mt-secondary: #9d9d9f;
+  --mt-pre-background: #ececec;
+  --mt-pre-border: #e0e0e0;
+  --mt-pre-color: #2f2f31;
+  --mt-hr: #dcdcdc;
+  --mt-drag-handle-hover: #5c5c5e;
+
+  --mt-accent-bold-blue: #05c;
+  --mt-accent-bold-teal: #206a83;
+  --mt-accent-bold-green: #216e4e;
+  --mt-accent-bold-orange: #a54800;
+  --mt-accent-bold-red: #ae2e24;
+  --mt-accent-bold-purple: #5e4db2;
+
+  --mt-accent-gray: #758195;
+  --mt-accent-blue: #1d7afc;
+  --mt-accent-teal: #2898bd;
+  --mt-accent-green: #22a06b;
+  --mt-accent-orange: #fea362;
+  --mt-accent-red: #c9372c;
+  --mt-accent-purple: #8270db;
+
+  --mt-accent-blue-subtler: #cce0ff;
+  --mt-accent-teal-subtler: #c6edfb;
+  --mt-accent-green-subtler: #baf3db;
+  --mt-accent-yellow-subtler: #f8e6a0;
+  --mt-accent-red-subtler: #ffd5d2;
+  --mt-accent-purple-subtler: #dfd8fd;
+
+  --hljs-string: #aa430f;
+  --hljs-title: #b08836;
+  --hljs-comment: #999999;
+  --hljs-keyword: #0c5eb1;
+  --hljs-attr: #3a92bc;
+  --hljs-literal: #c82b0f;
+  --hljs-name: #259792;
+  --hljs-selector-tag: #c8500f;
+  --hljs-number: #3da067;
+}
+
+.dark {
+  --mt-font-size-regular: 0.9375rem;
+
+  --mt-code-background: #ffffff13;
+  --mt-code-color: #2c2e33;
+  --mt-secondary: #595a5c;
+  --mt-pre-background: #080808;
+  --mt-pre-border: #23252a;
+  --mt-pre-color: #e3e4e6;
+  --mt-hr: #26282d;
+  --mt-drag-handle-hover: #969799;
+
+  --mt-accent-bold-blue: #85b8ff;
+  --mt-accent-bold-teal: #9dd9ee;
+  --mt-accent-bold-green: #7ee2b8;
+  --mt-accent-bold-orange: #fec195;
+  --mt-accent-bold-red: #fd9891;
+  --mt-accent-bold-purple: #b8acf6;
+
+  --mt-accent-gray: #738496;
+  --mt-accent-blue: #388bff;
+  --mt-accent-teal: #42b2d7;
+  --mt-accent-green: #2abb7f;
+  --mt-accent-orange: #a54800;
+  --mt-accent-red: #e2483d;
+  --mt-accent-purple: #8f7ee7;
+
+  --mt-accent-blue-subtler: #09326c;
+  --mt-accent-teal-subtler: #164555;
+  --mt-accent-green-subtler: #164b35;
+  --mt-accent-yellow-subtler: #533f04;
+  --mt-accent-red-subtler: #5d1f1a;
+  --mt-accent-purple-subtler: #352c63;
+
+  --hljs-string: #da936b;
+  --hljs-title: #f1d59d;
+  --hljs-comment: #aaaaaa;
+  --hljs-keyword: #6699cc;
+  --hljs-attr: #90cae8;
+  --hljs-literal: #f2777a;
+  --hljs-name: #5fc0a0;
+  --hljs-selector-tag: #e8c785;
+  --hljs-number: #b6e7b6;
+}
+
+.minimal-tiptap-editor .ProseMirror {
+  @apply flex max-w-full flex-1 cursor-text flex-col;
+  @apply z-0 outline-0;
+}
+
+.minimal-tiptap-editor .ProseMirror > div.editor {
+  @apply block flex-1 whitespace-pre-wrap;
+}
+
+.minimal-tiptap-editor .ProseMirror .block-node:not(:last-child),
+.minimal-tiptap-editor .ProseMirror .list-node:not(:last-child),
+.minimal-tiptap-editor .ProseMirror .text-node:not(:last-child) {
+  @apply mb-2.5;
+}
+
+.minimal-tiptap-editor .ProseMirror ol,
+.minimal-tiptap-editor .ProseMirror ul {
+  @apply pl-6;
+}
+
+.minimal-tiptap-editor .ProseMirror blockquote,
+.minimal-tiptap-editor .ProseMirror dl,
+.minimal-tiptap-editor .ProseMirror ol,
+.minimal-tiptap-editor .ProseMirror p,
+.minimal-tiptap-editor .ProseMirror pre,
+.minimal-tiptap-editor .ProseMirror ul {
+  @apply m-0;
+}
+
+.minimal-tiptap-editor .ProseMirror li {
+  @apply leading-7;
+}
+
+.minimal-tiptap-editor .ProseMirror p {
+  @apply break-words;
+}
+
+.minimal-tiptap-editor .ProseMirror li .text-node:has(+ .list-node),
+.minimal-tiptap-editor .ProseMirror li > .list-node,
+.minimal-tiptap-editor .ProseMirror li > .text-node,
+.minimal-tiptap-editor .ProseMirror li p {
+  @apply mb-0;
+}
+
+.minimal-tiptap-editor .ProseMirror blockquote {
+  @apply relative pl-3.5;
+}
+
+.minimal-tiptap-editor .ProseMirror blockquote::before,
+.minimal-tiptap-editor .ProseMirror blockquote.is-empty::before {
+  @apply absolute bottom-0 left-0 top-0 h-full w-1 rounded-sm bg-accent-foreground/15 content-[''];
+}
+
+.minimal-tiptap-editor .ProseMirror hr {
+  @apply my-3 h-0.5 w-full border-none bg-[var(--mt-hr)];
+}
+
+.minimal-tiptap-editor .ProseMirror-focused hr.ProseMirror-selectednode {
+  @apply rounded-full outline outline-2 outline-offset-1 outline-muted-foreground;
+}
+
+.minimal-tiptap-editor .ProseMirror .ProseMirror-gapcursor {
+  @apply pointer-events-none absolute hidden;
+}
+
+.minimal-tiptap-editor .ProseMirror .ProseMirror-hideselection {
+  @apply caret-transparent;
+}
+
+.minimal-tiptap-editor .ProseMirror.resize-cursor {
+  @apply cursor-col-resize;
+}
+
+.minimal-tiptap-editor .ProseMirror .selection {
+  @apply inline-block;
+}
+
+.minimal-tiptap-editor .ProseMirror .selection,
+.minimal-tiptap-editor .ProseMirror *::selection,
+::selection {
+  @apply bg-primary/25;
+}
+
+/* Override native selection when custom selection is present */
+.minimal-tiptap-editor .ProseMirror .selection::selection {
+  background: transparent;
+}
