@@ -88,7 +88,7 @@ export const ProfileSection: React.FC = () => {
 							<DropdownMenuSeparator />
 
 							<DropdownMenuItem asChild>
-								<Link className="cursor-pointer" href="https://github.com/learn-anything">
+								<Link className="cursor-pointer" href="https://github.com/learn-anything/learn-anything">
 									<div className="relative flex flex-1 items-center gap-2">
 										<LaIcon name="Github" />
 										<span className="line-clamp-1 flex-1">GitHub</span>
