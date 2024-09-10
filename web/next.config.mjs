@@ -42,14 +42,12 @@ const webConfig = {
 
 const nextConfig = isTauri ? tauriConfig : webConfig
 
-// console.log(`Using ${isTauri ? "Tauri" : "Web"} config`)
-
 export default withSentryConfig(nextConfig, {
 	// For all available options, see:
 	// https://github.com/getsentry/sentry-webpack-plugin#options
 
 	org: "learn-anything",
-	project: "website",
+	project: process.env.SENTRY_PROJECT,
 	sentryUrl: "https://sentry.io/",
 
 	// Only print logs for uploading source maps in CI
