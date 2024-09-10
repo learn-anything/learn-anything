@@ -1,6 +1,8 @@
 "use server"
 
 import { authedProcedure } from "@/lib/utils/auth-procedure"
+import { currentUser } from "@clerk/nextjs/server"
+import { get } from "ronin"
 import { create } from "ronin"
 import { z } from "zod"
 import { ZSAError } from "zsa"
@@ -68,3 +70,9 @@ export const storeImage = authedProcedure
 			throw new ZSAError("ERROR", "Failed to store image")
 		}
 	})
+
+export const isExistingUser = async () => {
+	const clerkUser = await currentUser()
+	const roninUser = await get.existingStripeSubscriber.with({ email: clerkUser?.emailAddresses[0].emailAddress })
+	return clerkUser?.emailAddresses[0].emailAddress === roninUser?.email
+}
