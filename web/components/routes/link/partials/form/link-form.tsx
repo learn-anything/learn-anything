@@ -118,7 +118,7 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 	const fetchMetadata = async (url: string) => {
 		setIsFetching(true)
 		try {
-			const res = await fetch(`/api/metadata?url=${encodeURIComponent(url)}`, { cache: "no-cache" })
+			const res = await fetch(`/api/metadata?url=${encodeURIComponent(url)}`, { cache: "force-cache" })
 			const data = await res.json()
 			setUrlFetched(data.url)
 			form.setValue("url", data.url, {
