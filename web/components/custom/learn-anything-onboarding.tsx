@@ -38,7 +38,7 @@ export function LearnAnythingOnboarding() {
 		if (!hasVisited) {
 			loadUser()
 		}
-	}, [hasVisited])
+	}, [hasVisited, setIsOpen])
 
 	const handleClose = () => {
 		setIsOpen(false)
@@ -60,9 +60,9 @@ export function LearnAnythingOnboarding() {
 					<p className="font-medium">Existing Customer Notice</p>
 					<p>
 						We noticed you are an existing Learn Anything customer. We sincerely apologize for any broken experience you
-						may have encountered on the old website. We've been working hard on this new version, which addresses
-						previous issues and offers more features. As an early customer, you're locked in at the <strong>$3</strong>{" "}
-						price for our upcoming pro version. Thank you for your support!
+						may have encountered on the old website. We&apos;ve been working hard on this new version, which addresses
+						previous issues and offers more features. As an early customer, you&apos;re locked in at the{" "}
+						<strong>$3</strong> price for our upcoming pro version. Thank you for your support!
 					</p>
 					<p>
 						Learn Anything is a learning platform that organizes knowledge in a social way. You can create pages, add
@@ -75,8 +75,8 @@ export function LearnAnythingOnboarding() {
 						<li>Update your learning status on a topic</li>
 					</ul>
 					<p>
-						If you have any questions, don't hesitate to reach out. Click on your name in the bottom left corner, select
-						"Feedback", and enter your message.
+						If you have any questions, don&apos;t hesitate to reach out. Click on your name in the bottom left corner,
+						select &quot;Feedback&quot;, and enter your message.
 					</p>
 				</AlertDialogDescription>
 
