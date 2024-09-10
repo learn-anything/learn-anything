@@ -27,7 +27,7 @@ const emptyPage = (page: PersonalPage): boolean => {
 	return (!page.title || page.title.trim() === "") && (!page.content || Object.keys(page.content).length === 0)
 }
 
-export const deleteEmptyPage = (currentPageId: string | null) => {
+export const DeleteEmptyPage = (currentPageId: string | null) => {
 	const router = useRouter()
 	const { me } = useAccount({
 		root: {
@@ -60,7 +60,7 @@ export function PageDetailRoute({ pageId }: { pageId: string }) {
 	const page = useCoState(PersonalPage, pageId as ID<PersonalPage>)
 	const router = useRouter()
 	const confirm = useConfirm()
-	deleteEmptyPage(pageId)
+	DeleteEmptyPage(pageId)
 
 	const handleDelete = async () => {
 		const result = await confirm({
