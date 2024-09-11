@@ -110,27 +110,30 @@ const TITLE_SIZE_PX = 400
 
 const simulateGraph = (
 	alpha: number,
-	graph: fg.graph.Graph,
-	canvas: fg.canvas.CanvasState,
+	gestures: fg.canvas.CanvasGestures,
 	vw: number,
 	vh: number
 ): void => {
+	let c = gestures.canvas
+	let g = c.graph
+
 	alpha = alpha / 10 // slow things down a bit
 
-	fg.graph.simulate(graph, alpha)
+	fg.graph.simulate(g, alpha)
 
 	/*
 		Push nodes away from the center (the title)
 	*/
-	let grid_radius = graph.options.grid_size / 2
-	let origin_x = grid_radius + canvas.translate.x
-	let origin_y = grid_radius + canvas.translate.y
+	let grid_radius = g.options.grid_size / 2
+	let origin_x = grid_radius + c.translate.x
+	let origin_y = grid_radius + c.translate.y
 	let vmax = Math.max(vw, vh)
 	let push_radius =
-		(Math.min(TITLE_SIZE_PX, vw / 2, vh / 2) / vmax) * (graph.options.grid_size / canvas.scale) +
+		(Math.min(TITLE_SIZE_PX, vw / 2, vh / 2) / vmax) * (g.options.grid_size / c.scale) +
 		80 /* additional margin for when scrolled in */
 
-	for (let node of graph.nodes) {
+	for (let node of g.nodes) {
+		// 
 		let dist_x = node.pos.x - origin_x
 		let dist_y = (node.pos.y - origin_y) * 2
 		let dist = Math.sqrt(dist_x * dist_x + dist_y * dist_y)
@@ -140,6 +143,25 @@ const simulateGraph = (
 
 		node.vel.x += strength * (node.pos.x - origin_x) * 10 * alpha
 		node.vel.y += strength * (node.pos.y - origin_y) * 10 * alpha
+	}
+
+	/*
+		When a node is being dragged
+		it will pull it's connections
+	*/
+	if (gestures.mode.type === fg.canvas.Mode.DraggingNode) {
+		//
+		let node = gestures.mode.node
+
+		for (let edge of fg.graph.each_node_edge(g, node)) {
+			let b = edge.b === node ? edge.a : edge.b
+
+			let dx = (b.pos.x - node.pos.x) * g.options.link_strength * edge.strength * alpha * 10
+			let dy = (b.pos.y - node.pos.y) * g.options.link_strength * edge.strength * alpha * 10
+
+			b.vel.x -= dx / b.mass
+			b.vel.y -= dy / b.mass
+		}
 	}
 }
 
@@ -230,32 +252,6 @@ function init(
 		init_grid_pos: trig.ZERO
 	})
 
-	s.ro = new ResizeObserver(() => {
-		if (canvas.resizeCanvasToDisplaySize(canvas_el)) {
-			fg.canvas.updateTranslate(canvas_state, canvas_state.translate.x, canvas_state.translate.y)
-		}
-	})
-	s.ro.observe(canvas_el)
-
-	simulateGraph(6, s.graph, canvas_state, window.innerWidth, window.innerHeight)
-
-	function loop(time: number) {
-		let is_active = gestures.mode.type === fg.canvas.Mode.DraggingNode
-		let iterations = Math.min(2, raf.calcIterations(s.frame_iter_limit, time))
-
-		for (let i = iterations; i > 0; i--) {
-			s.alpha = raf.updateAlpha(s.alpha, is_active || time < s.bump_end)
-			simulateGraph(s.alpha, s.graph, canvas_state, window.innerWidth, window.innerHeight)
-		}
-
-		if (iterations > 0) {
-			drawGraph(canvas_state, color_map)
-		}
-
-		s.raf_id = requestAnimationFrame(loop)
-	}
-	s.raf_id = requestAnimationFrame(loop)
-
 	let gestures = (s.gestures = fg.canvas.canvasGestures({
 		canvas: canvas_state,
 		onGesture: e => {
@@ -272,6 +268,34 @@ function init(
 			}
 		}
 	}))
+
+	s.ro = new ResizeObserver(() => {
+		if (canvas.resizeCanvasToDisplaySize(canvas_el)) {
+			fg.canvas.updateTranslate(canvas_state, canvas_state.translate.x, canvas_state.translate.y)
+		}
+	})
+	s.ro.observe(canvas_el)
+
+	// initial simulation is the most crazy
+	// so it's off-screen
+	simulateGraph(6, gestures, window.innerWidth, window.innerHeight)
+
+	function loop(time: number) {
+		let is_active = gestures.mode.type === fg.canvas.Mode.DraggingNode
+		let iterations = Math.min(2, raf.calcIterations(s.frame_iter_limit, time))
+
+		for (let i = iterations; i > 0; i--) {
+			s.alpha = raf.updateAlpha(s.alpha, is_active || time < s.bump_end)
+			simulateGraph(s.alpha, gestures, window.innerWidth, window.innerHeight)
+		}
+
+		if (iterations > 0) {
+			drawGraph(canvas_state, color_map)
+		}
+
+		s.raf_id = requestAnimationFrame(loop)
+	}
+	s.raf_id = requestAnimationFrame(loop)
 }
 
 function updateQuery(s: State, filter_query: string) {
