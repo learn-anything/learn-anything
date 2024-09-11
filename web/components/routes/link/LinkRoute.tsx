@@ -8,12 +8,14 @@ import { useQueryState } from "nuqs"
 import { atom, useAtom } from "jotai"
 import { LinkBottomBar } from "./bottom-bar"
 import { commandPaletteOpenAtom } from "@/components/custom/command-palette/command-palette"
+import { linkShowCreateAtom } from "@/store/link"
 
 export const isDeleteConfirmShownAtom = atom(false)
 
 export function LinkRoute(): React.ReactElement {
 	const [nuqsEditId] = useQueryState("editId")
 	const [activeItemIndex, setActiveItemIndex] = useState<number | null>(null)
+	const [isInCreateMode] = useAtom(linkShowCreateAtom)
 	const [isCommandPaletteOpen] = useAtom(commandPaletteOpenAtom)
 	const [isDeleteConfirmShown] = useAtom(isDeleteConfirmShownAtom)
 	const [disableEnterKey, setDisableEnterKey] = useState(false)
@@ -32,7 +34,7 @@ export function LinkRoute(): React.ReactElement {
 	}, [])
 
 	useEffect(() => {
-		if (isDeleteConfirmShown || isCommandPaletteOpen) {
+		if (isDeleteConfirmShown || isCommandPaletteOpen || isInCreateMode) {
 			setDisableEnterKey(true)
 			if (timeoutRef.current) {
 				clearTimeout(timeoutRef.current)
@@ -47,7 +49,7 @@ export function LinkRoute(): React.ReactElement {
 				clearTimeout(timeoutRef.current)
 			}
 		}
-	}, [isDeleteConfirmShown, isCommandPaletteOpen, handleCommandPaletteClose])
+	}, [isDeleteConfirmShown, isCommandPaletteOpen, isInCreateMode, handleCommandPaletteClose])
 
 	return (
 		<div className="flex h-full flex-auto flex-col overflow-hidden">

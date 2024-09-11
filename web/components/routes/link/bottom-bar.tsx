@@ -120,8 +120,6 @@ export const LinkBottomBar: React.FC = () => {
 					setShowCreate(true)
 				}
 			} else {
-				// For Windows, we'll use Ctrl + Win + N
-				// Note: The Windows key is not directly detectable in most browsers
 				if (event.ctrlKey && event.key.toLowerCase() === "n" && (event.metaKey || event.altKey)) {
 					event.preventDefault()
 					setShowCreate(true)
