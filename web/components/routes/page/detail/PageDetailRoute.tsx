@@ -201,7 +201,7 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 
 	const titleEditor = useEditor({
 		immediatelyRender: false,
-		autofocus: true,
+		autofocus: false,
 		extensions: [
 			FocusClasses,
 			Paragraph,
@@ -245,7 +245,13 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 	useEffect(() => {
 		isTitleInitialMount.current = true
 		isContentInitialMount.current = true
-	}, [])
+
+		if (!page.title) {
+			titleEditor?.commands.focus()
+		} else {
+			contentEditorRef.current?.editor?.commands.focus()
+		}
+	}, [page.title, titleEditor, contentEditorRef])
 
 	return (
 		<div className="relative flex grow flex-col overflow-y-auto [scrollbar-gutter:stable]">
