@@ -16,21 +16,6 @@ export default function SlidingMenu() {
 	])
 
 	useEffect(() => {
-		const handleKeyDown = (event: KeyboardEvent) => {
-			if (lastKeyPressed === "z" && event.key.toLowerCase() === "p") {
-				setIsOpen(prev => !prev)
-			}
-			setLastKeyPressed(event.key.toLowerCase())
-		}
-
-		window.addEventListener("keydown", handleKeyDown)
-
-		return () => {
-			window.removeEventListener("keydown", handleKeyDown)
-		}
-	}, [lastKeyPressed, setIsOpen])
-
-	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
 			if (panelRef.current && !panelRef.current.contains(event.target as Node)) {
 				setIsOpen(false)
