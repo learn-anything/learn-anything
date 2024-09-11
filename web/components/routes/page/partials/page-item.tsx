@@ -22,7 +22,7 @@ export const PageItem = React.forwardRef<HTMLAnchorElement, PageItemProps>(({ pa
 			ref={ref}
 			tabIndex={isActive ? 0 : -1}
 			className={cn(
-				"relative block cursor-default outline-none",
+				"relative block cursor-default rounded-lg outline-none",
 				"h-12 items-center gap-x-2 py-2 max-lg:px-4 sm:px-6",
 				{
 					"bg-muted-foreground/10": isActive,
