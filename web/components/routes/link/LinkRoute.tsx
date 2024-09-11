@@ -4,18 +4,17 @@ import React, { useEffect, useState, useCallback, useRef } from "react"
 import { LinkHeader } from "@/components/routes/link/header"
 import { LinkList } from "@/components/routes/link/list"
 import { LinkManage } from "@/components/routes/link/manage"
-import { useQueryState } from "nuqs"
+import { parseAsBoolean, useQueryState } from "nuqs"
 import { atom, useAtom } from "jotai"
 import { LinkBottomBar } from "./bottom-bar"
 import { commandPaletteOpenAtom } from "@/components/custom/command-palette/command-palette"
-import { linkShowCreateAtom } from "@/store/link"
 
 export const isDeleteConfirmShownAtom = atom(false)
 
 export function LinkRoute(): React.ReactElement {
 	const [nuqsEditId] = useQueryState("editId")
 	const [activeItemIndex, setActiveItemIndex] = useState<number | null>(null)
-	const [isInCreateMode] = useAtom(linkShowCreateAtom)
+	const [isInCreateMode] = useQueryState("create", parseAsBoolean)
 	const [isCommandPaletteOpen] = useAtom(commandPaletteOpenAtom)
 	const [isDeleteConfirmShown] = useAtom(isDeleteConfirmShownAtom)
 	const [disableEnterKey, setDisableEnterKey] = useState(false)

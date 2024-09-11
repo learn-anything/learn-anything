@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react"
+import React, { useCallback, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { icons } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -6,8 +6,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { getSpecialShortcut, formatShortcut, isMacOS } from "@/lib/utils"
 import { LaIcon } from "@/components/custom/la-icon"
 import { useAtom } from "jotai"
-import { linkShowCreateAtom } from "@/store/link"
-import { useQueryState } from "nuqs"
+import { parseAsBoolean, useQueryState } from "nuqs"
 import { useConfirm } from "@omit/react-confirm-dialog"
 import { useAccount, useCoState } from "@/lib/providers/jazz-provider"
 import { PersonalLink } from "@/lib/schema"
@@ -48,65 +47,50 @@ ToolbarButton.displayName = "ToolbarButton"
 
 export const LinkBottomBar: React.FC = () => {
 	const [editId, setEditId] = useQueryState("editId")
+	const [createMode, setCreateMode] = useQueryState("create", parseAsBoolean)
 	const [, setGlobalLinkFormExceptionRefsAtom] = useAtom(globalLinkFormExceptionRefsAtom)
-	const [showCreate, setShowCreate] = useAtom(linkShowCreateAtom)
-
 	const { me } = useAccount({ root: { personalLinks: [] } })
 	const personalLink = useCoState(PersonalLink, editId as ID<PersonalLink>)
-
-	const cancelBtnRef = useRef<HTMLButtonElement>(null)
-	const confirmBtnRef = useRef<HTMLButtonElement>(null)
-	const overlayRef = useRef<HTMLDivElement>(null)
-	const contentRef = useRef<HTMLDivElement>(null)
-
-	const deleteBtnRef = useRef<HTMLButtonElement>(null)
-	const editMoreBtnRef = useRef<HTMLButtonElement>(null)
-	const plusBtnRef = useRef<HTMLButtonElement>(null)
-	const plusMoreBtnRef = useRef<HTMLButtonElement>(null)
 
 	const { deleteLink } = useLinkActions()
 	const confirm = useConfirm()
 
+	const refs = {
+		cancel: useRef<HTMLButtonElement>(null),
+		confirm: useRef<HTMLButtonElement>(null),
+		overlay: useRef<HTMLDivElement>(null),
+		content: useRef<HTMLDivElement>(null),
+		delete: useRef<HTMLButtonElement>(null),
+		editMore: useRef<HTMLButtonElement>(null),
+		plus: useRef<HTMLButtonElement>(null),
+		plusMore: useRef<HTMLButtonElement>(null)
+	}
+
+	const handleCreateMode = useCallback(() => {
+		setEditId(null)
+		setTimeout(() => {
+			setCreateMode(true)
+		}, 100)
+	}, [setEditId, setCreateMode])
+
 	useEffect(() => {
-		setGlobalLinkFormExceptionRefsAtom([
-			overlayRef,
-			contentRef,
-			deleteBtnRef,
-			editMoreBtnRef,
-			cancelBtnRef,
-			confirmBtnRef,
-			plusBtnRef,
-			plusMoreBtnRef
-		])
+		setGlobalLinkFormExceptionRefsAtom(Object.values(refs))
 	}, [setGlobalLinkFormExceptionRefsAtom])
 
 	const handleDelete = async (e: React.MouseEvent) => {
-		if (!personalLink) return
+		if (!personalLink || !me) return
 
 		const result = await confirm({
 			title: `Delete "${personalLink.title}"?`,
 			description: "This action cannot be undone.",
-			alertDialogTitle: {
-				className: "text-base"
-			},
-			alertDialogOverlay: {
-				ref: overlayRef
-			},
-			alertDialogContent: {
-				ref: contentRef
-			},
-			cancelButton: {
-				variant: "outline",
-				ref: cancelBtnRef
-			},
-			confirmButton: {
-				variant: "destructive",
-				ref: confirmBtnRef
-			}
+			alertDialogTitle: { className: "text-base" },
+			alertDialogOverlay: { ref: refs.overlay },
+			alertDialogContent: { ref: refs.content },
+			cancelButton: { variant: "outline", ref: refs.cancel },
+			confirmButton: { variant: "destructive", ref: refs.confirm }
 		})
 
 		if (result) {
-			if (!me) return
 			deleteLink(me, personalLink)
 			setEditId(null)
 		}
@@ -114,22 +98,19 @@ export const LinkBottomBar: React.FC = () => {
 
 	useEffect(() => {
 		const handleKeyDown = (event: KeyboardEvent) => {
-			if (isMacOS()) {
-				if (event.ctrlKey && event.metaKey && event.key.toLowerCase() === "n") {
-					event.preventDefault()
-					setShowCreate(true)
-				}
-			} else {
-				if (event.ctrlKey && event.key.toLowerCase() === "n" && (event.metaKey || event.altKey)) {
-					event.preventDefault()
-					setShowCreate(true)
-				}
+			const isCreateShortcut = isMacOS()
+				? event.ctrlKey && event.metaKey && event.key.toLowerCase() === "n"
+				: event.ctrlKey && event.key.toLowerCase() === "n" && (event.metaKey || event.altKey)
+
+			if (isCreateShortcut) {
+				event.preventDefault()
+				handleCreateMode()
 			}
 		}
 
 		window.addEventListener("keydown", handleKeyDown)
 		return () => window.removeEventListener("keydown", handleKeyDown)
-	}, [setShowCreate])
+	}, [])
 
 	const shortcutKeys = getSpecialShortcut("expandToolbar")
 	const shortcutText = formatShortcut(shortcutKeys)
@@ -141,7 +122,7 @@ export const LinkBottomBar: React.FC = () => {
 			initial={{ y: "100%" }}
 		>
 			<AnimatePresence mode="wait">
-				{editId && (
+				{createMode ? (
 					<motion.div
 						key="expanded"
 						className="flex items-center justify-center gap-1 px-2 py-1"
@@ -150,18 +131,18 @@ export const LinkBottomBar: React.FC = () => {
 						exit={{ opacity: 0, y: 20 }}
 						transition={{ duration: 0.1 }}
 					>
-						<ToolbarButton icon={"ArrowLeft"} onClick={() => setEditId(null)} />
-						<ToolbarButton
-							icon={"Trash"}
-							onClick={handleDelete}
-							className="text-destructive hover:text-destructive"
-							ref={deleteBtnRef}
-						/>
-						<ToolbarButton icon={"Ellipsis"} ref={editMoreBtnRef} />
+						<ToolbarButton icon="ArrowLeft" onClick={() => setCreateMode(false)} />
+						{editId && (
+							<ToolbarButton
+								icon="Trash"
+								onClick={handleDelete}
+								className="text-destructive hover:text-destructive"
+								ref={refs.delete}
+							/>
+						)}
+						<ToolbarButton icon="Ellipsis" ref={refs.editMore} />
 					</motion.div>
-				)}
-
-				{!editId && (
+				) : (
 					<motion.div
 						key="collapsed"
 						className="flex items-center justify-center gap-1 px-2 py-1"
@@ -170,16 +151,12 @@ export const LinkBottomBar: React.FC = () => {
 						exit={{ opacity: 0, y: -20 }}
 						transition={{ duration: 0.1 }}
 					>
-						{showCreate && <ToolbarButton icon={"ArrowLeft"} onClick={() => setShowCreate(true)} />}
-						{!showCreate && (
-							<ToolbarButton
-								icon={"Plus"}
-								onClick={() => setShowCreate(true)}
-								tooltip={`New Link (${shortcutText})`}
-								ref={plusBtnRef}
-							/>
-						)}
-						{/* <ToolbarButton icon={"Ellipsis"} ref={plusMoreBtnRef} /> */}
+						<ToolbarButton
+							icon="Plus"
+							onClick={handleCreateMode}
+							tooltip={`New Link (${shortcutText})`}
+							ref={refs.plus}
+						/>
 					</motion.div>
 				)}
 			</AnimatePresence>
