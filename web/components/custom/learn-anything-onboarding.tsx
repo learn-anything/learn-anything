@@ -26,8 +26,6 @@ export function LearnAnythingOnboarding() {
 	const [isFetching, setIsFetching] = useState(true)
 	const [isExisting, setIsExisting] = useState(false)
 
-	if (pathname === "/") return null
-
 	useEffect(() => {
 		const loadUser = async () => {
 			try {
@@ -41,10 +39,10 @@ export function LearnAnythingOnboarding() {
 			}
 		}
 
-		if (!hasVisited) {
+		if (!hasVisited && pathname !== "/") {
 			loadUser()
 		}
-	}, [hasVisited, setIsOpen])
+	}, [hasVisited, pathname, setIsOpen])
 
 	const handleClose = () => {
 		setIsOpen(false)
@@ -68,8 +66,8 @@ export function LearnAnythingOnboarding() {
 							<p className="font-medium">Existing Customer Notice</p>
 							<p>
 								We noticed you are an existing Learn Anything customer. We sincerely apologize for any broken experience
-								you may have encountered on the old website. We've been working hard on this new version, which
-								addresses previous issues and offers more features. As an early customer, you're locked in at the{" "}
+								you may have encountered on the old website. We&apos;ve been working hard on this new version, which
+								addresses previous issues and offers more features. As an early customer, you&apos;re locked in at the{" "}
 								<strong>$3</strong> price for our upcoming pro version. Thank you for your support!
 							</p>
 						</>
@@ -85,8 +83,8 @@ export function LearnAnythingOnboarding() {
 						<li>Update your learning status on a topic</li>
 					</ul>
 					<p>
-						If you have any questions, don't hesitate to reach out. Click on question mark button in the bottom right
-						corner and enter your message.
+						If you have any questions, don&apos;t hesitate to reach out. Click on question mark button in the bottom
+						right corner and enter your message.
 					</p>
 				</AlertDialogDescription>
 

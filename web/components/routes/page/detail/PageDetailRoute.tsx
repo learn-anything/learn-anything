@@ -18,8 +18,8 @@ import { TopicSelector } from "@/components/custom/topic-selector"
 import { Button } from "@/components/ui/button"
 import { LaIcon } from "@/components/custom/la-icon"
 import { useConfirm } from "@omit/react-confirm-dialog"
-import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import { usePageActions } from "../hooks/use-page-actions"
 
 const TITLE_PLACEHOLDER = "Untitled"
 
@@ -59,7 +59,9 @@ export function PageDetailRoute({ pageId }: { pageId: string }) {
 	const isMobile = useMedia("(max-width: 770px)")
 	const page = useCoState(PersonalPage, pageId as ID<PersonalPage>)
 	const router = useRouter()
+	const { deletePage } = usePageActions()
 	const confirm = useConfirm()
+
 	DeleteEmptyPage(pageId)
 
 	const handleDelete = async () => {
@@ -73,19 +75,8 @@ export function PageDetailRoute({ pageId }: { pageId: string }) {
 		})
 
 		if (result && me?.root.personalPages) {
-			try {
-				const index = me.root.personalPages.findIndex(item => item?.id === pageId)
-				if (index === -1) {
-					toast.error("Page not found.")
-					return
-				}
-
-				me.root.personalPages.splice(index, 1)
-				toast.success("Page deleted.", { position: "bottom-right" })
-				router.replace("/")
-			} catch (error) {
-				console.error("Delete operation fail", { error })
-			}
+			deletePage(me, pageId as ID<PersonalPage>)
+			router.push("/pages")
 		}
 	}
 
@@ -210,7 +201,7 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 
 	const titleEditor = useEditor({
 		immediatelyRender: false,
-		autofocus: true,
+		autofocus: false,
 		extensions: [
 			FocusClasses,
 			Paragraph,
@@ -254,7 +245,13 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 	useEffect(() => {
 		isTitleInitialMount.current = true
 		isContentInitialMount.current = true
-	}, [])
+
+		if (!page.title) {
+			titleEditor?.commands.focus()
+		} else {
+			contentEditorRef.current?.editor?.commands.focus()
+		}
+	}, [page.title, titleEditor, contentEditorRef])
 
 	return (
 		<div className="relative flex grow flex-col overflow-y-auto [scrollbar-gutter:stable]">

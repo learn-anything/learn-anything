@@ -4,7 +4,7 @@ import React, { useEffect, useState, useCallback, useRef } from "react"
 import { LinkHeader } from "@/components/routes/link/header"
 import { LinkList } from "@/components/routes/link/list"
 import { LinkManage } from "@/components/routes/link/manage"
-import { useQueryState } from "nuqs"
+import { parseAsBoolean, useQueryState } from "nuqs"
 import { atom, useAtom } from "jotai"
 import { LinkBottomBar } from "./bottom-bar"
 import { commandPaletteOpenAtom } from "@/components/custom/command-palette/command-palette"
@@ -14,6 +14,7 @@ export const isDeleteConfirmShownAtom = atom(false)
 export function LinkRoute(): React.ReactElement {
 	const [nuqsEditId] = useQueryState("editId")
 	const [activeItemIndex, setActiveItemIndex] = useState<number | null>(null)
+	const [isInCreateMode] = useQueryState("create", parseAsBoolean)
 	const [isCommandPaletteOpen] = useAtom(commandPaletteOpenAtom)
 	const [isDeleteConfirmShown] = useAtom(isDeleteConfirmShownAtom)
 	const [disableEnterKey, setDisableEnterKey] = useState(false)
@@ -32,7 +33,7 @@ export function LinkRoute(): React.ReactElement {
 	}, [])
 
 	useEffect(() => {
-		if (isDeleteConfirmShown || isCommandPaletteOpen) {
+		if (isDeleteConfirmShown || isCommandPaletteOpen || isInCreateMode) {
 			setDisableEnterKey(true)
 			if (timeoutRef.current) {
 				clearTimeout(timeoutRef.current)
@@ -47,7 +48,7 @@ export function LinkRoute(): React.ReactElement {
 				clearTimeout(timeoutRef.current)
 			}
 		}
-	}, [isDeleteConfirmShown, isCommandPaletteOpen, handleCommandPaletteClose])
+	}, [isDeleteConfirmShown, isCommandPaletteOpen, isInCreateMode, handleCommandPaletteClose])
 
 	return (
 		<div className="flex h-full flex-auto flex-col overflow-hidden">

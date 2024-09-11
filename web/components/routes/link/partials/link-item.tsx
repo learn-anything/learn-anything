@@ -83,7 +83,7 @@ export const LinkItem: React.FC<LinkItemProps> = ({
 				"relative cursor-default outline-none",
 				"grid grid-cols-[auto_1fr_auto] items-center gap-x-2 py-2 max-lg:px-4 sm:px-5 sm:py-2",
 				{
-					"bg-muted-foreground/10": isActive,
+					"bg-muted-foreground/5": isActive,
 					"hover:bg-muted/50": !isActive
 				}
 			)}
@@ -148,7 +148,11 @@ export const LinkItem: React.FC<LinkItemProps> = ({
 			</div>
 
 			<div className="flex shrink-0 items-center justify-end">
-				{personalLink.topic && <Badge variant="secondary">{personalLink.topic.prettyName}</Badge>}
+				{personalLink.topic && (
+					<Badge variant="secondary" className="border-muted-foreground/25">
+						{personalLink.topic.prettyName}
+					</Badge>
+				)}
 			</div>
 		</li>
 	)

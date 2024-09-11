@@ -46,9 +46,8 @@ export default withSentryConfig(nextConfig, {
 	// For all available options, see:
 	// https://github.com/getsentry/sentry-webpack-plugin#options
 
-	org: "learn-anything",
-	project: process.env.SENTRY_PROJECT,
-	sentryUrl: "https://sentry.io/",
+	org: process.env.NEXT_PUBLIC_SENTRY_ORG,
+	project: process.env.NEXT_PUBLIC_SENTRY_PROJECT,
 
 	// Only print logs for uploading source maps in CI
 	silent: !process.env.CI,
@@ -64,7 +63,7 @@ export default withSentryConfig(nextConfig, {
 		enabled: true
 	},
 
-	// Uncomment to route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
+	// Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
 	// This can increase your server load as well as your hosting bill.
 	// Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
 	// side errors will fail.
