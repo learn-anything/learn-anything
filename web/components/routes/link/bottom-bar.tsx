@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { icons } from "lucide-react"
+import { icons, ZapIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { getSpecialShortcut, formatShortcut, isMacOS } from "@/lib/utils"
@@ -14,6 +14,7 @@ import { PersonalLink } from "@/lib/schema"
 import { ID } from "jazz-tools"
 import { globalLinkFormExceptionRefsAtom } from "./partials/form/link-form"
 import { useLinkActions } from "./hooks/use-link-actions"
+import { showHotkeyPanelAtom } from "@/store/sidebar"
 
 interface ToolbarButtonProps extends React.ComponentPropsWithoutRef<typeof Button> {
 	icon: keyof typeof icons
@@ -68,6 +69,8 @@ export const LinkBottomBar: React.FC = () => {
 
 	const { deleteLink } = useLinkActions()
 	const confirm = useConfirm()
+
+	const [showHotkeyPanel, setShowHotkeyPanel] = useAtom(showHotkeyPanelAtom)
 
 	useEffect(() => {
 		setGlobalLinkFormExceptionRefsAtom([
@@ -187,6 +190,16 @@ export const LinkBottomBar: React.FC = () => {
 					</motion.div>
 				)}
 			</AnimatePresence>
+			<div className="absolute right-0 top-0 flex h-full items-center justify-center p-2 pr-1">
+				<div
+					onClick={() => {
+						setShowHotkeyPanel(true)
+					}}
+					className="flex h-8 w-8 items-center justify-center rounded-md hover:bg-neutral-200 dark:hover:bg-neutral-800"
+				>
+					<ZapIcon className="h-4 w-4" />
+				</div>
+			</div>
 		</motion.div>
 	)
 }

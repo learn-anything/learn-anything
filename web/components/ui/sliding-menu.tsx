@@ -1,9 +1,11 @@
 import { XIcon } from "lucide-react"
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { showHotkeyPanelAtom } from "@/store/sidebar"
+import { useAtom } from "jotai/react"
 
 export default function SlidingMenu() {
-	const [isOpen, setIsOpen] = useState(false)
+	const [isOpen, setIsOpen] = useAtom(showHotkeyPanelAtom)
 	const [lastKeyPressed, setLastKeyPressed] = useState("")
 	const [shortcuts, setShortcuts] = useState<{ name: string; shortcut: string[] }[]>([
 		{ name: "New todo", shortcut: ["cmd", "ctrl", "n"] },
