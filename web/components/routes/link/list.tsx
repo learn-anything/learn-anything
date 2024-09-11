@@ -247,7 +247,7 @@ const LinkList: React.FC<LinkListProps> = ({ activeItemIndex, setActiveItemIndex
 
 	return (
 		<Primitive.div
-			className="mb-14 flex w-full flex-1 flex-col overflow-y-auto outline-none [scrollbar-gutter:stable]"
+			className="mb-11 flex w-full flex-1 flex-col overflow-y-auto outline-none [scrollbar-gutter:stable]"
 			tabIndex={0}
 		>
 			<DndContext

@@ -51,7 +51,7 @@ export function LinkRoute(): React.ReactElement {
 	}, [isDeleteConfirmShown, isCommandPaletteOpen, isInCreateMode, handleCommandPaletteClose])
 
 	return (
-		<div className="flex h-full flex-auto flex-col overflow-hidden">
+		<>
 			<LinkHeader />
 			<LinkManage />
 			<LinkList
@@ -61,6 +61,6 @@ export function LinkRoute(): React.ReactElement {
 				disableEnterKey={disableEnterKey}
 			/>
 			<LinkBottomBar />
-		</div>
+		</>
 	)
 }
