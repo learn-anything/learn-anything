@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react"
+import React, { useCallback, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { icons, ZapIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -6,8 +6,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { getSpecialShortcut, formatShortcut, isMacOS } from "@/lib/utils"
 import { LaIcon } from "@/components/custom/la-icon"
 import { useAtom } from "jotai"
-import { linkShowCreateAtom } from "@/store/link"
-import { useQueryState } from "nuqs"
+import { parseAsBoolean, useQueryState } from "nuqs"
 import { useConfirm } from "@omit/react-confirm-dialog"
 import { useAccount, useCoState } from "@/lib/providers/jazz-provider"
 import { PersonalLink } from "@/lib/schema"
@@ -49,9 +48,8 @@ ToolbarButton.displayName = "ToolbarButton"
 
 export const LinkBottomBar: React.FC = () => {
 	const [editId, setEditId] = useQueryState("editId")
+	const [createMode, setCreateMode] = useQueryState("create", parseAsBoolean)
 	const [, setGlobalLinkFormExceptionRefsAtom] = useAtom(globalLinkFormExceptionRefsAtom)
-	const [showCreate, setShowCreate] = useAtom(linkShowCreateAtom)
-
 	const { me } = useAccount({ root: { personalLinks: [] } })
 	const personalLink = useCoState(PersonalLink, editId as ID<PersonalLink>)
 
@@ -68,7 +66,14 @@ export const LinkBottomBar: React.FC = () => {
 	const { deleteLink } = useLinkActions()
 	const confirm = useConfirm()
 
-	const [showHotkeyPanel, setShowHotkeyPanel] = useAtom(showHotkeyPanelAtom)
+	const handleCreateMode = useCallback(() => {
+		setEditId(null)
+		setTimeout(() => {
+			setCreateMode(prev => !prev)
+		}, 100)
+	}, [setEditId, setCreateMode])
+
+	const [, setShowHotkeyPanel] = useAtom(showHotkeyPanelAtom)
 
 	useEffect(() => {
 		setGlobalLinkFormExceptionRefsAtom([
@@ -84,7 +89,7 @@ export const LinkBottomBar: React.FC = () => {
 	}, [setGlobalLinkFormExceptionRefsAtom])
 
 	const handleDelete = async (e: React.MouseEvent) => {
-		if (!personalLink) return
+		if (!personalLink || !me) return
 
 		const result = await confirm({
 			title: `Delete "${personalLink.title}"?`,
@@ -109,7 +114,6 @@ export const LinkBottomBar: React.FC = () => {
 		})
 
 		if (result) {
-			if (!me) return
 			deleteLink(me, personalLink)
 			setEditId(null)
 		}
@@ -117,24 +121,19 @@ export const LinkBottomBar: React.FC = () => {
 
 	useEffect(() => {
 		const handleKeyDown = (event: KeyboardEvent) => {
-			if (isMacOS()) {
-				if (event.ctrlKey && event.metaKey && event.key.toLowerCase() === "n") {
-					event.preventDefault()
-					setShowCreate(true)
-				}
-			} else {
-				// For Windows, we'll use Ctrl + Win + N
-				// Note: The Windows key is not directly detectable in most browsers
-				if (event.ctrlKey && event.key.toLowerCase() === "n" && (event.metaKey || event.altKey)) {
-					event.preventDefault()
-					setShowCreate(true)
-				}
+			const isCreateShortcut = isMacOS()
+				? event.ctrlKey && event.metaKey && event.key.toLowerCase() === "n"
+				: event.ctrlKey && event.key.toLowerCase() === "n" && (event.metaKey || event.altKey)
+
+			if (isCreateShortcut) {
+				event.preventDefault()
+				handleCreateMode()
 			}
 		}
 
 		window.addEventListener("keydown", handleKeyDown)
 		return () => window.removeEventListener("keydown", handleKeyDown)
-	}, [setShowCreate])
+	}, [handleCreateMode])
 
 	const shortcutKeys = getSpecialShortcut("expandToolbar")
 	const shortcutText = formatShortcut(shortcutKeys)
@@ -175,11 +174,11 @@ export const LinkBottomBar: React.FC = () => {
 						exit={{ opacity: 0, y: -20 }}
 						transition={{ duration: 0.1 }}
 					>
-						{showCreate && <ToolbarButton icon={"ArrowLeft"} onClick={() => setShowCreate(true)} />}
-						{!showCreate && (
+						{createMode && <ToolbarButton icon={"ArrowLeft"} onClick={handleCreateMode} />}
+						{!createMode && (
 							<ToolbarButton
 								icon={"Plus"}
-								onClick={() => setShowCreate(true)}
+								onClick={handleCreateMode}
 								tooltip={`New Link (${shortcutText})`}
 								ref={plusBtnRef}
 							/>

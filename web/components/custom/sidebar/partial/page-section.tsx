@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { useAtom } from "jotai"
 import { usePathname, useRouter } from "next/navigation"
 import { useAccount } from "@/lib/providers/jazz-provider"
@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button"
 import { LaIcon } from "@/components/custom/la-icon"
 import { toast } from "sonner"
 import Link from "next/link"
-import { useEffect } from "react"
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -54,13 +53,13 @@ export const PageSection: React.FC<{ pathname?: string }> = ({ pathname }) => {
 		}
 	})
 
-	const [sort, setSort] = useAtom(pageSortAtom)
-	const [show, setShow] = useAtom(pageShowAtom)
-
-	const pageCount = me?.root.personalPages?.length || 0
-	const isActive = pathname === "/pages"
+	const [sort] = useAtom(pageSortAtom)
+	const [show] = useAtom(pageShowAtom)
 
 	if (!me) return null
+
+	const pageCount = me.root.personalPages?.length || 0
+	const isActive = pathname === "/pages"
 
 	return (
 		<div className="group/pages flex flex-col gap-px py-2">
@@ -142,24 +141,19 @@ interface PageListProps {
 	show: ShowOption
 }
 
-const PageList: React.FC<PageListProps> = ({ personalPages }) => {
+const PageList: React.FC<PageListProps> = ({ personalPages, sort, show }) => {
 	const pathname = usePathname()
 
-	const [sortCriteria] = useAtom(pageSortAtom)
-	const [showCount] = useAtom(pageShowAtom)
-
-	const sortedPages = [...personalPages]
-		.sort((a, b) => {
-			switch (sortCriteria) {
-				case "title":
+	const sortedPages = useMemo(() => {
+		return [...personalPages]
+			.sort((a, b) => {
+				if (sort === "title") {
 					return (a?.title ?? "").localeCompare(b?.title ?? "")
-				case "recent":
-					return (b?.updatedAt?.getTime() ?? 0) - (a?.updatedAt?.getTime() ?? 0)
-				default:
-					return 0
-			}
-		})
-		.slice(0, showCount === 0 ? personalPages.length : showCount)
+				}
+				return (b?.updatedAt?.getTime() ?? 0) - (a?.updatedAt?.getTime() ?? 0)
+			})
+			.slice(0, show === 0 ? personalPages.length : show)
+	}, [personalPages, sort, show])
 
 	return (
 		<div className="flex flex-col gap-px">
@@ -185,7 +179,7 @@ const PageListItem: React.FC<PageListItemProps> = ({ page, isActive }) => (
 					{ "bg-accent text-accent-foreground": isActive }
 				)}
 			>
-				<div className="flex max-w-full flex-1 items-center gap-1.5 truncate text-sm">
+				<div className="flex max-w-[calc(100%-1rem)] flex-1 items-center gap-1.5 truncate text-sm">
 					<LaIcon name="FileText" className="flex-shrink-0 opacity-60" />
 					<p className="truncate opacity-95 group-hover/sidebar-link:opacity-100">{page.title || "Untitled"}</p>
 				</div>
