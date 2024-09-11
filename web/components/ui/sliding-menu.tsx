@@ -6,13 +6,14 @@ import { useAtom } from "jotai/react"
 
 export default function SlidingMenu() {
 	const [isOpen, setIsOpen] = useAtom(showHotkeyPanelAtom)
-	const [lastKeyPressed, setLastKeyPressed] = useState("")
 	const panelRef = useRef<HTMLDivElement>(null)
-	const [shortcuts, setShortcuts] = useState<{ name: string; shortcut: string[] }[]>([
-		{ name: "New todo", shortcut: ["cmd", "ctrl", "n"] },
-		{ name: "Cmd palette", shortcut: ["ctrl", "k"] },
-		{ name: "Global search", shortcut: ["."] },
-		{ name: "(/pages)", shortcut: [".", "."] }
+	const [shortcuts] = useState<{ name: string; shortcut: string[] }[]>([
+		// TODO: change to better keybind
+		{ name: "New Todo", shortcut: ["⌘", "⌃", "n"] },
+		{ name: "CMD Palette", shortcut: ["⌘", "k"] }
+		// TODO: add
+		// { name: "Global Search", shortcut: ["."] },
+		// { name: "(/pages)", shortcut: [".", "."] }
 	])
 
 	useEffect(() => {

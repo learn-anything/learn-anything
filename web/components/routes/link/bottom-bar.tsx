@@ -190,7 +190,7 @@ export const LinkBottomBar: React.FC = () => {
 			<div className="absolute right-0 top-0 flex h-full items-center justify-center p-2 pr-1">
 				<ToolbarButton
 					icon={"Zap"}
-					tooltip={`Hotkey panel`}
+					tooltip={`Hotkeys`}
 					onClick={() => {
 						setShowHotkeyPanel(true)
 					}}
