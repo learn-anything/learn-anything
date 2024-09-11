@@ -71,7 +71,7 @@ export const createCommandGroups = (
 					icon: "Plus",
 					value: "Create New Link...",
 					label: "Create New Link...",
-					action: () => actions.navigateTo("/")
+					action: () => actions.navigateTo("/links?create=true")
 				}
 			]
 		},
