@@ -67,7 +67,7 @@ export default function SlidingMenu() {
 								{shortcuts.map((shortcut, index) => (
 									<div key={index} className="flex flex-row items-center justify-between gap-4">
 										<div className="opacity-40">{shortcut.name}</div>
-										<div className="flex min-w-[20px] items-center justify-center rounded-sm bg-neutral-900 p-1 px-2">
+										<div className="flex min-w-[20px] items-center justify-center rounded-sm bg-gray-100 p-1 px-2 dark:bg-neutral-900">
 											{shortcut.shortcut.join(" ")}
 										</div>
 									</div>
