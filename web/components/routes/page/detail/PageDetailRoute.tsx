@@ -130,6 +130,7 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 	const contentEditorRef = useRef<LAEditorRef>(null)
 	const isTitleInitialMount = useRef(true)
 	const isContentInitialMount = useRef(true)
+	const isInitialFocusApplied = useRef(false)
 
 	const updatePageContent = (content: Content, model: PersonalPage) => {
 		if (isContentInitialMount.current) {
@@ -201,7 +202,6 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 
 	const titleEditor = useEditor({
 		immediatelyRender: false,
-		autofocus: false,
 		extensions: [
 			FocusClasses,
 			Paragraph,
@@ -246,10 +246,13 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 		isTitleInitialMount.current = true
 		isContentInitialMount.current = true
 
-		if (!page.title) {
-			titleEditor?.commands.focus()
-		} else {
-			contentEditorRef.current?.editor?.commands.focus()
+		if (!isInitialFocusApplied.current && titleEditor && contentEditorRef.current?.editor) {
+			isInitialFocusApplied.current = true
+			if (!page.title) {
+				titleEditor?.commands.focus()
+			} else {
+				contentEditorRef.current.editor.commands.focus()
+			}
 		}
 	}, [page.title, titleEditor, contentEditorRef])
 
