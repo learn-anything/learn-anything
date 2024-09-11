@@ -9,6 +9,7 @@ export default function SlidingMenu() {
 	const panelRef = useRef<HTMLDivElement>(null)
 	const [shortcuts] = useState<{ name: string; shortcut: string[] }[]>([
 		// TODO: change to better keybind
+		// TODO: windows users don't understand these symbols, figure out better way to show keybinds
 		{ name: "New Todo", shortcut: ["⌘", "⌃", "n"] },
 		{ name: "CMD Palette", shortcut: ["⌘", "k"] }
 		// TODO: add
