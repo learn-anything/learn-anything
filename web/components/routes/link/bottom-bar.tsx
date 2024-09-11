@@ -52,29 +52,37 @@ export const LinkBottomBar: React.FC = () => {
 	const { me } = useAccount({ root: { personalLinks: [] } })
 	const personalLink = useCoState(PersonalLink, editId as ID<PersonalLink>)
 
+	const cancelBtnRef = useRef<HTMLButtonElement>(null)
+	const confirmBtnRef = useRef<HTMLButtonElement>(null)
+	const overlayRef = useRef<HTMLDivElement>(null)
+	const contentRef = useRef<HTMLDivElement>(null)
+
+	const deleteBtnRef = useRef<HTMLButtonElement>(null)
+	const editMoreBtnRef = useRef<HTMLButtonElement>(null)
+	const plusBtnRef = useRef<HTMLButtonElement>(null)
+	const plusMoreBtnRef = useRef<HTMLButtonElement>(null)
+
 	const { deleteLink } = useLinkActions()
 	const confirm = useConfirm()
-
-	const refs = {
-		cancel: useRef<HTMLButtonElement>(null),
-		confirm: useRef<HTMLButtonElement>(null),
-		overlay: useRef<HTMLDivElement>(null),
-		content: useRef<HTMLDivElement>(null),
-		delete: useRef<HTMLButtonElement>(null),
-		editMore: useRef<HTMLButtonElement>(null),
-		plus: useRef<HTMLButtonElement>(null),
-		plusMore: useRef<HTMLButtonElement>(null)
-	}
 
 	const handleCreateMode = useCallback(() => {
 		setEditId(null)
 		setTimeout(() => {
-			setCreateMode(true)
+			setCreateMode(prev => !prev)
 		}, 100)
 	}, [setEditId, setCreateMode])
 
 	useEffect(() => {
-		setGlobalLinkFormExceptionRefsAtom(Object.values(refs))
+		setGlobalLinkFormExceptionRefsAtom([
+			overlayRef,
+			contentRef,
+			deleteBtnRef,
+			editMoreBtnRef,
+			cancelBtnRef,
+			confirmBtnRef,
+			plusBtnRef,
+			plusMoreBtnRef
+		])
 	}, [setGlobalLinkFormExceptionRefsAtom])
 
 	const handleDelete = async (e: React.MouseEvent) => {
@@ -83,11 +91,23 @@ export const LinkBottomBar: React.FC = () => {
 		const result = await confirm({
 			title: `Delete "${personalLink.title}"?`,
 			description: "This action cannot be undone.",
-			alertDialogTitle: { className: "text-base" },
-			alertDialogOverlay: { ref: refs.overlay },
-			alertDialogContent: { ref: refs.content },
-			cancelButton: { variant: "outline", ref: refs.cancel },
-			confirmButton: { variant: "destructive", ref: refs.confirm }
+			alertDialogTitle: {
+				className: "text-base"
+			},
+			alertDialogOverlay: {
+				ref: overlayRef
+			},
+			alertDialogContent: {
+				ref: contentRef
+			},
+			cancelButton: {
+				variant: "outline",
+				ref: cancelBtnRef
+			},
+			confirmButton: {
+				variant: "destructive",
+				ref: confirmBtnRef
+			}
 		})
 
 		if (result) {
@@ -110,7 +130,7 @@ export const LinkBottomBar: React.FC = () => {
 
 		window.addEventListener("keydown", handleKeyDown)
 		return () => window.removeEventListener("keydown", handleKeyDown)
-	}, [])
+	}, [handleCreateMode])
 
 	const shortcutKeys = getSpecialShortcut("expandToolbar")
 	const shortcutText = formatShortcut(shortcutKeys)
@@ -122,7 +142,7 @@ export const LinkBottomBar: React.FC = () => {
 			initial={{ y: "100%" }}
 		>
 			<AnimatePresence mode="wait">
-				{createMode ? (
+				{editId && (
 					<motion.div
 						key="expanded"
 						className="flex items-center justify-center gap-1 px-2 py-1"
@@ -131,18 +151,18 @@ export const LinkBottomBar: React.FC = () => {
 						exit={{ opacity: 0, y: 20 }}
 						transition={{ duration: 0.1 }}
 					>
-						<ToolbarButton icon="ArrowLeft" onClick={() => setCreateMode(false)} />
-						{editId && (
-							<ToolbarButton
-								icon="Trash"
-								onClick={handleDelete}
-								className="text-destructive hover:text-destructive"
-								ref={refs.delete}
-							/>
-						)}
-						<ToolbarButton icon="Ellipsis" ref={refs.editMore} />
+						<ToolbarButton icon={"ArrowLeft"} onClick={() => setEditId(null)} />
+						<ToolbarButton
+							icon={"Trash"}
+							onClick={handleDelete}
+							className="text-destructive hover:text-destructive"
+							ref={deleteBtnRef}
+						/>
+						<ToolbarButton icon={"Ellipsis"} ref={editMoreBtnRef} />
 					</motion.div>
-				) : (
+				)}
+
+				{!editId && (
 					<motion.div
 						key="collapsed"
 						className="flex items-center justify-center gap-1 px-2 py-1"
@@ -151,12 +171,16 @@ export const LinkBottomBar: React.FC = () => {
 						exit={{ opacity: 0, y: -20 }}
 						transition={{ duration: 0.1 }}
 					>
-						<ToolbarButton
-							icon="Plus"
-							onClick={handleCreateMode}
-							tooltip={`New Link (${shortcutText})`}
-							ref={refs.plus}
-						/>
+						{createMode && <ToolbarButton icon={"ArrowLeft"} onClick={handleCreateMode} />}
+						{!createMode && (
+							<ToolbarButton
+								icon={"Plus"}
+								onClick={handleCreateMode}
+								tooltip={`New Link (${shortcutText})`}
+								ref={plusBtnRef}
+							/>
+						)}
+						{/* <ToolbarButton icon={"Ellipsis"} ref={plusMoreBtnRef} /> */}
 					</motion.div>
 				)}
 			</AnimatePresence>
