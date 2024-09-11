@@ -81,7 +81,7 @@ interface PageListItemsProps {
 const PageListItems: React.FC<PageListItemsProps> = ({ listRef, setItemRef, personalPages, activeItemIndex }) => (
 	<Primitive.div
 		ref={listRef}
-		className="divide-primary/5 flex flex-1 flex-col divide-y overflow-y-auto outline-none [scrollbar-gutter:stable]"
+		className="divide-primary/5 mx-auto my-2 flex w-[99%] flex-1 flex-col divide-y overflow-y-auto outline-none [scrollbar-gutter:stable]"
 		tabIndex={-1}
 		role="list"
 	>

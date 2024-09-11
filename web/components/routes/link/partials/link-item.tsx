@@ -81,7 +81,7 @@ export const LinkItem: React.FC<LinkItemProps> = ({
 			onBlur={() => setActiveItemIndex(null)}
 			className={cn(
 				"relative cursor-default outline-none",
-				"grid grid-cols-[auto_1fr_auto] items-center gap-x-2 py-2 max-lg:px-4 sm:px-5 sm:py-2",
+				"mx-auto grid w-[98%] grid-cols-[auto_1fr_auto] items-center gap-x-2 rounded-lg p-2",
 				{
 					"bg-muted-foreground/5": isActive,
 					"hover:bg-muted/50": !isActive
