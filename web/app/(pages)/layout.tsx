@@ -3,6 +3,7 @@
 import { Sidebar } from "@/components/custom/sidebar/sidebar"
 import { CommandPalette } from "@/components/custom/command-palette/command-palette"
 import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
+import SlidingMenu from "@/components/ui/sliding-menu"
 
 export default function PageLayout({ children }: { children: React.ReactNode }) {
 	const { me } = useAccountOrGuest()
@@ -13,7 +14,8 @@ export default function PageLayout({ children }: { children: React.ReactNode }) 
 
 			{me._type !== "Anonymous" && <CommandPalette />}
 
-			<div className="flex min-w-0 flex-1 flex-col">
+			<div className="relative flex min-w-0 flex-1 flex-col">
+				<SlidingMenu />
 				<main className="relative flex flex-auto flex-col place-items-stretch overflow-auto lg:my-2 lg:mr-2 lg:rounded-md lg:border">
 					{children}
 				</main>
