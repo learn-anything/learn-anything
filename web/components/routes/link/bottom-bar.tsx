@@ -140,7 +140,7 @@ export const LinkBottomBar: React.FC = () => {
 
 	return (
 		<motion.div
-			className="bg-background absolute bottom-0 left-0 right-0 border-t"
+			className="bg-background absolute bottom-0 left-0 right-0 h-11 border-t"
 			animate={{ y: 0 }}
 			initial={{ y: "100%" }}
 		>
