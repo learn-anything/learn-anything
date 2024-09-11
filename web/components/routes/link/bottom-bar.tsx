@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { icons, ZapIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { getSpecialShortcut, formatShortcut, isMacOS } from "@/lib/utils"
+import { getSpecialShortcut, formatShortcut, isMacOS, cn } from "@/lib/utils"
 import { LaIcon } from "@/components/custom/la-icon"
 import { useAtom } from "jotai"
 import { parseAsBoolean, useQueryState } from "nuqs"
@@ -22,9 +22,9 @@ interface ToolbarButtonProps extends React.ComponentPropsWithoutRef<typeof Butto
 }
 
 const ToolbarButton = React.forwardRef<HTMLButtonElement, ToolbarButtonProps>(
-	({ icon, onClick, tooltip, ...props }, ref) => {
+	({ icon, onClick, tooltip, className, ...props }, ref) => {
 		const button = (
-			<Button variant="ghost" className="h-8 min-w-14" onClick={onClick} ref={ref} {...props}>
+			<Button variant="ghost" className={cn("h-8 min-w-14 p-0", className)} onClick={onClick} ref={ref} {...props}>
 				<LaIcon name={icon} />
 			</Button>
 		)
@@ -148,7 +148,7 @@ export const LinkBottomBar: React.FC = () => {
 				{editId && (
 					<motion.div
 						key="expanded"
-						className="flex items-center justify-center gap-1 px-2 py-1"
+						className="flex h-full items-center justify-center gap-1 px-2"
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
 						exit={{ opacity: 0, y: 20 }}
@@ -168,7 +168,7 @@ export const LinkBottomBar: React.FC = () => {
 				{!editId && (
 					<motion.div
 						key="collapsed"
-						className="flex items-center justify-center gap-1 px-2 py-1"
+						className="flex h-full items-center justify-center gap-1 px-2"
 						initial={{ opacity: 0, y: -20 }}
 						animate={{ opacity: 1, y: 0 }}
 						exit={{ opacity: 0, y: -20 }}
