@@ -38,7 +38,8 @@ export const LinkItem = React.memo(
 			const personalLinks = useMemo(() => {
 				if (!me || me._type === "Anonymous") return undefined
 				return me?.root?.personalLinks || []
-			}, [me])
+				// @ts-ignore
+			}, [me?.root?.personalLinks])
 
 			const personalLink = useMemo(() => {
 				return personalLinks?.find(pl => pl?.link?.id === link.id)
