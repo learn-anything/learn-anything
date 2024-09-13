@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useMemo, useRef } from "react"
+import { useRef } from "react"
 import { TopicDetailHeader } from "./Header"
 import { TopicSections } from "./partials/topic-sections"
 import { atom } from "jotai"

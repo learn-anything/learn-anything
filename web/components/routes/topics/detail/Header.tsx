@@ -8,12 +8,15 @@ import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
 import { LearningStateValue } from "@/lib/constants"
 import { useClerk } from "@clerk/nextjs"
 import { usePathname } from "next/navigation"
+import { useRouter } from "next/navigation"
+import { GuideCommunityToggle } from "@/components/custom/GuideCommunityToggle"
 
 interface TopicDetailHeaderProps {
 	topic: Topic
 }
 
 export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }: TopicDetailHeaderProps) {
+	const router = useRouter()
 	const clerk = useClerk()
 	const pathname = usePathname()
 	const { me } = useAccountOrGuest({
@@ -98,7 +101,7 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 			</div>
 
 			<div className="flex flex-auto"></div>
-
+			<GuideCommunityToggle topicName={topic.name} />
 			<LearningStateSelector
 				showSearch={false}
 				value={p?.learningState || ""}
