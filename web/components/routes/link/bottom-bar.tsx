@@ -187,7 +187,7 @@ export const LinkBottomBar: React.FC = () => {
 					</motion.div>
 				)}
 			</AnimatePresence>
-			<div className="absolute right-0 top-0 flex h-full items-center justify-center p-2 pr-1">
+			<div className="absolute right-0 top-0 hidden h-full items-center justify-center p-2 pr-1 sm:flex">
 				<ToolbarButton
 					icon={"Zap"}
 					tooltip={`Hotkeys`}
