@@ -1,18 +1,29 @@
 "use client"
 
-import React from "react"
+import { useState } from "react"
 import { useTopicData } from "@/hooks/use-topic-data"
 import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
 import { ContentHeader, SidebarToggleButton } from "@/components/custom/content-header"
 import { GuideCommunityToggle } from "@/components/custom/GuideCommunityToggle"
+import { QuestionList } from "@/components/custom/QuestionList"
+import { QuestionThread } from "@/components/custom/QuestionThread"
 
 interface CommunityTopicRouteProps {
 	topicName: string
 }
 
+interface Question {
+	id: string
+	title: string
+	author: string
+	timestamp: string
+}
+
 export function CommunityTopicRoute({ topicName }: CommunityTopicRouteProps) {
 	const { me } = useAccountOrGuest({ root: { personalLinks: [] } })
 	const { topic } = useTopicData(topicName, me)
+
+	const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null)
 
 	if (!topic) {
 		return null
@@ -20,7 +31,7 @@ export function CommunityTopicRoute({ topicName }: CommunityTopicRouteProps) {
 
 	return (
 		<div className="flex h-full flex-auto flex-col">
-			<ContentHeader className="px-6 py-5 max-lg:px-4">
+			<ContentHeader className="px-6 py-4">
 				<div className="flex min-w-0 shrink-0 items-center gap-1.5">
 					<SidebarToggleButton />
 					<div className="flex min-h-0 flex-col items-start">
@@ -31,8 +42,30 @@ export function CommunityTopicRoute({ topicName }: CommunityTopicRouteProps) {
 				<div className="flex-grow" />
 				<GuideCommunityToggle topicName={topic.name} />
 			</ContentHeader>
-			<div className="flex-1 overflow-y-auto p-6">
-				<p>Community content for {topic.prettyName} will be displayed here.</p>
+			<div className="relative flex flex-1 justify-center overflow-hidden">
+				<div
+					className={`w-1/2 overflow-y-auto p-3 transition-all duration-300 ${
+						selectedQuestion ? "translate-x-[-50%] opacity-5" : ""
+					}`}
+				>
+					<QuestionList
+						topicName={topic.name}
+						onSelectQuestion={(question: Question) => setSelectedQuestion(question)}
+					/>
+				</div>
+				{selectedQuestion && (
+					<div className="absolute right-0 top-0 h-full w-1/2 overflow-y-auto">
+						<QuestionThread
+							question={{
+								id: selectedQuestion.id,
+								title: selectedQuestion.title,
+								author: selectedQuestion.author,
+								timestamp: selectedQuestion.timestamp
+							}}
+							onClose={() => setSelectedQuestion(null)}
+						/>
+					</div>
+				)}
 			</div>
 		</div>
 	)
