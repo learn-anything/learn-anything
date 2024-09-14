@@ -20,7 +20,7 @@ interface LearningStateSelectorProps {
 
 export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({
 	showSearch = true,
-	defaultLabel = "Select state",
+	defaultLabel = "State",
 	searchPlaceholder = "Search state...",
 	value,
 	onChange,
