@@ -45,7 +45,7 @@ export function CommunityTopicRoute({ topicName }: CommunityTopicRouteProps) {
 			<div className="relative flex flex-1 justify-center overflow-hidden">
 				<div
 					className={`w-1/2 overflow-y-auto p-3 transition-all duration-300 ${
-						selectedQuestion ? "translate-x-[-50%] opacity-5" : ""
+						selectedQuestion ? "opacity-700 translate-x-[-50%]" : ""
 					}`}
 				>
 					<QuestionList

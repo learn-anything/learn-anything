@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { Input } from "../ui/input"
 import { LaIcon } from "./la-icon"
+import { cn } from "@/lib/utils"
 
 interface Question {
 	id: string
@@ -12,36 +13,34 @@ interface Question {
 interface QuestionListProps {
 	topicName: string
 	onSelectQuestion: (question: Question) => void
+	selectedQuestionId?: string
 }
 
-export function QuestionList({ topicName, onSelectQuestion }: QuestionListProps) {
+export function QuestionList({ topicName, onSelectQuestion, selectedQuestionId }: QuestionListProps) {
 	const [questions, setQuestions] = useState<Question[]>([])
 
 	useEffect(() => {
-		const mockQuestions: Question[] = [
-			{
-				id: "1",
-				title: "What's Figma's policy for customers in Russia and Belarus?",
-				author: "Kote",
-				timestamp: "12:30"
-			},
-			{
-				id: "2",
+		const mockQuestions: Question[] = Array(10)
+			.fill(null)
+			.map((_, index) => ({
+				id: (index + 1).toString(),
 				title: "What can I do offline in Figma?",
 				author: "Ana",
 				timestamp: "13:35"
-			}
-		]
+			}))
 		setQuestions(mockQuestions)
 	}, [topicName])
 
 	return (
 		<div className="flex h-full flex-col">
-			<div className="flex-grow overflow-y-auto">
+			<div className="scrollbar-hide flex-grow overflow-y-auto">
 				{questions.map(question => (
 					<div
 						key={question.id}
-						className="flex cursor-pointer flex-col gap-2 rounded p-4"
+						className={cn(
+							"flex cursor-pointer flex-col gap-2 rounded p-4",
+							selectedQuestionId === question.id && "bg-red-500"
+						)}
 						onClick={() => onSelectQuestion(question)}
 					>
 						<div className="flex flex-row justify-between opacity-50">
@@ -56,7 +55,7 @@ export function QuestionList({ topicName, onSelectQuestion }: QuestionListProps)
 				))}
 			</div>
 			<div className="relative mt-4">
-				<Input className="bg-input focus:ring-none py-5 pr-10" placeholder="Ask new question..." />
+				<Input className="bg-input py-5 pr-10 focus:outline-none focus:ring-0" placeholder="Ask new question..." />
 				<button className="absolute right-2 top-1/2 -translate-y-1/2 transform opacity-60 hover:opacity-80">
 					<LaIcon name="Send" />
 				</button>
