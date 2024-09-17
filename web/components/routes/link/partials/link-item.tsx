@@ -159,3 +159,5 @@ export const LinkItem = React.forwardRef<HTMLLIElement, LinkItemProps>(
 		)
 	}
 )
+
+LinkItem.displayName = "LinkItem"
