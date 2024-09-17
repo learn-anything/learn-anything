@@ -176,7 +176,7 @@ export const LinkItem = React.memo(
 								<div className="gap-x-2 space-y-0.5 xl:flex xl:flex-row">
 									<p
 										className={cn(
-											"text-primary hover:text-primary line-clamp-1 text-sm font-medium xl:truncate",
+											"text-primary hover:text-primary line-clamp-1 text-sm font-medium",
 											isActive && "font-bold"
 										)}
 									>
@@ -198,7 +198,7 @@ export const LinkItem = React.memo(
 											onClick={e => e.stopPropagation()}
 											className="text-muted-foreground hover:text-primary text-xs"
 										>
-											<span className="xl:truncate">{link.url}</span>
+											<span className="line-clamp-1">{link.url}</span>
 										</Link>
 									</div>
 								</div>

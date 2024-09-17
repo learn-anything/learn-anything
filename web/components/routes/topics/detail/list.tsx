@@ -1,5 +1,5 @@
-import React, { useRef } from "react"
-import { useVirtualizer } from "@tanstack/react-virtual"
+import React, { useRef, useCallback } from "react"
+import { useVirtualizer, VirtualItem } from "@tanstack/react-virtual"
 import { Link as LinkSchema, Section as SectionSchema, Topic } from "@/lib/schema"
 import { LinkItem } from "./partials/link-item"
 
@@ -18,16 +18,55 @@ export function TopicDetailList({ items, topic, activeIndex, setActiveIndex }: T
 	const virtualizer = useVirtualizer({
 		count: items.length,
 		getScrollElement: () => parentRef.current,
-		estimateSize: () => 44
+		estimateSize: () => 44,
+		overscan: 5
 	})
 
-	const rows = virtualizer.getVirtualItems()
+	const renderItem = useCallback(
+		(virtualRow: VirtualItem) => {
+			const item = items[virtualRow.index]
+
+			if (item.type === "section") {
+				return (
+					<div
+						key={virtualRow.key}
+						data-index={virtualRow.index}
+						ref={virtualizer.measureElement}
+						className="flex flex-col"
+					>
+						<div className="flex items-center gap-4 px-6 py-2 max-lg:px-4">
+							<p className="text-foreground text-sm font-medium">{item.data?.title}</p>
+							<div className="flex-1 border-b" />
+						</div>
+					</div>
+				)
+			}
+
+			if (item.data?.id) {
+				return (
+					<LinkItem
+						key={virtualRow.key}
+						data-index={virtualRow.index}
+						ref={virtualizer.measureElement}
+						topic={topic}
+						link={item.data as LinkSchema}
+						isActive={activeIndex === virtualRow.index}
+						index={virtualRow.index}
+						setActiveIndex={setActiveIndex}
+					/>
+				)
+			}
+
+			return null
+		},
+		[items, topic, activeIndex, setActiveIndex, virtualizer]
+	)
 
 	return (
 		<div ref={parentRef} className="flex-1 overflow-auto">
 			<div
 				style={{
-					height: virtualizer.getTotalSize(),
+					height: `${virtualizer.getTotalSize()}px`,
 					width: "100%",
 					position: "relative"
 				}}
@@ -38,37 +77,10 @@ export function TopicDetailList({ items, topic, activeIndex, setActiveIndex }: T
 						top: 0,
 						left: 0,
 						width: "100%",
-						transform: `translateY(${rows[0]?.start ?? 0}px)`
+						transform: `translateY(${virtualizer.getVirtualItems()[0]?.start ?? 0}px)`
 					}}
 				>
-					{rows.map(virtualRow =>
-						items[virtualRow.index].type === "section" ? (
-							<div
-								key={virtualRow.key}
-								data-index={virtualRow.index}
-								ref={virtualizer.measureElement}
-								className="flex flex-col"
-							>
-								<div className="flex items-center gap-4 px-6 py-2 max-lg:px-4">
-									<p className="text-foreground text-sm font-medium">{items[virtualRow.index].data?.title}</p>
-									<div className="flex-1 border-b"></div>
-								</div>
-							</div>
-						) : (
-							items[virtualRow.index].data?.id && (
-								<LinkItem
-									key={virtualRow.key}
-									data-index={virtualRow.index}
-									ref={virtualizer.measureElement}
-									topic={topic}
-									link={items[virtualRow.index].data as LinkSchema}
-									isActive={activeIndex === virtualRow.index}
-									index={virtualRow.index}
-									setActiveIndex={setActiveIndex}
-								/>
-							)
-						)
-					)}
+					{virtualizer.getVirtualItems().map(renderItem)}
 				</div>
 			</div>
 		</div>
