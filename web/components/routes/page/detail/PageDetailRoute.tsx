@@ -23,11 +23,11 @@ import { usePageActions } from "../hooks/use-page-actions"
 
 const TITLE_PLACEHOLDER = "Untitled"
 
-const emptyPage = (page: PersonalPage): boolean => {
+const isPageEmpty = (page: PersonalPage): boolean => {
 	return (!page.title || page.title.trim() === "") && (!page.content || Object.keys(page.content).length === 0)
 }
 
-export const DeleteEmptyPage = (currentPageId: string | null) => {
+const useDeleteEmptyPage = (currentPageId: string | null) => {
 	const router = useRouter()
 	const { me } = useAccount({
 		root: {
@@ -36,20 +36,16 @@ export const DeleteEmptyPage = (currentPageId: string | null) => {
 	})
 
 	useEffect(() => {
-		const handleRouteChange = () => {
+		return () => {
 			if (!currentPageId || !me?.root?.personalPages) return
 
 			const currentPage = me.root.personalPages.find(page => page?.id === currentPageId)
-			if (currentPage && emptyPage(currentPage)) {
+			if (currentPage && isPageEmpty(currentPage)) {
 				const index = me.root.personalPages.findIndex(page => page?.id === currentPageId)
 				if (index !== -1) {
 					me.root.personalPages.splice(index, 1)
 				}
 			}
-		}
-
-		return () => {
-			handleRouteChange()
 		}
 	}, [currentPageId, me, router])
 }
@@ -62,9 +58,9 @@ export function PageDetailRoute({ pageId }: { pageId: string }) {
 	const { deletePage } = usePageActions()
 	const confirm = useConfirm()
 
-	DeleteEmptyPage(pageId)
+	useDeleteEmptyPage(pageId)
 
-	const handleDelete = async () => {
+	const handleDelete = useCallback(async () => {
 		const result = await confirm({
 			title: "Delete page",
 			description: "Are you sure you want to delete this page?",
@@ -78,7 +74,7 @@ export function PageDetailRoute({ pageId }: { pageId: string }) {
 			deletePage(me, pageId as ID<PersonalPage>)
 			router.push("/pages")
 		}
-	}
+	}, [confirm, deletePage, me, pageId, router])
 
 	if (!page) return null
 
@@ -132,29 +128,32 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 	const isContentInitialMount = useRef(true)
 	const isInitialFocusApplied = useRef(false)
 
-	const updatePageContent = (content: Content, model: PersonalPage) => {
+	const updatePageContent = useCallback((content: Content, model: PersonalPage) => {
 		if (isContentInitialMount.current) {
 			isContentInitialMount.current = false
 			return
 		}
 		model.content = content
 		model.updatedAt = new Date()
-	}
+	}, [])
 
-	const handleUpdateTitle = (editor: Editor) => {
-		if (isTitleInitialMount.current) {
-			isTitleInitialMount.current = false
-			return
-		}
+	const handleUpdateTitle = useCallback(
+		(editor: Editor) => {
+			if (isTitleInitialMount.current) {
+				isTitleInitialMount.current = false
+				return
+			}
 
-		const newTitle = editor.getText()
-		if (newTitle !== page.title) {
-			const slug = generateUniqueSlug(page.title?.toString() || "")
-			page.title = newTitle
-			page.slug = slug
-			page.updatedAt = new Date()
-		}
-	}
+			const newTitle = editor.getText()
+			if (newTitle !== page.title) {
+				const slug = generateUniqueSlug(page.title?.toString() || "")
+				page.title = newTitle
+				page.slug = slug
+				page.updatedAt = new Date()
+			}
+		},
+		[page]
+	)
 
 	const handleTitleKeyDown = useCallback((view: EditorView, event: KeyboardEvent) => {
 		const editor = titleEditorRef.current
@@ -254,7 +253,7 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 				contentEditorRef.current.editor.commands.focus()
 			}
 		}
-	}, [page.title, titleEditor, contentEditorRef])
+	}, [page.title, titleEditor])
 
 	return (
 		<div className="relative flex grow flex-col overflow-y-auto [scrollbar-gutter:stable]">
