@@ -2,6 +2,7 @@ import React, { useRef, useCallback } from "react"
 import { useVirtualizer, VirtualItem } from "@tanstack/react-virtual"
 import { Link as LinkSchema, Section as SectionSchema, Topic } from "@/lib/schema"
 import { LinkItem } from "./partials/link-item"
+import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
 
 export type FlattenedItem = { type: "link"; data: LinkSchema | null } | { type: "section"; data: SectionSchema | null }
 
@@ -13,6 +14,9 @@ interface TopicDetailListProps {
 }
 
 export function TopicDetailList({ items, topic, activeIndex, setActiveIndex }: TopicDetailListProps) {
+	const { me } = useAccountOrGuest({ root: { personalLinks: [] } })
+	const personalLinks = !me || me._type === "Anonymous" ? undefined : me.root.personalLinks
+
 	const parentRef = useRef<HTMLDivElement>(null)
 
 	const virtualizer = useVirtualizer({
@@ -53,13 +57,14 @@ export function TopicDetailList({ items, topic, activeIndex, setActiveIndex }: T
 						isActive={activeIndex === virtualRow.index}
 						index={virtualRow.index}
 						setActiveIndex={setActiveIndex}
+						personalLinks={personalLinks}
 					/>
 				)
 			}
 
 			return null
 		},
-		[items, topic, activeIndex, setActiveIndex, virtualizer]
+		[items, topic, activeIndex, setActiveIndex, virtualizer, personalLinks]
 	)
 
 	return (

@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 import { LearningStateSelectorContent } from "@/components/custom/learning-state-selector"
 
 import { cn, ensureUrlProtocol, generateUniqueSlug } from "@/lib/utils"
-import { Link as LinkSchema, PersonalLink, Topic } from "@/lib/schema"
+import { Link as LinkSchema, PersonalLink, PersonalLinkLists, Topic } from "@/lib/schema"
 import { openPopoverForIdAtom } from "../TopicDetailRoute"
 import { LEARNING_STATES, LearningStateValue } from "@/lib/constants"
 import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
@@ -22,24 +22,18 @@ interface LinkItemProps extends React.ComponentPropsWithoutRef<"div"> {
 	isActive: boolean
 	index: number
 	setActiveIndex: (index: number) => void
+	personalLinks?: PersonalLinkLists
 }
 
 export const LinkItem = React.memo(
 	React.forwardRef<HTMLDivElement, LinkItemProps>(
-		({ topic, link, isActive, index, setActiveIndex, className, ...props }, ref) => {
+		({ topic, link, isActive, index, setActiveIndex, className, personalLinks, ...props }, ref) => {
 			const clerk = useClerk()
 			const pathname = usePathname()
 			const router = useRouter()
 			const [, setOpenPopoverForId] = useAtom(openPopoverForIdAtom)
 			const [isPopoverOpen, setIsPopoverOpen] = useState(false)
-
-			const { me } = useAccountOrGuest({ root: { personalLinks: [] } })
-
-			const personalLinks = useMemo(() => {
-				if (!me || me._type === "Anonymous") return undefined
-				return me?.root?.personalLinks || []
-				// @ts-ignore
-			}, [me?.root?.personalLinks])
+			const { me } = useAccountOrGuest()
 
 			const personalLink = useMemo(() => {
 				return personalLinks?.find(pl => pl?.link?.id === link.id)
