@@ -15,12 +15,15 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { usePathname } from "next/navigation"
 import { Feedback } from "./feedback"
+import { useAtom } from "jotai"
+import { showShortcutAtom } from "../../Shortcut/shortcut"
 
 export const ProfileSection: React.FC = () => {
 	const { user, isSignedIn } = useUser()
 	const { signOut } = useAuth()
 	const [menuOpen, setMenuOpen] = useState(false)
 	const pathname = usePathname()
+	const [showShortcut, setShowShortcut] = useAtom(showShortcutAtom)
 
 	if (!isSignedIn) {
 		return (
@@ -67,7 +70,14 @@ export const ProfileSection: React.FC = () => {
 									</div>
 								</Link>
 							</DropdownMenuItem>
+
+							<DropdownMenuItem className="gap-2" onClick={() => setShowShortcut(true)}>
+								<LaIcon name="Keyboard" />
+								<span>Shortcut</span>
+							</DropdownMenuItem>
+
 							<DropdownMenuSeparator />
+
 							<DropdownMenuItem asChild>
 								<Link className="cursor-pointer" href="/onboarding">
 									<div className="relative flex flex-1 items-center gap-2">
@@ -106,6 +116,7 @@ export const ProfileSection: React.FC = () => {
 									</div>
 								</Link>
 							</DropdownMenuItem>
+
 							<DropdownMenuSeparator />
 
 							<DropdownMenuItem onClick={() => signOut()}>
