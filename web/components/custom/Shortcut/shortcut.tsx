@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
-export const showShortcutAtom = atom(true)
+export const showShortcutAtom = atom(false)
 
 type ShortcutItem = {
 	label: string
