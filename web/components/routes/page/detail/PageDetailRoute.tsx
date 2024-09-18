@@ -58,7 +58,7 @@ export function PageDetailRoute({ pageId }: { pageId: string }) {
 	const { deletePage } = usePageActions()
 	const confirm = useConfirm()
 
-	useDeleteEmptyPage(pageId)
+	// useDeleteEmptyPage(pageId)
 
 	const handleDelete = useCallback(async () => {
 		const result = await confirm({
