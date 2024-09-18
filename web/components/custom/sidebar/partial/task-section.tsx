@@ -43,22 +43,6 @@ const TaskSectionHeader: React.FC<TaskSectionHeaderProps> = ({ taskCount, isActi
 			</p>
 		</Link>
 	</div>
-	// <div
-	// 	className={cn(
-	// 		"flex min-h-[30px] items-center gap-px rounded-md",
-	// 		isActive ? "bg-accent text-accent-foreground" : "hover:bg-accent hover:text-accent-foreground"
-	// 	)}
-	// >
-	// 	<Button
-	// 		variant="ghost"
-	// 		className="size-6 flex-1 items-center justify-start rounded-md px-2 py-1 focus-visible:outline-none focus-visible:ring-0"
-	// 	>
-	// 		<p className="flex items-center text-xs font-medium">
-	// 			Tasks
-	// 			{taskCount > 0 && <span className="text-muted-foreground ml-1">{taskCount}</span>}
-	// 		</p>
-	// 	</Button>
-	// </div>
 )
 
 interface ListProps {

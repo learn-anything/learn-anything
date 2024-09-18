@@ -15,6 +15,7 @@ import { PageSection } from "./partial/page-section"
 import { TopicSection } from "./partial/topic-section"
 import { ProfileSection } from "./partial/profile-section"
 import { TaskSection } from "./partial/task-section"
+import { JournalSection } from "./partial/journal-section"
 import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
 
 interface SidebarContextType {
@@ -125,7 +126,8 @@ const SidebarContent: React.FC = React.memo(() => {
 					{me._type === "Account" && <LinkSection pathname={pathname} />}
 					{me._type === "Account" && <PageSection pathname={pathname} />}
 					{me._type === "Account" && <TopicSection pathname={pathname} />}
-					{/* {me._type === "Account" && <TaskSection pathname={pathname} />} */}
+					{me._type === "Account" && <JournalSection />}
+
 					<TaskSection pathname={pathname} />
 				</div>
 
