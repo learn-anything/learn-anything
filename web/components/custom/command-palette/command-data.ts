@@ -6,6 +6,7 @@ import { HTMLLikeElement } from "@/lib/utils"
 export type CommandAction = string | (() => void)
 
 export interface CommandItemType {
+	id?: string
 	icon?: keyof typeof icons
 	value: string
 	label: HTMLLikeElement | string

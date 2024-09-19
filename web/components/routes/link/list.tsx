@@ -24,6 +24,7 @@ import { commandPaletteOpenAtom } from "@/components/custom/command-palette/comm
 import { useConfirm } from "@omit/react-confirm-dialog"
 import { useLinkActions } from "./hooks/use-link-actions"
 import { isDeleteConfirmShownAtom } from "./LinkRoute"
+import { useActiveItemScroll } from "@/hooks/use-active-item-scroll"
 
 interface LinkListProps {
 	activeItemIndex: number | null
@@ -76,12 +77,6 @@ const LinkList: React.FC<LinkListProps> = ({ activeItemIndex, setActiveItemIndex
 			coordinateGetter: sortableKeyboardCoordinates
 		})
 	)
-
-	useKey("Escape", () => {
-		if (editId) {
-			setEditId(null)
-		}
-	})
 
 	useKey(
 		event => (event.metaKey || event.ctrlKey) && event.key === "Backspace",
@@ -245,6 +240,8 @@ const LinkList: React.FC<LinkListProps> = ({ activeItemIndex, setActiveItemIndex
 		setDraggingId(null)
 	}
 
+	const setElementRef = useActiveItemScroll<HTMLLIElement>({ activeIndex: activeItemIndex })
+
 	return (
 		<Primitive.div
 			className="mb-11 flex w-full flex-1 flex-col overflow-y-auto outline-none [scrollbar-gutter:stable]"
@@ -271,6 +268,7 @@ const LinkList: React.FC<LinkListProps> = ({ activeItemIndex, setActiveItemIndex
 										isActive={activeItemIndex === index}
 										setActiveItemIndex={setActiveItemIndex}
 										index={index}
+										ref={el => setElementRef(el, index)}
 									/>
 								)
 						)}

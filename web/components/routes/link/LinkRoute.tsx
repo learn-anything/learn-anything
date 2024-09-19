@@ -8,11 +8,12 @@ import { parseAsBoolean, useQueryState } from "nuqs"
 import { atom, useAtom } from "jotai"
 import { LinkBottomBar } from "./bottom-bar"
 import { commandPaletteOpenAtom } from "@/components/custom/command-palette/command-palette"
+import { useKey } from "react-use"
 
 export const isDeleteConfirmShownAtom = atom(false)
 
 export function LinkRoute(): React.ReactElement {
-	const [nuqsEditId] = useQueryState("editId")
+	const [nuqsEditId, setNuqsEditId] = useQueryState("editId")
 	const [activeItemIndex, setActiveItemIndex] = useState<number | null>(null)
 	const [isInCreateMode] = useQueryState("create", parseAsBoolean)
 	const [isCommandPaletteOpen] = useAtom(commandPaletteOpenAtom)
@@ -49,6 +50,11 @@ export function LinkRoute(): React.ReactElement {
 			}
 		}
 	}, [isDeleteConfirmShown, isCommandPaletteOpen, isInCreateMode, handleCommandPaletteClose])
+
+	useKey("Escape", () => {
+		setDisableEnterKey(false)
+		setNuqsEditId(null)
+	})
 
 	return (
 		<>
