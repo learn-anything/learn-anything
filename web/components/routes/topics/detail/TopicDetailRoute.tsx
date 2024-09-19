@@ -1,10 +1,10 @@
 "use client"
 
-import React, { useMemo, useRef } from "react"
+import React, { useRef } from "react"
 import { TopicDetailHeader } from "./Header"
 import { TopicSections } from "./partials/topic-sections"
 import { atom } from "jotai"
-import { useAccount, useAccountOrGuest } from "@/lib/providers/jazz-provider"
+import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
 import { useTopicData } from "@/hooks/use-topic-data"
 
 interface TopicDetailRouteProps {
@@ -16,7 +16,6 @@ export const openPopoverForIdAtom = atom<string | null>(null)
 export function TopicDetailRoute({ topicName }: TopicDetailRouteProps) {
 	const { me } = useAccountOrGuest({ root: { personalLinks: [] } })
 	const { topic } = useTopicData(topicName, me)
-	// const { activeIndex, setActiveIndex, containerRef, linkRefs } = useLinkNavigation(allLinks)
 	const linksRefDummy = useRef<(HTMLLIElement | null)[]>([])
 	const containerRefDummy = useRef<HTMLDivElement>(null)
 

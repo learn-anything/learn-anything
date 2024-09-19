@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { SignInButton, useAuth, useUser } from "@clerk/nextjs"
 import { useAtom } from "jotai"
 import Link from "next/link"
@@ -21,6 +21,8 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Feedback } from "./feedback"
 import { showShortcutAtom } from "@/components/custom/Shortcut/shortcut"
+import { ShortcutKey } from "@/components/minimal-tiptap/components/shortcut-key"
+import { useKeyboardManager } from "@/hooks/use-keyboard-manager"
 
 export const ProfileSection: React.FC = () => {
 	const { user, isSignedIn } = useUser()
@@ -28,6 +30,12 @@ export const ProfileSection: React.FC = () => {
 	const [menuOpen, setMenuOpen] = useState(false)
 	const pathname = usePathname()
 	const [, setShowShortcut] = useAtom(showShortcutAtom)
+
+	const { disableKeydown } = useKeyboardManager("profileSection")
+
+	useEffect(() => {
+		disableKeydown(menuOpen)
+	}, [menuOpen, disableKeydown])
 
 	if (!isSignedIn) {
 		return (
@@ -115,7 +123,10 @@ const DropdownMenuItems: React.FC<DropdownMenuItemsProps> = ({ signOut, setShowS
 		<DropdownMenuItem onClick={signOut}>
 			<div className="relative flex flex-1 cursor-pointer items-center gap-2">
 				<LaIcon name="LogOut" />
-				<span className="line-clamp-1 flex-1">Log out</span>
+				<span>Log out</span>
+				<div className="absolute right-0">
+					<ShortcutKey keys={["alt", "shift", "q"]} />
+				</div>
 			</div>
 		</DropdownMenuItem>
 	</>
