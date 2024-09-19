@@ -1,19 +1,18 @@
 import React from "react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
-import { PersonalPage } from "@/lib/schema"
 import { Badge } from "@/components/ui/badge"
 import { useMedia } from "react-use"
 import { useColumnStyles } from "../hooks/use-column-styles"
-import { format } from "date-fns"
+import { Topic } from "@/lib/schema"
 import { Column } from "@/components/custom/column"
 
-interface PageItemProps {
-	page: PersonalPage
+interface TopicItemProps {
+	topic: Topic
 	isActive: boolean
 }
 
-export const PageItem = React.forwardRef<HTMLAnchorElement, PageItemProps>(({ page, isActive }, ref) => {
+export const TopicItem = React.forwardRef<HTMLAnchorElement, TopicItemProps>(({ topic, isActive }, ref) => {
 	const isTablet = useMedia("(max-width: 640px)")
 	const columnStyles = useColumnStyles()
 
@@ -25,26 +24,26 @@ export const PageItem = React.forwardRef<HTMLAnchorElement, PageItemProps>(({ pa
 				"bg-muted-foreground/5": isActive,
 				"hover:bg-muted/50": !isActive
 			})}
-			href={`/pages/${page.id}`}
+			href={`/topics/${topic.id}`}
 			role="listitem"
 		>
 			<div className="flex h-full items-center gap-4">
 				<Column.Wrapper style={columnStyles.title}>
-					<Column.Text className="truncate text-[13px] font-medium">{page.title || "Untitled"}</Column.Text>
+					<Column.Text className="truncate text-[13px] font-medium">{topic.prettyName}</Column.Text>
 				</Column.Wrapper>
 
 				{!isTablet && (
 					<Column.Wrapper style={columnStyles.topic}>
-						{page.topic && <Badge variant="secondary">{page.topic.prettyName}</Badge>}
+						{topic && <Badge variant="secondary">{topic.prettyName}</Badge>}
 					</Column.Wrapper>
 				)}
 
 				<Column.Wrapper style={columnStyles.updated} className="flex justify-end">
-					<Column.Text className="text-[13px]">{format(new Date(page.updatedAt), "d MMM yyyy")}</Column.Text>
+					<Column.Text className="text-[13px]">{topic.name}</Column.Text>
 				</Column.Wrapper>
 			</div>
 		</Link>
 	)
 })
 
-PageItem.displayName = "PageItem"
+TopicItem.displayName = "TopicItem"

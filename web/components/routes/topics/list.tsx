@@ -3,31 +3,35 @@ import { Primitive } from "@radix-ui/react-primitive"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { useAtom } from "jotai"
 import { commandPaletteOpenAtom } from "@/components/custom/command-palette/command-palette"
-import { PageItem } from "./partials/page-item"
+import { TopicItem } from "./partials/topic-item"
 import { useMedia } from "react-use"
-import { useColumnStyles } from "./hooks/use-column-styles"
-import { PersonalPage, PersonalPageLists } from "@/lib/schema"
 import { useRouter } from "next/navigation"
 import { useActiveItemScroll } from "@/hooks/use-active-item-scroll"
 import { Column } from "@/components/custom/column"
+import { useColumnStyles } from "./hooks/use-column-styles"
+import { Topic } from "@/lib/schema"
 
-interface PageListProps {
+interface TopicListProps {
 	activeItemIndex: number | null
 	setActiveItemIndex: React.Dispatch<React.SetStateAction<number | null>>
 	disableEnterKey: boolean
 }
 
-export const PageList: React.FC<PageListProps> = ({ activeItemIndex, setActiveItemIndex, disableEnterKey }) => {
+export const TopicList: React.FC<TopicListProps> = ({ activeItemIndex, setActiveItemIndex, disableEnterKey }) => {
 	const isTablet = useMedia("(max-width: 640px)")
 	const [isCommandPaletteOpen] = useAtom(commandPaletteOpenAtom)
-	const { me } = useAccount({ root: { personalPages: [] } })
-	const personalPages = useMemo(() => me?.root?.personalPages, [me?.root?.personalPages])
+	const { me } = useAccount({ root: { topicsWantToLearn: [], topicsLearning: [], topicsLearned: [] } })
+	const personalTopics = useMemo(() => {
+		if (!me) return null
+		const topics = [...me.root.topicsWantToLearn, ...me.root.topicsLearning, ...me.root.topicsLearned]
+		return topics
+	}, [me?.root.topicsWantToLearn, me?.root.topicsLearning, me?.root.topicsLearned])
 	const router = useRouter()
-	const itemCount = personalPages?.length || 0
+	const itemCount = personalTopics?.length || 0
 
 	const handleEnter = useCallback(
-		(selectedPage: PersonalPage) => {
-			router.push(`/pages/${selectedPage.id}`)
+		(selectedTopic: Topic) => {
+			router.push(`/${selectedTopic.name}`)
 		},
 		[router]
 	)
@@ -43,13 +47,13 @@ export const PageList: React.FC<PageListProps> = ({ activeItemIndex, setActiveIt
 					const newIndex = e.key === "ArrowUp" ? (prevIndex - 1 + itemCount) % itemCount : (prevIndex + 1) % itemCount
 					return newIndex
 				})
-			} else if (e.key === "Enter" && !disableEnterKey && activeItemIndex !== null && personalPages) {
+			} else if (e.key === "Enter" && !disableEnterKey && activeItemIndex !== null && personalTopics) {
 				e.preventDefault()
-				const selectedPage = personalPages[activeItemIndex]
-				if (selectedPage) handleEnter?.(selectedPage)
+				const selectedTopic = personalTopics[activeItemIndex]
+				if (selectedTopic) handleEnter?.(selectedTopic)
 			}
 		},
-		[itemCount, isCommandPaletteOpen, activeItemIndex, setActiveItemIndex, disableEnterKey, personalPages, handleEnter]
+		[itemCount, isCommandPaletteOpen, activeItemIndex, setActiveItemIndex, disableEnterKey, personalTopics, handleEnter]
 	)
 
 	useEffect(() => {
@@ -60,7 +64,7 @@ export const PageList: React.FC<PageListProps> = ({ activeItemIndex, setActiveIt
 	return (
 		<div className="flex h-full w-full flex-col overflow-hidden border-t">
 			{!isTablet && <ColumnHeader />}
-			<PageListItems personalPages={personalPages} activeItemIndex={activeItemIndex} />
+			<TopicListItems personalTopics={personalTopics} activeItemIndex={activeItemIndex} />
 		</div>
 	)
 }
@@ -71,10 +75,10 @@ export const ColumnHeader: React.FC = () => {
 	return (
 		<div className="flex h-8 shrink-0 grow-0 flex-row gap-4 border-b max-lg:px-4 sm:px-6">
 			<Column.Wrapper style={columnStyles.title}>
-				<Column.Text>Title</Column.Text>
+				<Column.Text>Name</Column.Text>
 			</Column.Wrapper>
 			<Column.Wrapper style={columnStyles.topic}>
-				<Column.Text>Topic</Column.Text>
+				<Column.Text>State</Column.Text>
 			</Column.Wrapper>
 			<Column.Wrapper style={columnStyles.updated}>
 				<Column.Text>Updated</Column.Text>
@@ -83,12 +87,12 @@ export const ColumnHeader: React.FC = () => {
 	)
 }
 
-interface PageListItemsProps {
-	personalPages?: PersonalPageLists | null
+interface TopicListItemsProps {
+	personalTopics?: (Topic | null)[] | null
 	activeItemIndex: number | null
 }
 
-const PageListItems: React.FC<PageListItemsProps> = ({ personalPages, activeItemIndex }) => {
+const TopicListItems: React.FC<TopicListItemsProps> = ({ personalTopics, activeItemIndex }) => {
 	const setElementRef = useActiveItemScroll<HTMLAnchorElement>({ activeIndex: activeItemIndex })
 
 	return (
@@ -97,13 +101,13 @@ const PageListItems: React.FC<PageListItemsProps> = ({ personalPages, activeItem
 			tabIndex={-1}
 			role="list"
 		>
-			{personalPages?.map(
-				(page, index) =>
-					page?.id && (
-						<PageItem
-							key={page.id}
+			{personalTopics?.map(
+				(topic, index) =>
+					topic?.id && (
+						<TopicItem
+							key={topic.id}
 							ref={el => setElementRef(el, index)}
-							page={page}
+							topic={topic}
 							isActive={index === activeItemIndex}
 						/>
 					)
