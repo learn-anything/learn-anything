@@ -22,6 +22,7 @@ export function TopicDetailRoute({ topicName }: TopicDetailRouteProps) {
 	const raw_graph_data = React.use(graph_data_promise) as GraphNode[]
 
 	const { me } = useAccountOrGuest({ root: { personalLinks: [] } })
+
 	const topicID = useMemo(() => me && Topic.findUnique({ topicName }, JAZZ_GLOBAL_GROUP_ID, me), [topicName, me])
 	const topic = useCoState(Topic, topicID, { latestGlobalGuide: { sections: [] } })
 	const [activeIndex, setActiveIndex] = useState(-1)

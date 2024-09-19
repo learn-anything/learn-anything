@@ -9,6 +9,7 @@ import { searchSafeRegExp } from "@/lib/utils"
 import { GraphNode } from "@/components/routes/public/PublicHomeRoute"
 import { useCommandActions } from "./hooks/use-command-actions"
 import { atom, useAtom } from "jotai"
+import { useKeydownListener } from "@/hooks/use-keydown-listener"
 
 const graph_data_promise = import("@/components/routes/public/graph-data.json").then(a => a.default)
 
@@ -29,17 +30,17 @@ export function CommandPalette() {
 
 	const raw_graph_data = React.use(graph_data_promise) as GraphNode[]
 
-	React.useEffect(() => {
-		const down = (e: KeyboardEvent) => {
+	const handleKeydown = React.useCallback(
+		(e: KeyboardEvent) => {
 			if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
 				e.preventDefault()
 				setOpen(prev => !prev)
 			}
-		}
+		},
+		[setOpen]
+	)
 
-		document.addEventListener("keydown", down)
-		return () => document.removeEventListener("keydown", down)
-	}, [setOpen])
+	useKeydownListener(handleKeydown)
 
 	const bounce = React.useCallback(() => {
 		if (dialogRef.current) {
@@ -118,11 +119,9 @@ export function CommandPalette() {
 
 		if (activePage === "home") {
 			if (!inputValue) {
-				// Only show items from the home object when there's no search input
 				return commandGroups.home
 			}
 
-			// When there's a search input, search across all categories
 			const allGroups = [...Object.values(commandGroups).flat(), personalLinks, personalPages, topics]
 
 			return allGroups
@@ -133,7 +132,6 @@ export function CommandPalette() {
 				.filter(group => group.items.length > 0)
 		}
 
-		// Handle other active pages (searchLinks, searchPages, etc.)
 		switch (activePage) {
 			case "searchLinks":
 				return [...commandGroups.searchLinks, { items: filterItems(personalLinks.items, searchRegex) }]
