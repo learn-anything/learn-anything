@@ -43,7 +43,7 @@ const JournalSectionHeader: React.FC<JournalHeaderProps> = ({ entriesCount, isAc
 )
 
 interface JournalEntryListProps {
-	entries: any[] // Replace 'any' with the actual type of journal entries
+	entries: any[]
 }
 
 const JournalEntryList: React.FC<JournalEntryListProps> = ({ entries }) => {
@@ -57,7 +57,7 @@ const JournalEntryList: React.FC<JournalEntryListProps> = ({ entries }) => {
 }
 
 interface JournalEntryItemProps {
-	entry: any // Replace 'any' with the actual type of a journal entry
+	entry: any
 }
 
 const JournalEntryItem: React.FC<JournalEntryItemProps> = ({ entry }) => (

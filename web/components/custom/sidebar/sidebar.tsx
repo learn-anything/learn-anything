@@ -127,7 +127,6 @@ const SidebarContent: React.FC = React.memo(() => {
 					{me._type === "Account" && <PageSection pathname={pathname} />}
 					{me._type === "Account" && <TopicSection pathname={pathname} />}
 					{me._type === "Account" && <JournalSection />}
-
 					<TaskSection pathname={pathname} />
 				</div>
 
