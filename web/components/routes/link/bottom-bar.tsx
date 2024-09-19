@@ -1,9 +1,11 @@
+"use client"
+
 import React, { useCallback, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { icons } from "lucide-react"
+import type { icons } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { getSpecialShortcut, formatShortcut, isMacOS } from "@/lib/utils"
+import { cn, getShortcutKeys } from "@/lib/utils"
 import { LaIcon } from "@/components/custom/la-icon"
 import { useAtom } from "jotai"
 import { parseAsBoolean, useQueryState } from "nuqs"
@@ -13,6 +15,7 @@ import { PersonalLink } from "@/lib/schema"
 import { ID } from "jazz-tools"
 import { globalLinkFormExceptionRefsAtom } from "./partials/form/link-form"
 import { useLinkActions } from "./hooks/use-link-actions"
+import { useKeydownListener } from "@/hooks/use-keydown-listener"
 
 interface ToolbarButtonProps extends React.ComponentPropsWithoutRef<typeof Button> {
 	icon: keyof typeof icons
@@ -21,9 +24,9 @@ interface ToolbarButtonProps extends React.ComponentPropsWithoutRef<typeof Butto
 }
 
 const ToolbarButton = React.forwardRef<HTMLButtonElement, ToolbarButtonProps>(
-	({ icon, onClick, tooltip, ...props }, ref) => {
+	({ icon, onClick, tooltip, className, ...props }, ref) => {
 		const button = (
-			<Button variant="ghost" className="h-8 min-w-14" onClick={onClick} ref={ref} {...props}>
+			<Button variant="ghost" className={cn("h-8 min-w-14 p-0", className)} onClick={onClick} ref={ref} {...props}>
 				<LaIcon name={icon} />
 			</Button>
 		)
@@ -116,28 +119,25 @@ export const LinkBottomBar: React.FC = () => {
 		}
 	}
 
-	useEffect(() => {
-		const handleKeyDown = (event: KeyboardEvent) => {
-			const isCreateShortcut = isMacOS()
-				? event.ctrlKey && event.metaKey && event.key.toLowerCase() === "n"
-				: event.ctrlKey && event.key.toLowerCase() === "n" && (event.metaKey || event.altKey)
+	const handleKeydown = useCallback(
+		(event: KeyboardEvent) => {
+			const isCreateShortcut = event.key === "c"
 
 			if (isCreateShortcut) {
 				event.preventDefault()
 				handleCreateMode()
 			}
-		}
+		},
+		[handleCreateMode]
+	)
 
-		window.addEventListener("keydown", handleKeyDown)
-		return () => window.removeEventListener("keydown", handleKeyDown)
-	}, [handleCreateMode])
+	useKeydownListener(handleKeydown)
 
-	const shortcutKeys = getSpecialShortcut("expandToolbar")
-	const shortcutText = formatShortcut(shortcutKeys)
+	const shortcutText = getShortcutKeys(["c"])
 
 	return (
 		<motion.div
-			className="bg-background absolute bottom-0 left-0 right-0 border-t"
+			className="bg-background absolute bottom-0 left-0 right-0 h-11 border-t"
 			animate={{ y: 0 }}
 			initial={{ y: "100%" }}
 		>
@@ -145,7 +145,7 @@ export const LinkBottomBar: React.FC = () => {
 				{editId && (
 					<motion.div
 						key="expanded"
-						className="flex items-center justify-center gap-1 px-2 py-1"
+						className="flex h-full items-center justify-center gap-1 px-2"
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
 						exit={{ opacity: 0, y: 20 }}
@@ -165,7 +165,7 @@ export const LinkBottomBar: React.FC = () => {
 				{!editId && (
 					<motion.div
 						key="collapsed"
-						className="flex items-center justify-center gap-1 px-2 py-1"
+						className="flex h-full items-center justify-center gap-1 px-2"
 						initial={{ opacity: 0, y: -20 }}
 						animate={{ opacity: 1, y: 0 }}
 						exit={{ opacity: 0, y: -20 }}
@@ -176,11 +176,10 @@ export const LinkBottomBar: React.FC = () => {
 							<ToolbarButton
 								icon={"Plus"}
 								onClick={handleCreateMode}
-								tooltip={`New Link (${shortcutText})`}
+								tooltip={`New Link (${shortcutText.map(s => s.symbol).join("")})`}
 								ref={plusBtnRef}
 							/>
 						)}
-						{/* <ToolbarButton icon={"Ellipsis"} ref={plusMoreBtnRef} /> */}
 					</motion.div>
 				)}
 			</AnimatePresence>

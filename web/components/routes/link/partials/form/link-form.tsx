@@ -231,7 +231,7 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 												<TopicSelector
 													{...field}
 													renderSelectedText={() => (
-														<span className="truncate">{selectedTopic?.prettyName || "Select a topic"}</span>
+														<span className="truncate">{selectedTopic?.prettyName || "Topic"}</span>
 													)}
 												/>
 											</FormItem>

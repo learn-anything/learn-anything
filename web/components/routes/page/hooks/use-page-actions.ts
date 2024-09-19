@@ -4,6 +4,15 @@ import { LaAccount, PersonalPage } from "@/lib/schema"
 import { ID } from "jazz-tools"
 
 export const usePageActions = () => {
+	const newPage = useCallback((me: LaAccount): PersonalPage => {
+		const newPersonalPage = PersonalPage.create(
+			{ public: false, createdAt: new Date(), updatedAt: new Date() },
+			{ owner: me._owner }
+		)
+		me.root?.personalPages?.push(newPersonalPage)
+		return newPersonalPage
+	}, [])
+
 	const deletePage = useCallback((me: LaAccount, pageId: ID<PersonalPage>): void => {
 		if (!me.root?.personalPages) return
 
@@ -32,5 +41,5 @@ export const usePageActions = () => {
 		}
 	}, [])
 
-	return { deletePage }
+	return { newPage, deletePage }
 }
