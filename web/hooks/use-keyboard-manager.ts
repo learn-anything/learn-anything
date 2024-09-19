@@ -7,18 +7,26 @@ export function useKeyboardManager(sourceId: string) {
 
 	useEffect(() => {
 		const handleKeyDown = (event: KeyboardEvent) => {
-			if (disableSources.size > 0) {
-				event.preventDefault()
+			if (disableSources.has(sourceId)) {
+				if (event.key === "Escape") {
+					setDisableSources(prev => {
+						const next = new Set(prev)
+						next.delete(sourceId)
+						return next
+					})
+				} else {
+					event.stopPropagation()
+				}
 			}
 		}
 
-		window.addEventListener("keydown", handleKeyDown)
-		return () => window.removeEventListener("keydown", handleKeyDown)
-	}, [disableSources])
+		window.addEventListener("keydown", handleKeyDown, true)
+		return () => window.removeEventListener("keydown", handleKeyDown, true)
+	}, [disableSources, sourceId, setDisableSources])
 
 	const disableKeydown = useCallback(
 		(disable: boolean) => {
-			console.log(`${sourceId} disable:`, disable)
+			// console.log(`${sourceId} disable:`, disable)
 			setDisableSources(prev => {
 				const next = new Set(prev)
 				if (disable) {
@@ -32,7 +40,7 @@ export function useKeyboardManager(sourceId: string) {
 		[setDisableSources, sourceId]
 	)
 
-	const isKeyboardDisabled = disableSources.size > 0
+	const isKeyboardDisabled = disableSources.has(sourceId)
 
 	return { disableKeydown, isKeyboardDisabled }
 }
