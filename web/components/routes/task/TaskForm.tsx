@@ -1,25 +1,30 @@
 "use client"
 import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Task } from "@/lib/schema/tasks"
+import { ListOfTasks, Task } from "@/lib/schema/tasks"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { LaIcon } from "@/components/custom/la-icon"
 
-interface TaskFormProps {
-	onAddTask: (task: Task) => void
-}
+interface TaskFormProps {}
 
-export const TaskForm: React.FC<TaskFormProps> = ({ onAddTask }) => {
+export const TaskForm: React.FC<TaskFormProps> = ({}) => {
 	const [title, setTitle] = useState("")
 	const [inputVisible, setInputVisible] = useState(false)
-	const { me } = useAccount()
+	const { me } = useAccount({ root: {} })
 	const inputRef = useRef<HTMLInputElement>(null)
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault()
-		if (title.trim() && me) {
+		console.log(title.trim())
+		console.log(me, "me")
+		if (title.trim()) {
+			if (me?.root?.tasks === undefined) {
+				if (!me) return
+				me.root.tasks = ListOfTasks.create([], { owner: me })
+			}
+
 			const newTask = Task.create(
 				{
 					title,
@@ -30,7 +35,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({ onAddTask }) => {
 				},
 				{ owner: me._owner }
 			)
-			onAddTask(newTask)
+			me.root.tasks?.push(newTask)
 			resetForm()
 		}
 	}
