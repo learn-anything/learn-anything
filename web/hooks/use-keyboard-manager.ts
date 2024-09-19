@@ -1,28 +1,38 @@
-import { isModalActiveAtom } from "@/store/keydown-manager"
 import { useAtom } from "jotai"
 import { useEffect, useCallback } from "react"
+import { keyboardDisableSourcesAtom } from "@/store/keydown-manager"
 
-export function useKeyboardManager() {
-	const [isModalActive, setIsModalActive] = useAtom(isModalActiveAtom)
+export function useKeyboardManager(sourceId: string) {
+	const [disableSources, setDisableSources] = useAtom(keyboardDisableSourcesAtom)
 
 	useEffect(() => {
 		const handleKeyDown = (event: KeyboardEvent) => {
-			if (isModalActive) {
+			if (disableSources.size > 0) {
 				event.preventDefault()
 			}
 		}
 
 		window.addEventListener("keydown", handleKeyDown)
 		return () => window.removeEventListener("keydown", handleKeyDown)
-	}, [isModalActive])
+	}, [disableSources])
 
-	const openModal = useCallback(() => {
-		setIsModalActive(true)
-	}, [setIsModalActive])
+	const disableKeydown = useCallback(
+		(disable: boolean) => {
+			console.log(`${sourceId} disable:`, disable)
+			setDisableSources(prev => {
+				const next = new Set(prev)
+				if (disable) {
+					next.add(sourceId)
+				} else {
+					next.delete(sourceId)
+				}
+				return next
+			})
+		},
+		[setDisableSources, sourceId]
+	)
 
-	const closeModal = useCallback(() => {
-		setIsModalActive(false)
-	}, [setIsModalActive])
+	const isKeyboardDisabled = disableSources.size > 0
 
-	return { openModal, closeModal, isModalActive }
+	return { disableKeydown, isKeyboardDisabled }
 }

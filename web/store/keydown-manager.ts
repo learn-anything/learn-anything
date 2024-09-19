@@ -1,3 +1,3 @@
 import { atom } from "jotai"
 
-export const isModalActiveAtom = atom(false)
+export const keyboardDisableSourcesAtom = atom<Set<string>>(new Set<string>())

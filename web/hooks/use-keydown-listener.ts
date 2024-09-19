@@ -1,17 +1,17 @@
-import { isModalActiveAtom } from "@/store/keydown-manager"
 import { useAtomValue } from "jotai"
 import { useEffect, useCallback } from "react"
+import { keyboardDisableSourcesAtom } from "@/store/keydown-manager"
 
 export function useKeydownListener(callback: (event: KeyboardEvent) => void) {
-	const isModalActive = useAtomValue(isModalActiveAtom)
+	const disableSources = useAtomValue(keyboardDisableSourcesAtom)
 
 	const handleKeyDown = useCallback(
 		(event: KeyboardEvent) => {
-			if (!isModalActive) {
+			if (disableSources.size === 0) {
 				callback(event)
 			}
 		},
-		[isModalActive, callback]
+		[disableSources, callback]
 	)
 
 	useEffect(() => {
