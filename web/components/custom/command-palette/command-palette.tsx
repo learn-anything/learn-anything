@@ -86,6 +86,7 @@ export function CommandPalette() {
 			heading: "Personal Links",
 			items:
 				me?.root.personalLinks?.map(link => ({
+					id: link?.id,
 					icon: "Link" as const,
 					value: link?.title || "Untitled",
 					label: link?.title || "Untitled",
@@ -100,6 +101,7 @@ export function CommandPalette() {
 			heading: "Personal Pages",
 			items:
 				me?.root.personalPages?.map(page => ({
+					id: page?.id,
 					icon: "FileText" as const,
 					value: page?.title || "Untitled",
 					label: page?.title || "Untitled",
@@ -184,7 +186,7 @@ export function CommandPalette() {
 	const commandKey = React.useMemo(() => {
 		return filteredCommands
 			.map(group => {
-				const itemsKey = group.items.map(item => `${item.label}-${item.action}`).join("|")
+				const itemsKey = group.items.map(item => `${item.label}-${item.value}`).join("|")
 				return `${group.heading}:${itemsKey}`
 			})
 			.join("__")
