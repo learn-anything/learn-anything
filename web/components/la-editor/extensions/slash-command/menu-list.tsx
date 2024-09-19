@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 
 import { Command, MenuListProps } from "./types"
-import { getShortcutKeys } from "../../lib/utils"
+import { getShortcutKeys } from "@/lib/utils"
 import { Icon } from "../../components/ui/icon"
 import { PopoverWrapper } from "../../components/ui/popover-wrapper"
 import { Shortcut } from "../../components/ui/shortcut"
@@ -136,7 +136,11 @@ export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
 							<Icon name={command.iconName} />
 							<span className="truncate text-sm">{command.label}</span>
 							<div className="flex flex-auto flex-row"></div>
-							<Shortcut.Wrapper ariaLabel={getShortcutKeys(command.shortcuts)}>
+							<Shortcut.Wrapper
+								ariaLabel={getShortcutKeys(command.shortcuts)
+									.map(shortcut => shortcut.readable)
+									.join(" + ")}
+							>
 								{command.shortcuts.map(shortcut => (
 									<Shortcut.Key shortcut={shortcut} key={shortcut} />
 								))}
