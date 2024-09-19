@@ -25,6 +25,8 @@ import { useConfirm } from "@omit/react-confirm-dialog"
 import { useLinkActions } from "./hooks/use-link-actions"
 import { isDeleteConfirmShownAtom } from "./LinkRoute"
 import { useActiveItemScroll } from "@/hooks/use-active-item-scroll"
+import { useKeyboardManager } from "@/hooks/use-keyboard-manager"
+import { useKeydownListener } from "@/hooks/use-keydown-listener"
 
 interface LinkListProps {
 	activeItemIndex: number | null
@@ -131,59 +133,52 @@ const LinkList: React.FC<LinkListProps> = ({ activeItemIndex, setActiveItemIndex
 		})
 	}, [])
 
-	useEffect(() => {
-		const handleKeyDown = (e: KeyboardEvent) => {
-			if (isCommandPalettePpen || !me?.root?.personalLinks || sortedLinks.length === 0 || editId !== null) return
+	const { isKeyboardDisabled } = useKeyboardManager("XComponent")
 
-			if (e.key === "ArrowUp" || e.key === "ArrowDown") {
-				e.preventDefault()
-				setActiveItemIndex(prevIndex => {
-					if (prevIndex === null) return 0
-					const newIndex =
-						e.key === "ArrowUp" ? Math.max(0, prevIndex - 1) : Math.min(sortedLinks.length - 1, prevIndex + 1)
+	useKeydownListener((e: KeyboardEvent) => {
+		if (
+			isKeyboardDisabled ||
+			isCommandPalettePpen ||
+			!me?.root?.personalLinks ||
+			sortedLinks.length === 0 ||
+			editId !== null
+		)
+			return
 
-					if (e.metaKey && sort === "manual") {
-						const linksArray = [...me.root.personalLinks]
-						const newLinks = arrayMove(linksArray, prevIndex, newIndex)
+		if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+			e.preventDefault()
+			setActiveItemIndex(prevIndex => {
+				if (prevIndex === null) return 0
+				const newIndex =
+					e.key === "ArrowUp" ? Math.max(0, prevIndex - 1) : Math.min(sortedLinks.length - 1, prevIndex + 1)
 
-						while (me.root.personalLinks.length > 0) {
-							me.root.personalLinks.pop()
-						}
+				if (e.metaKey && sort === "manual") {
+					const linksArray = [...me.root.personalLinks]
+					const newLinks = arrayMove(linksArray, prevIndex, newIndex)
 
-						newLinks.forEach(link => {
-							if (link) {
-								me.root.personalLinks.push(link)
-							}
-						})
-
-						updateSequences(me.root.personalLinks)
+					while (me.root.personalLinks.length > 0) {
+						me.root.personalLinks.pop()
 					}
 
-					return newIndex
-				})
-			} else if (e.key === "Enter" && !disableEnterKey && activeItemIndex !== null) {
-				e.preventDefault()
-				const activeLink = sortedLinks[activeItemIndex]
-				if (activeLink) {
-					setEditId(activeLink.id)
+					newLinks.forEach(link => {
+						if (link) {
+							me.root.personalLinks.push(link)
+						}
+					})
+
+					updateSequences(me.root.personalLinks)
 				}
+
+				return newIndex
+			})
+		} else if (e.key === "Enter" && !disableEnterKey && activeItemIndex !== null) {
+			e.preventDefault()
+			const activeLink = sortedLinks[activeItemIndex]
+			if (activeLink) {
+				setEditId(activeLink.id)
 			}
 		}
-
-		window.addEventListener("keydown", handleKeyDown)
-		return () => window.removeEventListener("keydown", handleKeyDown)
-	}, [
-		me?.root?.personalLinks,
-		sortedLinks,
-		editId,
-		sort,
-		updateSequences,
-		isCommandPalettePpen,
-		activeItemIndex,
-		setEditId,
-		setActiveItemIndex,
-		disableEnterKey
-	])
+	})
 
 	const handleDragStart = useCallback(
 		(event: DragStartEvent) => {
