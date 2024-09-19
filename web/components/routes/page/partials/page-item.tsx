@@ -3,10 +3,10 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { PersonalPage } from "@/lib/schema"
 import { Badge } from "@/components/ui/badge"
-import { Column } from "./column"
 import { useMedia } from "react-use"
 import { useColumnStyles } from "../hooks/use-column-styles"
 import { format } from "date-fns"
+import { Column } from "@/components/custom/column"
 
 interface PageItemProps {
 	page: PersonalPage
@@ -21,14 +21,10 @@ export const PageItem = React.forwardRef<HTMLAnchorElement, PageItemProps>(({ pa
 		<Link
 			ref={ref}
 			tabIndex={isActive ? 0 : -1}
-			className={cn(
-				"relative block cursor-default rounded-lg outline-none",
-				"h-12 items-center gap-x-2 py-2 max-lg:px-4 sm:px-6",
-				{
-					"bg-muted-foreground/10": isActive,
-					"hover:bg-muted/50": !isActive
-				}
-			)}
+			className={cn("relative block cursor-default outline-none", "min-h-12 py-2 max-lg:px-4 sm:px-6", {
+				"bg-muted-foreground/5": isActive,
+				"hover:bg-muted/50": !isActive
+			})}
 			href={`/pages/${page.id}`}
 			role="listitem"
 		>
@@ -38,14 +34,9 @@ export const PageItem = React.forwardRef<HTMLAnchorElement, PageItemProps>(({ pa
 				</Column.Wrapper>
 
 				{!isTablet && (
-					<>
-						{/* <Column.Wrapper style={columnStyles.content}>
-							<Column.Text className="text-[13px]">{page.slug}</Column.Text>
-						</Column.Wrapper> */}
-						<Column.Wrapper style={columnStyles.topic}>
-							{page.topic && <Badge variant="secondary">{page.topic.prettyName}</Badge>}
-						</Column.Wrapper>
-					</>
+					<Column.Wrapper style={columnStyles.topic}>
+						{page.topic && <Badge variant="secondary">{page.topic.prettyName}</Badge>}
+					</Column.Wrapper>
 				)}
 
 				<Column.Wrapper style={columnStyles.updated} className="flex justify-end">

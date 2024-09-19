@@ -14,8 +14,8 @@
 		"web"
 	],
 	"dependencies": {
-		"@clerk/themes": "^2.1.27",
-		"@tauri-apps/cli": "^2.0.0-rc.12",
+		"@clerk/themes": "^2.1.30",
+		"@tauri-apps/cli": "^2.0.0-rc.16",
 		"@tauri-apps/plugin-fs": "^2.0.0-rc.2",
 		"date-fns": "^4.1.0",
 		"jazz-nodejs": "0.7.35-guest-auth.5",
@@ -24,7 +24,7 @@
 		"tailwind-scrollbar-hide": "^1.1.7"
 	},
 	"devDependencies": {
-		"bun-types": "^1.1.27"
+		"bun-types": "^1.1.28"
 	},
 	"prettier": {
 		"plugins": [

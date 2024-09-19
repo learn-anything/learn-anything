@@ -1,15 +1,15 @@
-import React, { useMemo, useCallback } from "react"
+import React, { useMemo, useCallback, useEffect } from "react"
 import { Primitive } from "@radix-ui/react-primitive"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { useAtom } from "jotai"
 import { commandPaletteOpenAtom } from "@/components/custom/command-palette/command-palette"
 import { PageItem } from "./partials/page-item"
-import { useKeyboardNavigation } from "./hooks/use-keyboard-navigation"
 import { useMedia } from "react-use"
-import { Column } from "./partials/column"
 import { useColumnStyles } from "./hooks/use-column-styles"
 import { PersonalPage, PersonalPageLists } from "@/lib/schema"
 import { useRouter } from "next/navigation"
+import { useActiveItemScroll } from "@/hooks/use-active-item-scroll"
+import { Column } from "@/components/custom/column"
 
 interface PageListProps {
 	activeItemIndex: number | null
@@ -23,6 +23,7 @@ export const PageList: React.FC<PageListProps> = ({ activeItemIndex, setActiveIt
 	const { me } = useAccount({ root: { personalPages: [] } })
 	const personalPages = useMemo(() => me?.root?.personalPages, [me?.root?.personalPages])
 	const router = useRouter()
+	const itemCount = personalPages?.length || 0
 
 	const handleEnter = useCallback(
 		(selectedPage: PersonalPage) => {
@@ -31,24 +32,35 @@ export const PageList: React.FC<PageListProps> = ({ activeItemIndex, setActiveIt
 		[router]
 	)
 
-	const { listRef, setItemRef } = useKeyboardNavigation({
-		personalPages,
-		activeItemIndex,
-		setActiveItemIndex,
-		isCommandPaletteOpen,
-		disableEnterKey,
-		onEnter: handleEnter
-	})
+	const handleKeyDown = useCallback(
+		(e: KeyboardEvent) => {
+			if (isCommandPaletteOpen) return
+
+			if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+				e.preventDefault()
+				setActiveItemIndex(prevIndex => {
+					if (prevIndex === null) return 0
+					const newIndex = e.key === "ArrowUp" ? (prevIndex - 1 + itemCount) % itemCount : (prevIndex + 1) % itemCount
+					return newIndex
+				})
+			} else if (e.key === "Enter" && !disableEnterKey && activeItemIndex !== null && personalPages) {
+				e.preventDefault()
+				const selectedPage = personalPages[activeItemIndex]
+				if (selectedPage) handleEnter?.(selectedPage)
+			}
+		},
+		[itemCount, isCommandPaletteOpen, activeItemIndex, setActiveItemIndex, disableEnterKey, personalPages, handleEnter]
+	)
+
+	useEffect(() => {
+		window.addEventListener("keydown", handleKeyDown)
+		return () => window.removeEventListener("keydown", handleKeyDown)
+	}, [handleKeyDown])
 
 	return (
-		<div className="flex h-full w-full flex-col">
+		<div className="flex h-full w-full flex-col overflow-hidden border-t">
 			{!isTablet && <ColumnHeader />}
-			<PageListItems
-				listRef={listRef}
-				setItemRef={setItemRef}
-				personalPages={personalPages}
-				activeItemIndex={activeItemIndex}
-			/>
+			<PageListItems personalPages={personalPages} activeItemIndex={activeItemIndex} />
 		</div>
 	)
 }
@@ -72,29 +84,30 @@ export const ColumnHeader: React.FC = () => {
 }
 
 interface PageListItemsProps {
-	listRef: React.RefObject<HTMLDivElement>
-	setItemRef: (el: HTMLAnchorElement | null, index: number) => void
 	personalPages?: PersonalPageLists | null
 	activeItemIndex: number | null
 }
 
-const PageListItems: React.FC<PageListItemsProps> = ({ listRef, setItemRef, personalPages, activeItemIndex }) => (
-	<Primitive.div
-		ref={listRef}
-		className="divide-primary/5 mx-auto my-2 flex w-[99%] flex-1 flex-col divide-y overflow-y-auto outline-none [scrollbar-gutter:stable]"
-		tabIndex={-1}
-		role="list"
-	>
-		{personalPages?.map(
-			(page, index) =>
-				page?.id && (
-					<PageItem
-						key={page.id}
-						ref={(el: HTMLAnchorElement | null) => setItemRef(el, index)}
-						page={page}
-						isActive={index === activeItemIndex}
-					/>
-				)
-		)}
-	</Primitive.div>
-)
+const PageListItems: React.FC<PageListItemsProps> = ({ personalPages, activeItemIndex }) => {
+	const setElementRef = useActiveItemScroll<HTMLAnchorElement>({ activeIndex: activeItemIndex })
+
+	return (
+		<Primitive.div
+			className="divide-primary/5 flex flex-1 flex-col divide-y overflow-y-auto outline-none [scrollbar-gutter:stable]"
+			tabIndex={-1}
+			role="list"
+		>
+			{personalPages?.map(
+				(page, index) =>
+					page?.id && (
+						<PageItem
+							key={page.id}
+							ref={el => setElementRef(el, index)}
+							page={page}
+							isActive={index === activeItemIndex}
+						/>
+					)
+			)}
+		</Primitive.div>
+	)
+}

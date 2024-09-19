@@ -55,11 +55,7 @@ export function getShortcutKey(key: string): ShortcutKeyResult {
 	} else if (lowercaseKey === "alt") {
 		return isMacOS() ? { symbol: "⌥", readable: "Option" } : { symbol: "Alt", readable: "Alt" }
 	} else if (lowercaseKey === "shift") {
-		return { symbol: "⇧", readable: "Shift" }
-	} else if (lowercaseKey === "control") {
-		return { symbol: "⌃", readable: "Control" }
-	} else if (lowercaseKey === "windows" && !isMacOS()) {
-		return { symbol: "Win", readable: "Windows" }
+		return isMacOS() ? { symbol: "⇧", readable: "Shift" } : { symbol: "Shift", readable: "Shift" }
 	} else {
 		return { symbol: key.toUpperCase(), readable: key }
 	}
@@ -67,22 +63,4 @@ export function getShortcutKey(key: string): ShortcutKeyResult {
 
 export function getShortcutKeys(keys: string[]): ShortcutKeyResult[] {
 	return keys.map(key => getShortcutKey(key))
-}
-
-export function getSpecialShortcut(shortcutName: string): ShortcutKeyResult[] {
-	if (shortcutName === "expandToolbar") {
-		return isMacOS()
-			? [getShortcutKey("control"), getShortcutKey("mod"), getShortcutKey("n")]
-			: [getShortcutKey("mod"), getShortcutKey("windows"), getShortcutKey("n")]
-	}
-
-	return []
-}
-
-export function formatShortcut(shortcutKeys: ShortcutKeyResult[]): string {
-	return shortcutKeys.map(key => key.symbol).join("")
-}
-
-export function formatReadableShortcut(shortcutKeys: ShortcutKeyResult[]): string {
-	return shortcutKeys.map(key => key.readable).join(" + ")
 }

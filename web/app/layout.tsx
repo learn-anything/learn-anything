@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { cn } from "@/lib/utils"
 import { ThemeProvider } from "@/lib/providers/theme-provider"
 import "./globals.css"
@@ -10,7 +10,13 @@ import { DeepLinkProvider } from "@/lib/providers/deep-link-provider"
 import { GeistMono, GeistSans } from "./fonts"
 import { JazzAndAuth } from "@/lib/providers/jazz-provider"
 import { TooltipProvider } from "@/components/ui/tooltip"
-import { LearnAnythingOnboarding } from "@/components/custom/learn-anything-onboarding"
+
+export const viewport: Viewport = {
+	width: "device-width",
+	height: "device-height",
+	initialScale: 1,
+	viewportFit: "cover"
+}
 
 export const metadata: Metadata = {
 	title: "Learn Anything",
@@ -43,7 +49,7 @@ export default function RootLayout({
 			<body className={cn("h-full w-full font-sans antialiased", GeistSans.variable, GeistMono.variable)}>
 				<Providers>
 					{children}
-					<LearnAnythingOnboarding />
+
 					<Toaster expand={false} />
 				</Providers>
 			</body>
