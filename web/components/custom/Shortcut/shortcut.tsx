@@ -131,6 +131,7 @@ export function Shortcut() {
 						<form className="relative flex items-center">
 							<LaIcon name="Search" className="text-muted-foreground absolute left-3 size-4" />
 							<Input
+								autoFocus
 								placeholder="Search shortcuts"
 								className="border-muted-foreground/50 focus-visible:border-muted-foreground h-10 pl-10 focus-visible:ring-0"
 								value={searchQuery}
