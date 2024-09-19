@@ -3,10 +3,10 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { PersonalPage } from "@/lib/schema"
 import { Badge } from "@/components/ui/badge"
-import { Column } from "./column"
 import { useMedia } from "react-use"
 import { useColumnStyles } from "../hooks/use-column-styles"
 import { format } from "date-fns"
+import { Column } from "@/components/custom/column"
 
 interface PageItemProps {
 	page: PersonalPage

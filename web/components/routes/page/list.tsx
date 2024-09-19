@@ -5,11 +5,11 @@ import { useAtom } from "jotai"
 import { commandPaletteOpenAtom } from "@/components/custom/command-palette/command-palette"
 import { PageItem } from "./partials/page-item"
 import { useMedia } from "react-use"
-import { Column } from "./partials/column"
 import { useColumnStyles } from "./hooks/use-column-styles"
 import { PersonalPage, PersonalPageLists } from "@/lib/schema"
 import { useRouter } from "next/navigation"
 import { useActiveItemScroll } from "@/hooks/use-active-item-scroll"
+import { Column } from "@/components/custom/column"
 
 interface PageListProps {
 	activeItemIndex: number | null
