@@ -1,10 +1,12 @@
+"use client"
+
 import * as React from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { Command } from "cmdk"
 import { Dialog, DialogPortal, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { CommandGroup } from "./command-items"
 import { CommandAction, CommandItemType, createCommandGroups } from "./command-data"
-import { useAccount } from "@/lib/providers/jazz-provider"
+import { useAccount, useAccountOrGuest } from "@/lib/providers/jazz-provider"
 import { searchSafeRegExp } from "@/lib/utils"
 import { GraphNode } from "@/components/routes/public/PublicHomeRoute"
 import { useCommandActions } from "./hooks/use-command-actions"
@@ -18,6 +20,14 @@ const filterItems = (items: CommandItemType[], searchRegex: RegExp) =>
 export const commandPaletteOpenAtom = atom(false)
 
 export function CommandPalette() {
+	const { me } = useAccountOrGuest()
+
+	if (me._type === "Anonymous") return null
+
+	return <RealCommandPalette />
+}
+
+export function RealCommandPalette() {
 	const { me } = useAccount({ root: { personalLinks: [], personalPages: [] } })
 	const dialogRef = React.useRef<HTMLDivElement | null>(null)
 	const [inputValue, setInputValue] = React.useState("")
