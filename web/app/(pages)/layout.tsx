@@ -5,6 +5,7 @@ import { CommandPalette } from "@/components/custom/command-palette/command-pale
 import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
 import { LearnAnythingOnboarding } from "@/components/custom/learn-anything-onboarding"
 import { Shortcut } from "@/components/custom/Shortcut/shortcut"
+import { GlobalKeydownHandler } from "@/components/custom/global-keydown-handler"
 
 export default function PageLayout({ children }: { children: React.ReactNode }) {
 	const { me } = useAccountOrGuest()
@@ -13,6 +14,7 @@ export default function PageLayout({ children }: { children: React.ReactNode }) 
 		<div className="flex h-full min-h-full w-full flex-row items-stretch overflow-hidden">
 			<Sidebar />
 			<LearnAnythingOnboarding />
+			<GlobalKeydownHandler />
 
 			{me._type !== "Anonymous" && (
 				<>
