@@ -3,11 +3,13 @@ import { ensureUrlProtocol } from "@/lib/utils"
 import { useTheme } from "next-themes"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
-import { LaAccount, PersonalPage } from "@/lib/schema"
+import { LaAccount } from "@/lib/schema"
+import { usePageActions } from "@/components/routes/page/hooks/use-page-actions"
 
 export const useCommandActions = () => {
 	const { setTheme } = useTheme()
 	const router = useRouter()
+	const { newPage } = usePageActions()
 
 	const changeTheme = React.useCallback(
 		(theme: string) => {
@@ -35,19 +37,10 @@ export const useCommandActions = () => {
 
 	const createNewPage = React.useCallback(
 		(me: LaAccount) => {
-			try {
-				const newPersonalPage = PersonalPage.create(
-					{ public: false, createdAt: new Date(), updatedAt: new Date() },
-					{ owner: me._owner }
-				)
-
-				me.root?.personalPages?.push(newPersonalPage)
-				router.push(`/pages/${newPersonalPage.id}`)
-			} catch (error) {
-				toast.error("Failed to create page")
-			}
+			const page = newPage(me)
+			router.push(`/pages/${page.id}`)
 		},
-		[router]
+		[router, newPage]
 	)
 
 	return {
