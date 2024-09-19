@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useEffect } from "react"
+import React, { useCallback, useEffect, useMemo } from "react"
 import { Primitive } from "@radix-ui/react-primitive"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { atom, useAtom } from "jotai"
@@ -9,13 +9,23 @@ import { useRouter } from "next/navigation"
 import { useActiveItemScroll } from "@/hooks/use-active-item-scroll"
 import { Column } from "@/components/custom/column"
 import { useColumnStyles } from "./hooks/use-column-styles"
-import { Topic } from "@/lib/schema"
+import { LaAccount, ListOfTopics, Topic, UserRoot } from "@/lib/schema"
 import { LearningStateValue } from "@/lib/constants"
 
 interface TopicListProps {
 	activeItemIndex: number | null
 	setActiveItemIndex: React.Dispatch<React.SetStateAction<number | null>>
 	disableEnterKey: boolean
+}
+
+interface MainTopicListProps extends TopicListProps {
+	me: {
+		root: {
+			topicsWantToLearn: ListOfTopics
+			topicsLearning: ListOfTopics
+			topicsLearned: ListOfTopics
+		} & UserRoot
+	} & LaAccount
 }
 
 export interface PersonalTopic {
@@ -26,24 +36,40 @@ export interface PersonalTopic {
 export const topicOpenPopoverForIdAtom = atom<string | null>(null)
 
 export const TopicList: React.FC<TopicListProps> = ({ activeItemIndex, setActiveItemIndex, disableEnterKey }) => {
+	const { me } = useAccount({ root: { topicsWantToLearn: [], topicsLearning: [], topicsLearned: [] } })
+
+	if (!me) return null
+
+	return (
+		<MainTopicList
+			me={me}
+			activeItemIndex={activeItemIndex}
+			setActiveItemIndex={setActiveItemIndex}
+			disableEnterKey={disableEnterKey}
+		/>
+	)
+}
+
+export const MainTopicList: React.FC<MainTopicListProps> = ({
+	me,
+	activeItemIndex,
+	setActiveItemIndex,
+	disableEnterKey
+}) => {
 	const isTablet = useMedia("(max-width: 640px)")
 	const [isCommandPaletteOpen] = useAtom(commandPaletteOpenAtom)
 	const router = useRouter()
-	const { me } = useAccount({ root: { topicsWantToLearn: [], topicsLearning: [], topicsLearned: [] } })
 
-	const personalTopics = useMemo(() => {
-		if (!me) return null
-
-		const topicsWithState = [
+	const personalTopics = useMemo(
+		() => [
 			...me.root.topicsWantToLearn.map(topic => ({ topic, learningState: "wantToLearn" as const })),
 			...me.root.topicsLearning.map(topic => ({ topic, learningState: "learning" as const })),
 			...me.root.topicsLearned.map(topic => ({ topic, learningState: "learned" as const }))
-		]
+		],
+		[me.root.topicsWantToLearn, me.root.topicsLearning, me.root.topicsLearned]
+	)
 
-		return topicsWithState
-	}, [me?.root.topicsWantToLearn, me?.root.topicsLearning, me?.root.topicsLearned])
-
-	const itemCount = personalTopics?.length || 0
+	const itemCount = personalTopics.length
 
 	const handleEnter = useCallback(
 		(selectedTopic: Topic) => {

@@ -17,7 +17,7 @@ export function TopicSections({
 	activeIndex,
 	setActiveIndex,
 	linkRefs,
-	containerRef,
+	containerRef
 }: TopicSectionsProps) {
 	return (
 		<div ref={containerRef} className="flex w-full flex-1 flex-col overflow-y-auto [scrollbar-gutter:stable]">
