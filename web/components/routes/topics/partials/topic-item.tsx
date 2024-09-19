@@ -1,48 +1,100 @@
-import React from "react"
+import React, { useCallback, useMemo } from "react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
-import { Badge } from "@/components/ui/badge"
-import { useMedia } from "react-use"
 import { useColumnStyles } from "../hooks/use-column-styles"
 import { Topic } from "@/lib/schema"
 import { Column } from "@/components/custom/column"
+import { Button } from "@/components/ui/button"
+import { LaIcon } from "@/components/custom/la-icon"
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
+import { LearningStateSelectorContent } from "@/components/custom/learning-state-selector"
+import { useAtom } from "jotai"
+import { topicOpenPopoverForIdAtom } from "../list"
+import { LEARNING_STATES, LearningStateValue } from "@/lib/constants"
 
 interface TopicItemProps {
 	topic: Topic
+	learningState: LearningStateValue
 	isActive: boolean
 }
 
-export const TopicItem = React.forwardRef<HTMLAnchorElement, TopicItemProps>(({ topic, isActive }, ref) => {
-	const isTablet = useMedia("(max-width: 640px)")
+export const TopicItem = React.forwardRef<HTMLDivElement, TopicItemProps>(({ topic, learningState, isActive }, ref) => {
 	const columnStyles = useColumnStyles()
+	const [openPopoverForId, setOpenPopoverForId] = useAtom(topicOpenPopoverForIdAtom)
+
+	const selectedLearningState = useMemo(() => LEARNING_STATES.find(ls => ls.value === learningState), [learningState])
+	const handleLearningStateSelect = useCallback(
+		(value: string) => {
+			const learningState = value as LearningStateValue
+
+			setOpenPopoverForId(null)
+		},
+		[setOpenPopoverForId]
+	)
+
+	const handlePopoverTriggerClick = (e: React.MouseEvent) => {
+		e.preventDefault()
+		e.stopPropagation()
+
+		setOpenPopoverForId(openPopoverForId === topic.id ? null : topic.id)
+	}
 
 	return (
-		<Link
+		<div
 			ref={ref}
-			tabIndex={isActive ? 0 : -1}
-			className={cn("relative block cursor-default outline-none", "min-h-12 py-2 max-lg:px-4 sm:px-6", {
+			className={cn("relative block", "min-h-12 py-2 max-lg:px-5 sm:px-6", {
 				"bg-muted-foreground/5": isActive,
 				"hover:bg-muted/50": !isActive
 			})}
-			href={`/topics/${topic.id}`}
 			role="listitem"
 		>
-			<div className="flex h-full items-center gap-4">
+			<Link
+				href={`/${topic.name}`}
+				className="flex h-full cursor-default items-center gap-4 outline-none"
+				tabIndex={isActive ? 0 : -1}
+			>
 				<Column.Wrapper style={columnStyles.title}>
 					<Column.Text className="truncate text-[13px] font-medium">{topic.prettyName}</Column.Text>
 				</Column.Wrapper>
 
-				{!isTablet && (
-					<Column.Wrapper style={columnStyles.topic}>
-						{topic && <Badge variant="secondary">{topic.prettyName}</Badge>}
-					</Column.Wrapper>
-				)}
-
-				<Column.Wrapper style={columnStyles.updated} className="flex justify-end">
-					<Column.Text className="text-[13px]">{topic.name}</Column.Text>
+				<Column.Wrapper style={columnStyles.topic} className="max-sm:justify-end">
+					<Popover
+						open={openPopoverForId === topic.id}
+						onOpenChange={(open: boolean) => setOpenPopoverForId(open ? topic.id : null)}
+					>
+						<PopoverTrigger asChild>
+							<Button
+								size="sm"
+								type="button"
+								role="combobox"
+								variant="secondary"
+								className="size-7 shrink-0 p-0"
+								onClick={handlePopoverTriggerClick}
+							>
+								{selectedLearningState?.icon ? (
+									<LaIcon name={selectedLearningState.icon} className={cn(selectedLearningState.className)} />
+								) : (
+									<LaIcon name="Circle" />
+								)}
+							</Button>
+						</PopoverTrigger>
+						<PopoverContent
+							className="w-52 rounded-lg p-0"
+							side="bottom"
+							align="end"
+							onCloseAutoFocus={e => e.preventDefault()}
+						>
+							<LearningStateSelectorContent
+								showSearch={false}
+								searchPlaceholder="Search state..."
+								value={learningState}
+								onSelect={handleLearningStateSelect}
+							/>
+						</PopoverContent>
+					</Popover>
 				</Column.Wrapper>
-			</div>
-		</Link>
+			</Link>
+		</div>
 	)
 })
 

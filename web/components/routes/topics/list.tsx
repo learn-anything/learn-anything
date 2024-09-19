@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback, useEffect } from "react"
 import { Primitive } from "@radix-ui/react-primitive"
 import { useAccount } from "@/lib/providers/jazz-provider"
-import { useAtom } from "jotai"
+import { atom, useAtom } from "jotai"
 import { commandPaletteOpenAtom } from "@/components/custom/command-palette/command-palette"
 import { TopicItem } from "./partials/topic-item"
 import { useMedia } from "react-use"
@@ -10,6 +10,7 @@ import { useActiveItemScroll } from "@/hooks/use-active-item-scroll"
 import { Column } from "@/components/custom/column"
 import { useColumnStyles } from "./hooks/use-column-styles"
 import { Topic } from "@/lib/schema"
+import { LearningStateValue } from "@/lib/constants"
 
 interface TopicListProps {
 	activeItemIndex: number | null
@@ -17,16 +18,31 @@ interface TopicListProps {
 	disableEnterKey: boolean
 }
 
+export interface PersonalTopic {
+	topic: Topic | null
+	learningState: LearningStateValue
+}
+
+export const topicOpenPopoverForIdAtom = atom<string | null>(null)
+
 export const TopicList: React.FC<TopicListProps> = ({ activeItemIndex, setActiveItemIndex, disableEnterKey }) => {
 	const isTablet = useMedia("(max-width: 640px)")
 	const [isCommandPaletteOpen] = useAtom(commandPaletteOpenAtom)
+	const router = useRouter()
 	const { me } = useAccount({ root: { topicsWantToLearn: [], topicsLearning: [], topicsLearned: [] } })
+
 	const personalTopics = useMemo(() => {
 		if (!me) return null
-		const topics = [...me.root.topicsWantToLearn, ...me.root.topicsLearning, ...me.root.topicsLearned]
-		return topics
+
+		const topicsWithState = [
+			...me.root.topicsWantToLearn.map(topic => ({ topic, learningState: "wantToLearn" as const })),
+			...me.root.topicsLearning.map(topic => ({ topic, learningState: "learning" as const })),
+			...me.root.topicsLearned.map(topic => ({ topic, learningState: "learned" as const }))
+		]
+
+		return topicsWithState
 	}, [me?.root.topicsWantToLearn, me?.root.topicsLearning, me?.root.topicsLearned])
-	const router = useRouter()
+
 	const itemCount = personalTopics?.length || 0
 
 	const handleEnter = useCallback(
@@ -50,7 +66,7 @@ export const TopicList: React.FC<TopicListProps> = ({ activeItemIndex, setActive
 			} else if (e.key === "Enter" && !disableEnterKey && activeItemIndex !== null && personalTopics) {
 				e.preventDefault()
 				const selectedTopic = personalTopics[activeItemIndex]
-				if (selectedTopic) handleEnter?.(selectedTopic)
+				if (selectedTopic?.topic) handleEnter?.(selectedTopic.topic)
 			}
 		},
 		[itemCount, isCommandPaletteOpen, activeItemIndex, setActiveItemIndex, disableEnterKey, personalTopics, handleEnter]
@@ -80,20 +96,17 @@ export const ColumnHeader: React.FC = () => {
 			<Column.Wrapper style={columnStyles.topic}>
 				<Column.Text>State</Column.Text>
 			</Column.Wrapper>
-			<Column.Wrapper style={columnStyles.updated}>
-				<Column.Text>Updated</Column.Text>
-			</Column.Wrapper>
 		</div>
 	)
 }
 
 interface TopicListItemsProps {
-	personalTopics?: (Topic | null)[] | null
+	personalTopics: PersonalTopic[] | null
 	activeItemIndex: number | null
 }
 
 const TopicListItems: React.FC<TopicListItemsProps> = ({ personalTopics, activeItemIndex }) => {
-	const setElementRef = useActiveItemScroll<HTMLAnchorElement>({ activeIndex: activeItemIndex })
+	const setElementRef = useActiveItemScroll<HTMLDivElement>({ activeIndex: activeItemIndex })
 
 	return (
 		<Primitive.div
@@ -102,12 +115,13 @@ const TopicListItems: React.FC<TopicListItemsProps> = ({ personalTopics, activeI
 			role="list"
 		>
 			{personalTopics?.map(
-				(topic, index) =>
-					topic?.id && (
+				(pt, index) =>
+					pt.topic?.id && (
 						<TopicItem
-							key={topic.id}
+							key={pt.topic.id}
 							ref={el => setElementRef(el, index)}
-							topic={topic}
+							topic={pt.topic}
+							learningState={pt.learningState}
 							isActive={index === activeItemIndex}
 						/>
 					)
