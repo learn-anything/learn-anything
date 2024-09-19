@@ -8,6 +8,7 @@ import { LaIcon } from "../la-icon"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { useKeyboardManager } from "@/hooks/use-keyboard-manager"
 
 export const showShortcutAtom = atom(false)
 
@@ -87,6 +88,16 @@ const ShortcutSection: React.FC<ShortcutSection> = ({ title, shortcuts }) => (
 export function Shortcut() {
 	const [showShortcut, setShowShortcut] = useAtom(showShortcutAtom)
 	const [searchQuery, setSearchQuery] = React.useState("")
+
+	const { openModal, closeModal } = useKeyboardManager()
+
+	React.useEffect(() => {
+		if (showShortcut) {
+			openModal()
+		} else {
+			closeModal()
+		}
+	}, [showShortcut, openModal, closeModal])
 
 	const filteredShortcuts = React.useMemo(() => {
 		if (!searchQuery) return SHORTCUTS
