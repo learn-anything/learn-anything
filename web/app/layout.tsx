@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { cn } from "@/lib/utils"
 import { ThemeProvider } from "@/lib/providers/theme-provider"
 import "./globals.css"
@@ -10,6 +10,13 @@ import { DeepLinkProvider } from "@/lib/providers/deep-link-provider"
 import { GeistMono, GeistSans } from "./fonts"
 import { JazzAndAuth } from "@/lib/providers/jazz-provider"
 import { TooltipProvider } from "@/components/ui/tooltip"
+
+export const viewport: Viewport = {
+	width: "device-width",
+	height: "device-height",
+	initialScale: 1,
+	viewportFit: "cover"
+}
 
 export const metadata: Metadata = {
 	title: "Learn Anything",

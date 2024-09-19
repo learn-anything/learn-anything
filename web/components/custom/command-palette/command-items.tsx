@@ -11,14 +11,14 @@ export interface CommandItemProps extends Omit<CommandItemType, "action"> {
 }
 
 const HTMLLikeRenderer: React.FC<{ content: HTMLLikeElement | string }> = React.memo(({ content }) => {
-	return <>{renderHTMLLikeElement(content)}</>
+	return <span className="line-clamp-1">{renderHTMLLikeElement(content)}</span>
 })
 
 HTMLLikeRenderer.displayName = "HTMLLikeRenderer"
 
 export const CommandItem: React.FC<CommandItemProps> = React.memo(
-	({ icon, label, action, payload, shortcut, handleAction }) => (
-		<Command.Item onSelect={() => handleAction(action, payload)}>
+	({ icon, label, action, payload, shortcut, handleAction, ...item }) => (
+		<Command.Item value={`${item.id}-${item.value}`} onSelect={() => handleAction(action, payload)}>
 			{icon && <LaIcon name={icon} />}
 			<HTMLLikeRenderer content={label} />
 			{shortcut && <CommandShortcut>{shortcut}</CommandShortcut>}
