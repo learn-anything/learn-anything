@@ -7,7 +7,6 @@ import { atomWithStorage } from "jotai/utils"
 import { PersonalPage, PersonalPageLists } from "@/lib/schema/personal-page"
 import { Button } from "@/components/ui/button"
 import { LaIcon } from "@/components/custom/la-icon"
-import { toast } from "sonner"
 import Link from "next/link"
 import {
 	DropdownMenu,
@@ -21,6 +20,7 @@ import {
 	DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { icons } from "lucide-react"
+import { usePageActions } from "@/components/routes/page/hooks/use-page-actions"
 
 type SortOption = "title" | "recent"
 type ShowOption = 5 | 10 | 15 | 20 | 0
@@ -101,20 +101,13 @@ const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({ pageCount, isActi
 const NewPageButton: React.FC = () => {
 	const { me } = useAccount()
 	const router = useRouter()
+	const { newPage } = usePageActions()
 
 	if (!me) return null
 
 	const handleClick = () => {
-		try {
-			const newPersonalPage = PersonalPage.create(
-				{ public: false, createdAt: new Date(), updatedAt: new Date() },
-				{ owner: me._owner }
-			)
-			me.root?.personalPages?.push(newPersonalPage)
-			router.push(`/pages/${newPersonalPage.id}`)
-		} catch (error) {
-			toast.error("Failed to create page")
-		}
+		const page = newPage(me)
+		router.push(`/pages/${page.id}`)
 	}
 
 	return (

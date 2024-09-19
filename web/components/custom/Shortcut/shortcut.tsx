@@ -8,12 +8,14 @@ import { LaIcon } from "../la-icon"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { useKeyboardManager } from "@/hooks/use-keyboard-manager"
 
 export const showShortcutAtom = atom(false)
 
 type ShortcutItem = {
 	label: string
 	keys: string[]
+	then?: string[]
 }
 
 type ShortcutSection = {
@@ -32,18 +34,10 @@ const SHORTCUTS: ShortcutSection[] = [
 	{
 		title: "Navigation",
 		shortcuts: [
-			{ label: "Go to link", keys: ["⌘", "k"] },
-			{ label: "Go to page", keys: ["⌥", "⇧", "q"] },
-			{ label: "Go to topic", keys: ["⌥", "⇧", "q"] }
+			{ label: "Go to link", keys: ["G"], then: ["L"] },
+			{ label: "Go to page", keys: ["G"], then: ["P"] },
+			{ label: "Go to topic", keys: ["G"], then: ["T"] }
 		]
-	},
-	{
-		title: "Links",
-		shortcuts: [{ label: "New link", keys: ["⌘", "k"] }]
-	},
-	{
-		title: "Pages",
-		shortcuts: [{ label: "New page", keys: ["⌘", "k"] }]
 	}
 ]
 
@@ -56,17 +50,28 @@ const ShortcutKey: React.FC<{ keyChar: string }> = ({ keyChar }) => (
 	</kbd>
 )
 
-const ShortcutItem: React.FC<ShortcutItem> = ({ label, keys }) => (
+const ShortcutItem: React.FC<ShortcutItem> = ({ label, keys, then }) => (
 	<div className="flex flex-row items-center gap-2">
 		<dt className="flex grow items-center">
 			<span className="text-muted-foreground text-left text-sm">{label}</span>
 		</dt>
 		<dd className="flex items-end">
 			<span className="text-left">
-				<span aria-label={keys.join(" ")} className="inline-flex items-center gap-1">
+				<span
+					aria-label={keys.join(" ") + (then ? ` then ${then.join(" ")}` : "")}
+					className="inline-flex items-center gap-1"
+				>
 					{keys.map((key, index) => (
 						<ShortcutKey key={index} keyChar={key} />
 					))}
+					{then && (
+						<>
+							<span className="text-muted-foreground text-xs">then</span>
+							{then.map((key, index) => (
+								<ShortcutKey key={`then-${index}`} keyChar={key} />
+							))}
+						</>
+					)}
 				</span>
 			</span>
 		</dd>
@@ -87,6 +92,12 @@ const ShortcutSection: React.FC<ShortcutSection> = ({ title, shortcuts }) => (
 export function Shortcut() {
 	const [showShortcut, setShowShortcut] = useAtom(showShortcutAtom)
 	const [searchQuery, setSearchQuery] = React.useState("")
+
+	const { disableKeydown } = useKeyboardManager("shortcutSection")
+
+	React.useEffect(() => {
+		disableKeydown(showShortcut)
+	}, [showShortcut, disableKeydown])
 
 	const filteredShortcuts = React.useMemo(() => {
 		if (!searchQuery) return SHORTCUTS

@@ -11,6 +11,7 @@ import { searchSafeRegExp } from "@/lib/utils"
 import { GraphNode } from "@/components/routes/public/PublicHomeRoute"
 import { useCommandActions } from "./hooks/use-command-actions"
 import { atom, useAtom } from "jotai"
+import { useKeydownListener } from "@/hooks/use-keydown-listener"
 
 const graph_data_promise = import("@/components/routes/public/graph-data.json").then(a => a.default)
 
@@ -39,17 +40,17 @@ export function RealCommandPalette() {
 
 	const raw_graph_data = React.use(graph_data_promise) as GraphNode[]
 
-	React.useEffect(() => {
-		const down = (e: KeyboardEvent) => {
+	const handleKeydown = React.useCallback(
+		(e: KeyboardEvent) => {
 			if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
 				e.preventDefault()
 				setOpen(prev => !prev)
 			}
-		}
+		},
+		[setOpen]
+	)
 
-		document.addEventListener("keydown", down)
-		return () => document.removeEventListener("keydown", down)
-	}, [setOpen])
+	useKeydownListener(handleKeydown)
 
 	const bounce = React.useCallback(() => {
 		if (dialogRef.current) {
@@ -96,6 +97,7 @@ export function RealCommandPalette() {
 			heading: "Personal Links",
 			items:
 				me?.root.personalLinks?.map(link => ({
+					id: link?.id,
 					icon: "Link" as const,
 					value: link?.title || "Untitled",
 					label: link?.title || "Untitled",
@@ -110,6 +112,7 @@ export function RealCommandPalette() {
 			heading: "Personal Pages",
 			items:
 				me?.root.personalPages?.map(page => ({
+					id: page?.id,
 					icon: "FileText" as const,
 					value: page?.title || "Untitled",
 					label: page?.title || "Untitled",
@@ -126,11 +129,9 @@ export function RealCommandPalette() {
 
 		if (activePage === "home") {
 			if (!inputValue) {
-				// Only show items from the home object when there's no search input
 				return commandGroups.home
 			}
 
-			// When there's a search input, search across all categories
 			const allGroups = [...Object.values(commandGroups).flat(), personalLinks, personalPages, topics]
 
 			return allGroups
@@ -141,7 +142,6 @@ export function RealCommandPalette() {
 				.filter(group => group.items.length > 0)
 		}
 
-		// Handle other active pages (searchLinks, searchPages, etc.)
 		switch (activePage) {
 			case "searchLinks":
 				return [...commandGroups.searchLinks, { items: filterItems(personalLinks.items, searchRegex) }]
@@ -194,7 +194,7 @@ export function RealCommandPalette() {
 	const commandKey = React.useMemo(() => {
 		return filteredCommands
 			.map(group => {
-				const itemsKey = group.items.map(item => `${item.label}-${item.action}`).join("|")
+				const itemsKey = group.items.map(item => `${item.label}-${item.value}`).join("|")
 				return `${group.heading}:${itemsKey}`
 			})
 			.join("__")
