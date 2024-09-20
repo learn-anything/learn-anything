@@ -26,5 +26,5 @@ export function useActiveItemScroll<T extends HTMLElement>(options: ActiveItemSc
 		elementRefs.current[index] = element
 	}, [])
 
-	return setElementRef
+	return { setElementRef, scrollActiveElementIntoView }
 }
