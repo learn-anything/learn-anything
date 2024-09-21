@@ -9,7 +9,8 @@ import {
 	DragEndEvent,
 	DragStartEvent,
 	UniqueIdentifier,
-	MeasuringStrategy
+	MeasuringStrategy,
+	TouchSensor
 } from "@dnd-kit/core"
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import type { MeasuringConfiguration } from "@dnd-kit/core"
@@ -29,6 +30,7 @@ import { isDeleteConfirmShownAtom } from "./LinkRoute"
 import { useActiveItemScroll } from "@/hooks/use-active-item-scroll"
 import { useKeyboardManager } from "@/hooks/use-keyboard-manager"
 import { useKeydownListener } from "@/hooks/use-keydown-listener"
+import { useTouchSensor } from "@/hooks/use-touch-sensor"
 
 interface LinkListProps {
 	activeItemIndex: number | null
@@ -49,6 +51,7 @@ const LinkList: React.FC<LinkListProps> = ({
 	keyboardActiveIndex,
 	setKeyboardActiveIndex
 }) => {
+	const isTouchDevice = useTouchSensor()
 	const [isCommandPaletteOpen] = useAtom(commandPaletteOpenAtom)
 	const [, setIsDeleteConfirmShown] = useAtom(isDeleteConfirmShownAtom)
 	const [editId, setEditId] = useQueryState("editId")
@@ -83,7 +86,7 @@ const LinkList: React.FC<LinkListProps> = ({
 	)
 
 	const sensors = useSensors(
-		useSensor(PointerSensor, {
+		useSensor(isTouchDevice ? TouchSensor : PointerSensor, {
 			activationConstraint: {
 				distance: 5
 			}
