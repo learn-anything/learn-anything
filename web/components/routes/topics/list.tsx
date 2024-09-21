@@ -132,7 +132,7 @@ interface TopicListItemsProps {
 }
 
 const TopicListItems: React.FC<TopicListItemsProps> = ({ personalTopics, activeItemIndex }) => {
-	const setElementRef = useActiveItemScroll<HTMLDivElement>({ activeIndex: activeItemIndex })
+	const { setElementRef } = useActiveItemScroll<HTMLDivElement>({ activeIndex: activeItemIndex })
 
 	return (
 		<Primitive.div
