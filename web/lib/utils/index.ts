@@ -34,6 +34,24 @@ export function shuffleArray<T>(array: T[]): T[] {
 	return shuffled
 }
 
+export const isEditableElement = (element: HTMLElement): boolean => {
+	if (element.isContentEditable) {
+		return true
+	}
+
+	const tagName = element.tagName.toLowerCase()
+	const editableTags = ["input", "textarea", "select", "option"]
+
+	if (editableTags.includes(tagName)) {
+		return true
+	}
+
+	const role = element.getAttribute("role")
+	const editableRoles = ["textbox", "combobox", "listbox"]
+
+	return role ? editableRoles.includes(role) : false
+}
+
 export * from "./urls"
 export * from "./slug"
 export * from "./keyboard"
