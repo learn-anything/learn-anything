@@ -166,15 +166,6 @@ const LinkList: React.FC<LinkListProps> = ({
 					return newIndex
 				})
 				break
-			// case "Enter":
-			// 	if (!disableEnterKey && activeItemIndex !== null) {
-			// 		e.preventDefault()
-			// 		const activeLink = sortedLinks[activeItemIndex]
-			// 		if (activeLink) {
-			// 			setEditId(activeLink.id)
-			// 		}
-			// 	}
-			// 	break
 			case "Home":
 				e.preventDefault()
 				setActiveItemIndex(0)

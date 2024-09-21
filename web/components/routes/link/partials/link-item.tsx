@@ -97,9 +97,6 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
 					className={cn(
 						"w-full grow overflow-visible outline-none",
 						"flex items-center gap-x-2 py-2 max-lg:px-4 sm:px-5 sm:py-2"
-						// {
-						// 	"bg-[var(--link-background-muted)]": isActive
-						// }
 					)}
 				>
 					<Popover
