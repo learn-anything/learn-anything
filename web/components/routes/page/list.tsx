@@ -89,7 +89,7 @@ interface PageListItemsProps {
 }
 
 const PageListItems: React.FC<PageListItemsProps> = ({ personalPages, activeItemIndex }) => {
-	const setElementRef = useActiveItemScroll<HTMLAnchorElement>({ activeIndex: activeItemIndex })
+	const { setElementRef } = useActiveItemScroll<HTMLAnchorElement>({ activeIndex: activeItemIndex })
 
 	return (
 		<Primitive.div

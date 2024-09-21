@@ -9,18 +9,20 @@ export const useLinkActions = () => {
 		try {
 			const index = me.root.personalLinks.findIndex(item => item?.id === link.id)
 			if (index === -1) {
-				console.error("Delete operation fail", { index, link })
-				return
+				throw new Error(`Link with id ${link.id} not found`)
 			}
+
+			me.root.personalLinks.splice(index, 1)
 
 			toast.success("Link deleted.", {
 				position: "bottom-right",
 				description: `${link.title} has been deleted.`
 			})
-
-			me.root.personalLinks.splice(index, 1)
 		} catch (error) {
-			toast.error("Failed to delete link")
+			console.error("Failed to delete link:", error)
+			toast.error("Failed to delete link", {
+				description: error instanceof Error ? error.message : "An unknown error occurred"
+			})
 		}
 	}, [])
 

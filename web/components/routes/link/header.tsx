@@ -42,7 +42,7 @@ export const LinkHeader = React.memo(() => {
 			</ContentHeader>
 
 			{isTablet && (
-				<div className="flex min-h-10 flex-row items-start justify-between border-b px-6 py-2 max-lg:pl-4">
+				<div className="flex min-h-10 flex-row items-start justify-between border-b px-6 pb-4 pt-2 max-lg:pl-4">
 					<LearningTab />
 				</div>
 			)}

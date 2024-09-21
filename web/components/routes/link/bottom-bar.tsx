@@ -142,16 +142,12 @@ export const LinkBottomBar: React.FC = () => {
 	const shortcutText = getShortcutKeys(["c"])
 
 	return (
-		<motion.div
-			className="bg-background absolute bottom-0 left-0 right-0 h-11 border-t"
-			animate={{ y: 0 }}
-			initial={{ y: "100%" }}
-		>
+		<div className="bg-background min-h-11 border-t">
 			<AnimatePresence mode="wait">
 				{editId && (
 					<motion.div
 						key="expanded"
-						className="flex h-full items-center justify-center gap-1 px-2"
+						className="flex h-full items-center justify-center gap-1 border-t px-2"
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
 						exit={{ opacity: 0, y: 20 }}
@@ -191,7 +187,7 @@ export const LinkBottomBar: React.FC = () => {
 					</motion.div>
 				)}
 			</AnimatePresence>
-		</motion.div>
+		</div>
 	)
 }
 
