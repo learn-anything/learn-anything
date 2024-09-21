@@ -115,7 +115,7 @@ const FilterAndSort = React.memo(() => {
 			<div className="flex items-center gap-2">
 				<Popover open={sortOpen} onOpenChange={setSortOpen}>
 					<PopoverTrigger asChild>
-						<Button size="sm" type="button" variant="secondary" className="gap-x-2 text-sm">
+						<Button size="sm" type="button" variant="secondary" className="min-w-8 gap-x-2 text-sm max-sm:p-0">
 							<ListFilterIcon size={16} className="text-primary/60" />
 							<span className="hidden md:block">Filter: {getFilterText()}</span>
 						</Button>
