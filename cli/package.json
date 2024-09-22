@@ -1,0 +1,7 @@
+{
+	"name": "cli",
+	"dependencies": {
+		"@effect/cli": "^0.44.5",
+		"@effect/platform-node": "^0.60.5"
+	}
+}
