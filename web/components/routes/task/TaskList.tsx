@@ -9,8 +9,15 @@ interface TaskListProps {
 
 export const TaskList: React.FC<TaskListProps> = ({ tasks, onUpdateTask }) => {
 	return (
-		<ul className="space-y-2">
-			{tasks?.map(task => task?.id && <TaskItem key={task.id} task={task} onUpdateTask={onUpdateTask} />)}
+		<ul className="flex flex-col gap-y-2">
+			{tasks?.map(
+				task =>
+					task?.id && (
+						<li key={task.id}>
+							<TaskItem task={task} onUpdateTask={onUpdateTask} />
+						</li>
+					)
+			)}
 		</ul>
 	)
 }
