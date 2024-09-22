@@ -9,4 +9,6 @@ const cli = Command.run(command, {
 	version: "v0.0.1"
 })
 
+// TODO: do this https://discord.com/channels/795981131316985866/1287372464548216883/1287395565751111792
+// const run = process.env.IS_PRODUCTION ? BunRuntime.runMain : Effect.runPromise
 Effect.runPromise(cli(process.argv).pipe(Effect.provide(BunContext.layer)))
