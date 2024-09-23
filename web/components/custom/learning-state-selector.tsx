@@ -53,12 +53,7 @@ export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({
 					<LaIcon name="ChevronDown" />
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent
-				className="w-52 rounded-lg p-0"
-				side="bottom"
-				align="end"
-				onCloseAutoFocus={e => e.preventDefault()}
-			>
+			<PopoverContent className="w-52 rounded-lg p-0" side="bottom" align="end">
 				<LearningStateSelectorContent
 					showSearch={showSearch}
 					searchPlaceholder={searchPlaceholder}
