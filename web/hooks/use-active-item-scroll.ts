@@ -11,11 +11,11 @@ export function useActiveItemScroll<T extends HTMLElement>(options: ActiveItemSc
 	const { activeIndex } = options
 	const elementRefs = useRef<ElementRefs<T>>([])
 
-	const scrollActiveElementIntoView = useCallback((index: number) => {
+	const scrollActiveElementIntoView = (index: number) => {
 		const activeElement = elementRefs.current[index]
 		activeElement?.focus()
 		// activeElement?.scrollIntoView({ block: "nearest" })
-	}, [])
+	}
 
 	useEffect(() => {
 		if (activeIndex !== null) {

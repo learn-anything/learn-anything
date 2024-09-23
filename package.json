@@ -17,11 +17,10 @@
 		"@clerk/themes": "^2.1.30",
 		"@tauri-apps/cli": "^2.0.0-rc.16",
 		"@tauri-apps/plugin-fs": "^2.0.0-rc.2",
-		"jazz-nodejs": "0.7.35-guest-auth.5",
-		"react-icons": "^5.3.0"
+		"jazz-nodejs": "0.8.0"
 	},
 	"devDependencies": {
-		"bun-types": "^1.1.28"
+		"bun-types": "^1.1.29"
 	},
 	"prettier": {
 		"plugins": [
