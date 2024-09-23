@@ -27,7 +27,7 @@ export const TopicSection: React.FC<{ pathname: string }> = ({ pathname }) => {
 	if (!me) return null
 
 	return (
-		<div className="group/pages flex flex-col gap-px py-2">
+		<div className="group/topics flex flex-col gap-px py-2">
 			<TopicSectionHeader topicCount={topicCount} isActive={isActive} />
 			<List
 				topicsWantToLearn={me.root.topicsWantToLearn}
@@ -50,15 +50,12 @@ const TopicSectionHeader: React.FC<TopicSectionHeaderProps> = ({ topicCount, isA
 			isActive ? "bg-accent text-accent-foreground" : "hover:bg-accent hover:text-accent-foreground"
 		)}
 	>
-		<Button
-			variant="ghost"
-			className="size-6 flex-1 items-center justify-start rounded-md px-2 py-1 focus-visible:outline-none focus-visible:ring-0"
-		>
-			<p className="flex items-center text-xs font-medium">
+		<Link href="/topics" className="flex flex-1 items-center justify-start rounded-md px-2 py-1">
+			<p className="text-xs">
 				Topics
 				{topicCount > 0 && <span className="text-muted-foreground ml-1">{topicCount}</span>}
 			</p>
-		</Button>
+		</Link>
 	</div>
 )
 
@@ -78,7 +75,7 @@ const List: React.FC<ListProps> = ({ topicsWantToLearn, topicsLearning, topicsLe
 				count={topicsWantToLearn.length}
 				label="To Learn"
 				value="wantToLearn"
-				href="/me/wantToLearn"
+				href="#"
 				isActive={pathname === "/me/wantToLearn"}
 			/>
 			<ListItem
@@ -86,7 +83,7 @@ const List: React.FC<ListProps> = ({ topicsWantToLearn, topicsLearning, topicsLe
 				label="Learning"
 				value="learning"
 				count={topicsLearning.length}
-				href="/me/learning"
+				href="#"
 				isActive={pathname === "/me/learning"}
 			/>
 			<ListItem
@@ -94,7 +91,7 @@ const List: React.FC<ListProps> = ({ topicsWantToLearn, topicsLearning, topicsLe
 				label="Learned"
 				value="learned"
 				count={topicsLearned.length}
-				href="/me/learned"
+				href="#"
 				isActive={pathname === "/me/learned"}
 			/>
 		</div>
