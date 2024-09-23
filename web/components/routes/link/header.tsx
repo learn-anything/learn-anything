@@ -1,10 +1,9 @@
 "use client"
 
 import * as React from "react"
-import { ListFilterIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ContentHeader, SidebarToggleButton } from "@/components/custom/content-header"
-import { useMedia } from "react-use"
+import { useMedia } from "@/hooks/use-media"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -15,6 +14,7 @@ import { LEARNING_STATES } from "@/lib/constants"
 import { useQueryState, parseAsStringLiteral } from "nuqs"
 import { FancySwitch } from "@omit/react-fancy-switch"
 import { cn } from "@/lib/utils"
+import { LaIcon } from "@/components/custom/la-icon"
 
 const ALL_STATES = [{ label: "All", value: "all", icon: "List", className: "text-foreground" }, ...LEARNING_STATES]
 const ALL_STATES_STRING = ALL_STATES.map(ls => ls.value)
@@ -116,7 +116,7 @@ const FilterAndSort = React.memo(() => {
 				<Popover open={sortOpen} onOpenChange={setSortOpen}>
 					<PopoverTrigger asChild>
 						<Button size="sm" type="button" variant="secondary" className="min-w-8 gap-x-2 text-sm max-sm:p-0">
-							<ListFilterIcon size={16} className="text-primary/60" />
+							<LaIcon name="ListFilter" className="text-primary/60" />
 							<span className="hidden md:block">Filter: {getFilterText()}</span>
 						</Button>
 					</PopoverTrigger>

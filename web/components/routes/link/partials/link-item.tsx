@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react"
+import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useAtom } from "jotai"
@@ -19,22 +19,18 @@ interface LinkItemProps extends React.HTMLAttributes<HTMLDivElement> {
 	personalLink: PersonalLink
 	disabled?: boolean
 	editId: string | null
-	setEditId: (id: string | null) => void
 	isActive: boolean
-	setActiveItemIndex: (index: number | null) => void
 	index: number
 	onItemSelected?: (personalLink: PersonalLink) => void
+	onFormClose?: () => void
 }
 
 export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
-	(
-		{ personalLink, disabled, editId, setEditId, isActive, setActiveItemIndex, index, onItemSelected, ...props },
-		ref
-	) => {
+	({ personalLink, disabled, editId, isActive, index, onItemSelected, onFormClose, ...props }, ref) => {
 		const [openPopoverForId, setOpenPopoverForId] = useAtom(linkOpenPopoverForIdAtom)
 		const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: personalLink.id, disabled })
 
-		const style = useMemo(
+		const style = React.useMemo(
 			() => ({
 				transform: CSS.Transform.toString(transform),
 				transition
@@ -42,15 +38,12 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
 			[transform, transition]
 		)
 
-		const handleSuccess = useCallback(() => setEditId(null), [setEditId])
-		const handleOnClose = useCallback(() => setEditId(null), [setEditId])
-
-		const selectedLearningState = useMemo(
+		const selectedLearningState = React.useMemo(
 			() => LEARNING_STATES.find(ls => ls.value === personalLink.learningState),
 			[personalLink.learningState]
 		)
 
-		const handleLearningStateSelect = useCallback(
+		const handleLearningStateSelect = React.useCallback(
 			(value: string) => {
 				const learningState = value as LearningStateValue
 				personalLink.learningState = personalLink.learningState === learningState ? undefined : learningState
@@ -59,10 +52,19 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
 			[personalLink, setOpenPopoverForId]
 		)
 
+		const handleKeyDown = React.useCallback(
+			(ev: React.KeyboardEvent<HTMLDivElement>) => {
+				if (ev.key === "Enter") {
+					ev.preventDefault()
+					ev.stopPropagation()
+					onItemSelected?.(personalLink)
+				}
+			},
+			[personalLink, onItemSelected]
+		)
+
 		if (editId === personalLink.id) {
-			return (
-				<LinkForm onClose={handleOnClose} personalLink={personalLink} onSuccess={handleSuccess} onFail={() => {}} />
-			)
+			return <LinkForm onClose={onFormClose} personalLink={personalLink} onSuccess={onFormClose} onFail={() => {}} />
 		}
 
 		return (
@@ -86,12 +88,7 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
 				data-disabled={disabled}
 				data-active={isActive}
 				className="w-full overflow-visible border-b-[0.5px] border-transparent outline-none data-[active='true']:bg-[var(--link-background-muted)] data-[keyboard-active='true']:focus-visible:shadow-[var(--link-shadow)_0px_0px_0px_1px_inset]"
-				onKeyDown={e => {
-					if (e.key === "Enter") {
-						e.preventDefault()
-						onItemSelected?.(personalLink)
-					}
-				}}
+				onKeyDown={handleKeyDown}
 			>
 				<div
 					className={cn(

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react"
+import * as React from "react"
 import {
 	DndContext,
 	closestCenter,
@@ -19,25 +19,18 @@ import { useAccount } from "@/lib/providers/jazz-provider"
 import { PersonalLinkLists } from "@/lib/schema/personal-link"
 import { useAtom } from "jotai"
 import { linkSortAtom } from "@/store/link"
-import { useKey } from "react-use"
 import { LinkItem } from "./partials/link-item"
 import { parseAsBoolean, useQueryState } from "nuqs"
 import { learningStateAtom } from "./header"
-import { commandPaletteOpenAtom } from "@/components/custom/command-palette/command-palette"
 import { useConfirm } from "@omit/react-confirm-dialog"
 import { useLinkActions } from "./hooks/use-link-actions"
 import { isDeleteConfirmShownAtom } from "./LinkRoute"
 import { useActiveItemScroll } from "@/hooks/use-active-item-scroll"
-import { useKeyboardManager } from "@/hooks/use-keyboard-manager"
-import { useKeydownListener } from "@/hooks/use-keydown-listener"
 import { useTouchSensor } from "@/hooks/use-touch-sensor"
+import { useKeyDown } from "@/hooks/use-key-down"
+import { isModKey } from "@/lib/utils"
 
-interface LinkListProps {
-	activeItemIndex: number | null
-	setActiveItemIndex: React.Dispatch<React.SetStateAction<number | null>>
-	keyboardActiveIndex: number | null
-	setKeyboardActiveIndex: React.Dispatch<React.SetStateAction<number | null>>
-}
+interface LinkListProps {}
 
 const measuring: MeasuringConfiguration = {
 	droppable: {
@@ -45,14 +38,11 @@ const measuring: MeasuringConfiguration = {
 	}
 }
 
-const LinkList: React.FC<LinkListProps> = ({
-	activeItemIndex,
-	setActiveItemIndex,
-	keyboardActiveIndex,
-	setKeyboardActiveIndex
-}) => {
+const LinkList: React.FC<LinkListProps> = () => {
 	const isTouchDevice = useTouchSensor()
-	const [isCommandPaletteOpen] = useAtom(commandPaletteOpenAtom)
+	const lastActiveIndexRef = React.useRef<number | null>(null)
+	const [activeItemIndex, setActiveItemIndex] = React.useState<number | null>(null)
+	const [keyboardActiveIndex, setKeyboardActiveIndex] = React.useState<number | null>(null)
 	const [, setIsDeleteConfirmShown] = useAtom(isDeleteConfirmShownAtom)
 	const [editId, setEditId] = useQueryState("editId")
 	const [createMode] = useQueryState("create", parseAsBoolean)
@@ -63,11 +53,10 @@ const LinkList: React.FC<LinkListProps> = ({
 	const { deleteLink } = useLinkActions()
 	const confirm = useConfirm()
 	const { me } = useAccount({ root: { personalLinks: [] } })
-	const { isKeyboardDisabled } = useKeyboardManager("XComponent")
 
-	const personalLinks = useMemo(() => me?.root?.personalLinks || [], [me?.root?.personalLinks])
+	const personalLinks = React.useMemo(() => me?.root?.personalLinks || [], [me?.root?.personalLinks])
 
-	const filteredLinks = useMemo(
+	const filteredLinks = React.useMemo(
 		() =>
 			personalLinks.filter(link => {
 				if (activeLearningState === "all") return true
@@ -77,7 +66,7 @@ const LinkList: React.FC<LinkListProps> = ({
 		[personalLinks, activeLearningState]
 	)
 
-	const sortedLinks = useMemo(
+	const sortedLinks = React.useMemo(
 		() =>
 			sort === "title"
 				? [...filteredLinks].sort((a, b) => (a?.title || "").localeCompare(b?.title || ""))
@@ -85,9 +74,21 @@ const LinkList: React.FC<LinkListProps> = ({
 		[filteredLinks, sort]
 	)
 
+	React.useEffect(() => {
+		if (editId !== null) {
+			const index = sortedLinks.findIndex(link => link?.id === editId)
+			if (index !== -1) {
+				lastActiveIndexRef.current = index
+				setActiveItemIndex(index)
+				setKeyboardActiveIndex(index)
+			}
+		}
+	}, [editId, setActiveItemIndex, setKeyboardActiveIndex, sortedLinks])
+
 	const sensors = useSensors(
 		useSensor(isTouchDevice ? TouchSensor : PointerSensor, {
 			activationConstraint: {
+				...(isTouchDevice ? { delay: 100, tolerance: 5 } : {}),
 				distance: 5
 			}
 		}),
@@ -96,7 +97,7 @@ const LinkList: React.FC<LinkListProps> = ({
 		})
 	)
 
-	const updateSequences = useCallback((links: PersonalLinkLists) => {
+	const updateSequences = React.useCallback((links: PersonalLinkLists) => {
 		links.forEach((link, index) => {
 			if (link) {
 				link.sequence = index
@@ -104,7 +105,7 @@ const LinkList: React.FC<LinkListProps> = ({
 		})
 	}, [])
 
-	const handleDeleteLink = useCallback(async () => {
+	const handleDeleteLink = React.useCallback(async () => {
 		if (activeItemIndex === null) return
 		setIsDeleteConfirmShown(true)
 		const activeLink = sortedLinks[activeItemIndex]
@@ -124,63 +125,31 @@ const LinkList: React.FC<LinkListProps> = ({
 		setIsDeleteConfirmShown(false)
 	}, [activeItemIndex, sortedLinks, me, confirm, deleteLink, setIsDeleteConfirmShown])
 
-	useKey(event => (event.metaKey || event.ctrlKey) && event.key === "Backspace", handleDeleteLink, { event: "keydown" })
+	useKeyDown(e => isModKey(e) && e.key === "Backspace", handleDeleteLink)
 
-	useKeydownListener((e: KeyboardEvent) => {
-		if (
-			isKeyboardDisabled ||
-			isCommandPaletteOpen ||
-			!me?.root?.personalLinks ||
-			sortedLinks.length === 0 ||
-			editId !== null ||
-			e.defaultPrevented
-		)
-			return
+	const next = () => Math.min((activeItemIndex ?? 0) + 1, sortedLinks.length - 1)
 
-		switch (e.key) {
-			case "ArrowUp":
+	const prev = () => Math.max((activeItemIndex ?? 0) - 1, 0)
+
+	const handleKeyDown = (ev: KeyboardEvent) => {
+		switch (ev.key) {
 			case "ArrowDown":
-				e.preventDefault()
-				setActiveItemIndex(prevIndex => {
-					if (prevIndex === null) return 0
-
-					const newIndex =
-						e.key === "ArrowUp" ? Math.max(0, prevIndex - 1) : Math.min(sortedLinks.length - 1, prevIndex + 1)
-
-					if (e.metaKey && sort === "manual") {
-						const linksArray = [...me.root.personalLinks]
-						const newLinks = arrayMove(linksArray, prevIndex, newIndex)
-
-						while (me.root.personalLinks.length > 0) {
-							me.root.personalLinks.pop()
-						}
-
-						newLinks.forEach(link => {
-							if (link) {
-								me.root.personalLinks.push(link)
-							}
-						})
-
-						updateSequences(me.root.personalLinks)
-					}
-
-					setKeyboardActiveIndex(newIndex)
-
-					return newIndex
-				})
+				ev.preventDefault()
+				ev.stopPropagation()
+				setActiveItemIndex(next())
+				setKeyboardActiveIndex(next())
 				break
-			case "Home":
-				e.preventDefault()
-				setActiveItemIndex(0)
-				break
-			case "End":
-				e.preventDefault()
-				setActiveItemIndex(sortedLinks.length - 1)
-				break
+			case "ArrowUp":
+				ev.preventDefault()
+				ev.stopPropagation()
+				setActiveItemIndex(prev())
+				setKeyboardActiveIndex(prev())
 		}
-	})
+	}
 
-	const handleDragStart = useCallback(
+	useKeyDown(() => true, handleKeyDown)
+
+	const handleDragStart = React.useCallback(
 		(event: DragStartEvent) => {
 			if (sort !== "manual") return
 			if (!me) return
@@ -199,7 +168,7 @@ const LinkList: React.FC<LinkListProps> = ({
 		[sort, me, setActiveItemIndex]
 	)
 
-	const handleDragCancel = useCallback(() => {
+	const handleDragCancel = React.useCallback(() => {
 		setDraggingId(null)
 	}, [])
 
@@ -249,7 +218,9 @@ const LinkList: React.FC<LinkListProps> = ({
 		setDraggingId(null)
 	}
 
-	const { setElementRef } = useActiveItemScroll<HTMLDivElement>({ activeIndex: keyboardActiveIndex })
+	const { setElementRef } = useActiveItemScroll<HTMLDivElement>({
+		activeIndex: keyboardActiveIndex
+	})
 
 	return (
 		<DndContext
@@ -261,7 +232,7 @@ const LinkList: React.FC<LinkListProps> = ({
 			measuring={measuring}
 			modifiers={[restrictToVerticalAxis]}
 		>
-			<div className="relative flex h-full grow items-stretch overflow-hidden">
+			<div className="relative flex h-full grow items-stretch overflow-hidden" tabIndex={-1}>
 				<SortableContext items={sortedLinks.map(item => item?.id || "") || []} strategy={verticalListSortingStrategy}>
 					<div className="relative flex h-full grow flex-col items-stretch overflow-hidden">
 						<div className="flex h-full w-[calc(100%+0px)] flex-col overflow-hidden pr-0">
@@ -274,9 +245,7 @@ const LinkList: React.FC<LinkListProps> = ({
 												isActive={activeItemIndex === index}
 												personalLink={linkItem}
 												editId={editId}
-												setEditId={setEditId}
 												disabled={sort !== "manual" || editId !== null}
-												setActiveItemIndex={setActiveItemIndex}
 												onPointerMove={() => {
 													if (editId !== null || draggingId !== null || createMode) {
 														return undefined
@@ -284,6 +253,12 @@ const LinkList: React.FC<LinkListProps> = ({
 
 													setKeyboardActiveIndex(null)
 													setActiveItemIndex(index)
+												}}
+												onFormClose={() => {
+													setEditId(null)
+													setActiveItemIndex(lastActiveIndexRef.current)
+													setKeyboardActiveIndex(lastActiveIndexRef.current)
+													console.log(keyboardActiveIndex)
 												}}
 												index={index}
 												onItemSelected={link => setEditId(link.id)}

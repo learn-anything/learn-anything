@@ -1,11 +1,11 @@
 "use client"
 
-import React, { useCallback, useEffect, useMemo, useRef } from "react"
+import * as React from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import type { icons } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { cn, getShortcutKeys, isEditableElement } from "@/lib/utils"
+import { cn, getShortcutKeys } from "@/lib/utils"
 import { LaIcon } from "@/components/custom/la-icon"
 import { useAtom } from "jotai"
 import { parseAsBoolean, useQueryState } from "nuqs"
@@ -15,7 +15,6 @@ import { PersonalLink } from "@/lib/schema"
 import { ID } from "jazz-tools"
 import { globalLinkFormExceptionRefsAtom } from "./partials/form/link-form"
 import { useLinkActions } from "./hooks/use-link-actions"
-import { useKeydownListener } from "@/hooks/use-keydown-listener"
 
 interface ToolbarButtonProps extends React.ComponentPropsWithoutRef<typeof Button> {
 	icon: keyof typeof icons
@@ -55,27 +54,27 @@ export const LinkBottomBar: React.FC = () => {
 	const { me } = useAccount({ root: { personalLinks: [] } })
 	const personalLink = useCoState(PersonalLink, editId as ID<PersonalLink>)
 
-	const cancelBtnRef = useRef<HTMLButtonElement>(null)
-	const confirmBtnRef = useRef<HTMLButtonElement>(null)
-	const overlayRef = useRef<HTMLDivElement>(null)
-	const contentRef = useRef<HTMLDivElement>(null)
+	const cancelBtnRef = React.useRef<HTMLButtonElement>(null)
+	const confirmBtnRef = React.useRef<HTMLButtonElement>(null)
+	const overlayRef = React.useRef<HTMLDivElement>(null)
+	const contentRef = React.useRef<HTMLDivElement>(null)
 
-	const deleteBtnRef = useRef<HTMLButtonElement>(null)
-	const editMoreBtnRef = useRef<HTMLButtonElement>(null)
-	const plusBtnRef = useRef<HTMLButtonElement>(null)
-	const plusMoreBtnRef = useRef<HTMLButtonElement>(null)
+	const deleteBtnRef = React.useRef<HTMLButtonElement>(null)
+	const editMoreBtnRef = React.useRef<HTMLButtonElement>(null)
+	const plusBtnRef = React.useRef<HTMLButtonElement>(null)
+	const plusMoreBtnRef = React.useRef<HTMLButtonElement>(null)
 
 	const { deleteLink } = useLinkActions()
 	const confirm = useConfirm()
 
-	const handleCreateMode = useCallback(() => {
+	const handleCreateMode = React.useCallback(() => {
 		setEditId(null)
 		requestAnimationFrame(() => {
 			setCreateMode(prev => !prev)
 		})
 	}, [setEditId, setCreateMode])
 
-	const exceptionRefs = useMemo(
+	const exceptionRefs = React.useMemo(
 		() => [
 			overlayRef,
 			contentRef,
@@ -89,7 +88,7 @@ export const LinkBottomBar: React.FC = () => {
 		[]
 	)
 
-	useEffect(() => {
+	React.useEffect(() => {
 		setGlobalLinkFormExceptionRefsAtom(exceptionRefs)
 	}, [setGlobalLinkFormExceptionRefsAtom, exceptionRefs])
 
@@ -123,21 +122,6 @@ export const LinkBottomBar: React.FC = () => {
 			setEditId(null)
 		}
 	}
-
-	const handleKeydown = useCallback(
-		(event: KeyboardEvent) => {
-			const isCreateShortcut = event.key === "c"
-			const target = event.target as HTMLElement
-
-			if (isCreateShortcut && !isEditableElement(target)) {
-				event.preventDefault()
-				handleCreateMode()
-			}
-		},
-		[handleCreateMode]
-	)
-
-	useKeydownListener(handleKeydown)
 
 	const shortcutText = getShortcutKeys(["c"])
 
