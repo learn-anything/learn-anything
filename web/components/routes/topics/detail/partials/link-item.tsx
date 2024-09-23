@@ -151,12 +151,7 @@ export const LinkItem = React.memo(
 										)}
 									</Button>
 								</PopoverTrigger>
-								<PopoverContent
-									className="w-52 rounded-lg p-0"
-									side="bottom"
-									align="start"
-									onCloseAutoFocus={e => e.preventDefault()}
-								>
+								<PopoverContent className="w-52 rounded-lg p-0" side="bottom" align="start">
 									<LearningStateSelectorContent
 										showSearch={false}
 										searchPlaceholder="Search state..."

@@ -4,7 +4,7 @@ import { useAccount } from "@/lib/providers/jazz-provider"
 import { useAtom } from "jotai"
 import { commandPaletteOpenAtom } from "@/components/custom/command-palette/command-palette"
 import { PageItem } from "./partials/page-item"
-import { useMedia } from "react-use"
+import { useMedia } from "@/hooks/use-media"
 import { useColumnStyles } from "./hooks/use-column-styles"
 import { PersonalPage, PersonalPageLists } from "@/lib/schema"
 import { useRouter } from "next/navigation"
@@ -89,7 +89,7 @@ interface PageListItemsProps {
 }
 
 const PageListItems: React.FC<PageListItemsProps> = ({ personalPages, activeItemIndex }) => {
-	const setElementRef = useActiveItemScroll<HTMLAnchorElement>({ activeIndex: activeItemIndex })
+	const { setElementRef } = useActiveItemScroll<HTMLAnchorElement>({ activeIndex: activeItemIndex })
 
 	return (
 		<Primitive.div

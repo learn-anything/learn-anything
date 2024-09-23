@@ -81,10 +81,7 @@ const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({ pageCount, isActi
 			isActive ? "bg-accent text-accent-foreground" : "hover:bg-accent hover:text-accent-foreground"
 		)}
 	>
-		<Link
-			href="/pages"
-			className="flex flex-1 items-center justify-start rounded-md px-2 py-1 focus-visible:outline-none focus-visible:ring-0"
-		>
+		<Link href="/pages" className="flex flex-1 items-center justify-start rounded-md px-2 py-1">
 			<p className="text-xs">
 				Pages
 				{pageCount > 0 && <span className="text-muted-foreground ml-1">{pageCount}</span>}

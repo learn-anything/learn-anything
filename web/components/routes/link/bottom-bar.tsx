@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useCallback, useEffect, useRef } from "react"
+import * as React from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import type { icons } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -15,7 +15,6 @@ import { PersonalLink } from "@/lib/schema"
 import { ID } from "jazz-tools"
 import { globalLinkFormExceptionRefsAtom } from "./partials/form/link-form"
 import { useLinkActions } from "./hooks/use-link-actions"
-import { useKeydownListener } from "@/hooks/use-keydown-listener"
 
 interface ToolbarButtonProps extends React.ComponentPropsWithoutRef<typeof Button> {
 	icon: keyof typeof icons
@@ -55,28 +54,28 @@ export const LinkBottomBar: React.FC = () => {
 	const { me } = useAccount({ root: { personalLinks: [] } })
 	const personalLink = useCoState(PersonalLink, editId as ID<PersonalLink>)
 
-	const cancelBtnRef = useRef<HTMLButtonElement>(null)
-	const confirmBtnRef = useRef<HTMLButtonElement>(null)
-	const overlayRef = useRef<HTMLDivElement>(null)
-	const contentRef = useRef<HTMLDivElement>(null)
+	const cancelBtnRef = React.useRef<HTMLButtonElement>(null)
+	const confirmBtnRef = React.useRef<HTMLButtonElement>(null)
+	const overlayRef = React.useRef<HTMLDivElement>(null)
+	const contentRef = React.useRef<HTMLDivElement>(null)
 
-	const deleteBtnRef = useRef<HTMLButtonElement>(null)
-	const editMoreBtnRef = useRef<HTMLButtonElement>(null)
-	const plusBtnRef = useRef<HTMLButtonElement>(null)
-	const plusMoreBtnRef = useRef<HTMLButtonElement>(null)
+	const deleteBtnRef = React.useRef<HTMLButtonElement>(null)
+	const editMoreBtnRef = React.useRef<HTMLButtonElement>(null)
+	const plusBtnRef = React.useRef<HTMLButtonElement>(null)
+	const plusMoreBtnRef = React.useRef<HTMLButtonElement>(null)
 
 	const { deleteLink } = useLinkActions()
 	const confirm = useConfirm()
 
-	const handleCreateMode = useCallback(() => {
+	const handleCreateMode = React.useCallback(() => {
 		setEditId(null)
-		setTimeout(() => {
+		requestAnimationFrame(() => {
 			setCreateMode(prev => !prev)
-		}, 100)
+		})
 	}, [setEditId, setCreateMode])
 
-	useEffect(() => {
-		setGlobalLinkFormExceptionRefsAtom([
+	const exceptionRefs = React.useMemo(
+		() => [
 			overlayRef,
 			contentRef,
 			deleteBtnRef,
@@ -85,8 +84,13 @@ export const LinkBottomBar: React.FC = () => {
 			confirmBtnRef,
 			plusBtnRef,
 			plusMoreBtnRef
-		])
-	}, [setGlobalLinkFormExceptionRefsAtom])
+		],
+		[]
+	)
+
+	React.useEffect(() => {
+		setGlobalLinkFormExceptionRefsAtom(exceptionRefs)
+	}, [setGlobalLinkFormExceptionRefsAtom, exceptionRefs])
 
 	const handleDelete = async (e: React.MouseEvent) => {
 		if (!personalLink || !me) return
@@ -119,46 +123,29 @@ export const LinkBottomBar: React.FC = () => {
 		}
 	}
 
-	const handleKeydown = useCallback(
-		(event: KeyboardEvent) => {
-			const isCreateShortcut = event.key === "c"
-
-			if (isCreateShortcut) {
-				event.preventDefault()
-				handleCreateMode()
-			}
-		},
-		[handleCreateMode]
-	)
-
-	useKeydownListener(handleKeydown)
-
 	const shortcutText = getShortcutKeys(["c"])
 
 	return (
-		<motion.div
-			className="bg-background absolute bottom-0 left-0 right-0 h-11 border-t"
-			animate={{ y: 0 }}
-			initial={{ y: "100%" }}
-		>
+		<div className="bg-background min-h-11 border-t">
 			<AnimatePresence mode="wait">
 				{editId && (
 					<motion.div
 						key="expanded"
-						className="flex h-full items-center justify-center gap-1 px-2"
+						className="flex h-full items-center justify-center gap-1 border-t px-2"
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
 						exit={{ opacity: 0, y: 20 }}
 						transition={{ duration: 0.1 }}
 					>
-						<ToolbarButton icon={"ArrowLeft"} onClick={() => setEditId(null)} />
+						<ToolbarButton icon={"ArrowLeft"} onClick={() => setEditId(null)} aria-label="Go back" />
 						<ToolbarButton
 							icon={"Trash"}
 							onClick={handleDelete}
 							className="text-destructive hover:text-destructive"
 							ref={deleteBtnRef}
+							aria-label="Delete link"
 						/>
-						<ToolbarButton icon={"Ellipsis"} ref={editMoreBtnRef} />
+						<ToolbarButton icon={"Ellipsis"} ref={editMoreBtnRef} aria-label="More options" />
 					</motion.div>
 				)}
 
@@ -171,19 +158,20 @@ export const LinkBottomBar: React.FC = () => {
 						exit={{ opacity: 0, y: -20 }}
 						transition={{ duration: 0.1 }}
 					>
-						{createMode && <ToolbarButton icon={"ArrowLeft"} onClick={handleCreateMode} />}
+						{createMode && <ToolbarButton icon={"ArrowLeft"} onClick={handleCreateMode} aria-label="Go back" />}
 						{!createMode && (
 							<ToolbarButton
 								icon={"Plus"}
 								onClick={handleCreateMode}
 								tooltip={`New Link (${shortcutText.map(s => s.symbol).join("")})`}
 								ref={plusBtnRef}
+								aria-label="New link"
 							/>
 						)}
 					</motion.div>
 				)}
 			</AnimatePresence>
-		</motion.div>
+		</div>
 	)
 }
 

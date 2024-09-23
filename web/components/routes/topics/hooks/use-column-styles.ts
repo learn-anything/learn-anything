@@ -1,4 +1,4 @@
-import { useMedia } from "react-use"
+import { useMedia } from "@/hooks/use-media"
 
 export const useColumnStyles = () => {
 	const isTablet = useMedia("(max-width: 640px)")

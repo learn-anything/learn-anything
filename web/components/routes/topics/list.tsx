@@ -4,7 +4,7 @@ import { useAccount } from "@/lib/providers/jazz-provider"
 import { atom, useAtom } from "jotai"
 import { commandPaletteOpenAtom } from "@/components/custom/command-palette/command-palette"
 import { TopicItem } from "./partials/topic-item"
-import { useMedia } from "react-use"
+import { useMedia } from "@/hooks/use-media"
 import { useRouter } from "next/navigation"
 import { useActiveItemScroll } from "@/hooks/use-active-item-scroll"
 import { Column } from "@/components/custom/column"
@@ -132,7 +132,7 @@ interface TopicListItemsProps {
 }
 
 const TopicListItems: React.FC<TopicListItemsProps> = ({ personalTopics, activeItemIndex }) => {
-	const setElementRef = useActiveItemScroll<HTMLDivElement>({ activeIndex: activeItemIndex })
+	const { setElementRef } = useActiveItemScroll<HTMLDivElement>({ activeIndex: activeItemIndex })
 
 	return (
 		<Primitive.div

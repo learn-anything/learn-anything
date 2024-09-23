@@ -3,9 +3,8 @@
 import * as React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useMedia } from "react-use"
+import { useMedia } from "@/hooks/use-media"
 import { useAtom } from "jotai"
-import { SearchIcon } from "lucide-react"
 import { Logo } from "@/components/custom/logo"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -16,6 +15,7 @@ import { TopicSection } from "./partial/topic-section"
 import { ProfileSection } from "./partial/profile-section"
 import { TaskSection } from "./partial/task-section"
 import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
+import { LaIcon } from "../la-icon"
 
 interface SidebarContextType {
 	isCollapsed: boolean
@@ -99,7 +99,7 @@ const LogoAndSearch: React.FC = React.memo(() => {
 							type="button"
 							className="text-primary/60 flex w-20 items-center justify-start py-4 pl-2"
 						>
-							<SearchIcon size={16} className="mr-2" />
+							<LaIcon name="Search" className="mr-2" />
 						</Button>
 					</Link>
 				)}
@@ -120,13 +120,13 @@ const SidebarContent: React.FC = React.memo(() => {
 				<div>
 					<LogoAndSearch />
 				</div>
-				<div tabIndex={-1} className="relative mb-0.5 mt-1.5 flex grow flex-col overflow-y-auto rounded-md px-3">
+				<div className="relative mb-0.5 mt-1.5 flex grow flex-col overflow-y-auto rounded-md px-3 outline-none">
 					<div className="h-2 shrink-0" />
 					{me._type === "Account" && <LinkSection pathname={pathname} />}
-					{me._type === "Account" && <PageSection pathname={pathname} />}
 					{me._type === "Account" && <TopicSection pathname={pathname} />}
 					{/* {me._type === "Account" && <TaskSection pathname={pathname} />} */}
 					<TaskSection pathname={pathname} />
+					{me._type === "Account" && <PageSection pathname={pathname} />}
 				</div>
 
 				<ProfileSection />

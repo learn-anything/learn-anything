@@ -11,7 +11,6 @@ import { searchSafeRegExp } from "@/lib/utils"
 import { GraphNode } from "@/components/routes/public/PublicHomeRoute"
 import { useCommandActions } from "./hooks/use-command-actions"
 import { atom, useAtom } from "jotai"
-import { useKeydownListener } from "@/hooks/use-keydown-listener"
 
 const graph_data_promise = import("@/components/routes/public/graph-data.json").then(a => a.default)
 
@@ -39,18 +38,6 @@ export function RealCommandPalette() {
 	const commandGroups = React.useMemo(() => me && createCommandGroups(actions, me), [actions, me])
 
 	const raw_graph_data = React.use(graph_data_promise) as GraphNode[]
-
-	const handleKeydown = React.useCallback(
-		(e: KeyboardEvent) => {
-			if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-				e.preventDefault()
-				setOpen(prev => !prev)
-			}
-		},
-		[setOpen]
-	)
-
-	useKeydownListener(handleKeydown)
 
 	const bounce = React.useCallback(() => {
 		if (dialogRef.current) {
