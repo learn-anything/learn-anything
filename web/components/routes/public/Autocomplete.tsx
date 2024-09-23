@@ -1,9 +1,9 @@
-import React, { useState, useRef, useCallback, useMemo, useEffect } from "react"
+import * as React from "react"
 import { Command, CommandGroup, CommandItem, CommandList } from "@/components/ui/command"
 import { Command as CommandPrimitive } from "cmdk"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn, searchSafeRegExp, shuffleArray } from "@/lib/utils"
-import { useMountedState } from "react-use"
+import { useIsMounted } from "@/hooks/use-is-mounted"
 
 interface GraphNode {
 	name: string
@@ -18,16 +18,16 @@ interface AutocompleteProps {
 }
 
 export function Autocomplete({ topics = [], onSelect, onInputChange }: AutocompleteProps): JSX.Element {
-	const inputRef = useRef<HTMLInputElement>(null)
-	const [open, setOpen] = useState(false)
-	const isMounted = useMountedState()
-	const [inputValue, setInputValue] = useState("")
-	const [hasInteracted, setHasInteracted] = useState(false)
-	const [showDropdown, setShowDropdown] = useState(false)
+	const inputRef = React.useRef<HTMLInputElement>(null)
+	const [, setOpen] = React.useState(false)
+	const isMounted = useIsMounted()
+	const [inputValue, setInputValue] = React.useState("")
+	const [hasInteracted, setHasInteracted] = React.useState(false)
+	const [showDropdown, setShowDropdown] = React.useState(false)
 
-	const initialShuffledTopics = useMemo(() => shuffleArray(topics).slice(0, 5), [topics])
+	const initialShuffledTopics = React.useMemo(() => shuffleArray(topics).slice(0, 5), [topics])
 
-	const filteredTopics = useMemo(() => {
+	const filteredTopics = React.useMemo(() => {
 		if (!inputValue) {
 			return initialShuffledTopics
 		}
@@ -44,7 +44,7 @@ export function Autocomplete({ topics = [], onSelect, onInputChange }: Autocompl
 			.slice(0, 10)
 	}, [inputValue, topics, initialShuffledTopics])
 
-	const handleSelect = useCallback(
+	const handleSelect = React.useCallback(
 		(topic: GraphNode) => {
 			setOpen(false)
 			onSelect(topic.name)
@@ -52,7 +52,7 @@ export function Autocomplete({ topics = [], onSelect, onInputChange }: Autocompl
 		[onSelect]
 	)
 
-	const handleInputChange = useCallback(
+	const handleInputChange = React.useCallback(
 		(value: string) => {
 			setInputValue(value)
 			setShowDropdown(true)
@@ -62,33 +62,26 @@ export function Autocomplete({ topics = [], onSelect, onInputChange }: Autocompl
 		[onInputChange]
 	)
 
-	const handleFocus = useCallback(() => {
+	const handleFocus = React.useCallback(() => {
 		setHasInteracted(true)
 	}, [])
 
-	const handleClick = useCallback(() => {
+	const handleClick = React.useCallback(() => {
 		setShowDropdown(true)
 		setHasInteracted(true)
 	}, [])
 
-	const commandKey = useMemo(() => {
+	const commandKey = React.useMemo(() => {
 		return filteredTopics
 			.map(topic => `${topic.name}:${topic.prettyName}:${topic.connectedTopics.join(",")}`)
 			.join("__")
 	}, [filteredTopics])
 
-	useEffect(() => {
+	React.useEffect(() => {
 		if (inputRef.current && isMounted() && hasInteracted) {
 			inputRef.current.focus()
 		}
 	}, [commandKey, isMounted, hasInteracted])
-
-	const animationProps = {
-		initial: { opacity: 0, y: -10 },
-		animate: { opacity: 1, y: 0 },
-		exit: { opacity: 0, y: -10 },
-		transition: { duration: 0.1 }
-	}
 
 	return (
 		<Command
@@ -109,7 +102,7 @@ export function Autocomplete({ topics = [], onSelect, onInputChange }: Autocompl
 					onClick={handleClick}
 					placeholder={filteredTopics[0]?.prettyName}
 					className={cn("placeholder:text-muted-foreground flex-1 bg-transparent px-2 outline-none")}
-					autoFocus // Add this line
+					autoFocus
 				/>
 			</div>
 			<div className="relative">

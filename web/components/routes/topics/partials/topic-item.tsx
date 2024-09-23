@@ -139,7 +139,6 @@ export const TopicItem = React.forwardRef<HTMLDivElement, TopicItemProps>(({ top
 							side="bottom"
 							align="end"
 							onClick={e => e.stopPropagation()}
-							onCloseAutoFocus={e => e.preventDefault()}
 						>
 							<LearningStateSelectorContent
 								showSearch={false}
