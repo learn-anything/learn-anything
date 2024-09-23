@@ -8,6 +8,7 @@ import { LEARNING_STATES, LearningStateValue } from "@/lib/constants"
 import { linkLearningStateSelectorAtom } from "@/store/link"
 import { Command, CommandInput, CommandList, CommandItem, CommandGroup } from "@/components/ui/command"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import type { icons } from "lucide-react"
 
 interface LearningStateSelectorProps {
 	showSearch?: boolean
@@ -16,6 +17,7 @@ interface LearningStateSelectorProps {
 	value?: string
 	onChange: (value: LearningStateValue) => void
 	className?: string
+	defaultIcon?: keyof typeof icons
 }
 
 export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({
@@ -24,7 +26,8 @@ export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({
 	searchPlaceholder = "Search state...",
 	value,
 	onChange,
-	className
+	className,
+	defaultIcon
 }) => {
 	const [isLearningStateSelectorOpen, setIsLearningStateSelectorOpen] = useAtom(linkLearningStateSelectorAtom)
 	const selectedLearningState = useMemo(() => LEARNING_STATES.find(ls => ls.value === value), [value])
@@ -44,12 +47,20 @@ export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({
 					variant="secondary"
 					className={cn("gap-x-2 text-sm", className)}
 				>
-					{selectedLearningState?.icon && (
-						<LaIcon name={selectedLearningState.icon} className={cn(selectedLearningState.className)} />
-					)}
-					<span className={cn("truncate", selectedLearningState?.className || "")}>
-						{selectedLearningState?.label || defaultLabel}
-					</span>
+					{selectedLearningState?.icon ||
+						(defaultIcon && (
+							<LaIcon
+								name={selectedLearningState?.icon || defaultIcon}
+								className={cn(selectedLearningState?.className)}
+							/>
+						))}
+
+					{selectedLearningState?.label ||
+						(defaultLabel && (
+							<span className={cn("truncate", selectedLearningState?.className || "")}>
+								{selectedLearningState?.label || defaultLabel}
+							</span>
+						))}
 					<LaIcon name="ChevronDown" />
 				</Button>
 			</PopoverTrigger>
