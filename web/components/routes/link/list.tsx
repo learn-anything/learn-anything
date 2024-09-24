@@ -258,7 +258,6 @@ const LinkList: React.FC<LinkListProps> = () => {
 													setEditId(null)
 													setActiveItemIndex(lastActiveIndexRef.current)
 													setKeyboardActiveIndex(lastActiveIndexRef.current)
-													console.log(keyboardActiveIndex)
 												}}
 												index={index}
 												onItemSelected={link => setEditId(link.id)}
