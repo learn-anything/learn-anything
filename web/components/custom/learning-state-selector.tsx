@@ -8,7 +8,7 @@ import { LEARNING_STATES, LearningStateValue } from "@/lib/constants"
 import { linkLearningStateSelectorAtom } from "@/store/link"
 import { Command, CommandInput, CommandList, CommandItem, CommandGroup } from "@/components/ui/command"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import type { icons } from "lucide-react"
+import { icons } from "lucide-react"
 
 interface LearningStateSelectorProps {
 	showSearch?: boolean
@@ -37,6 +37,9 @@ export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({
 		setIsLearningStateSelectorOpen(false)
 	}
 
+	const iconName = selectedLearningState?.icon || defaultIcon
+	const labelText = selectedLearningState?.label || defaultLabel
+
 	return (
 		<Popover open={isLearningStateSelectorOpen} onOpenChange={setIsLearningStateSelectorOpen}>
 			<PopoverTrigger asChild>
@@ -47,20 +50,8 @@ export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({
 					variant="secondary"
 					className={cn("gap-x-2 text-sm", className)}
 				>
-					{selectedLearningState?.icon ||
-						(defaultIcon && (
-							<LaIcon
-								name={selectedLearningState?.icon || defaultIcon}
-								className={cn(selectedLearningState?.className)}
-							/>
-						))}
-
-					{selectedLearningState?.label ||
-						(defaultLabel && (
-							<span className={cn("truncate", selectedLearningState?.className || "")}>
-								{selectedLearningState?.label || defaultLabel}
-							</span>
-						))}
+					{iconName && <LaIcon name={iconName} className={cn(selectedLearningState?.className)} />}
+					{labelText && <span className={cn("truncate", selectedLearningState?.className || "")}>{labelText}</span>}
 					<LaIcon name="ChevronDown" />
 				</Button>
 			</PopoverTrigger>
@@ -97,7 +88,7 @@ export const LearningStateSelectorContent: React.FC<LearningStateSelectorContent
 					<CommandGroup>
 						{LEARNING_STATES.map(ls => (
 							<CommandItem key={ls.value} value={ls.value} onSelect={onSelect}>
-								<LaIcon name={ls.icon} className={cn("mr-2", ls.className)} />
+								{ls.icon && <LaIcon name={ls.icon} className={cn("mr-2", ls.className)} />}
 								<span className={ls.className}>{ls.label}</span>
 								<LaIcon
 									name="Check"
