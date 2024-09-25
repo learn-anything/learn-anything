@@ -152,7 +152,7 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
 									prefetch={false}
 									target="_blank"
 									onClick={e => e.stopPropagation()}
-									className="hover:text-primary truncate text-xs"
+									className="hover:text-primary mr-1 truncate text-xs"
 								>
 									{personalLink.url}
 								</Link>

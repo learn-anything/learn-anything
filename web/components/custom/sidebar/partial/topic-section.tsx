@@ -45,12 +45,12 @@ interface TopicSectionHeaderProps {
 const TopicSectionHeader: React.FC<TopicSectionHeaderProps> = ({ topicCount, isActive }) => (
 	<div
 		className={cn(
-			"flex min-h-[30px] items-center gap-px rounded-md",
+			"flex h-9 items-center gap-px rounded-md sm:h-[30px]",
 			isActive ? "bg-accent text-accent-foreground" : "hover:bg-accent hover:text-accent-foreground"
 		)}
 	>
 		<Link href="/topics" className="flex flex-1 items-center justify-start rounded-md px-2 py-1">
-			<p className="text-xs">
+			<p className="text-sm sm:text-xs">
 				Topics
 				{topicCount > 0 && <span className="text-muted-foreground ml-1">{topicCount}</span>}
 			</p>
@@ -116,7 +116,7 @@ const ListItem: React.FC<ListItemProps> = ({ label, value, href, count, isActive
 				<Link
 					href={href}
 					className={cn(
-						"group-hover/topic-link:bg-accent relative flex h-8 w-full items-center gap-2 rounded-md p-1.5 font-medium",
+						"group-hover/topic-link:bg-accent relative flex h-9 w-full items-center gap-2 rounded-md p-1.5 font-medium sm:h-8",
 						{ "bg-accent text-accent-foreground": isActive },
 						le.className
 					)}
