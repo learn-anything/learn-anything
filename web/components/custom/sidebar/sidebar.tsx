@@ -115,23 +115,20 @@ const SidebarContent: React.FC = React.memo(() => {
 	const pathname = usePathname()
 
 	return (
-		<>
-			<nav className="bg-background relative flex h-full w-full shrink-0 flex-col">
-				<div>
-					<LogoAndSearch />
-				</div>
-				<div className="relative mb-0.5 mt-1.5 flex grow flex-col overflow-y-auto rounded-md px-3 outline-none">
-					<div className="h-2 shrink-0" />
-					{me._type === "Account" && <LinkSection pathname={pathname} />}
-					{me._type === "Account" && <TopicSection pathname={pathname} />}
-					{/* {me._type === "Account" && <TaskSection pathname={pathname} />} */}
-					<TaskSection pathname={pathname} />
-					{me._type === "Account" && <PageSection pathname={pathname} />}
-				</div>
+		<nav className="bg-background relative flex h-full w-full shrink-0 flex-col">
+			<div>
+				<LogoAndSearch />
+			</div>
+			<div className="relative mb-0.5 mt-1.5 flex grow flex-col overflow-y-auto rounded-md px-3 outline-none">
+				<div className="h-2 shrink-0" />
+				{me._type === "Account" && <LinkSection pathname={pathname} />}
+				{me._type === "Account" && <TopicSection pathname={pathname} />}
+				{me._type === "Account" && <TaskSection pathname={pathname} />}
+				{me._type === "Account" && <PageSection pathname={pathname} />}
+			</div>
 
-				<ProfileSection />
-			</nav>
-		</>
+			<ProfileSection />
+		</nav>
 	)
 })
 

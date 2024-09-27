@@ -1,9 +1,11 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useAccount } from "@/lib/providers/jazz-provider"
 import { cn } from "@/lib/utils"
 import { ListOfTasks } from "@/lib/schema/tasks"
 import { LaIcon } from "../../la-icon"
+import { useEffect, useState } from "react"
+import { useAuth, useUser } from "@clerk/nextjs"
+import { getFeatureFlag } from "@/app/actions"
 
 export const TaskSection: React.FC<{ pathname: string }> = ({ pathname }) => {
 	const me = { root: { tasks: [{ id: "1", title: "Test Task" }] } }
@@ -11,12 +13,52 @@ export const TaskSection: React.FC<{ pathname: string }> = ({ pathname }) => {
 	const taskCount = me?.root.tasks?.length || 0
 	const isActive = pathname === "/tasks"
 
+	const [isFetching, setIsFetching] = useState(false)
+	const [isFeatureActive, setIsFeatureActive] = useState(false)
+	const { isLoaded, isSignedIn } = useAuth()
+	const { user } = useUser()
+
+	useEffect(() => {
+		async function checkFeatureFlag() {
+			setIsFetching(true)
+
+			if (isLoaded && isSignedIn) {
+				const [data, err] = await getFeatureFlag({ name: "TASK" })
+
+				if (err) {
+					console.error(err)
+					setIsFetching(false)
+					return
+				}
+
+				if (user?.emailAddresses.some(email => data.flag?.emails.includes(email.emailAddress))) {
+					setIsFeatureActive(true)
+				}
+				setIsFetching(false)
+			}
+		}
+
+		checkFeatureFlag()
+	}, [isLoaded, isSignedIn, user])
+
+	if (!isLoaded || !isSignedIn) {
+		return <div className="py-2 text-center text-gray-500">Loading...</div>
+	}
+
 	if (!me) return null
+
+	if (!isFeatureActive) {
+		return null
+	}
 
 	return (
 		<div className="group/tasks flex flex-col gap-px py-2">
 			<TaskSectionHeader taskCount={taskCount} isActive={isActive} />
-			<List tasks={me.root.tasks as ListOfTasks} />
+			{isFetching ? (
+				<div className="py-2 text-center text-gray-500">Fetching tasks...</div>
+			) : (
+				<List tasks={me.root.tasks as ListOfTasks} />
+			)}
 		</div>
 	)
 }
