@@ -47,7 +47,7 @@ const LinkSectionHeader: React.FC<LinkSectionHeaderProps> = ({ linkCount }) => {
 	return (
 		<div
 			className={cn(
-				"flex min-h-[30px] items-center gap-px rounded-md",
+				"flex h-9 items-center gap-px rounded-md sm:h-[30px]",
 				isLinksActive ? "bg-accent text-accent-foreground" : "hover:bg-accent hover:text-accent-foreground"
 			)}
 		>
@@ -55,7 +55,7 @@ const LinkSectionHeader: React.FC<LinkSectionHeaderProps> = ({ linkCount }) => {
 				href="/links"
 				className="flex flex-1 items-center justify-start rounded-md px-2 py-1 focus-visible:outline-none focus-visible:ring-0"
 			>
-				<p className="flex w-full items-center text-xs font-medium">
+				<p className="flex w-full items-center text-sm font-medium sm:text-xs">
 					Links
 					{linkCount > 0 && <span className="text-muted-foreground ml-1">{linkCount}</span>}
 				</p>
@@ -112,7 +112,7 @@ const ListItem: React.FC<ListItemProps> = ({ label, href, count, isActive }) => 
 			<Link
 				href={href}
 				className={cn(
-					"relative flex h-8 w-full items-center gap-2 rounded-md p-1.5 font-medium",
+					"relative flex h-9 w-full items-center gap-2 rounded-md p-1.5 font-medium sm:h-8",
 					isActive ? "bg-accent text-accent-foreground" : "hover:bg-accent hover:text-accent-foreground"
 				)}
 			>

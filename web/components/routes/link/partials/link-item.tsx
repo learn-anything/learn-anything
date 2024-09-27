@@ -87,7 +87,10 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
 				aria-selected={isActive}
 				data-disabled={disabled}
 				data-active={isActive}
-				className="w-full overflow-visible border-b-[0.5px] border-transparent outline-none data-[active='true']:bg-[var(--link-background-muted)] data-[keyboard-active='true']:focus-visible:shadow-[var(--link-shadow)_0px_0px_0px_1px_inset]"
+				className={cn(
+					"w-full overflow-visible border-b-[0.5px] border-transparent outline-none",
+					"data-[active='true']:bg-[var(--link-background-muted)] data-[keyboard-active='true']:focus-visible:shadow-[var(--link-shadow)_0px_0px_0px_1px_inset]"
+				)}
 				onKeyDown={handleKeyDown}
 			>
 				<div
@@ -149,7 +152,7 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
 									prefetch={false}
 									target="_blank"
 									onClick={e => e.stopPropagation()}
-									className="hover:text-primary truncate text-xs"
+									className="hover:text-primary mr-1 truncate text-xs"
 								>
 									{personalLink.url}
 								</Link>
