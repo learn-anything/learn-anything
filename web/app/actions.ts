@@ -10,6 +10,19 @@ import { ZSAError } from "zsa"
 const MAX_FILE_SIZE = 1 * 1024 * 1024
 const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"]
 
+export const getFeatureFlag = authedProcedure
+	.input(
+		z.object({
+			name: z.string()
+		})
+	)
+	.handler(async ({ input }) => {
+		const { name } = input
+		const flag = await get.featureFlag.with.name(name)
+
+		return { flag }
+	})
+
 export const sendFeedback = authedProcedure
 	.input(
 		z.object({

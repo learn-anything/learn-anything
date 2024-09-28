@@ -8,7 +8,7 @@ import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
 import { LearningStateValue } from "@/lib/constants"
 import { useClerk } from "@clerk/nextjs"
 import { usePathname } from "next/navigation"
-import { useRouter } from "next/navigation"
+import { useMedia } from "@/hooks/use-media"
 import { GuideCommunityToggle } from "@/components/custom/GuideCommunityToggle"
 
 interface TopicDetailHeaderProps {
@@ -16,9 +16,9 @@ interface TopicDetailHeaderProps {
 }
 
 export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }: TopicDetailHeaderProps) {
-	const router = useRouter()
 	const clerk = useClerk()
 	const pathname = usePathname()
+	const isMobile = useMedia("(max-width: 770px)")
 	const { me } = useAccountOrGuest({
 		root: {
 			topicsWantToLearn: [],
@@ -93,20 +93,22 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 
 	return (
 		<ContentHeader className="px-6 py-5 max-lg:px-4">
-			<div className="flex min-w-0 shrink-0 items-center gap-1.5">
+			<div className="flex min-w-0 flex-1 items-center gap-1.5">
 				<SidebarToggleButton />
-				<div className="flex min-h-0 items-center">
-					<span className="truncate text-left font-bold lg:text-xl">{topic.prettyName}</span>
+				<div className="flex min-h-0 min-w-0 flex-1 items-center">
+					<h1 className="truncate text-left font-bold lg:text-xl">{topic.prettyName}</h1>
 				</div>
 			</div>
 
 			<div className="flex flex-auto"></div>
 			<GuideCommunityToggle topicName={topic.name} />
+
 			<LearningStateSelector
 				showSearch={false}
 				value={p?.learningState || ""}
 				onChange={handleAddToProfile}
-				defaultLabel="Add to my profile"
+				defaultLabel={isMobile ? "" : "Add to profile"}
+				defaultIcon="Circle"
 			/>
 		</ContentHeader>
 	)

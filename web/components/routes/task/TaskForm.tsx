@@ -1,25 +1,30 @@
 "use client"
 import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Task } from "@/lib/schema/tasks"
+import { ListOfTasks, Task } from "@/lib/schema/tasks"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { LaIcon } from "@/components/custom/la-icon"
+import { Checkbox } from "@/components/ui/checkbox"
+import { format } from "date-fns"
 
-interface TaskFormProps {
-	onAddTask: (task: Task) => void
-}
+interface TaskFormProps {}
 
-export const TaskForm: React.FC<TaskFormProps> = ({ onAddTask }) => {
+export const TaskForm: React.FC<TaskFormProps> = ({}) => {
 	const [title, setTitle] = useState("")
 	const [inputVisible, setInputVisible] = useState(false)
-	const { me } = useAccount()
+	const { me } = useAccount({ root: {} })
 	const inputRef = useRef<HTMLInputElement>(null)
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault()
-		if (title.trim() && me) {
+		if (title.trim()) {
+			if (me?.root?.tasks === undefined) {
+				if (!me) return
+				me.root.tasks = ListOfTasks.create([], { owner: me })
+			}
+
 			const newTask = Task.create(
 				{
 					title,
@@ -30,7 +35,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({ onAddTask }) => {
 				},
 				{ owner: me._owner }
 			)
-			onAddTask(newTask)
+			me.root.tasks?.push(newTask)
 			resetForm()
 		}
 	}
@@ -43,6 +48,8 @@ export const TaskForm: React.FC<TaskFormProps> = ({ onAddTask }) => {
 	const handleKeyDown = (e: React.KeyboardEvent) => {
 		if (e.key === "Escape") {
 			resetForm()
+		} else if (e.key === "Backspace" && title.trim() === "") {
+			resetForm()
 		}
 	}
 
@@ -52,8 +59,10 @@ export const TaskForm: React.FC<TaskFormProps> = ({ onAddTask }) => {
 		}
 	}, [inputVisible])
 
+	const formattedDate = format(new Date(), "EEE, MMMM do, yyyy")
+
 	return (
-		<div className="flex items-center space-x-2 p-4">
+		<div className="flex items-center space-x-2">
 			<AnimatePresence mode="wait">
 				{!inputVisible ? (
 					<motion.div
@@ -63,7 +72,12 @@ export const TaskForm: React.FC<TaskFormProps> = ({ onAddTask }) => {
 						exit={{ opacity: 0, width: 0 }}
 						transition={{ duration: 0.3 }}
 					>
-						<Button onClick={() => setInputVisible(true)} variant="outline">
+						<Button
+							className="flex flex-row items-center gap-1"
+							onClick={() => setInputVisible(true)}
+							variant="outline"
+						>
+							<LaIcon name="Plus" />
 							Add task
 						</Button>
 					</motion.div>
@@ -71,24 +85,27 @@ export const TaskForm: React.FC<TaskFormProps> = ({ onAddTask }) => {
 					<motion.form
 						key="input-form"
 						initial={{ width: 0, opacity: 0 }}
-						animate={{ width: "60%", opacity: 1 }}
+						animate={{ width: "100%", opacity: 1 }}
 						exit={{ width: 0, opacity: 0 }}
 						transition={{ duration: 0.3 }}
 						onSubmit={handleSubmit}
-						className="flex items-center space-x-2"
+						className="bg-result flex w-full items-center justify-between rounded-lg p-2 px-3"
 					>
-						<Input
-							autoFocus
-							ref={inputRef}
-							value={title}
-							className="flex-grow"
-							onChange={e => setTitle(e.target.value)}
-							onKeyDown={handleKeyDown}
-							placeholder="Enter task title"
-						/>
-						<Button type="button" variant="ghost" size="icon" onClick={resetForm}>
-							<LaIcon name="X" className="h-4 w-4" />
-						</Button>
+						<div className="flex flex-row items-center gap-3">
+							<Checkbox checked={false} onCheckedChange={() => {}} />
+							<Input
+								autoFocus
+								ref={inputRef}
+								value={title}
+								className="flex-grow border-none bg-transparent p-0 focus-visible:ring-0"
+								onChange={e => setTitle(e.target.value)}
+								onKeyDown={handleKeyDown}
+								// placeholder="Task title"
+							/>
+						</div>
+						<div className="flex items-center space-x-2">
+							<span className="text-muted-foreground text-xs">{formattedDate}</span>
+						</div>
 					</motion.form>
 				)}
 			</AnimatePresence>

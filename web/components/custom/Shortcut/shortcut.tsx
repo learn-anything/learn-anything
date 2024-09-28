@@ -38,6 +38,14 @@ const SHORTCUTS: ShortcutSection[] = [
 			{ label: "Go to page", keys: ["G"], then: ["P"] },
 			{ label: "Go to topic", keys: ["G"], then: ["T"] }
 		]
+	},
+	{
+		title: "Links",
+		shortcuts: [{ label: "Create new link", keys: ["c"] }]
+	},
+	{
+		title: "Pages",
+		shortcuts: [{ label: "Create new page", keys: ["p"] }]
 	}
 ]
 

@@ -2,7 +2,18 @@ import { useAtom } from "jotai"
 import { useEffect, useCallback } from "react"
 import { keyboardDisableSourcesAtom } from "@/store/keydown-manager"
 
-const allowedKeys = ["Escape", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter"]
+const allowedKeys = [
+	"Escape",
+	"ArrowUp",
+	"ArrowDown",
+	"ArrowLeft",
+	"ArrowRight",
+	"Enter",
+	"Tab",
+	"Backspace",
+	"Home",
+	"End"
+]
 
 export function useKeyboardManager(sourceId: string) {
 	const [disableSources, setDisableSources] = useAtom(keyboardDisableSourcesAtom)

@@ -19,6 +19,7 @@ import { FormField, FormItem, FormLabel } from "@/components/ui/form"
 import { LearningStateSelector } from "@/components/custom/learning-state-selector"
 import { TopicSelector, topicSelectorAtom } from "@/components/custom/topic-selector"
 import { JAZZ_GLOBAL_GROUP_ID } from "@/lib/constants"
+import { useOnClickOutside } from "@/hooks/use-on-click-outside"
 
 export const globalLinkFormExceptionRefsAtom = atom<React.RefObject<HTMLElement>[]>([])
 
@@ -78,26 +79,16 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 		[exceptionsRefs, globalExceptionRefs]
 	)
 
-	React.useEffect(() => {
-		const handleClickOutside = (event: MouseEvent) => {
-			const isClickInsideForm = formRef.current && formRef.current.contains(event.target as Node)
-
-			const isClickInsideExceptions = allExceptionRefs.some((ref, index) => {
-				const isInside = ref.current && ref.current.contains(event.target as Node)
-				return isInside
-			})
-
-			if (!isClickInsideForm && !istopicSelectorOpen && !islearningStateSelectorOpen && !isClickInsideExceptions) {
-				onClose?.()
-			}
+	useOnClickOutside(formRef, event => {
+		if (
+			!istopicSelectorOpen &&
+			!islearningStateSelectorOpen &&
+			!allExceptionRefs.some(ref => ref.current?.contains(event.target as Node))
+		) {
+			console.log("clicking outside")
+			onClose?.()
 		}
-
-		document.addEventListener("mousedown", handleClickOutside)
-
-		return () => {
-			document.removeEventListener("mousedown", handleClickOutside)
-		}
-	}, [islearningStateSelectorOpen, istopicSelectorOpen, allExceptionRefs, onClose])
+	})
 
 	React.useEffect(() => {
 		if (selectedLink) {
@@ -193,7 +184,15 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 	const canSubmit = form.formState.isValid && !form.formState.isSubmitting
 
 	return (
-		<div className="p-3 transition-all">
+		<div
+			tabIndex={-1}
+			className="p-3 transition-all"
+			onKeyDown={e => {
+				if (e.key === "Escape") {
+					handleCancel()
+				}
+			}}
+		>
 			<div className={cn("bg-muted/30 relative rounded-md border", isFetching && "opacity-50")}>
 				<Form {...form}>
 					<form ref={formRef} onSubmit={form.handleSubmit(onSubmit)} className="relative min-w-0 flex-1">
@@ -213,7 +212,6 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 												<LearningStateSelector
 													value={field.value}
 													onChange={value => {
-														// toggle, if already selected set undefined
 														form.setValue("learningState", field.value === value ? undefined : value)
 													}}
 													showSearch={false}

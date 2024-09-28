@@ -13,7 +13,7 @@ import { Editor } from "@tiptap/core"
 import { generateUniqueSlug } from "@/lib/utils"
 import { FocusClasses } from "@tiptap/extension-focus"
 import { DetailPageHeader } from "./header"
-import { useMedia } from "react-use"
+import { useMedia } from "@/hooks/use-media"
 import { TopicSelector } from "@/components/custom/topic-selector"
 import { Button } from "@/components/ui/button"
 import { LaIcon } from "@/components/custom/la-icon"
@@ -23,33 +23,6 @@ import { usePageActions } from "../hooks/use-page-actions"
 
 const TITLE_PLACEHOLDER = "Untitled"
 
-const isPageEmpty = (page: PersonalPage): boolean => {
-	return (!page.title || page.title.trim() === "") && (!page.content || Object.keys(page.content).length === 0)
-}
-
-const useDeleteEmptyPage = (currentPageId: string | null) => {
-	const router = useRouter()
-	const { me } = useAccount({
-		root: {
-			personalPages: []
-		}
-	})
-
-	useEffect(() => {
-		return () => {
-			if (!currentPageId || !me?.root?.personalPages) return
-
-			const currentPage = me.root.personalPages.find(page => page?.id === currentPageId)
-			if (currentPage && isPageEmpty(currentPage)) {
-				const index = me.root.personalPages.findIndex(page => page?.id === currentPageId)
-				if (index !== -1) {
-					me.root.personalPages.splice(index, 1)
-				}
-			}
-		}
-	}, [currentPageId, me, router])
-}
-
 export function PageDetailRoute({ pageId }: { pageId: string }) {
 	const { me } = useAccount({ root: { personalLinks: [] } })
 	const isMobile = useMedia("(max-width: 770px)")
@@ -57,8 +30,6 @@ export function PageDetailRoute({ pageId }: { pageId: string }) {
 	const router = useRouter()
 	const { deletePage } = usePageActions()
 	const confirm = useConfirm()
-
-	// useDeleteEmptyPage(pageId)
 
 	const handleDelete = useCallback(async () => {
 		const result = await confirm({

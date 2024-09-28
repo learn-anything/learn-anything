@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import * as React from "react"
 import { SignInButton, useAuth, useUser } from "@clerk/nextjs"
 import { useAtom } from "jotai"
 import Link from "next/link"
@@ -27,13 +27,13 @@ import { useKeyboardManager } from "@/hooks/use-keyboard-manager"
 export const ProfileSection: React.FC = () => {
 	const { user, isSignedIn } = useUser()
 	const { signOut } = useAuth()
-	const [menuOpen, setMenuOpen] = useState(false)
+	const [menuOpen, setMenuOpen] = React.useState(false)
 	const pathname = usePathname()
 	const [, setShowShortcut] = useAtom(showShortcutAtom)
 
 	const { disableKeydown } = useKeyboardManager("profileSection")
 
-	useEffect(() => {
+	React.useEffect(() => {
 		disableKeydown(menuOpen)
 	}, [menuOpen, disableKeydown])
 

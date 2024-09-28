@@ -36,7 +36,6 @@ export class UserRoot extends CoMap {
 	topicsLearned = co.ref(ListOfTopics)
 
 	tasks = co.ref(ListOfTasks)
-
 	journalEntries = co.ref(JournalEntryLists)
 }
 
@@ -68,7 +67,6 @@ export class LaAccount extends Account {
 					topicsLearned: ListOfTopics.create([], { owner: this }),
 
 					tasks: ListOfTasks.create([], { owner: this }),
-
 					journalEntries: JournalEntryLists.create([], { owner: this })
 				},
 				{ owner: this }

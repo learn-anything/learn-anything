@@ -4,16 +4,12 @@ import { useAccount } from "@/lib/providers/jazz-provider"
 import { Task } from "@/lib/schema/tasks"
 import { TaskList } from "./TaskList"
 import { TaskForm } from "./TaskForm"
+import { LaIcon } from "@/components/custom/la-icon"
 
 export const TaskRoute: React.FC = () => {
 	const { me } = useAccount({ root: { tasks: [] } })
-	const tasks = me?.root?.tasks || []
-
-	const addTask = (newTask: Task) => {
-		if (me?.root?.tasks) {
-			me.root.tasks.push(newTask)
-		}
-	}
+	const tasks = me?.root.tasks
+	console.log(tasks, "tasks here")
 
 	const updateTask = (taskId: string, updates: Partial<Task>) => {
 		if (me?.root?.tasks) {
@@ -26,9 +22,12 @@ export const TaskRoute: React.FC = () => {
 
 	return (
 		<div className="flex flex-col space-y-4 p-4">
-			<h1 className="text-2xl font-bold">Tasks</h1>
-			<TaskForm onAddTask={addTask} />
-			<TaskList tasks={tasks as Task[]} updateTask={updateTask} />
+			<div className="flex flex-row items-center gap-1">
+				<LaIcon name="ListTodo" className="size-6" />
+				<h1 className="text-xl font-bold">Current Tasks</h1>
+			</div>
+			<TaskForm />
+			<TaskList tasks={tasks} onUpdateTask={updateTask} />
 		</div>
 	)
 }
