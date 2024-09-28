@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useMemo, useState } from "react"
-import { TopicDetailHeader } from "./h"
+import { TopicDetailHeader } from "./Header"
 import { useAccountOrGuest, useCoState } from "@/lib/providers/jazz-provider"
 import { JAZZ_GLOBAL_GROUP_ID } from "@/lib/constants"
 import { Topic } from "@/lib/schema"
