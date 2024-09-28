@@ -43,7 +43,6 @@ export const MainTopicList: React.FC<MainTopicListProps> = ({ me }) => {
 	const isTablet = useMedia("(max-width: 640px)")
 	const [activeItemIndex, setActiveItemIndex] = React.useState<number | null>(null)
 	const [keyboardActiveIndex, setKeyboardActiveIndex] = React.useState<number | null>(null)
-	const router = useRouter()
 
 	const personalTopics = React.useMemo(
 		() => [
@@ -52,13 +51,6 @@ export const MainTopicList: React.FC<MainTopicListProps> = ({ me }) => {
 			...me.root.topicsLearned.map(topic => ({ topic, learningState: "learned" as const }))
 		],
 		[me.root.topicsWantToLearn, me.root.topicsLearning, me.root.topicsLearned]
-	)
-
-	const handleEnter = React.useCallback(
-		(selectedTopic: Topic) => {
-			router.push(`/${selectedTopic.name}`)
-		},
-		[router]
 	)
 
 	const next = () => Math.min((activeItemIndex ?? 0) + 1, (personalTopics?.length ?? 0) - 1)

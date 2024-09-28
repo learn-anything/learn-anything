@@ -1,12 +1,13 @@
 "use client"
 
-import { useState } from "react"
-import { useTopicData } from "@/hooks/use-topic-data"
-import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
+import { useMemo, useState } from "react"
+import { useAccountOrGuest, useCoState } from "@/lib/providers/jazz-provider"
 import { ContentHeader, SidebarToggleButton } from "@/components/custom/content-header"
 import { GuideCommunityToggle } from "@/components/custom/GuideCommunityToggle"
 import { QuestionList } from "@/components/custom/QuestionList"
 import { QuestionThread } from "@/components/custom/QuestionThread"
+import { Topic } from "@/lib/schema"
+import { JAZZ_GLOBAL_GROUP_ID } from "@/lib/constants"
 
 interface CommunityTopicRouteProps {
 	topicName: string
@@ -21,7 +22,8 @@ interface Question {
 
 export function CommunityTopicRoute({ topicName }: CommunityTopicRouteProps) {
 	const { me } = useAccountOrGuest({ root: { personalLinks: [] } })
-	const { topic } = useTopicData(topicName, me)
+	const topicID = useMemo(() => me && Topic.findUnique({ topicName }, JAZZ_GLOBAL_GROUP_ID, me), [topicName, me])
+	const topic = useCoState(Topic, topicID, { latestGlobalGuide: { sections: [] } })
 
 	const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null)
 
