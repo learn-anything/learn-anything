@@ -1,13 +1,13 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Calendar } from "@/components/custom/sidebar/calendar"
 import { JournalEntry, JournalEntryLists } from "@/lib/schema/journal"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { calendarFormatDate } from "@/components/minimal-tiptap/utils"
+import { calendarFormatDate } from "@/lib/utils"
+import { Calendar } from "@/components/ui/calendar"
 
 export function JournalRoute() {
 	const [date, setDate] = useState<Date>(new Date())

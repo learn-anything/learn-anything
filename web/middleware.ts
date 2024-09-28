@@ -11,7 +11,8 @@ const ROUTE_PATTERNS = {
 		"/settings(.*)",
 		"/tauri(.*)",
 		"/onboarding(.*)",
-		"/tasks(.*)"
+		"/tasks(.*)",
+		"/journal(.*)"
 	]
 }
 

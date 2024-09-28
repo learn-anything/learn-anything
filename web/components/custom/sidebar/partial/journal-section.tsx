@@ -3,12 +3,53 @@ import { usePathname } from "next/navigation"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { LaIcon } from "../../la-icon"
 import { cn } from "@/lib/utils"
+import { useEffect, useState } from "react"
+import { useAuth, useUser } from "@clerk/nextjs"
+import { getFeatureFlag } from "@/app/actions"
 
 export const JournalSection: React.FC = () => {
 	const { me } = useAccount()
 	const journalEntries = me?.root?.journalEntries
 	const pathname = usePathname()
 	const isActive = pathname === "/journal"
+
+	const [isFetching, setIsFetching] = useState(false)
+	const [isFeatureActive, setIsFeatureActive] = useState(false)
+	const { isLoaded, isSignedIn } = useAuth()
+	const { user } = useUser()
+
+	useEffect(() => {
+		async function checkFeatureFlag() {
+			setIsFetching(true)
+
+			if (isLoaded && isSignedIn) {
+				const [data, err] = await getFeatureFlag({ name: "JOURNAL" })
+
+				if (err) {
+					console.error(err)
+					setIsFetching(false)
+					return
+				}
+
+				if (user?.emailAddresses.some(email => data.flag?.emails.includes(email.emailAddress))) {
+					setIsFeatureActive(true)
+				}
+				setIsFetching(false)
+			}
+		}
+
+		checkFeatureFlag()
+	}, [isLoaded, isSignedIn, user])
+
+	if (!isLoaded || !isSignedIn) {
+		return <div className="py-2 text-center text-gray-500">Loading...</div>
+	}
+
+	if (!me) return null
+
+	if (!isFeatureActive) {
+		return null
+	}
 
 	return (
 		<div className="group/journal flex flex-col gap-px py-2">
