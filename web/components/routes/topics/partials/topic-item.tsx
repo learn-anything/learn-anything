@@ -106,7 +106,7 @@ export const TopicItem = React.forwardRef<HTMLAnchorElement, TopicItemProps>(
 					router.push(`/${topic.name}`)
 				}
 			},
-			[router, topic.id]
+			[router, topic.name]
 		)
 
 		return (

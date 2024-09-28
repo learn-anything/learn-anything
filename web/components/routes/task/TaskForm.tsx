@@ -30,8 +30,8 @@ export const TaskForm: React.FC<TaskFormProps> = ({}) => {
 					title,
 					description: "",
 					status: "todo",
-					createdAt: new Date()
-					// updatedAt: new Date()
+					createdAt: new Date(),
+					updatedAt: new Date()
 				},
 				{ owner: me._owner }
 			)

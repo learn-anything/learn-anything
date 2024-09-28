@@ -1,36 +1,35 @@
 {
-	"name": "learn-anything",
-	"scripts": {
-		"dev": "bun web",
-		"web": "cd web && bun dev",
-		"web:build": "bun run --filter '*' build",
-		"ts": "bun run --watch scripts/run.ts",
-		"seed": "bun --watch scripts/seed.ts",
-		"tauri": "tauri",
-		"app": "tauri dev",
-		"app:build": "bun tauri build -b dmg -v"
-	},
-	"workspaces": [
-		"web"
-	],
-	"dependencies": {
-		"@clerk/themes": "^2.1.30",
-		"@tauri-apps/cli": "^2.0.0-rc.16",
-		"@tauri-apps/plugin-fs": "^2.0.0-rc.2",
-		"jazz-nodejs": "0.8.0"
-	},
-	"devDependencies": {
-		"bun-types": "^1.1.29"
-	},
-	"prettier": {
-		"plugins": [
-			"prettier-plugin-tailwindcss"
-		],
-		"useTabs": true,
-		"semi": false,
-		"trailingComma": "none",
-		"printWidth": 120,
-		"arrowParens": "avoid"
-	},
-	"license": "MIT"
+  "name": "learn-anything",
+  "scripts": {
+    "dev": "bun web",
+    "web": "cd web && bun dev",
+    "web:build": "bun run --filter '*' build",
+    "ts": "bun run --watch scripts/run.ts",
+    "seed": "bun --watch scripts/seed.ts",
+    "tauri": "tauri",
+    "app": "tauri dev",
+    "app:build": "bun tauri build -b dmg -v"
+  },
+  "workspaces": [
+    "web"
+  ],
+  "dependencies": {
+    "@tauri-apps/cli": "^2.0.0-rc.17",
+    "@tauri-apps/plugin-fs": "^2.0.0-rc.2",
+    "jazz-nodejs": "0.8.0"
+  },
+  "devDependencies": {
+    "bun-types": "^1.1.29"
+  },
+  "prettier": {
+    "plugins": [
+      "prettier-plugin-tailwindcss"
+    ],
+    "useTabs": true,
+    "semi": false,
+    "trailingComma": "none",
+    "printWidth": 120,
+    "arrowParens": "avoid"
+  },
+  "license": "MIT"
 }

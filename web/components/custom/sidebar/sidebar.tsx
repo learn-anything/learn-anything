@@ -16,6 +16,7 @@ import { ProfileSection } from "./partial/profile-section"
 import { TaskSection } from "./partial/task-section"
 import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
 import { LaIcon } from "../la-icon"
+import { JournalSection } from "./partial/journal-section"
 
 interface SidebarContextType {
 	isCollapsed: boolean
@@ -123,6 +124,7 @@ const SidebarContent: React.FC = React.memo(() => {
 				<div className="h-2 shrink-0" />
 				{me._type === "Account" && <LinkSection pathname={pathname} />}
 				{me._type === "Account" && <TopicSection pathname={pathname} />}
+				{me._type === "Account" && <JournalSection />}
 				{me._type === "Account" && <TaskSection pathname={pathname} />}
 				{me._type === "Account" && <PageSection pathname={pathname} />}
 			</div>

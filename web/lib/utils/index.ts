@@ -46,6 +46,14 @@ export function isTextInput(element: Element): boolean {
 	)
 }
 
+export function calendarFormatDate(date: Date): string {
+	return date.toLocaleDateString("en-US", {
+		year: "numeric",
+		month: "long",
+		day: "numeric"
+	})
+}
+
 export * from "./urls"
 export * from "./slug"
 export * from "./keyboard"

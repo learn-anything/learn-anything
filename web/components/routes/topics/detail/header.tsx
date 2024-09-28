@@ -99,6 +99,9 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 				</div>
 			</div>
 
+			<div className="flex flex-auto"></div>
+			{/* <GuideCommunityToggle topicName={topic.name} /> */}
+
 			<LearningStateSelector
 				showSearch={false}
 				value={p?.learningState || ""}
