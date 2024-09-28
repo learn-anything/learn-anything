@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useAtom } from "jotai"
 import { toast } from "sonner"
 
@@ -10,33 +10,33 @@ import { Button } from "@/components/ui/button"
 import { LearningStateSelectorContent } from "@/components/custom/learning-state-selector"
 
 import { cn, ensureUrlProtocol, generateUniqueSlug } from "@/lib/utils"
-import { LaAccount, Link as LinkSchema, PersonalLink, PersonalLinkLists, Topic, UserRoot } from "@/lib/schema"
+import { Link as LinkSchema, PersonalLink, PersonalLinkLists, Topic } from "@/lib/schema"
 import { openPopoverForIdAtom } from "../TopicDetailRoute"
 import { LEARNING_STATES, LearningStateValue } from "@/lib/constants"
+import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
+import { useClerk } from "@clerk/nextjs"
 
-interface LinkItemProps {
+interface LinkItemProps extends React.ComponentPropsWithoutRef<"div"> {
 	topic: Topic
 	link: LinkSchema
 	isActive: boolean
 	index: number
 	setActiveIndex: (index: number) => void
-	me: {
-		root: {
-			personalLinks: PersonalLinkLists
-		} & UserRoot
-	} & LaAccount
-	personalLinks: PersonalLinkLists
+	personalLinks?: PersonalLinkLists
 }
 
 export const LinkItem = React.memo(
-	React.forwardRef<HTMLLIElement, LinkItemProps>(
-		({ topic, link, isActive, index, setActiveIndex, me, personalLinks }, ref) => {
+	React.forwardRef<HTMLDivElement, LinkItemProps>(
+		({ topic, link, isActive, index, setActiveIndex, className, personalLinks, ...props }, ref) => {
+			const clerk = useClerk()
+			const pathname = usePathname()
 			const router = useRouter()
 			const [, setOpenPopoverForId] = useAtom(openPopoverForIdAtom)
 			const [isPopoverOpen, setIsPopoverOpen] = useState(false)
+			const { me } = useAccountOrGuest()
 
 			const personalLink = useMemo(() => {
-				return personalLinks.find(pl => pl?.link?.id === link.id)
+				return personalLinks?.find(pl => pl?.link?.id === link.id)
 			}, [personalLinks, link.id])
 
 			const selectedLearningState = useMemo(() => {
@@ -53,13 +53,19 @@ export const LinkItem = React.memo(
 
 			const handleSelectLearningState = useCallback(
 				(learningState: LearningStateValue) => {
+					if (!personalLinks || !me || me?._type === "Anonymous") {
+						return clerk.redirectToSignIn({
+							redirectUrl: pathname
+						})
+					}
+
 					const defaultToast = {
 						duration: 5000,
 						position: "bottom-right" as const,
 						closeButton: true,
 						action: {
 							label: "Go to list",
-							onClick: () => router.push("/")
+							onClick: () => router.push("/links")
 						}
 					}
 
@@ -72,7 +78,7 @@ export const LinkItem = React.memo(
 							toast.success("Link learning state updated", defaultToast)
 						}
 					} else {
-						const slug = generateUniqueSlug(personalLinks.toJSON(), link.title)
+						const slug = generateUniqueSlug(link.title)
 						const newPersonalLink = PersonalLink.create(
 							{
 								url: link.url,
@@ -100,7 +106,7 @@ export const LinkItem = React.memo(
 					setOpenPopoverForId(null)
 					setIsPopoverOpen(false)
 				},
-				[personalLink, personalLinks, me, link, router, setOpenPopoverForId, topic]
+				[personalLink, personalLinks, me, link, router, topic, setOpenPopoverForId, clerk, pathname]
 			)
 
 			const handlePopoverOpenChange = useCallback(
@@ -112,14 +118,19 @@ export const LinkItem = React.memo(
 			)
 
 			return (
-				<li
+				<div
 					ref={ref}
 					tabIndex={0}
 					onClick={handleClick}
-					className={cn("relative flex h-14 cursor-pointer items-center outline-none xl:h-11", {
-						"bg-muted-foreground/10": isActive,
-						"hover:bg-muted/50": !isActive
-					})}
+					className={cn(
+						"relative flex h-14 cursor-pointer items-center outline-none xl:h-11",
+						{
+							"bg-muted-foreground/10": isActive,
+							"hover:bg-muted/50": !isActive
+						},
+						className
+					)}
+					{...props}
 				>
 					<div className="flex grow justify-between gap-x-6 px-6 max-lg:px-4">
 						<div className="flex min-w-0 items-center gap-x-4">
@@ -140,12 +151,7 @@ export const LinkItem = React.memo(
 										)}
 									</Button>
 								</PopoverTrigger>
-								<PopoverContent
-									className="w-52 rounded-lg p-0"
-									side="bottom"
-									align="start"
-									onCloseAutoFocus={e => e.preventDefault()}
-								>
+								<PopoverContent className="w-52 rounded-lg p-0" side="bottom" align="start">
 									<LearningStateSelectorContent
 										showSearch={false}
 										searchPlaceholder="Search state..."
@@ -159,7 +165,7 @@ export const LinkItem = React.memo(
 								<div className="gap-x-2 space-y-0.5 xl:flex xl:flex-row">
 									<p
 										className={cn(
-											"text-primary hover:text-primary line-clamp-1 text-sm font-medium xl:truncate",
+											"text-primary hover:text-primary line-clamp-1 text-sm font-medium",
 											isActive && "font-bold"
 										)}
 									>
@@ -170,7 +176,7 @@ export const LinkItem = React.memo(
 										<LaIcon
 											name="Link"
 											aria-hidden="true"
-											className="text-muted-foreground group-hover:text-primary flex-none"
+											className="text-muted-foreground group-hover:text-primary size-3.5 flex-none"
 										/>
 
 										<Link
@@ -181,15 +187,14 @@ export const LinkItem = React.memo(
 											onClick={e => e.stopPropagation()}
 											className="text-muted-foreground hover:text-primary text-xs"
 										>
-											<span className="xl:truncate">{link.url}</span>
+											<span className="line-clamp-1">{link.url}</span>
 										</Link>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div className="flex shrink-0 items-center gap-x-4"></div>
 					</div>
-				</li>
+				</div>
 			)
 		}
 	)

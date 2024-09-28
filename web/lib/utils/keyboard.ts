@@ -1,47 +1,4 @@
-let isMac: boolean | undefined
-
-interface Navigator {
-	userAgentData?: {
-		brands: { brand: string; version: string }[]
-		mobile: boolean
-		platform: string
-		getHighEntropyValues: (hints: string[]) => Promise<{
-			platform: string
-			platformVersion: string
-			uaFullVersion: string
-		}>
-	}
-}
-
-function getPlatform(): string {
-	const nav = navigator as Navigator
-
-	if (nav.userAgentData) {
-		if (nav.userAgentData.platform) {
-			return nav.userAgentData.platform
-		}
-
-		nav.userAgentData.getHighEntropyValues(["platform"]).then(highEntropyValues => {
-			if (highEntropyValues.platform) {
-				return highEntropyValues.platform
-			}
-		})
-	}
-
-	if (typeof navigator.platform === "string") {
-		return navigator.platform
-	}
-
-	return ""
-}
-
-export function isMacOS() {
-	if (isMac === undefined) {
-		isMac = getPlatform().toLowerCase().includes("mac")
-	}
-
-	return isMac
-}
+const SSR = typeof window === "undefined"
 
 interface ShortcutKeyResult {
 	symbol: string
@@ -51,15 +8,11 @@ interface ShortcutKeyResult {
 export function getShortcutKey(key: string): ShortcutKeyResult {
 	const lowercaseKey = key.toLowerCase()
 	if (lowercaseKey === "mod") {
-		return isMacOS() ? { symbol: "⌘", readable: "Command" } : { symbol: "Ctrl", readable: "Control" }
+		return isMac() ? { symbol: "⌘", readable: "Command" } : { symbol: "Ctrl", readable: "Control" }
 	} else if (lowercaseKey === "alt") {
-		return isMacOS() ? { symbol: "⌥", readable: "Option" } : { symbol: "Alt", readable: "Alt" }
+		return isMac() ? { symbol: "⌥", readable: "Option" } : { symbol: "Alt", readable: "Alt" }
 	} else if (lowercaseKey === "shift") {
-		return { symbol: "⇧", readable: "Shift" }
-	} else if (lowercaseKey === "control") {
-		return { symbol: "⌃", readable: "Control" }
-	} else if (lowercaseKey === "windows" && !isMacOS()) {
-		return { symbol: "Win", readable: "Windows" }
+		return isMac() ? { symbol: "⇧", readable: "Shift" } : { symbol: "Shift", readable: "Shift" }
 	} else {
 		return { symbol: key.toUpperCase(), readable: key }
 	}
@@ -69,20 +22,38 @@ export function getShortcutKeys(keys: string[]): ShortcutKeyResult[] {
 	return keys.map(key => getShortcutKey(key))
 }
 
-export function getSpecialShortcut(shortcutName: string): ShortcutKeyResult[] {
-	if (shortcutName === "expandToolbar") {
-		return isMacOS()
-			? [getShortcutKey("control"), getShortcutKey("mod"), getShortcutKey("n")]
-			: [getShortcutKey("mod"), getShortcutKey("windows"), getShortcutKey("n")]
+export function isModKey(event: KeyboardEvent | MouseEvent | React.KeyboardEvent) {
+	return isMac() ? event.metaKey : event.ctrlKey
+}
+
+export function isMac(): boolean {
+	if (SSR) {
+		return false
 	}
-
-	return []
+	return window.navigator.platform === "MacIntel"
 }
 
-export function formatShortcut(shortcutKeys: ShortcutKeyResult[]): string {
-	return shortcutKeys.map(key => key.symbol).join("")
+export function isWindows(): boolean {
+	if (SSR) {
+		return false
+	}
+	return window.navigator.platform === "Win32"
 }
 
-export function formatReadableShortcut(shortcutKeys: ShortcutKeyResult[]): string {
-	return shortcutKeys.map(key => key.readable).join(" + ")
+let supportsPassive = false
+
+try {
+	const opts = Object.defineProperty({}, "passive", {
+		get() {
+			supportsPassive = true
+		}
+	})
+	// @ts-expect-error ts-migrate(2769) testPassive is not a real event
+	window.addEventListener("testPassive", null, opts)
+	// @ts-expect-error ts-migrate(2769) testPassive is not a real event
+	window.removeEventListener("testPassive", null, opts)
+} catch (e) {
+	// No-op
 }
+
+export const supportsPassiveListener = supportsPassive

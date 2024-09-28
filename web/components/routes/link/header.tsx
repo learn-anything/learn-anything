@@ -1,10 +1,9 @@
 "use client"
 
 import * as React from "react"
-import { ListFilterIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ContentHeader, SidebarToggleButton } from "@/components/custom/content-header"
-import { useMedia } from "react-use"
+import { useMedia } from "@/hooks/use-media"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -15,6 +14,7 @@ import { LEARNING_STATES } from "@/lib/constants"
 import { useQueryState, parseAsStringLiteral } from "nuqs"
 import { FancySwitch } from "@omit/react-fancy-switch"
 import { cn } from "@/lib/utils"
+import { LaIcon } from "@/components/custom/la-icon"
 
 const ALL_STATES = [{ label: "All", value: "all", icon: "List", className: "text-foreground" }, ...LEARNING_STATES]
 const ALL_STATES_STRING = ALL_STATES.map(ls => ls.value)
@@ -26,11 +26,11 @@ export const LinkHeader = React.memo(() => {
 
 	return (
 		<>
-			<ContentHeader className="px-6 py-5 max-lg:px-4">
+			<ContentHeader className="px-6 max-lg:px-4 lg:py-4">
 				<div className="flex min-w-0 shrink-0 items-center gap-1.5">
 					<SidebarToggleButton />
 					<div className="flex min-h-0 items-center">
-						<span className="truncate text-left text-xl font-bold">Links</span>
+						<span className="truncate text-left font-bold lg:text-xl">Links</span>
 					</div>
 				</div>
 
@@ -42,7 +42,7 @@ export const LinkHeader = React.memo(() => {
 			</ContentHeader>
 
 			{isTablet && (
-				<div className="flex min-h-10 flex-row items-start justify-between border-b px-6 py-2 max-lg:pl-4">
+				<div className="flex flex-row items-start justify-between border-b px-6 pb-4 pt-2 max-lg:pl-4">
 					<LearningTab />
 				</div>
 			)}
@@ -61,15 +61,19 @@ const LearningTab = React.memo(() => {
 
 	const handleTabChange = React.useCallback(
 		(value: string) => {
-			setActiveTab(value)
-			setActiveState(value)
+			if (value !== activeTab) {
+				setActiveTab(value)
+				setActiveState(value)
+			}
 		},
-		[setActiveTab, setActiveState]
+		[activeTab, setActiveTab, setActiveState]
 	)
 
 	React.useEffect(() => {
-		setActiveTab(activeState)
-	}, [activeState, setActiveTab])
+		if (activeState !== activeTab) {
+			setActiveTab(activeState)
+		}
+	}, [activeState, activeTab, setActiveTab])
 
 	return (
 		<FancySwitch
@@ -78,8 +82,8 @@ const LearningTab = React.memo(() => {
 				handleTabChange(value as string)
 			}}
 			options={ALL_STATES}
-			className="bg-secondary flex rounded-lg"
-			highlighterClassName="bg-secondary-foreground/10 rounded-lg"
+			className="bg-muted flex rounded-lg"
+			highlighterClassName="bg-muted-foreground/10 rounded-md"
 			radioClassName={cn(
 				"relative mx-2 flex h-8 cursor-pointer items-center justify-center rounded-full px-1 text-sm text-secondary-foreground/60 data-[checked]:text-secondary-foreground font-medium transition-colors focus:outline-none"
 			)}
@@ -111,8 +115,8 @@ const FilterAndSort = React.memo(() => {
 			<div className="flex items-center gap-2">
 				<Popover open={sortOpen} onOpenChange={setSortOpen}>
 					<PopoverTrigger asChild>
-						<Button size="sm" type="button" variant="secondary" className="gap-x-2 text-sm">
-							<ListFilterIcon size={16} className="text-primary/60" />
+						<Button size="sm" type="button" variant="secondary" className="min-w-8 gap-x-2 text-sm max-sm:p-0">
+							<LaIcon name="ListFilter" className="text-primary/60" />
 							<span className="hidden md:block">Filter: {getFilterText()}</span>
 						</Button>
 					</PopoverTrigger>

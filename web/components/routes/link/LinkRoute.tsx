@@ -1,28 +1,21 @@
 "use client"
 
+import * as React from "react"
 import { LinkHeader } from "@/components/routes/link/header"
 import { LinkList } from "@/components/routes/link/list"
 import { LinkManage } from "@/components/routes/link/manage"
-import { useQueryState } from "nuqs"
-import { useEffect } from "react"
-import { useAtom } from "jotai"
-import { linkEditIdAtom } from "@/store/link"
+import { atom } from "jotai"
 import { LinkBottomBar } from "./bottom-bar"
 
-export function LinkRoute() {
-	const [, setEditId] = useAtom(linkEditIdAtom)
-	const [nuqsEditId] = useQueryState("editId")
+export const isDeleteConfirmShownAtom = atom(false)
 
-	useEffect(() => {
-		setEditId(nuqsEditId)
-	}, [nuqsEditId, setEditId])
-
+export function LinkRoute(): React.ReactElement {
 	return (
-		<div className="flex h-full flex-auto flex-col overflow-hidden">
+		<>
 			<LinkHeader />
 			<LinkManage />
 			<LinkList />
 			<LinkBottomBar />
-		</div>
+		</>
 	)
 }

@@ -3,12 +3,11 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
 import { LaIcon } from "@/components/custom/la-icon"
 import { ListOfTopics } from "@/lib/schema"
 import { LEARNING_STATES, LearningStateValue } from "@/lib/constants"
 
-export const TopicSection: React.FC = () => {
+export const TopicSection: React.FC<{ pathname: string }> = ({ pathname }) => {
 	const { me } = useAccount({
 		root: {
 			topicsWantToLearn: [],
@@ -22,11 +21,13 @@ export const TopicSection: React.FC = () => {
 		(me?.root.topicsLearning?.length || 0) +
 		(me?.root.topicsLearned?.length || 0)
 
+	const isActive = pathname.startsWith("/topics")
+
 	if (!me) return null
 
 	return (
-		<div className="group/pages flex flex-col gap-px py-2">
-			<TopicSectionHeader topicCount={topicCount} />
+		<div className="group/topics flex flex-col gap-px py-2">
+			<TopicSectionHeader topicCount={topicCount} isActive={isActive} />
 			<List
 				topicsWantToLearn={me.root.topicsWantToLearn}
 				topicsLearning={me.root.topicsLearning}
@@ -38,21 +39,22 @@ export const TopicSection: React.FC = () => {
 
 interface TopicSectionHeaderProps {
 	topicCount: number
+	isActive: boolean
 }
 
-const TopicSectionHeader: React.FC<TopicSectionHeaderProps> = ({ topicCount }) => (
+const TopicSectionHeader: React.FC<TopicSectionHeaderProps> = ({ topicCount, isActive }) => (
 	<div
-		className={cn("flex min-h-[30px] items-center gap-px rounded-md", "hover:bg-accent hover:text-accent-foreground")}
+		className={cn(
+			"flex h-9 items-center gap-px rounded-md sm:h-[30px]",
+			isActive ? "bg-accent text-accent-foreground" : "hover:bg-accent hover:text-accent-foreground"
+		)}
 	>
-		<Button
-			variant="ghost"
-			className="size-6 flex-1 items-center justify-start rounded-md px-2 py-1 focus-visible:outline-none focus-visible:ring-0"
-		>
-			<p className="flex items-center text-xs font-medium">
+		<Link href="/topics" className="flex flex-1 items-center justify-start rounded-md px-2 py-1">
+			<p className="text-sm sm:text-xs">
 				Topics
 				{topicCount > 0 && <span className="text-muted-foreground ml-1">{topicCount}</span>}
 			</p>
-		</Button>
+		</Link>
 	</div>
 )
 
@@ -72,7 +74,7 @@ const List: React.FC<ListProps> = ({ topicsWantToLearn, topicsLearning, topicsLe
 				count={topicsWantToLearn.length}
 				label="To Learn"
 				value="wantToLearn"
-				href="/me/wantToLearn"
+				href="#"
 				isActive={pathname === "/me/wantToLearn"}
 			/>
 			<ListItem
@@ -80,7 +82,7 @@ const List: React.FC<ListProps> = ({ topicsWantToLearn, topicsLearning, topicsLe
 				label="Learning"
 				value="learning"
 				count={topicsLearning.length}
-				href="/me/learning"
+				href="#"
 				isActive={pathname === "/me/learning"}
 			/>
 			<ListItem
@@ -88,7 +90,7 @@ const List: React.FC<ListProps> = ({ topicsWantToLearn, topicsLearning, topicsLe
 				label="Learned"
 				value="learned"
 				count={topicsLearned.length}
-				href="/me/learned"
+				href="#"
 				isActive={pathname === "/me/learned"}
 			/>
 		</div>
@@ -114,7 +116,7 @@ const ListItem: React.FC<ListItemProps> = ({ label, value, href, count, isActive
 				<Link
 					href={href}
 					className={cn(
-						"group-hover/topic-link:bg-accent relative flex h-8 w-full items-center gap-2 rounded-md p-1.5 font-medium",
+						"group-hover/topic-link:bg-accent relative flex h-9 w-full items-center gap-2 rounded-md p-1.5 font-medium sm:h-8",
 						{ "bg-accent text-accent-foreground": isActive },
 						le.className
 					)}

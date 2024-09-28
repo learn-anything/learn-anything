@@ -2,10 +2,10 @@
 
 import * as react from "react"
 import * as fg from "@nothing-but/force-graph"
-import { ease, trig, raf } from "@nothing-but/utils"
-
 import * as schedule from "@/lib/utils/schedule"
 import * as canvas from "@/lib/utils/canvas"
+import { searchSafeRegExp } from "@/lib/utils"
+import { ease, trig, raf, color } from "@nothing-but/utils"
 
 export type RawGraphNode = {
 	name: string
@@ -13,70 +13,36 @@ export type RawGraphNode = {
 	connectedTopics: string[]
 }
 
-type HSL = [hue: number, saturation: number, lightness: number]
-
-const COLORS: readonly HSL[] = [
+const COLORS: readonly color.HSL[] = [
 	[3, 86, 64],
+	[15, 87, 66],
 	[31, 90, 69],
-	[15, 87, 66]
+	[15, 87, 66],
+	[31, 90, 69],
+	[344, 87, 70]
 ]
 
-/* use a plain object instead of Map for faster lookups */
-type ColorMap = {[key: string]: string}
-type HSLMap   = Map<fg.graph.Node, HSL>
+type ColorMap = Record<string, color.HSL>
 
-const MAX_COLOR_ITERATIONS = 10
+function generateColorMap(g: fg.graph.Graph): ColorMap {
+	const hsl_map: ColorMap = {}
 
-/**
- * Add a color to a node and all its connected nodes.
- */
-function visitColorNode(
-	g:         fg.graph.Graph,
-	prev:      fg.graph.Node,
-	node:      fg.graph.Node,
-	hsl_map:   HSLMap,
-	add:       HSL,
-	iteration: number = 1
-): void {
-	if (iteration > MAX_COLOR_ITERATIONS) return
-
-	const color = hsl_map.get(node)
-
-	if (!color) {
-		hsl_map.set(node, [...add])
-	} else {
-		const add_strength = MAX_COLOR_ITERATIONS / iteration
-		color[0] = (color[0] + add[0] * add_strength) / (1 + add_strength)
-		color[1] = (color[1] + add[1] * add_strength) / (1 + add_strength)
-		color[2] = (color[2] + add[2] * add_strength) / (1 + add_strength)
+	for (let i = 0; i < g.nodes.length; i++) {
+		hsl_map[g.nodes[i].key as string] = COLORS[i % COLORS.length]
 	}
 
-	for (let edge of g.edges) {
-		let b: fg.graph.Node
-		if      (edge.a === node) b = edge.b
-		else if (edge.b === node) b = edge.a
-		else continue
-		if (b !== prev) {
-			visitColorNode(g, node, b, hsl_map, add, iteration + 1)
-		}
-	}
-}
+	for (let { a, b } of g.edges) {
+		let a_hsl = hsl_map[a.key as string]
+		let b_hsl = hsl_map[b.key as string]
 
-function generateColorMap(g: fg.graph.Graph, nodes: readonly fg.graph.Node[]): ColorMap {
-	const hls_map: HSLMap = new Map()
+		let am = a.mass - 1
+		let bm = b.mass - 1
 
-	for (let i = 0; i < nodes.length; i++) {
-		const node = nodes[i]!
-		const color = COLORS[i % COLORS.length]!
-		visitColorNode(g, node, node, hls_map, color)
+		hsl_map[a.key as string] = color.mix(a_hsl, b_hsl, am * am * am, bm)
+		hsl_map[b.key as string] = color.mix(a_hsl, b_hsl, am, bm * bm * bm)
 	}
 
-	const color_map: ColorMap = {}
-	for (const [node, [hue, saturation, lightness]] of hls_map.entries()) {
-		color_map[node.key as string] = `${hue} ${saturation}% ${lightness}%`
-	}
-
-	return color_map
+	return hsl_map
 }
 
 function generateNodesFromRawData(g: fg.graph.Graph, raw_data: RawGraphNode[]): void {
@@ -107,14 +73,9 @@ function generateNodesFromRawData(g: fg.graph.Graph, raw_data: RawGraphNode[]): 
 		let edges = fg.graph.get_node_edges(g, node)
 		node.mass = fg.graph.node_mass_from_edges(edges.length)
 	}
-
-	fg.graph.randomize_positions(g)
 }
 
-function filterNodes(
-	s: State,
-	filter: string
-): void {
+function filterNodes(s: State, filter: string): void {
 	fg.graph.clear_nodes(s.graph)
 
 	if (filter === "") {
@@ -122,10 +83,16 @@ function filterNodes(
 		fg.graph.add_edges(s.graph, s.edges)
 	} else {
 		// regex matching all letters of the filter (out of order)
-		const regex = new RegExp(filter.split("").join(".*"), "i")
-	
-		fg.graph.add_nodes(s.graph, s.nodes.filter(node => regex.test(node.label)))
-		fg.graph.add_edges(s.graph, s.edges.filter(edge => regex.test(edge.a.label) && regex.test(edge.b.label)))
+		const regex = searchSafeRegExp(filter)
+
+		fg.graph.add_nodes(
+			s.graph,
+			s.nodes.filter(node => regex.test(node.label))
+		)
+		fg.graph.add_edges(
+			s.graph,
+			s.edges.filter(edge => regex.test(edge.a.label) && regex.test(edge.b.label))
+		)
 	}
 }
 
@@ -135,7 +102,7 @@ const GRAPH_OPTIONS: fg.graph.Options = {
 	origin_strength: 0.01,
 	repel_distance: 40,
 	repel_strength: 2,
-	link_strength: 0.015,
+	link_strength: 0.03,
 	grid_size: 500
 }
 
@@ -143,28 +110,30 @@ const TITLE_SIZE_PX = 400
 
 const simulateGraph = (
 	alpha: number,
-	graph: fg.graph.Graph,
-	canvas: fg.canvas.CanvasState,
+	gestures: fg.canvas.CanvasGestures,
 	vw: number,
 	vh: number
 ): void => {
+	let c = gestures.canvas
+	let g = c.graph
+
 	alpha = alpha / 10 // slow things down a bit
 
-	fg.graph.simulate(graph, alpha)
+	fg.graph.simulate(g, alpha)
 
 	/*
 		Push nodes away from the center (the title)
 	*/
-	let grid_radius = graph.options.grid_size / 2
-	let origin_x = grid_radius + canvas.translate.x
-	let origin_y = grid_radius + canvas.translate.y
+	let grid_radius = g.options.grid_size / 2
+	let origin_x = grid_radius + c.translate.x
+	let origin_y = grid_radius + c.translate.y
 	let vmax = Math.max(vw, vh)
 	let push_radius =
-		(Math.min(TITLE_SIZE_PX, vw / 2, vh / 2) / vmax) * (graph.options.grid_size / canvas.scale) +
+		(Math.min(TITLE_SIZE_PX, vw / 2, vh / 2) / vmax) * (g.options.grid_size / c.scale) +
 		80 /* additional margin for when scrolled in */
 
-	for (let node of graph.nodes) {
-
+	for (let node of g.nodes) {
+		// 
 		let dist_x = node.pos.x - origin_x
 		let dist_y = (node.pos.y - origin_y) * 2
 		let dist = Math.sqrt(dist_x * dist_x + dist_y * dist_y)
@@ -174,6 +143,25 @@ const simulateGraph = (
 
 		node.vel.x += strength * (node.pos.x - origin_x) * 10 * alpha
 		node.vel.y += strength * (node.pos.y - origin_y) * 10 * alpha
+	}
+
+	/*
+		When a node is being dragged
+		it will pull it's connections
+	*/
+	if (gestures.mode.type === fg.canvas.Mode.DraggingNode) {
+		//
+		let node = gestures.mode.node
+
+		for (let edge of fg.graph.each_node_edge(g, node)) {
+			let b = edge.b === node ? edge.a : edge.b
+
+			let dx = (b.pos.x - node.pos.x) * g.options.link_strength * edge.strength * alpha * 10
+			let dy = (b.pos.y - node.pos.y) * g.options.link_strength * edge.strength * alpha * 10
+
+			b.vel.x -= dx / b.mass
+			b.vel.y -= dy / b.mass
+		}
 	}
 }
 
@@ -185,32 +173,31 @@ const drawGraph = (c: fg.canvas.CanvasState, color_map: ColorMap): void => {
 		Draw text nodes
 	*/
 	let grid_size = c.graph.options.grid_size
-	let max_size  = Math.max(c.ctx.canvas.width, c.ctx.canvas.height)
+	let max_size = Math.max(c.ctx.canvas.width, c.ctx.canvas.height)
 
-	let clip_rect = fg.canvas.get_ctx_clip_rect(c.ctx, {x: 100, y: 20})
+	let clip_rect = fg.canvas.get_ctx_clip_rect(c.ctx, { x: 100, y: 20 })
 
 	c.ctx.textAlign = "center"
 	c.ctx.textBaseline = "middle"
 
 	for (let node of c.graph.nodes) {
-
-		let x = node.pos.x / grid_size * max_size
-		let y = node.pos.y / grid_size * max_size
+		let x = (node.pos.x / grid_size) * max_size
+		let y = (node.pos.y / grid_size) * max_size
 
 		if (fg.canvas.in_rect_xy(clip_rect, x, y)) {
-			
-			let base_size       = max_size / 220
+			let base_size = max_size / 220
 			let mass_boost_size = max_size / 140
-			let mass_boost      = (node.mass - 1) / 8 / c.scale
+			let mass_boost = (node.mass - 1) / 8 / c.scale
 
 			c.ctx.font = `${base_size + mass_boost * mass_boost_size}px sans-serif`
-	
+
 			let opacity = 0.6 + ((node.mass - 1) / 50) * 4
 
-			c.ctx.fillStyle = node.anchor || c.hovered_node === node
-				? `rgba(129, 140, 248, ${opacity})`
-				: `hsl(${color_map[node.key as string]} / ${opacity})`
-	
+			c.ctx.fillStyle =
+				node.anchor || c.hovered_node === node
+					? `rgba(129, 140, 248, ${opacity})`
+					: color.hsl_to_hsla_string(color_map[node.key as string], opacity)
+
 			c.ctx.fillText(node.label, x, y)
 		}
 	}
@@ -242,7 +229,7 @@ function init(
 		canvas_el: HTMLCanvasElement | null
 	}
 ) {
-	let {canvas_el, raw_nodes} = props
+	let { canvas_el, raw_nodes } = props
 
 	if (canvas_el == null) return
 
@@ -250,10 +237,12 @@ function init(
 	if (s.ctx == null) return
 
 	generateNodesFromRawData(s.graph, raw_nodes)
+	fg.graph.set_positions_smart(s.graph)
+
 	s.nodes = s.graph.nodes.slice()
 	s.edges = s.graph.edges.slice()
 
-	let color_map = generateColorMap(s.graph, s.nodes)
+	let color_map = generateColorMap(s.graph)
 
 	let canvas_state = fg.canvas.canvasState({
 		ctx: s.ctx,
@@ -263,6 +252,23 @@ function init(
 		init_grid_pos: trig.ZERO
 	})
 
+	let gestures = (s.gestures = fg.canvas.canvasGestures({
+		canvas: canvas_state,
+		onGesture: e => {
+			switch (e.type) {
+				case fg.canvas.GestureEventType.Translate:
+					s.bump_end = raf.bump(s.bump_end)
+					break
+				case fg.canvas.GestureEventType.NodeClick:
+					props.onNodeClick(e.node.key as string)
+					break
+				case fg.canvas.GestureEventType.NodeDrag:
+					fg.graph.set_position(canvas_state.graph, e.node, e.pos)
+					break
+			}
+		}
+	}))
+
 	s.ro = new ResizeObserver(() => {
 		if (canvas.resizeCanvasToDisplaySize(canvas_el)) {
 			fg.canvas.updateTranslate(canvas_state, canvas_state.translate.x, canvas_state.translate.y)
@@ -270,15 +276,19 @@ function init(
 	})
 	s.ro.observe(canvas_el)
 
+	// initial simulation is the most crazy
+	// so it's off-screen
+	simulateGraph(6, gestures, window.innerWidth, window.innerHeight)
+
 	function loop(time: number) {
 		let is_active = gestures.mode.type === fg.canvas.Mode.DraggingNode
 		let iterations = Math.min(2, raf.calcIterations(s.frame_iter_limit, time))
 
 		for (let i = iterations; i > 0; i--) {
 			s.alpha = raf.updateAlpha(s.alpha, is_active || time < s.bump_end)
-			simulateGraph(s.alpha, s.graph, canvas_state, window.innerWidth, window.innerHeight)
+			simulateGraph(s.alpha, gestures, window.innerWidth, window.innerHeight)
 		}
-		
+
 		if (iterations > 0) {
 			drawGraph(canvas_state, color_map)
 		}
@@ -286,23 +296,6 @@ function init(
 		s.raf_id = requestAnimationFrame(loop)
 	}
 	s.raf_id = requestAnimationFrame(loop)
-
-	let gestures = (s.gestures = fg.canvas.canvasGestures({
-		canvas: canvas_state,
-		onGesture: e => {
-			switch (e.type) {
-			case fg.canvas.GestureEventType.Translate:
-				s.bump_end = raf.bump(s.bump_end)
-				break
-			case fg.canvas.GestureEventType.NodeClick:
-				props.onNodeClick(e.node.key as string)
-				break
-			case fg.canvas.GestureEventType.NodeDrag:
-				fg.graph.set_position(canvas_state.graph, e.node, e.pos)
-				break
-			}
-		}
-	}))
 }
 
 function updateQuery(s: State, filter_query: string) {

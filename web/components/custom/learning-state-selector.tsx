@@ -8,6 +8,7 @@ import { LEARNING_STATES, LearningStateValue } from "@/lib/constants"
 import { linkLearningStateSelectorAtom } from "@/store/link"
 import { Command, CommandInput, CommandList, CommandItem, CommandGroup } from "@/components/ui/command"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { icons } from "lucide-react"
 
 interface LearningStateSelectorProps {
 	showSearch?: boolean
@@ -16,15 +17,17 @@ interface LearningStateSelectorProps {
 	value?: string
 	onChange: (value: LearningStateValue) => void
 	className?: string
+	defaultIcon?: keyof typeof icons
 }
 
 export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({
 	showSearch = true,
-	defaultLabel = "Select state",
+	defaultLabel = "State",
 	searchPlaceholder = "Search state...",
 	value,
 	onChange,
-	className
+	className,
+	defaultIcon
 }) => {
 	const [isLearningStateSelectorOpen, setIsLearningStateSelectorOpen] = useAtom(linkLearningStateSelectorAtom)
 	const selectedLearningState = useMemo(() => LEARNING_STATES.find(ls => ls.value === value), [value])
@@ -33,6 +36,9 @@ export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({
 		onChange(selectedValue as LearningStateValue)
 		setIsLearningStateSelectorOpen(false)
 	}
+
+	const iconName = selectedLearningState?.icon || defaultIcon
+	const labelText = selectedLearningState?.label || defaultLabel
 
 	return (
 		<Popover open={isLearningStateSelectorOpen} onOpenChange={setIsLearningStateSelectorOpen}>
@@ -44,21 +50,12 @@ export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({
 					variant="secondary"
 					className={cn("gap-x-2 text-sm", className)}
 				>
-					{selectedLearningState?.icon && (
-						<LaIcon name={selectedLearningState.icon} className={cn(selectedLearningState.className)} />
-					)}
-					<span className={cn("truncate", selectedLearningState?.className || "")}>
-						{selectedLearningState?.label || defaultLabel}
-					</span>
+					{iconName && <LaIcon name={iconName} className={cn(selectedLearningState?.className)} />}
+					{labelText && <span className={cn("truncate", selectedLearningState?.className || "")}>{labelText}</span>}
 					<LaIcon name="ChevronDown" />
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent
-				className="w-52 rounded-lg p-0"
-				side="bottom"
-				align="end"
-				onCloseAutoFocus={e => e.preventDefault()}
-			>
+			<PopoverContent className="w-52 rounded-lg p-0" side="bottom" align="end">
 				<LearningStateSelectorContent
 					showSearch={showSearch}
 					searchPlaceholder={searchPlaceholder}
@@ -91,7 +88,7 @@ export const LearningStateSelectorContent: React.FC<LearningStateSelectorContent
 					<CommandGroup>
 						{LEARNING_STATES.map(ls => (
 							<CommandItem key={ls.value} value={ls.value} onSelect={onSelect}>
-								<LaIcon name={ls.icon} className={cn("mr-2", ls.className)} />
+								{ls.icon && <LaIcon name={ls.icon} className={cn("mr-2", ls.className)} />}
 								<span className={ls.className}>{ls.label}</span>
 								<LaIcon
 									name="Check"

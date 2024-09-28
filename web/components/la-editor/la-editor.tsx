@@ -1,13 +1,13 @@
 import * as React from "react"
 import { EditorContent, useEditor } from "@tiptap/react"
 import { Editor, Content } from "@tiptap/core"
-import { useThrottleFn } from "react-use"
 import { BubbleMenu } from "./components/bubble-menu"
 import { createExtensions } from "./extensions"
 import "./styles/index.css"
 import { cn } from "@/lib/utils"
 import { getOutput } from "./lib/utils"
-import { EditorView } from "@tiptap/pm/view"
+import type { EditorView } from "@tiptap/pm/view"
+import { useThrottle } from "@/hooks/use-throttle"
 
 export interface LAEditorProps extends Omit<React.HTMLProps<HTMLDivElement>, "value"> {
 	output?: "html" | "json" | "text"
@@ -23,10 +23,6 @@ export interface LAEditorProps extends Omit<React.HTMLProps<HTMLDivElement>, "va
 
 export interface LAEditorRef {
 	editor: Editor | null
-}
-
-interface CustomEditor extends Editor {
-	previousBlockCount?: number
 }
 
 export const LAEditor = React.forwardRef<LAEditorRef, LAEditorProps>(
@@ -46,32 +42,13 @@ export const LAEditor = React.forwardRef<LAEditorRef, LAEditorProps>(
 		},
 		ref
 	) => {
-		const [content, setContent] = React.useState<Content | undefined>(value)
-		const throttledContent = useThrottleFn(defaultContent => defaultContent, throttleDelay, [content])
-		const [lastThrottledContent, setLastThrottledContent] = React.useState(throttledContent)
+		const throttledSetValue = useThrottle((value: Content) => onUpdate?.(value), throttleDelay)
 
 		const handleUpdate = React.useCallback(
 			(editor: Editor) => {
-				const newContent = getOutput(editor, output)
-				setContent(newContent)
-
-				const customEditor = editor as CustomEditor
-				const json = customEditor.getJSON()
-
-				if (json.content && Array.isArray(json.content)) {
-					const currentBlockCount = json.content.length
-
-					if (
-						typeof customEditor.previousBlockCount === "number" &&
-						currentBlockCount > customEditor.previousBlockCount
-					) {
-						onNewBlock?.(newContent)
-					}
-
-					customEditor.previousBlockCount = currentBlockCount
-				}
+				throttledSetValue(getOutput(editor, output))
 			},
-			[output, onNewBlock]
+			[output, throttledSetValue]
 		)
 
 		const editor = useEditor({
@@ -95,13 +72,6 @@ export const LAEditor = React.forwardRef<LAEditorRef, LAEditorProps>(
 				onBlur?.(getOutput(editor, output))
 			}
 		})
-
-		React.useEffect(() => {
-			if (lastThrottledContent !== throttledContent) {
-				setLastThrottledContent(throttledContent)
-				onUpdate?.(throttledContent!)
-			}
-		}, [throttledContent, lastThrottledContent, onUpdate])
 
 		React.useImperativeHandle(
 			ref,

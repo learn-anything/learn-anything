@@ -1,33 +1,30 @@
-import { SignedInClient } from "@/components/custom/clerk/signed-in-client"
+import type { Viewport } from "next"
 import { Sidebar } from "@/components/custom/sidebar/sidebar"
-import { PublicHomeRoute } from "@/components/routes/public/PublicHomeRoute"
-import { CommandPalette } from "@/components/ui/CommandPalette"
-import { JazzClerkAuth, JazzProvider } from "@/lib/providers/jazz-provider"
-import { currentUser } from "@clerk/nextjs/server"
+import { CommandPalette } from "@/components/custom/command-palette/command-palette"
+import { LearnAnythingOnboarding } from "@/components/custom/learn-anything-onboarding"
+import { Shortcut } from "@/components/custom/Shortcut/shortcut"
+import { GlobalKeyboardHandler } from "@/components/custom/global-keyboard-handler"
 
-export default async function PageLayout({ children }: { children: React.ReactNode }) {
-	const user = await currentUser()
+export const viewport: Viewport = {
+	width: "device-width, shrink-to-fit=no",
+	maximumScale: 1,
+	userScalable: false
+}
 
-	if (!user) {
-		return <PublicHomeRoute />
-	}
-
+export default function PageLayout({ children }: { children: React.ReactNode }) {
 	return (
-		<JazzClerkAuth>
-			<SignedInClient>
-				<JazzProvider>
-					<div className="flex h-full min-h-full w-full flex-row items-stretch overflow-hidden">
-						<Sidebar />
-						<CommandPalette />
+		<div className="flex h-full min-h-full w-full flex-row items-stretch overflow-hidden">
+			<Sidebar />
+			<LearnAnythingOnboarding />
+			<GlobalKeyboardHandler />
+			<CommandPalette />
+			<Shortcut />
 
-						<div className="flex min-w-0 flex-1 flex-col">
-							<main className="relative flex flex-auto flex-col place-items-stretch overflow-auto lg:my-2 lg:mr-2 lg:rounded-md lg:border">
-								{children}
-							</main>
-						</div>
-					</div>
-				</JazzProvider>
-			</SignedInClient>
-		</JazzClerkAuth>
+			<div className="relative flex min-w-0 flex-1 flex-col">
+				<main className="relative flex flex-auto flex-col place-items-stretch overflow-auto lg:my-2 lg:mr-2 lg:rounded-md lg:border">
+					{children}
+				</main>
+			</div>
+		</div>
 	)
 }

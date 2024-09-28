@@ -24,7 +24,7 @@ export const NotesSection: React.FC = () => {
 							<Input
 								{...field}
 								autoComplete="off"
-								placeholder="Take a notes..."
+								placeholder="Notes"
 								className={cn("placeholder:text-muted-foreground/70 border-none pl-8 shadow-none focus-visible:ring-0")}
 							/>
 						</>

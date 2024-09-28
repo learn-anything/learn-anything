@@ -21,7 +21,7 @@ export const DescriptionInput: React.FC<DescriptionInputProps> = () => {
 							<TextareaAutosize
 								{...field}
 								autoComplete="off"
-								placeholder="Description (optional)"
+								placeholder="Description"
 								className="placeholder:text-muted-foreground/70 resize-none overflow-y-auto border-none p-1.5 text-[13px] font-medium shadow-none focus-visible:ring-0"
 							/>
 						</FormControl>

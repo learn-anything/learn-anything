@@ -130,7 +130,7 @@ export const SearchWrapper = () => {
 								type="text"
 								value={searchText}
 								onChange={handleSearch}
-								placeholder="Search something..."
+								placeholder="Search topics, links, pages"
 								className="dark:bg-input w-full rounded-lg border border-neutral-300 p-2 pl-8 focus:outline-none dark:border-neutral-600"
 							/>
 							{searchText && (
@@ -178,12 +178,13 @@ export const SearchWrapper = () => {
 							</div>
 						) : (
 							<div className="mt-5">
-								{searchText && !showAiSearch && (
+								{/* {searchText && !showAiSearch && ( */}
+								{searchText && (
 									<div
-										className="cursor-pointer rounded-lg bg-blue-700 p-4 font-semibold text-white"
-										onClick={() => setShowAiSearch(true)}
+										className="cursor-default rounded-lg bg-blue-700 p-4 font-semibold text-white"
+										// onClick={() => setShowAiSearch(true)}
 									>
-										✨ Didn&apos;t find what you were looking for? Ask AI
+										✨ Didn&apos;t find what you were looking for? Will soon have AI assistant builtin
 									</div>
 								)}
 								{showAiSearch && <AiSearch searchQuery={searchText} />}

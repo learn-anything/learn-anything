@@ -11,11 +11,11 @@ export function DeepLinkProvider({ children }: DeepLinkProviderProps) {
 		const eventHandlers: { [key: string]: (event: Event) => void } = {
 			click: (event: Event) => {
 				const e = event as MouseEvent
-				console.log("Click event:", { x: e.clientX, y: e.clientY })
+				// console.log("Click event:", { x: e.clientX, y: e.clientY })
 			},
 			keydown: (event: Event) => {
 				const e = event as KeyboardEvent
-				console.log("Keydown event:", { key: e.key, code: e.code })
+				// console.log("Keydown event:", { key: e.key, code: e.code })
 			}
 		}
 

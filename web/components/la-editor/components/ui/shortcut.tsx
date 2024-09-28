@@ -1,6 +1,6 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import { getShortcutKey } from "../../lib/utils"
+import { getShortcutKey } from "@/lib/utils"
 
 export interface ShortcutKeyWrapperProps extends React.HTMLAttributes<HTMLSpanElement> {
 	ariaLabel: string
@@ -32,7 +32,7 @@ const ShortcutKey = React.forwardRef<HTMLSpanElement, ShortcutKeyProps>(({ class
 			{...props}
 			ref={ref}
 		>
-			{getShortcutKey(shortcut)}
+			{getShortcutKey(shortcut).symbol}
 		</kbd>
 	)
 })

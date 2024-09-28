@@ -4,7 +4,7 @@ import { FormField, FormItem, FormControl, FormLabel, FormMessage } from "@/comp
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 import { LinkFormValues } from "./schema"
-import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
 import { TooltipArrow } from "@radix-ui/react-tooltip"
 
 interface UrlInputProps {
@@ -38,30 +38,28 @@ export const UrlInput: React.FC<UrlInputProps> = ({ urlFetched, fetchMetadata, i
 				>
 					<FormLabel className="sr-only">Url</FormLabel>
 					<FormControl>
-						<TooltipProvider delayDuration={0}>
-							<Tooltip open={shouldShowTooltip && !isFetchingUrlMetadata}>
-								<TooltipTrigger asChild>
-									<Input
-										{...field}
-										type={urlFetched ? "hidden" : "text"}
-										autoComplete="off"
-										maxLength={100}
-										autoFocus
-										placeholder="Paste a link or write a link"
-										className="placeholder:text-muted-foreground/70 h-8 border-none p-1.5 text-[15px] font-semibold shadow-none focus-visible:ring-0"
-										onKeyDown={handleKeyDown}
-										onFocus={() => setIsFocused(true)}
-										onBlur={() => setIsFocused(false)}
-									/>
-								</TooltipTrigger>
-								<TooltipContent align="center" side="top">
-									<TooltipArrow className="text-primary fill-current" />
-									<span>
-										Press <kbd className="px-1.5">Enter</kbd> to fetch metadata
-									</span>
-								</TooltipContent>
-							</Tooltip>
-						</TooltipProvider>
+						<Tooltip open={shouldShowTooltip && !isFetchingUrlMetadata}>
+							<TooltipTrigger asChild>
+								<Input
+									{...field}
+									type={urlFetched ? "hidden" : "text"}
+									autoComplete="off"
+									maxLength={100}
+									autoFocus
+									placeholder="Paste a link or write a link"
+									className="placeholder:text-muted-foreground/70 h-8 border-none p-1.5 text-[15px] font-semibold shadow-none focus-visible:ring-0"
+									onKeyDown={handleKeyDown}
+									onFocus={() => setIsFocused(true)}
+									onBlur={() => setIsFocused(false)}
+								/>
+							</TooltipTrigger>
+							<TooltipContent align="center" side="top">
+								<TooltipArrow className="text-primary fill-current" />
+								<span>
+									Press <kbd className="px-1.5">Enter</kbd> to fetch metadata
+								</span>
+							</TooltipContent>
+						</Tooltip>
 					</FormControl>
 					<FormMessage className="px-1.5" />
 				</FormItem>

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { useAtom } from "jotai"
 import { usePathname, useRouter } from "next/navigation"
 import { useAccount } from "@/lib/providers/jazz-provider"
@@ -7,7 +7,6 @@ import { atomWithStorage } from "jotai/utils"
 import { PersonalPage, PersonalPageLists } from "@/lib/schema/personal-page"
 import { Button } from "@/components/ui/button"
 import { LaIcon } from "@/components/custom/la-icon"
-import { toast } from "sonner"
 import Link from "next/link"
 import {
 	DropdownMenu,
@@ -21,6 +20,7 @@ import {
 	DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { icons } from "lucide-react"
+import { usePageActions } from "@/components/routes/page/hooks/use-page-actions"
 
 type SortOption = "title" | "recent"
 type ShowOption = 5 | 10 | 15 | 20 | 0
@@ -46,36 +46,49 @@ const SHOWS: Option<ShowOption>[] = [
 const pageSortAtom = atomWithStorage<SortOption>("pageSort", "title")
 const pageShowAtom = atomWithStorage<ShowOption>("pageShow", 5)
 
-export const PageSection: React.FC = () => {
-	const { me } = useAccount({ root: { personalPages: [] } })
-	const pageCount = me?.root.personalPages?.length || 0
+export const PageSection: React.FC<{ pathname?: string }> = ({ pathname }) => {
+	const { me } = useAccount({
+		root: {
+			personalPages: []
+		}
+	})
+
+	const [sort] = useAtom(pageSortAtom)
+	const [show] = useAtom(pageShowAtom)
+
+	if (!me) return null
+
+	const pageCount = me.root.personalPages?.length || 0
+	const isActive = pathname === "/pages"
 
 	return (
 		<div className="group/pages flex flex-col gap-px py-2">
-			<PageSectionHeader pageCount={pageCount} />
-			{me?.root.personalPages && <PageList personalPages={me.root.personalPages} />}
+			<PageSectionHeader pageCount={pageCount} isActive={isActive} />
+			<PageList personalPages={me.root.personalPages} sort={sort} show={show} />
 		</div>
 	)
 }
 
 interface PageSectionHeaderProps {
 	pageCount: number
+	isActive: boolean
 }
 
-const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({ pageCount }) => (
+const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({ pageCount, isActive }) => (
 	<div
-		className={cn("flex min-h-[30px] items-center gap-px rounded-md", "hover:bg-accent hover:text-accent-foreground")}
+		className={cn(
+			"flex h-9 items-center gap-px rounded-md sm:h-[30px]",
+			isActive ? "bg-accent text-accent-foreground" : "hover:bg-accent hover:text-accent-foreground"
+		)}
 	>
-		<Button
-			variant="ghost"
-			className="size-6 flex-1 items-center justify-start rounded-md px-2 py-1 focus-visible:outline-none focus-visible:ring-0"
-		>
-			<p className="flex items-center text-xs font-medium">
+		<Link href="/pages" className="flex flex-1 items-center justify-start rounded-md px-2 py-1">
+			<p className="text-sm sm:text-xs">
 				Pages
 				{pageCount > 0 && <span className="text-muted-foreground ml-1">{pageCount}</span>}
 			</p>
-		</Button>
-		<div className={cn("flex items-center gap-px pr-2")}>
+		</Link>
+
+		<div className="flex items-center gap-px pr-2">
 			<ShowAllForm />
 			<NewPageButton />
 		</div>
@@ -85,20 +98,13 @@ const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({ pageCount }) => (
 const NewPageButton: React.FC = () => {
 	const { me } = useAccount()
 	const router = useRouter()
+	const { newPage } = usePageActions()
 
 	if (!me) return null
 
 	const handleClick = () => {
-		try {
-			const newPersonalPage = PersonalPage.create(
-				{ public: false, createdAt: new Date(), updatedAt: new Date() },
-				{ owner: me._owner }
-			)
-			me.root?.personalPages?.push(newPersonalPage)
-			router.push(`/pages/${newPersonalPage.id}`)
-		} catch (error) {
-			toast.error("Failed to create page")
-		}
+		const page = newPage(me)
+		router.push(`/pages/${page.id}`)
 	}
 
 	return (
@@ -121,26 +127,23 @@ const NewPageButton: React.FC = () => {
 
 interface PageListProps {
 	personalPages: PersonalPageLists
+	sort: SortOption
+	show: ShowOption
 }
 
-const PageList: React.FC<PageListProps> = ({ personalPages }) => {
+const PageList: React.FC<PageListProps> = ({ personalPages, sort, show }) => {
 	const pathname = usePathname()
 
-	const [sortCriteria] = useAtom(pageSortAtom)
-	const [showCount] = useAtom(pageShowAtom)
-
-	const sortedPages = [...personalPages]
-		.sort((a, b) => {
-			switch (sortCriteria) {
-				case "title":
+	const sortedPages = useMemo(() => {
+		return [...personalPages]
+			.sort((a, b) => {
+				if (sort === "title") {
 					return (a?.title ?? "").localeCompare(b?.title ?? "")
-				case "recent":
-					return (b?.updatedAt?.getTime() ?? 0) - (a?.updatedAt?.getTime() ?? 0)
-				default:
-					return 0
-			}
-		})
-		.slice(0, showCount === 0 ? personalPages.length : showCount)
+				}
+				return (b?.updatedAt?.getTime() ?? 0) - (a?.updatedAt?.getTime() ?? 0)
+			})
+			.slice(0, show === 0 ? personalPages.length : show)
+	}, [personalPages, sort, show])
 
 	return (
 		<div className="flex flex-col gap-px">
@@ -162,11 +165,11 @@ const PageListItem: React.FC<PageListItemProps> = ({ page, isActive }) => (
 			<Link
 				href={`/pages/${page.id}`}
 				className={cn(
-					"group-hover/sidebar-link:bg-accent group-hover/sidebar-link:text-accent-foreground relative flex h-8 w-full items-center gap-2 rounded-md p-1.5 font-medium",
+					"group-hover/sidebar-link:bg-accent group-hover/sidebar-link:text-accent-foreground relative flex h-9 w-full items-center gap-2 rounded-md p-1.5 font-medium sm:h-8",
 					{ "bg-accent text-accent-foreground": isActive }
 				)}
 			>
-				<div className="flex max-w-full flex-1 items-center gap-1.5 truncate text-sm">
+				<div className="flex max-w-[calc(100%-1rem)] flex-1 items-center gap-1.5 truncate text-sm">
 					<LaIcon name="FileText" className="flex-shrink-0 opacity-60" />
 					<p className="truncate opacity-95 group-hover/sidebar-link:opacity-100">{page.title || "Untitled"}</p>
 				</div>

@@ -79,12 +79,7 @@ export const TopicSelector = forwardRef<HTMLButtonElement, TopicSelectorProps>(
 						<LaIcon name="ChevronDown" />
 					</Button>
 				</PopoverTrigger>
-				<PopoverContent
-					className="w-52 rounded-lg p-0"
-					side={side}
-					align={align}
-					onCloseAutoFocus={e => e.preventDefault()}
-				>
+				<PopoverContent className="w-52 rounded-lg p-0" side={side} align={align}>
 					{group?.root.topics && (
 						<TopicSelectorContent
 							showSearch={showSearch}

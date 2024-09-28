@@ -1,0 +1,127 @@
+@keyframes scaleIn {
+	0% {
+		transform: scale(0.97) translateX(-50%);
+		opacity: 0;
+	}
+	to {
+		transform: scale(1) translateX(-50%);
+		opacity: 1;
+	}
+}
+
+@keyframes scaleOut {
+	0% {
+		transform: scale(1) translateX(-50%);
+		opacity: 1;
+	}
+	to {
+		transform: scale(0.97) translateX(-50%);
+		opacity: 0;
+	}
+}
+
+@keyframes fadeIn {
+	0% {
+		opacity: 0;
+	}
+	to {
+		opacity: 0.8;
+	}
+}
+@keyframes fadeOut {
+	0% {
+		opacity: 0.8;
+	}
+	to {
+		opacity: 0;
+	}
+}
+
+:root {
+	--cmdk-shadow: rgba(0, 0, 0, 0.12) 0px 4px 30px, rgba(0, 0, 0, 0.04) 0px 3px 17px, rgba(0, 0, 0, 0.04) 0px 2px 8px,
+		rgba(0, 0, 0, 0.04) 0px 1px 1px;
+	--cmdk-bg: rgb(255, 255, 255);
+	--cmdk-border-color: rgb(216, 216, 216);
+
+	--cmdk-input-color: rgb(48, 48, 49);
+	--cmdk-input-placeholder: hsl(0, 0%, 56.1%);
+
+	--cmdk-accent: rgb(243, 243, 243);
+}
+
+.dark {
+	--cmdk-shadow: rgba(0, 0, 0, 0.15) 0px 4px 40px, rgba(0, 0, 0, 0.184) 0px 3px 20px, rgba(0, 0, 0, 0.184) 0px 3px 12px,
+		rgba(0, 0, 0, 0.184) 0px 2px 8px, rgba(0, 0, 0, 0.184) 0px 1px 1px;
+	--cmdk-bg: rgb(27, 28, 31);
+	--cmdk-border-color: rgb(56, 59, 65);
+
+	--cmdk-input-color: rgb(228, 229, 233);
+	--cmdk-input-placeholder: hsl(0, 0%, 43.9%);
+
+	--cmdk-accent: rgb(44, 48, 57);
+}
+
+[la-overlay][cmdk-overlay] {
+	animation: fadeIn 0.2s ease;
+	@apply fixed inset-0 z-50 opacity-80;
+}
+
+[la-dialog][cmdk-dialog] {
+	top: 15%;
+	transform: translateX(-50%);
+	max-width: 640px;
+	background: var(--cmdk-bg);
+	box-shadow: var(--cmdk-shadow);
+	transform-origin: left;
+	animation: scaleIn 0.2s ease;
+	transition: transform 0.1s ease;
+	border: 0.5px solid var(--cmdk-border-color);
+	@apply fixed left-1/2 z-50 w-full overflow-hidden rounded-lg outline-none;
+}
+
+[la-dialog][cmdk-dialog][data-state="closed"] {
+	animation: scaleOut 0.2s ease;
+}
+
+.la [cmdk-input-wrapper] {
+	border-bottom: 1px solid var(--cmdk-border-color);
+	height: 62px;
+	font-size: 1.125rem;
+	@apply relative;
+}
+
+.la [cmdk-input] {
+	font-size: inherit;
+	height: 62px;
+	color: var(--cmdk-input-color);
+	caret-color: rgb(110, 94, 210);
+	@apply m-0 w-full appearance-none border-none bg-transparent p-5 outline-none;
+}
+
+.la [cmdk-input]::placeholder {
+	color: var(--cmdk-input-placeholder);
+}
+
+.la [cmdk-list] {
+	max-height: 400px;
+	overflow: auto;
+	overscroll-behavior: contain;
+	transition: 100ms ease;
+	transition-property: height;
+	@apply p-2;
+}
+
+.la [cmdk-group-heading] {
+	font-size: 13px;
+	height: 30px;
+	@apply text-muted-foreground flex items-center px-2;
+}
+
+.la [cmdk-empty] {
+	@apply text-muted-foreground flex h-16 items-center justify-center whitespace-pre-wrap text-sm;
+}
+
+.la [cmdk-item] {
+	scroll-margin: 8px 0;
+	@apply flex min-h-10 cursor-pointer items-center gap-3 rounded-md px-2 text-sm aria-selected:bg-[var(--cmdk-accent)];
+}
