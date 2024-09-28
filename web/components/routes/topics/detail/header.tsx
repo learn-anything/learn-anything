@@ -9,7 +9,6 @@ import { LearningStateValue } from "@/lib/constants"
 import { useClerk } from "@clerk/nextjs"
 import { usePathname } from "next/navigation"
 import { useMedia } from "@/hooks/use-media"
-import { GuideCommunityToggle } from "@/components/custom/GuideCommunityToggle"
 
 interface TopicDetailHeaderProps {
 	topic: Topic
@@ -101,7 +100,7 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({ topic }
 			</div>
 
 			<div className="flex flex-auto"></div>
-			<GuideCommunityToggle topicName={topic.name} />
+			{/* <GuideCommunityToggle topicName={topic.name} /> */}
 
 			<LearningStateSelector
 				showSearch={false}
