@@ -8,81 +8,78 @@
 // open issue about it: https://github.com/gardencmp/jazz/issues/44
 // TODO: figure out how to do default values, e.g. `GlobalLink.protocol` should have default value `https` so we don't have to supply it every time in code..
 // TODO: can jazz support vector fields? e.g. `GlobalLinkAiSummary.vectorContent`, would be nice to store website content as vector for semantic search
-import { CoMap, co, Account, Profile } from 'jazz-tools'
-import { PersonalPageLists } from './personal-page'
-import { PersonalLinkLists } from './personal-link'
-import { ListOfTopics } from './master/topic'
-import { ListOfTasks } from './tasks'
-import { JournalEntryLists } from './journal'
+import { CoMap, co, Account, Profile } from "jazz-tools"
+import { PersonalPageLists } from "./personal-page"
+import { PersonalLinkLists } from "./personal-link"
+import { ListOfTopics } from "./master/topic"
+import { ListOfTasks } from "./tasks"
+import { JournalEntryLists } from "./journal"
 
-declare module 'jazz-tools' {
-  interface Profile {
-    avatarUrl?: string
-  }
+declare module "jazz-tools" {
+	interface Profile {
+		avatarUrl?: string
+	}
 }
 export class UserRoot extends CoMap {
-  name = co.string
-  username = co.string
-  avatar = co.optional.string
-  website = co.optional.string
-  bio = co.optional.string
-  is_public = co.optional.boolean
+	name = co.string
+	username = co.string
+	avatar = co.optional.string
+	website = co.optional.string
+	bio = co.optional.string
+	is_public = co.optional.boolean
 
-  personalLinks = co.ref(PersonalLinkLists)
-  personalPages = co.ref(PersonalPageLists)
+	personalLinks = co.ref(PersonalLinkLists)
+	personalPages = co.ref(PersonalPageLists)
 
-  topicsWantToLearn = co.ref(ListOfTopics)
-  topicsLearning = co.ref(ListOfTopics)
-  topicsLearned = co.ref(ListOfTopics)
+	topicsWantToLearn = co.ref(ListOfTopics)
+	topicsLearning = co.ref(ListOfTopics)
+	topicsLearned = co.ref(ListOfTopics)
 
-  tasks = co.ref(ListOfTasks)
-  journalEntries = co.ref(JournalEntryLists)
+	tasks = co.ref(ListOfTasks)
+	journalEntries = co.ref(JournalEntryLists)
 
-  // TODO: maybe should be in another place?
-  connectedFolderPath = co.optional.string
+	// TODO: maybe should be in another place?
+	connectedFolderPath = co.optional.string
 }
 
 export class LaAccount extends Account {
-  profile = co.ref(Profile)
-  root = co.ref(UserRoot)
+	profile = co.ref(Profile)
+	root = co.ref(UserRoot)
 
-  migrate(
-    this: LaAccount,
-    creationProps?: { name: string; avatarUrl?: string }
-  ) {
-    // since we dont have a custom AuthProvider yet.
-    // and still using the DemoAuth. the creationProps will only accept name.
-    // so just do default profile create provided by jazz-tools
-    super.migrate(creationProps)
+	migrate(this: LaAccount, creationProps?: { name: string; avatarUrl?: string }) {
+		// since we dont have a custom AuthProvider yet.
+		// and still using the DemoAuth. the creationProps will only accept name.
+		// so just do default profile create provided by jazz-tools
+		super.migrate(creationProps)
 
-    if (!this._refs.root && creationProps) {
-      this.root = UserRoot.create(
-        {
-          name: creationProps.name,
-          username: creationProps.name,
-          avatar: creationProps.avatarUrl || '',
-          website: '',
-          bio: '',
-          is_public: false,
+		if (!this._refs.root && creationProps) {
+			this.root = UserRoot.create(
+				{
+					name: creationProps.name,
+					username: creationProps.name,
+					avatar: creationProps.avatarUrl || "",
+					website: "",
+					bio: "",
+					is_public: false,
 
-          connectedFolderPath: '',
+					connectedFolderPath: "",
 
-          personalLinks: PersonalLinkLists.create([], { owner: this }),
-          personalPages: PersonalPageLists.create([], { owner: this }),
+					personalLinks: PersonalLinkLists.create([], { owner: this }),
+					personalPages: PersonalPageLists.create([], { owner: this }),
 
-          topicsWantToLearn: ListOfTopics.create([], { owner: this }),
-          topicsLearning: ListOfTopics.create([], { owner: this }),
-          topicsLearned: ListOfTopics.create([], { owner: this }),
+					topicsWantToLearn: ListOfTopics.create([], { owner: this }),
+					topicsLearning: ListOfTopics.create([], { owner: this }),
+					topicsLearned: ListOfTopics.create([], { owner: this }),
 
-          tasks: ListOfTasks.create([], { owner: this }),
-          journalEntries: JournalEntryLists.create([], { owner: this })
-        },
-        { owner: this }
-      )
-    }
-  }
+					tasks: ListOfTasks.create([], { owner: this }),
+					journalEntries: JournalEntryLists.create([], { owner: this })
+				},
+				{ owner: this }
+			)
+		}
+	}
 }
 
-export * from './master/topic'
-export * from './personal-link'
-export * from './personal-page'
+export * from "./master/topic"
+export * from "./personal-link"
+export * from "./personal-page"
