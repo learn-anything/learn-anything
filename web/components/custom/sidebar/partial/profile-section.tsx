@@ -20,7 +20,7 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Feedback } from "./feedback"
-import { showShortcutAtom } from "@/components/custom/Shortcut/shortcut"
+import { showShortcutAtom } from "@/components/custom/shortcut/shortcut"
 import { ShortcutKey } from "@/components/minimal-tiptap/components/shortcut-key"
 import { useKeyboardManager } from "@/hooks/use-keyboard-manager"
 
