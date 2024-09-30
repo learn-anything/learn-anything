@@ -36,9 +36,13 @@ function parse_args(argv) {
 	if (browser == undefined) {
 		browser = safari;
 	}
+	let index = Number(args[0]);
+	if (Number.isNaN(index)) {
+		throw `Invalid window index: ${args[0]}`;
+	}
 	return {
 		browser,
-		index: args[0],
+		index,
 	};
 }
 
