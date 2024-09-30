@@ -2,7 +2,7 @@ import type { Viewport } from "next"
 import { Sidebar } from "@/components/custom/sidebar/sidebar"
 import { CommandPalette } from "@/components/custom/command-palette/command-palette"
 import { LearnAnythingOnboarding } from "@/components/custom/learn-anything-onboarding"
-import { Shortcut } from "@/components/custom/shortcut/shortcut"
+import { Shortcut } from "@/components/custom/testing/shortcut"
 import { GlobalKeyboardHandler } from "@/components/custom/global-keyboard-handler"
 
 export const viewport: Viewport = {
