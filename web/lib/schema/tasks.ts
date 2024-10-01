@@ -6,6 +6,7 @@ export class Task extends CoMap {
 	status = co.literal("todo", "in_progress", "done")
 	createdAt = co.encoded(Encoders.Date)
 	updatedAt = co.encoded(Encoders.Date)
+	dueDate = co.optional.encoded(Encoders.Date)
 }
 
 export class ListOfTasks extends CoList.Of(co.ref(Task)) {}

@@ -1,24 +1,78 @@
 import { Task } from "@/lib/schema/tasks"
 import { Checkbox } from "@/components/ui/checkbox"
 import { format } from "date-fns"
+import { useState, useRef, useEffect } from "react"
+import { Input } from "@/components/ui/input"
 
 interface TaskItemProps {
 	task: Task
 	onUpdateTask: (taskId: string, updates: Partial<Task>) => void
+	onDeleteTask: (taskId: string) => void
 }
 
-export const TaskItem: React.FC<TaskItemProps> = ({ task, onUpdateTask }) => {
+export const TaskItem: React.FC<TaskItemProps> = ({ task, onUpdateTask, onDeleteTask }) => {
+	const [isEditing, setIsEditing] = useState(false)
+	const [editedTitle, setEditedTitle] = useState(task.title)
+	const inputRef = useRef<HTMLInputElement>(null)
+
+	useEffect(() => {
+		if (isEditing && inputRef.current) {
+			inputRef.current.focus()
+		}
+	}, [isEditing])
+
 	const statusChange = (checked: boolean) => {
-		onUpdateTask(task.id, { status: checked ? "done" : "todo" })
+		if (checked) {
+			onDeleteTask(task.id)
+		} else {
+			onUpdateTask(task.id, { status: "todo" })
+		}
+	}
+
+	const clickTitle = () => {
+		setIsEditing(true)
+	}
+
+	const titleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setEditedTitle(e.target.value)
+	}
+
+	const titleBlur = () => {
+		setIsEditing(false)
+		if (editedTitle.trim() !== task.title) {
+			onUpdateTask(task.id, { title: editedTitle.trim() })
+		}
+	}
+
+	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === "Enter") {
+			titleBlur()
+		}
 	}
 
 	const formattedDate = format(new Date(task.createdAt), "EEE, MMMM do, yyyy")
 
 	return (
 		<li className="bg-result transitiion-opacity flex items-center justify-between rounded-lg p-2 px-3 hover:opacity-60">
-			<div className="flex flex-row items-center gap-3">
+			<div className="flex flex-grow flex-row items-center gap-3">
 				<Checkbox checked={task.status === "done"} onCheckedChange={statusChange} />
-				<p className={task.status === "done" ? "text-foreground line-through" : ""}>{task.title}</p>
+				{isEditing ? (
+					<input
+						ref={inputRef}
+						value={editedTitle}
+						onChange={titleChange}
+						onBlur={titleBlur}
+						onKeyDown={handleKeyDown}
+						className="flex-grow border-none bg-transparent p-0 shadow-none outline-none focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+					/>
+				) : (
+					<p
+						className={task.status === "done" ? "text-foreground flex-grow line-through" : "flex-grow"}
+						onClick={clickTitle}
+					>
+						{task.title}
+					</p>
+				)}
 			</div>
 			<span className="text-muted-foreground text-xs">{formattedDate}</span>
 		</li>

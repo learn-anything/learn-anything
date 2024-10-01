@@ -1,17 +1,22 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { ListOfTasks } from "@/lib/schema/tasks"
+import { ListOfTasks, Task } from "@/lib/schema/tasks"
 import { LaIcon } from "../../la-icon"
 import { useEffect, useState } from "react"
 import { useAuth, useUser } from "@clerk/nextjs"
 import { getFeatureFlag } from "@/app/actions"
+import { isToday, isFuture } from "date-fns"
+import { useAccount } from "@/lib/providers/jazz-provider"
 
 export const TaskSection: React.FC<{ pathname: string }> = ({ pathname }) => {
-	const me = { root: { tasks: [{ id: "1", title: "Test Task" }] } }
+	const { me } = useAccount({ root: { tasks: [] } })
 
-	const taskCount = me?.root.tasks?.length || 0
-	const isActive = pathname === "/tasks"
+	const taskCount = me?.root?.tasks?.length || 0
+	const todayTasks =
+		me?.root?.tasks?.filter(task => task?.status !== "done" && task?.dueDate && isToday(task.dueDate)) || []
+	const upcomingTasks =
+		me?.root?.tasks?.filter(task => task?.status !== "done" && task?.dueDate && isFuture(task.dueDate)) || []
 
 	const [isFetching, setIsFetching] = useState(false)
 	const [isFeatureActive, setIsFeatureActive] = useState(false)
@@ -53,7 +58,19 @@ export const TaskSection: React.FC<{ pathname: string }> = ({ pathname }) => {
 
 	return (
 		<div className="group/tasks flex flex-col gap-px py-2">
-			<TaskSectionHeader taskCount={taskCount} isActive={isActive} />
+			<TaskSectionHeader title="Tasks" href="/tasks" count={taskCount} isActive={pathname === "/tasks"} />
+			<TaskSectionHeader
+				title="Today"
+				href="/tasks/today"
+				count={todayTasks.length}
+				isActive={pathname === "/tasks/today"}
+			/>
+			<TaskSectionHeader
+				title="Upcoming"
+				href="/tasks/upcoming"
+				count={upcomingTasks.length}
+				isActive={pathname === "/tasks/upcoming"}
+			/>
 			{isFetching ? (
 				<div className="py-2 text-center text-gray-500">Fetching tasks...</div>
 			) : (
@@ -64,11 +81,13 @@ export const TaskSection: React.FC<{ pathname: string }> = ({ pathname }) => {
 }
 
 interface TaskSectionHeaderProps {
-	taskCount: number
+	title: string
+	href: string
+	count: number
 	isActive: boolean
 }
 
-const TaskSectionHeader: React.FC<TaskSectionHeaderProps> = ({ taskCount, isActive }) => (
+const TaskSectionHeader: React.FC<TaskSectionHeaderProps> = ({ title, href, count, isActive }) => (
 	<div
 		className={cn(
 			"flex min-h-[30px] items-center gap-px rounded-md",
@@ -76,74 +95,23 @@ const TaskSectionHeader: React.FC<TaskSectionHeaderProps> = ({ taskCount, isActi
 		)}
 	>
 		<Link
-			href="/tasks"
+			href={href}
 			className="flex flex-1 items-center justify-start rounded-md px-2 py-1 focus-visible:outline-none focus-visible:ring-0"
 		>
 			<p className="text-xs">
-				Tasks
-				{taskCount > 0 && <span className="text-muted-foreground ml-1">{taskCount}</span>}
+				{title}
+				{count > 0 && <span className="text-muted-foreground ml-1">{count}</span>}
 			</p>
 		</Link>
 	</div>
-	// <div
-	// 	className={cn(
-	// 		"flex min-h-[30px] items-center gap-px rounded-md",
-	// 		isActive ? "bg-accent text-accent-foreground" : "hover:bg-accent hover:text-accent-foreground"
-	// 	)}
-	// >
-	// 	<Button
-	// 		variant="ghost"
-	// 		className="size-6 flex-1 items-center justify-start rounded-md px-2 py-1 focus-visible:outline-none focus-visible:ring-0"
-	// 	>
-	// 		<p className="flex items-center text-xs font-medium">
-	// 			Tasks
-	// 			{taskCount > 0 && <span className="text-muted-foreground ml-1">{taskCount}</span>}
-	// 		</p>
-	// 	</Button>
-	// </div>
 )
 
 interface ListProps {
-	tasks: ListOfTasks
+	tasks: (Task | null)[] | undefined
 }
 
 const List: React.FC<ListProps> = ({ tasks }) => {
-	const pathname = usePathname()
-
 	return (
-		<div className="flex flex-col gap-px">
-			<ListItem label="All Tasks" href="/tasks" count={tasks.length} isActive={pathname === "/tasks"} />
-		</div>
+		<div>{tasks?.filter((task): task is Task => task !== null).map(task => <div key={task.id}>{task.title}</div>)}</div>
 	)
 }
-
-interface ListItemProps {
-	label: string
-	href: string
-	count: number
-	isActive: boolean
-}
-
-const ListItem: React.FC<ListItemProps> = ({ label, href, count, isActive }) => (
-	<div className="group/reorder-task relative">
-		<div className="group/task-link relative flex min-w-0 flex-1">
-			<Link
-				// TODO: update links
-				href="/tasks"
-				className="relative flex h-8 w-full items-center gap-2 rounded-md p-1.5 font-medium"
-				// className={cn(
-				// 	"relative flex h-8 w-full items-center gap-2 rounded-md p-1.5 font-medium",
-				// 	isActive ? "bg-accent text-accent-foreground" : "hover:bg-accent hover:text-accent-foreground"
-				// )}
-			>
-				<div className="flex max-w-full flex-1 items-center gap-1.5 truncate text-sm">
-					<LaIcon name="BookCheck" className="opacity-60" />
-					<p className={cn("truncate opacity-95 group-hover/task-link:opacity-100")}>{label}</p>
-				</div>
-			</Link>
-			{count > 0 && (
-				<span className="absolute right-2 top-1/2 z-[1] -translate-y-1/2 rounded p-1 text-sm">{count}</span>
-			)}
-		</div>
-	</div>
-)
