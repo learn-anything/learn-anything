@@ -61,12 +61,14 @@ export const TaskSection: React.FC<{ pathname: string }> = ({ pathname }) => {
 			<TaskSectionHeader title="Tasks" href="/tasks" count={taskCount} isActive={pathname === "/tasks"} />
 			<TaskSectionHeader
 				title="Today"
+				iconName="BookOpenCheck"
 				href="/tasks/today"
 				count={todayTasks.length}
 				isActive={pathname === "/tasks/today"}
 			/>
 			<TaskSectionHeader
 				title="Upcoming"
+				iconName="History"
 				href="/tasks/upcoming"
 				count={upcomingTasks.length}
 				isActive={pathname === "/tasks/upcoming"}
@@ -80,9 +82,10 @@ interface TaskSectionHeaderProps {
 	href: string
 	count: number
 	isActive: boolean
+	iconName?: "BookOpenCheck" | "History"
 }
 
-const TaskSectionHeader: React.FC<TaskSectionHeaderProps> = ({ title, href, count, isActive }) => (
+const TaskSectionHeader: React.FC<TaskSectionHeaderProps> = ({ title, href, count, isActive, iconName }) => (
 	<div
 		className={cn(
 			"flex min-h-[30px] items-center gap-px rounded-md",
@@ -93,7 +96,9 @@ const TaskSectionHeader: React.FC<TaskSectionHeaderProps> = ({ title, href, coun
 			href={href}
 			className="flex flex-1 items-center justify-start rounded-md px-2 py-1 focus-visible:outline-none focus-visible:ring-0"
 		>
-			<p className="text-xs">
+			{iconName && <LaIcon className="size-13 shrink-0 pr-2" name={iconName} />}
+
+			<p className="text-sm">
 				{title}
 				{count > 0 && <span className="text-muted-foreground ml-1">{count}</span>}
 			</p>
