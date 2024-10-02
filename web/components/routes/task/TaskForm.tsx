@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { LaIcon } from "@/components/custom/la-icon"
 import { Checkbox } from "@/components/ui/checkbox"
-import { format } from "date-fns"
 import { DatePicker } from "@/components/ui/date-picker"
+import { format, parse } from "date-fns"
 
 interface TaskFormProps {
 	filter?: "today" | "upcoming" | undefined
@@ -19,9 +19,14 @@ export const TaskForm: React.FC<TaskFormProps> = ({ filter }) => {
 	const [inputVisible, setInputVisible] = useState(false)
 	const { me } = useAccount({ root: {} })
 	const inputRef = useRef<HTMLInputElement>(null)
+	const formRef = useRef<HTMLDivElement>(null)
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault()
+		saveTask()
+	}
+
+	const saveTask = () => {
 		if (title.trim() && (filter !== "upcoming" || dueDate)) {
 			if (me?.root?.tasks === undefined) {
 				if (!me) return
@@ -64,6 +69,23 @@ export const TaskForm: React.FC<TaskFormProps> = ({ filter }) => {
 		}
 	}, [inputVisible])
 
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (formRef.current && !formRef.current.contains(event.target as Node)) {
+				if (title.trim()) {
+					saveTask()
+				} else {
+					resetForm()
+				}
+			}
+		}
+
+		document.addEventListener("mousedown", handleClickOutside)
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside)
+		}
+	}, [title, dueDate])
+
 	const formattedDate = dueDate ? format(dueDate, "EEE, MMMM do, yyyy") : "Select a date"
 
 	return (
@@ -76,7 +98,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({ filter }) => {
 							initial={{ opacity: 0, width: 0 }}
 							animate={{ opacity: 1, width: "auto" }}
 							exit={{ opacity: 0, width: 0 }}
-							transition={{ duration: 0.3 }}
+							transition={{ duration: 0.01 }}
 						>
 							<Button
 								className="flex flex-row items-center gap-1"
@@ -88,17 +110,13 @@ export const TaskForm: React.FC<TaskFormProps> = ({ filter }) => {
 							</Button>
 						</motion.div>
 					) : (
-						<motion.form
-							key="input-form"
-							initial={{ width: 0, opacity: 0 }}
-							animate={{ width: "100%", opacity: 1 }}
-							exit={{ width: 0, opacity: 0 }}
-							transition={{ duration: 0.3 }}
+						<div
+							ref={formRef}
 							onSubmit={handleSubmit}
-							className="bg-result flex w-full items-center justify-between rounded-lg p-2 px-3"
+							className="bg-result flex w-full items-center justify-between rounded-lg px-2 py-1"
 						>
-							<div className="flex flex-row items-center gap-3">
-								<Checkbox checked={false} onCheckedChange={() => {}} />
+							<div className="flex min-w-0 flex-1 items-center">
+								<Checkbox checked={false} onCheckedChange={() => {}} className="mr-2" />
 								<Input
 									autoFocus
 									ref={inputRef}
@@ -109,13 +127,17 @@ export const TaskForm: React.FC<TaskFormProps> = ({ filter }) => {
 									placeholder="Task title"
 								/>
 							</div>
-							<div className="flex items-center space-x-2">
+
+							<div className="ml-2 flex items-center" onClick={e => e.stopPropagation()}>
 								{filter === "upcoming" && (
-									<DatePicker date={dueDate} onDateChange={(date: Date | undefined) => setDueDate(date)} />
+									<DatePicker
+										date={dueDate}
+										onDateChange={(date: Date | undefined) => setDueDate(date)}
+										className="z-50"
+									/>
 								)}
-								<span className="text-muted-foreground text-xs">{formattedDate}</span>
 							</div>
-						</motion.form>
+						</div>
 					)
 				) : null}
 			</AnimatePresence>

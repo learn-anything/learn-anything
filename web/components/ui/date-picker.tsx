@@ -17,7 +17,7 @@ export function DatePicker({ date, onDateChange, className }: DatePickerProps) {
 
 	const selectDate = (selectedDate: Date | undefined) => {
 		onDateChange(selectedDate)
-		setOpen(false) // Закрываем Popover после выбора даты
+		setOpen(false)
 	}
 
 	return (
@@ -26,12 +26,13 @@ export function DatePicker({ date, onDateChange, className }: DatePickerProps) {
 				<Button
 					variant={"outline"}
 					className={cn("w-[240px] justify-start text-left font-normal", !date && "text-muted-foreground", className)}
+					onClick={e => e.stopPropagation()}
 				>
 					<CalendarIcon className="mr-2 h-4 w-4" />
 					{date ? format(date, "PPP") : <span>Pick a date</span>}
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className="w-auto p-0" align="start">
+			<PopoverContent className="w-auto p-0" align="start" onClick={e => e.stopPropagation()}>
 				<Calendar mode="single" selected={date} onSelect={selectDate} initialFocus />
 			</PopoverContent>
 		</Popover>
