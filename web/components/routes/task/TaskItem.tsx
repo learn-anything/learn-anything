@@ -2,7 +2,6 @@ import { Task } from "@/lib/schema/tasks"
 import { Checkbox } from "@/components/ui/checkbox"
 import { format } from "date-fns"
 import { useState, useRef, useEffect } from "react"
-import { Input } from "@/components/ui/input"
 
 interface TaskItemProps {
 	task: Task
@@ -50,7 +49,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, onUpdateTask, onDelete
 		}
 	}
 
-	const formattedDate = format(new Date(task.createdAt), "EEE, MMMM do, yyyy")
+	const formattedDate = task.dueDate ? format(new Date(task.dueDate), "EEE, MMMM do, yyyy") : "No due date"
 
 	return (
 		<li className="bg-result transitiion-opacity flex items-center justify-between rounded-lg p-2 px-3 hover:opacity-60">

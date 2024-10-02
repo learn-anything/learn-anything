@@ -48,9 +48,8 @@ export const useTaskActions = () => {
 		try {
 			me.root.tasks.splice(index, 1)
 
-			toast.success("Task deleted", {
-				position: "bottom-right",
-				description: `${task.title} has been deleted.`
+			toast.success("Task completed", {
+				position: "bottom-right"
 			})
 		} catch (error) {
 			console.error("Failed to delete task", error)

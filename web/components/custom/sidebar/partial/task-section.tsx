@@ -71,11 +71,6 @@ export const TaskSection: React.FC<{ pathname: string }> = ({ pathname }) => {
 				count={upcomingTasks.length}
 				isActive={pathname === "/tasks/upcoming"}
 			/>
-			{isFetching ? (
-				<div className="py-2 text-center text-gray-500">Fetching tasks...</div>
-			) : (
-				<List tasks={me.root.tasks as ListOfTasks} />
-			)}
 		</div>
 	)
 }
@@ -105,13 +100,3 @@ const TaskSectionHeader: React.FC<TaskSectionHeaderProps> = ({ title, href, coun
 		</Link>
 	</div>
 )
-
-interface ListProps {
-	tasks: (Task | null)[] | undefined
-}
-
-const List: React.FC<ListProps> = ({ tasks }) => {
-	return (
-		<div>{tasks?.filter((task): task is Task => task !== null).map(task => <div key={task.id}>{task.title}</div>)}</div>
-	)
-}

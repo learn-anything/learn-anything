@@ -13,8 +13,15 @@ interface DatePickerProps {
 }
 
 export function DatePicker({ date, onDateChange, className }: DatePickerProps) {
+	const [open, setOpen] = React.useState(false)
+
+	const selectDate = (selectedDate: Date | undefined) => {
+		onDateChange(selectedDate)
+		setOpen(false) // Закрываем Popover после выбора даты
+	}
+
 	return (
-		<Popover>
+		<Popover open={open} onOpenChange={setOpen}>
 			<PopoverTrigger asChild>
 				<Button
 					variant={"outline"}
@@ -25,7 +32,7 @@ export function DatePicker({ date, onDateChange, className }: DatePickerProps) {
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent className="w-auto p-0" align="start">
-				<Calendar mode="single" selected={date} onSelect={onDateChange} initialFocus />
+				<Calendar mode="single" selected={date} onSelect={selectDate} initialFocus />
 			</PopoverContent>
 		</Popover>
 	)

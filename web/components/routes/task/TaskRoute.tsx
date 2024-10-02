@@ -46,7 +46,10 @@ export const TaskRoute: React.FC<TaskRouteProps> = ({ filter }) => {
 	return (
 		<div className="flex flex-col space-y-4 p-4">
 			<div className="flex flex-row items-center gap-1">
-				<LaIcon name="ListTodo" className="size-6" />
+				<LaIcon
+					name={filter === "today" ? "BookOpenCheck" : filter === "upcoming" ? "History" : "ListTodo"}
+					className="size-6"
+				/>
 				<h1 className="text-xl font-bold">
 					{filter === "today" ? "Today's Tasks" : filter === "upcoming" ? "Upcoming Tasks" : "All Tasks"}
 				</h1>
