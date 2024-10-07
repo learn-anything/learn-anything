@@ -1,0 +1,3129 @@
+[
+  { "name": "habits", "prettyName": "Habits", "connectedTopics": ["focusing"] },
+  {
+    "name": "music-playlists",
+    "prettyName": "Music playlists",
+    "connectedTopics": ["music"]
+  },
+  {
+    "name": "zeromq",
+    "prettyName": "ZeroMQ",
+    "connectedTopics": ["networking"]
+  },
+  {
+    "name": "cockroachdb",
+    "prettyName": "CockroachDB",
+    "connectedTopics": ["databases"]
+  },
+  { "name": "tezos", "prettyName": "Tezos", "connectedTopics": ["blockchain"] },
+  {
+    "name": "mongodb",
+    "prettyName": "MongoDB",
+    "connectedTopics": ["databases"]
+  },
+  {
+    "name": "xstate",
+    "prettyName": "XState",
+    "connectedTopics": ["js-libraries"]
+  },
+  {
+    "name": "elasticsearch",
+    "prettyName": "Elasticsearch",
+    "connectedTopics": ["search-engines"]
+  },
+  { "name": "gpu", "prettyName": "GPU", "connectedTopics": ["hardware"] },
+  {
+    "name": "github-actions",
+    "prettyName": "GitHub actions",
+    "connectedTopics": ["github"]
+  },
+  {
+    "name": "capacitor",
+    "prettyName": "Capacitor",
+    "connectedTopics": ["web"]
+  },
+  {
+    "name": "wundergraph",
+    "prettyName": "WunderGraph",
+    "connectedTopics": ["graphql"]
+  },
+  {
+    "name": "linear-algebra",
+    "prettyName": "Linear algebra",
+    "connectedTopics": ["math"]
+  },
+  {
+    "name": "typescript-libraries",
+    "prettyName": "TypeScript libraries",
+    "connectedTopics": ["typescript"]
+  },
+  {
+    "name": "php",
+    "prettyName": "PHP",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "unison",
+    "prettyName": "Unison",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "ember",
+    "prettyName": "Ember.js",
+    "connectedTopics": ["js-libraries"]
+  },
+  { "name": "shell", "prettyName": "Unix Shell", "connectedTopics": ["unix"] },
+  {
+    "name": "programming",
+    "prettyName": "Programming",
+    "connectedTopics": ["computer-science"]
+  },
+  {
+    "name": "linters",
+    "prettyName": "Linters",
+    "connectedTopics": ["compilers"]
+  },
+  {
+    "name": "transfer-learning",
+    "prettyName": "Transfer learning",
+    "connectedTopics": ["machine-learning"]
+  },
+  {
+    "name": "intellij",
+    "prettyName": "IntelliJ IDEA",
+    "connectedTopics": ["text-editors"]
+  },
+  {
+    "name": "brain-computer-interfaces",
+    "prettyName": "Brain Computer Interfaces",
+    "connectedTopics": ["neuroscience"]
+  },
+  {
+    "name": "adblocking",
+    "prettyName": "Ad blocking",
+    "connectedTopics": ["privacy"]
+  },
+  {
+    "name": "data-processing",
+    "prettyName": "Data Processing",
+    "connectedTopics": ["data-science"]
+  },
+  { "name": "makeup", "prettyName": "Makeup", "connectedTopics": [] },
+  { "name": "drawing", "prettyName": "Drawing", "connectedTopics": ["art"] },
+  {
+    "name": "tailscale",
+    "prettyName": "Tailscale",
+    "connectedTopics": ["wireguard"]
+  },
+  {
+    "name": "cooking",
+    "prettyName": "Cooking",
+    "connectedTopics": ["recipes"]
+  },
+  { "name": "psychology", "prettyName": "Psychology", "connectedTopics": [] },
+  {
+    "name": "product-management",
+    "prettyName": "Product Management",
+    "connectedTopics": ["management"]
+  },
+  { "name": "humans", "prettyName": "Humans", "connectedTopics": [] },
+  {
+    "name": "statistics",
+    "prettyName": "Statistics",
+    "connectedTopics": ["math"]
+  },
+  {
+    "name": "python-libraries",
+    "prettyName": "Python libraries",
+    "connectedTopics": ["python"]
+  },
+  {
+    "name": "elm-libraries",
+    "prettyName": "Elm libraries",
+    "connectedTopics": ["elm"]
+  },
+  {
+    "name": "combine",
+    "prettyName": "Combine Framework",
+    "connectedTopics": ["swift-libraries"]
+  },
+  {
+    "name": "c-libraries",
+    "prettyName": "C libraries",
+    "connectedTopics": ["c"]
+  },
+  { "name": "languages", "prettyName": "Languages", "connectedTopics": [] },
+  {
+    "name": "reverse-engineering",
+    "prettyName": "Reverse engineering",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "stream-processing",
+    "prettyName": "Stream processing",
+    "connectedTopics": ["data-processing"]
+  },
+  {
+    "name": "gadts",
+    "prettyName": "Generalized algebraic data type",
+    "connectedTopics": ["data-structures"]
+  },
+  {
+    "name": "memory-management",
+    "prettyName": "Memory management",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "directors",
+    "prettyName": "Film directors",
+    "connectedTopics": ["movies"]
+  },
+  {
+    "name": "nuclear-energy",
+    "prettyName": "Nuclear energy",
+    "connectedTopics": ["renewable-energy"]
+  },
+  {
+    "name": "home-automation",
+    "prettyName": "Home automation",
+    "connectedTopics": ["automation"]
+  },
+  {
+    "name": "black-holes",
+    "prettyName": "Black holes",
+    "connectedTopics": ["space"]
+  },
+  {
+    "name": "nix-darwin",
+    "prettyName": "Nix on macOS",
+    "connectedTopics": ["nix"]
+  },
+  {
+    "name": "game-engines",
+    "prettyName": "Game engines",
+    "connectedTopics": ["gamedev"]
+  },
+  { "name": "finland", "prettyName": "Finland", "connectedTopics": [] },
+  {
+    "name": "r",
+    "prettyName": "R language",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "interior-design",
+    "prettyName": "Interior Design",
+    "connectedTopics": ["architecture"]
+  },
+  { "name": "3d-modeling", "prettyName": "3D modeling", "connectedTopics": [] },
+  {
+    "name": "spline",
+    "prettyName": "Spline",
+    "connectedTopics": ["3d-modeling"]
+  },
+  { "name": "design", "prettyName": "Design", "connectedTopics": [] },
+  {
+    "name": "blender",
+    "prettyName": "Blender",
+    "connectedTopics": ["3d-modeling"]
+  },
+  { "name": "icons", "prettyName": "Icons", "connectedTopics": ["logos"] },
+  {
+    "name": "industrial-design",
+    "prettyName": "Industrial Design",
+    "connectedTopics": []
+  },
+  {
+    "name": "rpcs",
+    "prettyName": "Remote Procedure Calls",
+    "connectedTopics": ["distributed-systems"]
+  },
+  { "name": "grpc", "prettyName": "gRPC", "connectedTopics": ["encoding"] },
+  {
+    "name": "asking-questions",
+    "prettyName": "Asking Questions",
+    "connectedTopics": []
+  },
+  {
+    "name": "solving-problems",
+    "prettyName": "Solving problems",
+    "connectedTopics": []
+  },
+  { "name": "research", "prettyName": "Research", "connectedTopics": [] },
+  { "name": "goals", "prettyName": "Goals", "connectedTopics": [] },
+  {
+    "name": "music-albums",
+    "prettyName": "Music albums",
+    "connectedTopics": ["music"]
+  },
+  { "name": "song-covers", "prettyName": "Song covers", "connectedTopics": [] },
+  { "name": "guitar", "prettyName": "Guitar", "connectedTopics": ["music"] },
+  {
+    "name": "synthesizers",
+    "prettyName": "Synthesizers",
+    "connectedTopics": ["music"]
+  },
+  {
+    "name": "music-production",
+    "prettyName": "Music production",
+    "connectedTopics": ["music"]
+  },
+  { "name": "piano", "prettyName": "Piano", "connectedTopics": ["music"] },
+  {
+    "name": "logic-pro",
+    "prettyName": "Logic Pro",
+    "connectedTopics": ["music"]
+  },
+  { "name": "ableton", "prettyName": "Ableton", "connectedTopics": ["music"] },
+  {
+    "name": "music-artists",
+    "prettyName": "Music artists",
+    "connectedTopics": ["music"]
+  },
+  { "name": "singing", "prettyName": "Singing", "connectedTopics": [] },
+  { "name": "ambient", "prettyName": "Ambient sounds", "connectedTopics": [] },
+  { "name": "framer", "prettyName": "Framer", "connectedTopics": ["design"] },
+  {
+    "name": "animation",
+    "prettyName": "Animation",
+    "connectedTopics": ["design"]
+  },
+  {
+    "name": "design-systems",
+    "prettyName": "Design systems",
+    "connectedTopics": ["design"]
+  },
+  {
+    "name": "design-inspiration",
+    "prettyName": "Design inspiration",
+    "connectedTopics": ["design"]
+  },
+  { "name": "logos", "prettyName": "Logos", "connectedTopics": ["icons"] },
+  { "name": "fonts", "prettyName": "Fonts", "connectedTopics": [] },
+  { "name": "rive", "prettyName": "Rive", "connectedTopics": [] },
+  { "name": "color", "prettyName": "Color", "connectedTopics": [] },
+  {
+    "name": "user-experience",
+    "prettyName": "User Experience",
+    "connectedTopics": ["design"]
+  },
+  { "name": "figma", "prettyName": "Figma", "connectedTopics": ["design"] },
+  {
+    "name": "figma-plugins",
+    "prettyName": "Figma plugins",
+    "connectedTopics": ["figma"]
+  },
+  {
+    "name": "distributed-systems",
+    "prettyName": "Distributed systems",
+    "connectedTopics": ["software-architecture"]
+  },
+  { "name": "e-commerce", "prettyName": "E-commerce", "connectedTopics": [] },
+  {
+    "name": "3d-printing",
+    "prettyName": "3D Printing",
+    "connectedTopics": ["hardware"]
+  },
+  { "name": "iran", "prettyName": "Iran", "connectedTopics": [] },
+  { "name": "thailand", "prettyName": "Thailand", "connectedTopics": [] },
+  {
+    "name": "video",
+    "prettyName": "Video",
+    "connectedTopics": ["computer-graphics"]
+  },
+  {
+    "name": "basic-income",
+    "prettyName": "Basic income",
+    "connectedTopics": ["economy"]
+  },
+  {
+    "name": "spicedb",
+    "prettyName": "SpiceDB",
+    "connectedTopics": ["databases"]
+  },
+  {
+    "name": "mariadb",
+    "prettyName": "MariaDB",
+    "connectedTopics": ["databases"]
+  },
+  {
+    "name": "edgedb",
+    "prettyName": "EdgeDB",
+    "connectedTopics": ["databases"]
+  },
+  {
+    "name": "planetscale",
+    "prettyName": "Planetscale",
+    "connectedTopics": ["databases"]
+  },
+  {
+    "name": "prisma",
+    "prettyName": "Prisma",
+    "connectedTopics": ["databases"]
+  },
+  { "name": "music", "prettyName": "Music", "connectedTopics": [] },
+  {
+    "name": "message-queue",
+    "prettyName": "Message queue",
+    "connectedTopics": []
+  },
+  { "name": "mqtt", "prettyName": "MQTT", "connectedTopics": [] },
+  {
+    "name": "load-balancing",
+    "prettyName": "Load balancing",
+    "connectedTopics": ["distributed-systems"]
+  },
+  {
+    "name": "crdt",
+    "prettyName": "Conflict-free replicated data type",
+    "connectedTopics": ["data-structures"]
+  },
+  {
+    "name": "cinematography",
+    "prettyName": "Cinematography",
+    "connectedTopics": ["movies"]
+  },
+  {
+    "name": "finance",
+    "prettyName": "Finance",
+    "connectedTopics": ["economy"]
+  },
+  {
+    "name": "high-frequency-trading",
+    "prettyName": "High frequency trading",
+    "connectedTopics": ["finance"]
+  },
+  {
+    "name": "investing",
+    "prettyName": "Investing",
+    "connectedTopics": ["finance"]
+  },
+  { "name": "kdb", "prettyName": "Kdb+", "connectedTopics": ["databases"] },
+  {
+    "name": "prometheus",
+    "prettyName": "Prometheus",
+    "connectedTopics": ["databases"]
+  },
+  {
+    "name": "rocksdb",
+    "prettyName": "RocksDB",
+    "connectedTopics": ["databases"]
+  },
+  { "name": "redis", "prettyName": "Redis", "connectedTopics": ["databases"] },
+  { "name": "mysql", "prettyName": "MySQL", "connectedTopics": ["databases"] },
+  {
+    "name": "duckdb",
+    "prettyName": "DuckDB",
+    "connectedTopics": ["databases"]
+  },
+  {
+    "name": "dynamodb",
+    "prettyName": "DynamoDB",
+    "connectedTopics": ["databases"]
+  },
+  {
+    "name": "greptimedb",
+    "prettyName": "GreptimeDB",
+    "connectedTopics": ["databases"]
+  },
+  {
+    "name": "blockchain",
+    "prettyName": "Blockchain",
+    "connectedTopics": ["databases"]
+  },
+  {
+    "name": "cardano",
+    "prettyName": "Cardano",
+    "connectedTopics": ["blockchain"]
+  },
+  {
+    "name": "arweave",
+    "prettyName": "Arweave",
+    "connectedTopics": ["blockchain"]
+  },
+  {
+    "name": "ethereum",
+    "prettyName": "Ethereum",
+    "connectedTopics": ["blockchain"]
+  },
+  {
+    "name": "polkadot",
+    "prettyName": "Polkadot",
+    "connectedTopics": ["blockchain"]
+  },
+  {
+    "name": "cosmos",
+    "prettyName": "Cosmos",
+    "connectedTopics": ["blockchain"]
+  },
+  {
+    "name": "near",
+    "prettyName": "NEAR Protocol",
+    "connectedTopics": ["blockchain"]
+  },
+  {
+    "name": "uniswap",
+    "prettyName": "Uniswap",
+    "connectedTopics": ["blockchain"]
+  },
+  {
+    "name": "solana",
+    "prettyName": "Solana",
+    "connectedTopics": ["blockchain"]
+  },
+  {
+    "name": "clickhouse",
+    "prettyName": "ClickHouse",
+    "connectedTopics": ["databases"]
+  },
+  {
+    "name": "foundationdb",
+    "prettyName": "FoundationDB",
+    "connectedTopics": ["databases"]
+  },
+  {
+    "name": "surrealdb",
+    "prettyName": "SurrealDB",
+    "connectedTopics": ["databases"]
+  },
+  {
+    "name": "postgresql",
+    "prettyName": "PostgreSQL",
+    "connectedTopics": ["databases"]
+  },
+  {
+    "name": "memcached",
+    "prettyName": "Memcached",
+    "connectedTopics": ["databases"]
+  },
+  {
+    "name": "cassandra",
+    "prettyName": "Cassandra",
+    "connectedTopics": ["databases"]
+  },
+  { "name": "databases", "prettyName": "Databases", "connectedTopics": [] },
+  {
+    "name": "timescaledb",
+    "prettyName": "TimescaleDB",
+    "connectedTopics": ["databases"]
+  },
+  { "name": "neo4j", "prettyName": "Neo4j", "connectedTopics": ["databases"] },
+  {
+    "name": "bonsaidb",
+    "prettyName": "BonsaiDb",
+    "connectedTopics": ["databases"]
+  },
+  {
+    "name": "sqlite",
+    "prettyName": "SQLite",
+    "connectedTopics": ["databases"]
+  },
+  {
+    "name": "dgraph",
+    "prettyName": "Dgraph",
+    "connectedTopics": ["databases"]
+  },
+  { "name": "fauna", "prettyName": "Fauna", "connectedTopics": ["databases"] },
+  { "name": "sql", "prettyName": "SQL", "connectedTopics": ["databases"] },
+  { "name": "vim", "prettyName": "Vim", "connectedTopics": ["text-editors"] },
+  {
+    "name": "vim-plugins",
+    "prettyName": "Vim plugins",
+    "connectedTopics": ["vim"]
+  },
+  {
+    "name": "tiptap",
+    "prettyName": "TipTap",
+    "connectedTopics": ["text-editors"]
+  },
+  {
+    "name": "sublime-text-plugins",
+    "prettyName": "Sublime Text plugins",
+    "connectedTopics": ["sublime-text"]
+  },
+  {
+    "name": "sublime-text",
+    "prettyName": "Sublime Text",
+    "connectedTopics": ["text-editors"]
+  },
+  { "name": "zed", "prettyName": "Zed", "connectedTopics": ["text-editors"] },
+  {
+    "name": "text-editors",
+    "prettyName": "Text editors",
+    "connectedTopics": []
+  },
+  {
+    "name": "emacs-packages",
+    "prettyName": "Emacs packages",
+    "connectedTopics": ["emacs"]
+  },
+  {
+    "name": "emacs",
+    "prettyName": "Emacs",
+    "connectedTopics": ["text-editors"]
+  },
+  {
+    "name": "manaco-editor",
+    "prettyName": "Monaco Editor",
+    "connectedTopics": ["text-editors"]
+  },
+  {
+    "name": "vs-code",
+    "prettyName": "VS Code",
+    "connectedTopics": ["text-editors"]
+  },
+  {
+    "name": "vs-code-extensions",
+    "prettyName": "VS Code extensions",
+    "connectedTopics": ["vs-code"]
+  },
+  {
+    "name": "codemirror",
+    "prettyName": "CodeMirror",
+    "connectedTopics": ["text-editors"]
+  },
+  {
+    "name": "prosemirror",
+    "prettyName": "ProseMirror",
+    "connectedTopics": ["text-editors"]
+  },
+  {
+    "name": "helix",
+    "prettyName": "Helix",
+    "connectedTopics": ["text-editors"]
+  },
+  {
+    "name": "inngest",
+    "prettyName": "Inngest",
+    "connectedTopics": ["message-queue"]
+  },
+  {
+    "name": "site-reliability-engineering",
+    "prettyName": "Site Reliability Engineering",
+    "connectedTopics": ["devops"]
+  },
+  {
+    "name": "terraform",
+    "prettyName": "Terraform",
+    "connectedTopics": ["devops"]
+  },
+  {
+    "name": "temporal",
+    "prettyName": "Temporal",
+    "connectedTopics": ["devops"]
+  },
+  {
+    "name": "observability",
+    "prettyName": "Observability",
+    "connectedTopics": ["devops"]
+  },
+  { "name": "devops", "prettyName": "DevOps", "connectedTopics": [] },
+  { "name": "email", "prettyName": "Email", "connectedTopics": [] },
+  {
+    "name": "logseq",
+    "prettyName": "Logseq",
+    "connectedTopics": ["text-editors"]
+  },
+  {
+    "name": "product-hunt",
+    "prettyName": "Product Hunt",
+    "connectedTopics": []
+  },
+  { "name": "firebase", "prettyName": "Firebase", "connectedTopics": [] },
+  { "name": "docusaurus", "prettyName": "Docusaurus", "connectedTopics": [] },
+  {
+    "name": "twitter",
+    "prettyName": "Twitter",
+    "connectedTopics": ["social-networks"]
+  },
+  { "name": "dropbox", "prettyName": "Dropbox", "connectedTopics": [] },
+  { "name": "slack", "prettyName": "Slack", "connectedTopics": [] },
+  {
+    "name": "roam-research",
+    "prettyName": "Roam Research",
+    "connectedTopics": []
+  },
+  { "name": "ifttt", "prettyName": "IFTTT", "connectedTopics": [] },
+  { "name": "blogs", "prettyName": "Blogs", "connectedTopics": ["writing"] },
+  { "name": "focusing", "prettyName": "Focusing", "connectedTopics": [] },
+  { "name": "irc", "prettyName": "IRC", "connectedTopics": [] },
+  { "name": "vitepress", "prettyName": "VitePress", "connectedTopics": [] },
+  { "name": "gitbook", "prettyName": "GitBook", "connectedTopics": [] },
+  { "name": "notion", "prettyName": "Notion", "connectedTopics": [] },
+  { "name": "remnote", "prettyName": "Remnote", "connectedTopics": [] },
+  {
+    "name": "obsidian",
+    "prettyName": "Obsidian\naliases: [Obsidan]",
+    "connectedTopics": []
+  },
+  { "name": "reddit", "prettyName": "Reddit", "connectedTopics": [] },
+  { "name": "wordpress", "prettyName": "Wordpress", "connectedTopics": [] },
+  { "name": "dendron", "prettyName": "Dendron", "connectedTopics": [] },
+  { "name": "dat", "prettyName": "Dat", "connectedTopics": [] },
+  { "name": "codesandbox", "prettyName": "CodeSandbox", "connectedTopics": [] },
+  { "name": "sanity", "prettyName": "Sanity", "connectedTopics": [] },
+  { "name": "ansible", "prettyName": "Ansible", "connectedTopics": [] },
+  { "name": "zulip", "prettyName": "Zulip", "connectedTopics": [] },
+  { "name": "pdf", "prettyName": "PDF", "connectedTopics": [] },
+  {
+    "name": "personal-setups",
+    "prettyName": "Personal setups",
+    "connectedTopics": []
+  },
+  {
+    "name": "telegram",
+    "prettyName": "Telegram",
+    "connectedTopics": ["communication"]
+  },
+  {
+    "name": "discord",
+    "prettyName": "Discord",
+    "connectedTopics": ["communication"]
+  },
+  { "name": "tools", "prettyName": "Tools", "connectedTopics": [] },
+  { "name": "turso", "prettyName": "Turso", "connectedTopics": ["databases"] },
+  {
+    "name": "meilisearch",
+    "prettyName": "Meilisearch",
+    "connectedTopics": ["search-engines"]
+  },
+  {
+    "name": "voice-assistants",
+    "prettyName": "Voice assistants",
+    "connectedTopics": []
+  },
+  {
+    "name": "neuroscience",
+    "prettyName": "Neuroscience",
+    "connectedTopics": ["brain-computer-interfaces"]
+  },
+  {
+    "name": "cognition",
+    "prettyName": "Cognition",
+    "connectedTopics": ["neuroscience"]
+  },
+  { "name": "hardware", "prettyName": "Hardware", "connectedTopics": ["cpu"] },
+  {
+    "name": "circuit-design",
+    "prettyName": "Circuit design",
+    "connectedTopics": ["electrical-engineering"]
+  },
+  { "name": "risc-v", "prettyName": "RISC-V", "connectedTopics": [] },
+  { "name": "amd", "prettyName": "AMD", "connectedTopics": ["cpu"] },
+  { "name": "cpu", "prettyName": "CPU", "connectedTopics": [] },
+  {
+    "name": "displays",
+    "prettyName": "Displays",
+    "connectedTopics": ["computer-graphics"]
+  },
+  {
+    "name": "arduino",
+    "prettyName": "Arduino",
+    "connectedTopics": ["embedded-systems"]
+  },
+  {
+    "name": "raspberry-pi",
+    "prettyName": "Raspberry Pi",
+    "connectedTopics": ["hardware"]
+  },
+  {
+    "name": "firmware",
+    "prettyName": "Firmware",
+    "connectedTopics": ["hardware"]
+  },
+  {
+    "name": "verilog",
+    "prettyName": "Verilog",
+    "connectedTopics": ["hardware"]
+  },
+  {
+    "name": "fpga",
+    "prettyName": "Field-programmable gate array",
+    "connectedTopics": ["hardware"]
+  },
+  {
+    "name": "neuromorphic-computing",
+    "prettyName": "Neuromorphic Computing",
+    "connectedTopics": ["hardware"]
+  },
+  {
+    "name": "jxa",
+    "prettyName": "JavaScript for Automation",
+    "connectedTopics": ["javascript"]
+  },
+  {
+    "name": "macOS",
+    "prettyName": "macOS",
+    "connectedTopics": ["operating-systems"]
+  },
+  {
+    "name": "applescript",
+    "prettyName": "AppleScript",
+    "connectedTopics": ["macOS"]
+  },
+  { "name": "tweetbot", "prettyName": "Tweetbot", "connectedTopics": [] },
+  { "name": "xcode", "prettyName": "Xcode", "connectedTopics": ["macOS"] },
+  {
+    "name": "xcode-extensions",
+    "prettyName": "Xcode Extensions",
+    "connectedTopics": ["xcode"]
+  },
+  {
+    "name": "keychain",
+    "prettyName": "Keychain",
+    "connectedTopics": ["macOS"]
+  },
+  {
+    "name": "macOS-apps",
+    "prettyName": "macOS apps",
+    "connectedTopics": ["macOS"]
+  },
+  { "name": "typinator", "prettyName": "Typinator", "connectedTopics": [] },
+  { "name": "timing", "prettyName": "Timing", "connectedTopics": [] },
+  { "name": "fantastical", "prettyName": "Fantastical", "connectedTopics": [] },
+  { "name": "hazel", "prettyName": "Hazel", "connectedTopics": [] },
+  { "name": "iterm", "prettyName": "iTerm", "connectedTopics": [] },
+  { "name": "sketch", "prettyName": "Sketch", "connectedTopics": [] },
+  { "name": "hammerspoon", "prettyName": "Hammerspoon", "connectedTopics": [] },
+  { "name": "scriptkit", "prettyName": "ScriptKit", "connectedTopics": [] },
+  { "name": "trello", "prettyName": "Trello", "connectedTopics": [] },
+  { "name": "2do", "prettyName": "2Do", "connectedTopics": [] },
+  { "name": "mindnode", "prettyName": "MindNode", "connectedTopics": [] },
+  { "name": "contacts", "prettyName": "Contacts", "connectedTopics": [] },
+  { "name": "textual", "prettyName": "Textual", "connectedTopics": [] },
+  { "name": "pixave", "prettyName": "Pixave", "connectedTopics": [] },
+  {
+    "name": "bettertouchtool",
+    "prettyName": "BetterTouchTool",
+    "connectedTopics": []
+  },
+  {
+    "name": "little-snitch",
+    "prettyName": "Little Snitch",
+    "connectedTopics": []
+  },
+  {
+    "name": "keyboard-maestro",
+    "prettyName": "Keyboard Maestro",
+    "connectedTopics": []
+  },
+  {
+    "name": "affinity-designer",
+    "prettyName": "Affinity Designer",
+    "connectedTopics": []
+  },
+  {
+    "name": "making-workflows",
+    "prettyName": "Making workflows",
+    "connectedTopics": []
+  },
+  { "name": "awgo", "prettyName": "AwGo", "connectedTopics": [] },
+  { "name": "alfred", "prettyName": "Alfred", "connectedTopics": ["macOS"] },
+  { "name": "1password", "prettyName": "1Password", "connectedTopics": [] },
+  {
+    "name": "karabiner",
+    "prettyName": "Karabiner",
+    "connectedTopics": ["macOS"]
+  },
+  { "name": "tracking", "prettyName": "Tracking", "connectedTopics": [] },
+  {
+    "name": "tor",
+    "prettyName": "Tor Project",
+    "connectedTopics": ["browsers"]
+  },
+  {
+    "name": "self-hosting",
+    "prettyName": "Self hosting",
+    "connectedTopics": ["web"]
+  },
+  { "name": "privacy", "prettyName": "Privacy", "connectedTopics": [] },
+  { "name": "freedom", "prettyName": "Freedom", "connectedTopics": [] },
+  { "name": "raycast", "prettyName": "Raycast", "connectedTopics": ["macOS"] },
+  { "name": "znc", "prettyName": "ZNC", "connectedTopics": ["irc"] },
+  {
+    "name": "github-bots",
+    "prettyName": "GitHub bots",
+    "connectedTopics": ["github"]
+  },
+  { "name": "open-source", "prettyName": "Open Source", "connectedTopics": [] },
+  {
+    "name": "data-structures",
+    "prettyName": "Data structures",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "automata-theory",
+    "prettyName": "Automata theory",
+    "connectedTopics": ["computer-science"]
+  },
+  {
+    "name": "algorithms",
+    "prettyName": "Algorithms",
+    "connectedTopics": ["computer-science"]
+  },
+  {
+    "name": "compression",
+    "prettyName": "Compression",
+    "connectedTopics": ["computer-science"]
+  },
+  {
+    "name": "parsing",
+    "prettyName": "Parsing",
+    "connectedTopics": ["compilers"]
+  },
+  {
+    "name": "computer-science",
+    "prettyName": "Computer Science",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "computer-architecture",
+    "prettyName": "Computer architecture",
+    "connectedTopics": ["computer-science"]
+  },
+  {
+    "name": "formal-verification",
+    "prettyName": "Formal verification",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "tla",
+    "prettyName": "TLA+",
+    "connectedTopics": ["formal-verification"]
+  },
+  {
+    "name": "kafka",
+    "prettyName": "Apache Kafka",
+    "connectedTopics": ["stream-processing"]
+  },
+  {
+    "name": "data-visualization",
+    "prettyName": "Data Visualization",
+    "connectedTopics": ["data-science"]
+  },
+  {
+    "name": "data-science",
+    "prettyName": "Data Science",
+    "connectedTopics": ["computer-science"]
+  },
+  {
+    "name": "datasette",
+    "prettyName": "Datasette",
+    "connectedTopics": ["data-processing"]
+  },
+  {
+    "name": "cryptography",
+    "prettyName": "Cryptography",
+    "connectedTopics": ["computer-science"]
+  },
+  {
+    "name": "zero-knowledge-proofs",
+    "prettyName": "Zero knowledge proofs",
+    "connectedTopics": ["encryption"]
+  },
+  {
+    "name": "encryption",
+    "prettyName": "Encryption",
+    "connectedTopics": ["security"]
+  },
+  { "name": "security", "prettyName": "Security", "connectedTopics": [] },
+  {
+    "name": "research-chemicals",
+    "prettyName": "Research chemicals",
+    "connectedTopics": ["drugs"]
+  },
+  { "name": "mdma", "prettyName": "MDMA", "connectedTopics": ["drugs"] },
+  { "name": "drugs", "prettyName": "Drugs", "connectedTopics": [] },
+  {
+    "name": "nootropics",
+    "prettyName": "Nootropics",
+    "connectedTopics": ["supplements"]
+  },
+  { "name": "opiates", "prettyName": "Opiates", "connectedTopics": ["drugs"] },
+  {
+    "name": "cannabis",
+    "prettyName": "Cannabis",
+    "connectedTopics": ["drugs"]
+  },
+  {
+    "name": "dissociatives",
+    "prettyName": "Dissociatives",
+    "connectedTopics": ["drugs"]
+  },
+  {
+    "name": "microdosing",
+    "prettyName": "Microdosing",
+    "connectedTopics": ["drugs"]
+  },
+  {
+    "name": "phenethylamines",
+    "prettyName": "Phenethylamines",
+    "connectedTopics": ["psychedelics"]
+  },
+  {
+    "name": "salvia",
+    "prettyName": "Salvia",
+    "connectedTopics": ["psychedelics"]
+  },
+  {
+    "name": "ketamine",
+    "prettyName": "Ketamine",
+    "connectedTopics": ["drugs"]
+  },
+  { "name": "dmt", "prettyName": "DMT", "connectedTopics": ["psychedelics"] },
+  {
+    "name": "tryptamines",
+    "prettyName": "Tryptamines",
+    "connectedTopics": ["psychedelics"]
+  },
+  {
+    "name": "psychedelics",
+    "prettyName": "Psychedelics",
+    "connectedTopics": ["drugs"]
+  },
+  { "name": "trippy", "prettyName": "Trippy things", "connectedTopics": [] },
+  { "name": "lsd", "prettyName": "LSD", "connectedTopics": ["lysergamides"] },
+  {
+    "name": "lysergamides",
+    "prettyName": "Lysergamides",
+    "connectedTopics": ["lsd"]
+  },
+  { "name": "sleep", "prettyName": "Sleep", "connectedTopics": ["health"] },
+  {
+    "name": "dreaming",
+    "prettyName": "Dreaming",
+    "connectedTopics": ["sleep"]
+  },
+  {
+    "name": "sketching",
+    "prettyName": "Sketching",
+    "connectedTopics": ["art"]
+  },
+  { "name": "art", "prettyName": "Art", "connectedTopics": [] },
+  { "name": "photography", "prettyName": "Photography", "connectedTopics": [] },
+  {
+    "name": "architecture",
+    "prettyName": "Architecture",
+    "connectedTopics": []
+  },
+  { "name": "anime", "prettyName": "Anime", "connectedTopics": [] },
+  {
+    "name": "midjourney",
+    "prettyName": "Midjourney",
+    "connectedTopics": ["generative-machine-learning"]
+  },
+  {
+    "name": "generative-art",
+    "prettyName": "Generative art",
+    "connectedTopics": ["art"]
+  },
+  { "name": "dancing", "prettyName": "Dancing", "connectedTopics": [] },
+  { "name": "furniture", "prettyName": "Furniture", "connectedTopics": [] },
+  { "name": "comics", "prettyName": "Comics", "connectedTopics": [] },
+  {
+    "name": "pen-plotting",
+    "prettyName": "Pen plotting",
+    "connectedTopics": ["art"]
+  },
+  { "name": "tattoos", "prettyName": "Tattoos", "connectedTopics": [] },
+  { "name": "clothes", "prettyName": "Clothes", "connectedTopics": [] },
+  { "name": "nestjs", "prettyName": "NestJS", "connectedTopics": [] },
+  {
+    "name": "nodejs",
+    "prettyName": "Node.js",
+    "connectedTopics": ["javascript"]
+  },
+  {
+    "name": "fastify",
+    "prettyName": "Fastify",
+    "connectedTopics": ["js-libraries"]
+  },
+  {
+    "name": "webassembly",
+    "prettyName": "WebAssembly",
+    "connectedTopics": ["web"]
+  },
+  { "name": "swc", "prettyName": "swc", "connectedTopics": ["javascript"] },
+  {
+    "name": "search-engines",
+    "prettyName": "Search engines",
+    "connectedTopics": ["databases"]
+  },
+  { "name": "vite", "prettyName": "Vite", "connectedTopics": ["web"] },
+  { "name": "deno", "prettyName": "Deno", "connectedTopics": ["javascript"] },
+  {
+    "name": "web-workers",
+    "prettyName": "Web workers",
+    "connectedTopics": ["browsers"]
+  },
+  {
+    "name": "electron",
+    "prettyName": "Electron",
+    "connectedTopics": ["browsers"]
+  },
+  {
+    "name": "web-performance",
+    "prettyName": "Web performance",
+    "connectedTopics": ["web"]
+  },
+  { "name": "spin", "prettyName": "Spin", "connectedTopics": ["webassembly"] },
+  {
+    "name": "bookmarklets",
+    "prettyName": "Bookmarklets",
+    "connectedTopics": []
+  },
+  {
+    "name": "google-chrome",
+    "prettyName": "Google Chrome",
+    "connectedTopics": ["browsers"]
+  },
+  {
+    "name": "chrome-dev-tools",
+    "prettyName": "Chrome DevTools",
+    "connectedTopics": ["google-chrome"]
+  },
+  { "name": "stylish-themes", "prettyName": "Stylish", "connectedTopics": [] },
+  { "name": "browsers", "prettyName": "Browsers", "connectedTopics": [] },
+  { "name": "safari", "prettyName": "Safari", "connectedTopics": ["browsers"] },
+  {
+    "name": "firefox",
+    "prettyName": "Firefox",
+    "connectedTopics": ["browsers"]
+  },
+  {
+    "name": "playwright",
+    "prettyName": "Playwright",
+    "connectedTopics": ["browsers"]
+  },
+  {
+    "name": "esbuild",
+    "prettyName": "esbuild",
+    "connectedTopics": ["javascript"]
+  },
+  { "name": "redwood", "prettyName": "Redwood", "connectedTopics": [] },
+  { "name": "jamstack", "prettyName": "JAMstack", "connectedTopics": [] },
+  {
+    "name": "seo",
+    "prettyName": "Search Engine Optimization",
+    "connectedTopics": ["search-engines"]
+  },
+  { "name": "rollup", "prettyName": "Rollup", "connectedTopics": ["web"] },
+  { "name": "web", "prettyName": "Web", "connectedTopics": [] },
+  { "name": "rss", "prettyName": "RSS", "connectedTopics": [] },
+  { "name": "gsoc", "prettyName": "GSOC", "connectedTopics": [] },
+  {
+    "name": "github",
+    "prettyName": "GitHub",
+    "connectedTopics": ["open-source"]
+  },
+  { "name": "webrtc", "prettyName": "WebRTC", "connectedTopics": ["video"] },
+  {
+    "name": "cms",
+    "prettyName": "Content management systems",
+    "connectedTopics": []
+  },
+  {
+    "name": "orama",
+    "prettyName": "Orama",
+    "connectedTopics": ["search-engines"]
+  },
+  {
+    "name": "progressive-web-apps",
+    "prettyName": "Progressive web apps (PWA)",
+    "connectedTopics": ["web"]
+  },
+  {
+    "name": "web-scraping",
+    "prettyName": "Web scraping",
+    "connectedTopics": ["web"]
+  },
+  { "name": "webpack", "prettyName": "Webpack", "connectedTopics": [] },
+  {
+    "name": "web-components",
+    "prettyName": "Web Components",
+    "connectedTopics": ["html"]
+  },
+  { "name": "webkit", "prettyName": "WebKit", "connectedTopics": ["browsers"] },
+  {
+    "name": "web-engines",
+    "prettyName": "Web engines",
+    "connectedTopics": ["browsers"]
+  },
+  {
+    "name": "eleventy",
+    "prettyName": "Eleventy",
+    "connectedTopics": ["static-sites"]
+  },
+  { "name": "jekyll", "prettyName": "Jekyll", "connectedTopics": [] },
+  { "name": "hugo", "prettyName": "Hugo", "connectedTopics": [] },
+  {
+    "name": "static-sites",
+    "prettyName": "Static sites",
+    "connectedTopics": []
+  },
+  { "name": "latex", "prettyName": "LaTeX", "connectedTopics": [] },
+  {
+    "name": "authentication",
+    "prettyName": "Authentication",
+    "connectedTopics": []
+  },
+  { "name": "http", "prettyName": "HTTP", "connectedTopics": ["networking"] },
+  { "name": "rabbitmq", "prettyName": "RabbitMQ", "connectedTopics": [] },
+  { "name": "tcp", "prettyName": "TCP", "connectedTopics": ["networking"] },
+  { "name": "tls", "prettyName": "TLS", "connectedTopics": ["networking"] },
+  { "name": "networking", "prettyName": "Networking", "connectedTopics": [] },
+  {
+    "name": "mesh-networking",
+    "prettyName": "Mesh networking",
+    "connectedTopics": ["networking"]
+  },
+  { "name": "nginx", "prettyName": "Nginx", "connectedTopics": ["networking"] },
+  { "name": "caddy", "prettyName": "Caddy", "connectedTopics": ["http"] },
+  { "name": "vpn", "prettyName": "VPN", "connectedTopics": ["networking"] },
+  {
+    "name": "wireguard",
+    "prettyName": "WireGuard",
+    "connectedTopics": ["networking"]
+  },
+  {
+    "name": "decentralization",
+    "prettyName": "Decentralization",
+    "connectedTopics": []
+  },
+  {
+    "name": "websocket",
+    "prettyName": "WebSocket",
+    "connectedTopics": ["web"]
+  },
+  { "name": "activitypub", "prettyName": "ActivityPub", "connectedTopics": [] },
+  { "name": "ssh", "prettyName": "SSH", "connectedTopics": [] },
+  { "name": "lorawan", "prettyName": "LoRaWAN", "connectedTopics": [] },
+  { "name": "iot", "prettyName": "Internet of things", "connectedTopics": [] },
+  { "name": "ipfs", "prettyName": "IPFS", "connectedTopics": [] },
+  {
+    "name": "bittorrent",
+    "prettyName": "BitTorrent",
+    "connectedTopics": ["networking"]
+  },
+  {
+    "name": "peer-to-peer",
+    "prettyName": "Peer to peer",
+    "connectedTopics": ["decentralization"]
+  },
+  { "name": "quic", "prettyName": "QUIC", "connectedTopics": ["networking"] },
+  { "name": "dns", "prettyName": "DNS", "connectedTopics": ["networking"] },
+  {
+    "name": "microservices",
+    "prettyName": "Microservices",
+    "connectedTopics": ["distributed-systems"]
+  },
+  {
+    "name": "postgraphile",
+    "prettyName": "PostGraphile",
+    "connectedTopics": []
+  },
+  {
+    "name": "apollo-graphql",
+    "prettyName": "Apollo GraphQL",
+    "connectedTopics": []
+  },
+  { "name": "hasura", "prettyName": "Hasura", "connectedTopics": [] },
+  { "name": "graphql", "prettyName": "GraphQL", "connectedTopics": ["http"] },
+  {
+    "name": "grafbase",
+    "prettyName": "Grafbase",
+    "connectedTopics": ["graphql"]
+  },
+  {
+    "name": "matrix",
+    "prettyName": "Matrix",
+    "connectedTopics": ["communication"]
+  },
+  { "name": "wifi", "prettyName": "Wi-Fi", "connectedTopics": [] },
+  {
+    "name": "file-sharing",
+    "prettyName": "File sharing",
+    "connectedTopics": []
+  },
+  { "name": "gemini", "prettyName": "Gemini", "connectedTopics": [] },
+  { "name": "domains", "prettyName": "Domains", "connectedTopics": [] },
+  { "name": "rest", "prettyName": "REST", "connectedTopics": [] },
+  { "name": "hair", "prettyName": "Hair", "connectedTopics": [] },
+  { "name": "depression", "prettyName": "Depression", "connectedTopics": [] },
+  { "name": "aging", "prettyName": "Aging", "connectedTopics": [] },
+  { "name": "teeth", "prettyName": "Teeth", "connectedTopics": [] },
+  { "name": "ergonomics", "prettyName": "Ergonomics", "connectedTopics": [] },
+  { "name": "skin-care", "prettyName": "Skin care", "connectedTopics": [] },
+  { "name": "nutrition", "prettyName": "Nutrition", "connectedTopics": [] },
+  { "name": "coffee", "prettyName": "Coffee", "connectedTopics": [] },
+  { "name": "drinks", "prettyName": "Drinks", "connectedTopics": [] },
+  { "name": "tea", "prettyName": "Tea", "connectedTopics": [] },
+  { "name": "wine", "prettyName": "Wine", "connectedTopics": [] },
+  { "name": "recipes", "prettyName": "Recipes", "connectedTopics": [] },
+  { "name": "foods", "prettyName": "Foods", "connectedTopics": [] },
+  { "name": "hydroponics", "prettyName": "Hydroponics", "connectedTopics": [] },
+  { "name": "supplements", "prettyName": "Supplements", "connectedTopics": [] },
+  { "name": "fasting", "prettyName": "Fasting", "connectedTopics": [] },
+  { "name": "health", "prettyName": "Health", "connectedTopics": [] },
+  { "name": "visionos", "prettyName": "VisionOS", "connectedTopics": [] },
+  {
+    "name": "virtual-reality",
+    "prettyName": "Virtual reality",
+    "connectedTopics": ["computer-graphics"]
+  },
+  { "name": "ego", "prettyName": "Ego", "connectedTopics": [] },
+  {
+    "name": "consciousness",
+    "prettyName": "Consciousness",
+    "connectedTopics": []
+  },
+  { "name": "biases", "prettyName": "Biases", "connectedTopics": [] },
+  {
+    "name": "decision-making",
+    "prettyName": "Decision making",
+    "connectedTopics": []
+  },
+  { "name": "marketing", "prettyName": "Marketing", "connectedTopics": [] },
+  { "name": "addiction", "prettyName": "Addiction", "connectedTopics": [] },
+  { "name": "negotiating", "prettyName": "Negotiating", "connectedTopics": [] },
+  { "name": "articles", "prettyName": "Articles", "connectedTopics": [] },
+  { "name": "learning", "prettyName": "Learning", "connectedTopics": [] },
+  { "name": "university", "prettyName": "University", "connectedTopics": [] },
+  { "name": "education", "prettyName": "Education", "connectedTopics": [] },
+  {
+    "name": "web-accessibility",
+    "prettyName": "Web accessibility",
+    "connectedTopics": []
+  },
+  {
+    "name": "service-workers",
+    "prettyName": "Service workers",
+    "connectedTopics": []
+  },
+  {
+    "name": "chemistry",
+    "prettyName": "Chemistry",
+    "connectedTopics": ["physics"]
+  },
+  { "name": "payroll", "prettyName": "Payroll", "connectedTopics": [] },
+  {
+    "name": "marketplaces",
+    "prettyName": "Marketplaces",
+    "connectedTopics": []
+  },
+  {
+    "name": "startups",
+    "prettyName": "Startups",
+    "connectedTopics": ["business"]
+  },
+  {
+    "name": "venture-capital",
+    "prettyName": "Venture Capital",
+    "connectedTopics": []
+  },
+  { "name": "values", "prettyName": "Values", "connectedTopics": [] },
+  { "name": "funding", "prettyName": "Funding", "connectedTopics": [] },
+  { "name": "onboarding", "prettyName": "Onboarding", "connectedTopics": [] },
+  { "name": "business", "prettyName": "Business", "connectedTopics": [] },
+  { "name": "dao", "prettyName": "DAOs", "connectedTopics": [] },
+  {
+    "name": "landing-pages",
+    "prettyName": "Landing pages",
+    "connectedTopics": []
+  },
+  { "name": "restaurants", "prettyName": "Restaurants", "connectedTopics": [] },
+  { "name": "products", "prettyName": "Products", "connectedTopics": [] },
+  { "name": "keyboards", "prettyName": "Keyboards", "connectedTopics": [] },
+  { "name": "anki", "prettyName": "Anki", "connectedTopics": [] },
+  { "name": "management", "prettyName": "Management", "connectedTopics": [] },
+  { "name": "leadership", "prettyName": "Leadership", "connectedTopics": [] },
+  {
+    "name": "presentations",
+    "prettyName": "Presentations",
+    "connectedTopics": []
+  },
+  { "name": "talks", "prettyName": "Talks", "connectedTopics": [] },
+  { "name": "ton", "prettyName": "TON", "connectedTopics": [] },
+  { "name": "terra", "prettyName": "Terra", "connectedTopics": [] },
+  { "name": "nano", "prettyName": "Nano", "connectedTopics": [] },
+  { "name": "stellar", "prettyName": "Stellar", "connectedTopics": [] },
+  { "name": "libra", "prettyName": "Libra", "connectedTopics": [] },
+  {
+    "name": "monero",
+    "prettyName": "Monero",
+    "connectedTopics": ["blockchain"]
+  },
+  {
+    "name": "bitcoin",
+    "prettyName": "Bitcoin",
+    "connectedTopics": ["blockchain"]
+  },
+  {
+    "name": "avalanche",
+    "prettyName": "Avalanche",
+    "connectedTopics": ["blockchain"]
+  },
+  {
+    "name": "cryptocurrencies",
+    "prettyName": "Cryptocurrencies",
+    "connectedTopics": ["blockchain"]
+  },
+  { "name": "compassion", "prettyName": "Compassion", "connectedTopics": [] },
+  { "name": "memories", "prettyName": "Memories", "connectedTopics": [] },
+  {
+    "name": "parenting",
+    "prettyName": "Parenting",
+    "connectedTopics": ["life"]
+  },
+  { "name": "life", "prettyName": "Life", "connectedTopics": [] },
+  { "name": "success", "prettyName": "Success", "connectedTopics": [] },
+  { "name": "happiness", "prettyName": "Happiness", "connectedTopics": [] },
+  { "name": "death", "prettyName": "Death", "connectedTopics": [] },
+  { "name": "time", "prettyName": "Time", "connectedTopics": [] },
+  { "name": "journaling", "prettyName": "Journaling", "connectedTopics": [] },
+  { "name": "alan-watts", "prettyName": "Alan Watts", "connectedTopics": [] },
+  { "name": "cli", "prettyName": "Command Line Tools", "connectedTopics": [] },
+  { "name": "ngrok", "prettyName": "Ngrok", "connectedTopics": [] },
+  { "name": "sed", "prettyName": "Sed", "connectedTopics": [] },
+  { "name": "tmux", "prettyName": "Tmux", "connectedTopics": [] },
+  {
+    "name": "philanthropy",
+    "prettyName": "Philanthropy",
+    "connectedTopics": []
+  },
+  {
+    "name": "research-papers",
+    "prettyName": "Research papers",
+    "connectedTopics": ["research"]
+  },
+  { "name": "minimalism", "prettyName": "Minimalism", "connectedTopics": [] },
+  {
+    "name": "markov-chains",
+    "prettyName": "Markov chains",
+    "connectedTopics": ["statistics"]
+  },
+  { "name": "geometry", "prettyName": "Geometry", "connectedTopics": ["math"] },
+  {
+    "name": "group-theory",
+    "prettyName": "Group theory",
+    "connectedTopics": ["math"]
+  },
+  { "name": "topology", "prettyName": "Topology", "connectedTopics": ["math"] },
+  {
+    "name": "lambda-calculus",
+    "prettyName": "Lambda calculus",
+    "connectedTopics": ["functional-programming"]
+  },
+  { "name": "fractals", "prettyName": "Fractals", "connectedTopics": ["math"] },
+  {
+    "name": "wolfram-alpha",
+    "prettyName": "Wolfram Alpha",
+    "connectedTopics": ["math"]
+  },
+  {
+    "name": "fourier-transform",
+    "prettyName": "Fourier transform",
+    "connectedTopics": ["math"]
+  },
+  {
+    "name": "lean",
+    "prettyName": "Lean",
+    "connectedTopics": ["formal-verification"]
+  },
+  {
+    "name": "automated-theorem-proving",
+    "prettyName": "Automated theorem proving",
+    "connectedTopics": ["formal-verification"]
+  },
+  {
+    "name": "satisfiability-modulo-theories",
+    "prettyName": "Satisfiability modulo theories",
+    "connectedTopics": ["computer-science"]
+  },
+  { "name": "logic", "prettyName": "Logic", "connectedTopics": ["math"] },
+  {
+    "name": "geometric-algebra",
+    "prettyName": "Geometric algebra",
+    "connectedTopics": ["math"]
+  },
+  {
+    "name": "homotopy-theory",
+    "prettyName": "Homotopy theory",
+    "connectedTopics": ["math"]
+  },
+  { "name": "math", "prettyName": "Math", "connectedTopics": [] },
+  {
+    "name": "cubical-type-theory",
+    "prettyName": "Cubical type theory",
+    "connectedTopics": ["math"]
+  },
+  {
+    "name": "computational-type-theory",
+    "prettyName": "Computational type theory",
+    "connectedTopics": ["math"]
+  },
+  {
+    "name": "type-theory",
+    "prettyName": "Type Theory",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "dependent-types",
+    "prettyName": "Dependent types",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "automatic-differentiation",
+    "prettyName": "Automatic differentiation",
+    "connectedTopics": ["computer-science"]
+  },
+  {
+    "name": "real-analysis",
+    "prettyName": "Real analysis",
+    "connectedTopics": ["math"]
+  },
+  {
+    "name": "queueing-theory",
+    "prettyName": "Queueing theory",
+    "connectedTopics": ["math"]
+  },
+  {
+    "name": "number-theory",
+    "prettyName": "Number theory",
+    "connectedTopics": ["math"]
+  },
+  {
+    "name": "category-theory",
+    "prettyName": "Category theory",
+    "connectedTopics": ["math"]
+  },
+  { "name": "calculus", "prettyName": "Calculus", "connectedTopics": ["math"] },
+  {
+    "name": "differential-equations",
+    "prettyName": "Differential equations",
+    "connectedTopics": ["math"]
+  },
+  {
+    "name": "nearest-neighbor-search",
+    "prettyName": "Nearest neighbor search",
+    "connectedTopics": ["algorithms"]
+  },
+  {
+    "name": "mathematical-optimization",
+    "prettyName": "Mathematical optimization",
+    "connectedTopics": ["math"]
+  },
+  {
+    "name": "combinatorial-optimization",
+    "prettyName": "Combinatorial optimization",
+    "connectedTopics": ["math"]
+  },
+  {
+    "name": "gradient-descent",
+    "prettyName": "Gradient descent",
+    "connectedTopics": ["machine-learning"]
+  },
+  {
+    "name": "game-theory",
+    "prettyName": "Game theory",
+    "connectedTopics": ["math"]
+  },
+  {
+    "name": "algebraic-topology",
+    "prettyName": "Algebraic topology",
+    "connectedTopics": ["math"]
+  },
+  { "name": "buddhism", "prettyName": "Buddhism", "connectedTopics": [] },
+  { "name": "meditation", "prettyName": "Meditation", "connectedTopics": [] },
+  { "name": "mindfulness", "prettyName": "Mindfulness", "connectedTopics": [] },
+  { "name": "tao", "prettyName": "Tao", "connectedTopics": [] },
+  {
+    "name": "ocaml-libraries",
+    "prettyName": "OCaml libraries",
+    "connectedTopics": ["ocaml"]
+  },
+  { "name": "ocaml", "prettyName": "OCaml", "connectedTopics": [] },
+  {
+    "name": "gleam",
+    "prettyName": "Gleam",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "programming-languages",
+    "prettyName": "Programming languages",
+    "connectedTopics": ["computer-science"]
+  },
+  {
+    "name": "datalog",
+    "prettyName": "Datalog",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "prolog",
+    "prettyName": "Prolog",
+    "connectedTopics": ["programming-languages"]
+  },
+  { "name": "modal", "prettyName": "Modal", "connectedTopics": [] },
+  {
+    "name": "factor",
+    "prettyName": "Factor",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "zig",
+    "prettyName": "Zig",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "zig-libraries",
+    "prettyName": "Zig libraries",
+    "connectedTopics": ["zig"]
+  },
+  {
+    "name": "janet",
+    "prettyName": "Janet",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "scheme",
+    "prettyName": "Scheme",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "racket",
+    "prettyName": "Racket",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "lisp",
+    "prettyName": "Lisp",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "carp",
+    "prettyName": "Carp",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "common-lisp",
+    "prettyName": "Common Lisp",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "pascal",
+    "prettyName": "Pascal",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "forth",
+    "prettyName": "Forth",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "go",
+    "prettyName": "Go",
+    "connectedTopics": ["programming-languages"]
+  },
+  { "name": "ent", "prettyName": "Ent", "connectedTopics": [] },
+  {
+    "name": "go-libraries",
+    "prettyName": "Go libraries",
+    "connectedTopics": ["go"]
+  },
+  { "name": "wails", "prettyName": "Wails", "connectedTopics": ["go"] },
+  {
+    "name": "apl",
+    "prettyName": "APL",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "nim",
+    "prettyName": "Nim",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "nim-libraries",
+    "prettyName": "Nim libraries",
+    "connectedTopics": ["nim"]
+  },
+  {
+    "name": "self",
+    "prettyName": "Self",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "assembly",
+    "prettyName": "Assembly",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "csharp",
+    "prettyName": "C#",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "tcl",
+    "prettyName": "Tcl",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "python",
+    "prettyName": "Python",
+    "connectedTopics": ["programming-languages"]
+  },
+  { "name": "dask", "prettyName": "Dask", "connectedTopics": [] },
+  { "name": "django", "prettyName": "Django", "connectedTopics": [] },
+  {
+    "name": "numpy",
+    "prettyName": "NumPy",
+    "connectedTopics": ["python-libraries"]
+  },
+  { "name": "fastapi", "prettyName": "FastAPI", "connectedTopics": [] },
+  {
+    "name": "babashka",
+    "prettyName": "Babashka",
+    "connectedTopics": ["clojure"]
+  },
+  {
+    "name": "clojurescript",
+    "prettyName": "ClojureScript",
+    "connectedTopics": ["clojure"]
+  },
+  { "name": "clojure", "prettyName": "Clojure", "connectedTopics": [] },
+  {
+    "name": "clojure-libraries",
+    "prettyName": "Clojure libraries",
+    "connectedTopics": ["clojure"]
+  },
+  { "name": "vale", "prettyName": "Vale", "connectedTopics": [] },
+  {
+    "name": "elixir-libraries",
+    "prettyName": "Elixir libraries",
+    "connectedTopics": ["elixir"]
+  },
+  {
+    "name": "elixir",
+    "prettyName": "Elixir",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "phoenix",
+    "prettyName": "Phoenix framework",
+    "connectedTopics": ["elixir"]
+  },
+  {
+    "name": "processing",
+    "prettyName": "Processing",
+    "connectedTopics": ["programming-languages"]
+  },
+  { "name": "p5js", "prettyName": "p5.js", "connectedTopics": [] },
+  { "name": "flutter", "prettyName": "Flutter", "connectedTopics": [] },
+  { "name": "dart", "prettyName": "Dart", "connectedTopics": [] },
+  {
+    "name": "haxe",
+    "prettyName": "Haxe",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "agda",
+    "prettyName": "Agda",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "tinybase",
+    "prettyName": "TinyBase",
+    "connectedTopics": ["js-libraries"]
+  },
+  {
+    "name": "effect",
+    "prettyName": "Effect",
+    "connectedTopics": ["js-libraries"]
+  },
+  { "name": "effector", "prettyName": "Effector", "connectedTopics": [] },
+  {
+    "name": "typescript",
+    "prettyName": "TypeScript",
+    "connectedTopics": ["javascript"]
+  },
+  {
+    "name": "rust",
+    "prettyName": "Rust",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "rust-libraries",
+    "prettyName": "Rust libraries",
+    "connectedTopics": ["rust"]
+  },
+  {
+    "name": "axum",
+    "prettyName": "Axum",
+    "connectedTopics": ["rust-libraries"]
+  },
+  {
+    "name": "tauri",
+    "prettyName": "Tauri",
+    "connectedTopics": ["rust-libraries"]
+  },
+  {
+    "name": "purescript",
+    "prettyName": "PureScript",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "erlang",
+    "prettyName": "Erlang",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "r-packages",
+    "prettyName": "R packages",
+    "connectedTopics": ["r"]
+  },
+  {
+    "name": "java",
+    "prettyName": "Java",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "java-libraries",
+    "prettyName": "Java libraries",
+    "connectedTopics": ["java"]
+  },
+  {
+    "name": "elm",
+    "prettyName": "Elm",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "kotlin",
+    "prettyName": "Kotlin",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "kotlin-libraries",
+    "prettyName": "Kotlin libraries",
+    "connectedTopics": ["kotlin"]
+  },
+  {
+    "name": "fortran",
+    "prettyName": "Fortran",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "haskell-libraries",
+    "prettyName": "Haskell libraries",
+    "connectedTopics": ["haskell"]
+  },
+  {
+    "name": "haskell",
+    "prettyName": "Haskell",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "graph-theory",
+    "prettyName": "Graph theory",
+    "connectedTopics": ["math"]
+  },
+  {
+    "name": "linear-programming",
+    "prettyName": "Linear programming",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "scala-libraries",
+    "prettyName": "Scala libraries",
+    "connectedTopics": ["scala"]
+  },
+  {
+    "name": "scala",
+    "prettyName": "Scala",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "futhark",
+    "prettyName": "Futhark",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "cpp-libraries",
+    "prettyName": "C++ libraries",
+    "connectedTopics": ["cpp"]
+  },
+  {
+    "name": "cpp",
+    "prettyName": "C++",
+    "connectedTopics": ["programming-languages"]
+  },
+  { "name": "qt", "prettyName": "Qt", "connectedTopics": ["cpp"] },
+  {
+    "name": "swift",
+    "prettyName": "Swift",
+    "connectedTopics": ["programming-languages"]
+  },
+  { "name": "swiftui", "prettyName": "SwiftUI", "connectedTopics": ["swift"] },
+  {
+    "name": "swift-libraries",
+    "prettyName": "Swift libraries",
+    "connectedTopics": ["swift"]
+  },
+  {
+    "name": "ada",
+    "prettyName": "Ada",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "lua",
+    "prettyName": "Lua",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "crystal",
+    "prettyName": "Crystal",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "language-server-protocol",
+    "prettyName": "Language Server Protocol",
+    "connectedTopics": ["programming-languages"]
+  },
+  { "name": "ink", "prettyName": "Ink", "connectedTopics": [] },
+  {
+    "name": "julia",
+    "prettyName": "Julia",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "julia-libraries",
+    "prettyName": "Julia libraries",
+    "connectedTopics": ["julia"]
+  },
+  {
+    "name": "odin",
+    "prettyName": "Odin",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "standard-ml",
+    "prettyName": "Standard ML",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "pony",
+    "prettyName": "Pony",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "idris",
+    "prettyName": "Idris",
+    "connectedTopics": ["programming-languages"]
+  },
+  { "name": "dhall", "prettyName": "Dhall", "connectedTopics": [] },
+  {
+    "name": "fsharp",
+    "prettyName": "F#",
+    "connectedTopics": ["programming-languages"]
+  },
+  { "name": "bun", "prettyName": "Bun", "connectedTopics": ["javascript"] },
+  { "name": "babel", "prettyName": "Babel", "connectedTopics": ["javascript"] },
+  {
+    "name": "javascript",
+    "prettyName": "JavaScript",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "astro",
+    "prettyName": "Astro",
+    "connectedTopics": ["js-libraries"]
+  },
+  {
+    "name": "svelte",
+    "prettyName": "Svelte",
+    "connectedTopics": ["js-libraries"]
+  },
+  { "name": "mobx", "prettyName": "MobX", "connectedTopics": ["js-libraries"] },
+  {
+    "name": "js-libraries",
+    "prettyName": "JS libraries",
+    "connectedTopics": ["javascript"]
+  },
+  {
+    "name": "threejs",
+    "prettyName": "Three.js",
+    "connectedTopics": ["js-libraries"]
+  },
+  {
+    "name": "vue",
+    "prettyName": "Vue.js",
+    "connectedTopics": ["js-libraries"]
+  },
+  { "name": "rxjs", "prettyName": "RxJS", "connectedTopics": ["js-libraries"] },
+  {
+    "name": "d3js",
+    "prettyName": "Data-Driven Documents",
+    "connectedTopics": ["js-libraries"]
+  },
+  {
+    "name": "angular",
+    "prettyName": "Angular",
+    "connectedTopics": ["js-libraries"]
+  },
+  {
+    "name": "solid",
+    "prettyName": "SolidJS",
+    "connectedTopics": ["js-libraries"]
+  },
+  {
+    "name": "redux",
+    "prettyName": "Redux",
+    "connectedTopics": ["js-libraries"]
+  },
+  { "name": "jest", "prettyName": "Jest", "connectedTopics": ["js-libraries"] },
+  { "name": "qwik", "prettyName": "Qwik", "connectedTopics": ["js-libraries"] },
+  {
+    "name": "react-native",
+    "prettyName": "React Native",
+    "connectedTopics": ["javascript"]
+  },
+  {
+    "name": "relay",
+    "prettyName": "Relay",
+    "connectedTopics": ["js-libraries"]
+  },
+  { "name": "gatsby", "prettyName": "Gatsby JS", "connectedTopics": [] },
+  {
+    "name": "nextjs",
+    "prettyName": "Next.js",
+    "connectedTopics": ["js-libraries"]
+  },
+  { "name": "expo", "prettyName": "Expo", "connectedTopics": ["js-libraries"] },
+  {
+    "name": "react-hooks",
+    "prettyName": "React Hooks",
+    "connectedTopics": ["react"]
+  },
+  { "name": "mdx", "prettyName": "MDX", "connectedTopics": [] },
+  { "name": "blitz", "prettyName": "Blitz.js", "connectedTopics": [] },
+  {
+    "name": "react",
+    "prettyName": "React",
+    "connectedTopics": ["js-libraries"]
+  },
+  {
+    "name": "react-ssr",
+    "prettyName": "React Server Side Rendering",
+    "connectedTopics": ["react"]
+  },
+  {
+    "name": "react-components",
+    "prettyName": "React components",
+    "connectedTopics": ["react"]
+  },
+  { "name": "remix", "prettyName": "Remix", "connectedTopics": ["react"] },
+  { "name": "enhance", "prettyName": "Enhance", "connectedTopics": ["html"] },
+  {
+    "name": "eslint",
+    "prettyName": "ESLint",
+    "connectedTopics": ["javascript"]
+  },
+  {
+    "name": "objc",
+    "prettyName": "Objective C",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "objc-libraries",
+    "prettyName": "ObjC libraries",
+    "connectedTopics": ["objc"]
+  },
+  {
+    "name": "austral",
+    "prettyName": "Austral",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "perl",
+    "prettyName": "Perl",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "coq",
+    "prettyName": "Coq",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "c",
+    "prettyName": "C",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "val",
+    "prettyName": "Val",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "d",
+    "prettyName": "D",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "smalltalk",
+    "prettyName": "Smalltalk",
+    "connectedTopics": ["programming-languages"]
+  },
+  { "name": "rails", "prettyName": "Rails", "connectedTopics": ["ruby"] },
+  {
+    "name": "ruby-libraries",
+    "prettyName": "Ruby libraries",
+    "connectedTopics": ["ruby"]
+  },
+  { "name": "ruby", "prettyName": "Ruby", "connectedTopics": [] },
+  {
+    "name": "roc",
+    "prettyName": "Roc",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "bash",
+    "prettyName": "Bash",
+    "connectedTopics": ["operating-systems"]
+  },
+  {
+    "name": "reasonml",
+    "prettyName": "ReasonML",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "reasonml-libraries",
+    "prettyName": "ReasonML libraries",
+    "connectedTopics": ["reasonml"]
+  },
+  { "name": "podcasts", "prettyName": "Podcasts", "connectedTopics": [] },
+  {
+    "name": "podcast-recording",
+    "prettyName": "Podcast recording",
+    "connectedTopics": ["podcasts"]
+  },
+  { "name": "streaming", "prettyName": "Streaming", "connectedTopics": [] },
+  { "name": "inlang", "prettyName": "Inlang", "connectedTopics": [] },
+  {
+    "name": "chinese",
+    "prettyName": "Chinese language",
+    "connectedTopics": []
+  },
+  {
+    "name": "english",
+    "prettyName": "English Language",
+    "connectedTopics": []
+  },
+  {
+    "name": "internationalization",
+    "prettyName": "Internationalization",
+    "connectedTopics": []
+  },
+  {
+    "name": "russian",
+    "prettyName": "Russian language",
+    "connectedTopics": []
+  },
+  { "name": "dotfiles", "prettyName": "Dotfiles", "connectedTopics": [] },
+  { "name": "warp", "prettyName": "Warp", "connectedTopics": [] },
+  { "name": "fish", "prettyName": "Fish Shell", "connectedTopics": ["shell"] },
+  { "name": "nushell", "prettyName": "Nushell", "connectedTopics": [] },
+  { "name": "mosh", "prettyName": "Mosh", "connectedTopics": [] },
+  { "name": "zsh-plugins", "prettyName": "Zsh plugins", "connectedTopics": [] },
+  { "name": "zsh", "prettyName": "Zsh", "connectedTopics": [] },
+  { "name": "v", "prettyName": "V", "connectedTopics": [] },
+  {
+    "name": "config-management",
+    "prettyName": "Configuration management",
+    "connectedTopics": []
+  },
+  {
+    "name": "courses",
+    "prettyName": "Courses",
+    "connectedTopics": ["education"]
+  },
+  {
+    "name": "arkit",
+    "prettyName": "ARKit",
+    "connectedTopics": ["augmented-reality"]
+  },
+  {
+    "name": "augmented-reality",
+    "prettyName": "Augmented Reality",
+    "connectedTopics": []
+  },
+  {
+    "name": "procedural-generation",
+    "prettyName": "Procedural generation",
+    "connectedTopics": []
+  },
+  { "name": "cuda", "prettyName": "CUDA", "connectedTopics": ["gpu"] },
+  { "name": "svg", "prettyName": "SVG", "connectedTopics": [] },
+  {
+    "name": "opengl",
+    "prettyName": "OpenGL",
+    "connectedTopics": ["computer-graphics"]
+  },
+  {
+    "name": "shaders",
+    "prettyName": "Shaders",
+    "connectedTopics": ["computer-graphics"]
+  },
+  { "name": "metal", "prettyName": "Metal", "connectedTopics": ["swift"] },
+  {
+    "name": "bezier-curves",
+    "prettyName": "Bézier curves",
+    "connectedTopics": ["math"]
+  },
+  {
+    "name": "image-processing",
+    "prettyName": "Image processing",
+    "connectedTopics": ["algorithms"]
+  },
+  {
+    "name": "webgl",
+    "prettyName": "WebGL",
+    "connectedTopics": ["computer-graphics"]
+  },
+  {
+    "name": "webgpu",
+    "prettyName": "WebGPU",
+    "connectedTopics": ["computer-graphics"]
+  },
+  {
+    "name": "rendering",
+    "prettyName": "Rendering",
+    "connectedTopics": ["computer-graphics"]
+  },
+  {
+    "name": "ocr",
+    "prettyName": "Optical character recognition",
+    "connectedTopics": ["computer-vision"]
+  },
+  {
+    "name": "computer-vision",
+    "prettyName": "Computer vision",
+    "connectedTopics": []
+  },
+  {
+    "name": "vulkan",
+    "prettyName": "Vulkan API",
+    "connectedTopics": ["computer-graphics"]
+  },
+  {
+    "name": "ray-tracing",
+    "prettyName": "Ray tracing",
+    "connectedTopics": ["computer-graphics"]
+  },
+  {
+    "name": "computer-graphics",
+    "prettyName": "Computer graphics",
+    "connectedTopics": []
+  },
+  {
+    "name": "fly-io",
+    "prettyName": "Fly.io",
+    "connectedTopics": ["cloud-computing"]
+  },
+  {
+    "name": "azure",
+    "prettyName": "Azure",
+    "connectedTopics": ["cloud-computing"]
+  },
+  {
+    "name": "gcp",
+    "prettyName": "Google Cloud",
+    "connectedTopics": ["cloud-computing"]
+  },
+  {
+    "name": "cloud-computing",
+    "prettyName": "Cloud computing",
+    "connectedTopics": []
+  },
+  {
+    "name": "aws",
+    "prettyName": "AWS",
+    "connectedTopics": ["cloud-computing"]
+  },
+  { "name": "aws-amplify", "prettyName": "AWS Amplify", "connectedTopics": [] },
+  {
+    "name": "aws-lambda",
+    "prettyName": "AWS Lambda",
+    "connectedTopics": ["aws"]
+  },
+  {
+    "name": "cloudflare-workers",
+    "prettyName": "Cloudflare workers",
+    "connectedTopics": ["cloud-computing"]
+  },
+  {
+    "name": "serverless-computing",
+    "prettyName": "Serverless computing",
+    "connectedTopics": ["cloud-computing"]
+  },
+  {
+    "name": "knowledge-graphs",
+    "prettyName": "Knowledge graphs",
+    "connectedTopics": ["knowledge"]
+  },
+  { "name": "knowledge", "prettyName": "Knowledge", "connectedTopics": [] },
+  {
+    "name": "knowledge-extraction",
+    "prettyName": "Knowledge extraction",
+    "connectedTopics": ["knowledge"]
+  },
+  {
+    "name": "mental-models",
+    "prettyName": "Mental models",
+    "connectedTopics": ["solving-problems"]
+  },
+  {
+    "name": "relational-programming",
+    "prettyName": "Relational programming",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "visual-programming",
+    "prettyName": "Visual programming",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "agile-development",
+    "prettyName": "Agile development",
+    "connectedTopics": []
+  },
+  {
+    "name": "program-synthesis",
+    "prettyName": "Program synthesis",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "software-testing",
+    "prettyName": "Software testing",
+    "connectedTopics": ["programming"]
+  },
+  { "name": "cypress", "prettyName": "Cypress", "connectedTopics": [] },
+  {
+    "name": "fuzzing",
+    "prettyName": "Fuzzing",
+    "connectedTopics": ["software-testing"]
+  },
+  {
+    "name": "serialization",
+    "prettyName": "Serialization",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "structured-programming",
+    "prettyName": "Structured programming",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "hashing",
+    "prettyName": "Hashing",
+    "connectedTopics": ["programming"]
+  },
+  { "name": "json", "prettyName": "JSON", "connectedTopics": ["javascript"] },
+  {
+    "name": "version-control",
+    "prettyName": "Version control",
+    "connectedTopics": []
+  },
+  {
+    "name": "git",
+    "prettyName": "Git",
+    "connectedTopics": ["version-control"]
+  },
+  {
+    "name": "semantic-versioning",
+    "prettyName": "Semantic versioning",
+    "connectedTopics": ["version-control"]
+  },
+  {
+    "name": "protocol-buffers",
+    "prettyName": "Protocol buffers",
+    "connectedTopics": ["encoding"]
+  },
+  {
+    "name": "reactive-programming",
+    "prettyName": "Reactive programming",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "system-design",
+    "prettyName": "System Design",
+    "connectedTopics": ["software-architecture"]
+  },
+  {
+    "name": "regex",
+    "prettyName": "Regex",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "logic-programming",
+    "prettyName": "Logic programming",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "program-analysis",
+    "prettyName": "Program analysis",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "recursion",
+    "prettyName": "Recursion",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "functional-programming",
+    "prettyName": "Functional programming",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "algebraic-effects",
+    "prettyName": "Algebraic effects",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "object-oriented-programming",
+    "prettyName": "Object-oriented programming",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "encoding",
+    "prettyName": "Encoding",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "embedded-systems",
+    "prettyName": "Embedded systems",
+    "connectedTopics": ["operating-systems"]
+  },
+  {
+    "name": "interactive-computing",
+    "prettyName": "Interactive computing",
+    "connectedTopics": ["computer-science"]
+  },
+  {
+    "name": "google-colab",
+    "prettyName": "Google Colab",
+    "connectedTopics": []
+  },
+  {
+    "name": "mathematica",
+    "prettyName": "Wolfram Mathematica",
+    "connectedTopics": []
+  },
+  {
+    "name": "jupyter-notebooks",
+    "prettyName": "Jupyter Notebooks",
+    "connectedTopics": ["python"]
+  },
+  {
+    "name": "state-machines",
+    "prettyName": "State machines",
+    "connectedTopics": ["computer-science"]
+  },
+  {
+    "name": "logging",
+    "prettyName": "Logging",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "design-patterns",
+    "prettyName": "Design patterns",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "array-programming",
+    "prettyName": "Array programming",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "probabilistic-programming",
+    "prettyName": "Probabilistic programming",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "documentation",
+    "prettyName": "Documentation",
+    "connectedTopics": []
+  },
+  {
+    "name": "software-architecture",
+    "prettyName": "Software architecture",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "dynamic-programming",
+    "prettyName": "Dynamic programming",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "continuous-integration",
+    "prettyName": "Continuous Integration",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "unix",
+    "prettyName": "Unix",
+    "connectedTopics": ["operating-systems"]
+  },
+  {
+    "name": "constraint-programming",
+    "prettyName": "Constraint programming",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "concurrency",
+    "prettyName": "Concurrency",
+    "connectedTopics": ["programming-languages"]
+  },
+  {
+    "name": "coding-practice",
+    "prettyName": "Coding practice",
+    "connectedTopics": ["programming"]
+  },
+  { "name": "ethics", "prettyName": "Ethics", "connectedTopics": [] },
+  {
+    "name": "simulated-reality",
+    "prettyName": "Simulated reality",
+    "connectedTopics": []
+  },
+  {
+    "name": "effective-altruism",
+    "prettyName": "Effective altruism",
+    "connectedTopics": []
+  },
+  { "name": "philosophy", "prettyName": "Philosophy", "connectedTopics": [] },
+  {
+    "name": "communication",
+    "prettyName": "Communication",
+    "connectedTopics": []
+  },
+  { "name": "work", "prettyName": "Work", "connectedTopics": [] },
+  { "name": "hiring", "prettyName": "Hiring", "connectedTopics": [] },
+  { "name": "cv", "prettyName": "CV", "connectedTopics": [] },
+  { "name": "interviews", "prettyName": "Interviews", "connectedTopics": [] },
+  { "name": "freelancing", "prettyName": "Freelancing", "connectedTopics": [] },
+  {
+    "name": "finding-work",
+    "prettyName": "Finding work",
+    "connectedTopics": []
+  },
+  { "name": "remote-work", "prettyName": "Remote work", "connectedTopics": [] },
+  {
+    "name": "consultancies",
+    "prettyName": "Consultancies",
+    "connectedTopics": []
+  },
+  { "name": "animals", "prettyName": "Animals", "connectedTopics": [] },
+  { "name": "birds", "prettyName": "Birds", "connectedTopics": [] },
+  {
+    "name": "medicine",
+    "prettyName": "Medicine",
+    "connectedTopics": ["diseases"]
+  },
+  { "name": "cancer", "prettyName": "Cancer", "connectedTopics": ["diseases"] },
+  { "name": "diseases", "prettyName": "Diseases", "connectedTopics": [] },
+  {
+    "name": "history",
+    "prettyName": "History",
+    "connectedTopics": ["writing"]
+  },
+  {
+    "name": "anthropology",
+    "prettyName": "Anthropology",
+    "connectedTopics": []
+  },
+  {
+    "name": "speech-recognition",
+    "prettyName": "Speech recognition",
+    "connectedTopics": ["nlp"]
+  },
+  {
+    "name": "virtual-assistant",
+    "prettyName": "Virtual assistant",
+    "connectedTopics": []
+  },
+  {
+    "name": "nlp",
+    "prettyName": "Natural language processing",
+    "connectedTopics": []
+  },
+  {
+    "name": "speech-synthesis",
+    "prettyName": "Speech synthesis",
+    "connectedTopics": ["nlp"]
+  },
+  {
+    "name": "sentiment-analysis",
+    "prettyName": "Sentiment analysis",
+    "connectedTopics": ["nlp"]
+  },
+  { "name": "bots", "prettyName": "Bots", "connectedTopics": ["nlp"] },
+  { "name": "acting", "prettyName": "Acting", "connectedTopics": ["movies"] },
+  { "name": "movies", "prettyName": "Movies", "connectedTopics": [] },
+  { "name": "governance", "prettyName": "Governance", "connectedTopics": [] },
+  { "name": "politics", "prettyName": "Politics", "connectedTopics": [] },
+  { "name": "law", "prettyName": "Law", "connectedTopics": [] },
+  { "name": "instagram", "prettyName": "Instagram", "connectedTopics": [] },
+  { "name": "scuttlebutt", "prettyName": "Scuttlebutt", "connectedTopics": [] },
+  {
+    "name": "bluesky",
+    "prettyName": "Bluesky",
+    "connectedTopics": ["social-networks"]
+  },
+  {
+    "name": "social-networks",
+    "prettyName": "Social networks",
+    "connectedTopics": []
+  },
+  {
+    "name": "farcaster",
+    "prettyName": "Farcaster",
+    "connectedTopics": ["social-networks"]
+  },
+  {
+    "name": "lemmy",
+    "prettyName": "Lemmy",
+    "connectedTopics": ["social-networks"]
+  },
+  { "name": "nostr", "prettyName": "Nostr", "connectedTopics": [] },
+  {
+    "name": "mastodon",
+    "prettyName": "Mastodon",
+    "connectedTopics": ["social-networks"]
+  },
+  { "name": "veganism", "prettyName": "Veganism", "connectedTopics": [] },
+  { "name": "environment", "prettyName": "Environment", "connectedTopics": [] },
+  { "name": "solar", "prettyName": "Solar", "connectedTopics": [] },
+  { "name": "batteries", "prettyName": "Batteries", "connectedTopics": [] },
+  {
+    "name": "renewable-energy",
+    "prettyName": "Renewable energy",
+    "connectedTopics": []
+  },
+  { "name": "zero-waste", "prettyName": "Zero waste", "connectedTopics": [] },
+  { "name": "api", "prettyName": "API", "connectedTopics": ["programming"] },
+  { "name": "trpc", "prettyName": "tRPC", "connectedTopics": ["js-libraries"] },
+  { "name": "fitness", "prettyName": "Fitness", "connectedTopics": ["health"] },
+  {
+    "name": "strength-training",
+    "prettyName": "Strength training",
+    "connectedTopics": ["fitness"]
+  },
+  {
+    "name": "running",
+    "prettyName": "Running",
+    "connectedTopics": ["fitness"]
+  },
+  {
+    "name": "exercises",
+    "prettyName": "Exercises",
+    "connectedTopics": ["fitness"]
+  },
+  { "name": "yoga", "prettyName": "Yoga", "connectedTopics": ["fitness"] },
+  {
+    "name": "documentaries",
+    "prettyName": "Documentaries",
+    "connectedTopics": []
+  },
+  { "name": "automation", "prettyName": "Automation", "connectedTopics": [] },
+  { "name": "physics", "prettyName": "Physics", "connectedTopics": [] },
+  {
+    "name": "dark-matter",
+    "prettyName": "Dark matter",
+    "connectedTopics": ["psychedelics"]
+  },
+  {
+    "name": "quantum-computing",
+    "prettyName": "Quantum computing",
+    "connectedTopics": ["physics"]
+  },
+  {
+    "name": "quantum-physics",
+    "prettyName": "Quantum physics",
+    "connectedTopics": ["physics"]
+  },
+  {
+    "name": "quantum-gravity",
+    "prettyName": "Quantum gravity",
+    "connectedTopics": ["physics"]
+  },
+  {
+    "name": "string-theory",
+    "prettyName": "String theory",
+    "connectedTopics": ["physics"]
+  },
+  {
+    "name": "antimatter",
+    "prettyName": "Antimatter",
+    "connectedTopics": ["physics"]
+  },
+  {
+    "name": "electrical-engineering",
+    "prettyName": "Electrical engineering",
+    "connectedTopics": ["physics"]
+  },
+  {
+    "name": "signal-processing",
+    "prettyName": "Signal processing",
+    "connectedTopics": ["physics"]
+  },
+  {
+    "name": "classical-mechanics",
+    "prettyName": "Classical mechanics",
+    "connectedTopics": ["physics"]
+  },
+  { "name": "drones", "prettyName": "Drones", "connectedTopics": ["hardware"] },
+  { "name": "robots", "prettyName": "Robots", "connectedTopics": ["hardware"] },
+  { "name": "ideas", "prettyName": "Ideas", "connectedTopics": [] },
+  { "name": "poems", "prettyName": "Poems", "connectedTopics": ["writing"] },
+  {
+    "name": "universe",
+    "prettyName": "Universe",
+    "connectedTopics": ["physics"]
+  },
+  { "name": "space", "prettyName": "Space", "connectedTopics": ["physics"] },
+  {
+    "name": "rockets",
+    "prettyName": "Rockets",
+    "connectedTopics": ["physics"]
+  },
+  {
+    "name": "compilers",
+    "prettyName": "Compilers",
+    "connectedTopics": ["parsing"]
+  },
+  { "name": "llvm", "prettyName": "LLVM", "connectedTopics": ["compilers"] },
+  { "name": "ipad", "prettyName": "iPad", "connectedTopics": [] },
+  {
+    "name": "competitive-programming",
+    "prettyName": "Competitive programming",
+    "connectedTopics": ["programming"]
+  },
+  {
+    "name": "build-systems",
+    "prettyName": "Build systems",
+    "connectedTopics": ["programming"]
+  },
+  { "name": "turbo", "prettyName": "turbo", "connectedTopics": ["devops"] },
+  { "name": "chatgpt", "prettyName": "ChatGPT", "connectedTopics": ["nlp"] },
+  {
+    "name": "reinforcement-learning",
+    "prettyName": "Reinforcement learning",
+    "connectedTopics": ["machine-learning"]
+  },
+  {
+    "name": "recommendation-systems",
+    "prettyName": "Recommendation systems",
+    "connectedTopics": ["machine-learning"]
+  },
+  {
+    "name": "generative-adversarial-networks",
+    "prettyName": "Generative adversarial networks",
+    "connectedTopics": ["machine-learning"]
+  },
+  {
+    "name": "graph-neural-networks",
+    "prettyName": "Graph neural networks",
+    "connectedTopics": ["neural-networks"]
+  },
+  {
+    "name": "neural-networks",
+    "prettyName": "Neural networks",
+    "connectedTopics": ["machine-learning"]
+  },
+  {
+    "name": "ml-libraries",
+    "prettyName": "ML Libraries",
+    "connectedTopics": ["machine-learning"]
+  },
+  {
+    "name": "pytorch",
+    "prettyName": "PyTorch",
+    "connectedTopics": ["machine-learning"]
+  },
+  {
+    "name": "keras",
+    "prettyName": "Keras",
+    "connectedTopics": ["machine-learning"]
+  },
+  {
+    "name": "tensorflow",
+    "prettyName": "TensorFlow",
+    "connectedTopics": ["machine-learning"]
+  },
+  {
+    "name": "jax",
+    "prettyName": "JAX",
+    "connectedTopics": ["machine-learning"]
+  },
+  {
+    "name": "autonomous-driving",
+    "prettyName": "Autonomous driving",
+    "connectedTopics": ["machine-learning"]
+  },
+  {
+    "name": "ml-models",
+    "prettyName": "ML Models",
+    "connectedTopics": ["machine-learning"]
+  },
+  {
+    "name": "generative-machine-learning",
+    "prettyName": "Generative Machine Learning",
+    "connectedTopics": ["machine-learning"]
+  },
+  {
+    "name": "unsupervised-learning",
+    "prettyName": "Unsupervised learning",
+    "connectedTopics": ["machine-learning"]
+  },
+  {
+    "name": "datasets",
+    "prettyName": "Datasets",
+    "connectedTopics": ["data-science"]
+  },
+  {
+    "name": "machine-learning",
+    "prettyName": "Machine learning",
+    "connectedTopics": ["math"]
+  },
+  {
+    "name": "artificial-intelligence",
+    "prettyName": "Artificial intelligence",
+    "connectedTopics": ["machine-learning"]
+  },
+  {
+    "name": "mirageos",
+    "prettyName": "MirageOS",
+    "connectedTopics": ["operating-systems"]
+  },
+  {
+    "name": "android",
+    "prettyName": "Android",
+    "connectedTopics": ["operating-systems"]
+  },
+  {
+    "name": "emulators",
+    "prettyName": "Emulators",
+    "connectedTopics": ["operating-systems"]
+  },
+  {
+    "name": "windows",
+    "prettyName": "Windows",
+    "connectedTopics": ["operating-systems"]
+  },
+  {
+    "name": "bsd",
+    "prettyName": "BSD",
+    "connectedTopics": ["operating-systems"]
+  },
+  {
+    "name": "fuchsia-os",
+    "prettyName": "Fuchsia OS",
+    "connectedTopics": ["operating-systems"]
+  },
+  { "name": "coreml", "prettyName": "CoreML", "connectedTopics": ["swift"] },
+  { "name": "watchos", "prettyName": "WatchOS", "connectedTopics": ["swift"] },
+  { "name": "tvos", "prettyName": "tvOS", "connectedTopics": ["swift"] },
+  { "name": "homekit", "prettyName": "HomeKit", "connectedTopics": ["swift"] },
+  { "name": "ios", "prettyName": "iOS", "connectedTopics": ["macOS"] },
+  {
+    "name": "ios-shortcuts",
+    "prettyName": "iOS Shortcuts",
+    "connectedTopics": ["ios"]
+  },
+  {
+    "name": "file-systems",
+    "prettyName": "File systems",
+    "connectedTopics": ["operating-systems"]
+  },
+  {
+    "name": "nixos",
+    "prettyName": "NixOS",
+    "connectedTopics": ["operating-systems"]
+  },
+  {
+    "name": "linux",
+    "prettyName": "Linux",
+    "connectedTopics": ["operating-systems"]
+  },
+  {
+    "name": "operating-systems",
+    "prettyName": "Operating systems",
+    "connectedTopics": ["computer-science"]
+  },
+  {
+    "name": "docker",
+    "prettyName": "Docker",
+    "connectedTopics": ["operating-systems"]
+  },
+  {
+    "name": "kubernetes",
+    "prettyName": "Kubernetes",
+    "connectedTopics": ["containers"]
+  },
+  {
+    "name": "kubernetes-plugins",
+    "prettyName": "Kubernetes plugins",
+    "connectedTopics": ["kubernetes"]
+  },
+  {
+    "name": "containers",
+    "prettyName": "Containers",
+    "connectedTopics": ["operating-systems"]
+  },
+  {
+    "name": "nix",
+    "prettyName": "Nix",
+    "connectedTopics": ["package-managers"]
+  },
+  {
+    "name": "brew",
+    "prettyName": "Brew",
+    "connectedTopics": ["package-managers"]
+  },
+  {
+    "name": "package-managers",
+    "prettyName": "Package managers",
+    "connectedTopics": ["operating-systems"]
+  },
+  {
+    "name": "minecraft",
+    "prettyName": "Minecraft",
+    "connectedTopics": ["games"]
+  },
+  {
+    "name": "board-games",
+    "prettyName": "Board games",
+    "connectedTopics": ["games"]
+  },
+  { "name": "sudoku", "prettyName": "Sudoku", "connectedTopics": ["games"] },
+  {
+    "name": "gamedev",
+    "prettyName": "Game development",
+    "connectedTopics": ["games"]
+  },
+  {
+    "name": "unreal-engine",
+    "prettyName": "Unreal Engine",
+    "connectedTopics": ["game-engines"]
+  },
+  {
+    "name": "godot",
+    "prettyName": "Godot",
+    "connectedTopics": ["game-engines"]
+  },
+  {
+    "name": "unity",
+    "prettyName": "Unity",
+    "connectedTopics": ["game-engines"]
+  },
+  {
+    "name": "ebiten",
+    "prettyName": "Ebiten",
+    "connectedTopics": ["game-engines"]
+  },
+  {
+    "name": "bevy",
+    "prettyName": "Bevy Engine",
+    "connectedTopics": ["game-engines"]
+  },
+  { "name": "chess", "prettyName": "Chess", "connectedTopics": ["games"] },
+  { "name": "golf", "prettyName": "Golf", "connectedTopics": ["games"] },
+  { "name": "games", "prettyName": "Games", "connectedTopics": [] },
+  { "name": "poker", "prettyName": "Poker", "connectedTopics": ["games"] },
+  {
+    "name": "front-end",
+    "prettyName": "Front End",
+    "connectedTopics": ["web"]
+  },
+  { "name": "css", "prettyName": "CSS", "connectedTopics": ["browsers"] },
+  {
+    "name": "tailwind-css",
+    "prettyName": "Tailwind CSS",
+    "connectedTopics": ["css"]
+  },
+  {
+    "name": "css-flexbox",
+    "prettyName": "CSS Flexbox",
+    "connectedTopics": ["css"]
+  },
+  {
+    "name": "css-in-js",
+    "prettyName": "CSS in JS",
+    "connectedTopics": ["css"]
+  },
+  { "name": "css-grid", "prettyName": "CSS Grid", "connectedTopics": ["css"] },
+  { "name": "html", "prettyName": "HTML", "connectedTopics": ["browsers"] },
+  { "name": "backups", "prettyName": "Backups", "connectedTopics": [] },
+  { "name": "seduction", "prettyName": "Seduction", "connectedTopics": [] },
+  { "name": "gifts", "prettyName": "Gifts", "connectedTopics": [] },
+  {
+    "name": "relationships",
+    "prettyName": "Relationships",
+    "connectedTopics": []
+  },
+  { "name": "sex", "prettyName": "Sex", "connectedTopics": [] },
+  { "name": "hiking", "prettyName": "Hiking", "connectedTopics": [] },
+  { "name": "cities", "prettyName": "Cities", "connectedTopics": [] },
+  {
+    "name": "transportation",
+    "prettyName": "Transportation",
+    "connectedTopics": []
+  },
+  { "name": "planes", "prettyName": "Planes", "connectedTopics": [] },
+  { "name": "cycling", "prettyName": "Cycling", "connectedTopics": [] },
+  { "name": "boats", "prettyName": "Boats", "connectedTopics": [] },
+  { "name": "afghanistan", "prettyName": "Afghanistan", "connectedTopics": [] },
+  { "name": "china", "prettyName": "China", "connectedTopics": [] },
+  {
+    "name": "united-kingdom",
+    "prettyName": "United Kingdom",
+    "connectedTopics": []
+  },
+  {
+    "name": "bazel",
+    "prettyName": "Bazel",
+    "connectedTopics": ["build-systems"]
+  },
+  { "name": "norway", "prettyName": "Norway", "connectedTopics": [] },
+  { "name": "portugal", "prettyName": "Portugal", "connectedTopics": [] },
+  { "name": "switzerland", "prettyName": "Switzerland", "connectedTopics": [] },
+  { "name": "bulgaria", "prettyName": "Bulgaria", "connectedTopics": [] },
+  { "name": "ireland", "prettyName": "Ireland", "connectedTopics": [] },
+  { "name": "sri-lanka", "prettyName": "Sri Lanka", "connectedTopics": [] },
+  { "name": "poland", "prettyName": "Poland", "connectedTopics": [] },
+  { "name": "italy", "prettyName": "Italy", "connectedTopics": [] },
+  { "name": "russia", "prettyName": "Russia", "connectedTopics": [] },
+  { "name": "estonia", "prettyName": "Estonia", "connectedTopics": [] },
+  { "name": "austria", "prettyName": "Austria", "connectedTopics": [] },
+  { "name": "kazakhstan", "prettyName": "Kazakhstan", "connectedTopics": [] },
+  { "name": "cyprus", "prettyName": "Cyprus", "connectedTopics": [] },
+  { "name": "visited", "prettyName": "Visited", "connectedTopics": [] },
+  { "name": "denmark", "prettyName": "Denmark", "connectedTopics": [] },
+  { "name": "france", "prettyName": "France", "connectedTopics": [] },
+  { "name": "turkey", "prettyName": "Turkey", "connectedTopics": [] },
+  { "name": "spain", "prettyName": "Spain", "connectedTopics": [] },
+  { "name": "indonesia", "prettyName": "Indonesia", "connectedTopics": [] },
+  { "name": "greece", "prettyName": "Greece", "connectedTopics": [] },
+  { "name": "japan", "prettyName": "Japan", "connectedTopics": [] },
+  {
+    "name": "canary-islands",
+    "prettyName": "Canary Islands",
+    "connectedTopics": []
+  },
+  { "name": "canada", "prettyName": "Canada", "connectedTopics": [] },
+  { "name": "europe", "prettyName": "Europe", "connectedTopics": [] },
+  { "name": "germany", "prettyName": "Germany", "connectedTopics": [] },
+  {
+    "name": "finding-home",
+    "prettyName": "Finding homes",
+    "connectedTopics": []
+  },
+  { "name": "travel", "prettyName": "Travel", "connectedTopics": [] },
+  { "name": "nomad", "prettyName": "Nomad", "connectedTopics": [] },
+  { "name": "backpacks", "prettyName": "Backpacks", "connectedTopics": [] },
+  { "name": "events", "prettyName": "Events", "connectedTopics": [] },
+  { "name": "geography", "prettyName": "Geography", "connectedTopics": [] },
+  {
+    "name": "spatial-analysis",
+    "prettyName": "Spatial analysis",
+    "connectedTopics": ["data-processing"]
+  },
+  { "name": "tv-series", "prettyName": "TV series", "connectedTopics": [] },
+  {
+    "name": "analytics",
+    "prettyName": "Analytics",
+    "connectedTopics": ["observability"]
+  },
+  {
+    "name": "tinybird",
+    "prettyName": "Tinybird",
+    "connectedTopics": ["analytics"]
+  },
+  {
+    "name": "grafana",
+    "prettyName": "Grafana",
+    "connectedTopics": ["analytics"]
+  },
+  {
+    "name": "genomics",
+    "prettyName": "Genomics",
+    "connectedTopics": ["physics"]
+  },
+  { "name": "dna", "prettyName": "DNA", "connectedTopics": ["physics"] },
+  {
+    "name": "bionics",
+    "prettyName": "Bionics",
+    "connectedTopics": ["physics"]
+  },
+  {
+    "name": "viruses",
+    "prettyName": "Viruses",
+    "connectedTopics": ["physics"]
+  },
+  { "name": "biology", "prettyName": "Biology", "connectedTopics": [] },
+  {
+    "name": "immunotherapy",
+    "prettyName": "Immunotherapy",
+    "connectedTopics": ["biology"]
+  },
+  {
+    "name": "immunology",
+    "prettyName": "Immunology",
+    "connectedTopics": ["biology"]
+  },
+  {
+    "name": "computational-biology",
+    "prettyName": "Computational biology",
+    "connectedTopics": ["biology"]
+  },
+  {
+    "name": "regenerative-medicine",
+    "prettyName": "Regenerative medicine",
+    "connectedTopics": ["biology"]
+  },
+  {
+    "name": "bioinformatics",
+    "prettyName": "Bioinformatics",
+    "connectedTopics": ["biology"]
+  },
+  {
+    "name": "evolution",
+    "prettyName": "Evolution",
+    "connectedTopics": ["biology"]
+  },
+  { "name": "markdown", "prettyName": "Markdown", "connectedTopics": [] },
+  {
+    "name": "writing-prompts",
+    "prettyName": "Writing prompts",
+    "connectedTopics": []
+  },
+  { "name": "writing", "prettyName": "Writing", "connectedTopics": [] },
+  { "name": "economy", "prettyName": "Economy", "connectedTopics": [] },
+  { "name": "israel", "prettyName": "Israel", "connectedTopics": [] },
+  { "name": "korea", "prettyName": "Korea", "connectedTopics": [] },
+  { "name": "georgia", "prettyName": "Georgia", "connectedTopics": [] },
+  { "name": "india", "prettyName": "India", "connectedTopics": [] },
+  { "name": "ukraine", "prettyName": "Ukraine", "connectedTopics": [] },
+  {
+    "name": "united-arab-emirates",
+    "prettyName": "United Arab Emirates",
+    "connectedTopics": []
+  },
+  { "name": "taiwan", "prettyName": "Taiwan", "connectedTopics": [] },
+  { "name": "romania", "prettyName": "Romania", "connectedTopics": [] },
+  { "name": "sweden", "prettyName": "Sweden", "connectedTopics": [] },
+  {
+    "name": "united-states",
+    "prettyName": "United States",
+    "connectedTopics": []
+  },
+  { "name": "belarus", "prettyName": "Belarus", "connectedTopics": [] },
+  { "name": "argentina", "prettyName": "Argentina", "connectedTopics": [] },
+  { "name": "netherlands", "prettyName": "Netherlands", "connectedTopics": [] }
+]

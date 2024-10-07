@@ -1,43 +1,94 @@
-## LA Editor
+## Below is TanStack Start Clerk
 
-This folder should not contain any changes. It is a copy of the original LA Editor component from the [LA Editor](https://github.com/learn-anything/la-editor) repository.
+Gotten from [here](https://github.com/TanStack/router/tree/main/examples/react/start-clerk-basic).
 
-> This component is a temporary solution until the original repository publish the component to npm.
+To make it work:
 
-## Clerk Middleware for Route Protection
-
-This middleware manages authentication and protects routes in our Next.js application using Clerk.
-
-## Key Concepts
-
-- **Public Routes**: Accessible to all users
-- **Protected Routes**: Require authentication
-
-## Important: Route Registration
-
-The middleware uses a catch-all public route `"/:topicName(.*)"`. This means:
-
-1. New routes are public by default
-2. Protected routes MUST be explicitly registered
-
-## How to Register Routes
-
-Update the `ROUTE_PATTERNS` object in the middleware file:
-
-```typescript
-const ROUTE_PATTERNS = {
-	public: ["/sign-in(.*)", "/sign-up(.*)", "/", "/:topicName(.*)"],
-	protected: [
-		"/edit-profile(.*)",
-		"/links(.*)",
-		// Add new protected routes here
-		"/new-protected-feature(.*)"
-	]
-}
+```
+bun i
+bun dev
 ```
 
-## Best Practices
+And have this in `.env`:
 
-1. Always add new protected routes to `ROUTE_PATTERNS.protected`
-2. Regularly review routes to ensure proper protection
-3. Be cautious when modifying the `"/:topicName(.*)"` catch-all route
+<!-- TODO: create some keys so others can also run it (not LA specific..) -->
+
+You can get those keys from [Clerk](https://clerk.com/).
+
+```
+CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+```
+
+# Welcome to TanStack.com!
+
+This site is built with TanStack Router!
+
+- [TanStack Router Docs](https://tanstack.com/router)
+
+It's deployed automagically with Vercel!
+
+- [Vercel](https://vercel.com/)
+
+## Development
+
+From your terminal:
+
+```sh
+pnpm install
+pnpm dev
+```
+
+This starts your app in development mode, rebuilding assets on file changes.
+
+## Editing and previewing the docs of TanStack projects locally
+
+The documentations for all TanStack projects except for `React Charts` are hosted on [https://tanstack.com](https://tanstack.com), powered by this TanStack Router app.
+In production, the markdown doc pages are fetched from the GitHub repos of the projects, but in development they are read from the local file system.
+
+Follow these steps if you want to edit the doc pages of a project (in these steps we'll assume it's [`TanStack/form`](https://github.com/tanstack/form)) and preview them locally :
+
+1. Create a new directory called `tanstack`.
+
+```sh
+mkdir tanstack
+```
+
+2. Enter the directory and clone this repo and the repo of the project there.
+
+```sh
+cd tanstack
+git clone git@github.com:TanStack/tanstack.com.git
+git clone git@github.com:TanStack/form.git
+```
+
+> [!NOTE]
+> Your `tanstack` directory should look like this:
+>
+> ```
+> tanstack/
+>    |
+>    +-- form/
+>    |
+>    +-- tanstack.com/
+> ```
+
+> [!WARNING]
+> Make sure the name of the directory in your local file system matches the name of the project's repo. For example, `tanstack/form` must be cloned into `form` (this is the default) instead of `some-other-name`, because that way, the doc pages won't be found.
+
+3. Enter the `tanstack/tanstack.com` directory, install the dependencies and run the app in dev mode:
+
+```sh
+cd tanstack.com
+pnpm i
+# The app will run on https://localhost:3000 by default
+pnpm dev
+```
+
+4. Now you can visit http://localhost:3000/form/latest/docs/overview in the browser and see the changes you make in `tanstack/form/docs`.
+
+> [!NOTE]
+> The updated pages need to be manually reloaded in the browser.
+
+> [!WARNING]
+> You will need to update the `docs/config.json` file (in the project's repo) if you add a new doc page!
