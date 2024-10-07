@@ -21,9 +21,7 @@ const DEFAULT_VALUES = {
 export const fetchClerkAuth = createServerFn("GET", async (_, ctx) => {
   const auth = await getAuth(ctx.request)
 
-  return {
-    user: auth,
-  }
+  return auth
 })
 
 export const getFeatureFlag = createServerFn(

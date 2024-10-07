@@ -290,7 +290,6 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
                 onUpdate={(c) => updatePageContent(c, page)}
                 handleKeyDown={handleContentKeyDown}
                 onBlur={(c) => updatePageContent(c, page)}
-                onNewBlock={(c) => updatePageContent(c, page)}
               />
             </div>
           </div>
