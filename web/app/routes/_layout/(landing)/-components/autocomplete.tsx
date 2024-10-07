@@ -109,7 +109,7 @@ export function Autocomplete({
         "rounded-none rounded-t-lg border-l border-r border-t": open,
       })}
     >
-      <div className={"relative flex items-center px-2 py-3"}>
+      <div className="relative flex items-center">
         <CommandPrimitive.Input
           ref={inputRef}
           value={inputValue}
@@ -125,7 +125,7 @@ export function Autocomplete({
           }}
           placeholder={filteredTopics[0]?.prettyName}
           className={cn(
-            "placeholder:text-muted-foreground flex-1 bg-transparent px-2 outline-none",
+            "placeholder:text-muted-foreground flex-1 bg-transparent min-h-10 px-3 py-1 sm:py-3 sm:px-4 outline-none",
           )}
           autoFocus
         />
