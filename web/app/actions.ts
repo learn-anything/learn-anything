@@ -54,27 +54,6 @@ export const sendFeedbackFn = createServerFn(
   },
 )
 
-export const isExistingUserFn = createServerFn(
-  "GET",
-  async (_, { request }) => {
-    const auth = await getAuth(request)
-
-    if (!auth.userId) {
-      return false
-    }
-
-    const user = await clerkClient({
-      telemetry: { disabled: true },
-    }).users.getUser(auth.userId)
-
-    const roninUser = await get.existingStripeSubscriber.with({
-      email: user.emailAddresses[0].emailAddress,
-    })
-
-    return user.emailAddresses[0].emailAddress === roninUser?.email
-  },
-)
-
 export const getMetadata = createServerFn("GET", async (url: string) => {
   if (!url) {
     return new Response('Missing "url" query parameter', {

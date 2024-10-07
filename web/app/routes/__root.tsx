@@ -4,12 +4,14 @@ import {
   Outlet,
   ScrollRestoration,
   createRootRouteWithContext,
+  useLocation,
 } from "@tanstack/react-router"
 import { Body, Head, Html, Meta, Scripts } from "@tanstack/start"
 import * as React from "react"
 import { fetchClerkAuth } from "~/actions"
 import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary.js"
 import { NotFound } from "~/components/NotFound.js"
+import { isServer } from "~/lib/utils"
 import appCss from "~/styles/app.css?url"
 
 export const TanStackRouterDevtools =
@@ -64,17 +66,18 @@ export const Route = createRootRouteWithContext<{
     { rel: "manifest", href: "/site.webmanifest", color: "#fffff" },
     { rel: "icon", href: "/favicon.ico" },
   ],
-  beforeLoad: async ({ cause }) => {
-    if (cause !== "stay") {
-      const { user } = await fetchClerkAuth()
-      return {
-        user,
-      }
-    }
+  beforeLoad: async ({ context, cause, location }) => {
+    // console.log(cause, location)
 
+    const { user } = await fetchClerkAuth()
     return {
-      user: null,
+      user,
     }
+    // }
+
+    // return {
+    //   user: null,
+    // }
   },
   errorComponent: (props) => {
     return (
