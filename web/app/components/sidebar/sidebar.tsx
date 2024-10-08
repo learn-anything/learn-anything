@@ -95,7 +95,7 @@ const LogoAndSearch: React.FC = React.memo(() => {
     <div className="px-3">
       <div className="mt-2 flex h-10 max-w-full items-center">
         <Link to="/" className="px-2">
-          <LogoIcon className="size-7" />
+          <img src="/logo.png" alt="Learn Anything" className="size-7" />
         </Link>
         <div className="flex min-w-2 grow flex-row" />
         <Link
