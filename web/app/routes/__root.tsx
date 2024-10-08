@@ -17,6 +17,7 @@ import {
 import * as React from "react"
 import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary.js"
 import { NotFound } from "~/components/NotFound.js"
+import { seo } from "~/lib/utils/seo"
 import appCss from "~/styles/app.css?url"
 
 export const TanStackRouterDevtools =
@@ -55,6 +56,13 @@ export const Route = createRootRouteWithContext<{
       name: "viewport",
       content: "width=device-width, initial-scale=1",
     },
+    ...seo({
+      title: "Learn Anything",
+      description:
+        "Discover and learn about any topic with Learn-Anything. Our free, comprehensive platform connects you to the best resources for every subject. Start learning today!",
+      keywords:
+        "learn anything, online learning, free education, educational resources, self-study, knowledge discovery, topic exploration, skill development, lifelong learning",
+    }),
   ],
   links: () => [
     { rel: "stylesheet", href: appCss },
