@@ -1,13 +1,20 @@
 /// <reference types="vite/client" />
+import { getAuth } from "@clerk/tanstack-start/server"
 import type { QueryClient } from "@tanstack/react-query"
 import {
   Outlet,
   ScrollRestoration,
   createRootRouteWithContext,
 } from "@tanstack/react-router"
-import { Body, Head, Html, Meta, Scripts } from "@tanstack/start"
+import {
+  Body,
+  createServerFn,
+  Head,
+  Html,
+  Meta,
+  Scripts,
+} from "@tanstack/start"
 import * as React from "react"
-import { fetchClerkAuth } from "~/actions"
 import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary.js"
 import { NotFound } from "~/components/NotFound.js"
 import appCss from "~/styles/app.css?url"
@@ -25,10 +32,16 @@ export const ReactQueryDevtools =
   process.env.NODE_ENV === "production"
     ? () => null
     : React.lazy(() =>
-        import("@tanstack/react-query-devtools/production").then((d) => ({
+        import("@tanstack/react-query-devtools").then((d) => ({
           default: d.ReactQueryDevtools,
         })),
       )
+
+export const fetchClerkAuth = createServerFn("GET", async (_, ctx) => {
+  const auth = await getAuth(ctx.request)
+
+  return auth
+})
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient

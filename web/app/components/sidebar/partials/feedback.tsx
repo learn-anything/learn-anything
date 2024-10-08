@@ -29,7 +29,28 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
 import { Spinner } from "@/components/custom/spinner"
 import { Editor } from "@tiptap/react"
-import { sendFeedbackFn } from "~/actions"
+import { createServerFn } from "@tanstack/start"
+import { clerkClient, getAuth } from "@clerk/tanstack-start/server"
+import { create } from "ronin"
+
+export const sendFeedbackFn = createServerFn(
+  "POST",
+  async (data: { content: string }, { request }) => {
+    const auth = await getAuth(request)
+
+    if (!auth.userId) {
+      throw new Error("User not authenticated")
+    }
+
+    const user = await clerkClient({
+      telemetry: { disabled: true },
+    }).users.getUser(auth.userId)
+    await create.feedback.with({
+      message: data.content,
+      emailFrom: user.emailAddresses[0].emailAddress,
+    })
+  },
+)
 
 const formSchema = z.object({
   content: z.string().min(1, {
