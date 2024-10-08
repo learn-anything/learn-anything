@@ -13,7 +13,7 @@ export function createRouter() {
       defaultPreload: "intent",
       defaultErrorComponent: DefaultCatchBoundary,
       defaultNotFoundComponent: () => <NotFound />,
-      context: { queryClient },
+      context: { queryClient, auth: undefined! },
     }),
     queryClient,
   )

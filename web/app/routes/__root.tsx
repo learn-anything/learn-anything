@@ -44,6 +44,7 @@ export const fetchClerkAuth = createServerFn("GET", async (_, ctx) => {
 })
 
 export const Route = createRootRouteWithContext<{
+  auth: { userId: string }
   queryClient: QueryClient
 }>()({
   meta: () => [
@@ -77,15 +78,13 @@ export const Route = createRootRouteWithContext<{
     { rel: "manifest", href: "/site.webmanifest", color: "#fffff" },
     { rel: "icon", href: "/favicon.ico" },
   ],
-  beforeLoad: async ({ cause }) => {
-    if (cause !== "stay") {
-      const auth = await fetchClerkAuth()
-      return { auth }
+  beforeLoad: async ({ context }) => {
+    if (context.auth) {
+      return { auth: context.auth }
     }
 
-    return {
-      auth: null,
-    }
+    const auth = await fetchClerkAuth()
+    return { auth }
   },
   errorComponent: (props) => {
     return (
