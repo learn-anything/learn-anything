@@ -1,7 +1,6 @@
 import * as React from "react"
 import { useMedia } from "@/hooks/use-media"
 import { useAtom } from "jotai"
-import { LogoIcon } from "@/components/icons/logo-icon"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { isCollapseAtom } from "@/store/sidebar"
