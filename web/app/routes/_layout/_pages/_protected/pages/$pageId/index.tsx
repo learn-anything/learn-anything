@@ -248,7 +248,7 @@ const DetailPageForm = React.memo(({ page }: { page: PersonalPage }) => {
           <div className="mb-2 mt-8 py-1.5">
             <EditorContent
               editor={titleEditor}
-              className="la-editor no-command grow cursor-text select-text text-2xl font-semibold leading-[calc(1.33333)] tracking-[-0.00625rem]"
+              className="title-editor no-command grow cursor-text select-text text-2xl font-semibold leading-[calc(1.33333)] tracking-[-0.00625rem]"
             />
           </div>
           <div className="flex flex-auto flex-col">

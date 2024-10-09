@@ -107,7 +107,7 @@ interface LinkListItemProps {
 }
 
 const LinkListItem: React.FC<LinkListItemProps> = ({ label, state, count }) => (
-  <div className="group/topic-link relative flex min-w-0 flex-1">
+  <div className="relative flex min-w-0 flex-1">
     <Link
       to="/links"
       search={{ state }}

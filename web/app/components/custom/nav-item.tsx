@@ -23,7 +23,7 @@ export function NavItem({
       className={cn(
         "group/p",
         "flex h-8 items-center cursor-default gap-px rounded-md px-2 text-[13px] font-medium",
-        "hover:bg-[var(--item-hover)] focus-visible:outline-none focus-visible:ring-0 sm:h-7",
+        "hover:bg-[var(--item-hover)] text-[var(--less-foreground)] focus-visible:outline-none focus-visible:ring-0 sm:h-7",
         className,
       )}
       activeProps={{
