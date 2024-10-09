@@ -4,6 +4,7 @@ import { useAccount } from "@/lib/providers/jazz-provider"
 import { cn } from "@/lib/utils"
 import { PersonalLinkLists } from "@/lib/schema/personal-link"
 import { LearningStateValue } from "~/lib/constants"
+import { LaIcon } from "~/components/custom/la-icon"
 
 export const LinkSection: React.FC = () => {
   const { me } = useAccount({ root: { personalLinks: [] } })
@@ -13,7 +14,7 @@ export const LinkSection: React.FC = () => {
   const linkCount = me.root.personalLinks?.length || 0
 
   return (
-    <div className="group/pages flex flex-col gap-px py-2">
+    <div className="flex flex-col gap-px py-2">
       <LinkSectionHeader linkCount={linkCount} />
       <LinkList personalLinks={me.root.personalLinks} />
     </div>
@@ -24,22 +25,41 @@ interface LinkSectionHeaderProps {
   linkCount: number
 }
 
-const LinkSectionHeader: React.FC<LinkSectionHeaderProps> = ({ linkCount }) => (
-  <Link
-    to="/links"
-    className={cn(
-      "flex h-9 items-center gap-px rounded-md px-2 py-1 text-sm font-medium hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-0 sm:h-[30px] sm:text-xs",
-    )}
-    activeProps={{
-      className: "bg-accent text-accent-foreground",
-    }}
-  >
-    Links
-    {linkCount > 0 && (
-      <span className="text-muted-foreground ml-1">{linkCount}</span>
-    )}
-  </Link>
-)
+const LinkSectionHeader: React.FC<LinkSectionHeaderProps> = ({ linkCount }) => {
+  return (
+    <Link
+      to="/links"
+      className={cn(
+        "flex h-8 items-center gap-px rounded-md px-2 text-[13px] font-medium hover:bg-[var(--item-hover)] focus-visible:outline-none focus-visible:ring-0 sm:h-7",
+      )}
+      activeProps={{
+        className:
+          "bg-[var(--item-active)] data-[status='active']:hover:bg-[var(--item-active)]",
+      }}
+    >
+      {({ isActive }) => {
+        return (
+          <>
+            <div className="flex items-center gap-1.5">
+              <LaIcon name="Link" className="size-3.5" />
+              <span>Links</span>
+            </div>
+            <span className="flex flex-auto"></span>
+            {linkCount > 0 && (
+              <span
+                className={cn("text-muted-foreground font-mono", {
+                  "text-foreground": isActive,
+                })}
+              >
+                {linkCount}
+              </span>
+            )}
+          </>
+        )
+      }}
+    </Link>
+  )
+}
 
 interface LinkListProps {
   personalLinks: PersonalLinkLists
@@ -87,29 +107,34 @@ interface LinkListItemProps {
 }
 
 const LinkListItem: React.FC<LinkListItemProps> = ({ label, state, count }) => (
-  <div className="group/reorder-page relative">
-    <div className="group/topic-link relative flex min-w-0 flex-1">
-      <Link
-        to="/links"
-        search={{ state }}
-        className={cn(
-          "relative flex h-9 w-full items-center gap-2 rounded-md p-1.5 font-medium hover:bg-accent hover:text-accent-foreground sm:h-8",
-        )}
-        activeProps={{
-          className: "bg-accent text-accent-foreground",
-        }}
-      >
-        <div className="flex max-w-full flex-1 items-center gap-1.5 truncate text-sm">
-          <p className="truncate opacity-95 group-hover/topic-link:opacity-100">
-            {label}
-          </p>
-        </div>
-      </Link>
-      {count > 0 && (
-        <span className="absolute right-2 top-1/2 z-[1] -translate-y-1/2 rounded p-1 text-sm">
-          {count}
-        </span>
+  <div className="group/topic-link relative flex min-w-0 flex-1">
+    <Link
+      to="/links"
+      search={{ state }}
+      className={cn(
+        "relative flex h-8 w-full text-[13px] items-center gap-2 rounded-md px-1.5 font-medium hover:bg-[var(--item-hover)] sm:h-7",
       )}
-    </div>
+      activeProps={{
+        className:
+          "bg-[var(--item-active)] data-[status='active']:hover:bg-[var(--item-active)]",
+      }}
+    >
+      {({ isActive }) => (
+        <>
+          <div className="flex max-w-full flex-1 items-center gap-1.5 truncate">
+            <p className="truncate">{label}</p>
+          </div>
+          {count > 0 && (
+            <span
+              className={cn("text-muted-foreground font-mono", {
+                "text-foreground": isActive,
+              })}
+            >
+              {count}
+            </span>
+          )}
+        </>
+      )}
+    </Link>
   </div>
 )

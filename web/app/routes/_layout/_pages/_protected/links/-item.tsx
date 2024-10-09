@@ -116,7 +116,7 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
         data-active={isActive}
         className={cn(
           "w-full overflow-visible border-b-[0.5px] border-transparent outline-none",
-          "data-[active='true']:bg-[var(--link-background-muted)] data-[keyboard-active='true']:focus-visible:shadow-[var(--link-shadow)_0px_0px_0px_1px_inset]",
+          "data-[active='true']:bg-[var(--link-background-muted-new)] data-[keyboard-active='true']:focus-visible:shadow-[var(--link-shadow)_0px_0px_0px_1px_inset]",
         )}
         onKeyDown={handleKeyDown}
       >
@@ -211,7 +211,7 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
           </div>
         </div>
 
-        <div className="relative h-[0.5px] w-full after:absolute after:left-0 after:right-0 after:block after:h-full after:bg-[var(--link-border-after)]"></div>
+        <div className="relative h-[0.5px] w-full after:absolute after:left-0 after:right-0 after:block after:h-full after:bg-[var(--link-border-after-new)]"></div>
       </div>
     )
   },

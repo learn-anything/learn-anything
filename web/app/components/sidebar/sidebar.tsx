@@ -8,12 +8,12 @@ import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
 import { LaIcon } from "@/components/custom/la-icon"
 import { Link, useLocation } from "@tanstack/react-router"
 
-import { LinkSection } from "./partials/link-section"
+// import { LinkSection } from "./partials/link-section"
 import { PageSection } from "./partials/page-section"
-import { TopicSection } from "./partials/topic-section"
 import { ProfileSection } from "./partials/profile-section"
 import { JournalSection } from "./partials/journal-section"
 import { TaskSection } from "./partials/task-section"
+import { LinkCollection } from "./partials/link-collection"
 
 interface SidebarContextType {
   isCollapsed: boolean
@@ -125,14 +125,14 @@ const SidebarContent: React.FC = React.memo(() => {
   const { me } = useAccountOrGuest()
 
   return (
-    <nav className="bg-background relative flex h-full w-full shrink-0 flex-col">
+    <nav className="bg-[var(--body-background)] relative flex h-full w-full shrink-0 flex-col">
       <div>
         <LogoAndSearch />
       </div>
       <div className="relative mb-0.5 mt-1.5 flex grow flex-col overflow-y-auto rounded-md px-3 outline-none">
         <div className="h-2 shrink-0" />
-        {me._type === "Account" && <LinkSection />}
-        {me._type === "Account" && <TopicSection />}
+        {me._type === "Account" && <LinkCollection />}
+        {/* {me._type === "Account" && <LinkSection />} */}
         {me._type === "Account" && <JournalSection />}
         {me._type === "Account" && <TaskSection />}
         {me._type === "Account" && <PageSection />}

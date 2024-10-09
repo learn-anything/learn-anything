@@ -146,7 +146,7 @@ export const LinkBottomBar: React.FC = () => {
   const shortcutText = getShortcutKeys(["c"])
 
   return (
-    <div className="bg-background min-h-11 border-t">
+    <div className="min-h-11 border-t">
       <AnimatePresence mode="wait">
         {editId && (
           <motion.div

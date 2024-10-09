@@ -49,7 +49,7 @@ function LayoutContent() {
 function MainContent() {
   return (
     <div className="relative flex min-w-0 flex-1 flex-col">
-      <main className="relative flex flex-auto flex-col place-items-stretch overflow-auto lg:my-2 lg:mr-2 lg:rounded-md lg:border">
+      <main className="relative bg-[var(--container-background)] flex flex-auto flex-col place-items-stretch overflow-auto lg:my-2 lg:mr-2 lg:rounded-md lg:border">
         <Outlet />
       </main>
     </div>
