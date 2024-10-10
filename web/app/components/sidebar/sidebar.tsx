@@ -63,14 +63,14 @@ const SidebarItem: React.FC<SidebarItemProps> = React.memo(
         )}
       >
         <Link
-          className="text-secondary-foreground flex h-8 grow items-center truncate rounded-md pl-1.5 pr-1 text-sm font-medium"
+          className="flex h-8 grow items-center truncate rounded-md pl-1.5 pr-1 text-sm font-medium text-secondary-foreground"
           to={url}
           onClick={onClick}
         >
           {icon && (
             <span
               className={cn(
-                "text-primary/60 group-hover:text-primary mr-2 size-4",
+                "mr-2 size-4 text-primary/60 group-hover:text-primary",
                 { "text-primary": isActive },
               )}
             >
@@ -101,7 +101,7 @@ const LogoAndSearch: React.FC = React.memo(() => {
           to={pathname === "/search" ? "/" : "/search"}
           className={cn(
             buttonVariants({ size: "sm", variant: "secondary" }),
-            "text-primary/60 flex w-20 items-center justify-start py-4 pl-2",
+            "flex w-20 items-center justify-start py-4 pl-2 text-primary/60",
           )}
           activeProps={{
             className: "text-md font-medium",
@@ -125,7 +125,7 @@ const SidebarContent: React.FC = React.memo(() => {
   const { me } = useAccountOrGuest()
 
   return (
-    <nav className="bg-[var(--body-background)] relative flex h-full w-full shrink-0 flex-col">
+    <nav className="relative flex h-full w-full shrink-0 flex-col bg-[var(--body-background)]">
       <div>
         <LogoAndSearch />
       </div>
@@ -183,7 +183,7 @@ const Sidebar: React.FC = () => {
           )}
         >
           <div
-            className={cn(sidebarInnerClasses, "border-r-primary/5 border-r")}
+            className={cn(sidebarInnerClasses, "border-r border-r-primary/5")}
           >
             <SidebarContext.Provider value={contextValue}>
               <SidebarContent />

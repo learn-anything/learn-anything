@@ -93,7 +93,7 @@ const TaskSectionHeader: React.FC<TaskSectionHeaderProps> = ({
   <Link
     to="/tasks"
     className={cn(
-      "flex flex-1 min-h-[30px] gap-px items-center justify-start hover:bg-accent hover:text-accent-foreground rounded-md px-2 py-1 focus-visible:outline-none focus-visible:ring-0",
+      "flex min-h-[30px] flex-1 items-center justify-start gap-px rounded-md px-2 py-1 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-0",
     )}
     search={{ filter }}
     activeProps={{
@@ -104,7 +104,7 @@ const TaskSectionHeader: React.FC<TaskSectionHeaderProps> = ({
 
     <p className="text-sm">
       {title}
-      {count > 0 && <span className="text-muted-foreground ml-1">{count}</span>}
+      {count > 0 && <span className="ml-1 text-muted-foreground">{count}</span>}
     </p>
   </Link>
 )

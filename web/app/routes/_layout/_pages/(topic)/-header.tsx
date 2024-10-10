@@ -144,13 +144,13 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({
           defaultIcon="Circle"
         />
       </ContentHeader>
-      <div className="flex flex-row items-center justify-between min-h-10 py-2 px-6 max-lg:px-4 border-b border-b-[var(--la-border-new)]">
+      <div className="flex min-h-10 flex-row items-center justify-between border-b border-b-[var(--la-border-new)] px-6 py-2 max-lg:px-4">
         <div className="flex flex-1 flex-row items-center gap-2">
           <span className="text-tertiary flex h-5 w-5 items-center justify-center">
             <LaIcon name="Search" className="text-muted-foreground" />
           </span>
           <Input
-            className="flex-1 border-none bg-transparent p-0 focus-visible:ring-0 h-6"
+            className="h-6 flex-1 border-none bg-transparent p-0 focus-visible:ring-0"
             placeholder="Search..."
             role="searchbox"
             autoComplete="off"

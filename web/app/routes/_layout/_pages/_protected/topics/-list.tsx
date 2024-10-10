@@ -97,7 +97,7 @@ export const MainTopicList: React.FC<MainTopicListProps> = ({ me }) => {
     <div className="flex h-full w-full flex-col overflow-hidden">
       {!isTablet && <ColumnHeader />}
       <Primitive.div
-        className="divide-primary/5 flex flex-1 flex-col divide-y overflow-y-auto outline-none [scrollbar-gutter:stable]"
+        className="flex flex-1 flex-col divide-y divide-primary/5 overflow-y-auto outline-none [scrollbar-gutter:stable]"
         tabIndex={-1}
         role="list"
       >
@@ -144,7 +144,7 @@ export const ColumnHeader: React.FC = () => {
   const columnStyles = useColumnStyles()
 
   return (
-    <div className="flex h-8 shrink-0 grow-0 flex-row gap-4 border-b max-lg:px-4 sm:px-6">
+    <div className="flex h-8 shrink-0 grow-0 flex-row gap-4 border-b sm:px-6 max-lg:px-4">
       <Column.Wrapper style={columnStyles.title}>
         <Column.Text>Name</Column.Text>
       </Column.Wrapper>

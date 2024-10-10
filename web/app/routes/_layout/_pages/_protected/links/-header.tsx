@@ -77,14 +77,14 @@ const FilterAndSort: React.FC = React.memo(() => {
             <Button
               size="sm"
               variant="ghost"
-              className="gap-x-2 h-7 text-sm max-sm:p-0"
+              className="h-7 gap-x-2 text-sm max-sm:p-0"
             >
               <LaIcon name="ChevronDown" />
               <span className="hidden md:block">Display</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end" side="top">
-            <DropdownMenuLabel className="font-medium text-xs text-muted-foreground">
+            <DropdownMenuLabel className="text-xs font-medium text-muted-foreground">
               Display
             </DropdownMenuLabel>
             <DropdownMenuItem>
@@ -93,7 +93,7 @@ const FilterAndSort: React.FC = React.memo(() => {
               <LaIcon name="Check" className="ml-auto h-4 w-4" />
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuLabel className="font-medium text-xs text-muted-foreground">
+            <DropdownMenuLabel className="text-xs font-medium text-muted-foreground">
               Ordering
             </DropdownMenuLabel>
             <DropdownMenuItem onClick={() => handleSortChange("title")}>

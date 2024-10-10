@@ -33,7 +33,7 @@ function LayoutContent() {
   return (
     <>
       <Toaster expand={false} />
-      <div className="flex min-h-full size-full flex-row items-stretch overflow-hidden">
+      <div className="flex size-full min-h-full flex-row items-stretch overflow-hidden">
         <Sidebar />
         <Shortcut />
         <GlobalKeyboardHandler />
@@ -49,7 +49,7 @@ function LayoutContent() {
 function MainContent() {
   return (
     <div className="relative flex min-w-0 flex-1 flex-col">
-      <main className="relative bg-[var(--container-background)] flex flex-auto flex-col place-items-stretch overflow-auto lg:my-2 lg:mr-2 lg:rounded-md lg:border">
+      <main className="relative flex flex-auto flex-col place-items-stretch overflow-auto bg-[var(--container-background)] lg:my-2 lg:mr-2 lg:rounded-md lg:border">
         <Outlet />
       </main>
     </div>

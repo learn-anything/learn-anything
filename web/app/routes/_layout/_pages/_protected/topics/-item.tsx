@@ -142,7 +142,7 @@ export const TopicItem = React.forwardRef<HTMLAnchorElement, TopicItemProps>(
         tabIndex={isActive ? 0 : -1}
         className={cn(
           "relative block cursor-default outline-none",
-          "min-h-12 py-2 max-lg:px-4 sm:px-6",
+          "min-h-12 py-2 sm:px-6 max-lg:px-4",
           "data-[active='true']:bg-[var(--link-background-muted-new)] data-[keyboard-active='true']:focus-visible:shadow-[var(--link-shadow)_0px_0px_0px_1px_inset]",
         )}
         aria-selected={isActive}

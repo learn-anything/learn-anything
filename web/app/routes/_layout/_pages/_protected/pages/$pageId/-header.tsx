@@ -45,7 +45,7 @@ export const DetailPageHeader: React.FC<DetailPageHeaderProps> = ({
           )}
         />
         <Button size="sm" variant="outline" onClick={handleDelete}>
-          <LaIcon name="Trash" className="mr-2 size-3.5" />
+          <LaIcon name="Trash" className="mr-2" />
           Delete
         </Button>
       </div>

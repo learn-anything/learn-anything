@@ -75,7 +75,7 @@ const JournalSectionHeader: React.FC<JournalHeaderProps> = ({
     <p className="text-xs">
       Journal
       {entriesCount > 0 && (
-        <span className="text-muted-foreground ml-1">({entriesCount})</span>
+        <span className="ml-1 text-muted-foreground">({entriesCount})</span>
       )}
     </p>
   </Link>

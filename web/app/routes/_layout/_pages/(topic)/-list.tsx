@@ -51,7 +51,7 @@ export function TopicDetailList({
             className="flex flex-col"
           >
             <div className="flex items-center gap-4 px-6 py-2 max-lg:px-4">
-              <p className="text-muted-foreground text-[13px] font-medium">
+              <p className="text-[13px] font-medium text-muted-foreground">
                 {item.data?.title}
               </p>
               <div className="flex-1 border-b border-[var(--la-border-new)]" />

@@ -123,7 +123,7 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
         <div
           className={cn(
             "w-full grow overflow-visible outline-none",
-            "flex items-center gap-x-2 py-2 max-lg:px-4 sm:px-5 sm:py-2",
+            "flex items-center gap-x-2 py-2 sm:px-5 sm:py-2 max-lg:px-4",
           )}
         >
           <Popover
@@ -138,7 +138,7 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
                 type="button"
                 role="combobox"
                 variant="ghost"
-                className="size-7 shrink-0 p-0 cursor-default text-muted-foreground/75 hover:text-foreground hover:bg-inherit"
+                className="size-7 shrink-0 cursor-default p-0 text-muted-foreground/75 hover:bg-inherit hover:text-foreground"
                 onClick={(e) => e.stopPropagation()}
                 onDoubleClick={(e) => e.stopPropagation()}
               >
@@ -177,12 +177,12 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
                   height={16}
                 />
               )}
-              <p className="text-primary hover:text-primary line-clamp-1 text-sm font-medium">
+              <p className="line-clamp-1 text-sm font-medium text-primary hover:text-primary">
                 {personalLink.title}
               </p>
             </div>
             {personalLink.url && (
-              <div className="text-muted-foreground flex min-w-0 shrink items-center gap-x-1">
+              <div className="flex min-w-0 shrink items-center gap-x-1 text-muted-foreground">
                 <LaIcon
                   name="Link"
                   aria-hidden="true"
@@ -192,7 +192,7 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
                   to={ensureUrlProtocol(personalLink.url)}
                   target="_blank"
                   onClick={(e) => e.stopPropagation()}
-                  className="hover:text-primary mr-1 truncate text-xs"
+                  className="mr-1 truncate text-xs hover:text-primary"
                 >
                   {personalLink.url}
                 </Link>

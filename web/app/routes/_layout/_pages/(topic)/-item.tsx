@@ -179,7 +179,7 @@ export const LinkItem = React.memo(
                     type="button"
                     role="combobox"
                     variant="ghost"
-                    className="h-auto shrink-0 p-0 cursor-default text-muted-foreground/75 hover:text-foreground hover:bg-inherit"
+                    className="h-auto shrink-0 cursor-default p-0 text-muted-foreground/75 hover:bg-inherit hover:text-foreground"
                     onClick={(e) => e.stopPropagation()}
                   >
                     {selectedLearningState?.icon ? (
@@ -212,7 +212,7 @@ export const LinkItem = React.memo(
                 <div className="gap-x-2 space-y-0.5 xl:flex xl:flex-row">
                   <p
                     className={cn(
-                      "text-primary hover:text-primary line-clamp-1 text-sm font-medium",
+                      "line-clamp-1 text-sm font-medium text-primary hover:text-primary",
                       isActive && "font-bold",
                     )}
                   >
@@ -223,14 +223,14 @@ export const LinkItem = React.memo(
                     <LaIcon
                       name="Link"
                       aria-hidden="true"
-                      className="text-muted-foreground group-hover:text-primary size-3.5 flex-none"
+                      className="flex-none text-muted-foreground group-hover:text-primary"
                     />
 
                     <Link
                       to={ensureUrlProtocol(link.url)}
                       target="_blank"
                       onClick={(e) => e.stopPropagation()}
-                      className="text-muted-foreground hover:text-primary text-xs"
+                      className="text-xs text-muted-foreground hover:text-primary"
                     >
                       <span className="line-clamp-1">{link.url}</span>
                     </Link>

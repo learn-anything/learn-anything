@@ -40,7 +40,7 @@ function LandingComponent() {
         >
           <motion.h1
             className={cn(
-              "mb-2 text-center text-5xl font-bold tracking-tight sm:mb-4 md:text-7xl font-raleway",
+              "mb-2 text-center font-raleway text-5xl font-bold tracking-tight sm:mb-4 md:text-7xl",
             )}
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}

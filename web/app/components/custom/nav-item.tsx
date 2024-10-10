@@ -22,8 +22,8 @@ export function NavItem({
     <Link
       className={cn(
         "group/p",
-        "flex h-[30px] items-center cursor-default gap-px rounded-md px-2 text-sm font-medium",
-        "hover:bg-[var(--item-hover)] text-[var(--less-foreground)] focus-visible:outline-none focus-visible:ring-0",
+        "flex h-[30px] cursor-default items-center gap-px rounded-md px-2 text-sm font-medium",
+        "text-[var(--less-foreground)] hover:bg-[var(--item-hover)] focus-visible:outline-none focus-visible:ring-0",
         className,
       )}
       activeProps={{
@@ -34,10 +34,10 @@ export function NavItem({
     >
       {({ isActive }) => (
         <>
-          <div className="flex items-center gap-1.5 ">
+          <div className="flex items-center gap-1.5">
             <LaIcon
               name={icon}
-              className={cn("size-3.5 group-hover/p:text-foreground", {
+              className={cn("group-hover/p:text-foreground", {
                 "text-foreground": isActive,
                 "text-muted-foreground": !isActive,
               })}

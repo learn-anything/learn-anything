@@ -77,7 +77,7 @@
   }
   body,
   div#root {
-    @apply bg-[var(--body-background)] text-foreground size-full font-sans antialiased;
+    @apply size-full bg-[var(--body-background)] font-sans text-foreground antialiased;
   }
 }
 

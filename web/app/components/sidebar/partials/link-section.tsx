@@ -30,7 +30,7 @@ const LinkSectionHeader: React.FC<LinkSectionHeaderProps> = ({ linkCount }) => {
     <Link
       to="/links"
       className={cn(
-        "flex h-[30px] items-center gap-px rounded-md px-2 text-sm font-medium hover:bg-[var(--item-hover)] focus-visible:outline-none focus-visible:ring-0 ",
+        "flex h-[30px] items-center gap-px rounded-md px-2 text-sm font-medium hover:bg-[var(--item-hover)] focus-visible:outline-none focus-visible:ring-0",
       )}
       activeProps={{
         className:
@@ -41,13 +41,13 @@ const LinkSectionHeader: React.FC<LinkSectionHeaderProps> = ({ linkCount }) => {
         return (
           <>
             <div className="flex items-center gap-1.5">
-              <LaIcon name="Link" className="size-3.5" />
+              <LaIcon name="Link" className="" />
               <span>Links</span>
             </div>
             <span className="flex flex-auto"></span>
             {linkCount > 0 && (
               <span
-                className={cn("text-muted-foreground font-mono", {
+                className={cn("font-mono text-muted-foreground", {
                   "text-foreground": isActive,
                 })}
               >
@@ -112,7 +112,7 @@ const LinkListItem: React.FC<LinkListItemProps> = ({ label, state, count }) => (
       to="/links"
       search={{ state }}
       className={cn(
-        "relative flex h-[30px] w-full text-sm items-center gap-2 rounded-md px-1.5 font-medium hover:bg-[var(--item-hover)] ",
+        "relative flex h-[30px] w-full items-center gap-2 rounded-md px-1.5 text-sm font-medium hover:bg-[var(--item-hover)]",
       )}
       activeProps={{
         className:
@@ -126,7 +126,7 @@ const LinkListItem: React.FC<LinkListItemProps> = ({ label, state, count }) => (
           </div>
           {count > 0 && (
             <span
-              className={cn("text-muted-foreground font-mono", {
+              className={cn("font-mono text-muted-foreground", {
                 "text-foreground": isActive,
               })}
             >

@@ -65,14 +65,14 @@ export const UrlInput: React.FC<UrlInputProps> = ({
                   maxLength={100}
                   autoFocus
                   placeholder="Paste a link or write a link"
-                  className="placeholder:text-muted-foreground/70 h-8 border-none p-1.5 text-[15px] font-semibold shadow-none focus-visible:ring-0"
+                  className="h-8 border-none p-1.5 text-[15px] font-semibold shadow-none placeholder:text-muted-foreground/70 focus-visible:ring-0"
                   onKeyDown={handleKeyDown}
                   onFocus={() => setIsFocused(true)}
                   onBlur={() => setIsFocused(false)}
                 />
               </TooltipTrigger>
               <TooltipContent align="center" side="top">
-                <TooltipArrow className="text-primary fill-current" />
+                <TooltipArrow className="fill-current text-primary" />
                 <span>
                   Press <kbd className="px-1.5">Enter</kbd> to fetch metadata
                 </span>

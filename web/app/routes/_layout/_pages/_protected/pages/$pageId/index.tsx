@@ -109,7 +109,7 @@ const SidebarActions = React.memo(
             onClick={handleDelete}
             className="-ml-1.5"
           >
-            <LaIcon name="Trash" className="mr-2 size-3.5" />
+            <LaIcon name="Trash" className="mr-2" />
             <span className="text-sm">Delete</span>
           </Button>
         </div>

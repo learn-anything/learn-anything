@@ -105,7 +105,7 @@ export function Autocomplete({
   return (
     <Command
       className={cn(
-        "relative mx-auto max-w-md bg-background overflow-visible shadow-md",
+        "relative mx-auto max-w-md overflow-visible bg-background shadow-md",
         {
           "rounded-lg border": !open,
           "rounded-none rounded-t-lg border-l border-r border-t": open,
@@ -128,7 +128,7 @@ export function Autocomplete({
           }}
           placeholder={filteredTopics[0]?.prettyName}
           className={cn(
-            "placeholder:text-muted-foreground flex-1 bg-transparent min-h-10 px-3 py-1 sm:py-3 sm:px-4 outline-none",
+            "min-h-10 flex-1 bg-transparent px-3 py-1 outline-none placeholder:text-muted-foreground sm:px-4 sm:py-3",
           )}
           autoFocus
         />
@@ -141,7 +141,7 @@ export function Autocomplete({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.1 }}
-              className="bg-background absolute left-0 right-0 z-10 -mx-px rounded-b-lg border-b border-l border-r border-t shadow-lg"
+              className="absolute left-0 right-0 z-10 -mx-px rounded-b-lg border-b border-l border-r border-t bg-background shadow-lg"
             >
               <CommandList className="max-h-56">
                 <CommandGroup className="my-2">
@@ -153,7 +153,7 @@ export function Autocomplete({
                       className="min-h-10 rounded-none px-3 py-1.5"
                     >
                       <span>{topic.prettyName}</span>
-                      <span className="text-muted-foreground/80 ml-auto text-xs">
+                      <span className="ml-auto text-xs text-muted-foreground/80">
                         {topic.connectedTopics.length > 0 &&
                           topic.connectedTopics.join(", ")}
                       </span>

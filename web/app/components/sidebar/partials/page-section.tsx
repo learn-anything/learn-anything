@@ -89,12 +89,12 @@ const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({
   <div
     className={cn(
       "group/pages",
-      "flex h-7 relative items-center cursor-default py-0 gap-px rounded-md text-muted-foreground font-medium hover:bg-[var(--item-hover)] focus-visible:outline-none focus-visible:ring-0",
+      "relative flex h-7 cursor-default items-center gap-px rounded-md py-0 font-medium text-muted-foreground hover:bg-[var(--item-hover)] focus-visible:outline-none focus-visible:ring-0",
     )}
   >
     <Button
       variant="ghost"
-      className="gap-1 px-2 py-0 w-full h-7 hover:bg-inherit justify-start text-xs"
+      className="h-7 w-full justify-start gap-1 px-2 py-0 text-xs hover:bg-inherit"
       onClick={onToggle}
     >
       <span>Pages</span>
@@ -150,10 +150,10 @@ const NewPageButton: React.FC = () => {
       aria-label="New Page"
       className={cn(
         "flex size-5 cursor-default items-center justify-center p-0.5 shadow-none",
-        "hover:bg-inherit text-muted-foreground hover:text-foreground",
+        "text-muted-foreground hover:bg-inherit hover:text-foreground",
         "opacity-0 transition-opacity duration-200",
         "group-hover/pages:opacity-100 group-has-[[data-state='open']]/pages:opacity-100",
-        "data-[state='open']:opacity-100 focus-visible:outline-none focus-visible:ring-0",
+        "focus-visible:outline-none focus-visible:ring-0 data-[state='open']:opacity-100",
       )}
       onClick={handleClick}
     >
@@ -200,7 +200,7 @@ const PageListItem: React.FC<PageListItemProps> = ({ page }) => {
       params={{ pageId: page.id }}
       className={cn(
         "group/p cursor-default text-[var(--less-foreground)]",
-        "relative flex h-[30px] w-full text-sm items-center gap-2 rounded-md px-1.5 font-medium hover:bg-[var(--item-hover)] ",
+        "relative flex h-[30px] w-full items-center gap-2 rounded-md px-1.5 text-sm font-medium hover:bg-[var(--item-hover)]",
       )}
       activeProps={{
         className:
@@ -211,13 +211,10 @@ const PageListItem: React.FC<PageListItemProps> = ({ page }) => {
         <div className="flex max-w-full flex-1 items-center gap-1.5 truncate">
           <LaIcon
             name="File"
-            className={cn(
-              "size-3.5 flex-shrink-0 group-hover/p:text-foreground",
-              {
-                "text-foreground": isActive,
-                "text-muted-foreground": !isActive,
-              },
-            )}
+            className={cn("flex-shrink-0 group-hover/p:text-foreground", {
+              "text-foreground": isActive,
+              "text-muted-foreground": !isActive,
+            })}
           />
           <p className="truncate">{page.title || "Untitled"}</p>
         </div>
@@ -244,11 +241,11 @@ const SubMenu = <T extends string | number>({
   <DropdownMenuSub>
     <DropdownMenuSubTrigger>
       <span className="flex items-center gap-2">
-        <LaIcon name={icon} className="size-3.5" />
+        <LaIcon name={icon} className="" />
         <span>{label}</span>
       </span>
       <span className="ml-auto flex items-center gap-1">
-        <span className="text-muted-foreground text-sm">
+        <span className="text-sm text-muted-foreground">
           {options.find((option) => option.value === currentValue)?.label}
         </span>
         <LaIcon name="ChevronRight" />
@@ -283,11 +280,11 @@ const ShowAllForm: React.FC = () => {
           variant="ghost"
           size="sm"
           className={cn(
-            "flex size-5 items-center cursor-default justify-center p-0.5 shadow-none",
-            "hover:bg-inherit text-muted-foreground hover:text-foreground",
+            "flex size-5 cursor-default items-center justify-center p-0.5 shadow-none",
+            "text-muted-foreground hover:bg-inherit hover:text-foreground",
             "opacity-0 transition-opacity duration-200",
             "group-hover/pages:opacity-100 group-has-[[data-state='open']]/pages:opacity-100",
-            "data-[state='open']:opacity-100 focus-visible:outline-none focus-visible:ring-0",
+            "focus-visible:outline-none focus-visible:ring-0 data-[state='open']:opacity-100",
           )}
         >
           <LaIcon name="Ellipsis" />
