@@ -155,7 +155,7 @@ const Sidebar: React.FC = () => {
   )
 
   const sidebarInnerClasses = cn(
-    "h-full w-56 min-w-56 transition-transform duration-300 ease-in-out",
+    "h-full w-60 min-w-60 transition-transform duration-300 ease-in-out",
     isCollapsed ? "-translate-x-full" : "translate-x-0",
   )
 

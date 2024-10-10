@@ -56,6 +56,7 @@ export const ProfileSection: React.FC = () => {
           signOut={signOut}
           setShowShortcut={setShowShortcut}
         />
+        <span className="flex flex-auto"></span>
         <Feedback />
       </div>
     </div>

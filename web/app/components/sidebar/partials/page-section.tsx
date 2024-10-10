@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { usePageActions } from "~/hooks/actions/use-page-actions"
 import { icons } from "lucide-react"
+import { ArrowIcon } from "~/components/icons/arrow-icon"
 
 type SortOption = "title" | "recent"
 type ShowOption = 5 | 10 | 15 | 20 | 0
@@ -86,43 +87,39 @@ const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({
   onToggle,
 }) => (
   <div
-    role="button"
     className={cn(
       "group/pages",
-      "flex h-7 relative items-center cursor-default py-0 gap-px rounded-md px-2 text-xs text-muted-foreground font-medium hover:bg-[var(--item-hover)] focus-visible:outline-none focus-visible:ring-0",
+      "flex h-7 relative items-center cursor-default py-0 gap-px rounded-md text-muted-foreground font-medium hover:bg-[var(--item-hover)] focus-visible:outline-none focus-visible:ring-0",
     )}
-    onClick={onToggle}
   >
-    <div className="flex grow items-center justify-between">
-      <div className="flex items-center gap-1">
-        <span>Pages</span>
-        {pageCount > 0 && (
-          <span className="text-xs text-muted-foreground">({pageCount})</span>
-        )}
-        <LaIcon
-          name="ChevronRight"
-          className={cn(
-            "size-3.5 transition-transform duration-200 ease-in-out",
-            {
-              "rotate-90": isExpanded,
-              "opacity-0 group-hover/pages:opacity-100": !isExpanded,
-            },
-          )}
-        />
-      </div>
-      <div
-        className={cn(
-          "absolute right-1 top-1/2 -translate-y-1/2",
-          "transition-all duration-200 ease-in-out",
-          {
-            "opacity-100": isExpanded,
-          },
-        )}
-      >
-        <div className="flex items-center gap-px">
-          <ShowAllForm />
-          <NewPageButton />
-        </div>
+    <Button
+      variant="ghost"
+      className="gap-1 px-2 py-0 w-full h-7 hover:bg-inherit justify-start text-xs"
+      onClick={onToggle}
+    >
+      <span>Pages</span>
+      {pageCount > 0 && (
+        <span className="text-xs text-muted-foreground">({pageCount})</span>
+      )}
+      <ArrowIcon
+        className={cn("size-3 transition-transform duration-200 ease-in-out", {
+          "rotate-90": isExpanded,
+          "opacity-0 group-hover/pages:opacity-100": !isExpanded,
+        })}
+      />
+    </Button>
+    <div
+      className={cn(
+        "absolute right-1 top-1/2 -translate-y-1/2",
+        "transition-all duration-200 ease-in-out",
+        {
+          "opacity-100": isExpanded,
+        },
+      )}
+    >
+      <div className="flex items-center gap-px">
+        <ShowAllForm />
+        <NewPageButton />
       </div>
     </div>
   </div>
