@@ -104,10 +104,13 @@ export function Autocomplete({
 
   return (
     <Command
-      className={cn("relative mx-auto max-w-md overflow-visible shadow-md", {
-        "rounded-lg border": !open,
-        "rounded-none rounded-t-lg border-l border-r border-t": open,
-      })}
+      className={cn(
+        "relative mx-auto max-w-md bg-background overflow-visible shadow-md",
+        {
+          "rounded-lg border": !open,
+          "rounded-none rounded-t-lg border-l border-r border-t": open,
+        },
+      )}
     >
       <div className="relative flex items-center">
         <CommandPrimitive.Input

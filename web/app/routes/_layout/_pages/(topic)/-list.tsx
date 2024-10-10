@@ -51,10 +51,10 @@ export function TopicDetailList({
             className="flex flex-col"
           >
             <div className="flex items-center gap-4 px-6 py-2 max-lg:px-4">
-              <p className="text-foreground text-sm font-medium">
+              <p className="text-muted-foreground text-[13px] font-medium">
                 {item.data?.title}
               </p>
-              <div className="flex-1 border-b" />
+              <div className="flex-1 border-b border-[var(--la-border-new)]" />
             </div>
           </div>
         )
@@ -82,7 +82,7 @@ export function TopicDetailList({
   )
 
   return (
-    <div ref={parentRef} className="flex-1 overflow-auto">
+    <div ref={parentRef} className="flex-1 overflow-auto py-4">
       <div
         style={{
           height: `${virtualizer.getTotalSize()}px`,

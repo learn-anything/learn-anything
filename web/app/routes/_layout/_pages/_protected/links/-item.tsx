@@ -138,7 +138,7 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
                 type="button"
                 role="combobox"
                 variant="ghost"
-                className="size-7 shrink-0 p-0 cursor-default text-muted-foreground/50 hover:text-foreground hover:bg-inherit"
+                className="size-7 shrink-0 p-0 cursor-default text-muted-foreground/75 hover:text-foreground hover:bg-inherit"
                 onClick={(e) => e.stopPropagation()}
                 onDoubleClick={(e) => e.stopPropagation()}
               >

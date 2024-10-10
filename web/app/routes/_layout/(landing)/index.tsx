@@ -25,7 +25,7 @@ function LandingComponent() {
   }
 
   return (
-    <div className="relative h-full w-screen">
+    <div className="relative h-full w-screen bg-background">
       <ForceGraphClient
         raw_nodes={GraphData}
         onNodeClick={handleTopicSelect}

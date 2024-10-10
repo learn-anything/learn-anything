@@ -45,7 +45,7 @@ function CommunityTopicComponent() {
 
   return (
     <div className="flex h-full flex-auto flex-col">
-      <ContentHeader className="px-6 py-4">
+      <ContentHeader>
         <div className="flex min-w-0 shrink-0 items-center gap-1.5">
           <SidebarToggleButton />
           <div className="flex min-h-0 flex-col items-start">

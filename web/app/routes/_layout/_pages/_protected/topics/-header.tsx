@@ -13,7 +13,7 @@ export const TopicHeader: React.FC<TopicHeaderProps> = React.memo(() => {
   if (!me) return null
 
   return (
-    <ContentHeader className="px-6 py-4 max-lg:px-4">
+    <ContentHeader>
       <HeaderTitle />
       <div className="flex flex-auto" />
     </ContentHeader>

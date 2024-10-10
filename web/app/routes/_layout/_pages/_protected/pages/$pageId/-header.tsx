@@ -23,7 +23,7 @@ export const DetailPageHeader: React.FC<DetailPageHeaderProps> = ({
 
   return (
     <>
-      <ContentHeader className="lg:min-h-0">
+      <ContentHeader>
         <div className="flex min-w-0 gap-2">
           <SidebarToggleButton />
         </div>

@@ -178,11 +178,8 @@ export const LinkItem = React.memo(
                     size="sm"
                     type="button"
                     role="combobox"
-                    variant="secondary"
-                    className={cn(
-                      "size-7 shrink-0 p-0",
-                      "hover:bg-accent-foreground/10 text-muted",
-                    )}
+                    variant="ghost"
+                    className="h-auto shrink-0 p-0 cursor-default text-muted-foreground/75 hover:text-foreground hover:bg-inherit"
                     onClick={(e) => e.stopPropagation()}
                   >
                     {selectedLearningState?.icon ? (

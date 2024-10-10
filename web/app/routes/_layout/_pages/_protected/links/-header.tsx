@@ -120,7 +120,7 @@ export const LinkHeader: React.FC = React.memo(() => {
 
   return (
     <>
-      <ContentHeader className="px-6 max-lg:px-4 lg:py-3 border-b border-b-[var(--la-border-new)]">
+      <ContentHeader>
         <div className="flex min-w-0 shrink-0 items-center gap-1.5">
           <SidebarToggleButton />
           <div className="flex min-h-0 items-center">
