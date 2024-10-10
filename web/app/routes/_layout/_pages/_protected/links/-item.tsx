@@ -177,7 +177,7 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
                   height={16}
                 />
               )}
-              <p className="text-primary hover:text-primary line-clamp-1 text-[13px] font-medium">
+              <p className="text-primary hover:text-primary line-clamp-1 text-sm font-medium">
                 {personalLink.title}
               </p>
             </div>
@@ -214,7 +214,7 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
           </div>
         </div>
 
-        <div className="relative h-[0.5px] w-full after:absolute after:left-0 after:right-0 after:block after:h-full after:bg-[var(--link-border-after-new)]"></div>
+        <div className="relative h-[0.5px] w-full after:absolute after:left-0 after:right-0 after:block after:h-full after:bg-[var(--la-border-new)]"></div>
       </div>
     )
   },

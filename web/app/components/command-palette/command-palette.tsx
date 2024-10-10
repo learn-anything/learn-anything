@@ -12,7 +12,7 @@ import { CommandGroup } from "./command-group"
 import { CommandAction, createCommandGroups } from "./command-data"
 import { useAccount, useAccountOrGuest } from "@/lib/providers/jazz-provider"
 import { useAtom } from "jotai"
-import { useCommandActions } from "~/hooks/use-command-actions"
+import { useCommandActions } from "~/hooks/actions/use-command-actions"
 import {
   filterItems,
   getTopics,

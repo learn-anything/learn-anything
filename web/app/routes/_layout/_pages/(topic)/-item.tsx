@@ -215,7 +215,7 @@ export const LinkItem = React.memo(
                 <div className="gap-x-2 space-y-0.5 xl:flex xl:flex-row">
                   <p
                     className={cn(
-                      "text-primary hover:text-primary line-clamp-1 text-[13px] font-medium",
+                      "text-primary hover:text-primary line-clamp-1 text-sm font-medium",
                       isActive && "font-bold",
                     )}
                   >

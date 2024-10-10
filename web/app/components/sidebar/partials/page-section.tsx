@@ -202,7 +202,7 @@ const PageListItem: React.FC<PageListItemProps> = ({ page }) => {
       params={{ pageId: page.id }}
       className={cn(
         "group/p cursor-default text-[var(--less-foreground)]",
-        "relative flex h-[30px] w-full text-[13px] items-center gap-2 rounded-md px-1.5 font-medium hover:bg-[var(--item-hover)] ",
+        "relative flex h-[30px] w-full text-sm items-center gap-2 rounded-md px-1.5 font-medium hover:bg-[var(--item-hover)] ",
       )}
       activeProps={{
         className:
@@ -250,7 +250,7 @@ const SubMenu = <T extends string | number>({
         <span>{label}</span>
       </span>
       <span className="ml-auto flex items-center gap-1">
-        <span className="text-muted-foreground text-[13px]">
+        <span className="text-muted-foreground text-sm">
           {options.find((option) => option.value === currentValue)?.label}
         </span>
         <LaIcon name="ChevronRight" />

@@ -89,7 +89,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({
           <Avatar className="size-6">
             <AvatarImage src={user.imageUrl} alt={user.fullName || ""} />
           </Avatar>
-          <span className="truncate text-left text-sm font-medium -tracking-wider">
+          <span className="truncate text-left text-sm font-medium -tracking-wide">
             {user.fullName}
           </span>
           <LaIcon

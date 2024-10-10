@@ -155,7 +155,7 @@ export const TopicItem = React.forwardRef<HTMLAnchorElement, TopicItemProps>(
           tabIndex={isActive ? 0 : -1}
         >
           <Column.Wrapper style={columnStyles.title}>
-            <Column.Text className="truncate text-[13px] font-medium">
+            <Column.Text className="truncate text-sm font-medium">
               {topic.prettyName}
             </Column.Text>
           </Column.Wrapper>

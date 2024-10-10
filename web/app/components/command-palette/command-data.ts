@@ -1,7 +1,7 @@
 import { icons } from "lucide-react"
 import { LaAccount } from "@/lib/schema"
 import { HTMLLikeElement } from "@/lib/utils"
-import { useCommandActions } from "~/hooks/use-command-actions"
+import { useCommandActions } from "~/hooks/actions/use-command-actions"
 
 export type CommandAction = string | (() => void)
 

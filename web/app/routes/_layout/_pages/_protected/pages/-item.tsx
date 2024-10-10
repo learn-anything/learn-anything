@@ -47,7 +47,7 @@ export const PageItem = React.forwardRef<HTMLAnchorElement, PageItemProps>(
       >
         <div className="flex h-full items-center gap-4">
           <Column.Wrapper style={columnStyles.title}>
-            <Column.Text className="truncate text-[13px] font-medium">
+            <Column.Text className="truncate text-sm font-medium">
               {page.title || "Untitled"}
             </Column.Text>
           </Column.Wrapper>
@@ -64,7 +64,7 @@ export const PageItem = React.forwardRef<HTMLAnchorElement, PageItemProps>(
             style={columnStyles.updated}
             className="flex justify-end"
           >
-            <Column.Text className="text-[13px]">
+            <Column.Text className="text-sm">
               {format(new Date(page.updatedAt), "d MMM yyyy")}
             </Column.Text>
           </Column.Wrapper>

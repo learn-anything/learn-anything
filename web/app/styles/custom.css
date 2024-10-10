@@ -1,8 +1,8 @@
 :root {
   --link-background-muted: hsl(0, 0%, 97.3%);
   --link-background-muted-new: hsl(0, 0%, 97.3%);
-  --link-border-after: hsl(0, 0%, 91%);
-  --link-border-after-new: hsl(0, 0%, 91%);
+  --la-border: hsl(0, 0%, 91%);
+  --la-border-new: hsl(0, 0%, 91%);
   --link-shadow: hsl(240, 5.6%, 82.5%);
   --less-foreground: hsl(240 10% 3.9%);
 
@@ -15,8 +15,8 @@
 .dark {
   --link-background-muted: hsl(220, 6.7%, 8.8%);
   --link-background-muted-new: rgb(28, 29, 32);
-  --link-border-after: hsl(230, 10%, 11.8%);
-  --link-border-after-new: hsl(230, 10%, 15%);
+  --la-border: hsl(230, 10%, 11.8%);
+  --la-border-new: hsl(230, 10%, 15%);
   --link-shadow: hsl(234.9, 27.1%, 25.3%);
   --less-foreground: #e5e7eb;
 
