@@ -290,7 +290,7 @@ export const LinkForm: React.FC<LinkFormProps> = ({
     >
       <div
         className={cn(
-          "bg-muted/30 relative rounded-md border",
+          "relative rounded-md border bg-muted/30",
           isFetching && "opacity-50",
         )}
       >
@@ -368,7 +368,7 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 
               {isFetching ? (
                 <div className="flex w-auto items-center justify-end gap-x-2">
-                  <span className="text-muted-foreground flex items-center text-sm">
+                  <span className="flex items-center text-sm text-muted-foreground">
                     <svg
                       className="mr-2 h-4 w-4 animate-spin"
                       viewBox="0 0 24 24"

@@ -16,7 +16,3 @@
   content: attr(data-placeholder);
   @apply pointer-events-none float-left h-0 text-[var(--la-secondary)];
 }
-
-.la-editor div.tiptap p {
-  @apply text-[var(--la-font-size-regular)];
-}

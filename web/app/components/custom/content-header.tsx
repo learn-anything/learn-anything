@@ -15,7 +15,7 @@ export const ContentHeader = React.forwardRef<
   return (
     <header
       className={cn(
-        "flex min-h-10 min-w-0 shrink-0 items-center gap-3 pl-8 pr-6 transition-opacity max-lg:px-4",
+        "flex min-h-10 min-w-0 shrink-0 items-center gap-3 border-b border-b-[var(--la-border-new)] px-6 py-3 transition-opacity max-lg:px-4",
         className,
       )}
       ref={ref}
@@ -48,7 +48,7 @@ export const SidebarToggleButton: React.FC = () => {
         size="icon"
         variant="ghost"
         aria-label="Menu"
-        className="text-primary/60"
+        className="-ml-2 cursor-default text-muted-foreground hover:bg-transparent"
         onClick={handleClick}
       >
         <LaIcon name="PanelLeft" />

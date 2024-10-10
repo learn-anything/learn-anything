@@ -115,7 +115,7 @@ export const TaskForm: React.FC = () => {
             <div
               ref={formRef}
               onSubmit={handleSubmit}
-              className="bg-result flex w-full items-center justify-between rounded-lg px-2 py-1"
+              className="flex w-full items-center justify-between rounded-lg bg-result px-2 py-1"
             >
               <div className="flex min-w-0 flex-1 items-center">
                 <Checkbox

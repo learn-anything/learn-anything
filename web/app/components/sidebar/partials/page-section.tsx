@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { usePageActions } from "~/hooks/actions/use-page-actions"
 import { icons } from "lucide-react"
+import { ArrowIcon } from "~/components/icons/arrow-icon"
 
 type SortOption = "title" | "recent"
 type ShowOption = 5 | 10 | 15 | 20 | 0
@@ -44,56 +45,82 @@ const SHOWS: Option<ShowOption>[] = [
 
 const pageSortAtom = atomWithStorage<SortOption>("pageSort", "title")
 const pageShowAtom = atomWithStorage<ShowOption>("pageShow", 5)
+const isExpandedAtom = atomWithStorage("isPageSectionExpanded", true)
 
 export const PageSection: React.FC = () => {
-  const { me } = useAccount({
-    root: {
-      personalPages: [],
-    },
-  })
+  const { me } = useAccount({ root: { personalPages: [] } })
   const [sort] = useAtom(pageSortAtom)
   const [show] = useAtom(pageShowAtom)
+  const [isExpanded, setIsExpanded] = useAtom(isExpandedAtom)
 
   if (!me) return null
 
   const pageCount = me.root.personalPages?.length || 0
 
   return (
-    <div className="group/pages flex flex-col gap-px py-2">
-      <PageSectionHeader pageCount={pageCount} />
-      <PageList personalPages={me.root.personalPages} sort={sort} show={show} />
+    <div className="flex flex-col gap-px py-2">
+      <PageSectionHeader
+        pageCount={pageCount}
+        isExpanded={isExpanded}
+        onToggle={() => setIsExpanded(!isExpanded)}
+      />
+      {isExpanded && (
+        <PageList
+          personalPages={me.root.personalPages}
+          sort={sort}
+          show={show}
+        />
+      )}
     </div>
   )
 }
 
 interface PageSectionHeaderProps {
   pageCount: number
+  isExpanded: boolean
+  onToggle: () => void
 }
 
-const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({ pageCount }) => (
-  <Link
-    to="/pages"
+const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({
+  pageCount,
+  isExpanded,
+  onToggle,
+}) => (
+  <div
     className={cn(
-      "flex h-9 flex-1 items-center justify-start gap-px rounded-md px-2 py-1",
-      "hover:bg-accent hover:text-accent-foreground sm:h-[30px]",
+      "group/pages",
+      "relative flex h-7 cursor-default items-center gap-px rounded-md py-0 font-medium text-muted-foreground hover:bg-[var(--item-hover)] focus-visible:outline-none focus-visible:ring-0",
     )}
-    activeProps={{
-      className: "bg-accent text-accent-foreground",
-    }}
   >
-    <div className="flex grow items-center justify-between">
-      <p className="text-sm sm:text-xs">
-        Pages
-        {pageCount > 0 && (
-          <span className="text-muted-foreground ml-1">{pageCount}</span>
-        )}
-      </p>
+    <Button
+      variant="ghost"
+      className="h-7 w-full justify-start gap-1 px-2 py-0 text-xs hover:bg-inherit"
+      onClick={onToggle}
+    >
+      <span>Pages</span>
+      {pageCount > 0 && <span className="text-xs">({pageCount})</span>}
+      <ArrowIcon
+        className={cn("size-3 transition-transform duration-200 ease-in-out", {
+          "rotate-90": isExpanded,
+          "opacity-0 group-hover/pages:opacity-100": !isExpanded,
+        })}
+      />
+    </Button>
+    <div
+      className={cn(
+        "absolute right-1 top-1/2 -translate-y-1/2",
+        "transition-all duration-200 ease-in-out",
+        {
+          "opacity-100": isExpanded,
+        },
+      )}
+    >
       <div className="flex items-center gap-px">
         <ShowAllForm />
         <NewPageButton />
       </div>
     </div>
-  </Link>
+  </div>
 )
 
 const NewPageButton: React.FC = () => {
@@ -122,11 +149,11 @@ const NewPageButton: React.FC = () => {
       variant="ghost"
       aria-label="New Page"
       className={cn(
-        "flex size-5 items-center justify-center p-0.5 shadow-none",
-        "hover:bg-accent-foreground/10",
+        "flex size-5 cursor-default items-center justify-center p-0.5 shadow-none",
+        "text-muted-foreground hover:bg-inherit hover:text-foreground",
         "opacity-0 transition-opacity duration-200",
         "group-hover/pages:opacity-100 group-has-[[data-state='open']]/pages:opacity-100",
-        "data-[state='open']:opacity-100 focus-visible:outline-none focus-visible:ring-0",
+        "focus-visible:outline-none focus-visible:ring-0 data-[state='open']:opacity-100",
       )}
       onClick={handleClick}
     >
@@ -168,29 +195,31 @@ interface PageListItemProps {
 
 const PageListItem: React.FC<PageListItemProps> = ({ page }) => {
   return (
-    <div className="group/reorder-page relative">
-      <div className="group/sidebar-link relative flex min-w-0 flex-1">
-        <Link
-          to="/pages/$pageId"
-          params={{ pageId: page.id }}
-          className={cn(
-            "relative flex h-9 w-full items-center gap-2 rounded-md p-1.5 font-medium sm:h-8",
-            "group-hover/sidebar-link:bg-accent group-hover/sidebar-link:text-accent-foreground",
-          )}
-          activeOptions={{ exact: true }}
-          activeProps={{
-            className: "bg-accent text-accent-foreground",
-          }}
-        >
-          <div className="flex max-w-[calc(100%-1rem)] flex-1 items-center gap-1.5 truncate text-sm">
-            <LaIcon name="FileText" className="flex-shrink-0 opacity-60" />
-            <p className="truncate opacity-95 group-hover/sidebar-link:opacity-100">
-              {page.title || "Untitled"}
-            </p>
-          </div>
-        </Link>
-      </div>
-    </div>
+    <Link
+      to="/pages/$pageId"
+      params={{ pageId: page.id }}
+      className={cn(
+        "group/p cursor-default text-[var(--less-foreground)]",
+        "relative flex h-[30px] w-full items-center gap-2 rounded-md px-1.5 text-sm font-medium hover:bg-[var(--item-hover)]",
+      )}
+      activeProps={{
+        className:
+          "bg-[var(--item-active)] data-[status='active']:hover:bg-[var(--item-active)]",
+      }}
+    >
+      {({ isActive }) => (
+        <div className="flex max-w-full flex-1 items-center gap-1.5 truncate">
+          <LaIcon
+            name="File"
+            className={cn("flex-shrink-0 group-hover/p:text-foreground", {
+              "text-foreground": isActive,
+              "text-muted-foreground": !isActive,
+            })}
+          />
+          <p className="truncate">{page.title || "Untitled"}</p>
+        </div>
+      )}
+    </Link>
   )
 }
 
@@ -212,11 +241,11 @@ const SubMenu = <T extends string | number>({
   <DropdownMenuSub>
     <DropdownMenuSubTrigger>
       <span className="flex items-center gap-2">
-        <LaIcon name={icon} />
+        <LaIcon name={icon} className="" />
         <span>{label}</span>
       </span>
       <span className="ml-auto flex items-center gap-1">
-        <span className="text-muted-foreground text-xs">
+        <span className="text-sm text-muted-foreground">
           {options.find((option) => option.value === currentValue)?.label}
         </span>
         <LaIcon name="ChevronRight" />
@@ -251,11 +280,11 @@ const ShowAllForm: React.FC = () => {
           variant="ghost"
           size="sm"
           className={cn(
-            "flex size-5 items-center justify-center p-0.5 shadow-none",
-            "hover:bg-accent-foreground/10",
+            "flex size-5 cursor-default items-center justify-center p-0.5 shadow-none",
+            "text-muted-foreground hover:bg-inherit hover:text-foreground",
             "opacity-0 transition-opacity duration-200",
             "group-hover/pages:opacity-100 group-has-[[data-state='open']]/pages:opacity-100",
-            "data-[state='open']:opacity-100 focus-visible:outline-none focus-visible:ring-0",
+            "focus-visible:outline-none focus-visible:ring-0 data-[state='open']:opacity-100",
           )}
         >
           <LaIcon name="Ellipsis" />

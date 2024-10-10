@@ -115,15 +115,15 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
         data-disabled={disabled}
         data-active={isActive}
         className={cn(
-          "w-full overflow-visible border-b-[0.5px] border-transparent outline-none",
-          "data-[active='true']:bg-[var(--link-background-muted)] data-[keyboard-active='true']:focus-visible:shadow-[var(--link-shadow)_0px_0px_0px_1px_inset]",
+          "w-full cursor-default overflow-visible border-b-[0.5px] border-transparent outline-none",
+          "data-[active='true']:bg-[var(--link-background-muted-new)] data-[keyboard-active='true']:focus-visible:shadow-[var(--link-shadow)_0px_0px_0px_1px_inset]",
         )}
         onKeyDown={handleKeyDown}
       >
         <div
           className={cn(
             "w-full grow overflow-visible outline-none",
-            "flex items-center gap-x-2 py-2 max-lg:px-4 sm:px-5 sm:py-2",
+            "flex items-center gap-x-2 py-2 sm:px-5 sm:py-2 max-lg:px-4",
           )}
         >
           <Popover
@@ -137,8 +137,8 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
                 size="sm"
                 type="button"
                 role="combobox"
-                variant="secondary"
-                className="size-7 shrink-0 p-0"
+                variant="ghost"
+                className="size-7 shrink-0 cursor-default p-0 text-muted-foreground/75 hover:bg-inherit hover:text-foreground"
                 onClick={(e) => e.stopPropagation()}
                 onDoubleClick={(e) => e.stopPropagation()}
               >
@@ -148,7 +148,7 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
                     className={cn(selectedLearningState.className)}
                   />
                 ) : (
-                  <LaIcon name="Circle" />
+                  <LaIcon name="Circle" strokeWidth={2.5} />
                 )}
               </Button>
             </PopoverTrigger>
@@ -167,22 +167,22 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
           </Popover>
 
           <div className="flex min-w-0 flex-col items-start gap-y-1.5 overflow-hidden md:flex-row md:items-center md:gap-x-2">
-            <div className="flex items-center gap-x-1">
+            <div className="flex items-center gap-x-1.5">
               {personalLink.icon && (
                 <img
                   src={personalLink.icon as string}
                   alt={personalLink.title}
-                  className="size-5 shrink-0 rounded-full"
+                  className="size-4 shrink-0 rounded-full"
                   width={16}
                   height={16}
                 />
               )}
-              <p className="text-primary hover:text-primary line-clamp-1 text-sm font-medium">
+              <p className="line-clamp-1 text-sm font-medium text-primary hover:text-primary">
                 {personalLink.title}
               </p>
             </div>
             {personalLink.url && (
-              <div className="text-muted-foreground flex min-w-0 shrink items-center gap-x-1">
+              <div className="flex min-w-0 shrink items-center gap-x-1 text-muted-foreground">
                 <LaIcon
                   name="Link"
                   aria-hidden="true"
@@ -192,7 +192,7 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
                   to={ensureUrlProtocol(personalLink.url)}
                   target="_blank"
                   onClick={(e) => e.stopPropagation()}
-                  className="hover:text-primary mr-1 truncate text-xs"
+                  className="mr-1 truncate text-xs hover:text-primary"
                 >
                   {personalLink.url}
                 </Link>
@@ -204,14 +204,17 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
 
           <div className="flex shrink-0 items-center justify-end">
             {personalLink.topic && (
-              <Badge variant="secondary" className="border-muted-foreground/25">
+              <Badge
+                variant="secondary"
+                className="border-muted-foreground/25 font-medium"
+              >
                 {personalLink.topic.prettyName}
               </Badge>
             )}
           </div>
         </div>
 
-        <div className="relative h-[0.5px] w-full after:absolute after:left-0 after:right-0 after:block after:h-full after:bg-[var(--link-border-after)]"></div>
+        <div className="relative h-[0.5px] w-full after:absolute after:left-0 after:right-0 after:block after:h-full after:bg-[var(--la-border-new)]"></div>
       </div>
     )
   },

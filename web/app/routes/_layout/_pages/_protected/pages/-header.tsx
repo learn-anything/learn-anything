@@ -24,7 +24,7 @@ export const PageHeader: React.FC<PageHeaderProps> = React.memo(() => {
   }
 
   return (
-    <ContentHeader className="px-6 py-4 max-lg:px-4">
+    <ContentHeader>
       <HeaderTitle />
       <div className="flex flex-auto" />
       <NewPageButton onClick={handleNewPageClick} />

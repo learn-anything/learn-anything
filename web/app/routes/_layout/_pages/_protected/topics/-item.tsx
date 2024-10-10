@@ -142,8 +142,8 @@ export const TopicItem = React.forwardRef<HTMLAnchorElement, TopicItemProps>(
         tabIndex={isActive ? 0 : -1}
         className={cn(
           "relative block cursor-default outline-none",
-          "min-h-12 py-2 max-lg:px-4 sm:px-6",
-          "data-[active='true']:bg-[var(--link-background-muted)] data-[keyboard-active='true']:focus-visible:shadow-[var(--link-shadow)_0px_0px_0px_1px_inset]",
+          "min-h-12 py-2 sm:px-6 max-lg:px-4",
+          "data-[active='true']:bg-[var(--link-background-muted-new)] data-[keyboard-active='true']:focus-visible:shadow-[var(--link-shadow)_0px_0px_0px_1px_inset]",
         )}
         aria-selected={isActive}
         data-active={isActive}
@@ -155,7 +155,7 @@ export const TopicItem = React.forwardRef<HTMLAnchorElement, TopicItemProps>(
           tabIndex={isActive ? 0 : -1}
         >
           <Column.Wrapper style={columnStyles.title}>
-            <Column.Text className="truncate text-[13px] font-medium">
+            <Column.Text className="truncate text-sm font-medium">
               {topic.prettyName}
             </Column.Text>
           </Column.Wrapper>

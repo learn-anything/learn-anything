@@ -35,7 +35,7 @@ export const NotesSection: React.FC = () => {
                 autoComplete="off"
                 placeholder="Notes"
                 className={cn(
-                  "placeholder:text-muted-foreground/70 border-none pl-8 shadow-none focus-visible:ring-0",
+                  "border-none pl-8 shadow-none placeholder:text-muted-foreground/70 focus-visible:ring-0",
                 )}
               />
             </>

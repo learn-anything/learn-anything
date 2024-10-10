@@ -31,7 +31,7 @@ export const TitleInput: React.FC<TitleInputProps> = ({ urlFetched }) => {
               maxLength={100}
               autoFocus
               placeholder="Title"
-              className="placeholder:text-muted-foreground/70 h-8 border-none p-1.5 text-[15px] font-semibold shadow-none focus-visible:ring-0"
+              className="h-8 border-none p-1.5 text-[15px] font-semibold shadow-none placeholder:text-muted-foreground/70 focus-visible:ring-0"
             />
           </FormControl>
         </FormItem>

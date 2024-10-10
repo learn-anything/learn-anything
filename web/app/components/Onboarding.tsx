@@ -42,7 +42,7 @@ export function Onboarding() {
         </AlertDialogHeader>
 
         <AlertDialogDescription asChild>
-          <div className="text-foreground/70 space-y-4 text-base leading-5">
+          <div className="space-y-4 text-base leading-5 text-foreground/70">
             <p>
               Learn Anything is a learning platform that organizes knowledge in
               a social way. You can create pages, add links, track learning
