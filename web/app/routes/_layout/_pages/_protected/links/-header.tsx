@@ -36,11 +36,11 @@ export const LinkHeader = React.memo(() => {
 
   return (
     <>
-      <ContentHeader className="px-6 max-lg:px-4 lg:py-4">
+      <ContentHeader className="px-6 max-lg:px-4 lg:py-3">
         <div className="flex min-w-0 shrink-0 items-center gap-1.5">
           <SidebarToggleButton />
           <div className="flex min-h-0 items-center">
-            <span className="truncate text-left font-bold lg:text-xl">
+            <span className="truncate text-left font-bold lg:text-lg">
               Links
             </span>
           </div>
@@ -89,10 +89,10 @@ const LearningTab = React.memo(() => {
         handleTabChange(value as string)
       }}
       options={ALL_STATES}
-      className="bg-muted flex rounded-lg"
-      highlighterClassName="bg-muted-foreground/10 rounded-md"
+      className="bg-muted flex rounded-md"
+      highlighterClassName="bg-muted-foreground/10 rounded"
       radioClassName={cn(
-        "relative mx-2 flex h-8 cursor-pointer items-center justify-center rounded-full px-1 text-sm text-secondary-foreground/60 data-[checked]:text-secondary-foreground font-medium transition-colors focus:outline-none",
+        "relative mx-2 flex h-7 cursor-pointer items-center justify-center rounded-full px-1 text-[13px] text-muted-foreground data-[checked]:text-foreground transition-colors focus:outline-none",
       )}
       highlighterIncludeMargin={true}
     />

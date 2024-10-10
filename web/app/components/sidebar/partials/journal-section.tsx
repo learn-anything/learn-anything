@@ -104,7 +104,7 @@ const JournalEntryItem: React.FC<JournalEntryItemProps> = ({ entry }) => (
     href={`/journal/${entry.id}`}
     className="group/journal-entry relative flex min-w-0 flex-1"
   >
-    <div className="relative flex h-8 w-full items-center gap-2 rounded-md p-1.5 font-medium">
+    <div className="relative flex h-[30px] w-full items-center gap-2 rounded-md p-1.5 font-medium">
       <div className="flex max-w-full flex-1 items-center gap-1.5 truncate text-sm">
         <LaIcon name="FileText" className="opacity-60" />
         <p

@@ -30,7 +30,7 @@ const LinkSectionHeader: React.FC<LinkSectionHeaderProps> = ({ linkCount }) => {
     <Link
       to="/links"
       className={cn(
-        "flex h-8 items-center gap-px rounded-md px-2 text-[13px] font-medium hover:bg-[var(--item-hover)] focus-visible:outline-none focus-visible:ring-0 sm:h-7",
+        "flex h-[30px] items-center gap-px rounded-md px-2 text-[13px] font-medium hover:bg-[var(--item-hover)] focus-visible:outline-none focus-visible:ring-0 ",
       )}
       activeProps={{
         className:
@@ -112,7 +112,7 @@ const LinkListItem: React.FC<LinkListItemProps> = ({ label, state, count }) => (
       to="/links"
       search={{ state }}
       className={cn(
-        "relative flex h-8 w-full text-[13px] items-center gap-2 rounded-md px-1.5 font-medium hover:bg-[var(--item-hover)] sm:h-7",
+        "relative flex h-[30px] w-full text-[13px] items-center gap-2 rounded-md px-1.5 font-medium hover:bg-[var(--item-hover)] ",
       )}
       activeProps={{
         className:

@@ -115,7 +115,7 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
         data-disabled={disabled}
         data-active={isActive}
         className={cn(
-          "w-full overflow-visible border-b-[0.5px] border-transparent outline-none",
+          "w-full cursor-default overflow-visible border-b-[0.5px] border-transparent outline-none",
           "data-[active='true']:bg-[var(--link-background-muted-new)] data-[keyboard-active='true']:focus-visible:shadow-[var(--link-shadow)_0px_0px_0px_1px_inset]",
         )}
         onKeyDown={handleKeyDown}
@@ -137,8 +137,8 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
                 size="sm"
                 type="button"
                 role="combobox"
-                variant="secondary"
-                className="size-7 shrink-0 p-0"
+                variant="ghost"
+                className="size-7 shrink-0 p-0 cursor-default text-muted-foreground/50 hover:text-foreground hover:bg-inherit"
                 onClick={(e) => e.stopPropagation()}
                 onDoubleClick={(e) => e.stopPropagation()}
               >
@@ -148,7 +148,7 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
                     className={cn(selectedLearningState.className)}
                   />
                 ) : (
-                  <LaIcon name="Circle" />
+                  <LaIcon name="Circle" strokeWidth={2.5} />
                 )}
               </Button>
             </PopoverTrigger>
@@ -167,17 +167,17 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
           </Popover>
 
           <div className="flex min-w-0 flex-col items-start gap-y-1.5 overflow-hidden md:flex-row md:items-center md:gap-x-2">
-            <div className="flex items-center gap-x-1">
+            <div className="flex items-center gap-x-1.5">
               {personalLink.icon && (
                 <img
                   src={personalLink.icon as string}
                   alt={personalLink.title}
-                  className="size-5 shrink-0 rounded-full"
+                  className="size-4 shrink-0 rounded-full"
                   width={16}
                   height={16}
                 />
               )}
-              <p className="text-primary hover:text-primary line-clamp-1 text-sm font-medium">
+              <p className="text-primary hover:text-primary line-clamp-1 text-[13px] font-medium">
                 {personalLink.title}
               </p>
             </div>
@@ -204,7 +204,10 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
 
           <div className="flex shrink-0 items-center justify-end">
             {personalLink.topic && (
-              <Badge variant="secondary" className="border-muted-foreground/25">
+              <Badge
+                variant="secondary"
+                className="border-muted-foreground/25 font-medium"
+              >
                 {personalLink.topic.prettyName}
               </Badge>
             )}

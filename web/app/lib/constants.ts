@@ -28,13 +28,13 @@ export const LEARNING_STATES: LearningState[] = [
     label: "Learning",
     value: "learning",
     icon: "GraduationCap",
-    className: "text-[#D29752]",
+    className: "text-yellow-600 hover:text-yellow-700",
   },
   {
     label: "Learned",
     value: "learned",
     icon: "Check",
-    className: "text-[#708F51]",
+    className: "text-green-700 hover:text-green-800",
   },
 ] as const
 

@@ -44,58 +44,88 @@ const SHOWS: Option<ShowOption>[] = [
 
 const pageSortAtom = atomWithStorage<SortOption>("pageSort", "title")
 const pageShowAtom = atomWithStorage<ShowOption>("pageShow", 5)
+const isExpandedAtom = atomWithStorage("isPageSectionExpanded", true)
 
 export const PageSection: React.FC = () => {
-  const { me } = useAccount({
-    root: {
-      personalPages: [],
-    },
-  })
+  const { me } = useAccount({ root: { personalPages: [] } })
   const [sort] = useAtom(pageSortAtom)
   const [show] = useAtom(pageShowAtom)
+  const [isExpanded, setIsExpanded] = useAtom(isExpandedAtom)
 
   if (!me) return null
 
   const pageCount = me.root.personalPages?.length || 0
 
   return (
-    <div className="group/pages flex flex-col gap-px py-2">
-      <PageSectionHeader pageCount={pageCount} />
-      <PageList personalPages={me.root.personalPages} sort={sort} show={show} />
+    <div className="flex flex-col gap-px py-2">
+      <PageSectionHeader
+        pageCount={pageCount}
+        isExpanded={isExpanded}
+        onToggle={() => setIsExpanded(!isExpanded)}
+      />
+      {isExpanded && (
+        <PageList
+          personalPages={me.root.personalPages}
+          sort={sort}
+          show={show}
+        />
+      )}
     </div>
   )
 }
 
 interface PageSectionHeaderProps {
   pageCount: number
+  isExpanded: boolean
+  onToggle: () => void
 }
 
-const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({ pageCount }) => (
-  <Link
-    to="/pages"
+const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({
+  pageCount,
+  isExpanded,
+  onToggle,
+}) => (
+  <div
+    role="button"
     className={cn(
-      "flex h-8 items-center cursor-default gap-px rounded-md px-2 text-xs text-muted-foreground font-medium hover:bg-[var(--item-hover)] focus-visible:outline-none focus-visible:ring-0 sm:h-7",
+      "group/pages",
+      "flex h-7 relative items-center cursor-default py-0 gap-px rounded-md px-2 text-xs text-muted-foreground font-medium hover:bg-[var(--item-hover)] focus-visible:outline-none focus-visible:ring-0",
     )}
-    activeProps={{
-      className:
-        "bg-[var(--item-active)] data-[status='active']:hover:bg-[var(--item-active)]",
-    }}
+    onClick={onToggle}
   >
     <div className="flex grow items-center justify-between">
-      <div>
-        <span>Pages&nbsp;</span>
+      <div className="flex items-center gap-1">
+        <span>Pages</span>
         {pageCount > 0 && (
-          <span className={cn("text-xs text-muted-foreground")}>
-            ({pageCount})
-          </span>
+          <span className="text-xs text-muted-foreground">({pageCount})</span>
         )}
+        <LaIcon
+          name="ChevronRight"
+          className={cn(
+            "size-3.5 transition-transform duration-200 ease-in-out",
+            {
+              "rotate-90": isExpanded,
+              "opacity-0 group-hover/pages:opacity-100": !isExpanded,
+            },
+          )}
+        />
       </div>
-      <div className="flex items-center gap-px">
-        <ShowAllForm />
-        <NewPageButton />
+      <div
+        className={cn(
+          "absolute right-1 top-1/2 -translate-y-1/2",
+          "transition-all duration-200 ease-in-out",
+          {
+            "opacity-100": isExpanded,
+          },
+        )}
+      >
+        <div className="flex items-center gap-px">
+          <ShowAllForm />
+          <NewPageButton />
+        </div>
       </div>
     </div>
-  </Link>
+  </div>
 )
 
 const NewPageButton: React.FC = () => {
@@ -175,7 +205,7 @@ const PageListItem: React.FC<PageListItemProps> = ({ page }) => {
       params={{ pageId: page.id }}
       className={cn(
         "group/p cursor-default text-[var(--less-foreground)]",
-        "relative flex h-8 w-full text-[13px] items-center gap-2 rounded-md px-1.5 font-medium hover:bg-[var(--item-hover)] sm:h-7",
+        "relative flex h-[30px] w-full text-[13px] items-center gap-2 rounded-md px-1.5 font-medium hover:bg-[var(--item-hover)] ",
       )}
       activeProps={{
         className:
@@ -219,7 +249,7 @@ const SubMenu = <T extends string | number>({
   <DropdownMenuSub>
     <DropdownMenuSubTrigger>
       <span className="flex items-center gap-2">
-        <LaIcon name={icon} />
+        <LaIcon name={icon} className="size-3.5" />
         <span>{label}</span>
       </span>
       <span className="ml-auto flex items-center gap-1">
