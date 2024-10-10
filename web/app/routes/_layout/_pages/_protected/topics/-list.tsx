@@ -94,7 +94,7 @@ export const MainTopicList: React.FC<MainTopicListProps> = ({ me }) => {
   })
 
   return (
-    <div className="flex h-full w-full flex-col overflow-hidden border-t">
+    <div className="flex h-full w-full flex-col overflow-hidden">
       {!isTablet && <ColumnHeader />}
       <Primitive.div
         className="divide-primary/5 flex flex-1 flex-col divide-y overflow-y-auto outline-none [scrollbar-gutter:stable]"

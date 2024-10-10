@@ -98,9 +98,7 @@ const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({
       onClick={onToggle}
     >
       <span>Pages</span>
-      {pageCount > 0 && (
-        <span className="text-xs text-muted-foreground">({pageCount})</span>
-      )}
+      {pageCount > 0 && <span className="text-xs">({pageCount})</span>}
       <ArrowIcon
         className={cn("size-3 transition-transform duration-200 ease-in-out", {
           "rotate-90": isExpanded,
