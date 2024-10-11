@@ -50,14 +50,15 @@ export const getMetadata = createServerFn("GET", async (url: string) => {
     })
   }
 
-  const result = urlSchema.safeParse(url)
+  const result = urlSchema.safeParse(decodeURIComponent(url))
+
   if (!result.success) {
     throw new Error(
       result.error.issues.map((issue) => issue.message).join(", "),
     )
   }
 
-  url = ensureUrlProtocol(url)
+  url = ensureUrlProtocol(decodeURIComponent(url))
 
   try {
     const response = await fetch(url, {
