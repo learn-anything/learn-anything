@@ -1,11 +1,10 @@
-import { co, CoList, CoMap, Encoders } from "jazz-tools"
+import { co, CoList, Encoders } from "jazz-tools"
+import { BaseModel } from "./base"
 
-export class JournalEntry extends CoMap {
+export class JournalEntry extends BaseModel {
   title = co.string
   content = co.json()
   date = co.encoded(Encoders.Date)
-  createdAt = co.encoded(Encoders.Date)
-  updatedAt = co.encoded(Encoders.Date)
 }
 
 export class JournalEntryLists extends CoList.Of(co.ref(JournalEntry)) {}

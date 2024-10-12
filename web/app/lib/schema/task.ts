@@ -1,11 +1,10 @@
-import { co, CoList, CoMap, Encoders } from "jazz-tools"
+import { co, CoList, Encoders } from "jazz-tools"
+import { BaseModel } from "./base"
 
-export class Task extends CoMap {
+export class Task extends BaseModel {
   title = co.string
   description = co.optional.string
   status = co.literal("todo", "in_progress", "done")
-  createdAt = co.encoded(Encoders.Date)
-  updatedAt = co.encoded(Encoders.Date)
   dueDate = co.optional.encoded(Encoders.Date)
 }
 
