@@ -1,13 +1,13 @@
 import * as React from "react"
 import { useKeyDown, KeyFilter, Options } from "@/hooks/use-key-down"
 import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
-import { isModKey, isServer } from "@/lib/utils"
 import { useAtom } from "jotai"
 import { usePageActions } from "~/hooks/actions/use-page-actions"
 import { useAuth } from "@clerk/tanstack-start"
 import { useNavigate } from "@tanstack/react-router"
 import queryString from "query-string"
 import { commandPaletteOpenAtom } from "~/store/any-store"
+import { isModKey, isServer } from "@shared/utils"
 
 type RegisterKeyDownProps = {
   trigger: KeyFilter

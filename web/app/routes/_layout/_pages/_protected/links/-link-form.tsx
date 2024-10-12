@@ -19,7 +19,8 @@ import { DescriptionInput } from "./-description-input"
 import { UrlBadge } from "./-url-badge"
 import { NotesSection } from "./-notes-section"
 import { useOnClickOutside } from "~/hooks/use-on-click-outside"
-import TopicSelector, {
+import {
+  TopicSelector,
   topicSelectorAtom,
 } from "~/components/custom/topic-selector"
 import { createServerFn } from "@tanstack/start"
@@ -50,14 +51,15 @@ export const getMetadata = createServerFn("GET", async (url: string) => {
     })
   }
 
-  const result = urlSchema.safeParse(url)
+  const result = urlSchema.safeParse(decodeURIComponent(url))
+
   if (!result.success) {
     throw new Error(
       result.error.issues.map((issue) => issue.message).join(", "),
     )
   }
 
-  url = ensureUrlProtocol(url)
+  url = ensureUrlProtocol(decodeURIComponent(url))
 
   try {
     const response = await fetch(url, {

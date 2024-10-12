@@ -1,4 +1,4 @@
-import { isServer } from "."
+import { isServer } from "@shared/utils"
 
 interface ShortcutKeyResult {
   symbol: string
