@@ -15,14 +15,14 @@ import { Button } from "@/components/ui/button"
 import { LaIcon } from "@/components/custom/la-icon"
 import { useConfirm } from "@omit/react-confirm-dialog"
 import { usePageActions } from "~/hooks/actions/use-page-actions"
-import { Paragraph } from "@shared/la-editor/extensions/paragraph"
-import { StarterKit } from "@shared/la-editor/extensions/starter-kit"
-import { LAEditor, LAEditorRef } from "@shared/la-editor"
+import { Paragraph } from "@shared/editor/extensions/paragraph"
+import { StarterKit } from "@shared/editor/extensions/starter-kit"
+import { LaEditor } from "@shared/editor"
 
 export const Route = createFileRoute(
   "/_layout/_pages/_protected/pages/$pageId/",
 )({
-  component: () => <PageDetailComponent />,
+  component: PageDetailComponent,
 })
 
 const TITLE_PLACEHOLDER = "Untitled"
@@ -73,20 +73,22 @@ function PageDetailComponent() {
   )
 }
 
-const SidebarActions = ({
-  page,
-  handleDelete,
-}: {
-  page: PersonalPage
-  handleDelete: () => void
-}) => (
-  <div className="relative min-w-56 max-w-72 border-l">
-    <div className="flex">
-      <div className="flex h-10 flex-auto flex-row items-center justify-between px-5">
-        <span className="text-left text-[13px] font-medium">Page actions</span>
-      </div>
-      <div className="absolute bottom-0 left-0 right-0 top-10 space-y-3 overflow-y-auto px-4 py-1.5">
-        <div className="flex flex-row">
+const SidebarActions = React.memo(
+  ({
+    page,
+    handleDelete,
+  }: {
+    page: PersonalPage
+    handleDelete: () => void
+  }) => (
+    <div className="relative min-w-56 max-w-72 border-l bg-[var(--body-background)]">
+      <div className="flex">
+        <div className="flex h-10 flex-auto flex-row items-center justify-between px-5">
+          <span className="text-left text-[13px] font-medium text-muted-foreground">
+            Page actions
+          </span>
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 top-10 space-y-3 overflow-y-auto px-4 py-1.5">
           <TopicSelector
             value={page.topic?.name}
             onTopicChange={(topic) => {
@@ -101,52 +103,40 @@ const SidebarActions = ({
               </span>
             )}
           />
-        </div>
-        <div className="flex flex-row">
           <Button
             size="sm"
             variant="ghost"
             onClick={handleDelete}
             className="-ml-1.5"
           >
-            <LaIcon name="Trash" className="mr-2 size-3.5" />
+            <LaIcon name="Trash" className="mr-2" />
             <span className="text-sm">Delete</span>
           </Button>
         </div>
       </div>
     </div>
-  </div>
+  ),
 )
 
-const DetailPageForm = ({ page }: { page: PersonalPage }) => {
+SidebarActions.displayName = "SidebarActions"
+
+const DetailPageForm = React.memo(({ page }: { page: PersonalPage }) => {
   const titleEditorRef = React.useRef<Editor | null>(null)
-  const contentEditorRef = React.useRef<LAEditorRef>(null)
-  const isTitleInitialMount = React.useRef(true)
-  const isContentInitialMount = React.useRef(true)
-  const isInitialFocusApplied = React.useRef(false)
+  const contentEditorRef = React.useRef<Editor | null>(null)
 
   const updatePageContent = React.useCallback(
-    (content: Content, model: PersonalPage) => {
-      if (isContentInitialMount.current) {
-        isContentInitialMount.current = false
-        return
-      }
-      model.content = content
-      model.updatedAt = new Date()
+    (content: Content) => {
+      page.content = content
+      page.updatedAt = new Date()
     },
-    [],
+    [page],
   )
 
   const handleUpdateTitle = React.useCallback(
     (editor: Editor) => {
-      if (isTitleInitialMount.current) {
-        isTitleInitialMount.current = false
-        return
-      }
-
       const newTitle = editor.getText()
       if (newTitle !== page.title) {
-        const slug = generateUniqueSlug(page.title?.toString() || "")
+        const slug = generateUniqueSlug(newTitle || "")
         page.title = newTitle
         page.slug = slug
         page.updatedAt = new Date()
@@ -164,22 +154,18 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
       const { selection } = state
       const { $anchor } = selection
 
-      switch (event.key) {
-        case "ArrowRight":
-        case "ArrowDown":
-          if ($anchor.pos === state.doc.content.size - 1) {
-            event.preventDefault()
-            contentEditorRef.current?.editor?.commands.focus("start")
-            return true
-          }
-          break
-        case "Enter":
-          if (!event.shiftKey) {
-            event.preventDefault()
-            contentEditorRef.current?.editor?.commands.focus("start")
-            return true
-          }
-          break
+      if (
+        (event.key === "ArrowRight" || event.key === "ArrowDown") &&
+        $anchor.pos === state.doc.content.size - 1
+      ) {
+        event.preventDefault()
+        contentEditorRef.current?.commands.focus("start")
+        return true
+      }
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault()
+        contentEditorRef.current?.commands.focus("start")
+        return true
       }
       return false
     },
@@ -188,7 +174,7 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
 
   const handleContentKeyDown = React.useCallback(
     (view: EditorView, event: KeyboardEvent) => {
-      const editor = contentEditorRef.current?.editor
+      const editor = contentEditorRef.current
       if (!editor) return false
 
       const { state } = editor
@@ -239,34 +225,21 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
     },
     onCreate: ({ editor }) => {
       if (page.title) editor.commands.setContent(`<p>${page.title}</p>`)
+      titleEditorRef.current = editor
     },
     onBlur: ({ editor }) => handleUpdateTitle(editor),
     onUpdate: ({ editor }) => handleUpdateTitle(editor),
   })
 
-  React.useEffect(() => {
-    if (titleEditor) {
-      titleEditorRef.current = titleEditor
-    }
-  }, [titleEditor])
-
-  React.useEffect(() => {
-    isTitleInitialMount.current = true
-    isContentInitialMount.current = true
-
-    if (
-      !isInitialFocusApplied.current &&
-      titleEditor &&
-      contentEditorRef.current?.editor
-    ) {
-      isInitialFocusApplied.current = true
-      if (!page.title) {
-        titleEditor?.commands.focus()
-      } else {
-        contentEditorRef.current.editor.commands.focus()
+  const handleCreate = React.useCallback(
+    ({ editor }: { editor: Editor }) => {
+      if (page.content) {
+        editor.commands.setContent(page.content as Content)
       }
-    }
-  }, [page.title, titleEditor])
+      contentEditorRef.current = editor
+    },
+    [page.content],
+  )
 
   return (
     <div className="relative flex grow flex-col overflow-y-auto [scrollbar-gutter:stable]">
@@ -275,21 +248,21 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
           <div className="mb-2 mt-8 py-1.5">
             <EditorContent
               editor={titleEditor}
-              className="la-editor no-command grow cursor-text select-text text-2xl font-semibold leading-[calc(1.33333)] tracking-[-0.00625rem]"
+              className="title-editor no-command grow cursor-text select-text text-2xl font-semibold leading-[calc(1.33333)] tracking-[-0.00625rem]"
             />
           </div>
           <div className="flex flex-auto flex-col">
             <div className="relative flex h-full max-w-full grow flex-col items-stretch p-0">
-              <LAEditor
-                ref={contentEditorRef}
+              <LaEditor
                 editorClassName="-mx-3.5 px-3.5 py-2.5 flex-auto focus:outline-none"
-                value={page.content}
+                value={page.content as Content}
                 placeholder="Add content..."
                 output="json"
                 throttleDelay={3000}
-                onUpdate={(c) => updatePageContent(c, page)}
-                handleKeyDown={handleContentKeyDown}
-                onBlur={(c) => updatePageContent(c, page)}
+                editorProps={{ handleKeyDown: handleContentKeyDown }}
+                onCreate={handleCreate}
+                onUpdate={updatePageContent}
+                onBlur={updatePageContent}
               />
             </div>
           </div>
@@ -297,4 +270,6 @@ const DetailPageForm = ({ page }: { page: PersonalPage }) => {
       </div>
     </div>
   )
-}
+})
+
+DetailPageForm.displayName = "DetailPageForm"

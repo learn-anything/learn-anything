@@ -113,7 +113,7 @@ const ImageEditBlock = ({
           onChange={handleFile}
         />
         {error && (
-          <div className="text-destructive text-sm bg-destructive/10 p-2 rounded">
+          <div className="rounded bg-destructive/10 p-2 text-sm text-destructive">
             {error}
           </div>
         )}

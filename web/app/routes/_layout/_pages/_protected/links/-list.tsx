@@ -27,12 +27,12 @@ import { linkSortAtom } from "@/store/link"
 import { LinkItem } from "./-item"
 import { useConfirm } from "@omit/react-confirm-dialog"
 import { useKeyDown } from "@/hooks/use-key-down"
-import { isModKey } from "@/lib/utils"
 import { useTouchSensor } from "~/hooks/use-touch-sensor"
 import { useActiveItemScroll } from "~/hooks/use-active-item-scroll"
 import { isDeleteConfirmShownAtom } from "."
 import { useLinkActions } from "~/hooks/actions/use-link-actions"
 import { useNavigate, useSearch } from "@tanstack/react-router"
+import { isModKey } from "@shared/utils"
 
 interface LinkListProps {}
 

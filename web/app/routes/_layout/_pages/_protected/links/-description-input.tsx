@@ -27,7 +27,7 @@ export const DescriptionInput: React.FC<DescriptionInputProps> = () => {
                 {...field}
                 autoComplete="off"
                 placeholder="Description"
-                className="placeholder:text-muted-foreground/70 resize-none overflow-y-auto border-none p-1.5 text-[13px] font-medium shadow-none focus-visible:ring-0"
+                className="resize-none overflow-y-auto border-none p-1.5 text-sm font-medium shadow-none placeholder:text-muted-foreground/70 focus-visible:ring-0"
               />
             </FormControl>
           </FormItem>

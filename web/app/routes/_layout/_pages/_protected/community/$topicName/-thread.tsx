@@ -106,7 +106,7 @@ export function QuestionThread({ question, onClose }: QuestionThreadProps) {
         >
           <div className="flex items-center justify-between pb-1">
             <div className="flex items-center">
-              <div className="bg-accent mr-2 h-6 w-6 rounded-full"></div>
+              <div className="mr-2 h-6 w-6 rounded-full bg-accent"></div>
               <span className="text-sm">{answer.author}</span>
             </div>
             <div className="flex items-center">
@@ -147,16 +147,16 @@ export function QuestionThread({ question, onClose }: QuestionThreadProps) {
   )
 
   return (
-    <div className="border-accent bg-background fixed bottom-0 right-0 top-0 z-50 flex h-full w-[40%] flex-col border-l">
-      <div className="border-accent flex w-full justify-between border-b p-4">
+    <div className="fixed bottom-0 right-0 top-0 z-50 flex h-full w-[40%] flex-col border-l border-accent bg-background">
+      <div className="flex w-full justify-between border-b border-accent p-4">
         <div className="flex w-full flex-col">
           <div className="mb-2 flex w-full items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="bg-accent h-8 w-8 rounded-full"></div>
+              <div className="h-8 w-8 rounded-full bg-accent"></div>
               <h2 className="opacity-70">{question.author}</h2>
             </div>
             <button
-              className="bg-accent rounded-full p-1.5 opacity-50 hover:opacity-80"
+              className="rounded-full bg-accent p-1.5 opacity-50 hover:opacity-80"
               onClick={onClose}
             >
               <LaIcon name="X" className="text-primary" />
@@ -167,7 +167,7 @@ export function QuestionThread({ question, onClose }: QuestionThreadProps) {
         </div>
       </div>
       <div className="flex-grow overflow-y-auto">{renderAnswers(answers)}</div>
-      <div className="border-accent border-t p-4">
+      <div className="border-t border-accent p-4">
         <form className="relative" onSubmit={sendAnswer}>
           <div className="relative flex items-center">
             <input
@@ -176,7 +176,7 @@ export function QuestionThread({ question, onClose }: QuestionThreadProps) {
               value={newAnswer}
               onChange={changeInput}
               placeholder="Answer the question..."
-              className="bg-input w-full rounded p-2 text-opacity-70 placeholder:text-opacity-50 focus:outline-none focus:ring-0"
+              className="w-full rounded bg-input p-2 text-opacity-70 placeholder:text-opacity-50 focus:outline-none focus:ring-0"
             />
           </div>
           <button className="absolute right-2 top-1/2 -translate-y-1/2 transform opacity-50 hover:opacity-90">

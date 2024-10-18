@@ -60,7 +60,7 @@ const StepItem = ({
   done: boolean
 }) => (
   <div className="flex items-start space-x-4 py-4">
-    <div className="border-foreground/20 w-6 flex-shrink-0 items-center justify-center rounded-3xl border text-center opacity-70">
+    <div className="w-6 flex-shrink-0 items-center justify-center rounded-3xl border border-foreground/20 text-center opacity-70">
       {number}
     </div>
     <div className="flex-grow space-y-2">

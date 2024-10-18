@@ -10,13 +10,19 @@ import { LearningStateValue } from "@/lib/constants"
 import { useMedia } from "@/hooks/use-media"
 import { useClerk } from "@clerk/tanstack-start"
 import { useLocation } from "@tanstack/react-router"
+import { Input } from "~/components/ui/input"
+import { LaIcon } from "~/components/custom/la-icon"
 
 interface TopicDetailHeaderProps {
   topic: Topic
+  searchQuery: string
+  setSearchQuery: (query: string) => void
 }
 
 export const TopicDetailHeader = React.memo(function TopicDetailHeader({
   topic,
+  searchQuery,
+  setSearchQuery,
 }: TopicDetailHeaderProps) {
   const clerk = useClerk()
   const { pathname } = useLocation()
@@ -111,28 +117,51 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({
     topicLists[learningState]?.push(topic)
   }
 
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value)
+  }
+
   return (
-    <ContentHeader className="px-6 py-5 max-lg:px-4">
-      <div className="flex min-w-0 flex-1 items-center gap-1.5">
-        <SidebarToggleButton />
-        <div className="flex min-h-0 min-w-0 flex-1 items-center">
-          <h1 className="truncate text-left font-bold lg:text-xl">
-            {topic.prettyName}
-          </h1>
+    <>
+      <ContentHeader>
+        <div className="flex min-w-0 flex-1 items-center gap-1.5">
+          <SidebarToggleButton />
+          <div className="flex min-h-0 min-w-0 flex-1 items-center">
+            <h1 className="truncate text-left font-semibold lg:text-lg">
+              {topic.prettyName}
+            </h1>
+          </div>
+        </div>
+
+        <div className="flex flex-auto"></div>
+        {/* <GuideCommunityToggle topicName={topic.name} /> */}
+
+        <LearningStateSelector
+          showSearch={false}
+          value={p?.learningState || ""}
+          onChange={handleAddToProfile}
+          defaultLabel={isMobile ? "" : "Add to profile"}
+          defaultIcon="Circle"
+        />
+      </ContentHeader>
+      <div className="flex min-h-10 flex-row items-center justify-between border-b border-b-[var(--la-border-new)] px-6 py-2 max-lg:px-4">
+        <div className="flex flex-1 flex-row items-center gap-2">
+          <span className="text-tertiary flex h-5 w-5 items-center justify-center">
+            <LaIcon name="Search" className="text-muted-foreground" />
+          </span>
+          <Input
+            className="h-6 flex-1 border-none bg-transparent p-0 focus-visible:ring-0"
+            placeholder="Search..."
+            role="searchbox"
+            autoComplete="off"
+            autoCorrect="off"
+            spellCheck={false}
+            value={searchQuery}
+            onChange={handleSearchChange}
+          />
         </div>
       </div>
-
-      <div className="flex flex-auto"></div>
-      {/* <GuideCommunityToggle topicName={topic.name} /> */}
-
-      <LearningStateSelector
-        showSearch={false}
-        value={p?.learningState || ""}
-        onChange={handleAddToProfile}
-        defaultLabel={isMobile ? "" : "Add to profile"}
-        defaultIcon="Circle"
-      />
-    </ContentHeader>
+    </>
   )
 })
 

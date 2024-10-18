@@ -1,0 +1,18 @@
+[data-theme="slash-command"] {
+  width: 1000vw;
+}
+
+.la-editor .ProseMirror .is-empty::before {
+  @apply pointer-events-none float-left h-0 w-full text-[var(--la-secondary)];
+}
+
+.la-editor:not(.no-command)
+  .ProseMirror.ProseMirror-focused
+  > p.has-focus.is-empty::before {
+  content: "Type / for commands...";
+}
+
+.la-editor .ProseMirror > p.is-editor-empty::before {
+  content: attr(data-placeholder);
+  @apply pointer-events-none float-left h-0 text-[var(--la-secondary)];
+}

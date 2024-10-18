@@ -56,6 +56,7 @@ export const ProfileSection: React.FC = () => {
           signOut={signOut}
           setShowShortcut={setShowShortcut}
         />
+        <span className="flex flex-auto"></span>
         <Feedback />
       </div>
     </div>
@@ -83,12 +84,12 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({
         <Button
           variant="ghost"
           aria-label="Profile"
-          className="hover:bg-accent focus-visible:ring-ring hover:text-accent-foreground flex h-auto items-center gap-1.5 truncate rounded py-1 pl-1 pr-1.5 focus-visible:outline-none focus-visible:ring-1"
+          className="flex h-auto items-center gap-1.5 truncate rounded py-1 pl-1 pr-1.5 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
         >
           <Avatar className="size-6">
             <AvatarImage src={user.imageUrl} alt={user.fullName || ""} />
           </Avatar>
-          <span className="truncate text-left text-sm font-medium -tracking-wider">
+          <span className="truncate text-left text-sm font-medium -tracking-wide">
             {user.fullName}
           </span>
           <LaIcon

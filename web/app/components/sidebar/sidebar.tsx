@@ -1,7 +1,6 @@
 import * as React from "react"
 import { useMedia } from "@/hooks/use-media"
 import { useAtom } from "jotai"
-import { LogoIcon } from "@/components/icons/logo-icon"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { isCollapseAtom } from "@/store/sidebar"
@@ -9,12 +8,12 @@ import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
 import { LaIcon } from "@/components/custom/la-icon"
 import { Link, useLocation } from "@tanstack/react-router"
 
-import { LinkSection } from "./partials/link-section"
+// import { LinkSection } from "./partials/link-section"
 import { PageSection } from "./partials/page-section"
-import { TopicSection } from "./partials/topic-section"
 import { ProfileSection } from "./partials/profile-section"
 import { JournalSection } from "./partials/journal-section"
 import { TaskSection } from "./partials/task-section"
+import { LinkCollection } from "./partials/link-collection"
 
 interface SidebarContextType {
   isCollapsed: boolean
@@ -64,14 +63,14 @@ const SidebarItem: React.FC<SidebarItemProps> = React.memo(
         )}
       >
         <Link
-          className="text-secondary-foreground flex h-8 grow items-center truncate rounded-md pl-1.5 pr-1 text-sm font-medium"
+          className="flex h-8 grow items-center truncate rounded-md pl-1.5 pr-1 text-sm font-medium text-secondary-foreground"
           to={url}
           onClick={onClick}
         >
           {icon && (
             <span
               className={cn(
-                "text-primary/60 group-hover:text-primary mr-2 size-4",
+                "mr-2 size-4 text-primary/60 group-hover:text-primary",
                 { "text-primary": isActive },
               )}
             >
@@ -102,7 +101,7 @@ const LogoAndSearch: React.FC = React.memo(() => {
           to={pathname === "/search" ? "/" : "/search"}
           className={cn(
             buttonVariants({ size: "sm", variant: "secondary" }),
-            "text-primary/60 flex w-20 items-center justify-start py-4 pl-2",
+            "flex w-20 items-center justify-start py-4 pl-2 text-primary/60",
           )}
           activeProps={{
             className: "text-md font-medium",
@@ -126,14 +125,14 @@ const SidebarContent: React.FC = React.memo(() => {
   const { me } = useAccountOrGuest()
 
   return (
-    <nav className="bg-background relative flex h-full w-full shrink-0 flex-col">
+    <nav className="relative flex h-full w-full shrink-0 flex-col bg-[var(--body-background)]">
       <div>
         <LogoAndSearch />
       </div>
       <div className="relative mb-0.5 mt-1.5 flex grow flex-col overflow-y-auto rounded-md px-3 outline-none">
         <div className="h-2 shrink-0" />
-        {me._type === "Account" && <LinkSection />}
-        {me._type === "Account" && <TopicSection />}
+        {me._type === "Account" && <LinkCollection />}
+        {/* {me._type === "Account" && <LinkSection />} */}
         {me._type === "Account" && <JournalSection />}
         {me._type === "Account" && <TaskSection />}
         {me._type === "Account" && <PageSection />}
@@ -156,7 +155,7 @@ const Sidebar: React.FC = () => {
   )
 
   const sidebarInnerClasses = cn(
-    "h-full w-56 min-w-56 transition-transform duration-300 ease-in-out",
+    "h-full w-60 min-w-60 transition-transform duration-300 ease-in-out",
     isCollapsed ? "-translate-x-full" : "translate-x-0",
   )
 
@@ -184,7 +183,7 @@ const Sidebar: React.FC = () => {
           )}
         >
           <div
-            className={cn(sidebarInnerClasses, "border-r-primary/5 border-r")}
+            className={cn(sidebarInnerClasses, "border-r border-r-primary/5")}
           >
             <SidebarContext.Provider value={contextValue}>
               <SidebarContent />

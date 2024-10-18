@@ -28,7 +28,7 @@ export const GuideCommunityToggle: React.FC<GuideCommunityToggleProps> = ({
   }
 
   return (
-    <div className="bg-accent/70 relative flex h-8 w-48 items-center rounded-md">
+    <div className="relative flex h-8 w-48 items-center rounded-md bg-accent/70">
       <div
         className="absolute h-8 w-[calc(50%-4px)] rounded-md transition-all duration-300 ease-in-out"
         style={{ left: view === "guide" ? "2px" : "calc(50% + 2px)" }}
@@ -36,7 +36,7 @@ export const GuideCommunityToggle: React.FC<GuideCommunityToggleProps> = ({
       <button
         className={cn(
           "relative z-10 h-full flex-1 rounded-md text-sm font-medium transition-colors",
-          view === "guide" ? "text-primary bg-accent" : "text-primary/50",
+          view === "guide" ? "bg-accent text-primary" : "text-primary/50",
         )}
         onClick={() => handleToggle("guide")}
       >
@@ -45,7 +45,7 @@ export const GuideCommunityToggle: React.FC<GuideCommunityToggleProps> = ({
       <button
         className={cn(
           "relative z-10 h-full flex-1 rounded-md text-sm font-medium transition-colors",
-          view === "community" ? "text-primary bg-accent" : "text-primary/50",
+          view === "community" ? "bg-accent text-primary" : "text-primary/50",
         )}
         onClick={() => handleToggle("community")}
       >

@@ -1,11 +1,42 @@
 :root {
   --link-background-muted: hsl(0, 0%, 97.3%);
-  --link-border-after: hsl(0, 0%, 91%);
+  --link-background-muted-new: hsl(0, 0%, 97.3%);
+  --la-border: hsl(0, 0%, 91%);
+  --la-border-new: hsl(0, 0%, 91%);
   --link-shadow: hsl(240, 5.6%, 82.5%);
+  --less-foreground: hsl(240 10% 3.9%);
+
+  --item-active: rgb(228, 228, 229);
+  --item-hover: rgb(237, 237, 239);
+  --body-background: rgb(248, 248, 249);
+  --container-background: rgb(255, 255, 255);
 }
 
 .dark {
   --link-background-muted: hsl(220, 6.7%, 8.8%);
-  --link-border-after: hsl(230, 10%, 11.8%);
+  --link-background-muted-new: rgb(28, 29, 32);
+  --la-border: hsl(230, 10%, 11.8%);
+  --la-border-new: hsl(230, 10%, 15%);
   --link-shadow: hsl(234.9, 27.1%, 25.3%);
+  --less-foreground: #e5e7eb;
+
+  --item-active: rgb(53, 54, 57);
+  --item-hover: rgb(42, 43, 46);
+  --body-background: rgb(31, 32, 35);
+  --container-background: rgb(24, 25, 28);
+}
+
+.title-editor .ProseMirror .is-empty::before {
+  @apply pointer-events-none float-left h-0 w-full text-[var(--la-secondary)];
+}
+
+.title-editor:not(.no-command)
+  .ProseMirror.ProseMirror-focused
+  > p.has-focus.is-empty::before {
+  content: "Type / for commands...";
+}
+
+.title-editor .ProseMirror > p.is-editor-empty::before {
+  content: attr(data-placeholder);
+  @apply pointer-events-none float-left h-0 text-[var(--la-secondary)];
 }

@@ -1,5 +1,6 @@
 import * as React from "react"
-import { isModKey, isServer, isTextInput } from "@/lib/utils"
+import { isTextInput } from "@/lib/utils"
+import { isModKey, isServer } from "@shared/utils"
 
 export type KeyFilter = ((event: KeyboardEvent) => boolean) | string
 export type Options = { allowInInput?: boolean }

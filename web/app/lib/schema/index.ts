@@ -4,6 +4,7 @@ import { PersonalLinkLists } from "./personal-link"
 import { ListOfTopics } from "./master/topic"
 import { ListOfTasks } from "./task"
 import { JournalEntryLists } from "./journal"
+import { FolderLists, ImageLists } from "./folder"
 
 declare module "jazz-tools" {
   interface Profile {
@@ -12,6 +13,7 @@ declare module "jazz-tools" {
 }
 
 export class UserRoot extends CoMap {
+  version = co.optional.number
   name = co.string
   username = co.string
   avatar = co.optional.string
@@ -28,6 +30,9 @@ export class UserRoot extends CoMap {
 
   tasks = co.ref(ListOfTasks)
   journalEntries = co.ref(JournalEntryLists)
+
+  folders = co.ref(FolderLists)
+  images = co.ref(ImageLists)
 }
 
 export class LaAccount extends Account {
@@ -38,9 +43,6 @@ export class LaAccount extends Account {
     this: LaAccount,
     creationProps?: { name: string; avatarUrl?: string },
   ) {
-    // since we dont have a custom AuthProvider yet.
-    // and still using the DemoAuth. the creationProps will only accept name.
-    // so just do default profile create provided by jazz-tools
     super.migrate(creationProps)
 
     if (!this._refs.root && creationProps) {
@@ -62,6 +64,11 @@ export class LaAccount extends Account {
 
           tasks: ListOfTasks.create([], { owner: this }),
           journalEntries: JournalEntryLists.create([], { owner: this }),
+
+          folders: FolderLists.create([], { owner: this }),
+          images: ImageLists.create([], { owner: this }),
+
+          version: 1,
         },
         { owner: this },
       )
@@ -72,3 +79,6 @@ export class LaAccount extends Account {
 export * from "./master/topic"
 export * from "./personal-link"
 export * from "./personal-page"
+export * from "./task"
+export * from "./journal"
+export * from "./folder"

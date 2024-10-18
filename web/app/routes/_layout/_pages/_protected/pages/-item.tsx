@@ -36,8 +36,8 @@ export const PageItem = React.forwardRef<HTMLAnchorElement, PageItemProps>(
         tabIndex={isActive ? 0 : -1}
         className={cn(
           "relative block cursor-default outline-none",
-          "min-h-12 py-2 max-lg:px-4 sm:px-6",
-          "data-[active='true']:bg-[var(--link-background-muted)] data-[keyboard-active='true']:focus-visible:shadow-[var(--link-shadow)_0px_0px_0px_1px_inset]",
+          "min-h-12 py-2 sm:px-6 max-lg:px-4",
+          "data-[active='true']:bg-[var(--link-background-muted-new)] data-[keyboard-active='true']:focus-visible:shadow-[var(--link-shadow)_0px_0px_0px_1px_inset]",
         )}
         to={`/pages/${page.id}`}
         aria-selected={isActive}
@@ -47,7 +47,7 @@ export const PageItem = React.forwardRef<HTMLAnchorElement, PageItemProps>(
       >
         <div className="flex h-full items-center gap-4">
           <Column.Wrapper style={columnStyles.title}>
-            <Column.Text className="truncate text-[13px] font-medium">
+            <Column.Text className="truncate text-sm font-medium">
               {page.title || "Untitled"}
             </Column.Text>
           </Column.Wrapper>
@@ -64,7 +64,7 @@ export const PageItem = React.forwardRef<HTMLAnchorElement, PageItemProps>(
             style={columnStyles.updated}
             className="flex justify-end"
           >
-            <Column.Text className="text-[13px]">
+            <Column.Text className="text-sm">
               {format(new Date(page.updatedAt), "d MMM yyyy")}
             </Column.Text>
           </Column.Wrapper>
