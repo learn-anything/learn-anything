@@ -23,6 +23,7 @@ import { OrderedList } from "@shared/editor/extensions/ordered-list"
 import { Dropcursor } from "@shared/editor/extensions/dropcursor"
 import { Image } from "../extensions/image"
 import { FileHandler } from "../extensions/file-handler"
+import { toast } from "sonner"
 
 export interface UseLaEditorProps
   extends Omit<UseEditorOptions, "editorProps"> {
@@ -65,14 +66,33 @@ const createExtensions = (placeholder: string) => [
     },
     onValidationError(errors) {
       errors.forEach((error) => {
-        console.log("Image validation error", error)
+        toast.error("Image validation error", {
+          position: "bottom-right",
+          description: error.reason,
+        })
       })
     },
-    onActionSuccess(props) {
-      console.log("Image action success", props)
+    onActionSuccess({ action }) {
+      const mapping = {
+        copyImage: "Copy Image",
+        copyLink: "Copy Link",
+        download: "Download",
+      }
+      toast.success(mapping[action], {
+        position: "bottom-right",
+        description: "Image action success",
+      })
     },
-    onActionError(error, props) {
-      console.error("Image action error", error, props)
+    onActionError(error, { action }) {
+      const mapping = {
+        copyImage: "Copy Image",
+        copyLink: "Copy Link",
+        download: "Download",
+      }
+      toast.error(`Failed to ${mapping[action]}`, {
+        position: "bottom-right",
+        description: error.message,
+      })
     },
   }),
   FileHandler.configure({
