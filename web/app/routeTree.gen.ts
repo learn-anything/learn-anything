@@ -169,14 +169,14 @@ declare module '@tanstack/react-router' {
       parentRoute: typeof LayoutImport
     }
     '/_layout/(auth)': {
-      id: '/_layout/'
+      id: '/_layout/(auth)'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof LayoutauthImport
       parentRoute: typeof LayoutImport
     }
     '/_layout/(auth)/_auth': {
-      id: '/_layout/_auth'
+      id: '/_layout/(auth)/_auth'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof LayoutauthAuthImport
@@ -190,28 +190,28 @@ declare module '@tanstack/react-router' {
       parentRoute: typeof LayoutPagesImport
     }
     '/_layout/(landing)/': {
-      id: '/_layout/'
+      id: '/_layout/(landing)/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof LayoutlandingIndexImport
       parentRoute: typeof LayoutImport
     }
     '/_layout/_pages/(topic)/$': {
-      id: '/_layout/_pages/$'
+      id: '/_layout/_pages/(topic)/$'
       path: '/$'
       fullPath: '/$'
       preLoaderRoute: typeof LayoutPagestopicSplatImport
       parentRoute: typeof LayoutPagesImport
     }
     '/_layout/(auth)/_auth/sign-in/$': {
-      id: '/_layout/_auth/sign-in/$'
+      id: '/_layout/(auth)/_auth/sign-in/$'
       path: '/sign-in/$'
       fullPath: '/sign-in/$'
       preLoaderRoute: typeof LayoutauthAuthSignInSplatImport
       parentRoute: typeof LayoutauthAuthImport
     }
     '/_layout/(auth)/_auth/sign-up/$': {
-      id: '/_layout/_auth/sign-up/$'
+      id: '/_layout/(auth)/_auth/sign-up/$'
       path: '/sign-up/$'
       fullPath: '/sign-up/$'
       preLoaderRoute: typeof LayoutauthAuthSignUpSplatImport
@@ -432,12 +432,13 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_layout': typeof LayoutRouteWithChildren
   '/_layout/_pages': typeof LayoutPagesRouteWithChildren
-  '/_layout/': typeof LayoutlandingIndexRoute
-  '/_layout/_auth': typeof LayoutauthAuthRouteWithChildren
+  '/_layout/(auth)': typeof LayoutauthRouteWithChildren
+  '/_layout/(auth)/_auth': typeof LayoutauthAuthRouteWithChildren
   '/_layout/_pages/_protected': typeof LayoutPagesProtectedRouteWithChildren
-  '/_layout/_pages/$': typeof LayoutPagestopicSplatRoute
-  '/_layout/_auth/sign-in/$': typeof LayoutauthAuthSignInSplatRoute
-  '/_layout/_auth/sign-up/$': typeof LayoutauthAuthSignUpSplatRoute
+  '/_layout/(landing)/': typeof LayoutlandingIndexRoute
+  '/_layout/_pages/(topic)/$': typeof LayoutPagestopicSplatRoute
+  '/_layout/(auth)/_auth/sign-in/$': typeof LayoutauthAuthSignInSplatRoute
+  '/_layout/(auth)/_auth/sign-up/$': typeof LayoutauthAuthSignUpSplatRoute
   '/_layout/_pages/_protected/journals/': typeof LayoutPagesProtectedJournalsIndexRoute
   '/_layout/_pages/_protected/links/': typeof LayoutPagesProtectedLinksIndexRoute
   '/_layout/_pages/_protected/onboarding/': typeof LayoutPagesProtectedOnboardingIndexRoute
@@ -492,12 +493,13 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_layout'
     | '/_layout/_pages'
-    | '/_layout/'
-    | '/_layout/_auth'
+    | '/_layout/(auth)'
+    | '/_layout/(auth)/_auth'
     | '/_layout/_pages/_protected'
-    | '/_layout/_pages/$'
-    | '/_layout/_auth/sign-in/$'
-    | '/_layout/_auth/sign-up/$'
+    | '/_layout/(landing)/'
+    | '/_layout/_pages/(topic)/$'
+    | '/_layout/(auth)/_auth/sign-in/$'
+    | '/_layout/(auth)/_auth/sign-up/$'
     | '/_layout/_pages/_protected/journals/'
     | '/_layout/_pages/_protected/links/'
     | '/_layout/_pages/_protected/onboarding/'
@@ -539,8 +541,8 @@ export const routeTree = rootRoute
       "filePath": "_layout.tsx",
       "children": [
         "/_layout/_pages",
-        "/_layout/",
-        "/_layout/"
+        "/_layout/(auth)",
+        "/_layout/(landing)/"
       ]
     },
     "/_layout/_pages": {
@@ -548,19 +550,22 @@ export const routeTree = rootRoute
       "parent": "/_layout",
       "children": [
         "/_layout/_pages/_protected",
-        "/_layout/_pages/$"
+        "/_layout/_pages/(topic)/$"
       ]
     },
-    "/_layout/": {
-      "filePath": "_layout/(landing)/index.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/_auth": {
-      "filePath": "_layout/(auth)/_auth.tsx",
-      "parent": "/_layout/",
+    "/_layout/(auth)": {
+      "filePath": "_layout/(auth)",
+      "parent": "/_layout",
       "children": [
-        "/_layout/_auth/sign-in/$",
-        "/_layout/_auth/sign-up/$"
+        "/_layout/(auth)/_auth"
+      ]
+    },
+    "/_layout/(auth)/_auth": {
+      "filePath": "_layout/(auth)/_auth.tsx",
+      "parent": "/_layout/(auth)",
+      "children": [
+        "/_layout/(auth)/_auth/sign-in/$",
+        "/_layout/(auth)/_auth/sign-up/$"
       ]
     },
     "/_layout/_pages/_protected": {
@@ -580,17 +585,21 @@ export const routeTree = rootRoute
         "/_layout/_pages/_protected/pages/$pageId/"
       ]
     },
-    "/_layout/_pages/$": {
+    "/_layout/(landing)/": {
+      "filePath": "_layout/(landing)/index.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/_pages/(topic)/$": {
       "filePath": "_layout/_pages/(topic)/$.tsx",
       "parent": "/_layout/_pages"
     },
-    "/_layout/_auth/sign-in/$": {
+    "/_layout/(auth)/_auth/sign-in/$": {
       "filePath": "_layout/(auth)/_auth.sign-in.$.tsx",
-      "parent": "/_layout/_auth"
+      "parent": "/_layout/(auth)/_auth"
     },
-    "/_layout/_auth/sign-up/$": {
+    "/_layout/(auth)/_auth/sign-up/$": {
       "filePath": "_layout/(auth)/_auth.sign-up.$.tsx",
-      "parent": "/_layout/_auth"
+      "parent": "/_layout/(auth)/_auth"
     },
     "/_layout/_pages/_protected/journals/": {
       "filePath": "_layout/_pages/_protected/journals/index.tsx",
