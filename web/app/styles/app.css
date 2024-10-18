@@ -2,6 +2,7 @@
 
 @import "./command-palette.css";
 @import "./custom.css";
+@import "../../shared/editor/styles/index.css";
 
 @tailwind base;
 @tailwind components;

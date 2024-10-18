@@ -1,6 +1,4 @@
 import * as React from "react"
-import "./styles/index.css"
-
 import { EditorContent } from "@tiptap/react"
 import { Content } from "@tiptap/core"
 import { BubbleMenu } from "./components/bubble-menu"
