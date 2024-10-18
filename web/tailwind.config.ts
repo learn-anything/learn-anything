@@ -9,7 +9,7 @@ const config = {
     "../web/app/**/*.{js,ts,jsx,tsx}",
   ],
   prefix: "",
-  safelist: [".dark"],
+  safelist: [".dark", ".ProseMirror", ".la-editor"],
   theme: {
     container: {
       center: true,
