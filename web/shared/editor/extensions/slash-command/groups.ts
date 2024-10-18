@@ -84,6 +84,17 @@ export const GROUPS: Group[] = [
     title: "Insert",
     commands: [
       {
+        name: "image",
+        label: "Image",
+        iconName: "Image",
+        description: "Insert an image",
+        shortcuts: ["mod", "shift", "i"],
+        aliases: ["img"],
+        action: (editor) => {
+          editor.chain().focus().toggleImage().run()
+        },
+      },
+      {
         name: "codeBlock",
         label: "Code Block",
         iconName: "SquareCode",

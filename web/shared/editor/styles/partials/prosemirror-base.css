@@ -43,7 +43,7 @@
 
 .la-editor .ProseMirror blockquote::before,
 .la-editor .ProseMirror blockquote.is-empty::before {
-  @apply bg-accent-foreground/15 absolute bottom-0 left-0 top-0 h-full w-1 rounded-sm content-[''];
+  @apply absolute bottom-0 left-0 top-0 h-full w-1 rounded-sm bg-accent-foreground/15 content-[''];
 }
 
 .la-editor .ProseMirror hr {
@@ -51,7 +51,7 @@
 }
 
 .la-editor .ProseMirror-focused hr.ProseMirror-selectednode {
-  @apply outline-muted-foreground rounded-full outline outline-2 outline-offset-1;
+  @apply rounded-full outline outline-2 outline-offset-1 outline-muted-foreground;
 }
 
 .la-editor .ProseMirror .ProseMirror-gapcursor {

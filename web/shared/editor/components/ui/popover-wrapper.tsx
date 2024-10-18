@@ -10,7 +10,7 @@ export const PopoverWrapper = React.forwardRef<
   return (
     <div
       className={cn(
-        "bg-popover text-popover-foreground rounded-lg border shadow-sm",
+        "rounded-lg border bg-popover text-popover-foreground shadow-sm",
         className,
       )}
       {...props}

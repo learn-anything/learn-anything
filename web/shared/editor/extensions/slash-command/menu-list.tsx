@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 
 import { Command, MenuListProps } from "./types"
-import { getShortcutKeys } from "@/lib/utils"
 import { Icon } from "../../components/ui/icon"
 import { PopoverWrapper } from "../../components/ui/popover-wrapper"
 import { Shortcut } from "../../components/ui/shortcut"
+import { getShortcutKeys } from "@shared/utils"
 
 export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
   const scrollContainer = React.useRef<HTMLDivElement>(null)

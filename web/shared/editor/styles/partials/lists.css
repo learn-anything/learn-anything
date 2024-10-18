@@ -1,7 +1,3 @@
-.la-editor div p {
-  @apply [font-size:var(--la-font-size-regular)];
-}
-
 .la-editor .ProseMirror ol {
   @apply list-decimal;
 }
@@ -68,7 +64,7 @@
 }
 
 .la-editor .ProseMirror .taskItem-checkbox:checked {
-  @apply border-primary bg-primary border bg-no-repeat;
+  @apply border border-primary bg-primary bg-no-repeat;
   background-image: var(--checkbox-bg-image);
 }
 

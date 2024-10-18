@@ -19,7 +19,7 @@
 }
 
 .la-editor .ProseMirror a.link {
-  @apply text-primary cursor-pointer;
+  @apply cursor-pointer text-primary;
 }
 
 .la-editor .ProseMirror a.link:hover {
