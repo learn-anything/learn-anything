@@ -66,7 +66,7 @@ export const LearningStateSelector: React.FC<LearningStateSelectorProps> = ({
           type="button"
           role="combobox"
           variant="secondary"
-          className={cn("gap-x-2 text-sm", className)}
+          className={cn("h-7 gap-x-2 text-sm", className)}
         >
           {iconName && (
             <LaIcon

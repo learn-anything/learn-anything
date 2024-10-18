@@ -116,11 +116,11 @@
 .la [cmdk-group-heading] {
   font-size: 13px;
   height: 30px;
-  @apply text-muted-foreground flex items-center px-2;
+  @apply flex items-center px-2 text-muted-foreground;
 }
 
 .la [cmdk-empty] {
-  @apply text-muted-foreground flex h-16 items-center justify-center whitespace-pre-wrap text-sm;
+  @apply flex h-16 items-center justify-center whitespace-pre-wrap text-sm text-muted-foreground;
 }
 
 .la [cmdk-item] {

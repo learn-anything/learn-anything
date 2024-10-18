@@ -58,7 +58,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
     : "No due date"
 
   return (
-    <li className="bg-result transitiion-opacity flex items-center justify-between rounded-lg p-2 px-3 hover:opacity-60">
+    <li className="transitiion-opacity flex items-center justify-between rounded-lg bg-result p-2 px-3 hover:opacity-60">
       <div className="flex flex-grow flex-row items-center gap-3">
         <Checkbox
           checked={task.status === "done"}
@@ -77,7 +77,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
           <p
             className={
               task.status === "done"
-                ? "text-foreground flex-grow line-through"
+                ? "flex-grow text-foreground line-through"
                 : "flex-grow"
             }
             onClick={clickTitle}
@@ -86,7 +86,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
           </p>
         )}
       </div>
-      <span className="text-muted-foreground text-xs">{formattedDate}</span>
+      <span className="text-xs text-muted-foreground">{formattedDate}</span>
     </li>
   )
 }

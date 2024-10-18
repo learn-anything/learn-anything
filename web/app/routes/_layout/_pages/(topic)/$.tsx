@@ -16,7 +16,6 @@ export const Route = createFileRoute("/_layout/_pages/(topic)/$")({
 export const openPopoverForIdAtom = atom<string | null>(null)
 
 export function TopicDetailComponent() {
-  console.log("TopicDetailComponent")
   const params = useParams({ from: "/_layout/_pages/$" })
   const { me } = useAccountOrGuest({ root: { personalLinks: [] } })
 
@@ -30,34 +29,65 @@ export function TopicDetailComponent() {
     latestGlobalGuide: { sections: [] },
   })
   const [activeIndex, setActiveIndex] = React.useState(-1)
+  const [searchQuery, setSearchQuery] = React.useState("")
 
-  const topicExists = GraphData.find((node) => {
-    return node.name === params._splat
-  })
+  const topicExists = React.useMemo(
+    () => GraphData.find((node) => node.name === params._splat),
+    [params._splat],
+  )
+
+  const latestGlobalGuide = React.useMemo(
+    () => topic?.latestGlobalGuide,
+    [topic?.latestGlobalGuide],
+  )
+
+  const flattenedItems = React.useMemo(
+    () =>
+      latestGlobalGuide?.sections.flatMap((section) => [
+        { type: "section" as const, data: section },
+        ...(section?.links?.map((link) => ({
+          type: "link" as const,
+          data: link,
+        })) || []),
+      ]) || [],
+    [latestGlobalGuide],
+  )
+
+  const filteredItems = React.useMemo(() => {
+    if (!searchQuery) return flattenedItems
+    return flattenedItems.filter((item) => {
+      if (item.type === "section") {
+        return item.data?.title
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
+      }
+      if (item.type === "link") {
+        return (
+          item.data?.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.data?.url.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      }
+      return false
+    })
+  }, [flattenedItems, searchQuery])
 
   if (!topicExists) {
     return <NotFoundPlaceholder />
   }
 
-  const flattenedItems = topic?.latestGlobalGuide?.sections.flatMap(
-    (section) => [
-      { type: "section" as const, data: section },
-      ...(section?.links?.map((link) => ({
-        type: "link" as const,
-        data: link,
-      })) || []),
-    ],
-  )
-
-  if (!topic || !me || !flattenedItems) {
+  if (!topic || !me) {
     return <TopicDetailSkeleton />
   }
 
   return (
     <>
-      <TopicDetailHeader topic={topic} />
+      <TopicDetailHeader
+        topic={topic}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+      />
       <TopicDetailList
-        items={flattenedItems}
+        items={filteredItems}
         topic={topic}
         activeIndex={activeIndex}
         setActiveIndex={setActiveIndex}
@@ -88,7 +118,7 @@ function TopicDetailSkeleton() {
           <Skeleton className="h-8 w-8 rounded-full" />
           <Skeleton className="h-6 w-48" />
         </div>
-        <Skeleton className="h-9 w-36" />
+        <Skeleton className="h-7 w-28" />
       </div>
 
       <div className="space-y-4 p-6 max-lg:px-4">

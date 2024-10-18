@@ -1,14 +1,10 @@
-import { co, CoList, CoMap, Encoders } from "jazz-tools"
+import { co, CoList } from "jazz-tools"
 import { Link, Topic } from "./master/topic"
-
-class BaseModel extends CoMap {
-  createdAt = co.encoded(Encoders.Date)
-  updatedAt = co.encoded(Encoders.Date)
-}
+import { BaseModel } from "./base"
 
 export class PersonalLink extends BaseModel {
   url = co.string
-  icon = co.optional.string // is an icon URL
+  icon = co.optional.string
   link = co.optional.ref(Link)
   title = co.string
   slug = co.string

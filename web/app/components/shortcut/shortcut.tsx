@@ -66,7 +66,7 @@ const ShortcutKey: React.FC<{ keyChar: string }> = ({ keyChar }) => (
 const ShortcutItem: React.FC<ShortcutItem> = ({ label, keys, then }) => (
   <div className="flex flex-row items-center gap-2">
     <dt className="flex grow items-center">
-      <span className="text-muted-foreground text-left text-sm">{label}</span>
+      <span className="text-left text-sm text-muted-foreground">{label}</span>
     </dt>
     <dd className="flex items-end">
       <span className="text-left">
@@ -79,7 +79,7 @@ const ShortcutItem: React.FC<ShortcutItem> = ({ label, keys, then }) => (
           ))}
           {then && (
             <>
-              <span className="text-muted-foreground text-xs">then</span>
+              <span className="text-xs text-muted-foreground">then</span>
               {then.map((key, index) => (
                 <ShortcutKey key={`then-${index}`} keyChar={key} />
               ))}
@@ -149,7 +149,7 @@ export function Shortcut() {
                 "size-6 p-0",
               )}
             >
-              <LaIcon name="X" className="text-muted-foreground size-5" />
+              <LaIcon name="X" className="size-5 text-muted-foreground" />
               <span className="sr-only">Close</span>
             </SheetPrimitive.Close>
           </header>
@@ -158,12 +158,12 @@ export function Shortcut() {
             <form className="relative flex items-center">
               <LaIcon
                 name="Search"
-                className="text-muted-foreground absolute left-3 size-4"
+                className="absolute left-3 size-4 text-muted-foreground"
               />
               <Input
                 autoFocus
                 placeholder="Search shortcuts"
-                className="border-muted-foreground/50 focus-visible:border-muted-foreground h-10 pl-10 focus-visible:ring-0"
+                className="h-10 border-muted-foreground/50 pl-10 focus-visible:border-muted-foreground focus-visible:ring-0"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />

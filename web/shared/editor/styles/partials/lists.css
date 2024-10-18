@@ -1,0 +1,86 @@
+.la-editor .ProseMirror ol {
+  @apply list-decimal;
+}
+
+.la-editor .ProseMirror ol ol {
+  list-style: lower-alpha;
+}
+
+.la-editor .ProseMirror ol ol ol {
+  list-style: lower-roman;
+}
+
+.la-editor .ProseMirror ul {
+  list-style: disc;
+}
+
+.la-editor .ProseMirror ul ul {
+  list-style: circle;
+}
+
+.la-editor .ProseMirror ul ul ul {
+  list-style: square;
+}
+
+.la-editor .ProseMirror ul[data-type="taskList"] {
+  @apply list-none pl-1;
+}
+
+.la-editor .ProseMirror ul[data-type="taskList"] p {
+  @apply m-0;
+}
+
+.la-editor .ProseMirror ul[data-type="taskList"] li > label {
+  @apply mr-2 mt-0.5 flex-none select-none;
+}
+
+.la-editor .ProseMirror li[data-type="taskItem"] {
+  @apply flex flex-row items-start;
+}
+
+.la-editor .ProseMirror li[data-type="taskItem"] .taskItem-checkbox-container {
+  @apply relative pr-2;
+}
+
+.la-editor .ProseMirror .taskItem-drag-handle {
+  @apply absolute -left-5 top-1.5 h-[18px] w-[18px] cursor-move pl-0.5 text-[var(--la-secondary)] opacity-0;
+}
+
+.la-editor
+  .ProseMirror
+  li[data-type="taskItem"]:hover:not(:has(li:hover))
+  > .taskItem-checkbox-container
+  > .taskItem-drag-handle {
+  @apply opacity-100;
+}
+
+.la-editor .ProseMirror .taskItem-drag-handle:hover {
+  @apply text-[var(--la-drag-handle-hover)];
+}
+
+.la-editor .ProseMirror .taskItem-checkbox {
+  fill-opacity: 0;
+  @apply h-3.5 w-3.5 flex-shrink-0 cursor-pointer select-none appearance-none rounded border border-solid border-[var(--la-secondary)] bg-transparent bg-[1px_2px] p-0.5 align-middle transition-colors duration-75 ease-out;
+}
+
+.la-editor .ProseMirror .taskItem-checkbox:checked {
+  @apply border border-primary bg-primary bg-no-repeat;
+  background-image: var(--checkbox-bg-image);
+}
+
+.la-editor .ProseMirror .taskItem-content {
+  @apply min-w-0 flex-1;
+}
+
+.la-editor
+  .ProseMirror
+  li[data-checked="true"]
+  .taskItem-content
+  > :not([data-type="taskList"]),
+.la-editor
+  .ProseMirror
+  li[data-checked="true"]
+  .taskItem-content
+  .taskItem-checkbox {
+  @apply opacity-75;
+}

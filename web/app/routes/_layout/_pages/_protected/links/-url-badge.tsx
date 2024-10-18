@@ -27,9 +27,9 @@ export const UrlBadge: React.FC<UrlBadgeProps> = ({
             size="icon"
             type="button"
             onClick={handleResetUrl}
-            className="text-muted-foreground hover:text-foreground ml-2 size-4 rounded-full bg-transparent hover:bg-transparent"
+            className="ml-2 size-4 rounded-full bg-transparent text-muted-foreground hover:bg-transparent hover:text-foreground"
           >
-            <LaIcon name="X" className="size-3.5" />
+            <LaIcon name="X" className="" />
           </Button>
         </Badge>
       </div>

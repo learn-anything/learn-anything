@@ -124,7 +124,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 
         <React.Suspense>
           <TanStackRouterDevtools position="bottom-right" />
-          <ReactQueryDevtools buttonPosition="bottom-left" />
+          <ReactQueryDevtools buttonPosition="bottom-right" />
         </React.Suspense>
 
         <ScrollRestoration />

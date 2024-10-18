@@ -7,7 +7,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { cn, getShortcutKeys } from "@/lib/utils"
+import { cn } from "@/lib/utils"
 import { LaIcon } from "@/components/custom/la-icon"
 import { useAtom } from "jotai"
 import { useConfirm } from "@omit/react-confirm-dialog"
@@ -17,6 +17,7 @@ import { ID } from "jazz-tools"
 import { globalLinkFormExceptionRefsAtom } from "./-link-form"
 import { useLinkActions } from "~/hooks/actions/use-link-actions"
 import { useNavigate, useSearch } from "@tanstack/react-router"
+import { getShortcutKeys } from "@shared/utils"
 
 interface ToolbarButtonProps
   extends React.ComponentPropsWithoutRef<typeof Button> {
@@ -146,7 +147,7 @@ export const LinkBottomBar: React.FC = () => {
   const shortcutText = getShortcutKeys(["c"])
 
   return (
-    <div className="bg-background min-h-11 border-t">
+    <div className="min-h-11 border-t">
       <AnimatePresence mode="wait">
         {editId && (
           <motion.div

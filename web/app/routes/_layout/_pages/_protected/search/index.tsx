@@ -28,7 +28,7 @@ const SearchTitle: React.FC<SearchTitleProps> = ({ title, count }) => (
   <div className="flex w-full items-center">
     <h2 className="text-md font-semibold">{title}</h2>
     <div className="mx-4 flex-grow">
-      <div className="bg-result h-px"></div>
+      <div className="h-px bg-result"></div>
     </div>
     <span className="text-base font-light text-opacity-55">{count}</span>
   </div>
@@ -41,7 +41,7 @@ const SearchItem: React.FC<SearchItemProps> = ({
   subtitle,
   topic,
 }) => (
-  <div className="hover:bg-result group flex min-w-0 items-center gap-x-4 rounded-md p-2">
+  <div className="group flex min-w-0 items-center gap-x-4 rounded-md p-2 hover:bg-result">
     <LaIcon
       name={icon as "Square"}
       className="size-4 flex-shrink-0 opacity-0 transition-opacity duration-200 group-hover:opacity-50"
@@ -50,7 +50,7 @@ const SearchItem: React.FC<SearchItemProps> = ({
       <Link
         to={href}
         onClick={(e) => e.stopPropagation()}
-        className="hover:text-primary text-sm font-medium hover:opacity-70"
+        className="text-sm font-medium hover:text-primary hover:opacity-70"
       >
         {title}
       </Link>
@@ -58,7 +58,7 @@ const SearchItem: React.FC<SearchItemProps> = ({
         <Link
           to={href}
           onClick={(e) => e.stopPropagation()}
-          className="text-muted-foreground ml-2 truncate text-xs hover:underline"
+          className="ml-2 truncate text-xs text-muted-foreground hover:underline"
         >
           {subtitle}
         </Link>
@@ -138,7 +138,7 @@ const SearchComponent = () => {
             <div className="relative my-5 flex w-full items-center space-x-2">
               <LaIcon
                 name="Search"
-                className="text-foreground absolute left-4 size-4 flex-shrink-0"
+                className="absolute left-4 size-4 flex-shrink-0 text-foreground"
               />
               <input
                 autoFocus
@@ -146,12 +146,12 @@ const SearchComponent = () => {
                 value={searchText}
                 onChange={handleSearch}
                 placeholder="Search topics, links, pages"
-                className="dark:bg-input w-full rounded-lg border border-neutral-300 p-2 pl-8 focus:outline-none dark:border-neutral-600"
+                className="w-full rounded-lg border border-neutral-300 p-2 pl-8 focus:outline-none dark:border-neutral-600 dark:bg-input"
               />
               {searchText && (
                 <LaIcon
                   name="X"
-                  className="text-foreground/50 absolute right-3 size-4 flex-shrink-0 cursor-pointer"
+                  className="absolute right-3 size-4 flex-shrink-0 cursor-pointer text-foreground/50"
                   onClick={clearSearch}
                 />
               )}

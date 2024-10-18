@@ -137,7 +137,7 @@ function ProfileComponent() {
                 <Input
                   value={newName}
                   onChange={changeName}
-                  className="border-result mb-3 mr-3 text-[25px] font-semibold"
+                  className="mb-3 mr-3 border-result text-[25px] font-semibold"
                 />
                 {error && (
                   <p className="text-red-500 text-opacity-70">{error}</p>
