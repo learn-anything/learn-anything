@@ -7,6 +7,7 @@ const config = {
     "./app/**/*.{js,ts,jsx,tsx}",
     "./shared/**/*.{js,ts,jsx,tsx}",
     "../web/app/**/*.{js,ts,jsx,tsx}",
+    "../web/shared/**/*.{js,ts,jsx,tsx}",
   ],
   prefix: "",
   safelist: [".dark", ".ProseMirror", ".la-editor"],
