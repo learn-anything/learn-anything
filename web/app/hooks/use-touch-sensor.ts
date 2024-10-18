@@ -1,5 +1,5 @@
+import { isClient } from "@shared/utils"
 import * as React from "react"
-import { isClient } from "~/lib/utils"
 
 export function useTouchSensor() {
   const [isTouchDevice, setIsTouchDevice] = React.useState(false)
