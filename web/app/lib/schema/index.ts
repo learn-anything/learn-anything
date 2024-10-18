@@ -13,6 +13,7 @@ declare module "jazz-tools" {
 }
 
 export class UserRoot extends CoMap {
+  version = co.optional.number
   name = co.string
   username = co.string
   avatar = co.optional.string
@@ -66,6 +67,8 @@ export class LaAccount extends Account {
 
           folders: FolderLists.create([], { owner: this }),
           images: ImageLists.create([], { owner: this }),
+
+          version: 1,
         },
         { owner: this },
       )
@@ -76,3 +79,6 @@ export class LaAccount extends Account {
 export * from "./master/topic"
 export * from "./personal-link"
 export * from "./personal-page"
+export * from "./task"
+export * from "./journal"
+export * from "./folder"

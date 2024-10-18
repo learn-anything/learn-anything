@@ -24,7 +24,7 @@ interface ImageActionProps {
 interface CustomImageOptions
   extends ImageOptions,
     Omit<FileValidationOptions, "allowBase64"> {
-  uploadFn?: (file: string, editor: Editor) => Promise<string>
+  uploadFn?: (blobUrl: string, editor: Editor) => Promise<string>
   onToggle?: (editor: Editor, files: File[], pos: number) => void
   onActionSuccess?: (props: ImageActionProps) => void
   onActionError?: (error: Error, props: ImageActionProps) => void

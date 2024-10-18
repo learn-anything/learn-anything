@@ -112,8 +112,8 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({
         imageLoaded: true,
       }))
       updateAttributes({
-        width: newNaturalSize.width,
-        height: newNaturalSize.height,
+        width: img.width || newNaturalSize.width,
+        height: img.height || newNaturalSize.height,
         alt: img.alt,
         title: img.title,
       })
