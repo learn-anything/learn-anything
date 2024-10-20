@@ -14,12 +14,12 @@
     "web"
   ],
   "dependencies": {
-    "@tauri-apps/cli": "^2.0.0-rc.17",
-    "@tauri-apps/plugin-fs": "^2.0.0-rc.2",
+    "@tauri-apps/cli": "^2.0.3",
+    "@tauri-apps/plugin-fs": "^2.0.0",
     "jazz-nodejs": "0.8.0"
   },
   "devDependencies": {
-    "bun-types": "^1.1.29"
+    "bun-types": "^1.1.31"
   },
   "prettier": {
     "plugins": [
