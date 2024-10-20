@@ -4,6 +4,7 @@ import { Content } from "@tiptap/core"
 import { BubbleMenu } from "./components/bubble-menu"
 import { cn } from "@/lib/utils"
 import { useLaEditor, UseLaEditorProps } from "./hooks/use-la-editor"
+import { MeasuredContainer } from "./components/measured-container"
 
 export interface LaEditorProps extends UseLaEditorProps {
   value?: Content
@@ -21,7 +22,9 @@ export const LaEditor = React.memo(
       }
 
       return (
-        <div
+        <MeasuredContainer
+          as="div"
+          name="editor"
           className={cn("relative flex h-full w-full grow flex-col", className)}
           ref={ref}
         >
@@ -30,7 +33,7 @@ export const LaEditor = React.memo(
             className={cn("la-editor", editorContentClassName)}
           />
           <BubbleMenu editor={editor} />
-        </div>
+        </MeasuredContainer>
       )
     },
   ),

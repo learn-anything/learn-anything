@@ -4,13 +4,12 @@ import type { ElementDimensions } from "../hooks/use-drag-resize"
 import { useDragResize } from "../hooks/use-drag-resize"
 import { ResizeHandle } from "./resize-handle"
 import { cn } from "@/lib/utils"
-import { NodeSelection } from "@tiptap/pm/state"
 import { Controlled as ControlledZoom } from "react-medium-image-zoom"
 import { ActionButton, ActionWrapper, ImageActions } from "./image-actions"
 import { useImageActions } from "../hooks/use-image-actions"
-import { blobUrlToBase64 } from "@shared/editor/lib/utils"
 import { InfoCircledIcon, TrashIcon } from "@radix-ui/react-icons"
 import { ImageOverlay } from "./image-overlay"
+import { blobUrlToBase64 } from "@shared/editor/lib/utils"
 import { Spinner } from "@shared/components/spinner"
 
 const MAX_HEIGHT = 600
@@ -29,7 +28,6 @@ interface ImageState {
 export const ImageViewBlock: React.FC<NodeViewProps> = ({
   editor,
   node,
-  getPos,
   selected,
   updateAttributes,
 }) => {
@@ -52,23 +50,23 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({
     "left" | "right" | null
   >(null)
 
-  const focus = React.useCallback(() => {
-    const { view } = editor
-    const $pos = view.state.doc.resolve(getPos())
-    view.dispatch(view.state.tr.setSelection(new NodeSelection($pos)))
-  }, [editor, getPos])
-
   const onDimensionsChange = React.useCallback(
     ({ width, height }: ElementDimensions) => {
-      focus()
       updateAttributes({ width, height })
     },
-    [focus, updateAttributes],
+    [updateAttributes],
   )
 
   const aspectRatio =
     imageState.naturalSize.width / imageState.naturalSize.height
   const maxWidth = MAX_HEIGHT * aspectRatio
+  const containerMaxWidth = containerRef.current
+    ? parseFloat(
+        getComputedStyle(containerRef.current).getPropertyValue(
+          "--editor-width",
+        ),
+      )
+    : Infinity
 
   const { isLink, onView, onDownload, onCopy, onCopyLink, onRemoveImg } =
     useImageActions({
@@ -94,7 +92,7 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({
     onDimensionsChange,
     minWidth: MIN_WIDTH,
     minHeight: MIN_HEIGHT,
-    maxWidth,
+    maxWidth: containerMaxWidth > 0 ? containerMaxWidth : maxWidth,
   })
 
   const shouldMerge = React.useMemo(() => currentWidth <= 180, [currentWidth])
@@ -182,6 +180,8 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({
             }))
           }
         }
+
+        URL.revokeObjectURL(initialSrc)
       }
     }
 
