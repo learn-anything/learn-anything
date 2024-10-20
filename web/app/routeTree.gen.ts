@@ -55,6 +55,7 @@ const LayoutPagesRoute = LayoutPagesImport.update({
 } as any)
 
 const LayoutlandingIndexRoute = LayoutlandingIndexImport.update({
+  id: '/(landing)/',
   path: '/',
   getParentRoute: () => LayoutRoute,
 } as any)
@@ -70,82 +71,96 @@ const LayoutauthAuthRoute = LayoutauthAuthImport.update({
 } as any)
 
 const LayoutPagestopicSplatRoute = LayoutPagestopicSplatImport.update({
+  id: '/(topic)/$',
   path: '/$',
   getParentRoute: () => LayoutPagesRoute,
 } as any)
 
 const LayoutPagesProtectedTopicsIndexRoute =
   LayoutPagesProtectedTopicsIndexImport.update({
+    id: '/topics/',
     path: '/topics/',
     getParentRoute: () => LayoutPagesProtectedRoute,
   } as any)
 
 const LayoutPagesProtectedTasksIndexRoute =
   LayoutPagesProtectedTasksIndexImport.update({
+    id: '/tasks/',
     path: '/tasks/',
     getParentRoute: () => LayoutPagesProtectedRoute,
   } as any)
 
 const LayoutPagesProtectedSettingsIndexRoute =
   LayoutPagesProtectedSettingsIndexImport.update({
+    id: '/settings/',
     path: '/settings/',
     getParentRoute: () => LayoutPagesProtectedRoute,
   } as any)
 
 const LayoutPagesProtectedSearchIndexRoute =
   LayoutPagesProtectedSearchIndexImport.update({
+    id: '/search/',
     path: '/search/',
     getParentRoute: () => LayoutPagesProtectedRoute,
   } as any)
 
 const LayoutPagesProtectedProfileIndexRoute =
   LayoutPagesProtectedProfileIndexImport.update({
+    id: '/profile/',
     path: '/profile/',
     getParentRoute: () => LayoutPagesProtectedRoute,
   } as any)
 
 const LayoutPagesProtectedPagesIndexRoute =
   LayoutPagesProtectedPagesIndexImport.update({
+    id: '/pages/',
     path: '/pages/',
     getParentRoute: () => LayoutPagesProtectedRoute,
   } as any)
 
 const LayoutPagesProtectedOnboardingIndexRoute =
   LayoutPagesProtectedOnboardingIndexImport.update({
+    id: '/onboarding/',
     path: '/onboarding/',
     getParentRoute: () => LayoutPagesProtectedRoute,
   } as any)
 
 const LayoutPagesProtectedLinksIndexRoute =
   LayoutPagesProtectedLinksIndexImport.update({
+    id: '/links/',
     path: '/links/',
     getParentRoute: () => LayoutPagesProtectedRoute,
   } as any)
 
 const LayoutPagesProtectedJournalsIndexRoute =
   LayoutPagesProtectedJournalsIndexImport.update({
+    id: '/journals/',
     path: '/journals/',
     getParentRoute: () => LayoutPagesProtectedRoute,
   } as any)
 
 const LayoutauthAuthSignUpSplatRoute = LayoutauthAuthSignUpSplatImport.update({
+  id: '/sign-up/$',
   path: '/sign-up/$',
   getParentRoute: () => LayoutauthAuthRoute,
 } as any)
 
 const LayoutauthAuthSignInSplatRoute = LayoutauthAuthSignInSplatImport.update({
+  id: '/sign-in/$',
   path: '/sign-in/$',
   getParentRoute: () => LayoutauthAuthRoute,
 } as any)
 
 const LayoutPagesProtectedPagesPageIdIndexRoute =
   LayoutPagesProtectedPagesPageIdIndexImport.update({
+    id: '/pages/$pageId/',
     path: '/pages/$pageId/',
     getParentRoute: () => LayoutPagesProtectedRoute,
   } as any)
 
 const LayoutPagesProtectedCommunityTopicNameIndexRoute =
   LayoutPagesProtectedCommunityTopicNameIndexImport.update({
+    id: '/community/$topicName/',
     path: '/community/$topicName/',
     getParentRoute: () => LayoutPagesProtectedRoute,
   } as any)
