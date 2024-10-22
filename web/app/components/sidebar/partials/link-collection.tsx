@@ -6,6 +6,7 @@ export const LinkCollection: React.FC = () => {
   const { me } = useAccount({
     root: {
       personalLinks: [],
+      personalPages: [],
       topicsWantToLearn: [],
       topicsLearning: [],
       topicsLearned: [],
@@ -13,6 +14,7 @@ export const LinkCollection: React.FC = () => {
   })
 
   const linkCount = me?.root.personalLinks?.length || 0
+  const pageCount = me?.root.personalPages?.length || 0
 
   const topicCount =
     (me?.root.topicsWantToLearn?.length || 0) +
@@ -23,6 +25,7 @@ export const LinkCollection: React.FC = () => {
     <div className="flex flex-col gap-px py-2">
       <NavItem to="/links" title="Links" icon="Link" count={linkCount} />
       <NavItem to="/topics" title="Topics" icon="Hash" count={topicCount} />
+      <NavItem to="/pages" title="Pages" icon="Layers" count={pageCount} />
     </div>
   )
 }
