@@ -258,7 +258,7 @@ const DetailPageForm = React.memo(({ page }: { page: PersonalPage }) => {
                 value={page.content as Content}
                 placeholder="Add content..."
                 output="json"
-                throttleDelay={3000}
+                throttleDelay={1000}
                 editorProps={{ handleKeyDown: handleContentKeyDown }}
                 onCreate={handleCreate}
                 onUpdate={updatePageContent}
