@@ -1,5 +1,9 @@
 import * as React from "react"
-import { useAccount, useCoState } from "@/lib/providers/jazz-provider"
+import {
+  useAccount,
+  useAccountOrGuest,
+  useCoState,
+} from "@/lib/providers/jazz-provider"
 import { LaIcon } from "@/components/custom/la-icon"
 import { Topic, PersonalLink, PersonalPage } from "@/lib/schema"
 import { PublicGlobalGroup } from "@/lib/schema/master/public-group"
@@ -8,7 +12,7 @@ import { createFileRoute } from "@tanstack/react-router"
 import AiSearch from "~/components/custom/ai-search"
 import { Link } from "@tanstack/react-router"
 
-export const Route = createFileRoute("/_layout/_pages/_protected/search/")({
+export const Route = createFileRoute("/_layout/_pages/search/")({
   component: () => <SearchComponent />,
 })
 
@@ -85,7 +89,7 @@ const SearchComponent = () => {
     pages: PersonalPage[]
   }>({ topics: [], links: [], pages: [] })
 
-  const { me } = useAccount({
+  const { me } = useAccountOrGuest({
     root: { personalLinks: [], personalPages: [] },
   })
 
@@ -110,17 +114,21 @@ const SearchComponent = () => {
             topic !== null && topic.prettyName.toLowerCase().startsWith(value),
         ) || [],
       links:
-        me?.root.personalLinks?.filter(
-          (link: PersonalLink | null): link is PersonalLink =>
-            link !== null && link.title.toLowerCase().startsWith(value),
-        ) || [],
+        me?._type === "Anonymous"
+          ? []
+          : me?.root.personalLinks?.filter(
+              (link: PersonalLink | null): link is PersonalLink =>
+                link !== null && link.title.toLowerCase().startsWith(value),
+            ) || [],
       pages:
-        me?.root.personalPages?.filter(
-          (page): page is PersonalPage =>
-            page !== null &&
-            page.title !== undefined &&
-            page.title.toLowerCase().startsWith(value),
-        ) || [],
+        me?._type === "Anonymous"
+          ? []
+          : me?.root.personalPages?.filter(
+              (page): page is PersonalPage =>
+                page !== null &&
+                page.title !== undefined &&
+                page.title.toLowerCase().startsWith(value),
+            ) || [],
     })
   }
 

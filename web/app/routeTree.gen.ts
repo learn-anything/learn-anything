@@ -18,11 +18,11 @@ import { Route as LayoutPagesImport } from './routes/_layout/_pages'
 import { Route as LayoutlandingIndexImport } from './routes/_layout/(landing)/index'
 import { Route as LayoutPagesProtectedImport } from './routes/_layout/_pages/_protected'
 import { Route as LayoutauthAuthImport } from './routes/_layout/(auth)/_auth'
+import { Route as LayoutPagesSearchIndexImport } from './routes/_layout/_pages/search/index'
 import { Route as LayoutPagestopicSplatImport } from './routes/_layout/_pages/(topic)/$'
 import { Route as LayoutPagesProtectedTopicsIndexImport } from './routes/_layout/_pages/_protected/topics/index'
 import { Route as LayoutPagesProtectedTasksIndexImport } from './routes/_layout/_pages/_protected/tasks/index'
 import { Route as LayoutPagesProtectedSettingsIndexImport } from './routes/_layout/_pages/_protected/settings/index'
-import { Route as LayoutPagesProtectedSearchIndexImport } from './routes/_layout/_pages/_protected/search/index'
 import { Route as LayoutPagesProtectedProfileIndexImport } from './routes/_layout/_pages/_protected/profile/index'
 import { Route as LayoutPagesProtectedPagesIndexImport } from './routes/_layout/_pages/_protected/pages/index'
 import { Route as LayoutPagesProtectedOnboardingIndexImport } from './routes/_layout/_pages/_protected/onboarding/index'
@@ -70,6 +70,12 @@ const LayoutauthAuthRoute = LayoutauthAuthImport.update({
   getParentRoute: () => LayoutauthRoute,
 } as any)
 
+const LayoutPagesSearchIndexRoute = LayoutPagesSearchIndexImport.update({
+  id: '/search/',
+  path: '/search/',
+  getParentRoute: () => LayoutPagesRoute,
+} as any)
+
 const LayoutPagestopicSplatRoute = LayoutPagestopicSplatImport.update({
   id: '/(topic)/$',
   path: '/$',
@@ -94,13 +100,6 @@ const LayoutPagesProtectedSettingsIndexRoute =
   LayoutPagesProtectedSettingsIndexImport.update({
     id: '/settings/',
     path: '/settings/',
-    getParentRoute: () => LayoutPagesProtectedRoute,
-  } as any)
-
-const LayoutPagesProtectedSearchIndexRoute =
-  LayoutPagesProtectedSearchIndexImport.update({
-    id: '/search/',
-    path: '/search/',
     getParentRoute: () => LayoutPagesProtectedRoute,
   } as any)
 
@@ -218,6 +217,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutPagestopicSplatImport
       parentRoute: typeof LayoutPagesImport
     }
+    '/_layout/_pages/search/': {
+      id: '/_layout/_pages/search/'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof LayoutPagesSearchIndexImport
+      parentRoute: typeof LayoutPagesImport
+    }
     '/_layout/(auth)/_auth/sign-in/$': {
       id: '/_layout/(auth)/_auth/sign-in/$'
       path: '/sign-in/$'
@@ -267,13 +273,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutPagesProtectedProfileIndexImport
       parentRoute: typeof LayoutPagesProtectedImport
     }
-    '/_layout/_pages/_protected/search/': {
-      id: '/_layout/_pages/_protected/search/'
-      path: '/search'
-      fullPath: '/search'
-      preLoaderRoute: typeof LayoutPagesProtectedSearchIndexImport
-      parentRoute: typeof LayoutPagesProtectedImport
-    }
     '/_layout/_pages/_protected/settings/': {
       id: '/_layout/_pages/_protected/settings/'
       path: '/settings'
@@ -320,7 +319,6 @@ interface LayoutPagesProtectedRouteChildren {
   LayoutPagesProtectedOnboardingIndexRoute: typeof LayoutPagesProtectedOnboardingIndexRoute
   LayoutPagesProtectedPagesIndexRoute: typeof LayoutPagesProtectedPagesIndexRoute
   LayoutPagesProtectedProfileIndexRoute: typeof LayoutPagesProtectedProfileIndexRoute
-  LayoutPagesProtectedSearchIndexRoute: typeof LayoutPagesProtectedSearchIndexRoute
   LayoutPagesProtectedSettingsIndexRoute: typeof LayoutPagesProtectedSettingsIndexRoute
   LayoutPagesProtectedTasksIndexRoute: typeof LayoutPagesProtectedTasksIndexRoute
   LayoutPagesProtectedTopicsIndexRoute: typeof LayoutPagesProtectedTopicsIndexRoute
@@ -336,7 +334,6 @@ const LayoutPagesProtectedRouteChildren: LayoutPagesProtectedRouteChildren = {
     LayoutPagesProtectedOnboardingIndexRoute,
   LayoutPagesProtectedPagesIndexRoute: LayoutPagesProtectedPagesIndexRoute,
   LayoutPagesProtectedProfileIndexRoute: LayoutPagesProtectedProfileIndexRoute,
-  LayoutPagesProtectedSearchIndexRoute: LayoutPagesProtectedSearchIndexRoute,
   LayoutPagesProtectedSettingsIndexRoute:
     LayoutPagesProtectedSettingsIndexRoute,
   LayoutPagesProtectedTasksIndexRoute: LayoutPagesProtectedTasksIndexRoute,
@@ -353,11 +350,13 @@ const LayoutPagesProtectedRouteWithChildren =
 interface LayoutPagesRouteChildren {
   LayoutPagesProtectedRoute: typeof LayoutPagesProtectedRouteWithChildren
   LayoutPagestopicSplatRoute: typeof LayoutPagestopicSplatRoute
+  LayoutPagesSearchIndexRoute: typeof LayoutPagesSearchIndexRoute
 }
 
 const LayoutPagesRouteChildren: LayoutPagesRouteChildren = {
   LayoutPagesProtectedRoute: LayoutPagesProtectedRouteWithChildren,
   LayoutPagestopicSplatRoute: LayoutPagestopicSplatRoute,
+  LayoutPagesSearchIndexRoute: LayoutPagesSearchIndexRoute,
 }
 
 const LayoutPagesRouteWithChildren = LayoutPagesRoute._addFileChildren(
@@ -409,6 +408,7 @@ export interface FileRoutesByFullPath {
   '': typeof LayoutPagesProtectedRouteWithChildren
   '/': typeof LayoutlandingIndexRoute
   '/$': typeof LayoutPagestopicSplatRoute
+  '/search': typeof LayoutPagesSearchIndexRoute
   '/sign-in/$': typeof LayoutauthAuthSignInSplatRoute
   '/sign-up/$': typeof LayoutauthAuthSignUpSplatRoute
   '/journals': typeof LayoutPagesProtectedJournalsIndexRoute
@@ -416,7 +416,6 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof LayoutPagesProtectedOnboardingIndexRoute
   '/pages': typeof LayoutPagesProtectedPagesIndexRoute
   '/profile': typeof LayoutPagesProtectedProfileIndexRoute
-  '/search': typeof LayoutPagesProtectedSearchIndexRoute
   '/settings': typeof LayoutPagesProtectedSettingsIndexRoute
   '/tasks': typeof LayoutPagesProtectedTasksIndexRoute
   '/topics': typeof LayoutPagesProtectedTopicsIndexRoute
@@ -428,6 +427,7 @@ export interface FileRoutesByTo {
   '': typeof LayoutPagesProtectedRouteWithChildren
   '/': typeof LayoutlandingIndexRoute
   '/$': typeof LayoutPagestopicSplatRoute
+  '/search': typeof LayoutPagesSearchIndexRoute
   '/sign-in/$': typeof LayoutauthAuthSignInSplatRoute
   '/sign-up/$': typeof LayoutauthAuthSignUpSplatRoute
   '/journals': typeof LayoutPagesProtectedJournalsIndexRoute
@@ -435,7 +435,6 @@ export interface FileRoutesByTo {
   '/onboarding': typeof LayoutPagesProtectedOnboardingIndexRoute
   '/pages': typeof LayoutPagesProtectedPagesIndexRoute
   '/profile': typeof LayoutPagesProtectedProfileIndexRoute
-  '/search': typeof LayoutPagesProtectedSearchIndexRoute
   '/settings': typeof LayoutPagesProtectedSettingsIndexRoute
   '/tasks': typeof LayoutPagesProtectedTasksIndexRoute
   '/topics': typeof LayoutPagesProtectedTopicsIndexRoute
@@ -452,6 +451,7 @@ export interface FileRoutesById {
   '/_layout/_pages/_protected': typeof LayoutPagesProtectedRouteWithChildren
   '/_layout/(landing)/': typeof LayoutlandingIndexRoute
   '/_layout/_pages/(topic)/$': typeof LayoutPagestopicSplatRoute
+  '/_layout/_pages/search/': typeof LayoutPagesSearchIndexRoute
   '/_layout/(auth)/_auth/sign-in/$': typeof LayoutauthAuthSignInSplatRoute
   '/_layout/(auth)/_auth/sign-up/$': typeof LayoutauthAuthSignUpSplatRoute
   '/_layout/_pages/_protected/journals/': typeof LayoutPagesProtectedJournalsIndexRoute
@@ -459,7 +459,6 @@ export interface FileRoutesById {
   '/_layout/_pages/_protected/onboarding/': typeof LayoutPagesProtectedOnboardingIndexRoute
   '/_layout/_pages/_protected/pages/': typeof LayoutPagesProtectedPagesIndexRoute
   '/_layout/_pages/_protected/profile/': typeof LayoutPagesProtectedProfileIndexRoute
-  '/_layout/_pages/_protected/search/': typeof LayoutPagesProtectedSearchIndexRoute
   '/_layout/_pages/_protected/settings/': typeof LayoutPagesProtectedSettingsIndexRoute
   '/_layout/_pages/_protected/tasks/': typeof LayoutPagesProtectedTasksIndexRoute
   '/_layout/_pages/_protected/topics/': typeof LayoutPagesProtectedTopicsIndexRoute
@@ -473,6 +472,7 @@ export interface FileRouteTypes {
     | ''
     | '/'
     | '/$'
+    | '/search'
     | '/sign-in/$'
     | '/sign-up/$'
     | '/journals'
@@ -480,7 +480,6 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/pages'
     | '/profile'
-    | '/search'
     | '/settings'
     | '/tasks'
     | '/topics'
@@ -491,6 +490,7 @@ export interface FileRouteTypes {
     | ''
     | '/'
     | '/$'
+    | '/search'
     | '/sign-in/$'
     | '/sign-up/$'
     | '/journals'
@@ -498,7 +498,6 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/pages'
     | '/profile'
-    | '/search'
     | '/settings'
     | '/tasks'
     | '/topics'
@@ -513,6 +512,7 @@ export interface FileRouteTypes {
     | '/_layout/_pages/_protected'
     | '/_layout/(landing)/'
     | '/_layout/_pages/(topic)/$'
+    | '/_layout/_pages/search/'
     | '/_layout/(auth)/_auth/sign-in/$'
     | '/_layout/(auth)/_auth/sign-up/$'
     | '/_layout/_pages/_protected/journals/'
@@ -520,7 +520,6 @@ export interface FileRouteTypes {
     | '/_layout/_pages/_protected/onboarding/'
     | '/_layout/_pages/_protected/pages/'
     | '/_layout/_pages/_protected/profile/'
-    | '/_layout/_pages/_protected/search/'
     | '/_layout/_pages/_protected/settings/'
     | '/_layout/_pages/_protected/tasks/'
     | '/_layout/_pages/_protected/topics/'
@@ -565,7 +564,8 @@ export const routeTree = rootRoute
       "parent": "/_layout",
       "children": [
         "/_layout/_pages/_protected",
-        "/_layout/_pages/(topic)/$"
+        "/_layout/_pages/(topic)/$",
+        "/_layout/_pages/search/"
       ]
     },
     "/_layout/(auth)": {
@@ -592,7 +592,6 @@ export const routeTree = rootRoute
         "/_layout/_pages/_protected/onboarding/",
         "/_layout/_pages/_protected/pages/",
         "/_layout/_pages/_protected/profile/",
-        "/_layout/_pages/_protected/search/",
         "/_layout/_pages/_protected/settings/",
         "/_layout/_pages/_protected/tasks/",
         "/_layout/_pages/_protected/topics/",
@@ -606,6 +605,10 @@ export const routeTree = rootRoute
     },
     "/_layout/_pages/(topic)/$": {
       "filePath": "_layout/_pages/(topic)/$.tsx",
+      "parent": "/_layout/_pages"
+    },
+    "/_layout/_pages/search/": {
+      "filePath": "_layout/_pages/search/index.tsx",
       "parent": "/_layout/_pages"
     },
     "/_layout/(auth)/_auth/sign-in/$": {
@@ -634,10 +637,6 @@ export const routeTree = rootRoute
     },
     "/_layout/_pages/_protected/profile/": {
       "filePath": "_layout/_pages/_protected/profile/index.tsx",
-      "parent": "/_layout/_pages/_protected"
-    },
-    "/_layout/_pages/_protected/search/": {
-      "filePath": "_layout/_pages/_protected/search/index.tsx",
       "parent": "/_layout/_pages/_protected"
     },
     "/_layout/_pages/_protected/settings/": {
