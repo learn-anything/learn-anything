@@ -224,8 +224,14 @@ const DetailPageForm = React.memo(({ page }: { page: PersonalPage }) => {
       handleKeyDown: handleTitleKeyDown,
     },
     onCreate: ({ editor }) => {
-      if (page.title) editor.commands.setContent(`<p>${page.title}</p>`)
+      if (page.title) {
+        editor.commands.setContent(`<p>${page.title}</p>`)
+      }
       titleEditorRef.current = editor
+
+      if (!page.title) {
+        editor.commands.focus()
+      }
     },
     onBlur: ({ editor }) => handleUpdateTitle(editor),
     onUpdate: ({ editor }) => handleUpdateTitle(editor),
@@ -237,8 +243,12 @@ const DetailPageForm = React.memo(({ page }: { page: PersonalPage }) => {
         editor.commands.setContent(page.content as Content)
       }
       contentEditorRef.current = editor
+
+      if (page.title) {
+        editor.commands.focus()
+      }
     },
-    [page.content],
+    [page.content, page.title],
   )
 
   return (
