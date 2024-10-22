@@ -1,9 +1,5 @@
 import * as React from "react"
-import {
-  useAccount,
-  useAccountOrGuest,
-  useCoState,
-} from "@/lib/providers/jazz-provider"
+import { useAccountOrGuest, useCoState } from "@/lib/providers/jazz-provider"
 import { LaIcon } from "@/components/custom/la-icon"
 import { Topic, PersonalLink, PersonalPage } from "@/lib/schema"
 import { PublicGlobalGroup } from "@/lib/schema/master/public-group"

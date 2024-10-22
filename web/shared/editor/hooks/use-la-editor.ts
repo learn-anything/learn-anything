@@ -239,12 +239,13 @@ export const useLaEditor = ({
       ...props,
     }),
     [
+      me,
       placeholder,
       mergedEditorProps,
+      props,
       throttledSetValue,
       handleCreate,
       handleBlur,
-      props,
     ],
   )
 

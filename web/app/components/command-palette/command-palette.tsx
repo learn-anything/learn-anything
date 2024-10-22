@@ -149,6 +149,13 @@ export function RealCommandPalette() {
     [bounce, setOpen],
   )
 
+  React.useEffect(() => {
+    if (!open) {
+      setInputValue("")
+      setActivePage("home")
+    }
+  }, [open, setActivePage, setInputValue])
+
   const filteredCommands = React.useMemo(
     () => getFilteredCommands(),
     [getFilteredCommands],
