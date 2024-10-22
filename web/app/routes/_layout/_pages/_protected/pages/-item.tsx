@@ -52,22 +52,19 @@ export const PageItem = React.forwardRef<HTMLAnchorElement, PageItemProps>(
             </Column.Text>
           </Column.Wrapper>
 
+          <Column.Wrapper style={columnStyles.topic}>
+            {page.topic && (
+              <Badge variant="secondary">{page.topic.prettyName}</Badge>
+            )}
+          </Column.Wrapper>
+
           {!isTablet && (
-            <Column.Wrapper style={columnStyles.topic}>
-              {page.topic && (
-                <Badge variant="secondary">{page.topic.prettyName}</Badge>
-              )}
+            <Column.Wrapper style={columnStyles.updated}>
+              <Column.Text>
+                {format(new Date(page.updatedAt), "d MMM yyyy")}
+              </Column.Text>
             </Column.Wrapper>
           )}
-
-          <Column.Wrapper
-            style={columnStyles.updated}
-            className="flex justify-end"
-          >
-            <Column.Text className="text-sm">
-              {format(new Date(page.updatedAt), "d MMM yyyy")}
-            </Column.Text>
-          </Column.Wrapper>
         </div>
       </Link>
     )
