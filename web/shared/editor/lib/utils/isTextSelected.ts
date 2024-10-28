@@ -1,26 +1,22 @@
-import { isTextSelection } from "@tiptap/core"
 import { Editor } from "@tiptap/react"
 
-export const isTextSelected = ({ editor }: { editor: Editor }) => {
-  const {
-    state: {
-      doc,
-      selection,
-      selection: { empty, from, to },
-    },
-  } = editor
-
-  // Sometime check for `empty` is not enough.
-  // Doubleclick an empty paragraph returns a node size of 2.
-  // So we check also for an empty text size.
-  const isEmptyTextBlock =
-    !doc.textBetween(from, to).length && isTextSelection(selection)
-
-  if (empty || isEmptyTextBlock || !editor.isEditable) {
+export const isTextSelected = (editor: Editor) => {
+  if (!editor.isEditable) {
     return false
   }
 
-  return true
+  const { selection } = editor.state
+  const { empty, from, to } = selection
+
+  // Don't check for selection type since we only care about text content
+  // Handle empty selections, including empty paragraphs
+  if (empty) {
+    return false
+  }
+
+  // Get text content and trim to handle whitespace-only selections
+  const text = editor.state.doc.textBetween(from, to, " ").trim()
+  return text.length > 0
 }
 
 export default isTextSelected

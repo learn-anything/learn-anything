@@ -1,24 +1,16 @@
 import * as React from "react"
 import { Editor } from "@tiptap/react"
 import { ShouldShowProps } from "../types"
-import { isCustomNodeSelected, isTextSelected } from "../lib/utils"
+import { isTextSelected } from "../lib/utils"
 
 export const useTextmenuStates = (editor: Editor) => {
   const shouldShow = React.useCallback(
-    ({ view, from }: ShouldShowProps) => {
+    ({ view }: ShouldShowProps) => {
       if (!view) {
         return false
       }
 
-      const domAtPos = view.domAtPos(from || 0).node as HTMLElement
-      const nodeDOM = view.nodeDOM(from || 0) as HTMLElement
-      const node = nodeDOM || domAtPos
-
-      if (isCustomNodeSelected(editor, node)) {
-        return false
-      }
-
-      return isTextSelected({ editor })
+      return isTextSelected(editor)
     },
     [editor],
   )
