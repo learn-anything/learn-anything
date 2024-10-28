@@ -183,5 +183,4 @@ export const filterFiles = <T extends FileInput>(
   return [validFiles, errors]
 }
 
-export * from "./isCustomNodeSelected"
 export * from "./isTextSelected"
