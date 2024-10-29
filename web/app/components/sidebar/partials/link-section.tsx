@@ -14,7 +14,7 @@ export const LinkSection: React.FC = () => {
   const linkCount = me.root.personalLinks?.length || 0
 
   return (
-    <div className="flex flex-col gap-px py-2">
+    <div className="flex flex-col gap-px">
       <LinkSectionHeader linkCount={linkCount} />
       <LinkList personalLinks={me.root.personalLinks} />
     </div>
