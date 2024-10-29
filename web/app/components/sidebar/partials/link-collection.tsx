@@ -1,8 +1,11 @@
 import * as React from "react"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { NavItem } from "~/components/custom/nav-item"
+import { ListOfTasks } from "~/lib/schema"
 
 export const LinkCollection: React.FC = () => {
+  // will delete soon after do the versioning
+  const { me: tempMe } = useAccount()
   const { me } = useAccount({
     root: {
       personalLinks: [],
@@ -13,6 +16,10 @@ export const LinkCollection: React.FC = () => {
       tasks: [],
     },
   })
+
+  if (!tempMe.root?.tasks) {
+    tempMe.root!.tasks = ListOfTasks.create([], { owner: tempMe })
+  }
 
   const linkCount = me?.root.personalLinks?.length || 0
   const pageCount = me?.root.personalPages?.length || 0
