@@ -77,7 +77,7 @@ export const LinkItem = React.memo(
         (learningState: LearningStateValue) => {
           if (!personalLinks || !me || me?._type === "Anonymous") {
             return clerk.redirectToSignIn({
-              redirectUrl: pathname,
+              signInFallbackRedirectUrl: pathname,
             })
           }
 

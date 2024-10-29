@@ -89,7 +89,7 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({
   const handleAddToProfile = (learningState: LearningStateValue) => {
     if (me?._type === "Anonymous") {
       return clerk.redirectToSignIn({
-        redirectUrl: pathname,
+        signInFallbackRedirectUrl: pathname,
       })
     }
 

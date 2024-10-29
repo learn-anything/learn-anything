@@ -8,11 +8,10 @@ import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
 import { LaIcon } from "@/components/custom/la-icon"
 import { Link, useLocation } from "@tanstack/react-router"
 
-// import { LinkSection } from "./partials/link-section"
 import { PageSection } from "./partials/page-section"
 import { ProfileSection } from "./partials/profile-section"
 import { JournalSection } from "./partials/journal-section"
-import { TaskSection } from "./partials/task-section"
+// import { TaskSection } from "./partials/task-section"
 import { LinkCollection } from "./partials/link-collection"
 
 interface SidebarContextType {

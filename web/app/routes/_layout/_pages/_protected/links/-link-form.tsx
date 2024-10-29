@@ -173,7 +173,6 @@ export const LinkForm: React.FC<LinkFormProps> = ({
         ref.current?.contains(event.target as Node),
       )
     ) {
-      console.log("clicking outside")
       onClose?.()
     }
   })

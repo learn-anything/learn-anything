@@ -190,7 +190,10 @@ const createExtensions = ({
     },
     onValidationError: (errors) => {
       errors.forEach((error) => {
-        console.log("File validation error", error)
+        toast.error("Image validation error", {
+          position: "bottom-right",
+          description: error.reason,
+        })
       })
     },
   }),
