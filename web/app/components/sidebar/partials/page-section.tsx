@@ -202,6 +202,7 @@ const PageListItem: React.FC<PageListItemProps> = ({ page }) => {
         "group/p cursor-default text-[var(--less-foreground)]",
         "relative flex h-[30px] w-full items-center gap-2 rounded-md px-1.5 text-sm font-medium hover:bg-[var(--item-hover)]",
       )}
+      activeOptions={{ exact: true }}
       activeProps={{
         className:
           "bg-[var(--item-active)] data-[status='active']:hover:bg-[var(--item-active)]",

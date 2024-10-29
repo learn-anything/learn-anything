@@ -26,6 +26,7 @@ export function NavItem({
         "text-[var(--less-foreground)] hover:bg-[var(--item-hover)] focus-visible:outline-none focus-visible:ring-0",
         className,
       )}
+      activeOptions={{ exact: true }}
       activeProps={{
         className:
           'bg-[var(--item-active)] data-[status="active"]:hover:bg-[var(--item-active)]',
