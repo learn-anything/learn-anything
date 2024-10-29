@@ -59,9 +59,13 @@ export const TaskSection: React.FC = () => {
   }
 
   return (
-    <div className="group/tasks flex flex-col gap-px py-2">
-      <TaskSectionHeader title="Tasks" count={taskCount} />
+    <div className="group/tasks flex flex-col gap-px">
       <TaskSectionHeader
+        title="Tasks"
+        iconName="BookOpenCheck"
+        count={taskCount}
+      />
+      {/* <TaskSectionHeader
         title="Today"
         iconName="BookOpenCheck"
         filter="today"
@@ -72,7 +76,7 @@ export const TaskSection: React.FC = () => {
         iconName="History"
         filter="upcoming"
         count={upcomingTasks.length}
-      />
+      /> */}
     </div>
   )
 }
@@ -86,25 +90,24 @@ interface TaskSectionHeaderProps {
 
 const TaskSectionHeader: React.FC<TaskSectionHeaderProps> = ({
   title,
-  filter,
   count,
   iconName,
 }) => (
   <Link
     to="/tasks"
     className={cn(
-      "flex min-h-[30px] flex-1 items-center justify-start gap-px rounded-md px-2 py-1 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-0",
+      "flex min-h-[30px] flex-1 items-center justify-between gap-px rounded-md px-2 py-1 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-0",
     )}
-    search={{ filter }}
     activeProps={{
       className: "bg-accent text-accent-foreground",
     }}
   >
-    {iconName && <LaIcon className="size-13 shrink-0 pr-2" name={iconName} />}
-
-    <p className="text-sm">
-      {title}
-      {count > 0 && <span className="ml-1 text-muted-foreground">{count}</span>}
-    </p>
+    <div className="flex items-center">
+      {iconName && (
+        <LaIcon className="size-13 shrink-0 pr-2 opacity-50" name={iconName} />
+      )}
+      <p className="text-sm">{title}</p>
+    </div>
+    {count > 0 && <span className="text-muted-foreground">{count}</span>}
   </Link>
 )

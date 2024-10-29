@@ -10,11 +10,13 @@ export const LinkCollection: React.FC = () => {
       topicsWantToLearn: [],
       topicsLearning: [],
       topicsLearned: [],
+      tasks: [],
     },
   })
 
   const linkCount = me?.root.personalLinks?.length || 0
   const pageCount = me?.root.personalPages?.length || 0
+  const taskCount = me?.root.tasks?.length || 0
 
   const topicCount =
     (me?.root.topicsWantToLearn?.length || 0) +
@@ -26,6 +28,12 @@ export const LinkCollection: React.FC = () => {
       <NavItem to="/links" title="Links" icon="Link" count={linkCount} />
       <NavItem to="/topics" title="Topics" icon="Hash" count={topicCount} />
       <NavItem to="/pages" title="Pages" icon="Layers" count={pageCount} />
+      <NavItem
+        to="/tasks"
+        title="Tasks"
+        icon="BookOpenCheck"
+        count={taskCount}
+      />
     </div>
   )
 }
