@@ -1,7 +1,7 @@
 import * as React from "react"
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { ID } from "jazz-tools"
-import { PersonalPage } from "@/lib/schema"
+import { LaAccount, PersonalPage } from "@/lib/schema"
 import { Content, EditorContent, useEditor } from "@tiptap/react"
 import { useAccount, useCoState } from "@/lib/providers/jazz-provider"
 import { EditorView } from "@tiptap/pm/view"
@@ -52,7 +52,7 @@ function PageDetailComponent() {
     }
   }, [confirm, deletePage, me, pageId, navigate])
 
-  if (!page) return null
+  if (!page || !me) return null
 
   return (
     <div className="absolute inset-0 flex flex-row overflow-hidden">
@@ -63,7 +63,7 @@ function PageDetailComponent() {
             handleDelete={handleDelete}
             isMobile={isMobile}
           />
-          <DetailPageForm key={pageId} page={page} />
+          <DetailPageForm key={pageId} page={page} me={me} />
         </div>
         {!isMobile && (
           <SidebarActions page={page} handleDelete={handleDelete} />
@@ -120,7 +120,13 @@ const SidebarActions = React.memo(
 
 SidebarActions.displayName = "SidebarActions"
 
-const DetailPageForm = React.memo(({ page }: { page: PersonalPage }) => {
+const DetailPageForm = ({
+  page,
+  me,
+}: {
+  page: PersonalPage
+  me: LaAccount
+}) => {
   const titleEditorRef = React.useRef<Editor | null>(null)
   const contentEditorRef = React.useRef<Editor | null>(null)
 
@@ -264,6 +270,8 @@ const DetailPageForm = React.memo(({ page }: { page: PersonalPage }) => {
           <div className="flex flex-auto flex-col">
             <div className="relative flex h-full max-w-full grow flex-col items-stretch p-0">
               <LaEditor
+                me={me}
+                personalPage={page}
                 editorClassName="-mx-3.5 px-3.5 py-2.5 flex-auto focus:outline-none"
                 value={page.content as Content}
                 placeholder="Add content..."
@@ -280,6 +288,6 @@ const DetailPageForm = React.memo(({ page }: { page: PersonalPage }) => {
       </div>
     </div>
   )
-})
+}
 
 DetailPageForm.displayName = "DetailPageForm"

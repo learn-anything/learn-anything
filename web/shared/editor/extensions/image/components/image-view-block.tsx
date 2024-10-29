@@ -9,8 +9,9 @@ import { ActionButton, ActionWrapper, ImageActions } from "./image-actions"
 import { useImageActions } from "../hooks/use-image-actions"
 import { InfoCircledIcon, TrashIcon } from "@radix-ui/react-icons"
 import { ImageOverlay } from "./image-overlay"
-import { blobUrlToBase64 } from "@shared/editor/lib/utils"
+import type { UploadReturnType } from "../image"
 import { Spinner } from "@shared/components/spinner"
+import { blobUrlToBase64, randomId } from "@shared/editor/lib/utils"
 
 const MAX_HEIGHT = 600
 const MIN_HEIGHT = 120
@@ -25,6 +26,11 @@ interface ImageState {
   naturalSize: ElementDimensions
 }
 
+const normalizeUploadResponse = (res: UploadReturnType) => ({
+  src: typeof res === "string" ? res : res.src,
+  id: typeof res === "string" ? randomId() : res.id,
+})
+
 export const ImageViewBlock: React.FC<NodeViewProps> = ({
   editor,
   node,
@@ -35,9 +41,20 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({
     src: initialSrc,
     width: initialWidth,
     height: initialHeight,
+    fileName,
+    fileType,
   } = node.attrs
+
+  const initSrc = React.useMemo(() => {
+    if (typeof initialSrc === "string") {
+      return initialSrc
+    }
+
+    return initialSrc.src
+  }, [initialSrc])
+
   const [imageState, setImageState] = React.useState<ImageState>({
-    src: initialSrc,
+    src: initSrc,
     isServerUploading: false,
     imageLoaded: false,
     isZoomed: false,
@@ -153,10 +170,10 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({
       )
       const { uploadFn } = imageExtension?.options ?? {}
 
-      if (initialSrc.startsWith("blob:")) {
+      if (initSrc.startsWith("blob:")) {
         if (!uploadFn) {
           try {
-            const base64 = await blobUrlToBase64(initialSrc)
+            const base64 = await blobUrlToBase64(initSrc)
             setImageState((prev) => ({ ...prev, src: base64 }))
             updateAttributes({ src: base64 })
           } catch {
@@ -165,13 +182,24 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({
         } else {
           try {
             setImageState((prev) => ({ ...prev, isServerUploading: true }))
-            const url = await uploadFn(initialSrc, editor)
+
+            const response = await fetch(initSrc)
+            const blob = await response.blob()
+
+            const file = new File([blob], fileName || "image", {
+              type: fileType || blob.type,
+            })
+
+            const url: UploadReturnType = await uploadFn(file, editor)
+            const normalizedData = normalizeUploadResponse(url)
+
             setImageState((prev) => ({
               ...prev,
-              src: url,
+              ...normalizedData,
               isServerUploading: false,
             }))
-            updateAttributes({ src: url })
+
+            updateAttributes(normalizedData)
           } catch {
             setImageState((prev) => ({
               ...prev,
@@ -180,13 +208,11 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({
             }))
           }
         }
-
-        URL.revokeObjectURL(initialSrc)
       }
     }
 
     handleImage()
-  }, [editor, initialSrc, updateAttributes])
+  }, [editor, fileName, fileType, initSrc, updateAttributes])
 
   return (
     <NodeViewWrapper

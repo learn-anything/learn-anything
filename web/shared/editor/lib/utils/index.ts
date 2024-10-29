@@ -183,4 +183,6 @@ export const filterFiles = <T extends FileInput>(
   return [validFiles, errors]
 }
 
+export const randomId = (): string => Math.random().toString(36).slice(2, 11)
+
 export * from "./isTextSelected"

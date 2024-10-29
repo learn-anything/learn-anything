@@ -1,7 +1,10 @@
 import { co, CoList, ImageDefinition } from "jazz-tools"
 import { BaseModel } from "./base"
+import { PersonalPage } from "./personal-page"
 
 export class Image extends BaseModel {
+  page = co.optional.ref(PersonalPage)
+  referenceId = co.optional.string
   fileName = co.optional.string
   fileSize = co.optional.number
   width = co.optional.number

@@ -1,53 +1,64 @@
 import type { ImageOptions } from "@tiptap/extension-image"
 import { Image as TiptapImage } from "@tiptap/extension-image"
 import type { Editor } from "@tiptap/react"
+import type { Node } from "@tiptap/pm/model"
 import { ReactNodeViewRenderer } from "@tiptap/react"
 import { ImageViewBlock } from "./components/image-view-block"
 import {
   filterFiles,
-  sanitizeUrl,
+  randomId,
   type FileError,
   type FileValidationOptions,
 } from "@shared/editor/lib/utils"
+
+type ImageAction = "download" | "copyImage" | "copyLink"
 
 interface DownloadImageCommandProps {
   src: string
   alt?: string
 }
 
-interface ImageActionProps {
-  src: string
-  alt?: string
-  action: "download" | "copyImage" | "copyLink"
+interface ImageActionProps extends DownloadImageCommandProps {
+  action: ImageAction
 }
+
+type ImageInfo = {
+  id?: string | number
+  src: string
+}
+
+export type UploadReturnType =
+  | string
+  | {
+      id: string | number
+      src: string
+    }
 
 interface CustomImageOptions
   extends ImageOptions,
     Omit<FileValidationOptions, "allowBase64"> {
-  uploadFn?: (blobUrl: string, editor: Editor) => Promise<string>
-  onToggle?: (editor: Editor, files: File[], pos: number) => void
+  uploadFn?: (file: File, editor: Editor) => Promise<UploadReturnType>
+  onImageRemoved?: (props: ImageInfo) => void
   onActionSuccess?: (props: ImageActionProps) => void
   onActionError?: (error: Error, props: ImageActionProps) => void
   customDownloadImage?: (
     props: ImageActionProps,
     options: CustomImageOptions,
-  ) => void
+  ) => Promise<void>
   customCopyImage?: (
     props: ImageActionProps,
     options: CustomImageOptions,
-  ) => void
+  ) => Promise<void>
   customCopyLink?: (
     props: ImageActionProps,
     options: CustomImageOptions,
-  ) => void
+  ) => Promise<void>
   onValidationError?: (errors: FileError[]) => void
+  onToggle?: (editor: Editor, files: File[], pos: number) => void
 }
 
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {
-    toggleImage: {
-      toggleImage: () => ReturnType
-    }
     setImages: {
       setImages: (
         attrs: { src: string | File; alt?: string; title?: string }[],
@@ -62,6 +73,9 @@ declare module "@tiptap/core" {
     copyLink: {
       copyLink: (attrs: DownloadImageCommandProps) => ReturnType
     }
+    toggleImage: {
+      toggleImage: () => ReturnType
+    }
   }
 }
 
@@ -69,7 +83,7 @@ const handleError = (
   error: unknown,
   props: ImageActionProps,
   errorHandler?: (error: Error, props: ImageActionProps) => void,
-) => {
+): void => {
   const typedError = error instanceof Error ? error : new Error("Unknown error")
   errorHandler?.(typedError, props)
 }
@@ -100,11 +114,7 @@ const handleImageUrl = async (
 const fetchImageBlob = async (
   src: string,
 ): Promise<{ blob: Blob; extension: string }> => {
-  if (src.startsWith("data:")) {
-    return handleDataUrl(src)
-  } else {
-    return handleImageUrl(src)
-  }
+  return src.startsWith("data:") ? handleDataUrl(src) : handleImageUrl(src)
 }
 
 const saveImage = async (
@@ -141,7 +151,7 @@ const defaultDownloadImage = async (
 const defaultCopyImage = async (
   props: ImageActionProps,
   options: CustomImageOptions,
-) => {
+): Promise<void> => {
   const { src } = props
   try {
     const res = await fetch(src)
@@ -156,7 +166,7 @@ const defaultCopyImage = async (
 const defaultCopyLink = async (
   props: ImageActionProps,
   options: CustomImageOptions,
-) => {
+): Promise<void> => {
   const { src } = props
   try {
     await navigator.clipboard.writeText(src)
@@ -182,10 +192,19 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
   addAttributes() {
     return {
       ...this.parent?.(),
+      id: {
+        default: undefined,
+      },
       width: {
         default: undefined,
       },
       height: {
+        default: undefined,
+      },
+      fileName: {
+        default: undefined,
+      },
+      fileType: {
         default: undefined,
       },
     }
@@ -193,6 +212,70 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
 
   addCommands() {
     return {
+      setImages:
+        (attrs) =>
+        ({ commands }) => {
+          const [validImages, errors] = filterFiles(attrs, {
+            allowedMimeTypes: this.options.allowedMimeTypes,
+            maxFileSize: this.options.maxFileSize,
+            allowBase64: this.options.allowBase64,
+          })
+
+          if (errors.length > 0 && this.options.onValidationError) {
+            this.options.onValidationError(errors)
+          }
+
+          if (validImages.length > 0) {
+            return commands.insertContent(
+              validImages.map((image) => {
+                if (image.src instanceof File) {
+                  const blobUrl = URL.createObjectURL(image.src)
+                  return {
+                    type: this.type.name,
+                    attrs: {
+                      id: randomId(),
+                      src: blobUrl,
+                      alt: image.alt,
+                      title: image.title,
+                      fileName: image.src.name,
+                      fileType: image.src.type,
+                    },
+                  }
+                } else {
+                  return {
+                    type: this.type.name,
+                    attrs: {
+                      id: randomId(),
+                      src: image.src,
+                      alt: image.alt,
+                      title: image.title,
+                      fileName: null,
+                      fileType: null,
+                    },
+                  }
+                }
+              }),
+            )
+          }
+
+          return false
+        },
+      downloadImage: (attrs) => () => {
+        const downloadFunc =
+          this.options.customDownloadImage || defaultDownloadImage
+        void downloadFunc({ ...attrs, action: "download" }, this.options)
+        return true
+      },
+      copyImage: (attrs) => () => {
+        const copyImageFunc = this.options.customCopyImage || defaultCopyImage
+        void copyImageFunc({ ...attrs, action: "copyImage" }, this.options)
+        return true
+      },
+      copyLink: (attrs) => () => {
+        const copyLinkFunc = this.options.customCopyLink || defaultCopyLink
+        void copyLinkFunc({ ...attrs, action: "copyLink" }, this.options)
+        return true
+      },
       toggleImage: () => (props) => {
         const input = document.createElement("input")
         input.type = "file"
@@ -226,58 +309,48 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
         input.click()
         return true
       },
-      setImages:
-        (attrs) =>
-        ({ commands }) => {
-          const [validImages, errors] = filterFiles(attrs, {
-            allowedMimeTypes: this.options.allowedMimeTypes,
-            maxFileSize: this.options.maxFileSize,
-            allowBase64: this.options.allowBase64,
-          })
-
-          if (errors.length > 0 && this.options.onValidationError) {
-            this.options.onValidationError(errors)
-          }
-
-          if (validImages.length > 0) {
-            return commands.insertContent(
-              validImages.map((image) => {
-                return {
-                  type: this.name,
-                  attrs: {
-                    src:
-                      image.src instanceof File
-                        ? sanitizeUrl(URL.createObjectURL(image.src), {
-                            allowBase64: this.options.allowBase64,
-                          })
-                        : image.src,
-                    alt: image.alt,
-                    title: image.title,
-                  },
-                }
-              }),
-            )
-          }
-
-          return false
-        },
-      downloadImage: (attrs) => () => {
-        const downloadFunc =
-          this.options.customDownloadImage || defaultDownloadImage
-        void downloadFunc({ ...attrs, action: "download" }, this.options)
-        return true
-      },
-      copyImage: (attrs) => () => {
-        const copyImageFunc = this.options.customCopyImage || defaultCopyImage
-        void copyImageFunc({ ...attrs, action: "copyImage" }, this.options)
-        return true
-      },
-      copyLink: (attrs) => () => {
-        const copyLinkFunc = this.options.customCopyLink || defaultCopyLink
-        void copyLinkFunc({ ...attrs, action: "copyLink" }, this.options)
-        return true
-      },
     }
+  },
+
+  onTransaction({ transaction }) {
+    if (!transaction.docChanged) return
+
+    const oldDoc = transaction.before
+    const newDoc = transaction.doc
+
+    const oldImages = new Map<string, ImageInfo>()
+    const newImages = new Map<string, ImageInfo>()
+
+    const addToMap = (node: Node, map: Map<string, ImageInfo>) => {
+      if (node.type.name === "image") {
+        const attrs = node.attrs
+        if (attrs.src) {
+          const key = attrs.id || attrs.src
+          map.set(key, { id: attrs.id, src: attrs.src })
+        }
+      }
+    }
+
+    oldDoc.descendants((node) => addToMap(node, oldImages))
+    newDoc.descendants((node) => addToMap(node, newImages))
+
+    oldImages.forEach((imageInfo, key) => {
+      if (!newImages.has(key)) {
+        if (imageInfo.src.startsWith("blob:")) {
+          URL.revokeObjectURL(imageInfo.src)
+        }
+
+        if (
+          !imageInfo.src.startsWith("blob:") &&
+          !imageInfo.src.startsWith("data:")
+        ) {
+          this.options.onImageRemoved?.({
+            id: imageInfo.id,
+            src: imageInfo.src,
+          })
+        }
+      }
+    })
   },
 
   addNodeView() {

@@ -20,6 +20,7 @@ export class UserRoot extends CoMap {
   website = co.optional.string
   bio = co.optional.string
   is_public = co.optional.boolean
+  subscription_tier = co.optional.literal("free", "premium")
 
   personalLinks = co.ref(PersonalLinkLists)
   personalPages = co.ref(PersonalPageLists)

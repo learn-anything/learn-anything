@@ -20,13 +20,13 @@ import { Paragraph } from "@shared/editor/extensions/paragraph"
 import { BulletList } from "@shared/editor/extensions/bullet-list"
 import { OrderedList } from "@shared/editor/extensions/ordered-list"
 import { Dropcursor } from "@shared/editor/extensions/dropcursor"
-import { Image } from "../extensions/image"
+import { Image as ImageExt } from "../extensions/image"
 import { FileHandler } from "../extensions/file-handler"
 import { toast } from "sonner"
-import { useAccount } from "~/lib/providers/jazz-provider"
 import { ImageLists } from "~/lib/schema/folder"
-import { LaAccount, Image as LaImage } from "~/lib/schema"
-import { storeImageFn } from "@shared/actions"
+import { LaAccount, Image as LaImage, PersonalPage } from "~/lib/schema"
+import { deleteImageFn, storeImageFn } from "@shared/actions"
+import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE } from "@shared/constants"
 
 export interface UseLaEditorProps
   extends Omit<UseEditorOptions, "editorProps"> {
@@ -41,10 +41,12 @@ export interface UseLaEditorProps
 }
 
 const createExtensions = ({
+  personalPage,
   me,
   placeholder,
 }: {
-  me?: LaAccount
+  personalPage: PersonalPage
+  me: LaAccount
   placeholder: string
 }) => [
   Heading,
@@ -54,40 +56,78 @@ const createExtensions = ({
   TaskItem,
   Selection,
   Paragraph,
-  Image.configure({
-    allowedMimeTypes: ["image/*"],
-    maxFileSize: 5 * 1024 * 1024,
+  ImageExt.configure({
+    allowedMimeTypes: ALLOWED_FILE_TYPES,
+    maxFileSize: MAX_FILE_SIZE,
     allowBase64: true,
-    uploadFn: async (blobUrl) => {
-      const uniqueId = Math.random().toString(36).substring(7)
-      const response = await fetch(blobUrl)
-      const blob = await response.blob()
+    uploadFn: async (file) => {
+      const dimensions = await new Promise<{ width: number; height: number }>(
+        (resolve, reject) => {
+          const img = new Image()
+          const objectUrl = URL.createObjectURL(file)
 
-      const file = new File([blob], `${uniqueId}`, { type: blob.type })
+          img.onload = () => {
+            resolve({
+              width: img.naturalWidth,
+              height: img.naturalHeight,
+            })
+            URL.revokeObjectURL(objectUrl)
+          }
+
+          img.onerror = () => {
+            URL.revokeObjectURL(objectUrl)
+            reject(new Error("Failed to load image"))
+          }
+
+          img.src = objectUrl
+        },
+      )
 
       const formData = new FormData()
       formData.append("file", file)
+      formData.append("width", dimensions.width.toString())
+      formData.append("height", dimensions.height.toString())
 
       const store = await storeImageFn(formData)
 
-      if (me) {
-        if (!me.root?.images) {
-          me.root!.images = ImageLists.create([], { owner: me })
-        }
-
-        const img = LaImage.create(
-          {
-            url: store.fileModel.content.src,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-          },
-          { owner: me },
-        )
-
-        me.root!.images.push(img)
+      if (!me.root?.images) {
+        me.root!.images = ImageLists.create([], { owner: me })
       }
 
-      return store.fileModel.content.src
+      const img = LaImage.create(
+        {
+          fileName: store.fileModel.name,
+          fileSize: store.fileModel.size,
+          width: store.fileModel.width,
+          height: store.fileModel.height,
+          page: personalPage,
+          referenceId: store.fileModel.id,
+          url: store.fileModel.content.src,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        { owner: me },
+      )
+
+      me.root!.images.push(img)
+
+      return { id: store.fileModel.id, src: store.fileModel.content.src }
+    },
+    onImageRemoved({ id }) {
+      const index = me.root?.images?.findIndex((item) => item?.id === id)
+
+      if (index !== undefined && index !== -1) {
+        me.root?.images?.splice(index, 1)
+      }
+
+      if (id) {
+        deleteImageFn({ id: id?.toString() })
+      }
+
+      toast.success("Image removed", {
+        position: "bottom-right",
+        description: "Image removed successfully",
+      })
     },
     onToggle(editor, files, pos) {
       files.forEach((file) =>
@@ -130,8 +170,8 @@ const createExtensions = ({
   }),
   FileHandler.configure({
     allowBase64: true,
-    allowedMimeTypes: ["image/*"],
-    maxFileSize: 5 * 1024 * 1024,
+    allowedMimeTypes: ALLOWED_FILE_TYPES,
+    maxFileSize: MAX_FILE_SIZE,
     onDrop: (editor, files, pos) => {
       files.forEach((file) =>
         editor.commands.insertContentAt(pos, {
@@ -168,6 +208,11 @@ const createExtensions = ({
   }),
 ]
 
+type Props = UseLaEditorProps & {
+  me: LaAccount
+  personalPage: PersonalPage
+}
+
 export const useLaEditor = ({
   value,
   output = "html",
@@ -177,10 +222,10 @@ export const useLaEditor = ({
   onUpdate,
   onBlur,
   editorProps,
+  me,
+  personalPage,
   ...props
-}: UseLaEditorProps) => {
-  const { me } = useAccount({ root: { images: [] } })
-
+}: Props) => {
   const throttledSetValue = useThrottleCallback(
     (editor: Editor) => {
       const content = getOutput(editor, output)
@@ -231,7 +276,7 @@ export const useLaEditor = ({
 
   const editorOptions: UseEditorOptions = React.useMemo(
     () => ({
-      extensions: createExtensions({ me, placeholder }),
+      extensions: createExtensions({ personalPage, me, placeholder }),
       editorProps: mergedEditorProps,
       onUpdate: ({ editor }) => throttledSetValue(editor),
       onCreate: ({ editor }) => handleCreate(editor),
@@ -239,6 +284,7 @@ export const useLaEditor = ({
       ...props,
     }),
     [
+      personalPage,
       me,
       placeholder,
       mergedEditorProps,
