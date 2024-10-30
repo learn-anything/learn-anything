@@ -16,12 +16,11 @@ import { cn } from "@/lib/utils"
 import { showShortcutAtom } from "@/components/shortcut/shortcut"
 import { useKeyboardManager } from "@/hooks/use-keyboard-manager"
 import { SignInButton, useAuth, useUser } from "@clerk/tanstack-start"
-import { Link, useLocation, useRouter } from "@tanstack/react-router"
+import { Link, useLocation } from "@tanstack/react-router"
 import { ShortcutKey } from "@shared/minimal-tiptap/components/shortcut-key"
 import { Feedback } from "./feedback"
 
 export const ProfileSection: React.FC = () => {
-  const router = useRouter()
   const { user, isSignedIn } = useUser()
   const { signOut } = useAuth()
   const [menuOpen, setMenuOpen] = React.useState(false)
@@ -30,10 +29,7 @@ export const ProfileSection: React.FC = () => {
 
   const { disableKeydown } = useKeyboardManager("profileSection")
 
-  const handleSignOut = async () => {
-    // this is no good, stupid fn, invalidate context but dont do it correctly
-    await router.invalidate()
-
+  const handleSignOut = () => {
     signOut(() => {
       window.location.replace("/")
     })
