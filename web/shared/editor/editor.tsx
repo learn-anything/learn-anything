@@ -21,7 +21,6 @@ export const LaEditor = React.forwardRef<HTMLDivElement, LaEditorProps>(
       ...props,
       me,
       personalPage,
-      shouldRerenderOnTransaction: true,
     })
 
     if (!editor) {
