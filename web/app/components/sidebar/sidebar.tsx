@@ -11,18 +11,15 @@ import { Link, useLocation } from "@tanstack/react-router"
 import { PageSection } from "./partials/page-section"
 import { ProfileSection } from "./partials/profile-section"
 import { JournalSection } from "./partials/journal-section"
-// import { TaskSection } from "./partials/task-section"
 import { LinkCollection } from "./partials/link-collection"
 
-interface SidebarContextType {
-  isCollapsed: boolean
-  setIsCollapsed: React.Dispatch<React.SetStateAction<boolean>>
+interface SidebarItemProps {
+  label: string
+  url: string
+  icon?: React.ReactNode
+  onClick?: () => void
+  children?: React.ReactNode
 }
-
-const SidebarContext = React.createContext<SidebarContextType>({
-  isCollapsed: false,
-  setIsCollapsed: () => {},
-})
 
 const useSidebarCollapse = (
   isTablet: boolean,
@@ -39,14 +36,6 @@ const useSidebarCollapse = (
   }, [isTablet, setIsCollapsed])
 
   return [isCollapsed, setIsCollapsed]
-}
-
-interface SidebarItemProps {
-  label: string
-  url: string
-  icon?: React.ReactNode
-  onClick?: () => void
-  children?: React.ReactNode
 }
 
 const SidebarItem: React.FC<SidebarItemProps> = React.memo(
@@ -132,7 +121,6 @@ const SidebarContent: React.FC = React.memo(() => {
         <div className="h-2 shrink-0" />
         {me._type === "Account" && <LinkCollection />}
         {me._type === "Account" && <JournalSection />}
-        {/* {me._type === "Account" && <TaskSection />} */}
         {me._type === "Account" && <PageSection />}
       </div>
 
@@ -157,11 +145,6 @@ const Sidebar: React.FC = () => {
     isCollapsed ? "-translate-x-full" : "translate-x-0",
   )
 
-  const contextValue = React.useMemo(
-    () => ({ isCollapsed, setIsCollapsed }),
-    [isCollapsed, setIsCollapsed],
-  )
-
   if (isTablet) {
     return (
       <>
@@ -183,9 +166,7 @@ const Sidebar: React.FC = () => {
           <div
             className={cn(sidebarInnerClasses, "border-r border-r-primary/5")}
           >
-            <SidebarContext.Provider value={contextValue}>
-              <SidebarContent />
-            </SidebarContext.Provider>
+            <SidebarContent />
           </div>
         </div>
       </>
@@ -195,9 +176,7 @@ const Sidebar: React.FC = () => {
   return (
     <div className={sidebarClasses}>
       <div className={sidebarInnerClasses}>
-        <SidebarContext.Provider value={contextValue}>
-          <SidebarContent />
-        </SidebarContext.Provider>
+        <SidebarContent />
       </div>
     </div>
   )
@@ -205,4 +184,4 @@ const Sidebar: React.FC = () => {
 
 Sidebar.displayName = "Sidebar"
 
-export { Sidebar, SidebarItem, SidebarContext }
+export { Sidebar, SidebarItem }

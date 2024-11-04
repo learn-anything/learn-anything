@@ -32,6 +32,7 @@ function PageDetailComponent() {
   const { me } = useAccount({ root: { personalLinks: [] } })
   const isMobile = useMedia("(max-width: 770px)")
   const page = useCoState(PersonalPage, pageId as ID<PersonalPage>)
+
   const navigate = useNavigate()
   const { deletePage } = usePageActions()
   const confirm = useConfirm()
@@ -63,10 +64,15 @@ function PageDetailComponent() {
             handleDelete={handleDelete}
             isMobile={isMobile}
           />
-          <DetailPageForm key={pageId} page={page} me={me} />
+          <DetailPageForm page={page} me={me} />
         </div>
+
         {!isMobile && (
-          <SidebarActions page={page} handleDelete={handleDelete} />
+          <SidebarActions
+            key={pageId}
+            page={page}
+            handleDelete={handleDelete}
+          />
         )}
       </div>
     </div>
@@ -129,11 +135,40 @@ const DetailPageForm = ({
 }) => {
   const titleEditorRef = React.useRef<Editor | null>(null)
   const contentEditorRef = React.useRef<Editor | null>(null)
+  const [isInitialSync, setIsInitialSync] = React.useState(true)
+
+  React.useEffect(() => {
+    if (!page) return
+
+    const unsubscribe = page.subscribe({}, (updatedPage) => {
+      if (
+        updatedPage &&
+        contentEditorRef.current &&
+        titleEditorRef.current &&
+        !isInitialSync
+      ) {
+        const currentTItle = titleEditorRef.current.getText()
+        const newTitle = updatedPage.title
+
+        if (currentTItle !== newTitle) {
+          titleEditorRef.current.commands.setContent(newTitle as Content)
+        }
+
+        const currentContent = contentEditorRef.current.getJSON()
+        const newContent = updatedPage.content
+
+        if (JSON.stringify(currentContent) !== JSON.stringify(newContent)) {
+          contentEditorRef.current.commands.setContent(newContent as Content)
+        }
+      }
+    })
+
+    return () => unsubscribe()
+  }, [page, isInitialSync])
 
   const updatePageContent = React.useCallback(
     (content: Content) => {
-      page.content = content
-      page.updatedAt = new Date()
+      page.applyDiff({ content, updatedAt: new Date() })
     },
     [page],
   )
@@ -142,7 +177,7 @@ const DetailPageForm = ({
     (editor: Editor) => {
       const newTitle = editor.getText()
       if (newTitle !== page.title) {
-        const slug = generateUniqueSlug(newTitle || "")
+        const slug = generateUniqueSlug(newTitle)
         page.title = newTitle
         page.slug = slug
         page.updatedAt = new Date()
@@ -201,7 +236,8 @@ const DetailPageForm = ({
   )
 
   const titleEditor = useEditor({
-    immediatelyRender: false,
+    immediatelyRender: true,
+    shouldRerenderOnTransaction: false,
     extensions: [
       FocusClasses,
       Paragraph,
@@ -231,7 +267,7 @@ const DetailPageForm = ({
     },
     onCreate: ({ editor }) => {
       if (page.title) {
-        editor.commands.setContent(`<p>${page.title}</p>`)
+        editor.commands.setContent(page.title)
       }
       titleEditorRef.current = editor
 
@@ -245,10 +281,13 @@ const DetailPageForm = ({
 
   const handleCreate = React.useCallback(
     ({ editor }: { editor: Editor }) => {
+      contentEditorRef.current = editor
+
       if (page.content) {
         editor.commands.setContent(page.content as Content)
       }
-      contentEditorRef.current = editor
+
+      setIsInitialSync(false)
 
       if (page.title) {
         editor.commands.focus()
@@ -276,7 +315,9 @@ const DetailPageForm = ({
                 value={page.content as Content}
                 placeholder="Add content..."
                 output="json"
-                throttleDelay={1000}
+                throttleDelay={0}
+                immediatelyRender={true}
+                shouldRerenderOnTransaction={false}
                 editorProps={{ handleKeyDown: handleContentKeyDown }}
                 onCreate={handleCreate}
                 onUpdate={updatePageContent}

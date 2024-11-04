@@ -17,7 +17,12 @@ export interface LaEditorProps extends UseLaEditorProps {
 
 export const LaEditor = React.forwardRef<HTMLDivElement, LaEditorProps>(
   ({ className, editorContentClassName, me, personalPage, ...props }, ref) => {
-    const editor = useLaEditor({ ...props, me, personalPage })
+    const editor = useLaEditor({
+      ...props,
+      me,
+      personalPage,
+      shouldRerenderOnTransaction: true,
+    })
 
     if (!editor) {
       return null

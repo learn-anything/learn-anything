@@ -24,7 +24,7 @@ export const JournalSection: React.FC = () => {
 
         if (
           user?.emailAddresses.some((email) =>
-            response?.emails.includes(email.emailAddress),
+            response?.emails?.includes(email.emailAddress),
           )
         ) {
           setIsFeatureActive(true)
