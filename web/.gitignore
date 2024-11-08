@@ -22,3 +22,5 @@ yarn.lock
 /playwright/.cache/
 
 .ronin
+
+app.config.timestamp_*.js
