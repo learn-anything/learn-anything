@@ -7,30 +7,37 @@ import {
 import { LaIcon } from "@/components/custom/la-icon"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { usePageActions } from "~/hooks/actions/use-page-actions"
-import { useNavigate } from "@tanstack/react-router"
 
 interface PageHeaderProps {}
 
-export const PageHeader: React.FC<PageHeaderProps> = React.memo(() => {
+export const PageHeader: React.FC<PageHeaderProps> = () => {
   const { me } = useAccount()
-  const navigate = useNavigate()
   const { newPage } = usePageActions()
 
   if (!me) return null
-
-  const handleNewPageClick = () => {
-    const page = newPage(me)
-    navigate({ to: `/pages/${page.id}` })
-  }
 
   return (
     <ContentHeader>
       <HeaderTitle />
       <div className="flex flex-auto" />
-      <NewPageButton onClick={handleNewPageClick} />
+
+      <div className="flex w-auto items-center justify-end">
+        <div className="flex items-center gap-2">
+          <Button
+            size="sm"
+            type="button"
+            variant="secondary"
+            className="gap-x-2"
+            onClick={newPage}
+          >
+            <LaIcon name="Plus" />
+            <span className="hidden md:block">New page</span>
+          </Button>
+        </div>
+      </div>
     </ContentHeader>
   )
-})
+}
 
 PageHeader.displayName = "PageHeader"
 
@@ -39,27 +46,6 @@ const HeaderTitle: React.FC = () => (
     <SidebarToggleButton />
     <div className="flex min-h-0 items-center">
       <span className="truncate text-left font-bold lg:text-xl">Pages</span>
-    </div>
-  </div>
-)
-
-interface NewPageButtonProps {
-  onClick: () => void
-}
-
-const NewPageButton: React.FC<NewPageButtonProps> = ({ onClick }) => (
-  <div className="flex w-auto items-center justify-end">
-    <div className="flex items-center gap-2">
-      <Button
-        size="sm"
-        type="button"
-        variant="secondary"
-        className="gap-x-2"
-        onClick={onClick}
-      >
-        <LaIcon name="Plus" />
-        <span className="hidden md:block">New page</span>
-      </Button>
     </div>
   </div>
 )

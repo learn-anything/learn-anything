@@ -26,7 +26,7 @@ const ALL_STATES = [
   ...LEARNING_STATES,
 ]
 
-const LearningTab: React.FC = React.memo(() => {
+const LearningTab: React.FC = () => {
   const navigate = useNavigate()
   const { state } = useSearch({ from: "/_layout/_pages/_protected/links/" })
 
@@ -55,9 +55,9 @@ const LearningTab: React.FC = React.memo(() => {
       highlighterIncludeMargin={true}
     />
   )
-})
+}
 
-const FilterAndSort: React.FC = React.memo(() => {
+const FilterAndSort: React.FC = () => {
   const [sort, setSort] = useAtom(linkSortAtom)
   const [sortOpen, setSortOpen] = React.useState(false)
 
@@ -113,9 +113,9 @@ const FilterAndSort: React.FC = React.memo(() => {
       </div>
     </div>
   )
-})
+}
 
-export const LinkHeader: React.FC = React.memo(() => {
+export const LinkHeader: React.FC = () => {
   const isTablet = useMedia("(max-width: 1024px)")
 
   return (
@@ -144,7 +144,7 @@ export const LinkHeader: React.FC = React.memo(() => {
       )}
     </>
   )
-})
+}
 
 LinkHeader.displayName = "LinkHeader"
 LearningTab.displayName = "LearningTab"

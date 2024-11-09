@@ -3,22 +3,17 @@ import {
   ContentHeader,
   SidebarToggleButton,
 } from "@/components/custom/content-header"
-import { useAccount } from "@/lib/providers/jazz-provider"
 
 interface TopicHeaderProps {}
 
-export const TopicHeader: React.FC<TopicHeaderProps> = React.memo(() => {
-  const { me } = useAccount()
-
-  if (!me) return null
-
+export const TopicHeader: React.FC<TopicHeaderProps> = () => {
   return (
     <ContentHeader>
       <HeaderTitle />
       <div className="flex flex-auto" />
     </ContentHeader>
   )
-})
+}
 
 TopicHeader.displayName = "TopicHeader"
 

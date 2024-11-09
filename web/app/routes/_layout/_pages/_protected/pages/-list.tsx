@@ -11,20 +11,19 @@ interface PageListProps {}
 
 export const PageList: React.FC<PageListProps> = () => {
   const isTablet = useMedia("(max-width: 640px)")
-  const { me } = useAccount({ root: { personalPages: [] } })
+  const { me } = useAccount({ root: { personalPages: [{ topic: {} }] } })
   const [activeItemIndex, setActiveItemIndex] = React.useState<number | null>(
     null,
   )
   const [keyboardActiveIndex, setKeyboardActiveIndex] = React.useState<
     number | null
   >(null)
-  const personalPages = React.useMemo(
-    () => me?.root?.personalPages,
-    [me?.root?.personalPages],
-  )
 
   const next = () =>
-    Math.min((activeItemIndex ?? 0) + 1, (personalPages?.length ?? 0) - 1)
+    Math.min(
+      (activeItemIndex ?? 0) + 1,
+      (me?.root.personalPages.length ?? 0) - 1,
+    )
 
   const prev = () => Math.max((activeItemIndex ?? 0) - 1, 0)
 
@@ -58,22 +57,19 @@ export const PageList: React.FC<PageListProps> = () => {
         tabIndex={-1}
         role="list"
       >
-        {personalPages?.map(
-          (page, index) =>
-            page?.id && (
-              <PageItem
-                key={page.id}
-                ref={(el) => setElementRef(el, index)}
-                page={page}
-                isActive={index === activeItemIndex}
-                onPointerMove={() => {
-                  setKeyboardActiveIndex(null)
-                  setActiveItemIndex(index)
-                }}
-                data-keyboard-active={keyboardActiveIndex === index}
-              />
-            ),
-        )}
+        {me?.root.personalPages.map((page, index) => (
+          <PageItem
+            key={page.id}
+            ref={(el) => setElementRef(el, index)}
+            page={page}
+            isActive={index === activeItemIndex}
+            onPointerMove={() => {
+              setKeyboardActiveIndex(null)
+              setActiveItemIndex(index)
+            }}
+            data-keyboard-active={keyboardActiveIndex === index}
+          />
+        ))}
       </Primitive.div>
     </div>
   )

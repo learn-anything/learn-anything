@@ -30,7 +30,13 @@ const TITLE_PLACEHOLDER = "Untitled"
 function PageDetailComponent() {
   const { pageId } = Route.useParams()
   const { me } = useAccount({
-    root: { personalPages: [{}] },
+    root: {
+      personalPages: [
+        {
+          topic: {},
+        },
+      ],
+    },
   })
   const isMobile = useMedia("(max-width: 770px)")
   const page = useCoState(PersonalPage, pageId as ID<PersonalPage>)
@@ -81,49 +87,47 @@ function PageDetailComponent() {
   )
 }
 
-const SidebarActions = React.memo(
-  ({
-    page,
-    handleDelete,
-  }: {
-    page: PersonalPage
-    handleDelete: () => void
-  }) => (
-    <div className="relative min-w-56 max-w-72 border-l bg-[var(--body-background)]">
-      <div className="flex">
-        <div className="flex h-10 flex-auto flex-row items-center justify-between px-5">
-          <span className="text-left text-[13px] font-medium text-muted-foreground">
-            Page actions
-          </span>
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 top-10 space-y-3 overflow-y-auto px-4 py-1.5">
-          <TopicSelector
-            value={page.topic?.name}
-            onTopicChange={(topic) => {
-              page.topic = topic
-              page.updatedAt = new Date()
-            }}
-            variant="ghost"
-            className="-ml-1.5"
-            renderSelectedText={() => (
-              <span className="truncate">
-                {page.topic?.prettyName || "Select a topic"}
-              </span>
-            )}
-          />
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={handleDelete}
-            className="-ml-1.5"
-          >
-            <LaIcon name="Trash" className="mr-2" />
-            <span className="text-sm">Delete</span>
-          </Button>
-        </div>
+const SidebarActions = ({
+  page,
+  handleDelete,
+}: {
+  page: PersonalPage
+  handleDelete: () => void
+}) => (
+  <div className="relative min-w-56 max-w-72 border-l bg-[var(--body-background)]">
+    <div className="flex">
+      <div className="flex h-10 flex-auto flex-row items-center justify-between px-5">
+        <span className="text-left text-[13px] font-medium text-muted-foreground">
+          Page actions
+        </span>
+      </div>
+      <div className="absolute bottom-0 left-0 right-0 top-10 space-y-3 overflow-y-auto px-4 py-1.5">
+        <TopicSelector
+          value={page.topic?.name}
+          onTopicChange={(topic) => {
+            page.topic = topic
+            page.updatedAt = new Date()
+          }}
+          variant="ghost"
+          className="-ml-1.5"
+          renderSelectedText={() => (
+            <span className="truncate">
+              {page.topic?.prettyName || "Select a topic"}
+            </span>
+          )}
+        />
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={handleDelete}
+          className="-ml-1.5"
+        >
+          <LaIcon name="Trash" className="mr-2" />
+          <span className="text-sm">Delete</span>
+        </Button>
       </div>
     </div>
-  ),
+  </div>
 )
 
 SidebarActions.displayName = "SidebarActions"

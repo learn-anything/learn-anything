@@ -19,7 +19,7 @@ interface TopicDetailHeaderProps {
   setSearchQuery: (query: string) => void
 }
 
-export const TopicDetailHeader = React.memo(function TopicDetailHeader({
+export const TopicDetailHeader = function TopicDetailHeader({
   topic,
   searchQuery,
   setSearchQuery,
@@ -163,6 +163,6 @@ export const TopicDetailHeader = React.memo(function TopicDetailHeader({
       </div>
     </>
   )
-})
+}
 
 TopicDetailHeader.displayName = "TopicDetailHeader"
