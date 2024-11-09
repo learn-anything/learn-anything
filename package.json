@@ -15,7 +15,7 @@
   ],
   "dependencies": {
     "@tauri-apps/cli": "^2.0.4",
-    "@tauri-apps/plugin-fs": "^2.0.1",
+    "@tauri-apps/plugin-fs": "^2.0.2",
     "jazz-nodejs": "0.8.0"
   },
   "devDependencies": {
