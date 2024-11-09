@@ -32,17 +32,16 @@ export function CommandPalette() {
 }
 
 export function RealCommandPalette() {
-  const { me } = useAccount({ root: { personalLinks: [], personalPages: [] } })
+  const { me } = useAccount({
+    root: { personalLinks: [{}], personalPages: [{}] },
+  })
   const dialogRef = React.useRef<HTMLDivElement | null>(null)
   const [inputValue, setInputValue] = React.useState("")
   const [activePage, setActivePage] = React.useState("home")
   const [open, setOpen] = useAtom(commandPaletteOpenAtom)
 
   const actions = useCommandActions()
-  const commandGroups = React.useMemo(
-    () => me && createCommandGroups(actions, me),
-    [actions, me],
-  )
+  const commandGroups = createCommandGroups(actions)
 
   const bounce = React.useCallback(() => {
     if (dialogRef.current) {

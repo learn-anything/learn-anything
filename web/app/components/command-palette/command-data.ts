@@ -1,5 +1,4 @@
 import { icons } from "lucide-react"
-import { LaAccount } from "@/lib/schema"
 import { HTMLLikeElement } from "@/lib/utils"
 import { useCommandActions } from "~/hooks/actions/use-command-actions"
 
@@ -44,7 +43,6 @@ const createNavigationItem = (
 
 export const createCommandGroups = (
   actions: ReturnType<typeof useCommandActions>,
-  me: LaAccount,
 ): Record<string, CommandGroupType> => ({
   home: [
     {
@@ -97,7 +95,7 @@ export const createCommandGroups = (
           icon: "Plus",
           value: "Create New Page...",
           label: "Create New Page...",
-          action: () => actions.createNewPage(me),
+          action: () => actions.createNewPage(),
         },
       ],
     },
