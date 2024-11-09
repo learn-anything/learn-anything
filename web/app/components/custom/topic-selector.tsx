@@ -123,85 +123,89 @@ interface TopicSelectorContentProps
   topics: ListOfTopics
 }
 
-const TopicSelectorContent: React.FC<TopicSelectorContentProps> = React.memo(
-  ({ showSearch, searchPlaceholder, value, onSelect, topics }) => {
-    const [search, setSearch] = React.useState("")
-    const filteredTopics = React.useMemo(
-      () =>
-        topics.filter((topic) =>
-          topic?.prettyName.toLowerCase().includes(search.toLowerCase()),
-        ),
-      [topics, search],
-    )
+const TopicSelectorContent: React.FC<TopicSelectorContentProps> = ({
+  showSearch,
+  searchPlaceholder,
+  value,
+  onSelect,
+  topics,
+}) => {
+  const [search, setSearch] = React.useState("")
+  const filteredTopics = React.useMemo(
+    () =>
+      topics.filter((topic) =>
+        topic?.prettyName.toLowerCase().includes(search.toLowerCase()),
+      ),
+    [topics, search],
+  )
 
-    const parentRef = React.useRef<HTMLDivElement>(null)
+  const parentRef = React.useRef<HTMLDivElement>(null)
 
-    const rowVirtualizer = useVirtualizer({
-      count: filteredTopics.length,
-      getScrollElement: () => parentRef.current,
-      estimateSize: () => 35,
-      overscan: 5,
-    })
+  const rowVirtualizer = useVirtualizer({
+    count: filteredTopics.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 35,
+    overscan: 5,
+  })
 
-    return (
-      <Command>
-        {showSearch && (
-          <CommandInput
-            placeholder={searchPlaceholder}
-            className="h-9"
-            value={search}
-            onValueChange={setSearch}
-          />
-        )}
-        <CommandList>
-          <div ref={parentRef} style={{ height: "200px", overflow: "auto" }}>
-            <div
-              style={{
-                height: `${rowVirtualizer.getTotalSize()}px`,
-                width: "100%",
-                position: "relative",
-              }}
-            >
-              <CommandGroup>
-                {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-                  const topic = filteredTopics[virtualRow.index]
-                  return (
-                    topic && (
-                      <CommandItem
-                        key={virtualRow.key}
-                        value={topic.name}
-                        onSelect={(value) => onSelect(value, topic)}
-                        style={{
-                          position: "absolute",
-                          top: 0,
-                          left: 0,
-                          width: "100%",
-                          height: `${virtualRow.size}px`,
-                          transform: `translateY(${virtualRow.start}px)`,
-                        }}
-                      >
-                        <span>{topic.prettyName}</span>
-                        <LaIcon
-                          name="Check"
-                          className={cn(
-                            "absolute right-3",
-                            topic.name === value
-                              ? "text-primary"
-                              : "text-transparent",
-                          )}
-                        />
-                      </CommandItem>
-                    )
+  return (
+    <Command>
+      {showSearch && (
+        <CommandInput
+          placeholder={searchPlaceholder}
+          className="h-9"
+          value={search}
+          onValueChange={setSearch}
+        />
+      )}
+      <CommandList>
+        <div ref={parentRef} style={{ height: "200px", overflow: "auto" }}>
+          <div
+            style={{
+              height: `${rowVirtualizer.getTotalSize()}px`,
+              width: "100%",
+              position: "relative",
+            }}
+          >
+            <CommandGroup>
+              {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                const topic = filteredTopics[virtualRow.index]
+                return (
+                  topic && (
+                    <CommandItem
+                      key={virtualRow.key}
+                      value={topic.name}
+                      onSelect={(value) => onSelect(value, topic)}
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: `${virtualRow.size}px`,
+                        transform: `translateY(${virtualRow.start}px)`,
+                      }}
+                    >
+                      <span>{topic.prettyName}</span>
+                      <LaIcon
+                        name="Check"
+                        className={cn(
+                          "absolute right-3",
+                          topic.name === value
+                            ? "text-primary"
+                            : "text-transparent",
+                        )}
+                      />
+                    </CommandItem>
                   )
-                })}
-              </CommandGroup>
-            </div>
+                )
+              })}
+            </CommandGroup>
           </div>
-        </CommandList>
-      </Command>
-    )
-  },
-)
+        </div>
+      </CommandList>
+    </Command>
+  )
+}
 
 TopicSelectorContent.displayName = "TopicSelectorContent"
 
