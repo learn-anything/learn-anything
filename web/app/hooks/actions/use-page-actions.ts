@@ -2,16 +2,25 @@ import * as React from "react"
 import { toast } from "sonner"
 import { LaAccount, PersonalPage } from "@/lib/schema"
 import { ID } from "jazz-tools"
+import { useNavigate } from "@tanstack/react-router"
+import { useAccount } from "~/lib/providers/jazz-provider"
 
 export const usePageActions = () => {
-  const newPage = React.useCallback((me: LaAccount) => {
-    const newPersonalPage = PersonalPage.create(
+  const { me } = useAccount()
+  const navigate = useNavigate()
+
+  const newPage = React.useCallback(() => {
+    if (!me) return
+
+    const page = PersonalPage.create(
       { public: false, createdAt: new Date(), updatedAt: new Date() },
       { owner: me },
     )
-    me.root?.personalPages?.push(newPersonalPage)
-    return newPersonalPage
-  }, [])
+
+    me.root?.personalPages?.push(page)
+
+    navigate({ to: "/pages/$pageId", params: { pageId: page.id } })
+  }, [me, navigate])
 
   const deletePage = React.useCallback(
     (me: LaAccount, pageId: ID<PersonalPage>): void => {

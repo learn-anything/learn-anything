@@ -2,7 +2,6 @@ import * as React from "react"
 import { ensureUrlProtocol } from "@/lib/utils"
 import { useTheme } from "next-themes"
 import { toast } from "sonner"
-import { LaAccount } from "@/lib/schema"
 import { usePageActions } from "./use-page-actions"
 import { useNavigate } from "@tanstack/react-router"
 
@@ -35,19 +34,11 @@ export const useCommandActions = () => {
     toast.success("URL copied to clipboard.", { position: "bottom-right" })
   }, [])
 
-  const createNewPage = React.useCallback(
-    (me: LaAccount) => {
-      const page = newPage(me)
-      navigate({ to: `/pages/${page.id}` })
-    },
-    [navigate, newPage],
-  )
-
   return {
     changeTheme,
     navigateTo,
     openLinkInNewTab,
     copyCurrentURL,
-    createNewPage,
+    createNewPage: newPage,
   }
 }
