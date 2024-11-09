@@ -65,7 +65,7 @@ export const LinkBottomBar: React.FC = () => {
   const [, setGlobalLinkFormExceptionRefsAtom] = useAtom(
     globalLinkFormExceptionRefsAtom,
   )
-  const { me } = useAccount({ root: { personalLinks: [] } })
+  const { me } = useAccount({ root: { personalLinks: [{}] } })
   const personalLink = useCoState(PersonalLink, editId as ID<PersonalLink>)
 
   const cancelBtnRef = React.useRef<HTMLButtonElement>(null)

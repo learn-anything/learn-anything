@@ -67,7 +67,15 @@ const LinkList: React.FC<LinkListProps> = () => {
 
   const { deleteLink } = useLinkActions()
   const confirm = useConfirm()
-  const { me } = useAccount({ root: { personalLinks: [{}] } })
+  const { me } = useAccount({
+    root: {
+      personalLinks: [
+        {
+          topic: [],
+        },
+      ],
+    },
+  })
 
   const personalLinks = me?.root.personalLinks || []
   const filteredLinks = personalLinks.filter((link) => {
@@ -268,39 +276,36 @@ const LinkList: React.FC<LinkListProps> = () => {
           <div className="relative flex h-full grow flex-col items-stretch overflow-hidden">
             <div className="flex h-full w-[calc(100%+0px)] flex-col overflow-hidden pr-0">
               <div className="relative overflow-y-auto overflow-x-hidden [scrollbar-gutter:auto]">
-                {sortedLinks.map(
-                  (linkItem, index) =>
-                    linkItem && (
-                      <LinkItem
-                        key={linkItem.id}
-                        isActive={activeItemIndex === index}
-                        personalLink={linkItem}
-                        editId={editId}
-                        disabled={sort !== "manual" || !!editId}
-                        onPointerMove={() => {
-                          if (editId || draggingId || createMode) {
-                            return undefined
-                          }
+                {sortedLinks.map((linkItem, index) => (
+                  <LinkItem
+                    key={linkItem.id}
+                    isActive={activeItemIndex === index}
+                    personalLink={linkItem}
+                    editId={editId}
+                    disabled={sort !== "manual" || !!editId}
+                    onPointerMove={() => {
+                      if (editId || draggingId || createMode) {
+                        return undefined
+                      }
 
-                          setKeyboardActiveIndex(null)
-                          setActiveItemIndex(index)
-                        }}
-                        onFormClose={async () => {
-                          navigate({ to: "/links" })
-                          setActiveItemIndex(lastActiveIndexRef.current)
-                          setKeyboardActiveIndex(lastActiveIndexRef.current)
-                        }}
-                        onItemSelected={(link) =>
-                          navigate({
-                            to: "/links",
-                            search: { editId: link.id },
-                          })
-                        }
-                        data-keyboard-active={keyboardActiveIndex === index}
-                        ref={(el) => setElementRef(el, index)}
-                      />
-                    ),
-                )}
+                      setKeyboardActiveIndex(null)
+                      setActiveItemIndex(index)
+                    }}
+                    onFormClose={async () => {
+                      navigate({ to: "/links" })
+                      setActiveItemIndex(lastActiveIndexRef.current)
+                      setKeyboardActiveIndex(lastActiveIndexRef.current)
+                    }}
+                    onItemSelected={(link) =>
+                      navigate({
+                        to: "/links",
+                        search: { editId: link.id },
+                      })
+                    }
+                    data-keyboard-active={keyboardActiveIndex === index}
+                    ref={(el) => setElementRef(el, index)}
+                  />
+                ))}
               </div>
             </div>
           </div>

@@ -153,8 +153,10 @@ export const LinkForm: React.FC<LinkFormProps> = ({
   })
 
   const topicName = form.watch("topic")
-  const findTopic =
-    me && Topic.findUnique({ topicName }, JAZZ_GLOBAL_GROUP_ID, me)
+  const findTopic = React.useMemo(
+    () => me && Topic.findUnique({ topicName }, JAZZ_GLOBAL_GROUP_ID, me),
+    [topicName, me],
+  )
 
   const selectedTopic = useCoState(Topic, findTopic, {})
 
