@@ -4,10 +4,10 @@ import { LaAccount, PersonalPage } from "@/lib/schema"
 import { ID } from "jazz-tools"
 
 export const usePageActions = () => {
-  const newPage = React.useCallback((me: LaAccount): PersonalPage => {
+  const newPage = React.useCallback((me: LaAccount) => {
     const newPersonalPage = PersonalPage.create(
       { public: false, createdAt: new Date(), updatedAt: new Date() },
-      { owner: me._owner },
+      { owner: me },
     )
     me.root?.personalPages?.push(newPersonalPage)
     return newPersonalPage
