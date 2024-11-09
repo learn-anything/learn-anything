@@ -3,14 +3,15 @@ import { toast } from "sonner"
 import { LaAccount, PersonalPage } from "@/lib/schema"
 import { ID } from "jazz-tools"
 import { useNavigate } from "@tanstack/react-router"
-import { useAccount } from "~/lib/providers/jazz-provider"
+import { useAccountOrGuest } from "~/lib/providers/jazz-provider"
 
 export const usePageActions = () => {
-  const { me } = useAccount()
+  const { me } = useAccountOrGuest()
   const navigate = useNavigate()
 
   const newPage = React.useCallback(() => {
     if (!me) return
+    if (me._type !== "Account") return
 
     const page = PersonalPage.create(
       { public: false, createdAt: new Date(), updatedAt: new Date() },
