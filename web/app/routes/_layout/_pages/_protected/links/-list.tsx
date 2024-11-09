@@ -67,32 +67,20 @@ const LinkList: React.FC<LinkListProps> = () => {
 
   const { deleteLink } = useLinkActions()
   const confirm = useConfirm()
-  const { me } = useAccount({ root: { personalLinks: [] } })
+  const { me } = useAccount({ root: { personalLinks: [{}] } })
 
-  const personalLinks = React.useMemo(
-    () => me?.root?.personalLinks || [],
-    [me?.root?.personalLinks],
-  )
-
-  const filteredLinks = React.useMemo(
-    () =>
-      personalLinks.filter((link) => {
-        if (state === "all") return true
-        if (!link?.learningState) return false
-        return link.learningState === state
-      }),
-    [personalLinks, state],
-  )
-
-  const sortedLinks = React.useMemo(
-    () =>
-      sort === "title"
-        ? [...filteredLinks].sort((a, b) =>
-            (a?.title || "").localeCompare(b?.title || ""),
-          )
-        : filteredLinks,
-    [filteredLinks, sort],
-  )
+  const personalLinks = me?.root.personalLinks || []
+  const filteredLinks = personalLinks.filter((link) => {
+    if (state === "all") return true
+    if (!link?.learningState) return false
+    return link.learningState === state
+  })
+  const sortedLinks =
+    sort === "title"
+      ? [...filteredLinks].sort((a, b) =>
+          (a?.title || "").localeCompare(b?.title || ""),
+        )
+      : filteredLinks
 
   React.useEffect(() => {
     if (editId) {
@@ -208,7 +196,7 @@ const LinkList: React.FC<LinkListProps> = () => {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
 
-    if (!active || !over || !me?.root?.personalLinks) {
+    if (!active || !over || !me?.root.personalLinks) {
       console.error("Drag operation fail", { active, over })
       return
     }
