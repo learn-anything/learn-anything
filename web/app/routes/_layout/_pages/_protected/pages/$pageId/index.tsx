@@ -139,17 +139,17 @@ const DetailPageForm = ({
   const contentEditorRef = React.useRef<Editor | null>(null)
   const [isInitialSync, setIsInitialSync] = React.useState(true)
 
-  const { id: pageId, title: pageTitle } = page
+  // const { id: pageId, title: pageTitle } = page
 
-  React.useEffect(() => {
-    if (!pageId) return
+  // React.useEffect(() => {
+  //   if (!pageId) return
 
-    if (!pageTitle && titleEditorRef.current) {
-      titleEditorRef.current.commands.focus()
-    } else if (contentEditorRef.current) {
-      contentEditorRef.current.commands.focus()
-    }
-  }, [pageId, pageTitle])
+  //   if (!pageTitle && titleEditorRef.current) {
+  //     titleEditorRef.current.commands.focus()
+  //   } else if (contentEditorRef.current) {
+  //     contentEditorRef.current.commands.focus()
+  //   }
+  // }, [pageId, pageTitle])
 
   React.useEffect(() => {
     if (!page) return
