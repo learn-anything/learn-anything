@@ -4,7 +4,6 @@ import { atomWithStorage } from "jotai/utils"
 import { Link, useNavigate } from "@tanstack/react-router"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { cn } from "@/lib/utils"
-import { PersonalPage, PersonalPageLists } from "@/lib/schema/personal-page"
 import { Button } from "@/components/ui/button"
 import { LaIcon } from "@/components/custom/la-icon"
 import {
@@ -48,14 +47,25 @@ const pageShowAtom = atomWithStorage<ShowOption>("pageShow", 5)
 const isExpandedAtom = atomWithStorage("isPageSectionExpanded", true)
 
 export const PageSection: React.FC = () => {
-  const { me } = useAccount({ root: { personalPages: [] } })
+  const { me } = useAccount({
+    root: {
+      personalPages: [{}],
+    },
+  })
   const [sort] = useAtom(pageSortAtom)
   const [show] = useAtom(pageShowAtom)
   const [isExpanded, setIsExpanded] = useAtom(isExpandedAtom)
 
-  if (!me) return null
-
-  const pageCount = me.root.personalPages?.length || 0
+  const pageCount = me?.root.personalPages.length || 0
+  const personalPages = me?.root.personalPages ?? []
+  const sortedPages = [...personalPages]
+    .sort((a, b) => {
+      if (sort === "title") {
+        return (a?.title ?? "").localeCompare(b?.title ?? "")
+      }
+      return (b?.updatedAt?.getTime() ?? 0) - (a?.updatedAt?.getTime() ?? 0)
+    })
+    .slice(0, show === 0 ? personalPages.length : show)
 
   return (
     <div className="flex flex-col gap-px py-2">
@@ -65,11 +75,40 @@ export const PageSection: React.FC = () => {
         onToggle={() => setIsExpanded(!isExpanded)}
       />
       {isExpanded && (
-        <PageList
-          personalPages={me.root.personalPages}
-          sort={sort}
-          show={show}
-        />
+        <div className="flex flex-col gap-px">
+          {sortedPages.map((page) => (
+            <Link
+              key={page.id}
+              to="/pages/$pageId"
+              params={{ pageId: page.id }}
+              className={cn(
+                "group/p cursor-default text-[var(--less-foreground)]",
+                "relative flex h-[30px] w-full items-center gap-2 rounded-md px-1.5 text-sm font-medium hover:bg-[var(--item-hover)]",
+              )}
+              activeOptions={{ exact: true }}
+              activeProps={{
+                className:
+                  "bg-[var(--item-active)] data-[status='active']:hover:bg-[var(--item-active)]",
+              }}
+            >
+              {({ isActive }) => (
+                <div className="flex max-w-full flex-1 items-center gap-1.5 truncate">
+                  <LaIcon
+                    name="File"
+                    className={cn(
+                      "flex-shrink-0 group-hover/p:text-foreground",
+                      {
+                        "text-foreground": isActive,
+                        "text-muted-foreground": !isActive,
+                      },
+                    )}
+                  />
+                  <p className="truncate">{page.title || "Untitled"}</p>
+                </div>
+              )}
+            </Link>
+          ))}
+        </div>
       )}
     </div>
   )
@@ -159,68 +198,6 @@ const NewPageButton: React.FC = () => {
     >
       <LaIcon name="Plus" />
     </Button>
-  )
-}
-
-interface PageListProps {
-  personalPages: PersonalPageLists
-  sort: SortOption
-  show: ShowOption
-}
-
-const PageList: React.FC<PageListProps> = ({ personalPages, sort, show }) => {
-  const sortedPages = React.useMemo(() => {
-    return [...personalPages]
-      .sort((a, b) => {
-        if (sort === "title") {
-          return (a?.title ?? "").localeCompare(b?.title ?? "")
-        }
-        return (b?.updatedAt?.getTime() ?? 0) - (a?.updatedAt?.getTime() ?? 0)
-      })
-      .slice(0, show === 0 ? personalPages.length : show)
-  }, [personalPages, sort, show])
-
-  return (
-    <div className="flex flex-col gap-px">
-      {sortedPages.map(
-        (page) => page?.id && <PageListItem key={page.id} page={page} />,
-      )}
-    </div>
-  )
-}
-
-interface PageListItemProps {
-  page: PersonalPage
-}
-
-const PageListItem: React.FC<PageListItemProps> = ({ page }) => {
-  return (
-    <Link
-      to="/pages/$pageId"
-      params={{ pageId: page.id }}
-      className={cn(
-        "group/p cursor-default text-[var(--less-foreground)]",
-        "relative flex h-[30px] w-full items-center gap-2 rounded-md px-1.5 text-sm font-medium hover:bg-[var(--item-hover)]",
-      )}
-      activeOptions={{ exact: true }}
-      activeProps={{
-        className:
-          "bg-[var(--item-active)] data-[status='active']:hover:bg-[var(--item-active)]",
-      }}
-    >
-      {({ isActive }) => (
-        <div className="flex max-w-full flex-1 items-center gap-1.5 truncate">
-          <LaIcon
-            name="File"
-            className={cn("flex-shrink-0 group-hover/p:text-foreground", {
-              "text-foreground": isActive,
-              "text-muted-foreground": !isActive,
-            })}
-          />
-          <p className="truncate">{page.title || "Untitled"}</p>
-        </div>
-      )}
-    </Link>
   )
 }
 
