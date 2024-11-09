@@ -27,7 +27,13 @@ export const LinkCollection: React.FC = () => {
     <div className="flex flex-col gap-px py-2">
       <NavItem to="/links" title="Links" icon="Link" count={linkCount} />
       <NavItem to="/topics" title="Topics" icon="Hash" count={topicCount} />
-      <NavItem to="/pages" title="Pages" icon="Layers" count={pageCount} />
+      <NavItem
+        to="/pages"
+        title="Pages"
+        icon="Layers"
+        count={pageCount}
+        activeOptions={{ exact: true }}
+      />
       <NavItem
         to="/tasks"
         title="Tasks"

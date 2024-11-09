@@ -2,9 +2,9 @@ import { Link } from "@tanstack/react-router"
 import { cn } from "@/lib/utils"
 import { LaIcon } from "~/components/custom/la-icon"
 import { icons } from "lucide-react"
-import type { NavigateOptions } from "@tanstack/react-router"
+import type { LinkOptions } from "@tanstack/react-router"
 
-interface NavItemProps extends NavigateOptions {
+interface NavItemProps extends LinkOptions {
   title: string
   count: number
   icon: keyof typeof icons
@@ -26,7 +26,6 @@ export function NavItem({
         "text-[var(--less-foreground)] hover:bg-[var(--item-hover)] focus-visible:outline-none focus-visible:ring-0",
         className,
       )}
-      activeOptions={{ exact: true }}
       activeProps={{
         className:
           'bg-[var(--item-active)] data-[status="active"]:hover:bg-[var(--item-active)]',
