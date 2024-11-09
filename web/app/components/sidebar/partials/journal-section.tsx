@@ -7,8 +7,8 @@ import { Link } from "@tanstack/react-router"
 import { getFeatureFlag } from "~/actions"
 
 export const JournalSection: React.FC = () => {
-  const { me } = useAccount()
-  const journalEntries = me?.root?.journalEntries
+  const { me } = useAccount({ root: { journalEntries: [{}] } })
+  const journalEntries = me?.root.journalEntries
 
   const [, setIsFetching] = useState(false)
   const [isFeatureActive, setIsFeatureActive] = useState(false)

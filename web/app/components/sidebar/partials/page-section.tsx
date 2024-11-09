@@ -1,7 +1,7 @@
 import * as React from "react"
 import { useAtom } from "jotai"
 import { atomWithStorage } from "jotai/utils"
-import { Link, useNavigate } from "@tanstack/react-router"
+import { Link } from "@tanstack/react-router"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -49,9 +49,14 @@ const isExpandedAtom = atomWithStorage("isPageSectionExpanded", true)
 export const PageSection: React.FC = () => {
   const { me } = useAccount({
     root: {
-      personalPages: [{}],
+      personalPages: [
+        {
+          topic: {},
+        },
+      ],
     },
   })
+
   const [sort] = useAtom(pageSortAtom)
   const [show] = useAtom(pageShowAtom)
   const [isExpanded, setIsExpanded] = useAtom(isExpandedAtom)
@@ -163,23 +168,13 @@ const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({
 )
 
 const NewPageButton: React.FC = () => {
-  const { me } = useAccount()
-  const navigate = useNavigate()
   const { newPage } = usePageActions()
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     e.stopPropagation()
 
-    const page = newPage(me)
-
-    if (page.id) {
-      navigate({
-        to: "/pages/$pageId",
-        params: { pageId: page.id },
-        replace: true,
-      })
-    }
+    newPage()
   }
 
   return (

@@ -38,44 +38,48 @@ const useSidebarCollapse = (
   return [isCollapsed, setIsCollapsed]
 }
 
-const SidebarItem: React.FC<SidebarItemProps> = React.memo(
-  ({ label, url, icon, onClick, children }) => {
-    const { pathname } = useLocation()
-    const isActive = pathname === url
+const SidebarItem: React.FC<SidebarItemProps> = ({
+  label,
+  url,
+  icon,
+  onClick,
+  children,
+}) => {
+  const { pathname } = useLocation()
+  const isActive = pathname === url
 
-    return (
-      <div
-        className={cn(
-          "group relative my-0.5 rounded-md",
-          isActive ? "bg-secondary/80" : "hover:bg-secondary/40",
-        )}
+  return (
+    <div
+      className={cn(
+        "group relative my-0.5 rounded-md",
+        isActive ? "bg-secondary/80" : "hover:bg-secondary/40",
+      )}
+    >
+      <Link
+        className="flex h-8 grow items-center truncate rounded-md pl-1.5 pr-1 text-sm font-medium text-secondary-foreground"
+        to={url}
+        onClick={onClick}
       >
-        <Link
-          className="flex h-8 grow items-center truncate rounded-md pl-1.5 pr-1 text-sm font-medium text-secondary-foreground"
-          to={url}
-          onClick={onClick}
-        >
-          {icon && (
-            <span
-              className={cn(
-                "mr-2 size-4 text-primary/60 group-hover:text-primary",
-                { "text-primary": isActive },
-              )}
-            >
-              {icon}
-            </span>
-          )}
-          <span>{label}</span>
-          {children}
-        </Link>
-      </div>
-    )
-  },
-)
+        {icon && (
+          <span
+            className={cn(
+              "mr-2 size-4 text-primary/60 group-hover:text-primary",
+              { "text-primary": isActive },
+            )}
+          >
+            {icon}
+          </span>
+        )}
+        <span>{label}</span>
+        {children}
+      </Link>
+    </div>
+  )
+}
 
 SidebarItem.displayName = "SidebarItem"
 
-const LogoAndSearch: React.FC = React.memo(() => {
+const LogoAndSearch: React.FC = () => {
   const { pathname } = useLocation()
 
   return (
@@ -105,11 +109,11 @@ const LogoAndSearch: React.FC = React.memo(() => {
       </div>
     </div>
   )
-})
+}
 
 LogoAndSearch.displayName = "LogoAndSearch"
 
-const SidebarContent: React.FC = React.memo(() => {
+const SidebarContent: React.FC = () => {
   const { me } = useAccountOrGuest()
 
   return (
@@ -119,15 +123,15 @@ const SidebarContent: React.FC = React.memo(() => {
       </div>
       <div className="relative mt-1.5 flex grow flex-col overflow-y-auto rounded-md px-3 outline-none">
         <div className="h-2 shrink-0" />
-        {me._type === "Account" && <LinkCollection />}
-        {me._type === "Account" && <JournalSection />}
-        {me._type === "Account" && <PageSection />}
+        {me?._type === "Account" && <LinkCollection />}
+        {me?._type === "Account" && <JournalSection />}
+        {me?._type === "Account" && <PageSection />}
       </div>
 
       <ProfileSection />
     </nav>
   )
-})
+}
 
 SidebarContent.displayName = "SidebarContent"
 

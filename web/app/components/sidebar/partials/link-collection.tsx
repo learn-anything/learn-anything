@@ -3,25 +3,16 @@ import { useAccount } from "@/lib/providers/jazz-provider"
 import { NavItem } from "~/components/custom/nav-item"
 
 export const LinkCollection: React.FC = () => {
-  const { me } = useAccount({
-    root: {
-      personalLinks: [],
-      personalPages: [],
-      topicsWantToLearn: [],
-      topicsLearning: [],
-      topicsLearned: [],
-      tasks: [],
-    },
-  })
+  const { me } = useAccount()
 
-  const linkCount = me?.root.personalLinks?.length || 0
-  const pageCount = me?.root.personalPages?.length || 0
-  const taskCount = me?.root.tasks?.length || 0
+  const linkCount = me?.root?.personalLinks?.length || 0
+  const pageCount = me?.root?.personalPages?.length || 0
+  const taskCount = me?.root?.tasks?.length || 0
 
   const topicCount =
-    (me?.root.topicsWantToLearn?.length || 0) +
-    (me?.root.topicsLearning?.length || 0) +
-    (me?.root.topicsLearned?.length || 0)
+    (me?.root?.topicsWantToLearn?.length || 0) +
+    (me?.root?.topicsLearning?.length || 0) +
+    (me?.root?.topicsLearned?.length || 0)
 
   return (
     <div className="flex flex-col gap-px py-2">
