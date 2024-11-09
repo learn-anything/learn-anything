@@ -29,7 +29,9 @@ const TITLE_PLACEHOLDER = "Untitled"
 
 function PageDetailComponent() {
   const { pageId } = Route.useParams()
-  const { me } = useAccount({ root: { personalLinks: [] } })
+  const { me } = useAccount({
+    root: { personalPages: [{}] },
+  })
   const isMobile = useMedia("(max-width: 770px)")
   const page = useCoState(PersonalPage, pageId as ID<PersonalPage>)
 
@@ -136,6 +138,18 @@ const DetailPageForm = ({
   const titleEditorRef = React.useRef<Editor | null>(null)
   const contentEditorRef = React.useRef<Editor | null>(null)
   const [isInitialSync, setIsInitialSync] = React.useState(true)
+
+  const { id: pageId, title: pageTitle } = page
+
+  React.useEffect(() => {
+    if (!pageId) return
+
+    if (!pageTitle && titleEditorRef.current) {
+      titleEditorRef.current.commands.focus()
+    } else if (contentEditorRef.current) {
+      contentEditorRef.current.commands.focus()
+    }
+  }, [pageId, pageTitle])
 
   React.useEffect(() => {
     if (!page) return
@@ -270,10 +284,6 @@ const DetailPageForm = ({
         editor.commands.setContent(page.title)
       }
       titleEditorRef.current = editor
-
-      if (!page.title) {
-        editor.commands.focus()
-      }
     },
     onBlur: ({ editor }) => handleUpdateTitle(editor),
     onUpdate: ({ editor }) => handleUpdateTitle(editor),
@@ -288,12 +298,8 @@ const DetailPageForm = ({
       }
 
       setIsInitialSync(false)
-
-      if (page.title) {
-        editor.commands.focus()
-      }
     },
-    [page.content, page.title],
+    [page.content],
   )
 
   return (
