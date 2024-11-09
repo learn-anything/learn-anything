@@ -5,7 +5,6 @@ import { useAtom } from "jotai"
 import { usePageActions } from "~/hooks/actions/use-page-actions"
 import { useAuth } from "@clerk/tanstack-start"
 import { useNavigate } from "@tanstack/react-router"
-import queryString from "query-string"
 import { commandPaletteOpenAtom } from "~/store/any-store"
 import { isModKey, isServer } from "@shared/utils"
 
@@ -57,9 +56,7 @@ export function KeyboardHandlerContent() {
     const route = SEQUENCES[sequenceStr]
 
     if (route) {
-      navigate({
-        to: route,
-      })
+      navigate({ to: route })
       resetSequence()
     }
   }, [sequence, navigate, resetSequence])
@@ -71,7 +68,8 @@ export function KeyboardHandlerContent() {
       }
 
       navigate({
-        to: `/links?${queryString.stringify({ create: true })}`,
+        to: "/links",
+        search: { create: true },
       })
     },
     [navigate],
@@ -83,17 +81,9 @@ export function KeyboardHandlerContent() {
         return
       }
 
-      if (!me || me._type === "Anonymous") {
-        return
-      }
-
-      const page = newPage(me)
-
-      navigate({
-        to: `/pages/${page.id}`,
-      })
+      newPage()
     },
-    [me, newPage, navigate],
+    [newPage],
   )
 
   useKeyDown(
