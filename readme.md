@@ -30,7 +30,7 @@ bun i
 ```
 
 > [!NOTE]
-> bun setup is not yet done but will be a command to fully bootstrap a local working env for the project, without it, running `bun web` is impossible yet
+> bun setup is not yet done but will be a command to fully bootstrap a local working env for the project
 
 ```
 bun setup
@@ -56,7 +56,7 @@ VITE_JAZZ_GLOBAL_GROUP_ID=
 CLERK_SECRET_KEY=
 ```
 
-Currently the way to get them is to message to us on [Discord](https://discord.gg/bxtD8x6aNF) (this will be improved).
+Currently the way to get them is to message us on [Discord](https://discord.gg/bxtD8x6aNF) (this will be improved/automated).
 
 ## Run website
 
