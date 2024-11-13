@@ -5,23 +5,16 @@ import { BubbleMenu } from "./components/bubble-menu"
 import { cn } from "@/lib/utils"
 import { useLaEditor, UseLaEditorProps } from "./hooks/use-la-editor"
 import { MeasuredContainer } from "./components/measured-container"
-import { LaAccount, PersonalPage } from "~/lib/schema"
 
 export interface LaEditorProps extends UseLaEditorProps {
   value?: Content
   className?: string
   editorContentClassName?: string
-  me: LaAccount
-  personalPage: PersonalPage
 }
 
 export const LaEditor = React.forwardRef<HTMLDivElement, LaEditorProps>(
-  ({ className, editorContentClassName, me, personalPage, ...props }, ref) => {
-    const editor = useLaEditor({
-      ...props,
-      me,
-      personalPage,
-    })
+  ({ className, editorContentClassName, ...props }, ref) => {
+    const editor = useLaEditor(props)
 
     if (!editor) {
       return null

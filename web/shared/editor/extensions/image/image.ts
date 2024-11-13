@@ -5,10 +5,11 @@ import type { Node } from "@tiptap/pm/model"
 import { ReactNodeViewRenderer } from "@tiptap/react"
 import { ImageViewBlock } from "./components/image-view-block"
 import {
+  FileError,
+  FileValidationOptions,
   filterFiles,
+  isUrl,
   randomId,
-  type FileError,
-  type FileValidationOptions,
 } from "@shared/editor/lib/utils"
 
 type ImageAction = "download" | "copyImage" | "copyLink"
@@ -57,7 +58,7 @@ interface CustomImageOptions
   onToggle?: (editor: Editor, files: File[], pos: number) => void
 }
 
-declare module "@tiptap/core" {
+declare module "@tiptap/react" {
   interface Commands<ReturnType> {
     setImages: {
       setImages: (
@@ -204,9 +205,6 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
       fileName: {
         default: undefined,
       },
-      fileType: {
-        default: undefined,
-      },
     }
   },
 
@@ -238,7 +236,6 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
                       alt: image.alt,
                       title: image.title,
                       fileName: image.src.name,
-                      fileType: image.src.type,
                     },
                   }
                 } else {
@@ -250,7 +247,6 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
                       alt: image.alt,
                       title: image.title,
                       fileName: null,
-                      fileType: null,
                     },
                   }
                 }
@@ -342,7 +338,8 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
 
         if (
           !imageInfo.src.startsWith("blob:") &&
-          !imageInfo.src.startsWith("data:")
+          !imageInfo.src.startsWith("data:") &&
+          isUrl(imageInfo.src)
         ) {
           this.options.onImageRemoved?.({
             id: imageInfo.id,

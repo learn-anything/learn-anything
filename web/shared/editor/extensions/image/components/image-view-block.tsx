@@ -7,11 +7,11 @@ import { cn } from "@/lib/utils"
 import { Controlled as ControlledZoom } from "react-medium-image-zoom"
 import { ActionButton, ActionWrapper, ImageActions } from "./image-actions"
 import { useImageActions } from "../hooks/use-image-actions"
+import { blobUrlToBase64, randomId } from "@shared/editor/lib/utils"
 import { InfoCircledIcon, TrashIcon } from "@radix-ui/react-icons"
 import { ImageOverlay } from "./image-overlay"
 import type { UploadReturnType } from "../image"
 import { Spinner } from "@shared/components/spinner"
-import { blobUrlToBase64, randomId } from "@shared/editor/lib/utils"
 
 const MAX_HEIGHT = 600
 const MIN_HEIGHT = 120
@@ -42,14 +42,13 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({
     width: initialWidth,
     height: initialHeight,
     fileName,
-    fileType,
   } = node.attrs
+  const uploadAttemptedRef = React.useRef(false)
 
   const initSrc = React.useMemo(() => {
     if (typeof initialSrc === "string") {
       return initialSrc
     }
-
     return initialSrc.src
   }, [initialSrc])
 
@@ -165,54 +164,55 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({
 
   React.useEffect(() => {
     const handleImage = async () => {
+      if (!initSrc.startsWith("blob:") || uploadAttemptedRef.current) {
+        return
+      }
+
+      uploadAttemptedRef.current = true
       const imageExtension = editor.options.extensions.find(
         (ext) => ext.name === "image",
       )
       const { uploadFn } = imageExtension?.options ?? {}
 
-      if (initSrc.startsWith("blob:")) {
-        if (!uploadFn) {
-          try {
-            const base64 = await blobUrlToBase64(initSrc)
-            setImageState((prev) => ({ ...prev, src: base64 }))
-            updateAttributes({ src: base64 })
-          } catch {
-            setImageState((prev) => ({ ...prev, error: true }))
-          }
-        } else {
-          try {
-            setImageState((prev) => ({ ...prev, isServerUploading: true }))
-
-            const response = await fetch(initSrc)
-            const blob = await response.blob()
-
-            const file = new File([blob], fileName || "image", {
-              type: fileType || blob.type,
-            })
-
-            const url: UploadReturnType = await uploadFn(file, editor)
-            const normalizedData = normalizeUploadResponse(url)
-
-            setImageState((prev) => ({
-              ...prev,
-              ...normalizedData,
-              isServerUploading: false,
-            }))
-
-            updateAttributes(normalizedData)
-          } catch {
-            setImageState((prev) => ({
-              ...prev,
-              error: true,
-              isServerUploading: false,
-            }))
-          }
+      if (!uploadFn) {
+        try {
+          const base64 = await blobUrlToBase64(initSrc)
+          setImageState((prev) => ({ ...prev, src: base64 }))
+          updateAttributes({ src: base64 })
+        } catch {
+          setImageState((prev) => ({ ...prev, error: true }))
         }
+        return
+      }
+
+      try {
+        setImageState((prev) => ({ ...prev, isServerUploading: true }))
+        const response = await fetch(initSrc)
+        const blob = await response.blob()
+        const file = new File([blob], fileName, { type: blob.type })
+
+        const url = await uploadFn(file, editor)
+        const normalizedData = normalizeUploadResponse(url)
+
+        setImageState((prev) => ({
+          ...prev,
+          ...normalizedData,
+          isServerUploading: false,
+        }))
+
+        updateAttributes(normalizedData)
+      } catch (error) {
+        console.error("Image upload failed:", error)
+        setImageState((prev) => ({
+          ...prev,
+          error: true,
+          isServerUploading: false,
+        }))
       }
     }
 
     handleImage()
-  }, [editor, fileName, fileType, initSrc, updateAttributes])
+  }, [editor, fileName, initSrc, updateAttributes])
 
   return (
     <NodeViewWrapper

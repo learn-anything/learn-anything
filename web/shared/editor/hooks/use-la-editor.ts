@@ -23,10 +23,9 @@ import { Dropcursor } from "@shared/editor/extensions/dropcursor"
 import { Image as ImageExt } from "../extensions/image"
 import { FileHandler } from "../extensions/file-handler"
 import { toast } from "sonner"
-import { ImageLists } from "~/lib/schema/folder"
-import { LaAccount, Image as LaImage, PersonalPage } from "~/lib/schema"
 import { deleteImageFn, storeImageFn } from "@shared/actions"
 import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE } from "@shared/constants"
+import { TrailingNode } from "../extensions/trailing-node"
 
 export interface UseLaEditorProps
   extends Omit<UseEditorOptions, "editorProps"> {
@@ -40,15 +39,7 @@ export interface UseLaEditorProps
   editorProps?: EditorOptions["editorProps"]
 }
 
-const createExtensions = ({
-  personalPage,
-  me,
-  placeholder,
-}: {
-  personalPage: PersonalPage
-  me: LaAccount
-  placeholder: string
-}) => [
+const createExtensions = ({ placeholder }: { placeholder: string }) => [
   Heading,
   Code,
   Link,
@@ -56,6 +47,7 @@ const createExtensions = ({
   TaskItem,
   Selection,
   Paragraph,
+  TrailingNode,
   ImageExt.configure({
     allowedMimeTypes: ALLOWED_FILE_TYPES,
     maxFileSize: MAX_FILE_SIZE,
@@ -90,36 +82,9 @@ const createExtensions = ({
 
       const store = await storeImageFn(formData)
 
-      if (!me.root?.images) {
-        me.root!.images = ImageLists.create([], { owner: me })
-      }
-
-      const img = LaImage.create(
-        {
-          fileName: store.fileModel.name,
-          fileSize: store.fileModel.size,
-          width: store.fileModel.width,
-          height: store.fileModel.height,
-          page: personalPage,
-          referenceId: store.fileModel.id,
-          url: store.fileModel.content.src,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        { owner: me },
-      )
-
-      me.root!.images.push(img)
-
       return { id: store.fileModel.id, src: store.fileModel.content.src }
     },
     onImageRemoved({ id }) {
-      const index = me.root?.images?.findIndex((item) => item?.id === id)
-
-      if (index !== undefined && index !== -1) {
-        me.root?.images?.splice(index, 1)
-      }
-
       if (id) {
         deleteImageFn({ id: id?.toString() })
       }
@@ -211,10 +176,7 @@ const createExtensions = ({
   }),
 ]
 
-type Props = UseLaEditorProps & {
-  me: LaAccount
-  personalPage: PersonalPage
-}
+type Props = UseLaEditorProps
 
 export const useLaEditor = ({
   value,
@@ -225,8 +187,6 @@ export const useLaEditor = ({
   onUpdate,
   onBlur,
   editorProps,
-  me,
-  personalPage,
   ...props
 }: Props) => {
   const throttledSetValue = useThrottleCallback(
@@ -279,7 +239,7 @@ export const useLaEditor = ({
 
   const editorOptions: UseEditorOptions = React.useMemo(
     () => ({
-      extensions: createExtensions({ personalPage, me, placeholder }),
+      extensions: createExtensions({ placeholder }),
       editorProps: mergedEditorProps,
       onUpdate: ({ editor }) => throttledSetValue(editor),
       onCreate: ({ editor }) => handleCreate(editor),
@@ -287,8 +247,6 @@ export const useLaEditor = ({
       ...props,
     }),
     [
-      personalPage,
-      me,
       placeholder,
       mergedEditorProps,
       props,
