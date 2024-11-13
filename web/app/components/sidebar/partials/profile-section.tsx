@@ -130,7 +130,7 @@ const DropdownMenuItems: React.FC<DropdownMenuItemsProps> = ({
       <MenuLink href="/profile" icon="CircleUser" text="My profile" />
       <DropdownMenuItem className="gap-2" onClick={() => setShowShortcut(true)}>
         <LaIcon name="Keyboard" />
-        <span>Shortcut</span>
+        <span>Shortcuts</span>
       </DropdownMenuItem>
       <MenuLink href="/onboarding" icon="LayoutList" text="Onboarding" />
       <DropdownMenuSeparator />
