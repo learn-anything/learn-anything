@@ -8,7 +8,7 @@ import { useNavigate } from "@tanstack/react-router"
 export const useCommandActions = () => {
   const { setTheme } = useTheme()
   const navigate = useNavigate()
-  const { newPage } = usePageActions()
+  const { createNewPage } = usePageActions()
 
   const changeTheme = React.useCallback(
     (theme: string) => {
@@ -39,6 +39,6 @@ export const useCommandActions = () => {
     navigateTo,
     openLinkInNewTab,
     copyCurrentURL,
-    createNewPage: newPage,
+    createNewPage,
   }
 }

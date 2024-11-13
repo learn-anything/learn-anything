@@ -1,60 +1,60 @@
 import * as React from "react"
 import { toast } from "sonner"
-import { LaAccount, PersonalPage } from "@/lib/schema"
+import { PersonalPage } from "@/lib/schema"
 import { ID } from "jazz-tools"
 import { useNavigate } from "@tanstack/react-router"
 import { useAccountOrGuest } from "~/lib/providers/jazz-provider"
 
 export const usePageActions = () => {
-  const { me } = useAccountOrGuest()
+  const { me: account } = useAccountOrGuest()
   const navigate = useNavigate()
 
-  const newPage = React.useCallback(() => {
-    if (!me) return
-    if (me._type !== "Account") return
+  const createNewPage = React.useCallback(async () => {
+    try {
+      const isValidAccount = account && account._type === "Account"
+      if (!isValidAccount) return
 
-    const page = PersonalPage.create(
-      { public: false, createdAt: new Date(), updatedAt: new Date() },
-      { owner: me },
-    )
+      const page = PersonalPage.create(
+        {
+          public: false,
+          topic: null,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        { owner: account },
+      )
 
-    me.root?.personalPages?.push(page)
+      account.root?.personalPages?.push(page)
 
-    navigate({ to: "/pages/$pageId", params: { pageId: page.id } })
-  }, [me, navigate])
+      navigate({
+        to: "/pages/$pageId",
+        params: { pageId: page.id },
+        replace: true,
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }, [account, navigate])
 
   const deletePage = React.useCallback(
-    (me: LaAccount, pageId: ID<PersonalPage>): void => {
-      if (!me.root?.personalPages) return
+    (pageId: ID<PersonalPage>): void => {
+      const isValidAccount = account && account._type === "Account"
+      if (!isValidAccount) return
 
-      const index = me.root.personalPages.findIndex(
+      const found = account.root?.personalPages?.findIndex(
         (item) => item?.id === pageId,
       )
-      if (index === -1) {
-        toast.error("Page not found")
-        return
-      }
 
-      const page = me.root.personalPages[index]
-      if (!page) {
-        toast.error("Page data is invalid")
-        return
-      }
-
-      try {
-        me.root.personalPages.splice(index, 1)
+      if (found !== undefined && found > -1) {
+        account.root?.personalPages?.splice(found, 1)
 
         toast.success("Page deleted", {
-          position: "bottom-right",
-          description: `${page.title} has been deleted.`,
+          description: "The page has been deleted",
         })
-      } catch (error) {
-        console.error("Failed to delete page", error)
-        toast.error("Failed to delete page")
       }
     },
-    [],
+    [account],
   )
 
-  return { newPage, deletePage }
+  return { createNewPage, deletePage }
 }

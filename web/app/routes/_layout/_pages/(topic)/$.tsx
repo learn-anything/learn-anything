@@ -17,7 +17,7 @@ export const openPopoverForIdAtom = atom<string | null>(null)
 
 export function TopicDetailComponent() {
   const params = useParams({ from: "/_layout/_pages/(topic)/$" })
-  const { me } = useAccountOrGuest({ root: { personalLinks: [] } })
+  const { me } = useAccountOrGuest({ root: { personalLinks: [{}] } })
 
   const topicID = React.useMemo(
     () =>

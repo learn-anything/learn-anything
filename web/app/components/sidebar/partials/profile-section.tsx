@@ -19,21 +19,15 @@ import { SignInButton, useAuth, useUser } from "@clerk/tanstack-start"
 import { Link, useLocation } from "@tanstack/react-router"
 import { ShortcutKey } from "@shared/minimal-tiptap/components/shortcut-key"
 import { Feedback } from "./feedback"
+import { useAccount } from "~/lib/providers/jazz-provider"
 
 export const ProfileSection: React.FC = () => {
   const { user, isSignedIn } = useUser()
-  const { signOut } = useAuth()
   const [menuOpen, setMenuOpen] = React.useState(false)
   const { pathname } = useLocation()
   const [, setShowShortcut] = useAtom(showShortcutAtom)
 
   const { disableKeydown } = useKeyboardManager("profileSection")
-
-  const handleSignOut = () => {
-    signOut(() => {
-      window.location.replace("/")
-    })
-  }
 
   React.useEffect(() => {
     disableKeydown(menuOpen)
@@ -59,7 +53,6 @@ export const ProfileSection: React.FC = () => {
           user={user}
           menuOpen={menuOpen}
           setMenuOpen={setMenuOpen}
-          signOut={handleSignOut}
           setShowShortcut={setShowShortcut}
         />
         <span className="flex flex-auto"></span>
@@ -73,7 +66,6 @@ interface ProfileDropdownProps {
   user: any
   menuOpen: boolean
   setMenuOpen: (open: boolean) => void
-  signOut: () => void
   setShowShortcut: (show: boolean) => void
 }
 
@@ -81,7 +73,6 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({
   user,
   menuOpen,
   setMenuOpen,
-  signOut,
   setShowShortcut,
 }) => (
   <div className="flex min-w-0">
@@ -107,60 +98,71 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="start" side="top">
-        <DropdownMenuItems
-          signOut={signOut}
-          setShowShortcut={setShowShortcut}
-        />
+        <DropdownMenuItems setShowShortcut={setShowShortcut} />
       </DropdownMenuContent>
     </DropdownMenu>
   </div>
 )
 
 interface DropdownMenuItemsProps {
-  signOut: () => void
   setShowShortcut: (show: boolean) => void
 }
 
 const DropdownMenuItems: React.FC<DropdownMenuItemsProps> = ({
-  signOut,
   setShowShortcut,
-}) => (
-  <>
-    <MenuLink href="/profile" icon="CircleUser" text="My profile" />
-    <DropdownMenuItem className="gap-2" onClick={() => setShowShortcut(true)}>
-      <LaIcon name="Keyboard" />
-      <span>Shortcut</span>
-    </DropdownMenuItem>
-    <MenuLink href="/onboarding" icon="LayoutList" text="Onboarding" />
-    <DropdownMenuSeparator />
-    <MenuLink
-      href="https://docs.learn-anything.xyz/"
-      icon="Sticker"
-      text="Docs"
-    />
-    <MenuLink
-      href="https://github.com/learn-anything/learn-anything"
-      icon="Github"
-      text="GitHub"
-    />
-    <MenuLink
-      href="https://discord.com/invite/bxtD8x6aNF"
-      icon={DiscordIcon}
-      text="Discord"
-      iconClass="-ml-1"
-    />
-    <DropdownMenuSeparator />
-    <DropdownMenuItem onClick={signOut}>
-      <div className="relative flex flex-1 cursor-pointer items-center gap-2">
-        <LaIcon name="LogOut" />
-        <span>Log out</span>
-        <div className="absolute right-0">
-          <ShortcutKey keys={["alt", "shift", "q"]} />
+}) => {
+  const { signOut } = useAuth()
+  const { logOut } = useAccount()
+
+  const handleSignOut = React.useCallback(async () => {
+    try {
+      logOut()
+      signOut(() => {
+        window.location.href = "/"
+      })
+    } catch (error) {
+      console.error("Error signing out:", error)
+    }
+  }, [logOut, signOut])
+
+  return (
+    <>
+      <MenuLink href="/profile" icon="CircleUser" text="My profile" />
+      <DropdownMenuItem className="gap-2" onClick={() => setShowShortcut(true)}>
+        <LaIcon name="Keyboard" />
+        <span>Shortcut</span>
+      </DropdownMenuItem>
+      <MenuLink href="/onboarding" icon="LayoutList" text="Onboarding" />
+      <DropdownMenuSeparator />
+      <MenuLink
+        href="https://docs.learn-anything.xyz/"
+        icon="Sticker"
+        text="Docs"
+      />
+      <MenuLink
+        href="https://github.com/learn-anything/learn-anything"
+        icon="Github"
+        text="GitHub"
+      />
+      <MenuLink
+        href="https://discord.com/invite/bxtD8x6aNF"
+        icon={DiscordIcon}
+        text="Discord"
+        iconClass="-ml-1"
+      />
+      <DropdownMenuSeparator />
+      <DropdownMenuItem onClick={handleSignOut}>
+        <div className="relative flex flex-1 cursor-pointer items-center gap-2">
+          <LaIcon name="LogOut" />
+          <span>Log out</span>
+          <div className="absolute right-0">
+            <ShortcutKey keys={["alt", "shift", "q"]} />
+          </div>
         </div>
-      </div>
-    </DropdownMenuItem>
-  </>
-)
+      </DropdownMenuItem>
+    </>
+  )
+}
 
 interface MenuLinkProps {
   href: string

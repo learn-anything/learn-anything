@@ -1,6 +1,5 @@
 /// <reference types="vite/client" />
 import { getAuth } from "@clerk/tanstack-start/server"
-import type { QueryClient } from "@tanstack/react-query"
 import {
   Outlet,
   ScrollRestoration,
@@ -29,15 +28,6 @@ export const TanStackRouterDevtools =
         })),
       )
 
-export const ReactQueryDevtools =
-  process.env.NODE_ENV === "production"
-    ? () => null
-    : React.lazy(() =>
-        import("@tanstack/react-query-devtools").then((d) => ({
-          default: d.ReactQueryDevtools,
-        })),
-      )
-
 export const fetchClerkAuth = createServerFn("GET", async (_, ctx) => {
   const auth = await getAuth(ctx.request)
 
@@ -45,8 +35,7 @@ export const fetchClerkAuth = createServerFn("GET", async (_, ctx) => {
 })
 
 export const Route = createRootRouteWithContext<{
-  auth: { userId: string }
-  queryClient: QueryClient
+  auth?: ReturnType<typeof getAuth> | null
 }>()({
   meta: () => [
     {
@@ -86,13 +75,25 @@ export const Route = createRootRouteWithContext<{
     { rel: "manifest", href: "/site.webmanifest", color: "#fffff" },
     { rel: "icon", href: "/favicon.ico" },
   ],
-  beforeLoad: async ({ context }) => {
-    if (context.auth) {
-      return { auth: context.auth }
-    }
+  beforeLoad: async (ctx) => {
+    try {
+      // Handle explicit null auth (logged out state)
+      if (ctx.context.auth === null) {
+        return { auth: null }
+      }
 
-    const auth = await fetchClerkAuth()
-    return { auth }
+      // Use existing auth if available
+      if (ctx.context.auth) {
+        return { auth: ctx.context.auth }
+      }
+
+      // Fetch new auth state
+      const auth = await fetchClerkAuth()
+      return { auth }
+    } catch (error) {
+      console.error("Error in beforeLoad:", error)
+      return { auth: null }
+    }
   },
   errorComponent: (props) => {
     return (
@@ -101,6 +102,11 @@ export const Route = createRootRouteWithContext<{
       </RootDocument>
     )
   },
+  pendingComponent: () => (
+    <RootDocument>
+      <div>Loading...</div>
+    </RootDocument>
+  ),
   notFoundComponent: () => <NotFound />,
   component: RootComponent,
 })
@@ -124,7 +130,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 
         <React.Suspense>
           <TanStackRouterDevtools position="bottom-right" />
-          <ReactQueryDevtools buttonPosition="bottom-right" />
         </React.Suspense>
 
         <ScrollRestoration />

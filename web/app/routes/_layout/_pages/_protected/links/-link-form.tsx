@@ -143,7 +143,7 @@ export const LinkForm: React.FC<LinkFormProps> = ({
 
   const [isFetching, setIsFetching] = React.useState(false)
   const [urlFetched, setUrlFetched] = React.useState<string | null>(null)
-  const { me } = useAccount()
+  const { me } = useAccount({ root: { personalLinks: [{}] } })
   const selectedLink = useCoState(PersonalLink, personalLink?.id)
 
   const form = useForm<LinkFormValues>({

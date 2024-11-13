@@ -5,16 +5,12 @@ import {
   SidebarToggleButton,
 } from "@/components/custom/content-header"
 import { LaIcon } from "@/components/custom/la-icon"
-import { useAccount } from "@/lib/providers/jazz-provider"
 import { usePageActions } from "~/hooks/actions/use-page-actions"
 
 interface PageHeaderProps {}
 
 export const PageHeader: React.FC<PageHeaderProps> = () => {
-  const { me } = useAccount()
-  const { newPage } = usePageActions()
-
-  if (!me) return null
+  const { createNewPage } = usePageActions()
 
   return (
     <ContentHeader>
@@ -28,7 +24,7 @@ export const PageHeader: React.FC<PageHeaderProps> = () => {
             type="button"
             variant="secondary"
             className="gap-x-2"
-            onClick={newPage}
+            onClick={createNewPage}
           >
             <LaIcon name="Plus" />
             <span className="hidden md:block">New page</span>

@@ -82,7 +82,7 @@ export const Route = createFileRoute("/_layout/_pages/_protected/tasks/")({
 
 function TaskComponent() {
   const { filter } = Route.useSearch()
-  const { me } = useAccount({ root: { tasks: [] } })
+  const { me } = useAccount({ root: { tasks: [{}] } })
   const tasks = me?.root.tasks
   const { deleteTask } = useTaskActions()
 

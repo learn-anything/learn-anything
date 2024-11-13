@@ -26,7 +26,14 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({ number, label }) => {
 }
 
 function ProfileComponent() {
-  const account = useAccount()
+  const account = useAccount({
+    profile: {},
+    root: {
+      topicsLearning: [{}],
+      topicsWantToLearn: [{}],
+      topicsLearned: [{}],
+    },
+  })
   const username = ""
   const { user } = useUser()
   const avatarInputRef = React.useRef<HTMLInputElement>(null)

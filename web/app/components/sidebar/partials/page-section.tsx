@@ -49,11 +49,7 @@ const isExpandedAtom = atomWithStorage("isPageSectionExpanded", true)
 export const PageSection: React.FC = () => {
   const { me } = useAccount({
     root: {
-      personalPages: [
-        {
-          topic: {},
-        },
-      ],
+      personalPages: [{}],
     },
   })
 
@@ -81,9 +77,9 @@ export const PageSection: React.FC = () => {
       />
       {isExpanded && (
         <div className="flex flex-col gap-px">
-          {sortedPages.map((page) => (
+          {sortedPages.map((page, index) => (
             <Link
-              key={page.id}
+              key={index}
               to="/pages/$pageId"
               params={{ pageId: page.id }}
               className={cn(
@@ -168,13 +164,13 @@ const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({
 )
 
 const NewPageButton: React.FC = () => {
-  const { newPage } = usePageActions()
+  const { createNewPage } = usePageActions()
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     e.stopPropagation()
 
-    newPage()
+    createNewPage()
   }
 
   return (

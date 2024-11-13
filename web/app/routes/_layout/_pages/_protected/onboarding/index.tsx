@@ -80,9 +80,9 @@ const StepItem = ({
 function OnboardingComponent() {
   const { me } = useAccount({
     root: {
-      personalPages: [],
-      personalLinks: [],
-      topicsWantToLearn: [],
+      personalPages: [{}],
+      personalLinks: [{}],
+      topicsWantToLearn: [{}],
     },
   })
 

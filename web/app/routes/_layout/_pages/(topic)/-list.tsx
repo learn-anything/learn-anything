@@ -25,7 +25,7 @@ export function TopicDetailList({
   activeIndex,
   setActiveIndex,
 }: TopicDetailListProps) {
-  const { me } = useAccountOrGuest({ root: { personalLinks: [] } })
+  const { me } = useAccountOrGuest({ root: { personalLinks: [{}] } })
   const personalLinks =
     !me || me._type === "Anonymous" ? undefined : me.root.personalLinks
 

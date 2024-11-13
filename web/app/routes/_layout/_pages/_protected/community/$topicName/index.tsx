@@ -26,7 +26,7 @@ interface Question {
 
 function CommunityTopicComponent() {
   const { topicName } = Route.useParams()
-  const { me } = useAccountOrGuest({ root: { personalLinks: [] } })
+  const { me } = useAccountOrGuest()
   const topicID = useMemo(
     () => me && Topic.findUnique({ topicName }, JAZZ_GLOBAL_GROUP_ID, me),
     [topicName, me],

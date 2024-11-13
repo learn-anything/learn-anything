@@ -5,22 +5,12 @@ import { atom } from "jotai"
 import { useMedia } from "@/hooks/use-media"
 import { useActiveItemScroll } from "@/hooks/use-active-item-scroll"
 import { Column } from "@/components/custom/column"
-import { LaAccount, ListOfTopics, Topic, UserRoot } from "@/lib/schema"
+import { Topic } from "@/lib/schema"
 import { LearningStateValue } from "@/lib/constants"
 import { useKeyDown } from "@/hooks/use-key-down"
 import { TopicItem } from "./-item"
 
 interface TopicListProps {}
-
-interface MainTopicListProps extends TopicListProps {
-  me: {
-    root: {
-      topicsWantToLearn: ListOfTopics
-      topicsLearning: ListOfTopics
-      topicsLearned: ListOfTopics
-    } & UserRoot
-  } & LaAccount
-}
 
 export interface PersonalTopic {
   topic: Topic | null
@@ -31,15 +21,13 @@ export const topicOpenPopoverForIdAtom = atom<string | null>(null)
 
 export const TopicList: React.FC<TopicListProps> = () => {
   const { me } = useAccount({
-    root: { topicsWantToLearn: [], topicsLearning: [], topicsLearned: [] },
+    root: {
+      topicsWantToLearn: [{}],
+      topicsLearning: [{}],
+      topicsLearned: [{}],
+    },
   })
 
-  if (!me) return null
-
-  return <MainTopicList me={me} />
-}
-
-export const MainTopicList: React.FC<MainTopicListProps> = ({ me }) => {
   const isTablet = useMedia("(max-width: 640px)")
   const [activeItemIndex, setActiveItemIndex] = React.useState<number | null>(
     null,
@@ -49,21 +37,24 @@ export const MainTopicList: React.FC<MainTopicListProps> = ({ me }) => {
   >(null)
 
   const personalTopics = React.useMemo(
-    () => [
-      ...me.root.topicsWantToLearn.map((topic) => ({
-        topic,
-        learningState: "wantToLearn" as const,
-      })),
-      ...me.root.topicsLearning.map((topic) => ({
-        topic,
-        learningState: "learning" as const,
-      })),
-      ...me.root.topicsLearned.map((topic) => ({
-        topic,
-        learningState: "learned" as const,
-      })),
-    ],
-    [me.root.topicsWantToLearn, me.root.topicsLearning, me.root.topicsLearned],
+    () =>
+      me
+        ? [
+            ...me.root.topicsWantToLearn.map((topic) => ({
+              topic,
+              learningState: "wantToLearn" as const,
+            })),
+            ...me.root.topicsLearning.map((topic) => ({
+              topic,
+              learningState: "learning" as const,
+            })),
+            ...me.root.topicsLearned.map((topic) => ({
+              topic,
+              learningState: "learned" as const,
+            })),
+          ]
+        : [],
+    [me],
   )
 
   const next = () =>

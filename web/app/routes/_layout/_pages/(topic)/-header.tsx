@@ -29,9 +29,9 @@ export const TopicDetailHeader = function TopicDetailHeader({
   const isMobile = useMedia("(max-width: 770px)")
   const { me } = useAccountOrGuest({
     root: {
-      topicsWantToLearn: [],
-      topicsLearning: [],
-      topicsLearned: [],
+      topicsWantToLearn: [{}],
+      topicsLearning: [{}],
+      topicsLearned: [{}],
     },
   })
 

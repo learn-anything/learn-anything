@@ -30,7 +30,11 @@ export const TopicItem = React.forwardRef<HTMLAnchorElement, TopicItemProps>(
     )
     const navigate = useNavigate()
     const { me } = useAccount({
-      root: { topicsWantToLearn: [], topicsLearning: [], topicsLearned: [] },
+      root: {
+        topicsWantToLearn: [{}],
+        topicsLearning: [{}],
+        topicsLearned: [{}],
+      },
     })
 
     let p: {

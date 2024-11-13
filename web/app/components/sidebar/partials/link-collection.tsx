@@ -3,7 +3,16 @@ import { useAccount } from "@/lib/providers/jazz-provider"
 import { NavItem } from "~/components/custom/nav-item"
 
 export const LinkCollection: React.FC = () => {
-  const { me } = useAccount()
+  const { me } = useAccount({
+    root: {
+      personalLinks: [{}],
+      personalPages: [{}],
+      tasks: [{}],
+      topicsWantToLearn: [{}],
+      topicsLearning: [{}],
+      topicsLearned: [{}],
+    },
+  })
 
   const linkCount = me?.root?.personalLinks?.length || 0
   const pageCount = me?.root?.personalPages?.length || 0

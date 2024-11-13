@@ -85,9 +85,7 @@ const SearchComponent = () => {
     pages: PersonalPage[]
   }>({ topics: [], links: [], pages: [] })
 
-  const { me } = useAccountOrGuest({
-    root: { personalLinks: [{}], personalPages: [{}] },
-  })
+  const { me } = useAccountOrGuest()
 
   const globalGroup = useCoState(PublicGlobalGroup, JAZZ_GLOBAL_GROUP_ID, {
     root: {
@@ -112,14 +110,14 @@ const SearchComponent = () => {
       links:
         me?._type === "Anonymous"
           ? []
-          : me?.root.personalLinks?.filter(
+          : me?.root?.personalLinks?.filter(
               (link: PersonalLink | null): link is PersonalLink =>
                 link !== null && link.title.toLowerCase().startsWith(value),
             ) || [],
       pages:
         me?._type === "Anonymous"
           ? []
-          : me?.root.personalPages.filter(
+          : me?.root?.personalPages?.filter(
               (page): page is PersonalPage =>
                 page !== null &&
                 page.title !== undefined &&

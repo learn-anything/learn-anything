@@ -1,9 +1,9 @@
 import * as React from "react"
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { ID } from "jazz-tools"
-import { LaAccount, PersonalPage } from "@/lib/schema"
+import { PersonalPage } from "@/lib/schema"
 import { Content, EditorContent, useEditor } from "@tiptap/react"
-import { useAccount, useCoState } from "@/lib/providers/jazz-provider"
+import { useCoState } from "@/lib/providers/jazz-provider"
 import { EditorView } from "@tiptap/pm/view"
 import { Editor } from "@tiptap/core"
 import { generateUniqueSlug } from "@/lib/utils"
@@ -29,17 +29,10 @@ const TITLE_PLACEHOLDER = "Untitled"
 
 function PageDetailComponent() {
   const { pageId } = Route.useParams()
-  const { me } = useAccount({
-    root: {
-      personalPages: [
-        {
-          topic: {},
-        },
-      ],
-    },
-  })
   const isMobile = useMedia("(max-width: 770px)")
-  const page = useCoState(PersonalPage, pageId as ID<PersonalPage>)
+  const page = useCoState(PersonalPage, pageId as ID<PersonalPage>, {
+    topic: {},
+  })
 
   const navigate = useNavigate()
   const { deletePage } = usePageActions()
@@ -55,13 +48,13 @@ function PageDetailComponent() {
       confirmButton: { variant: "destructive" },
     })
 
-    if (result && me?.root.personalPages) {
-      deletePage(me, pageId as ID<PersonalPage>)
+    if (result) {
+      deletePage(pageId as ID<PersonalPage>)
       navigate({ to: "/pages" })
     }
-  }, [confirm, deletePage, me, pageId, navigate])
+  }, [confirm, deletePage, pageId, navigate])
 
-  if (!page || !me) return null
+  if (!page) return null
 
   return (
     <div className="absolute inset-0 flex flex-row overflow-hidden">
@@ -72,7 +65,7 @@ function PageDetailComponent() {
             handleDelete={handleDelete}
             isMobile={isMobile}
           />
-          <DetailPageForm page={page} me={me} />
+          <DetailPageForm page={page} />
         </div>
 
         {!isMobile && (
@@ -132,28 +125,10 @@ const SidebarActions = ({
 
 SidebarActions.displayName = "SidebarActions"
 
-const DetailPageForm = ({
-  page,
-  me,
-}: {
-  page: PersonalPage
-  me: LaAccount
-}) => {
+const DetailPageForm = ({ page }: { page: PersonalPage }) => {
   const titleEditorRef = React.useRef<Editor | null>(null)
   const contentEditorRef = React.useRef<Editor | null>(null)
   const [isInitialSync, setIsInitialSync] = React.useState(true)
-
-  // const { id: pageId, title: pageTitle } = page
-
-  // React.useEffect(() => {
-  //   if (!pageId) return
-
-  //   if (!pageTitle && titleEditorRef.current) {
-  //     titleEditorRef.current.commands.focus()
-  //   } else if (contentEditorRef.current) {
-  //     contentEditorRef.current.commands.focus()
-  //   }
-  // }, [pageId, pageTitle])
 
   React.useEffect(() => {
     if (!page) return
@@ -293,17 +268,25 @@ const DetailPageForm = ({
     onUpdate: ({ editor }) => handleUpdateTitle(editor),
   })
 
+  const { content: pageContent, title: pageTitle } = page
+
   const handleCreate = React.useCallback(
     ({ editor }: { editor: Editor }) => {
       contentEditorRef.current = editor
 
-      if (page.content) {
-        editor.commands.setContent(page.content as Content)
+      if (pageContent) {
+        editor.commands.setContent(pageContent as Content)
       }
 
       setIsInitialSync(false)
+
+      if (!pageTitle && titleEditorRef.current) {
+        titleEditorRef.current.commands.focus()
+      } else if (contentEditorRef.current) {
+        contentEditorRef.current.commands.focus()
+      }
     },
-    [page.content],
+    [pageContent, pageTitle],
   )
 
   return (
@@ -312,6 +295,7 @@ const DetailPageForm = ({
         <form className="flex shrink-0 flex-col">
           <div className="mb-2 mt-8 py-1.5">
             <EditorContent
+              key={page.id}
               editor={titleEditor}
               className="title-editor no-command grow cursor-text select-text text-2xl font-semibold leading-[calc(1.33333)] tracking-[-0.00625rem]"
             />
@@ -319,8 +303,7 @@ const DetailPageForm = ({
           <div className="flex flex-auto flex-col">
             <div className="relative flex h-full max-w-full grow flex-col items-stretch p-0">
               <LaEditor
-                me={me}
-                personalPage={page}
+                key={page.id}
                 editorClassName="-mx-3.5 px-3.5 py-2.5 flex-auto focus:outline-none"
                 value={page.content as Content}
                 placeholder="Add content..."

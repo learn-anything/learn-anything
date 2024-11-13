@@ -45,7 +45,7 @@ export function KeyboardHandlerContent() {
   const { signOut } = useAuth()
   const navigate = useNavigate()
   const { me } = useAccountOrGuest()
-  const { newPage } = usePageActions()
+  const { createNewPage } = usePageActions()
 
   const resetSequence = React.useCallback(() => {
     setSequence([])
@@ -81,9 +81,9 @@ export function KeyboardHandlerContent() {
         return
       }
 
-      newPage()
+      createNewPage()
     },
-    [newPage],
+    [createNewPage],
   )
 
   useKeyDown(
