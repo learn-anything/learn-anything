@@ -4,8 +4,6 @@
 
 ### Files
 
-- [lib](lib) - shared functions
-- [scripts](scripts) - utility scripts
 - [web](web) - website hosted on [learn-anything.xyz](https://learn-anything.xyz) (using [React](https://react.dev/), [TanStack Start](https://tanstack.com/start/latest), [Jazz](https://jazz.tools/))
 
 ## Setup

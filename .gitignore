@@ -14,3 +14,5 @@ private
 private.*
 private-*
 past.*
+past-*
+scripts/run.ts
