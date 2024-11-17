@@ -2,21 +2,11 @@
 
 > Organize world's knowledge, explore connections and curate learning paths
 
-## Files
+### Files
 
 - [lib](lib) - shared functions
 - [scripts](scripts) - utility scripts
 - [web](web) - website hosted on [learn-anything.xyz](https://learn-anything.xyz) (using [React](https://react.dev/), [TanStack Start](https://tanstack.com/start/latest), [Jazz](https://jazz.tools/))
-
-> [!NOTE]
-> Other folders present in repo are in non stable state.
-
-<!-- TODO: make the folders stable/runnable and add them to `Files` -->
-<!-- - [api](api) - http services (using TS/[Encore](https://encore.dev/)) -->
-<!-- - [app](app) - desktop app (wrapping the [website](web) with desktop specific logic) (using [Tauri](https://v2.tauri.app/)) -->
-<!-- - [cli](cli) - cli (using [Go](https://go.dev)) -->
-<!-- - [docs](https://github.com/learn-anything/docs) - public docs hosted on [docs.learn-anything.xyz](https://docs.learn-anything.xyz/) -->
-<!-- - [nix](nix) - shared nix code -->
 
 ## Setup
 
@@ -76,6 +66,6 @@ Can always submit draft PRs with good ideas/fixes. We will help along the way to
 
 ## Join core team
 
-We are a small team of core developers right now but are always looking to expand. We will reach out with offer to join us if you contribute to repo in form of PRs. Can also contact us via [email](mailto:join@learn-anything.xyz).
+We are a small team of core developers right now but are always looking to expand. We will reach out with offer to join us if you contribute to repo in form of PRs or fruitful issues/discussions. Can also contact us via [email](mailto:join@learn-anything.xyz).
 
 [![Discord](https://img.shields.io/badge/Discord-100000?style=flat&logo=discord&logoColor=white&labelColor=black&color=black)](https://discord.com/invite/bxtD8x6aNF) [![X](https://img.shields.io/badge/learnanything-100000?logo=X&color=black)](https://x.com/learnanything_)
