@@ -60,7 +60,7 @@ Can [open new issue](../../issues/new/choose) (search [existing ones](../../issu
 
 Can submit draft PRs with good ideas/fixes. You will get help along the way to make it merge ready.
 
-Ask for help on [Discord](https://discord.gg/bxtD8x6aNF)'s [#dev channel](https://discord.com/channels/428579844046192640/1171861795867209798). You will be onboarded and unblocked fast.
+Ask for help on [Discord](https://discord.gg/bxtD8x6aNF)'s [#dev channel](https://discord.com/channels/428579844046192640/1171861795867209798). You will be unblocked fast.
 
 ## Join core team
 
