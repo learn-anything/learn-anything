@@ -54,13 +54,13 @@ bun web
 
 ## Contributing
 
-If you want to help contribute to code, ask for help on [Discord](https://discord.gg/bxtD8x6aNF)'s [#dev channel](https://discord.com/channels/428579844046192640/1171861795867209798). You will be onboarded and unblocked fast.
+Always open to useful ideas or fixes in form of issues or PRs.
 
-Can see [existing issues](../../issues) for things being worked on.
+Can [open new issue](../../issues/new/choose) (search [existing ones](../../issues) for duplicates first) or start discussion on [GitHub](../../discussions) or [Discord](https://discord.gg/bxtD8x6aNF).
 
-Can [open new issue](../../issues/new/choose) (search existing ones for duplicates first) or start discussion on [GitHub](../../discussions) or [Discord](https://discord.gg/bxtD8x6aNF).
+Can submit draft PRs with good ideas/fixes. You will get help along the way to make it merge ready.
 
-Can always submit draft PRs with good ideas/fixes. We will help along the way to make it merge ready.
+Ask for help on [Discord](https://discord.gg/bxtD8x6aNF)'s [#dev channel](https://discord.com/channels/428579844046192640/1171861795867209798). You will be onboarded and unblocked fast.
 
 ## Join core team
 
