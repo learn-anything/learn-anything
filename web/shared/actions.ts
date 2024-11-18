@@ -3,6 +3,7 @@ import { createServerFn } from "@tanstack/start"
 import { create, drop } from "ronin"
 import { z } from "zod"
 import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE } from "./constants"
+import { getWebRequest } from "vinxi/http"
 
 const ImageRuleSchema = z.object({
   file: z
@@ -16,10 +17,10 @@ const ImageRuleSchema = z.object({
     }),
 })
 
-export const storeImageFn = createServerFn(
-  "POST",
-  async (data: FormData, { request }) => {
-    const auth = await getAuth(request)
+export const storeImageFn = createServerFn({ method: "POST" })
+  .validator((data: FormData) => data)
+  .handler(async ({ data }) => {
+    const auth = await getAuth(getWebRequest())
 
     if (!auth.userId) {
       throw new Error("Unauthorized")
@@ -37,18 +38,16 @@ export const storeImageFn = createServerFn(
     })
 
     return { fileModel }
-  },
-)
+  })
 
-export const deleteImageFn = createServerFn(
-  "POST",
-  async (data: { id: string }, { request }) => {
-    const auth = await getAuth(request)
+export const deleteImageFn = createServerFn({ method: "POST" })
+  .validator((id: string) => id)
+  .handler(async ({ data }) => {
+    const auth = await getAuth(getWebRequest())
 
     if (!auth.userId) {
       throw new Error("Unauthorized")
     }
 
-    await drop.image.with.id(data.id)
-  },
-)
+    await drop.image.with.id(data)
+  })

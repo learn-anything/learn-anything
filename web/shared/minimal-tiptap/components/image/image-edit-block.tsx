@@ -45,7 +45,7 @@ const ImageEditBlock = ({
     formData.append("file", files[0])
 
     try {
-      const response = await storeImageFn(formData)
+      const response = await storeImageFn({ data: formData })
 
       editor
         .chain()

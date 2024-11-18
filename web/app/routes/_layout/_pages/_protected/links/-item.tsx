@@ -191,7 +191,9 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
                 <Link
                   to={ensureUrlProtocol(personalLink.url)}
                   target="_blank"
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={(e: React.MouseEvent<HTMLAnchorElement>) =>
+                    e.stopPropagation()
+                  }
                   className="mr-1 truncate text-xs hover:text-primary"
                 >
                   {personalLink.url}

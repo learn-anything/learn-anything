@@ -44,70 +44,72 @@ export const globalLinkFormExceptionRefsAtom = atom<
   React.RefObject<HTMLElement>[]
 >([])
 
-export const getMetadata = createServerFn("GET", async (url: string) => {
-  if (!url) {
-    return new Response('Missing "url" query parameter', {
-      status: 400,
-    })
-  }
-
-  const result = urlSchema.safeParse(decodeURIComponent(url))
-
-  if (!result.success) {
-    throw new Error(
-      result.error.issues.map((issue) => issue.message).join(", "),
-    )
-  }
-
-  url = ensureUrlProtocol(decodeURIComponent(url))
-
-  try {
-    const response = await fetch(url, {
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-      },
-    })
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+export const getMetadata = createServerFn()
+  .validator((url: string) => url)
+  .handler(async ({ data: url }) => {
+    if (!url) {
+      return new Response('Missing "url" query parameter', {
+        status: 400,
+      })
     }
 
-    const data = await response.text()
-    const $ = cheerio.load(data)
+    const result = urlSchema.safeParse(decodeURIComponent(url))
 
-    const metadata: Metadata = {
-      title:
-        $("title").text() ||
-        $('meta[property="og:title"]').attr("content") ||
-        DEFAULT_VALUES.TITLE,
-      description:
-        $('meta[name="description"]').attr("content") ||
-        $('meta[property="og:description"]').attr("content") ||
-        DEFAULT_VALUES.DESCRIPTION,
-      icon:
-        $('link[rel="icon"]').attr("href") ||
-        $('link[rel="shortcut icon"]').attr("href") ||
-        DEFAULT_VALUES.FAVICON,
-      url: url,
+    if (!result.success) {
+      throw new Error(
+        result.error.issues.map((issue) => issue.message).join(", "),
+      )
     }
 
-    if (metadata.icon && !metadata.icon.startsWith("http")) {
-      metadata.icon = new URL(metadata.icon, url).toString()
-    }
+    url = ensureUrlProtocol(decodeURIComponent(url))
 
-    return metadata
-  } catch (error) {
-    console.error("Error fetching metadata:", error)
-    const defaultMetadata: Metadata = {
-      title: DEFAULT_VALUES.TITLE,
-      description: DEFAULT_VALUES.DESCRIPTION,
-      icon: DEFAULT_VALUES.FAVICON,
-      url: url,
+    try {
+      const response = await fetch(url, {
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      const data = await response.text()
+      const $ = cheerio.load(data)
+
+      const metadata: Metadata = {
+        title:
+          $("title").text() ||
+          $('meta[property="og:title"]').attr("content") ||
+          DEFAULT_VALUES.TITLE,
+        description:
+          $('meta[name="description"]').attr("content") ||
+          $('meta[property="og:description"]').attr("content") ||
+          DEFAULT_VALUES.DESCRIPTION,
+        icon:
+          $('link[rel="icon"]').attr("href") ||
+          $('link[rel="shortcut icon"]').attr("href") ||
+          DEFAULT_VALUES.FAVICON,
+        url: url,
+      }
+
+      if (metadata.icon && !metadata.icon.startsWith("http")) {
+        metadata.icon = new URL(metadata.icon, url).toString()
+      }
+
+      return metadata
+    } catch (error) {
+      console.error("Error fetching metadata:", error)
+      const defaultMetadata: Metadata = {
+        title: DEFAULT_VALUES.TITLE,
+        description: DEFAULT_VALUES.DESCRIPTION,
+        icon: DEFAULT_VALUES.FAVICON,
+        url: url,
+      }
+      return defaultMetadata
     }
-    return defaultMetadata
-  }
-})
+  })
 
 interface LinkFormProps extends React.ComponentPropsWithoutRef<"form"> {
   onClose?: () => void
@@ -196,7 +198,7 @@ export const LinkForm: React.FC<LinkFormProps> = ({
   const fetchMetadata = async (url: string) => {
     setIsFetching(true)
     try {
-      const data = await getMetadata(encodeURIComponent(url))
+      const data = await getMetadata({ data: encodeURIComponent(url) })
       setUrlFetched(data.url)
       form.setValue("url", data.url, {
         shouldValidate: true,

@@ -4,7 +4,7 @@ import type { Content, EditorOptions, UseEditorOptions } from "@tiptap/react"
 import { useEditor } from "@tiptap/react"
 import { cn } from "@/lib/utils"
 import { useThrottleCallback } from "@shared/hooks/use-throttle-callback"
-import { getOutput } from "@shared/editor/lib/utils"
+import { getOutput, randomId } from "@shared/editor/lib/utils"
 import { StarterKit } from "@shared/editor/extensions/starter-kit"
 import { TaskList } from "@shared/editor/extensions/task-list"
 import { TaskItem } from "@shared/editor/extensions/task-item"
@@ -80,25 +80,39 @@ const createExtensions = ({ placeholder }: { placeholder: string }) => [
       formData.append("width", dimensions.width.toString())
       formData.append("height", dimensions.height.toString())
 
-      const store = await storeImageFn(formData)
+      const store = await storeImageFn({ data: formData })
 
       return { id: store.fileModel.id, src: store.fileModel.content.src }
     },
-    onImageRemoved({ id }) {
-      if (id) {
-        deleteImageFn({ id: id?.toString() })
-      }
+    onImageRemoved(props) {
+      if (props.id) {
+        deleteImageFn({ data: props.id })
 
-      toast.success("Image removed", {
-        position: "bottom-right",
-        description: "Image removed successfully",
-      })
+        console.log("Image removed", props)
+
+        toast.success("Image removed", {
+          position: "bottom-right",
+          description: "Image removed successfully",
+        })
+      }
     },
     onToggle(editor, files, pos) {
-      files.forEach((file) =>
-        editor.commands.insertContentAt(pos, {
-          type: "image",
-          attrs: { src: URL.createObjectURL(file) },
+      editor.commands.insertContentAt(
+        pos,
+        files.map((image) => {
+          const blobUrl = URL.createObjectURL(image)
+          const id = randomId()
+
+          return {
+            type: "image",
+            attrs: {
+              id,
+              src: blobUrl,
+              alt: image.name,
+              title: image.name,
+              fileName: image.name,
+            },
+          }
         }),
       )
     },

@@ -67,7 +67,7 @@ export const Route = createFileRoute("/_layout/_pages/_protected/tasks/")({
   //     throw new Error("Unauthorized")
   //   }
 
-  //   const flag = await getFeatureFlag({ name: "TASK" })
+  //   const flag = await getFeatureFlag({ data: "TASK" })
   //   const canAccess = context.user?.emailAddresses.some((email) =>
   //     flag?.emails.includes(email.emailAddress),
   //   )

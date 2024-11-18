@@ -228,7 +228,7 @@ export const LinkItem = React.forwardRef<HTMLDivElement, LinkItemProps>(
                   <Link
                     to={ensureUrlProtocol(link.url)}
                     target="_blank"
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={(e: React.MouseEvent) => e.stopPropagation()}
                     className="text-xs text-muted-foreground hover:text-primary"
                   >
                     <span className="line-clamp-1">{link.url}</span>
