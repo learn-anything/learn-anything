@@ -1,16 +1,16 @@
 import type { ImageOptions } from "@tiptap/extension-image"
 import { Image as TiptapImage } from "@tiptap/extension-image"
 import type { Editor } from "@tiptap/react"
-import type { Node } from "@tiptap/pm/model"
 import { ReactNodeViewRenderer } from "@tiptap/react"
 import { ImageViewBlock } from "./components/image-view-block"
 import {
-  FileError,
-  FileValidationOptions,
   filterFiles,
-  isUrl,
   randomId,
+  type FileError,
+  type FileValidationOptions,
 } from "@shared/editor/lib/utils"
+import { ReplaceStep } from "@tiptap/pm/transform"
+import type { Attrs } from "@tiptap/pm/model"
 
 type ImageAction = "download" | "copyImage" | "copyLink"
 
@@ -21,11 +21,6 @@ interface DownloadImageCommandProps {
 
 interface ImageActionProps extends DownloadImageCommandProps {
   action: ImageAction
-}
-
-type ImageInfo = {
-  id?: string | number
-  src: string
 }
 
 export type UploadReturnType =
@@ -39,18 +34,18 @@ interface CustomImageOptions
   extends ImageOptions,
     Omit<FileValidationOptions, "allowBase64"> {
   uploadFn?: (file: File, editor: Editor) => Promise<UploadReturnType>
-  onImageRemoved?: (props: ImageInfo) => void
+  onImageRemoved?: (props: Attrs) => void
   onActionSuccess?: (props: ImageActionProps) => void
   onActionError?: (error: Error, props: ImageActionProps) => void
-  customDownloadImage?: (
+  downloadImage?: (
     props: ImageActionProps,
     options: CustomImageOptions,
   ) => Promise<void>
-  customCopyImage?: (
+  copyImage?: (
     props: ImageActionProps,
     options: CustomImageOptions,
   ) => Promise<void>
-  customCopyLink?: (
+  copyLink?: (
     props: ImageActionProps,
     options: CustomImageOptions,
   ) => Promise<void>
@@ -133,7 +128,7 @@ const saveImage = async (
   URL.revokeObjectURL(imageURL)
 }
 
-const defaultDownloadImage = async (
+const downloadImage = async (
   props: ImageActionProps,
   options: CustomImageOptions,
 ): Promise<void> => {
@@ -149,7 +144,7 @@ const defaultDownloadImage = async (
   }
 }
 
-const defaultCopyImage = async (
+const copyImage = async (
   props: ImageActionProps,
   options: CustomImageOptions,
 ): Promise<void> => {
@@ -164,7 +159,7 @@ const defaultCopyImage = async (
   }
 }
 
-const defaultCopyLink = async (
+const copyLink = async (
   props: ImageActionProps,
   options: CustomImageOptions,
 ): Promise<void> => {
@@ -187,23 +182,34 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
       maxFileSize: 0,
       uploadFn: undefined,
       onToggle: undefined,
+      downloadImage: undefined,
+      copyImage: undefined,
+      copyLink: undefined,
     }
   },
 
   addAttributes() {
     return {
-      ...this.parent?.(),
+      src: {
+        default: null,
+      },
+      alt: {
+        default: null,
+      },
+      title: {
+        default: null,
+      },
       id: {
-        default: undefined,
+        default: null,
       },
       width: {
-        default: undefined,
+        default: null,
       },
       height: {
-        default: undefined,
+        default: null,
       },
       fileName: {
-        default: undefined,
+        default: null,
       },
     }
   },
@@ -228,10 +234,12 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
               validImages.map((image) => {
                 if (image.src instanceof File) {
                   const blobUrl = URL.createObjectURL(image.src)
+                  const id = randomId()
+
                   return {
                     type: this.type.name,
                     attrs: {
-                      id: randomId(),
+                      id,
                       src: blobUrl,
                       alt: image.alt,
                       title: image.title,
@@ -256,96 +264,81 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
 
           return false
         },
+
       downloadImage: (attrs) => () => {
-        const downloadFunc =
-          this.options.customDownloadImage || defaultDownloadImage
+        const downloadFunc = this.options.downloadImage || downloadImage
         void downloadFunc({ ...attrs, action: "download" }, this.options)
         return true
       },
+
       copyImage: (attrs) => () => {
-        const copyImageFunc = this.options.customCopyImage || defaultCopyImage
+        const copyImageFunc = this.options.copyImage || copyImage
         void copyImageFunc({ ...attrs, action: "copyImage" }, this.options)
         return true
       },
+
       copyLink: (attrs) => () => {
-        const copyLinkFunc = this.options.customCopyLink || defaultCopyLink
+        const copyLinkFunc = this.options.copyLink || copyLink
         void copyLinkFunc({ ...attrs, action: "copyLink" }, this.options)
         return true
       },
-      toggleImage: () => (props) => {
-        const input = document.createElement("input")
-        input.type = "file"
-        input.accept = this.options.allowedMimeTypes.join(",")
-        input.onchange = () => {
-          const files = input.files
-          if (!files) return
 
-          const [validImages, errors] = filterFiles(Array.from(files), {
-            allowedMimeTypes: this.options.allowedMimeTypes,
-            maxFileSize: this.options.maxFileSize,
-            allowBase64: this.options.allowBase64,
-          })
+      toggleImage:
+        () =>
+        ({ editor }) => {
+          const input = document.createElement("input")
+          input.type = "file"
+          input.accept = this.options.allowedMimeTypes.join(",")
+          input.onchange = () => {
+            const files = input.files
+            if (!files) return
 
-          if (errors.length > 0 && this.options.onValidationError) {
-            this.options.onValidationError(errors)
+            const [validImages, errors] = filterFiles(Array.from(files), {
+              allowedMimeTypes: this.options.allowedMimeTypes,
+              maxFileSize: this.options.maxFileSize,
+              allowBase64: this.options.allowBase64,
+            })
+
+            if (errors.length > 0 && this.options.onValidationError) {
+              this.options.onValidationError(errors)
+              return false
+            }
+
+            if (validImages.length === 0) return false
+
+            if (this.options.onToggle) {
+              this.options.onToggle(
+                editor,
+                validImages,
+                editor.state.selection.from,
+              )
+            }
+
             return false
           }
 
-          if (validImages.length === 0) return false
-
-          if (this.options.onToggle) {
-            this.options.onToggle(
-              props.editor,
-              validImages,
-              props.editor.state.selection.from,
-            )
-          }
-        }
-
-        input.click()
-        return true
-      },
+          input.click()
+          return true
+        },
     }
   },
 
   onTransaction({ transaction }) {
-    if (!transaction.docChanged) return
+    transaction.steps.forEach((step) => {
+      if (step instanceof ReplaceStep && step.slice.size === 0) {
+        const deletedPages = transaction.before.content.cut(step.from, step.to)
 
-    const oldDoc = transaction.before
-    const newDoc = transaction.doc
+        deletedPages.forEach((node) => {
+          if (node.type.name === "image") {
+            const attrs = node.attrs
 
-    const oldImages = new Map<string, ImageInfo>()
-    const newImages = new Map<string, ImageInfo>()
+            if (attrs.src.startsWith("blob:")) {
+              URL.revokeObjectURL(attrs.src)
+            }
 
-    const addToMap = (node: Node, map: Map<string, ImageInfo>) => {
-      if (node.type.name === "image") {
-        const attrs = node.attrs
-        if (attrs.src) {
-          const key = attrs.id || attrs.src
-          map.set(key, { id: attrs.id, src: attrs.src })
-        }
-      }
-    }
-
-    oldDoc.descendants((node) => addToMap(node, oldImages))
-    newDoc.descendants((node) => addToMap(node, newImages))
-
-    oldImages.forEach((imageInfo, key) => {
-      if (!newImages.has(key)) {
-        if (imageInfo.src.startsWith("blob:")) {
-          URL.revokeObjectURL(imageInfo.src)
-        }
-
-        if (
-          !imageInfo.src.startsWith("blob:") &&
-          !imageInfo.src.startsWith("data:") &&
-          isUrl(imageInfo.src)
-        ) {
-          this.options.onImageRemoved?.({
-            id: imageInfo.id,
-            src: imageInfo.src,
-          })
-        }
+            this.options.onImageRemoved?.(attrs)
+          }
+        })
       }
     })
   },

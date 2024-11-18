@@ -20,7 +20,7 @@ export const JournalSection: React.FC = () => {
       setIsFetching(true)
 
       if (isLoaded && isSignedIn) {
-        const response = await getFeatureFlag({ name: "JOURNAL" })
+        const response = await getFeatureFlag({ data: "JOURNAL" })
 
         if (
           user?.emailAddresses.some((email) =>

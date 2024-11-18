@@ -5,15 +5,9 @@ import {
   ScrollRestoration,
   createRootRouteWithContext,
 } from "@tanstack/react-router"
-import {
-  Body,
-  createServerFn,
-  Head,
-  Html,
-  Meta,
-  Scripts,
-} from "@tanstack/start"
+import { createServerFn, Meta, Scripts } from "@tanstack/start"
 import * as React from "react"
+import { getWebRequest } from "vinxi/http"
 import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary.js"
 import { NotFound } from "~/components/NotFound.js"
 import { seo } from "~/lib/utils/seo"
@@ -28,8 +22,8 @@ export const TanStackRouterDevtools =
         })),
       )
 
-export const fetchClerkAuth = createServerFn("GET", async (_, ctx) => {
-  const auth = await getAuth(ctx.request)
+export const fetchClerkAuth = createServerFn().handler(async () => {
+  const auth = await getAuth(getWebRequest())
 
   return auth
 })
@@ -37,44 +31,49 @@ export const fetchClerkAuth = createServerFn("GET", async (_, ctx) => {
 export const Route = createRootRouteWithContext<{
   auth?: ReturnType<typeof getAuth> | null
 }>()({
-  meta: () => [
-    {
-      charSet: "utf-8",
-    },
-    {
-      name: "viewport",
-      content: "width=device-width, initial-scale=1",
-    },
-    ...seo({
-      title: "Learn Anything",
-      description:
-        "Discover and learn about any topic with Learn-Anything. Our free, comprehensive platform connects you to the best resources for every subject. Start learning today!",
-      keywords:
-        "learn anything, online learning, free education, educational resources, self-study, knowledge discovery, topic exploration, skill development, lifelong learning",
-    }),
-  ],
-  links: () => [
-    { rel: "stylesheet", href: appCss },
-    {
-      rel: "apple-touch-icon",
-      sizes: "180x180",
-      href: "/apple-touch-icon.png",
-    },
-    {
-      rel: "icon",
-      type: "image/png",
-      sizes: "32x32",
-      href: "/favicon-32x32.png",
-    },
-    {
-      rel: "icon",
-      type: "image/png",
-      sizes: "16x16",
-      href: "/favicon-16x16.png",
-    },
-    { rel: "manifest", href: "/site.webmanifest", color: "#fffff" },
-    { rel: "icon", href: "/favicon.ico" },
-  ],
+  head() {
+    return {
+      meta: [
+        {
+          charSet: "utf-8",
+        },
+        {
+          name: "viewport",
+          content: "width=device-width, initial-scale=1",
+        },
+        ...seo({
+          title: "Learn Anything",
+          description:
+            "Discover and learn about any topic with Learn-Anything. Our free, comprehensive platform connects you to the best resources for every subject. Start learning today!",
+          keywords:
+            "learn anything, online learning, free education, educational resources, self-study, knowledge discovery, topic exploration, skill development, lifelong learning",
+        }),
+      ],
+      links: [
+        { rel: "stylesheet", href: appCss },
+        {
+          rel: "apple-touch-icon",
+          sizes: "180x180",
+          href: "/apple-touch-icon.png",
+        },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "32x32",
+          href: "/favicon-32x32.png",
+        },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "16x16",
+          href: "/favicon-16x16.png",
+        },
+        { rel: "manifest", href: "/site.webmanifest", color: "#fffff" },
+        { rel: "icon", href: "/favicon.ico" },
+      ],
+    }
+  },
+
   beforeLoad: async (ctx) => {
     try {
       // Handle explicit null auth (logged out state)
@@ -121,20 +120,17 @@ function RootComponent() {
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <Html>
-      <Head>
+    <html lang="en" suppressHydrationWarning={true}>
+      <head>
         <Meta />
-      </Head>
-      <Body>
+      </head>
+      <body>
         {children}
 
-        <React.Suspense>
-          <TanStackRouterDevtools position="bottom-right" />
-        </React.Suspense>
-
         <ScrollRestoration />
+        <TanStackRouterDevtools position="bottom-right" />
         <Scripts />
-      </Body>
-    </Html>
+      </body>
+    </html>
   )
 }

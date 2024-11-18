@@ -32,11 +32,12 @@ import { Editor } from "@tiptap/react"
 import { createServerFn } from "@tanstack/start"
 import { clerkClient, getAuth } from "@clerk/tanstack-start/server"
 import { create } from "ronin"
+import { getWebRequest } from "vinxi/http"
 
-export const sendFeedbackFn = createServerFn(
-  "POST",
-  async (data: { content: string }, { request }) => {
-    const auth = await getAuth(request)
+export const sendFeedbackFn = createServerFn({ method: "POST" })
+  .validator((content: string) => content)
+  .handler(async ({ data }) => {
+    const auth = await getAuth(getWebRequest())
 
     if (!auth.userId) {
       throw new Error("User not authenticated")
@@ -46,11 +47,10 @@ export const sendFeedbackFn = createServerFn(
       telemetry: { disabled: true },
     }).users.getUser(auth.userId)
     await create.feedback.with({
-      message: data.content,
+      message: data,
       emailFrom: user.emailAddresses[0].emailAddress,
     })
-  },
-)
+  })
 
 const formSchema = z.object({
   content: z.string().min(1, {
@@ -83,7 +83,7 @@ export function Feedback() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsPending(true)
-      await sendFeedbackFn(values)
+      await sendFeedbackFn({ data: values.content })
 
       form.reset({ content: "" })
       editorRef.current?.commands.clearContent()

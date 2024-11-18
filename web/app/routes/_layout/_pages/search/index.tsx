@@ -49,7 +49,7 @@ const SearchItem: React.FC<SearchItemProps> = ({
     <div className="group flex items-center justify-between">
       <Link
         to={href}
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
         className="text-sm font-medium hover:text-primary hover:opacity-70"
       >
         {title}
@@ -57,7 +57,7 @@ const SearchItem: React.FC<SearchItemProps> = ({
       {subtitle && (
         <Link
           to={href}
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e: React.MouseEvent) => e.stopPropagation()}
           className="ml-2 truncate text-xs text-muted-foreground hover:underline"
         >
           {subtitle}

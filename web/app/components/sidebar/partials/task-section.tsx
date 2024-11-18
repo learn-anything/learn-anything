@@ -32,7 +32,7 @@ export const TaskSection: React.FC = () => {
       setIsFetching(true)
 
       if (isLoaded && isSignedIn) {
-        const response = await getFeatureFlag({ name: "TASK" })
+        const response = await getFeatureFlag({ data: "TASK" })
 
         if (
           user?.emailAddresses.some((email) =>
