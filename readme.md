@@ -66,4 +66,4 @@ Ask for help on [Discord](https://discord.gg/bxtD8x6aNF)'s [#dev channel](https:
 
 We are a small team of core developers right now but are always looking to expand. We will reach out with offer to join us if you contribute to repo in form of PRs or fruitful issues/discussions. Can also contact us via [email](mailto:join@learn-anything.xyz).
 
-[![Discord](https://img.shields.io/badge/Discord-100000?style=flat&logo=discord&logoColor=white&labelColor=black&color=black)](https://discord.com/invite/bxtD8x6aNF) [![X](https://img.shields.io/badge/learnanything-100000?logo=X&color=black)](https://x.com/learnanything_)
+[![Discord](https://go.nikiv.dev/badge-discord)](https://discord.com/invite/bxtD8x6aNF) [![X](https://go.nikiv.dev/badge-x)](https://x.com/learnanything_)
