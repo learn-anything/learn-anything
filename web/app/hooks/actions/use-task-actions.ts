@@ -2,7 +2,7 @@ import { useCallback } from "react"
 import { toast } from "sonner"
 import { LaAccount } from "@/lib/schema"
 import { ID } from "jazz-tools"
-import { ListOfTasks, Task } from "~/lib/schema/task"
+import { Task } from "~/lib/schema/task"
 
 export const useTaskActions = () => {
   const newTask = useCallback((me: LaAccount): Task | null => {
@@ -12,7 +12,7 @@ export const useTaskActions = () => {
     }
 
     if (!me.root.tasks) {
-      me.root.tasks = ListOfTasks.create([], { owner: me })
+      me.root.tasks = []
     }
 
     const newTask = Task.create(
@@ -33,7 +33,9 @@ export const useTaskActions = () => {
   const deleteTask = useCallback((me: LaAccount, taskId: ID<Task>): void => {
     if (!me.root?.tasks) return
 
-    const index = me.root.tasks.findIndex((item) => item?.id === taskId)
+    const index: number = me.root.tasks.findIndex(
+      (item: Task) => item?.id === taskId,
+    )
     if (index === -1) {
       toast.error("Task not found")
       return

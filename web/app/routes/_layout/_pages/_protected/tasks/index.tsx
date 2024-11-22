@@ -86,7 +86,7 @@ function TaskComponent() {
   const tasks = me?.root.tasks
   const { deleteTask } = useTaskActions()
 
-  const filteredTasks = tasks?.filter((task) => {
+  const filteredTasks = tasks?.filter((task: Task) => {
     if (!task) return false
     if (filter === "today") {
       return task.status !== "done" && task.dueDate && isToday(task.dueDate)
@@ -98,7 +98,9 @@ function TaskComponent() {
 
   const updateTask = (taskId: string, updates: Partial<Task>) => {
     if (me?.root?.tasks) {
-      const taskIndex = me.root.tasks.findIndex((task) => task?.id === taskId)
+      const taskIndex = me.root.tasks.findIndex(
+        (task: Task) => task?.id === taskId,
+      )
       if (taskIndex !== -1) {
         Object.assign(me.root.tasks[taskIndex]!, updates)
       }
@@ -135,9 +137,7 @@ function TaskComponent() {
       </div> */}
       <TaskForm />
       <TaskList
-        tasks={
-          filteredTasks?.filter((task): task is Task => task !== null) || []
-        }
+        tasks={filteredTasks?.filter((task: Task) => task !== null) || []}
         onUpdateTask={updateTask}
         onDeleteTask={onDeleteTask}
       />
