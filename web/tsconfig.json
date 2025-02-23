@@ -19,7 +19,6 @@
       "@/*": ["./app/*"],
       "@shared/*": ["./shared/*"]
     },
-    "noEmit": true,
-    "types": ["@ronin/learn-anything"]
+    "noEmit": true
   }
 }
