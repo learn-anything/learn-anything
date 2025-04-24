@@ -25,6 +25,7 @@
     "@tanstack/router-devtools": "^1.112.17",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "jazz-inspector": "^0.11.1",
     "jazz-react": "^0.11.1",
     "jazz-tools": "^0.11.0",

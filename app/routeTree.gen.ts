@@ -16,6 +16,7 @@ import { Route as DailyImport } from './routes/daily'
 import { Route as AllNotesImport } from './routes/all-notes'
 import { Route as AppImport } from './routes/_app'
 import { Route as IndexImport } from './routes/index'
+import { Route as DailyDateImport } from './routes/daily.$date'
 
 // Create/Update Routes
 
@@ -46,6 +47,12 @@ const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const DailyDateRoute = DailyDateImport.update({
+  id: '/$date',
+  path: '/$date',
+  getParentRoute: () => DailyRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -87,25 +94,44 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TasksImport
       parentRoute: typeof rootRoute
     }
+    '/daily/$date': {
+      id: '/daily/$date'
+      path: '/$date'
+      fullPath: '/daily/$date'
+      preLoaderRoute: typeof DailyDateImport
+      parentRoute: typeof DailyImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface DailyRouteChildren {
+  DailyDateRoute: typeof DailyDateRoute
+}
+
+const DailyRouteChildren: DailyRouteChildren = {
+  DailyDateRoute: DailyDateRoute,
+}
+
+const DailyRouteWithChildren = DailyRoute._addFileChildren(DailyRouteChildren)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof AppRoute
   '/all-notes': typeof AllNotesRoute
-  '/daily': typeof DailyRoute
+  '/daily': typeof DailyRouteWithChildren
   '/tasks': typeof TasksRoute
+  '/daily/$date': typeof DailyDateRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof AppRoute
   '/all-notes': typeof AllNotesRoute
-  '/daily': typeof DailyRoute
+  '/daily': typeof DailyRouteWithChildren
   '/tasks': typeof TasksRoute
+  '/daily/$date': typeof DailyDateRoute
 }
 
 export interface FileRoutesById {
@@ -113,16 +139,24 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_app': typeof AppRoute
   '/all-notes': typeof AllNotesRoute
-  '/daily': typeof DailyRoute
+  '/daily': typeof DailyRouteWithChildren
   '/tasks': typeof TasksRoute
+  '/daily/$date': typeof DailyDateRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/all-notes' | '/daily' | '/tasks'
+  fullPaths: '/' | '' | '/all-notes' | '/daily' | '/tasks' | '/daily/$date'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/all-notes' | '/daily' | '/tasks'
-  id: '__root__' | '/' | '/_app' | '/all-notes' | '/daily' | '/tasks'
+  to: '/' | '' | '/all-notes' | '/daily' | '/tasks' | '/daily/$date'
+  id:
+    | '__root__'
+    | '/'
+    | '/_app'
+    | '/all-notes'
+    | '/daily'
+    | '/tasks'
+    | '/daily/$date'
   fileRoutesById: FileRoutesById
 }
 
@@ -130,7 +164,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRoute
   AllNotesRoute: typeof AllNotesRoute
-  DailyRoute: typeof DailyRoute
+  DailyRoute: typeof DailyRouteWithChildren
   TasksRoute: typeof TasksRoute
 }
 
@@ -138,7 +172,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRoute,
   AllNotesRoute: AllNotesRoute,
-  DailyRoute: DailyRoute,
+  DailyRoute: DailyRouteWithChildren,
   TasksRoute: TasksRoute,
 }
 
@@ -169,10 +203,17 @@ export const routeTree = rootRoute
       "filePath": "all-notes.tsx"
     },
     "/daily": {
-      "filePath": "daily.tsx"
+      "filePath": "daily.tsx",
+      "children": [
+        "/daily/$date"
+      ]
     },
     "/tasks": {
       "filePath": "tasks.tsx"
+    },
+    "/daily/$date": {
+      "filePath": "daily.$date.tsx",
+      "parent": "/daily"
     }
   }
 }

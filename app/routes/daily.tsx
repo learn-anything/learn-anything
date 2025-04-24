@@ -1,11 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router"
+import { Outlet } from "@tanstack/react-router"
 
 function RouteComponent() {
-  return (
-    <div>
-      <h1>Daily Notes</h1>
-    </div>
-  )
+  return <Outlet />
 }
 
 export const Route = createFileRoute("/daily")({
