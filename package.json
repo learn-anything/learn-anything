@@ -10,6 +10,7 @@
     "s": "bun --watch scripts/run.ts"
   },
   "dependencies": {
+    "@base-ui-components/react": "^1.0.0-alpha.8",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-regular-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",

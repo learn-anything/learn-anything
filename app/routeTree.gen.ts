@@ -11,40 +11,54 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as TasksImport } from './routes/tasks'
+import { Route as DailyImport } from './routes/daily'
+import { Route as AllNotesImport } from './routes/all-notes'
 import { Route as AppImport } from './routes/_app'
-import { Route as AppIndexImport } from './routes/_app/index'
-import { Route as AppTestIndexImport } from './routes/_app/test/index'
-import { Route as AppTestCrudImport } from './routes/_app/test/crud'
+import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
+
+const TasksRoute = TasksImport.update({
+  id: '/tasks',
+  path: '/tasks',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DailyRoute = DailyImport.update({
+  id: '/daily',
+  path: '/daily',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AllNotesRoute = AllNotesImport.update({
+  id: '/all-notes',
+  path: '/all-notes',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AppRoute = AppImport.update({
   id: '/_app',
   getParentRoute: () => rootRoute,
 } as any)
 
-const AppIndexRoute = AppIndexImport.update({
+const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AppRoute,
-} as any)
-
-const AppTestIndexRoute = AppTestIndexImport.update({
-  id: '/test/',
-  path: '/test/',
-  getParentRoute: () => AppRoute,
-} as any)
-
-const AppTestCrudRoute = AppTestCrudImport.update({
-  id: '/test/crud',
-  path: '/test/crud',
-  getParentRoute: () => AppRoute,
+  getParentRoute: () => rootRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
     '/_app': {
       id: '/_app'
       path: ''
@@ -52,82 +66,80 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppImport
       parentRoute: typeof rootRoute
     }
-    '/_app/': {
-      id: '/_app/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof AppIndexImport
-      parentRoute: typeof AppImport
+    '/all-notes': {
+      id: '/all-notes'
+      path: '/all-notes'
+      fullPath: '/all-notes'
+      preLoaderRoute: typeof AllNotesImport
+      parentRoute: typeof rootRoute
     }
-    '/_app/test/crud': {
-      id: '/_app/test/crud'
-      path: '/test/crud'
-      fullPath: '/test/crud'
-      preLoaderRoute: typeof AppTestCrudImport
-      parentRoute: typeof AppImport
+    '/daily': {
+      id: '/daily'
+      path: '/daily'
+      fullPath: '/daily'
+      preLoaderRoute: typeof DailyImport
+      parentRoute: typeof rootRoute
     }
-    '/_app/test/': {
-      id: '/_app/test/'
-      path: '/test'
-      fullPath: '/test'
-      preLoaderRoute: typeof AppTestIndexImport
-      parentRoute: typeof AppImport
+    '/tasks': {
+      id: '/tasks'
+      path: '/tasks'
+      fullPath: '/tasks'
+      preLoaderRoute: typeof TasksImport
+      parentRoute: typeof rootRoute
     }
   }
 }
 
 // Create and export the route tree
 
-interface AppRouteChildren {
-  AppIndexRoute: typeof AppIndexRoute
-  AppTestCrudRoute: typeof AppTestCrudRoute
-  AppTestIndexRoute: typeof AppTestIndexRoute
-}
-
-const AppRouteChildren: AppRouteChildren = {
-  AppIndexRoute: AppIndexRoute,
-  AppTestCrudRoute: AppTestCrudRoute,
-  AppTestIndexRoute: AppTestIndexRoute,
-}
-
-const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
-
 export interface FileRoutesByFullPath {
-  '': typeof AppRouteWithChildren
-  '/': typeof AppIndexRoute
-  '/test/crud': typeof AppTestCrudRoute
-  '/test': typeof AppTestIndexRoute
+  '/': typeof IndexRoute
+  '': typeof AppRoute
+  '/all-notes': typeof AllNotesRoute
+  '/daily': typeof DailyRoute
+  '/tasks': typeof TasksRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof AppIndexRoute
-  '/test/crud': typeof AppTestCrudRoute
-  '/test': typeof AppTestIndexRoute
+  '/': typeof IndexRoute
+  '': typeof AppRoute
+  '/all-notes': typeof AllNotesRoute
+  '/daily': typeof DailyRoute
+  '/tasks': typeof TasksRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/_app': typeof AppRouteWithChildren
-  '/_app/': typeof AppIndexRoute
-  '/_app/test/crud': typeof AppTestCrudRoute
-  '/_app/test/': typeof AppTestIndexRoute
+  '/': typeof IndexRoute
+  '/_app': typeof AppRoute
+  '/all-notes': typeof AllNotesRoute
+  '/daily': typeof DailyRoute
+  '/tasks': typeof TasksRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/' | '/test/crud' | '/test'
+  fullPaths: '/' | '' | '/all-notes' | '/daily' | '/tasks'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/test/crud' | '/test'
-  id: '__root__' | '/_app' | '/_app/' | '/_app/test/crud' | '/_app/test/'
+  to: '/' | '' | '/all-notes' | '/daily' | '/tasks'
+  id: '__root__' | '/' | '/_app' | '/all-notes' | '/daily' | '/tasks'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  AppRoute: typeof AppRouteWithChildren
+  IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRoute
+  AllNotesRoute: typeof AllNotesRoute
+  DailyRoute: typeof DailyRoute
+  TasksRoute: typeof TasksRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  AppRoute: AppRouteWithChildren,
+  IndexRoute: IndexRoute,
+  AppRoute: AppRoute,
+  AllNotesRoute: AllNotesRoute,
+  DailyRoute: DailyRoute,
+  TasksRoute: TasksRoute,
 }
 
 export const routeTree = rootRoute
@@ -140,28 +152,27 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/_app"
+        "/",
+        "/_app",
+        "/all-notes",
+        "/daily",
+        "/tasks"
       ]
+    },
+    "/": {
+      "filePath": "index.tsx"
     },
     "/_app": {
-      "filePath": "_app.tsx",
-      "children": [
-        "/_app/",
-        "/_app/test/crud",
-        "/_app/test/"
-      ]
+      "filePath": "_app.tsx"
     },
-    "/_app/": {
-      "filePath": "_app/index.tsx",
-      "parent": "/_app"
+    "/all-notes": {
+      "filePath": "all-notes.tsx"
     },
-    "/_app/test/crud": {
-      "filePath": "_app/test/crud.tsx",
-      "parent": "/_app"
+    "/daily": {
+      "filePath": "daily.tsx"
     },
-    "/_app/test/": {
-      "filePath": "_app/test/index.tsx",
-      "parent": "/_app"
+    "/tasks": {
+      "filePath": "tasks.tsx"
     }
   }
 }

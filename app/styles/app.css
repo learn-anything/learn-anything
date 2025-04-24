@@ -2,6 +2,11 @@
 /* TODO: add font with tailwind v4 */
 /* @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"); */
 
+/* for https://base-ui.com/react/overview/quick-start */
+.root {
+  isolation: isolate;
+}
+
 @layer base {
   :root {
     --foreground: #f4f4f5;
@@ -12,10 +17,7 @@
     --border: #27272a;
     --input: #27272a;
     --ring: #3b82f6;
-
-    --sidebar-background: #18181b;
-    --sidebar-foreground: #f4f4f5;
-    --sidebar-primary: #3b82f6;
+    --sidebar-background: #1b1b1e;
     --sidebar-primary-foreground: #ffffff;
     --sidebar-accent: #27272a;
     --sidebar-accent-foreground: #f4f4f5;
@@ -30,6 +32,10 @@
   .using-mouse * {
     outline: none !important;
   }
+}
+
+.bg-sidebar {
+  background-color: var(--sidebar-background);
 }
 
 /* .font-grotesk {

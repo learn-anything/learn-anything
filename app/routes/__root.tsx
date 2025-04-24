@@ -6,6 +6,7 @@ import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary"
 import { NotFound } from "~/components/NotFound"
 import { seo } from "~/lib/seo"
 import appCss from "~/styles/app.css?url"
+import MainLayout from "~/components/MainLayout"
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient
@@ -61,7 +62,7 @@ export const Route = createRootRouteWithContext<{
 function RootComponent() {
   return (
     <RootDocument>
-      <Outlet />
+      <MainLayout />
     </RootDocument>
   )
 }
@@ -73,7 +74,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Meta />
       </head>
       <body>
-        {children}
+        <div className="root">{children}</div>
         <Scripts />
       </body>
     </html>

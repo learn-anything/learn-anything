@@ -1,95 +1,93 @@
 import { useState, useEffect } from "react"
-import Tree from "./Tree"
-import { WebsiteElement } from "./TreeItem"
 import { cn } from "~/lib/utils"
-import { testData, sortElements, filterElements } from "~/data/testData"
-import Filters from "./Filters"
 import ResizablePanel from "./ResizablePanel"
+import { Link } from "@tanstack/react-router"
 
 type SidebarProps = {
   className?: string
-  onAnalyzeSelection?: (selectedElements: WebsiteElement[]) => void
   width?: number
   onWidthChange?: (width: number) => void
 }
 
 export default function Sidebar({
   className,
-  onAnalyzeSelection,
   width = 250,
   onWidthChange,
 }: SidebarProps) {
-  const [initialized, setInitialized] = useState(false)
-  const [selectedElements, setSelectedElements] = useState<WebsiteElement[]>([])
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc" | null>(null)
-  const [filterType, setFilterType] = useState<string | null>(null)
-  const [data, setData] = useState<WebsiteElement[]>(testData)
-  const [originalData] = useState<WebsiteElement[]>(
-    JSON.parse(JSON.stringify(testData)),
-  )
-
-  const selectionChange = (elements: WebsiteElement[]) => {
-    setSelectedElements(elements)
-  }
-
-  const applySorting = (order: "asc" | "desc" | null) => {
-    setSortOrder(order)
-
-    if (order === null) {
-      setData(JSON.parse(JSON.stringify(originalData)))
-      return
-    }
-
-    const sortedData = JSON.parse(JSON.stringify(data)) as WebsiteElement[]
-    setData(sortedData.length > 0 ? sortElements(sortedData, order) : [])
-  }
-
-  const applyFilter = (type: string | null) => {
-    setFilterType(type)
-
-    if (type === null) {
-      setData(JSON.parse(JSON.stringify(originalData)))
-      return
-    }
-
-    const dataToFilter = JSON.parse(
-      JSON.stringify(originalData),
-    ) as WebsiteElement[]
-
-    setData(filterElements(dataToFilter, type))
-  }
-
-  const clearFilters = () => {
-    setSortOrder(null)
-    setFilterType(null)
-    setData(JSON.parse(JSON.stringify(originalData)))
-  }
-
-  useEffect(() => {
-    if (initialized && onAnalyzeSelection) {
-      onAnalyzeSelection(selectedElements)
-    }
-  }, [initialized, onAnalyzeSelection, selectedElements])
-
   return (
     <ResizablePanel
       width={width}
       onWidthChange={onWidthChange}
       className={cn(
-        "bg-sidebar-background text-sidebar-foreground border-r border-white/10 h-full overflow-y-auto flex flex-col",
+        "text-sidebar-foreground border-r bg-sidebar border-white/10 h-full overflow-y-auto flex flex-col",
         className,
       )}
     >
       <div className="p-4 flex-1 overflow-auto">
-        <Filters
-          sortOrder={sortOrder}
-          filterType={filterType}
-          onSort={applySorting}
-          onFilter={applyFilter}
-          onClear={clearFilters}
-        />
+        <nav className="space-y-2">
+          <Link
+            to="/daily"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg hover:cursor-pointer transition-colors"
+            // activeProps={{ className: "text-white" }}
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+              />
+            </svg>
+            Daily notes
+          </Link>
 
-        <Tree data={data} onSelectionChange={selectionChange} />
+          <Link
+            to="/all-notes"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors"
+            activeProps={{ className: "bg-white/10" }}
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+              />
+            </svg>
+            All notes
+          </Link>
+
+          <Link
+            to="/tasks"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors"
+            activeProps={{ className: "bg-white/10" }}
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+              />
+            </svg>
+            Tasks
+          </Link>
+        </nav>
       </div>
     </ResizablePanel>
   )
