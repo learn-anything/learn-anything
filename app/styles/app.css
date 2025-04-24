@@ -1,0 +1,37 @@
+@import "tailwindcss" source("../");
+/* TODO: add font with tailwind v4 */
+/* @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"); */
+
+@layer base {
+  :root {
+    --foreground: #f4f4f5;
+    --primary: #fafafa;
+    --primary-foreground: #18181b;
+    --accent: #3f4046;
+    --accent-foreground: #fafafa;
+    --border: #27272a;
+    --input: #27272a;
+    --ring: #3b82f6;
+
+    --sidebar-background: #18181b;
+    --sidebar-foreground: #f4f4f5;
+    --sidebar-primary: #3b82f6;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #27272a;
+    --sidebar-accent-foreground: #f4f4f5;
+    --sidebar-border: #27272a;
+    --sidebar-ring: #3b82f6;
+  }
+
+  html,
+  body {
+    @apply bg-[#171717] text-neutral-200;
+  }
+  .using-mouse * {
+    outline: none !important;
+  }
+}
+
+/* .font-grotesk {
+  font-family: "Space Grotesk", sans-serif;
+} */
