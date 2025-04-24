@@ -1,6 +1,4 @@
-# [PrePrompt](https://preprompt.app)
-
-> Give AI right context
+# [learn-anything.xyz](https://learn-anything.xyz)
 
 ## Setup
 
