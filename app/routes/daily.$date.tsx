@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { parse } from "date-fns"
+import { parse, format } from "date-fns"
 import DailyCalendar from "~/components/DailyCalendar"
-import DailyNote from "~/components/DailyNote"
+import Tiptap from "~/components/Tiptap"
 
 function RouteComponent() {
   const { date } = Route.useParams()
@@ -11,7 +11,10 @@ function RouteComponent() {
     <div className="flex h-screen">
       <div className="flex-1 px-6 py-6">
         <div className="max-w-3xl mx-auto">
-          <DailyNote date={parsedDate} />
+          <h1 className="text-3xl font-medium text-white mb-6">
+            {format(parsedDate, "EEE, do MMMM, yyyy")}
+          </h1>
+          <Tiptap />
         </div>
       </div>
       <div className="w-[250px] h-full">

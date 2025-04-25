@@ -1,4 +1,6 @@
 @import "tailwindcss" source("../");
+@import "tippy.js/dist/tippy.css";
+
 /* TODO: add font with tailwind v4 */
 /* @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"); */
 
@@ -41,3 +43,109 @@
 /* .font-grotesk {
   font-family: "Space Grotesk", sans-serif;
 } */
+
+/* Editor.css */
+.editor-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.tiptap-editor {
+  padding: 1rem;
+  min-height: 200px;
+  background: none;
+}
+
+.tiptap-editor:focus {
+  outline: none;
+}
+
+.tiptap-editor p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #9ca3af;
+  pointer-events: none;
+  height: 0;
+}
+
+.slash-menu {
+  background: #e5e7eb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  min-width: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 0.5rem;
+}
+
+.slash-menu-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.5rem;
+  border: none;
+  background: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.2s;
+}
+
+.slash-menu-item:hover,
+.slash-menu-item.is-selected {
+  background: #f3f4f6;
+}
+
+.slash-menu-item-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.slash-menu-item-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.slash-menu-item-description {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.ProseMirror {
+  outline: none;
+}
+
+.ProseMirror h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 1rem 0;
+}
+
+.ProseMirror h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0.75rem 0;
+}
+
+.ProseMirror blockquote {
+  border-left: 4px solid #e5e7eb;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  color: #4b5563;
+}
+
+.ProseMirror pre {
+  background: none;
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+}

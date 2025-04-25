@@ -1,4 +1,5 @@
 import { format } from "date-fns"
+import Tiptap from "./Tiptap"
 
 interface DailyNoteProps {
   date: Date
@@ -29,7 +30,9 @@ export default function DailyNote({ date }: DailyNoteProps) {
           minHeight: "calc(100vh - 120px)",
           caretColor: "white",
         }}
-      />
+      >
+        <Tiptap />
+      </div>
     </div>
   )
 }
