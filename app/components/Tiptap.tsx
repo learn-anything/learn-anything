@@ -3,6 +3,9 @@ import StarterKit from "@tiptap/starter-kit"
 import Placeholder from "@tiptap/extension-placeholder"
 import Suggestion from "@tiptap/suggestion"
 import { ReactRenderer } from "@tiptap/react"
+import HardBreak from "@tiptap/extension-hard-break"
+import Paragraph from "@tiptap/extension-paragraph"
+import Text from "@tiptap/extension-text"
 import Heading from "@tiptap/extension-heading"
 import BulletList from "@tiptap/extension-bullet-list"
 import HorizontalRule from "@tiptap/extension-horizontal-rule"
@@ -228,6 +231,9 @@ const extensions = [
     bulletList: false,
     horizontalRule: false,
   }),
+  Paragraph,
+  Text,
+  HardBreak,
   Heading.configure({
     levels: [1, 2, 3],
   }),
