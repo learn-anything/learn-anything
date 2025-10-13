@@ -1,0 +1,29 @@
+{
+  "name": "linsa",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun --bun blade",
+    "diff": "bun --bun blade diff",
+    "apply": "bun --bun blade apply",
+    "build": "blade build",
+    "serve": "blade serve",
+    "db:migrate": "blade diff ronin/ronin-schema.ts",
+    "db:generate": "blade types && ronin types --zod",
+    "db:apply": "blade apply ronin/ronin-schema.ts"
+  },
+  "dependencies": {
+    "blade": "3.22.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.1.4",
+    "@types/react-dom": "19.1.5",
+    "typescript": "5.9.2"
+  },
+  "prettier": {
+    "semi": false
+  }
+}
