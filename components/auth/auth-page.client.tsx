@@ -121,7 +121,7 @@ export default function AuthPage() {
               Your lens into everything.
             </h1>
             <p className="text-sm text-white/70">
-              Save contacts, images, everything. Chat. Community.
+              Save contacts, images, everything. Chat. Share with community.
             </p>
           </header>
 
