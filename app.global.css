@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary-50: hsl(222 100% 98%);
+    --primary-100: hsl(222 95% 95%);
+    --primary-200: hsl(222 90% 88%);
+    --primary-300: hsl(222 88% 78%);
+    --primary-400: hsl(222 86% 66%);
+    --primary-500: hsl(222 84% 56%);
+    --primary-600: hsl(222 82% 48%);
+    --primary-700: hsl(222 80% 40%);
+    --primary-800: hsl(222 78% 32%);
+    --primary-900: hsl(222 76% 24%);
+  }
+
+  body {
+    @apply bg-white text-slate-900 transition-colors duration-300 ease-linear dark:bg-neutral-950 dark:text-slate-100;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .glass-card {
+    position: relative;
+    --border-width: 1px;
+    background: radial-gradient(
+        circle at 50% 250%,
+        hsl(from var(--primary-100) h s l / 0.25),
+        hsl(from var(--primary-500) h s l / 0.15)
+      )
+      padding-box;
+    box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(12px);
+  }
+
+.glass-card::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+    inset: 0;
+    border-radius: inherit;
+    border: var(--border-width) solid transparent;
+    background: linear-gradient(
+        hsl(from var(--primary-200) h s l / 0.25),
+        hsl(from var(--primary-400) h s l / 0.2)
+      ),
+      border-box;
+    mask: linear-gradient(black, black) border-box,
+      linear-gradient(black, black) padding-box;
+    mask-composite: subtract;
+  }
+}
